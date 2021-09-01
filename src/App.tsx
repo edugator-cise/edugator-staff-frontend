@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      
+      INSERT EDUGATOR HERE
     </div>
   );
 }
