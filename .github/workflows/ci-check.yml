@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+# This action works with pull requests and pushes
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - release
+      - marcgabe15/add-test-ci
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install packages
+        run: npm install
+      - name: Prettier Check
+        run: npm run lint
+      - name: Unit tests
+        run: npm run test
+      - name: build
+        run: npm run build
