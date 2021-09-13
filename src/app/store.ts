@@ -1,9 +1,13 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+/* import slices of state here */
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    /* Place the object keys for state here followed by the reducer taken from that slice
+
+      e.g. key : keyReducer
+
+    */
   },
 });
 
