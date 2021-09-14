@@ -1,10 +1,13 @@
-import React from 'react';
-import './App.css';
+import { Typography } from "@material-ui/core";
+import React from "react";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      INSERT EDUGATOR HERE
+      <Typography variant="h1" color="textSecondary">
+        INSERT EDUGATOR HERE
+      </Typography>
     </div>
   );
 }
