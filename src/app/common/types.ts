@@ -1,3 +1,3 @@
 export interface IGenericAction {
-    type: string
+  type: string;
 }
