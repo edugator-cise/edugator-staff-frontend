@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../common/store";
-import { requestLogin } from "./auth.actions";
+import { requestLogin } from "./Login.actions";
 
 export function LoginPage(): React.ReactElement {
 	const dispatch = useDispatch();

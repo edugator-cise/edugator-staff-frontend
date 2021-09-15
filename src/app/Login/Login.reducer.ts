@@ -3,7 +3,7 @@ import {
 	IReceiveLoginFailureAction,
 	IReceiveLoginSuccessAction,
 	IRequestLoginAction,
-} from "./auth.actions";
+} from "./Login.actions";
 
 export interface IAuthState {
 	authorizationToken: string;
@@ -24,7 +24,7 @@ export function getInitialAuthState(): IAuthState {
 	return { ...initialAuthState };
 }
 
-export default function authReducer(
+export default function loginReducer(
 	state = getInitialAuthState(),
 	action:
 		| IReceiveLoginSuccessAction

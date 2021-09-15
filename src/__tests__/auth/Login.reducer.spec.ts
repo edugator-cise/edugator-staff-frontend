@@ -2,12 +2,14 @@ import {
 	receiveLoginFailure,
 	receiveLoginSuccess,
 	requestLogin,
-} from "../../app/Login/auth.actions";
-import authReducer, { getInitialAuthState } from "../../app/Login/auth.reducer";
+} from "../../app/Login/Login.actions";
+import loginReducer, {
+	getInitialAuthState,
+} from "../../app/Login/Login.reducer";
 
 describe("Auth Reducer", () => {
 	it("should handle request login", () => {
-		const actual = authReducer(
+		const actual = loginReducer(
 			getInitialAuthState(),
 			requestLogin("josh", "test")
 		);
@@ -20,7 +22,7 @@ describe("Auth Reducer", () => {
 
 	it("should handle receive login success", () => {
 		const token = "test";
-		const actual = authReducer(
+		const actual = loginReducer(
 			{ ...getInitialAuthState(), isLoading: true },
 			receiveLoginSuccess(token)
 		);
@@ -33,7 +35,7 @@ describe("Auth Reducer", () => {
 
 	it("should handle receive login failure", () => {
 		const message = "test";
-		const actual = authReducer(
+		const actual = loginReducer(
 			{ ...getInitialAuthState(), isLoading: true },
 			receiveLoginFailure(message)
 		);

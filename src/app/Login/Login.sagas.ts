@@ -5,7 +5,7 @@ import {
 	IRequestLoginAction,
 	receiveLoginFailure,
 	receiveLoginSuccess,
-} from "./auth.actions";
+} from "./Login.actions";
 
 function* requestLogin(action: IRequestLoginAction): any {
 	try {
