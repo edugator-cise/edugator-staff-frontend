@@ -8,11 +8,13 @@ import {
 export interface IAuthState {
 	authorizationToken: string;
 	isLoading: boolean;
+	errorMessage: string;
 }
 
 const initialAuthState: IAuthState = {
 	authorizationToken: "",
 	isLoading: false,
+	errorMessage: "",
 };
 
 /**
@@ -34,12 +36,21 @@ export default function authReducer(
 			return {
 				...state,
 				isLoading: true,
+				authorizationToken: "",
+				errorMessage: "",
 			};
 		case AuthActionTypes.RECEIVE_LOGIN_SUCCESS:
 			return {
 				...state,
 				isLoading: false,
 				authorizationToken: action.token,
+				errorMessage: "",
+			};
+		case AuthActionTypes.RECEIVE_LOGIN_FAILURE:
+			return {
+				...state,
+				isLoading: false,
+				errorMessage: action.message,
 			};
 		default:
 			return { ...state };
