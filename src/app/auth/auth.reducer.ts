@@ -50,6 +50,7 @@ export default function authReducer(
 			return {
 				...state,
 				isLoading: false,
+				authorizationToken: "",
 				errorMessage: action.message,
 			};
 		default:

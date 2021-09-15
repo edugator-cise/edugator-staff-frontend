@@ -38,9 +38,11 @@ export function receiveLoginSuccess(token: string): IReceiveLoginSuccessAction {
 	};
 }
 
-export function receiveLoginFailure(token: string): IReceiveLoginSuccessAction {
+export function receiveLoginFailure(
+	message: string
+): IReceiveLoginFailureAction {
 	return {
-		type: AuthActionTypes.RECEIVE_LOGIN_SUCCESS,
-		token,
+		type: AuthActionTypes.RECEIVE_LOGIN_FAILURE,
+		message,
 	};
 }
