@@ -2,8 +2,8 @@ import {
 	receiveLoginFailure,
 	receiveLoginSuccess,
 	requestLogin,
-} from "../../app/auth/auth.actions";
-import authReducer, { getInitialAuthState } from "../../app/auth/auth.reducer";
+} from "../../app/Login/auth.actions";
+import authReducer, { getInitialAuthState } from "../../app/Login/auth.reducer";
 
 describe("Auth Reducer", () => {
 	it("should handle request login", () => {
