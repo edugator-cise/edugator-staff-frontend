@@ -24,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --passWithNoTests",
+    "test": "jest",
     "eject": "react-scripts eject",
     "prettier-check": "prettier --check src/**/*.ts{,x}",
     "format": "prettier --write src/**/*.ts{,x}",
