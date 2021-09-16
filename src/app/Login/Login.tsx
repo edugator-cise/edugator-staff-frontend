@@ -4,8 +4,9 @@ import { requestLogin } from "./Login.actions";
 
 export function LoginPage(): React.ReactElement {
 	const dispatch = useDispatch();
-	const authState = useSelector((state: RootState) => state.auth);
+	const authState = useSelector((state: RootState) => state.login);
 
+	//Just a demo page for now to show that the dispatching/sagas and state work as expected
 	return (
 		<div>
 			<h1>login</h1>

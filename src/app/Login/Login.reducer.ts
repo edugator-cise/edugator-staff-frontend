@@ -1,5 +1,5 @@
 import {
-	AuthActionTypes,
+	LoginActionTypes,
 	IReceiveLoginFailureAction,
 	IReceiveLoginSuccessAction,
 	IRequestLoginAction,
@@ -32,21 +32,21 @@ export default function loginReducer(
 		| IRequestLoginAction
 ): IAuthState {
 	switch (action.type) {
-		case AuthActionTypes.REQUEST_LOGIN:
+		case LoginActionTypes.REQUEST_LOGIN:
 			return {
 				...state,
 				isLoading: true,
 				authorizationToken: "",
 				errorMessage: "",
 			};
-		case AuthActionTypes.RECEIVE_LOGIN_SUCCESS:
+		case LoginActionTypes.RECEIVE_LOGIN_SUCCESS:
 			return {
 				...state,
 				isLoading: false,
 				authorizationToken: action.token,
 				errorMessage: "",
 			};
-		case AuthActionTypes.RECEIVE_LOGIN_FAILURE:
+		case LoginActionTypes.RECEIVE_LOGIN_FAILURE:
 			return {
 				...state,
 				isLoading: false,

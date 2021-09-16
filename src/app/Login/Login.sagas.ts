@@ -1,7 +1,7 @@
 import { put, takeEvery } from "redux-saga/effects";
 import { appSettings } from "../common/appSettings";
 import {
-	AuthActionTypes,
+	LoginActionTypes,
 	IRequestLoginAction,
 	receiveLoginFailure,
 	receiveLoginSuccess,
@@ -23,7 +23,7 @@ function* requestLogin(action: IRequestLoginAction): any {
 }
 
 function* authSaga() {
-	yield takeEvery(AuthActionTypes.REQUEST_LOGIN, requestLogin);
+	yield takeEvery(LoginActionTypes.REQUEST_LOGIN, requestLogin);
 }
 
 export default authSaga;
