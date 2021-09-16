@@ -1,13 +1,12 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
 import "./App.css";
+import { LayoutContainer } from "./shared/LayoutContainer";
 
 function App() {
   return (
     <div className="App">
-      <Typography variant="h1" color="textSecondary">
-        INSERT EDUGATOR HERE
-      </Typography>
+      <LayoutContainer pageTitle="New Problem" />
     </div>
   );
 }
