@@ -1,48 +1,52 @@
+import store from "../../app/common/store";
 import {
-  receiveLoginFailure,
-  receiveLoginSuccess,
-  requestLogin,
-} from "../../app/Login/Login.actions";
-import loginReducer, {
-  getInitialAuthState,
-} from "../../app/Login/Login.reducer";
+	receiveLoginFailure,
+	receiveLoginSuccess,
+	requestLogin,
+} from "../../app/Login/Login.slice";
 
 describe("Auth Reducer", () => {
-  it("should handle request login", () => {
-    const actual = loginReducer(
-      getInitialAuthState(),
-      requestLogin("josh", "test")
-    );
-    const expected = getInitialAuthState();
-    expected.authorizationToken = "";
-    expected.errorMessage = "";
-    expected.isLoading = true;
-    expect(actual).toEqual(expected);
-  });
+	it("should handle request login", () => {
+		const baseLoginState = store.getState().login;
 
-  it("should handle receive login success", () => {
-    const token = "test";
-    const actual = loginReducer(
-      { ...getInitialAuthState(), isLoading: true },
-      receiveLoginSuccess(token)
-    );
-    const expected = getInitialAuthState();
-    expected.authorizationToken = token;
-    expected.errorMessage = "";
-    expected.isLoading = false;
-    expect(actual).toEqual(expected);
-  });
+		store.dispatch(requestLogin({ username: "test", password: "test" }));
 
-  it("should handle receive login failure", () => {
-    const message = "test";
-    const actual = loginReducer(
-      { ...getInitialAuthState(), isLoading: true },
-      receiveLoginFailure(message)
-    );
-    const expected = getInitialAuthState();
-    expected.authorizationToken = "";
-    expected.errorMessage = message;
-    expected.isLoading = false;
-    expect(actual).toEqual(expected);
-  });
+		const expected = {
+			...baseLoginState,
+			authorizationToken: "",
+			errorMessage: "",
+			isLoading: true,
+		};
+		expect(store.getState().login).toEqual(expected);
+	});
+
+	it("should handle receive login success", () => {
+		const baseLoginState = store.getState().login;
+
+		const token = "token";
+		store.dispatch(receiveLoginSuccess(token));
+
+		const expected = {
+			...baseLoginState,
+			authorizationToken: token,
+			errorMessage: "",
+			isLoading: false,
+		};
+		expect(store.getState().login).toEqual(expected);
+	});
+
+	it("should handle receive login success", () => {
+		const baseLoginState = store.getState().login;
+
+		const msg = "test-error";
+		store.dispatch(receiveLoginFailure(msg));
+
+		const expected = {
+			...baseLoginState,
+			authorizationToken: "",
+			errorMessage: msg,
+			isLoading: false,
+		};
+		expect(store.getState().login).toEqual(expected);
+	});
 });
