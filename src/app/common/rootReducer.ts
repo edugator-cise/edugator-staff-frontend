@@ -6,7 +6,7 @@ import loginReducer from "../Login/Login.reducer";
     e.g. key : keyReducer
 */
 const rootReducer = combineReducers({
-	login: loginReducer,
+  login: loginReducer,
 });
 
 export default rootReducer;

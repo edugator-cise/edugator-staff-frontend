@@ -3,5 +3,5 @@ import authSaga from "../Login/Login.sagas";
 
 /** Place additional saga functions in the array */
 export default function* rootSaga() {
-	yield all([authSaga()]);
+  yield all([authSaga()]);
 }
