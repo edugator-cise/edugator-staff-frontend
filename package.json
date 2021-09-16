@@ -31,7 +31,8 @@
 		"prettier-check": "prettier --check src/**/*.ts{,x}",
 		"format": "prettier --write src/**/*.ts{,x}",
 		"lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
-		"lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix"
+		"lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
+		"pre-pr": "npm run format && npm run lint-fix && npm run test"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
