@@ -5,8 +5,8 @@ import rootSaga from "./rootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
-	reducer: rootReducer,
-	middleware: [sagaMiddleware] as const,
+  reducer: rootReducer,
+  middleware: [sagaMiddleware] as const,
 });
 sagaMiddleware.run(rootSaga);
 
