@@ -1,5 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { put, takeEvery } from "redux-saga/effects";
+import axios from "axios";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { appSettings } from "../common/appSettings";
 import {
 	requestLogin,
@@ -10,10 +11,9 @@ import {
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
-		const url = `${appSettings.API_URL}/health`; //`${appSettings.API_URL}/user/login?username=${action.payload.username}&password=${action.payload.password}`
-		const token = yield fetch(url, {
-			method: "GET",
-			headers: {},
+		const url = `${appSettings.API_URL}/v1/health`; //user/login?username=${action.payload.username}&password=${action.payload.password}`;
+		const token = yield call(async () => {
+			return axios.get(url);
 		});
 		yield put(receiveLoginSuccess(token));
 	} catch (e) {
