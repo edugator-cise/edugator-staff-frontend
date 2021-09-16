@@ -16,5 +16,5 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src", "src/tests", "auth", "src/tests"]
+	"include": ["src", "src/__tests__", "auth", "src/__tests__"]
 }
