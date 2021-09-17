@@ -6,9 +6,7 @@ import { LoginPage } from "./app/Login/Login";
 function App() {
   return (
     <div className="App">
-      <Typography variant="h1" color="textSecondary">
-        <LoginPage></LoginPage>
-      </Typography>
+      <LoginPage></LoginPage>
     </div>
   );
 }
