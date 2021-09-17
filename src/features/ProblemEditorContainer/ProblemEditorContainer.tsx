@@ -13,7 +13,7 @@ export const ProblemEditorContainer = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <>
+    <Box display="flex" flexDirection="column" flexGrow={1}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
@@ -27,9 +27,9 @@ export const ProblemEditorContainer = () => {
           );
         })}
       </Stepper>
-      <Box border="1px solid lightgray" borderRadius="10px" height="100%">
+      <Box border="1px solid lightgray" borderRadius="10px" flexGrow={1}>
         Content
       </Box>
-    </>
+    </Box>
   );
 };

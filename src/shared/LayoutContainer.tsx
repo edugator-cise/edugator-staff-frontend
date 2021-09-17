@@ -17,8 +17,11 @@ interface Props {
 }
 
 const useStyles = makeStyles({
-  gridContainer: {
+  mainContainer: {
+    flexGrow: 1,
     paddingTop: "3rem",
+    display: "flex",
+    flexDirection: "column",
   },
   pageTitle: {
     paddingLeft: "2rem",
@@ -38,7 +41,7 @@ export const LayoutContainer = ({
   const classes = useStyles();
 
   return (
-    <>
+    <Box minHeight="100vh" display="flex" flexDirection="column">
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" component="h1">
@@ -46,27 +49,28 @@ export const LayoutContainer = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container>
-        <Grid container className={classes.gridContainer}>
-          <Grid item xs={12}>
-            <Box display="flex">
-              <Typography
-                variant="h4"
-                component="h2"
-                align="left"
-                className={classes.pageTitle}
-              >
-                {pageTitle}
-              </Typography>
-              {actionComponents}
-            </Box>
-            <Divider className={classes.divider} />
-          </Grid>
-          <Grid item xs={12}>
-            {children}
-          </Grid>
-        </Grid>
+      <Container className={classes.mainContainer}>
+        <Box display="flex">
+          <Typography
+            variant="h4"
+            component="h2"
+            align="left"
+            className={classes.pageTitle}
+          >
+            {pageTitle}
+          </Typography>
+          {actionComponents}
+        </Box>
+        <Divider className={classes.divider} />
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexGrow={1}
+          paddingBottom="2rem"
+        >
+          {children}
+        </Box>
       </Container>
-    </>
+    </Box>
   );
 };
