@@ -6,11 +6,14 @@ import {
   Divider,
   Grid,
   makeStyles,
+  Box,
 } from "@material-ui/core";
 import React from "react";
 
 interface Props {
   pageTitle: string;
+  children: JSX.Element;
+  actionComponents?: Array<React.Component>;
 }
 
 const useStyles = makeStyles({
@@ -19,6 +22,7 @@ const useStyles = makeStyles({
   },
   pageTitle: {
     paddingLeft: "2rem",
+    flexGrow: 1,
   },
   divider: {
     marginTop: "1rem",
@@ -26,7 +30,11 @@ const useStyles = makeStyles({
   },
 });
 
-export const LayoutContainer = ({ pageTitle }: Props) => {
+export const LayoutContainer = ({
+  pageTitle,
+  children,
+  actionComponents,
+}: Props) => {
   const classes = useStyles();
 
   return (
@@ -41,15 +49,21 @@ export const LayoutContainer = ({ pageTitle }: Props) => {
       <Container>
         <Grid container className={classes.gridContainer}>
           <Grid item xs={12}>
-            <Typography
-              variant="h4"
-              component="h2"
-              align="left"
-              className={classes.pageTitle}
-            >
-              {pageTitle}
-            </Typography>
+            <Box display="flex">
+              <Typography
+                variant="h4"
+                component="h2"
+                align="left"
+                className={classes.pageTitle}
+              >
+                {pageTitle}
+              </Typography>
+              {actionComponents}
+            </Box>
             <Divider className={classes.divider} />
+          </Grid>
+          <Grid item xs={12}>
+            {children}
           </Grid>
         </Grid>
       </Container>
