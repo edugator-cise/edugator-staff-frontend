@@ -7,7 +7,9 @@ import { LayoutContainer } from "./shared/LayoutContainer";
 function App() {
   return (
     <div className="App">
-      <ProblemEditorContainer />
+      <LayoutContainer pageTitle="New Problem">
+        <ProblemEditorContainer />
+      </LayoutContainer>
     </div>
   );
 }
