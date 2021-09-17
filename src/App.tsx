@@ -1,4 +1,3 @@
-import { Typography } from "@material-ui/core";
 import React from "react";
 import "./App.css";
 import { LoginPage } from "./app/Login/Login";
