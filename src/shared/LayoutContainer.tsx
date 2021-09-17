@@ -7,13 +7,19 @@ import {
   Grid,
   makeStyles,
   Box,
+  Button,
 } from "@material-ui/core";
 import React from "react";
+
+interface ButtonProps {
+  label: string;
+  onClick(): any;
+}
 
 interface Props {
   pageTitle: string;
   children: JSX.Element;
-  actionComponents?: Array<React.Component>;
+  actionButtons?: ButtonProps[];
 }
 
 const useStyles = makeStyles({
@@ -36,7 +42,7 @@ const useStyles = makeStyles({
 export const LayoutContainer = ({
   pageTitle,
   children,
-  actionComponents,
+  actionButtons = [],
 }: Props) => {
   const classes = useStyles();
 
@@ -59,7 +65,9 @@ export const LayoutContainer = ({
           >
             {pageTitle}
           </Typography>
-          {actionComponents}
+          {actionButtons.map((button) => (
+            <Button onClick={button.onClick}>{button.label}</Button>
+          ))}
         </Box>
         <Divider className={classes.divider} />
         <Box
