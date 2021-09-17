@@ -4,12 +4,12 @@ import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import { MoreVert } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      padding: theme.spacing(0.5),
-      marginLeft: theme.spacing(0.5),
-    },
-  }),
+    createStyles({
+        root: {
+            padding: theme.spacing(0.5),
+            marginLeft: theme.spacing(0.5),
+        },
+    }),
 );
 
 export default function ModuleMenu() {
@@ -25,8 +25,8 @@ export default function ModuleMenu() {
         setAnchorEl(null);
     };
 
-    const handleClickAway = (event : any) => {
-        if(event) event.stopPropagation();
+    const handleClickAway = (event: any) => {
+        if (event) event.stopPropagation();
         setAnchorEl(null);
     };
 
@@ -40,7 +40,7 @@ export default function ModuleMenu() {
                 onClick={(event) => { handleClick(event) }}
                 className={classes.root}
             >
-                <MoreVert/>
+                <MoreVert />
             </IconButton>
             <Menu
                 id="simple-menu"

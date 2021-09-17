@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: "auto",
     },
     button: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(1),
     },
   }),
 );
@@ -107,17 +107,17 @@ export default function Modules() {
 
                       <span className={classes.buttons}>
                         <Button
-                          variant="contained"
+                          //variant="contained"
                           color="default"
                           className={classes.button}
                           startIcon={<AssignmentTurnedIn />}
                           size="small"
                         >
-                          Grade Solutions
+                          Grade
                         </Button>
 
                         <Button
-                          variant="contained"
+                          //variant="contained"
                           color="default"
                           className={classes.button}
                           startIcon={<Edit />}

@@ -37,9 +37,9 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
   const classes = useStyles();
 
   return (
-    <Dialog 
-      onClose={handleClose} 
-      aria-labelledby="new-module-dialog" 
+    <Dialog
+      onClose={handleClose}
+      aria-labelledby="new-module-dialog"
       open={open}
       className={classes.dialog}
       maxWidth="sm"
@@ -47,7 +47,7 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
     >
       <Paper elevation={3}>
         <DialogTitle id="module-title-dialog">Add a new module</DialogTitle>
-        <Divider/>
+        <Divider />
         <TextField
           id="outlined-new-module"
           label="Module Name"
