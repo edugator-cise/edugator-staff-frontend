@@ -1,4 +1,4 @@
-import { Box, Button, Card, Step, StepLabel, Stepper } from "@material-ui/core";
+import { Box, Button, Step, StepLabel, Stepper } from "@material-ui/core";
 import React, { useState } from "react";
 
 const steps = [
