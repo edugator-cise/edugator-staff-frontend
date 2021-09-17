@@ -1,12 +1,14 @@
 import React from "react";
 import "./App.css";
-import Modules from "./pages/modules/ModulesView";
+import { LoginPage } from "./app/Login/Login";
 
 
 function App() {
   return (
     <div className="App">
-      <Modules />
+      <Typography variant="h1" color="textSecondary">
+        <LoginPage></LoginPage>
+      </Typography>
     </div>
   );
 }
