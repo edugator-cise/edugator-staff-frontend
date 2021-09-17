@@ -24,12 +24,8 @@ export const ProblemEditorContainer = () => {
     <Box display="flex" flexDirection="column" flexGrow={1}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
           return (
-            <Step key={label}>
+            <Step key={index}>
               <StepLabel>{label}</StepLabel>
             </Step>
           );

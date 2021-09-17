@@ -65,7 +65,9 @@ export const LayoutContainer = ({
             {pageTitle}
           </Typography>
           {actionButtons.map((button) => (
-            <Button onClick={button.onClick}>{button.label}</Button>
+            <Button onClick={button.onClick} key={button.label}>
+              {button.label}
+            </Button>
           ))}
         </Box>
         <Divider className={classes.divider} />
