@@ -1,14 +1,11 @@
 import React from "react";
 import "./App.css";
-import { LoginPage } from "./app/Login/Login";
-import { Typography } from "@material-ui/core";
+import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 
 function App() {
   return (
     <div className="App">
-      <Typography variant="h1" color="textSecondary">
-        <LoginPage></LoginPage>
-      </Typography>
+      <ProblemEditorPage />
     </div>
   );
 }
