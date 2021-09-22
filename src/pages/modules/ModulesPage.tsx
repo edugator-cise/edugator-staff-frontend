@@ -2,16 +2,12 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Button, Typography, Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import { ExpandMore, Edit, AssignmentTurnedIn } from '@material-ui/icons';
-import { IModule } from './types';
-import NewModuleDialog from "./NewModule";
-import ModuleOptions from "./ModuleOptions"
+import { NewModuleDialog, ModuleMenu, ProblemButtons } from "./components";
 import { LayoutContainer } from '../../shared/LayoutContainer';
+import { IModule } from './types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      margin: theme.spacing(1),
-    },
     summary: {
       backgroundColor: 'rgba(0, 0, 0, .1)',           // background of module
       borderBottom: '1px solid rgba(0, 0, 0, .125)',  // bottom line of module
@@ -88,7 +84,7 @@ export default function Modules() {
                     <Typography variant="h6">
                       Module {i}: {module.name}
                     </Typography>
-                    <ModuleOptions />
+                    <ModuleMenu />
                   </AccordionSummary>
 
 
@@ -106,6 +102,11 @@ export default function Modules() {
                       </Typography>
 
                       <span className={classes.buttons}>
+                        <ProblemButtons
+                          open={newModuleDialog}
+                          handleSubmit={handleNewModule}
+                          handleClose={handleDialogClose}
+                        />
                         <Button
                           //variant="contained"
                           color="default"

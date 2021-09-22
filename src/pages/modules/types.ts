@@ -27,3 +27,34 @@ export interface IModule {
     number: number,
     problemList: IProblem[],
 }
+
+export interface IModuleState {
+    modules: IModule[];
+    isLoading: boolean;
+    errorMessage: string | null;
+}
+
+export interface Iaction {
+    type: string,
+    payload: any,
+}
+
+export interface IActions {
+    [action: string]: {type: string, payload: {}};
+}
+
+export const ModuleActions: IActions = {
+    "asdasd": {
+        type: "your mother",
+        payload: {},
+    }
+}
+
+export const actions = { 
+    GET_MODULES_START: "GET_MODULES_START", 
+    GET_MODULES_SUCCESS: "GET_MODULES_SUCCESS",
+    GET_MODULES_FAILURE: "GET_MODULES_FAILURE",
+};
+
+
+
