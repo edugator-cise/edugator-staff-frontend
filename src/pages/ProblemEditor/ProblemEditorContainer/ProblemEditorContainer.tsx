@@ -106,14 +106,16 @@ export const ProblemEditorContainer = () => {
         display="flex"
         flexDirection="Column"
       >
-        <ExampleValidator />
+        <ExampleValidator
+          handleValidation={(isValid: boolean) => handleValidation(isValid)}
+        />
         <Box marginTop="auto" display="flex" justifyContent="space-between">
           <Button onClick={handleBack} disabled={activeStep === 0}>
             Back
           </Button>
           <Button
             onClick={handleNext}
-            disabled={activeStep === steps.length - 1}
+            disabled={activeStep === steps.length - 1 || !getValidationStatus()}
           >
             Next
           </Button>

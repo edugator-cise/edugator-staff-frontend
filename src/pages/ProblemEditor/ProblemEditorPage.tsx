@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { validateMetadata } from "./ProblemEditorContainer/problemEditorContainerSlice";
 
 export const ProblemEditorPage = () => {
   const actions = [
