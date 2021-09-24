@@ -1,8 +1,15 @@
 import { Box, Button, Step, StepLabel, Stepper } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../app/common/hooks";
 import { ExampleValidator } from "./ExampleValidator";
-import { validateMetadata } from "./problemEditorContainerSlice";
+import {
+  validateCode,
+  validateMetadata,
+  validateProblem,
+  validateServerConfig,
+  validateTestEditor,
+} from "./problemEditorContainerSlice";
 
 const steps = [
   "Metadata",
@@ -16,12 +23,61 @@ export const ProblemEditorContainer = () => {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useDispatch();
 
-  // const handleDispatch = () : void => {
-  //   switch(activeStep) {
-  //     case 0:
-  //       dispatch(validateMetadata())
-  //   }
-  // }
+  /* STEP SELECTORS */
+  const metadataIsValid = useAppSelector(
+    (state) => state.problemEditorContainer.metadataIsValid
+  );
+  const problemIsValid = useAppSelector(
+    (state) => state.problemEditorContainer.problemIsValid
+  );
+  const codeIsValid = useAppSelector(
+    (state) => state.problemEditorContainer.codeIsValid
+  );
+  const serverConfigIsValid = useAppSelector(
+    (state) => state.problemEditorContainer.serverConfigIsValid
+  );
+  const testEditorIsValid = useAppSelector(
+    (state) => state.problemEditorContainer.testEditorIsValid
+  );
+
+  /* Dispatches the correct action based on the current active step */
+  const handleValidation = (isValid: boolean): void => {
+    switch (activeStep) {
+      case 0:
+        dispatch(validateMetadata(isValid));
+        break;
+      case 1:
+        dispatch(validateProblem(isValid));
+        break;
+      case 2:
+        dispatch(validateCode(isValid));
+        break;
+      case 3:
+        dispatch(validateServerConfig(isValid));
+        break;
+      case 4:
+        dispatch(validateTestEditor(isValid));
+        break;
+    }
+  };
+
+  /* Selects the correct member of state based on the current active step */
+  const getValidationStatus = (): boolean => {
+    switch (activeStep) {
+      case 0:
+        return metadataIsValid;
+      case 1:
+        return problemIsValid;
+      case 2:
+        return codeIsValid;
+      case 3:
+        return serverConfigIsValid;
+      case 4:
+        return testEditorIsValid;
+      default:
+        return false;
+    }
+  };
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
