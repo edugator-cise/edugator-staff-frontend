@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface ProblemEditorContainerState {
   /* 
@@ -26,20 +26,20 @@ export const problemEditorContainerSlice = createSlice({
   name: "problemEditorContainer",
   initialState,
   reducers: {
-    validateMetadata: (state) => {
-      state.metadataIsValid = true;
+    validateMetadata: (state, action: PayloadAction<boolean>) => {
+      state.metadataIsValid = action.payload;
     },
-    validateProblem: (state) => {
-      state.problemIsValid = true;
+    validateProblem: (state, action: PayloadAction<boolean>) => {
+      state.problemIsValid = action.payload;
     },
-    validateCode: (state) => {
-      state.codeIsValid = true;
+    validateCode: (state, action: PayloadAction<boolean>) => {
+      state.codeIsValid = action.payload;
     },
-    validateServerConfig: (state) => {
-      state.serverConfigIsValid = true;
+    validateServerConfig: (state, action: PayloadAction<boolean>) => {
+      state.serverConfigIsValid = action.payload;
     },
-    validateTestEditor: (state) => {
-      state.testEditorIsValid = true;
+    validateTestEditor: (state, action: PayloadAction<boolean>) => {
+      state.testEditorIsValid = action.payload;
     },
   },
 });

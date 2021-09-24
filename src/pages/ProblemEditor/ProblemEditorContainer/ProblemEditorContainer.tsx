@@ -1,6 +1,8 @@
 import { Box, Button, Step, StepLabel, Stepper } from "@material-ui/core";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { ExampleValidator } from "./ExampleValidator";
+import { validateMetadata } from "./problemEditorContainerSlice";
 
 const steps = [
   "Metadata",
@@ -12,6 +14,14 @@ const steps = [
 
 export const ProblemEditorContainer = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useDispatch();
+
+  // const handleDispatch = () : void => {
+  //   switch(activeStep) {
+  //     case 0:
+  //       dispatch(validateMetadata())
+  //   }
+  // }
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);

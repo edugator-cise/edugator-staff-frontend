@@ -32,25 +32,31 @@ describe("problemEditorContainer reducer", () => {
   it("should handle metadata validation", () => {
     const actual = problemEditorContainerSlice(
       initialState,
-      validateMetadata()
+      validateMetadata(true)
     );
     expect(actual.metadataIsValid).toBe(true);
   });
 
   it("should handle problem validation", () => {
-    const actual = problemEditorContainerSlice(initialState, validateProblem());
+    const actual = problemEditorContainerSlice(
+      initialState,
+      validateProblem(true)
+    );
     expect(actual.problemIsValid).toBe(true);
   });
 
   it("should handle code validation", () => {
-    const actual = problemEditorContainerSlice(initialState, validateCode());
+    const actual = problemEditorContainerSlice(
+      initialState,
+      validateCode(true)
+    );
     expect(actual.codeIsValid).toBe(true);
   });
 
   it("should handle server config validation", () => {
     const actual = problemEditorContainerSlice(
       initialState,
-      validateServerConfig()
+      validateServerConfig(true)
     );
     expect(actual.serverConfigIsValid).toBe(true);
   });
@@ -58,7 +64,7 @@ describe("problemEditorContainer reducer", () => {
   it("should handle test editor validation", () => {
     const actual = problemEditorContainerSlice(
       initialState,
-      validateTestEditor()
+      validateTestEditor(true)
     );
     expect(actual.testEditorIsValid).toBe(true);
   });
