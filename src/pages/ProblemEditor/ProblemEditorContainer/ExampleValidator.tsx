@@ -1,7 +1,15 @@
 import { Box, FormControlLabel, FormGroup, Switch } from "@material-ui/core";
 import React from "react";
 
-export const ExampleValidator = ({ handleValidation }: any) => {
+interface Props {
+  handleValidation: (isValid: boolean) => void;
+  validationStatus: () => boolean;
+}
+
+export const ExampleValidator = ({
+  handleValidation,
+  validationStatus,
+}: Props) => {
   return (
     <Box mt="auto" ml="auto" mr="auto">
       <FormGroup>
@@ -10,6 +18,7 @@ export const ExampleValidator = ({ handleValidation }: any) => {
             <Switch
               color="primary"
               onChange={(event) => handleValidation(event.target.checked)}
+              checked={validationStatus()}
             />
           }
           label="Validated"

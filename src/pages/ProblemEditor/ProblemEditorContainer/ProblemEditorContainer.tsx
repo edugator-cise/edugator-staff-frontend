@@ -80,7 +80,11 @@ export const ProblemEditorContainer = () => {
   };
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if (activeStep === steps.length - 1) {
+      console.log("Submitted!");
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -108,16 +112,14 @@ export const ProblemEditorContainer = () => {
       >
         <ExampleValidator
           handleValidation={(isValid: boolean) => handleValidation(isValid)}
+          validationStatus={() => getValidationStatus()}
         />
         <Box marginTop="auto" display="flex" justifyContent="space-between">
           <Button onClick={handleBack} disabled={activeStep === 0}>
             Back
           </Button>
-          <Button
-            onClick={handleNext}
-            disabled={activeStep === steps.length - 1 || !getValidationStatus()}
-          >
-            Next
+          <Button onClick={handleNext} disabled={!getValidationStatus()}>
+            {activeStep === steps.length - 1 ? "Submit" : "Next"}
           </Button>
         </Box>
       </Box>
