@@ -1,5 +1,6 @@
 import { Box, Button, Step, StepLabel, Stepper } from "@material-ui/core";
 import React, { useState } from "react";
+import { ExampleValidator } from "./ExampleValidator";
 
 const steps = [
   "Metadata",
@@ -39,7 +40,7 @@ export const ProblemEditorContainer = () => {
         display="flex"
         flexDirection="Column"
       >
-        Content goes here
+        <ExampleValidator />
         <Box marginTop="auto" display="flex" justifyContent="space-between">
           <Button onClick={handleBack} disabled={activeStep === 0}>
             Back
