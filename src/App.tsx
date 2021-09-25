@@ -6,7 +6,7 @@ import { Typography } from "@material-ui/core";
 function App() {
   return (
     <div className="App">
-      <Typography variant="h1" color="textSecondary">
+      <Typography variant="h3" color="textSecondary">
         <LoginPage></LoginPage>
       </Typography>
     </div>
