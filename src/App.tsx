@@ -4,6 +4,9 @@ import { LoginPage } from "./app/Login/Login";
 import { Typography } from "@material-ui/core";
 import { Route, Switch } from "react-router-dom";
 import { Routes } from "./shared/Routes.constants";
+import { PrivateRoute } from "./shared/PrivateRoute";
+import Modules from "./pages/modules/ModulesView";
+import { ProblemEditorPage } from "./pages/ProblemEditorPage";
 
 function App() {
 	return (
@@ -13,6 +16,12 @@ function App() {
 					<Route path={Routes.Login}>
 						<LoginPage />
 					</Route>
+					<PrivateRoute routeProps={{ path: Routes.Modules }}>
+						<Modules />
+					</PrivateRoute>
+					<PrivateRoute routeProps={{ path: Routes.ProblemEditor }}>
+						<ProblemEditorPage />
+					</PrivateRoute>
 				</Switch>
 			</Typography>
 		</div>
