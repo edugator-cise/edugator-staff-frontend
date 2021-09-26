@@ -13,14 +13,16 @@ function App() {
 		<div className="App">
 			<Typography variant="h3" color="textSecondary">
 				<Switch>
-					<Route path={Routes.Login}>
+					<Route exact path={Routes.Login}>
 						<LoginPage />
 					</Route>
-					<PrivateRoute routeProps={{ path: Routes.Modules }}>
-						<Modules />
-					</PrivateRoute>
-					<PrivateRoute routeProps={{ path: Routes.ProblemEditor }}>
+					<PrivateRoute
+						routeProps={{ exact: true, path: Routes.ProblemEditor }}
+					>
 						<ProblemEditorPage />
+					</PrivateRoute>
+					<PrivateRoute routeProps={{ exact: true, path: Routes.Modules }}>
+						<Modules />
 					</PrivateRoute>
 				</Switch>
 			</Typography>
