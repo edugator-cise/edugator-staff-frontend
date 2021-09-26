@@ -5,14 +5,20 @@ import App from "./App";
 import store from "./app/common/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
+import { createBrowserHistory } from "history";
+import { Router } from "react-router";
+
+const history = createBrowserHistory();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById("root")
+	<React.StrictMode>
+		<Provider store={store}>
+			<Router history={history}>
+				<App />
+			</Router>
+		</Provider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
