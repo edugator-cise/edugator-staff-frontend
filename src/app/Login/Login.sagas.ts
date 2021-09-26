@@ -1,6 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
+import { baseAPIURL, jwtToken } from "../../shared/constants";
 import {
 	requestLogin,
 	receiveLoginFailure,
@@ -12,11 +13,11 @@ function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
 		console.log(action);
 		if (action.payload.username === "test") {
-			console.log("success");
+			localStorage.setItem(jwtToken, "test");
 			yield put(receiveLoginSuccess("test"));
 		} else {
 			//Dummy URL until we get the env
-			const url = `/v1/health`; //user/login?username=${action.payload.username}&password=${action.payload.password}`;
+			const url = `${baseAPIURL}/user/login?username=${action.payload.username}&password=${action.payload.password}`;
 			const token = yield call(async () => {
 				return axios.get(url);
 			});
