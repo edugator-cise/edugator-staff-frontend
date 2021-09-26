@@ -7,12 +7,14 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import CardHeader from "@material-ui/core/CardHeader";
 import Button from "@material-ui/core/Button";
+import { CircularProgress, Snackbar } from "@material-ui/core";
 import { IRequestLoginAction } from "./Login.slice";
 import { Field, Form, Formik } from "formik";
 import { FormTextField } from "../../shared/FormTextField";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { Routes } from "../../shared/Routes.constants";
 import { Redirect } from "react-router";
+import { jwtToken } from "../../shared/constants";
 
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,66 +46,72 @@ export function LoginPage(): React.ReactElement {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const authState = useSelector((state: RootState) => state.login);
-
-	return authState.authorizationToken ? (
+	return localStorage.getItem(jwtToken) ? (
 		<Redirect
 			to={{
-				pathname: Routes.ProblemEditor,
+				pathname: Routes.Modules,
 				state: { from: Routes.Login },
 			}}
 		/>
 	) : (
 		<LayoutContainer pageTitle="Login">
-			<Formik
-				initialValues={{ username: "", password: "" }}
-				onSubmit={(values: IRequestLoginAction) => {
-					dispatch(requestLogin(values));
-				}}
-			>
-				{() => (
-					<Form className={classes.container}>
-						<Card className={classes.card}>
-							<CardHeader className={classes.header} title="Admin Login" />
-							<CardContent>
-								<div>
-									<Field
-										name="username"
-										label="Username"
-										placeholder="Username"
-										margin="normal"
-										fullWidth
-										required
-										component={FormTextField}
-									/>
-								</div>
-								<div>
-									<Field
-										name="password"
-										placeholder="Password"
-										label="Password"
-										type="password"
-										margin="normal"
-										fullWidth
-										required
-										component={FormTextField}
-									/>
-								</div>
-							</CardContent>
-							<CardActions>
-								<Button
-									type="submit"
-									variant="contained"
-									size="large"
-									color="secondary"
-									className={classes.loginBtn}
-								>
-									Submit
-								</Button>
-							</CardActions>
-						</Card>
-					</Form>
-				)}
-			</Formik>
+			<div>
+				{authState.isLoading && <CircularProgress />}
+				{
+					//TODO: Temp until we solve Alert MUI Issue
+				}
+				{authState.errorMessage && <h4>{authState.errorMessage}</h4>}
+				<Formik
+					initialValues={{ username: "", password: "" }}
+					onSubmit={(values: IRequestLoginAction) => {
+						dispatch(requestLogin(values));
+					}}
+				>
+					{() => (
+						<Form className={classes.container}>
+							<Card className={classes.card}>
+								<CardHeader className={classes.header} title="Admin Login" />
+								<CardContent>
+									<div>
+										<Field
+											name="username"
+											label="Username"
+											placeholder="Username"
+											margin="normal"
+											fullWidth
+											required
+											component={FormTextField}
+										/>
+									</div>
+									<div>
+										<Field
+											name="password"
+											placeholder="Password"
+											label="Password"
+											type="password"
+											margin="normal"
+											fullWidth
+											required
+											component={FormTextField}
+										/>
+									</div>
+								</CardContent>
+								<CardActions>
+									<Button
+										type="submit"
+										variant="contained"
+										size="large"
+										color="secondary"
+										className={classes.loginBtn}
+									>
+										Submit
+									</Button>
+								</CardActions>
+							</Card>
+						</Form>
+					)}
+				</Formik>
+			</div>
 		</LayoutContainer>
 	);
 }
