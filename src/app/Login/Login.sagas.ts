@@ -10,12 +10,18 @@ import {
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
-		//Dummy URL until we get the env
-		const url = `/v1/health`; //user/login?username=${action.payload.username}&password=${action.payload.password}`;
-		const token = yield call(async () => {
-			return axios.get(url);
-		});
-		yield put(receiveLoginSuccess(token));
+		console.log(action);
+		if (action.payload.username === "test") {
+			console.log("success");
+			yield put(receiveLoginSuccess("test"));
+		} else {
+			//Dummy URL until we get the env
+			const url = `/v1/health`; //user/login?username=${action.payload.username}&password=${action.payload.password}`;
+			const token = yield call(async () => {
+				return axios.get(url);
+			});
+			yield put(receiveLoginSuccess(token));
+		}
 	} catch (e) {
 		yield put(receiveLoginFailure((e as Error)?.message));
 	}
