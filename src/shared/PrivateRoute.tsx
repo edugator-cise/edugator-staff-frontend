@@ -1,24 +1,15 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Routes } from "./Routes.constants";
-import { RootState } from "../app/common/store";
-
-interface PrivateRouteProps {
-	routeProps: RouteProps;
-}
+import { jwtToken } from "./constants";
 
 //Reference: https://reactrouter.com/web/example/auth-workflow
-export const PrivateRoute: React.FC<PrivateRouteProps> = ({
-	children,
-	...routeProps
-}) => {
-	const authState = useSelector((state: RootState) => state.login);
+export const PrivateRoute: React.FC<RouteProps> = ({ children, ...props }) => {
 	return (
 		<Route
-			{...routeProps}
+			{...props}
 			render={({ location }) =>
-				authState.authorizationToken ? (
+				localStorage.getItem(jwtToken) ? (
 					children
 				) : (
 					<Redirect
