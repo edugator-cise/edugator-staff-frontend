@@ -16,12 +16,10 @@ function App() {
 					<Route exact path={Routes.Login}>
 						<LoginPage />
 					</Route>
-					<PrivateRoute
-						routeProps={{ exact: true, path: Routes.ProblemEditor }}
-					>
+					<PrivateRoute exact path={Routes.ProblemEditor}>
 						<ProblemEditorPage />
 					</PrivateRoute>
-					<PrivateRoute routeProps={{ exact: true, path: Routes.Modules }}>
+					<PrivateRoute exact path={Routes.Modules}>
 						<Modules />
 					</PrivateRoute>
 				</Switch>
