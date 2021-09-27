@@ -2,9 +2,12 @@ import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Button, Typography, Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import { ExpandMore, Edit, AssignmentTurnedIn } from '@material-ui/icons';
-import { NewModuleDialog, ModuleMenu, ProblemButtons } from "./components";
+import { NewModuleDialog, ModuleMenu, /*ProblemButtons*/ } from "./components";
 import { LayoutContainer } from '../../shared/LayoutContainer';
-import { IModule } from './types';
+import { useAppDispatch, useAppSelector } from '../../app/common/hooks';
+import { requestModules, requestNewModule } from './ModulesPage.slice';
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,29 +35,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Modules() {
-  const [modules, setModules] = React.useState<IModule[]>([]); // temporary place for module information
+  const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const modulesState = useAppSelector((state) => state.modules);
 
   const [newModuleDialog, setNewModuleDialog] = React.useState(false);
-
   const handleDialogClose = () => {
     setNewModuleDialog(false);
   };
-
   const handleNewModule = (nameInput: string) => {
     setNewModuleDialog(false);
-    let newModule: IModule = {
-      name: nameInput,
-      number: 0,
-      problemList: [],
-    }
-    setModules(modules.concat(newModule))
+    dispatch(requestNewModule({ moduleName: nameInput, moduleNum: 0 }))
   }
-
-  const classes = useStyles();
 
   const moduleButtons = [
     { label: "Add Module", onClick: () => { setNewModuleDialog(true) } }
   ]
+  console.log("before dispatch get modules")
+  dispatch(requestModules())
 
   return (
 
@@ -71,8 +69,8 @@ export default function Modules() {
 
         {/* Loop here for each module */}
 
-        {modules ?
-          modules.map(
+        {(modulesState.modules.length > 0) ?
+          modulesState.modules.map(
             (module, i) => {
               return (
                 <Accordion>
@@ -102,11 +100,16 @@ export default function Modules() {
                       </Typography>
 
                       <span className={classes.buttons}>
-                        <ProblemButtons
+                        {
+                          /*
+                           <ProblemButtons
                           open={newModuleDialog}
                           handleSubmit={handleNewModule}
                           handleClose={handleDialogClose}
-                        />
+                          />
+                          */
+                        }
+
                         <Button
                           //variant="contained"
                           color="default"
@@ -134,7 +137,7 @@ export default function Modules() {
                 </Accordion>
               )
 
-            }) : <h1>Add some modules to get started. It doesn't show?</h1>
+            }) : <Typography variant="h6"> Click Add Modules to get started </Typography>
         }
       </div>
     </LayoutContainer>

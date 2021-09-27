@@ -1,23 +1,27 @@
 import { AxiosRequestConfig } from "axios";
 
-interface IConfig {
-    apiUrls: {
-        [desc: string]: AxiosRequestConfig;
-    };
+interface IApiConfig {
+    [desc: string]: AxiosRequestConfig;
+
 }
 
 const noCache = { "Cache-Control": "no-cache" };
 
-const Config: IConfig = {
-    apiUrls: {
-        "get modules": {
-            url: "/api/admin/modules",
-            method: "GET",
-            headers: {
-                ...noCache,
-            },
+const apiUrls: IApiConfig = {
+    "get modules": {
+        url: "/v1/admin/modules",
+        method: "GET",
+        headers: {
+            ...noCache,
         },
-    }
+    },
+    "add modules": {
+        url: "/v1/admin/modules",
+        method: "PUT",
+        headers: {
+            ...noCache,
+        },
+    },
 }
 
-export default Config;
+export default apiUrls;

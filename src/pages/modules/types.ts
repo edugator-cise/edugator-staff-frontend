@@ -28,12 +28,43 @@ export interface IModule {
     problemList: IProblem[],
 }
 
+/* Redux State - Modules */
 export interface IModuleState {
     modules: IModule[];
     isLoading: boolean;
     errorMessage: string | null;
 }
 
+/* GET Request Actions - Modules */
+export interface IModulesGET { }
+export interface IModulesGETEnd {
+    modules: IModule[]
+}
+export interface IModulesGETFail {
+    message: string | null
+}
+
+/* PUT Request Actions - Modules */
+export interface IModulesPUT {
+    moduleName: string,
+    moduleNum: number,
+}
+
+export interface IModulesPUTEnd {
+    module: IModule
+}
+
+export interface IModulesPUTFail {
+    message: string | null
+}
+
+/* POST Request Actions - Modules */
+
+
+
+/* DELETE Request Actions - Modules */
+
+/*
 export interface Iaction {
     type: string,
     payload: any,
@@ -55,6 +86,6 @@ export const actions = {
     GET_MODULES_SUCCESS: "GET_MODULES_SUCCESS",
     GET_MODULES_FAILURE: "GET_MODULES_FAILURE",
 };
-
+*/
 
 
