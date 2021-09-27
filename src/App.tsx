@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
-import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { LoginPage } from "./app/Login/Login";
+import { Typography } from "@material-ui/core";
 
 function App() {
   return (
