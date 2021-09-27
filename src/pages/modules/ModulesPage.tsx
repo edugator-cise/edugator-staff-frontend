@@ -51,8 +51,9 @@ export default function Modules() {
   const moduleButtons = [
     { label: "Add Module", onClick: () => { setNewModuleDialog(true) } }
   ]
-  console.log("before dispatch get modules")
-  dispatch(requestModules())
+  
+  React.useEffect(() => { dispatch(requestModules()) }, [dispatch]);
+
 
   return (
 
@@ -73,7 +74,7 @@ export default function Modules() {
           modulesState.modules.map(
             (module, i) => {
               return (
-                <Accordion>
+                <Accordion key={i}>
 
                   <AccordionSummary
                     expandIcon={<ExpandMore />}
@@ -92,6 +93,7 @@ export default function Modules() {
                   {[0, 1].map((value) => (
                     <AccordionDetails
                       className={classes.details}
+                      key={value}
                     >
                       <Typography
                         className={classes.text}

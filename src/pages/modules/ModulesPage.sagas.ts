@@ -23,9 +23,10 @@ const moduleRequests =
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
 	console.log("sagas for GET Modules")
 	try {
-		const response = yield call(moduleRequests);
+		//const response = yield call(moduleRequests);
 		yield put(
-			requestModulesSuccess(response.data)
+			//requestModulesSuccess(response.data)
+			requestModulesSuccess({modules: []})
 		);
 	} catch (e) {
 		yield put(
