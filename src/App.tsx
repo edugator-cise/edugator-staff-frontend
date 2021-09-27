@@ -5,7 +5,9 @@ import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 function App() {
   return (
     <div className="App">
-      <ProblemEditorPage />
+      <Typography variant="h3" color="textSecondary">
+        <LoginPage></LoginPage>
+      </Typography>
     </div>
   );
 }
