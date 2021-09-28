@@ -5,16 +5,15 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import CardHeader from "@material-ui/core/CardHeader";
 import Button from "@material-ui/core/Button";
-import { CircularProgress, Snackbar } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import { IRequestLoginAction } from "./Login.slice";
 import { Field, Form, Formik } from "formik";
 import { FormTextField } from "../../shared/FormTextField";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { Routes } from "../../shared/Routes.constants";
 import { Redirect } from "react-router";
-import { jwtToken } from "../../shared/constants";
+import { LocalStorage } from "../common/localStorage";
 
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 const useStyles = makeStyles((theme: Theme) =>
@@ -26,15 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
 			justifyContent: "center",
 			width: 400,
 			margin: `${theme.spacing(0)} auto`,
+			position: "absolute",
+			left: "50%",
+			top: "50%",
+			transform: "translate(-50%, -50%)",
 		},
 		loginBtn: {
 			marginTop: theme.spacing(2),
 			flexGrow: 1,
-		},
-		header: {
-			textAlign: "center",
-			background: "#212121",
-			color: "#fff",
 		},
 		card: {
 			marginTop: theme.spacing(10),
@@ -46,7 +44,7 @@ export function LoginPage(): React.ReactElement {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const authState = useSelector((state: RootState) => state.login);
-	return localStorage.getItem(jwtToken) ? (
+	return LocalStorage.getToken() ? (
 		<Redirect
 			to={{
 				pathname: Routes.Modules,
@@ -54,7 +52,7 @@ export function LoginPage(): React.ReactElement {
 			}}
 		/>
 	) : (
-		<LayoutContainer pageTitle="Login">
+		<LayoutContainer pageTitle="Admin Login">
 			<div>
 				{authState.isLoading && <CircularProgress />}
 				{
@@ -70,7 +68,6 @@ export function LoginPage(): React.ReactElement {
 					{() => (
 						<Form className={classes.container}>
 							<Card className={classes.card}>
-								<CardHeader className={classes.header} title="Admin Login" />
 								<CardContent>
 									<div>
 										<Field
