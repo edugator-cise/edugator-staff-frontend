@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { LocalStorage } from "../app/common/localStorage";
 import { Routes } from "./Routes.constants";
-import { jwtToken } from "./constants";
 
 //Reference: https://reactrouter.com/web/example/auth-workflow
 export const PrivateRoute: React.FC<RouteProps> = ({ children, ...props }) => {
@@ -9,7 +9,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({ children, ...props }) => {
 		<Route
 			{...props}
 			render={({ location }) =>
-				localStorage.getItem(jwtToken) ? (
+				LocalStorage.getToken() ? (
 					children
 				) : (
 					<Redirect
