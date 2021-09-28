@@ -41,6 +41,11 @@ const ProblemAction = styled(Button)(({ theme }) => ({
   color: grey["A700"],
 }));
 
+interface INewModule {
+  nameInput: string;
+  numberInput: number;
+}
+
 export default function Modules() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
@@ -49,9 +54,15 @@ export default function Modules() {
   const handleDialogClose = () => {
     setNewModuleDialog(false);
   };
-  const handleNewModule = (nameInput: string) => {
+
+  const handleNewModule = (moduleInput: INewModule) => {
     setNewModuleDialog(false);
-    dispatch(requestNewModule({ moduleName: nameInput, moduleNum: 0 }));
+    dispatch(
+      requestNewModule({
+        moduleName: moduleInput.nameInput,
+        moduleNum: moduleInput.numberInput,
+      })
+    );
   };
 
   const moduleButtons = [
@@ -76,21 +87,13 @@ export default function Modules() {
           handleClose={handleDialogClose}
         />
 
-        <Button
-          onClick={() => {
-            setNewModuleDialog(true);
-          }}
-        >
-          Add Module
-        </Button>
-
         {modulesState.modules.length > 0 ? (
           modulesState.modules.map((module, i) => {
             return (
               <Accordion key={i}>
                 <ModuleSummary expandIcon={<ExpandMore />}>
                   <Typography variant="h6">
-                    Module {i}: {module.name}
+                    Module {module.number}: {module.name}
                   </Typography>
                   <ModuleMenu />
                 </ModuleSummary>

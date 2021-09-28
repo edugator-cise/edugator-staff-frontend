@@ -10,8 +10,19 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+const Form = styled("div")({
+  display: "flex",
+});
+
+const NumberField = styled(TextField)<TextFieldProps>(({ theme }) => ({
+  marginLeft: theme.spacing(3),
+  marginTop: theme.spacing(2),
+  margin: theme.spacing(1),
+  minWidth: "11%",
+  maxWidth: "13%",
+}));
+
 const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  display: "block",
   marginLeft: theme.spacing(3),
   marginTop: theme.spacing(2),
   margin: theme.spacing(1),
@@ -29,12 +40,21 @@ const Footer = styled("div")({
 export interface NewModuleDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleSubmit: (name: string) => void;
+  handleSubmit: (moduleInput: INewModule) => void;
+}
+
+interface INewModule {
+  nameInput: string;
+  numberInput: number;
 }
 
 export default function NewModuleDialog(props: NewModuleDialogProps) {
   const { open, handleClose, handleSubmit } = props;
-  const [moduleName, setModuleName] = React.useState("");
+
+  const [moduleValues, setModuleValues] = React.useState<INewModule>({
+    numberInput: 0,
+    nameInput: "",
+  });
 
   return (
     <Dialog
@@ -47,21 +67,38 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
       <Paper elevation={3}>
         <DialogTitle id="module-title-dialog">Add a new module</DialogTitle>
         <Divider />
-        <NameTextField
-          id="outlined-new-module"
-          label="Module Name"
-          variant="outlined"
-          onChange={(event) => {
-            setModuleName(event.target.value);
-          }}
-          placeholder="Module X: Sorting Algorithms"
-          fullWidth
-          autoFocus
-        />
+        <Form>
+          <NumberField
+            id="outlined-new-module"
+            label="Number"
+            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            onChange={(event) => {
+              setModuleValues({
+                ...moduleValues,
+                numberInput: parseInt(event.target.value),
+              });
+            }}
+            fullWidth
+            focused
+          />
+          <NameTextField
+            id="outlined-new-module"
+            label="Module Name"
+            variant="outlined"
+            onChange={(event) => {
+              setModuleValues({
+                ...moduleValues,
+                nameInput: event.target.value,
+              });
+            }}
+            fullWidth
+            focused
+          />
+        </Form>
 
         <Footer>
           <AddButton
-            onClick={() => handleSubmit(moduleName)}
+            onClick={() => handleSubmit(moduleValues)}
             variant="outlined"
           >
             Add module
