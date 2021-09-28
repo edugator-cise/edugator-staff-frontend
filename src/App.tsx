@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { ProblemEditorPage } from "./pages/ProblemEditorPage";
+import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 
 function App() {
   return (
