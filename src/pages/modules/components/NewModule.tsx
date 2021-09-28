@@ -50,8 +50,7 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
         <NameTextField
           id="outlined-new-module"
           label="Module Name"
-          //variant="filled"
-          variant="outlined" //???????????????????? error.
+          variant="outlined"
           onChange={(event) => {
             setModuleName(event.target.value);
           }}

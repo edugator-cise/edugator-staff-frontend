@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ExpandMore, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
-//import { LayoutContainer } from "../../shared/LayoutContainer";
+import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
 import { styled } from "@mui/material/styles";
@@ -53,7 +53,7 @@ export default function Modules() {
     setNewModuleDialog(false);
     dispatch(requestNewModule({ moduleName: nameInput, moduleNum: 0 }));
   };
-  /*
+
   const moduleButtons = [
     {
       label: "Add Module",
@@ -61,76 +61,70 @@ export default function Modules() {
         setNewModuleDialog(true);
       },
     },
-  ];*/
+  ];
 
   React.useEffect(() => {
     dispatch(requestModules());
   }, [dispatch]);
 
   return (
-    <div>
-      <NewModuleDialog
-        open={newModuleDialog}
-        handleSubmit={handleNewModule}
-        handleClose={handleDialogClose}
-      />
-
-      <Button
-        onClick={() => {
-          setNewModuleDialog(true);
-        }}
-      >
-        Add Module
-      </Button>
-
-      {modulesState.modules.length > 0 ? (
-        modulesState.modules.map((module, i) => {
-          return (
-            <Accordion key={i}>
-              <ModuleSummary expandIcon={<ExpandMore />}>
-                <Typography variant="h6">
-                  Module {i}: {module.name}
-                </Typography>
-                <ModuleMenu />
-              </ModuleSummary>
-
-              {[0, 1].map((value) => (
-                <ModuleContent key={value}>
-                  <ProblemTitle>Problem {value}</ProblemTitle>
-
-                  <ButtonContainer>
-                    <ProblemAction
-                      //variant="contained"
-                      startIcon={<AssignmentTurnedIn />}
-                      size="small"
-                    >
-                      Grade
-                    </ProblemAction>
-
-                    <ProblemAction
-                      //variant="contained"
-                      startIcon={<Edit />}
-                      size="small"
-                    >
-                      Edit
-                    </ProblemAction>
-                  </ButtonContainer>
-                </ModuleContent>
-              ))}
-            </Accordion>
-          );
-        })
-      ) : (
-        <Typography variant="h6"> Click Add Modules to get started </Typography>
-      )}
-    </div>
-  );
-  /*
-  return (
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleButtons}>
-      content
+      <div>
+        <NewModuleDialog
+          open={newModuleDialog}
+          handleSubmit={handleNewModule}
+          handleClose={handleDialogClose}
+        />
+
+        <Button
+          onClick={() => {
+            setNewModuleDialog(true);
+          }}
+        >
+          Add Module
+        </Button>
+
+        {modulesState.modules.length > 0 ? (
+          modulesState.modules.map((module, i) => {
+            return (
+              <Accordion key={i}>
+                <ModuleSummary expandIcon={<ExpandMore />}>
+                  <Typography variant="h6">
+                    Module {i}: {module.name}
+                  </Typography>
+                  <ModuleMenu />
+                </ModuleSummary>
+
+                {[0, 1].map((value) => (
+                  <ModuleContent key={value}>
+                    <ProblemTitle>Problem {value}</ProblemTitle>
+
+                    <ButtonContainer>
+                      <ProblemAction
+                        //variant="contained"
+                        startIcon={<AssignmentTurnedIn />}
+                        size="small"
+                      >
+                        Grade
+                      </ProblemAction>
+
+                      <ProblemAction
+                        //variant="contained"
+                        startIcon={<Edit />}
+                        size="small"
+                      >
+                        Edit
+                      </ProblemAction>
+                    </ButtonContainer>
+                  </ModuleContent>
+                ))}
+              </Accordion>
+            );
+          })
+        ) : (
+          <Typography variant="h6">Click Add Modules to get started</Typography>
+        )}
+      </div>
     </LayoutContainer>
-    
   );
-  */
 }
