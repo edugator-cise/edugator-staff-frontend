@@ -1,12 +1,18 @@
+import { createMuiTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/system";
 import React from "react";
 import "./App.css";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 
 function App() {
+  const theme = createMuiTheme();
+
   return (
-    <div className="App">
-      <ProblemEditorPage />
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <ProblemEditorPage />
+      </div>
+    </ThemeProvider>
   );
 }
 
