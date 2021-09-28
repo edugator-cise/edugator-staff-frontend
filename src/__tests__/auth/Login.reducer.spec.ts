@@ -13,7 +13,6 @@ describe("Auth Reducer", () => {
 
     const expected = {
       ...baseLoginState,
-      authorizationToken: "",
       errorMessage: "",
       isLoading: true,
     };
@@ -28,7 +27,6 @@ describe("Auth Reducer", () => {
 
     const expected = {
       ...baseLoginState,
-      authorizationToken: token,
       errorMessage: "",
       isLoading: false,
     };
@@ -43,7 +41,6 @@ describe("Auth Reducer", () => {
 
     const expected = {
       ...baseLoginState,
-      authorizationToken: "",
       errorMessage: msg,
       isLoading: false,
     };

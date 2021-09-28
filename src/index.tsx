@@ -11,14 +11,14 @@ import { Router } from "react-router";
 const history = createBrowserHistory();
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<Router history={history}>
-				<App />
-			</Router>
-		</Provider>
-	</React.StrictMode>,
-	document.getElementById("root")
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router history={history}>
+        <App />
+      </Router>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -9,23 +9,23 @@ import Modules from "./pages/modules/ModulesView";
 import { ProblemEditorPage } from "./pages/ProblemEditorPage";
 
 function App() {
-	return (
-		<div className="App">
-			<Typography variant="h3" color="textSecondary">
-				<Switch>
-					<Route exact path={Routes.Login}>
-						<LoginPage />
-					</Route>
-					<PrivateRoute exact path={Routes.ProblemEditor}>
-						<ProblemEditorPage />
-					</PrivateRoute>
-					<PrivateRoute exact path={Routes.Modules}>
-						<Modules />
-					</PrivateRoute>
-				</Switch>
-			</Typography>
-		</div>
-	);
+  return (
+    <div className="App">
+      <Typography variant="h3" color="textSecondary">
+        <Switch>
+          <Route exact path={Routes.Login}>
+            <LoginPage />
+          </Route>
+          <PrivateRoute exact path={Routes.ProblemEditor}>
+            <ProblemEditorPage />
+          </PrivateRoute>
+          <PrivateRoute exact path={Routes.Modules}>
+            <Modules />
+          </PrivateRoute>
+        </Switch>
+      </Typography>
+    </div>
+  );
 }
 
 export default App;
