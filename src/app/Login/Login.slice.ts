@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocalStorage } from "../common/localStorage";
+import { LocalStorage } from "../common/LocalStorage";
 import setAuthToken from "../common/setAuthToken";
 
 export interface IAuthState {

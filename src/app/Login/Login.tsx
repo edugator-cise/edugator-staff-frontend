@@ -13,7 +13,7 @@ import { FormTextField } from "../../shared/FormTextField";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { Routes } from "../../shared/Routes.constants";
 import { Redirect } from "react-router";
-import { LocalStorage } from "../common/localStorage";
+import { LocalStorage } from "../common/LocalStorage";
 
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,12 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			flexWrap: "wrap",
 			alignItems: "center",
 			justifyContent: "center",
-			width: 400,
+			width: "50%",
 			margin: `${theme.spacing(0)} auto`,
-			position: "absolute",
 			left: "50%",
 			top: "50%",
-			transform: "translate(-50%, -50%)",
 		},
 		loginBtn: {
 			marginTop: theme.spacing(2),
@@ -58,7 +56,6 @@ export function LoginPage(): React.ReactElement {
 				{
 					//TODO: Temp until we solve Alert MUI Issue
 				}
-				{authState.errorMessage && <h4>{authState.errorMessage}</h4>}
 				<Formik
 					initialValues={{ username: "", password: "" }}
 					onSubmit={(values: IRequestLoginAction) => {
@@ -93,6 +90,7 @@ export function LoginPage(): React.ReactElement {
 										/>
 									</div>
 								</CardContent>
+								{authState.errorMessage && <p>{authState.errorMessage}</p>}
 								<CardActions>
 									<Button
 										type="submit"

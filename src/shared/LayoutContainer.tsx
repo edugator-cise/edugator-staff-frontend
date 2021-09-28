@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { LocalStorage } from "../app/common/localStorage";
+import { LocalStorage } from "../app/common/LocalStorage";
 import { requestLogout } from "../app/Login/Login.slice";
 import { Routes } from "../shared/Routes.constants";
 
