@@ -13,6 +13,7 @@ import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
 import { styled } from "@mui/material/styles";
+import { grey } from '@mui/material/colors';
 
 const ModuleSummary = styled(AccordionSummary)({
   backgroundColor: "rgba(0, 0, 0, .1)", // background of module
@@ -20,6 +21,7 @@ const ModuleSummary = styled(AccordionSummary)({
 });
 
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
+  display: "flex",
   padding: theme.spacing(1),
   paddingLeft: theme.spacing(2),
   backgroundColor: "rgba(0, 0, 0, .02)",
@@ -37,6 +39,7 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 
 const ProblemAction = styled(Button)(({ theme }) => ({
   marginRight: theme.spacing(1),
+  color: grey["A700"]
 }));
 
 export default function Modules() {
@@ -72,6 +75,8 @@ export default function Modules() {
         handleSubmit={handleNewModule}
         handleClose={handleDialogClose}
       />
+
+      <Button onClick={()=>{setNewModuleDialog(true);}}>Add Module</Button>
 
       {modulesState.modules.length > 0 ? (
         modulesState.modules.map((module, i) => {
