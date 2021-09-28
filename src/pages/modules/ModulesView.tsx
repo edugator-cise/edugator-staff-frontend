@@ -1,7 +1,9 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { Button, Typography, Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
-import { ExpandMore, Edit, AssignmentTurnedIn } from '@material-ui/icons';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import { Button, Typography, Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { ExpandMore, Edit, AssignmentTurnedIn } from '@mui/icons-material';
 import { IModule } from './types';
 import NewModuleDialog from "./NewModule";
 import ModuleOptions from "./ModuleOptions"
@@ -61,7 +63,6 @@ export default function Modules() {
   ]
 
   return (
-
     <LayoutContainer
       pageTitle={"Modules"}
       actionButtons={moduleButtons}
@@ -107,22 +108,13 @@ export default function Modules() {
 
                       <span className={classes.buttons}>
                         <Button
-                          //variant="contained"
-                          color="default"
                           className={classes.button}
                           startIcon={<AssignmentTurnedIn />}
-                          size="small"
-                        >
+                          size="small">
                           Grade
                         </Button>
 
-                        <Button
-                          //variant="contained"
-                          color="default"
-                          className={classes.button}
-                          startIcon={<Edit />}
-                          size="small"
-                        >
+                        <Button className={classes.button} startIcon={<Edit />} size="small">
                           Edit
                         </Button>
                       </span>
@@ -131,12 +123,11 @@ export default function Modules() {
                   ))}
 
                 </Accordion>
-              )
+              );
 
             }) : <h1>Add some modules to get started. It doesn't show?</h1>
         }
       </div>
     </LayoutContainer>
-
   );
 }

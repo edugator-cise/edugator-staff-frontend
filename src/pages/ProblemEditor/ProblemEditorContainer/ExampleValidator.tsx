@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, FormGroup, Switch } from "@material-ui/core";
+import { Box, FormControlLabel, FormGroup, Switch } from "@mui/material";
 import React from "react";
 
 interface Props {

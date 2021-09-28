@@ -1,7 +1,9 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { IconButton, Menu, MenuItem } from '@material-ui/core';
-import { MoreVert } from '@material-ui/icons';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import { MoreVert } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +41,7 @@ export default function ModuleMenu() {
                 aria-haspopup="true"
                 onClick={(event) => { handleClick(event) }}
                 className={classes.root}
-            >
+                size="large">
                 <MoreVert />
             </IconButton>
             <Menu
