@@ -11,8 +11,8 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { LocalStorage } from "../app/common/localStorage";
 import { requestLogout } from "../app/Login/Login.slice";
-import { jwtToken } from "./constants";
 import { Routes } from "../shared/Routes.constants";
 
 interface ButtonProps {
@@ -59,7 +59,7 @@ export const LayoutContainer = ({
 						EDUGATOR
 					</Typography>
 					<Box sx={{ flexGrow: 1 }} />
-					{localStorage.getItem(jwtToken) && (
+					{LocalStorage.getToken() && (
 						<Button
 							size="large"
 							color="secondary"
