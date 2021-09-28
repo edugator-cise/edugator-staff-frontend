@@ -1,28 +1,30 @@
-import React from 'react';
-import { Button, TextField, DialogTitle, Dialog, Paper, Divider } from '@material-ui/core';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  DialogTitle,
+  Dialog,
+  Paper,
+  Divider,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    textfield: {
-      display: "block",
-      marginLeft: theme.spacing(3),
-      marginTop: theme.spacing(2),
-      margin: theme.spacing(1),
-      maxWidth: "70%",
-    },
-    dialog: {
-      //width: "50vw",
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    footer: {
-      float: "right",
-    },
-  }),
-);
+const NameTextField = styled(TextField)(({ theme }) => ({
+  display: "block",
+  marginLeft: theme.spacing(3),
+  marginTop: theme.spacing(2),
+  margin: theme.spacing(1),
+  maxWidth: "70%",
+}));
 
+const AddButton = styled(Button)(({ theme }) => ({
+  margin: theme.spacing(1),
+}));
+
+const Footer = styled(Box)({
+  float: "right",
+});
 
 export interface NewModuleDialogProps {
   open: boolean;
@@ -32,42 +34,40 @@ export interface NewModuleDialogProps {
 
 export default function NewModuleDialog(props: NewModuleDialogProps) {
   const { open, handleClose, handleSubmit } = props;
-  const [moduleName, setModuleName] = React.useState('');
-
-  const classes = useStyles();
+  const [moduleName, setModuleName] = React.useState("");
 
   return (
     <Dialog
       onClose={handleClose}
       aria-labelledby="new-module-dialog"
       open={open}
-      className={classes.dialog}
       maxWidth="sm"
       fullWidth
     >
       <Paper elevation={3}>
         <DialogTitle id="module-title-dialog">Add a new module</DialogTitle>
         <Divider />
-        <TextField
+        <NameTextField
           id="outlined-new-module"
           label="Module Name"
-          variant="outlined"
-          onChange={(event) => { setModuleName(event.target.value) }}
+          variant="filled"
+          //variant="outlined" ???????????????????? error.
+          onChange={(event) => {
+            setModuleName(event.target.value);
+          }}
           placeholder="Module X: Sorting Algorithms"
-          className={classes.textfield}
           fullWidth
           autoFocus
         />
 
-        <div className={classes.footer}>
-          <Button
+        <Footer>
+          <AddButton
             onClick={() => handleSubmit(moduleName)}
-            className={classes.button}
             variant="outlined"
           >
             Add module
-          </Button>
-        </div>
+          </AddButton>
+        </Footer>
       </Paper>
     </Dialog>
   );
