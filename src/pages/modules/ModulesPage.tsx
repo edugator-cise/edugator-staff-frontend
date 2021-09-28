@@ -5,7 +5,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
 } from "@mui/material";
 import { ExpandMore, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
@@ -33,7 +32,7 @@ const ProblemTitle = styled(Typography)(({ theme }) => ({
   marginBottom: "auto",
 }));
 
-const ButtonContainer = styled(Box)(({ theme }) => ({
+const ButtonContainer = styled("div")(({ theme }) => ({
   marginLeft: "auto",
 }));
 

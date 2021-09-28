@@ -1,8 +1,8 @@
 import React from "react";
 import {
-  Box,
   Button,
   TextField,
+  TextFieldProps,
   DialogTitle,
   Dialog,
   Paper,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const NameTextField = styled(TextField)(({ theme }) => ({
+const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   display: "block",
   marginLeft: theme.spacing(3),
   marginTop: theme.spacing(2),
@@ -22,7 +22,7 @@ const AddButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
-const Footer = styled(Box)({
+const Footer = styled("div")({
   float: "right",
 });
 
@@ -50,8 +50,8 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
         <NameTextField
           id="outlined-new-module"
           label="Module Name"
-          variant="filled"
-          //variant="outlined" ???????????????????? error.
+          //variant="filled"
+          variant="outlined" //???????????????????? error.
           onChange={(event) => {
             setModuleName(event.target.value);
           }}
