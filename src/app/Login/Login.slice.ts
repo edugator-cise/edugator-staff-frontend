@@ -1,15 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { jwtToken } from "../../shared/constants";
+import { LocalStorage } from "../common/localStorage";
 import setAuthToken from "../common/setAuthToken";
 
 export interface IAuthState {
-	authorizationToken: string;
 	isLoading: boolean;
 	errorMessage: string;
 }
 
 const initialAuthState: IAuthState = {
-	authorizationToken: "",
 	isLoading: false,
 	errorMessage: "",
 };
@@ -33,14 +31,17 @@ export const loginSlice = createSlice({
 	initialState: getInitialAuthState(),
 	reducers: {
 		requestLogin(state, action: PayloadAction<IRequestLoginAction>) {
-			state.isLoading = true;
-			return state;
+			return {
+				...state,
+				isLoading: true,
+				errorMessage: "",
+			};
 		},
 		receiveLoginSuccess(state, action) {
+			setAuthToken(action.payload);
 			return {
 				...state,
 				isLoading: false,
-				authorizationToken: action.payload,
 				errorMessage: "",
 			};
 		},
@@ -48,12 +49,11 @@ export const loginSlice = createSlice({
 			return {
 				...state,
 				isLoading: false,
-				authorizationToken: "",
 				errorMessage: action.payload,
 			};
 		},
 		requestLogout(state) {
-			localStorage.removeItem(jwtToken);
+			LocalStorage.removeToken();
 			setAuthToken(false);
 			return { ...state, isLoading: false, authorizationToken: "" };
 		},
