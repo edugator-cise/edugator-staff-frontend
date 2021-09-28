@@ -33,6 +33,7 @@
 		"eject": "react-scripts eject",
 		"prettier-check": "prettier --check src/**/*.ts{,x}",
 		"format": "prettier --write src/**/*.ts{,x}",
+		"format-modules": "prettier --write src/pages/modules/**/*.ts{,x}",
 		"lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
 		"lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
 		"pre-pr": "npm run build && npm run format && npm run lint-fix && npm run test"

@@ -5,7 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box
+  Box,
 } from "@mui/material";
 import { ExpandMore, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
@@ -13,7 +13,7 @@ import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
 import { styled } from "@mui/material/styles";
-import { grey } from '@mui/material/colors';
+import { grey } from "@mui/material/colors";
 
 const ModuleSummary = styled(AccordionSummary)({
   backgroundColor: "rgba(0, 0, 0, .1)", // background of module
@@ -39,7 +39,7 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 
 const ProblemAction = styled(Button)(({ theme }) => ({
   marginRight: theme.spacing(1),
-  color: grey["A700"]
+  color: grey["A700"],
 }));
 
 export default function Modules() {
@@ -54,7 +54,7 @@ export default function Modules() {
     setNewModuleDialog(false);
     dispatch(requestNewModule({ moduleName: nameInput, moduleNum: 0 }));
   };
-
+  /*
   const moduleButtons = [
     {
       label: "Add Module",
@@ -62,7 +62,7 @@ export default function Modules() {
         setNewModuleDialog(true);
       },
     },
-  ];
+  ];*/
 
   React.useEffect(() => {
     dispatch(requestModules());
@@ -76,32 +76,30 @@ export default function Modules() {
         handleClose={handleDialogClose}
       />
 
-      <Button onClick={()=>{setNewModuleDialog(true);}}>Add Module</Button>
+      <Button
+        onClick={() => {
+          setNewModuleDialog(true);
+        }}
+      >
+        Add Module
+      </Button>
 
       {modulesState.modules.length > 0 ? (
         modulesState.modules.map((module, i) => {
           return (
             <Accordion key={i}>
-              <ModuleSummary
-                expandIcon={<ExpandMore />}
-              >
+              <ModuleSummary expandIcon={<ExpandMore />}>
                 <Typography variant="h6">
                   Module {i}: {module.name}
                 </Typography>
                 <ModuleMenu />
               </ModuleSummary>
 
-
-
               {[0, 1].map((value) => (
                 <ModuleContent key={value}>
-                  <ProblemTitle>
-                    Problem {value}
-                  </ProblemTitle>
+                  <ProblemTitle>Problem {value}</ProblemTitle>
 
                   <ButtonContainer>
-
-
                     <ProblemAction
                       //variant="contained"
                       startIcon={<AssignmentTurnedIn />}
@@ -124,13 +122,10 @@ export default function Modules() {
           );
         })
       ) : (
-        <Typography variant="h6">
-          {" "}
-          Click Add Modules to get started{" "}
-        </Typography>
+        <Typography variant="h6"> Click Add Modules to get started </Typography>
       )}
     </div>
-  )
+  );
   /*
   return (
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleButtons}>
@@ -139,5 +134,4 @@ export default function Modules() {
     
   );
   */
-
 }

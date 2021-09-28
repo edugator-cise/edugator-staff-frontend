@@ -1,8 +1,5 @@
 import React from "react";
 
-
-
-
 export interface NewModuleDialogProps {
   open: boolean;
   handleClose: () => void;
@@ -10,10 +7,5 @@ export interface NewModuleDialogProps {
 }
 
 export default function NewModuleDialog() {
-  
-
-  return (
-    <div>
-    </div>
-  );
+  return <div></div>;
 }
