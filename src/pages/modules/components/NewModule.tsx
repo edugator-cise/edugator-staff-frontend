@@ -71,6 +71,7 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
           <NumberField
             id="outlined-new-module"
             label="Number"
+            variant="filled"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             onChange={(event) => {
               setModuleValues({
@@ -84,7 +85,7 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
           <NameTextField
             id="outlined-new-module"
             label="Module Name"
-            variant="outlined"
+            variant="filled"
             onChange={(event) => {
               setModuleValues({
                 ...moduleValues,
