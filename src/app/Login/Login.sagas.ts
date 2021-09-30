@@ -10,10 +10,6 @@ import {
 	IRequestLoginAction,
 } from "./Login.slice";
 
-interface ServiceSideToken {
-	token: string;
-}
-
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
 		const url = `${baseAPIURL}v1/user/login?username=${action.payload.username}&password=${action.payload.password}`;
