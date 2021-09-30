@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../common/store";
-import { requestLogin } from "./Login.slice";
+import { requestLogin, resetErrorMessage } from "./Login.slice";
 import { IRequestLoginAction } from "./Login.slice";
 import { Field, Form, Formik } from "formik";
 import { FormTextField } from "../../shared/FormTextField";
@@ -11,6 +11,7 @@ import { LocalStorage } from "../common/LocalStorage";
 import makeStyles from "@mui/styles/makeStyles";
 import createStyles from "@mui/styles/createStyles";
 import {
+	Alert,
 	Button,
 	Card,
 	CardActions,
@@ -57,9 +58,16 @@ export function LoginPage(): React.ReactElement {
 		<LayoutContainer pageTitle="Admin Login">
 			<div>
 				{authState.isLoading && <CircularProgress />}
-				{
-					//TODO: Temp until we solve Alert MUI Issue
-				}
+				{authState.errorMessage && (
+					<Alert
+						severity="error"
+						onClose={() => {
+							dispatch(resetErrorMessage());
+						}}
+					>
+						{authState.errorMessage}
+					</Alert>
+				)}
 				<Formik
 					initialValues={{ username: "", password: "" }}
 					onSubmit={(values: IRequestLoginAction) => {
@@ -94,7 +102,6 @@ export function LoginPage(): React.ReactElement {
 										/>
 									</div>
 								</CardContent>
-								{authState.errorMessage && <p>{authState.errorMessage}</p>}
 								<CardActions>
 									<Button
 										type="submit"
