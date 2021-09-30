@@ -16,7 +16,7 @@ interface ServiceSideToken {
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
-		const url = `${baseAPIURL}v1/user/login?userName=${action.payload.username}&passWord=${action.payload.password}`;
+		const url = `${baseAPIURL}v1/user/login?username=${action.payload.username}&password=${action.payload.password}`;
 		const { data } = yield call(async () => {
 			return axios.get(url);
 		});
