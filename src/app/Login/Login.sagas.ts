@@ -24,7 +24,11 @@ function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 		LocalStorage.setToken(token);
 		yield put(receiveLoginSuccess(token));
 	} catch (e) {
-		yield put(receiveLoginFailure((e as Error)?.message));
+		yield put(
+			receiveLoginFailure(
+				"The username or password is incorrect. Please try again."
+			)
+		);
 	}
 }
 
