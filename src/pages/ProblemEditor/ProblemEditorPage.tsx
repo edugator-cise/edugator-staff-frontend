@@ -1,6 +1,6 @@
 import React from "react";
-import { ProblemEditorContainer } from "../features/ProblemEditorContainer/ProblemEditorContainer";
-import { LayoutContainer } from "../shared/LayoutContainer";
+import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
+import { LayoutContainer } from "../../shared/LayoutContainer";
 
 export const ProblemEditorPage = () => {
   const actions = [

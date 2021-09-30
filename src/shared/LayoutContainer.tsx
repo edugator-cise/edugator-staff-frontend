@@ -4,10 +4,10 @@ import {
   Toolbar,
   Typography,
   Divider,
-  makeStyles,
   Box,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
