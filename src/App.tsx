@@ -10,27 +10,27 @@ import Modules from "./pages/modules/ModulesView";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 
 function App() {
-	const theme = createTheme();
+  const theme = createTheme();
 
-	return (
-		<StyledEngineProvider injectFirst>
-			<ThemeProvider theme={theme}>
-				<div className="App">
-					<Switch>
-						<Route exact path={Routes.Login}>
-							<LoginPage />
-						</Route>
-						<PrivateRoute exact path={Routes.ProblemEditor}>
-							<ProblemEditorPage />
-						</PrivateRoute>
-						<PrivateRoute exact path={Routes.Modules}>
-							<Modules />
-						</PrivateRoute>
-					</Switch>
-				</div>
-			</ThemeProvider>
-		</StyledEngineProvider>
-	);
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Switch>
+            <Route exact path={Routes.Login}>
+              <LoginPage />
+            </Route>
+            <PrivateRoute exact path={Routes.ProblemEditor}>
+              <ProblemEditorPage />
+            </PrivateRoute>
+            <PrivateRoute exact path={Routes.Modules}>
+              <Modules />
+            </PrivateRoute>
+          </Switch>
+        </div>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
 }
 
 export default App;
