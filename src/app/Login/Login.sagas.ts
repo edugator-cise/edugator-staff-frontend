@@ -17,12 +17,12 @@ interface ServiceSideToken {
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
 		const url = `${baseAPIURL}v1/user/login?userName=${action.payload.username}&passWord=${action.payload.password}`;
-		const token = yield call(async () => {
+		const { data } = yield call(async () => {
 			return axios.get(url);
 		});
-		const tokenVal = (token as ServiceSideToken)?.token;
-		LocalStorage.setToken(tokenVal);
-		yield put(receiveLoginSuccess(tokenVal));
+		const { token } = data;
+		LocalStorage.setToken(token);
+		yield put(receiveLoginSuccess(token));
 	} catch (e) {
 		yield put(receiveLoginFailure((e as Error)?.message));
 	}
