@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// for now
-
 import { PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
@@ -14,19 +11,29 @@ import {
 } from "./ModulesPage.slice";
 
 import apiUrls from "./config";
-import { GetModuleResponse } from "./responseTypes";
-import { IModule, IModulesGET, IModulesPUT } from "./types";
+import {
+  IModule,
+  //IModulesGETSuccess,
+  IModulesPUT,
+  IModulesPUTSuccess,
+} from "./types";
 
 const moduleRequests = () =>
-  axios.request<GetModuleResponse>({ ...apiUrls["get modules"] });
+  axios.request<IModule[]>({ ...apiUrls["get modules"] });
+
+/*
+const moduleRequests = () =>
+  axios.request<GetModuleResponse>({ ...apiUrls["get modules and problems"] });
+ */
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   console.log("sagas for GET Modules");
   try {
-    const response: AxiosResponse = yield call(moduleRequests);
+    //const response = yield call(moduleRequests); // response: any???????????
+    const response: AxiosResponse<IModule[]> = yield call(moduleRequests);
     console.log("stuff:", response);
+    console.log("data:", response.data);
 
-    //yield put(requestModulesSuccess({ modules: [] }));
     yield put(requestModulesSuccess({ modules: response.data }));
   } catch (e) {
     yield put(requestModulesFailure(e as Error));
@@ -34,7 +41,7 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
 }
 
 const moduleAddRequest = () =>
-  axios.request<GetModuleResponse>({ ...apiUrls["get modules"] });
+  axios.request<IModulesPUTSuccess>({ ...apiUrls["get modules"] });
 
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   try {

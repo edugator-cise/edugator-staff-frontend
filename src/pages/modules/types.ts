@@ -39,10 +39,10 @@ export interface IModuleState {
 
 /* GET Request Actions - Modules */
 export interface IModulesGET {}
-export interface IModulesGETEnd {
+export interface IModulesGETSuccess { 
   modules: IModule[];
 }
-export interface IModulesGETFail {
+export interface IModulesGETFailure { 
   message: string | null;
 }
 
@@ -52,11 +52,11 @@ export interface IModulesPUT {
   moduleNum: number;
 }
 
-export interface IModulesPUTEnd {
+export interface IModulesPUTSuccess {
   module: IModule;
 }
 
-export interface IModulesPUTFail {
+export interface IModulesPUTFailure {
   message: string | null;
 }
 
@@ -64,26 +64,3 @@ export interface IModulesPUTFail {
 
 /* DELETE Request Actions - Modules */
 
-/*
-export interface Iaction {
-    type: string,
-    payload: any,
-}
-
-export interface IActions {
-    [action: string]: {type: string, payload: {}};
-}
-
-export const ModuleActions: IActions = {
-    "asdasd": {
-        type: "your mother",
-        payload: {},
-    }
-}
-
-export const actions = { 
-    GET_MODULES_START: "GET_MODULES_START", 
-    GET_MODULES_SUCCESS: "GET_MODULES_SUCCESS",
-    GET_MODULES_FAILURE: "GET_MODULES_FAILURE",
-};
-*/

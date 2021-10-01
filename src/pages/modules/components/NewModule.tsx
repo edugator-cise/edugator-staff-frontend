@@ -43,12 +43,12 @@ export interface NewModuleDialogProps {
   handleSubmit: (moduleInput: INewModule) => void;
 }
 
-interface INewModule {
+export interface INewModule {
   nameInput: string;
   numberInput: number;
 }
 
-export default function NewModuleDialog(props: NewModuleDialogProps) {
+export function NewModuleDialog(props: NewModuleDialogProps) {
   const { open, handleClose, handleSubmit } = props;
 
   const [moduleValues, setModuleValues] = React.useState<INewModule>({

@@ -1,3 +1,4 @@
-export { default as NewModuleDialog } from "./NewModule";
-export { default as ModuleMenu } from "./ModuleMenu";
-//export { default as ProblemButtons } from "./ProblemButtons";
+export { NewModuleDialog } from "./NewModule";
+export { ModuleMenu } from "./ModuleMenu";
+export { ProblemButtons } from "./ProblemButtons";
+export { Modules } from "./ModuleAccordion"

@@ -6,9 +6,11 @@ import { MoreVert } from "@mui/icons-material/";
 const MenuButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(0.5),
   marginLeft: theme.spacing(0.5),
+  marginTop: "auto",
+  marginBottom: "auto",
 }));
 
-export default function ModuleMenu() {
+export function ModuleMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (

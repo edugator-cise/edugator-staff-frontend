@@ -1,59 +1,23 @@
 import React from "react";
-import {
-  Button,
-  Typography,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  CircularProgress,
-} from "@mui/material";
-import { ExpandMore, Edit, AssignmentTurnedIn } from "@mui/icons-material";
-import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
+import { Typography, CircularProgress } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
 import { styled } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
+import { NewModuleDialog, Modules } from "./components";
 
-const ModuleSummary = styled(AccordionSummary)({
-  backgroundColor: "rgba(0, 0, 0, .1)", // background of module
-  borderBottom: "1px solid rgba(0, 0, 0, .125)", // bottom line of module
-});
-
-const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
+const Centered = styled("div")({
   display: "flex",
-  padding: theme.spacing(1),
-  paddingLeft: theme.spacing(2),
-  backgroundColor: "rgba(0, 0, 0, .02)",
-  borderBottom: "1px solid rgba(0, 0, 0, .125)",
-}));
-
-const ProblemTitle = styled(Typography)(({
-  marginTop: "auto",
-  marginBottom: "auto",
-}));
-
-const Centered = styled("div")(({
-  display:  "flex",
   marginLeft: "auto",
   marginRight: "auto",
-}));
-
-const ButtonContainer = styled("div")(({
-  marginLeft: "auto",
-}));
-
-const ProblemAction = styled(Button)(({ theme }) => ({
-  marginRight: theme.spacing(1),
-  color: grey["A700"],
-}));
+});
 
 interface INewModule {
   nameInput: string;
   numberInput: number;
 }
 
-export default function Modules() {
+export function ModulesPage() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
 
@@ -87,7 +51,7 @@ export default function Modules() {
 
   return (
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleButtons}>
-      <div>
+      <>
         <NewModuleDialog
           open={newModuleDialog}
           handleSubmit={handleNewModule}
@@ -95,52 +59,19 @@ export default function Modules() {
         />
 
         {modulesState.isLoading ? (
-          <Centered><CircularProgress/></Centered>
+          <Centered>
+            <CircularProgress />
+          </Centered>
         ) : modulesState.modules.length > 0 ? (
-          modulesState.modules.map((module, i) => {
-            return (
-              <Accordion key={i}>
-                <ModuleSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">
-                    Module {module.number}: {module.name}
-                  </Typography>
-                  <ModuleMenu />
-                </ModuleSummary>
-
-                {/** For now, until getting modules with problems works */}
-
-                {[0, 1].map((value) => (
-                  <ModuleContent key={value}>
-                    <ProblemTitle>Problem {value}</ProblemTitle>
-
-                    <ButtonContainer>
-                      <ProblemAction
-                        //variant="contained"
-                        startIcon={<AssignmentTurnedIn />}
-                        size="small"
-                      >
-                        Grade
-                      </ProblemAction>
-
-                      <ProblemAction
-                        //variant="contained"
-                        startIcon={<Edit />}
-                        size="small"
-                      >
-                        Edit
-                      </ProblemAction>
-                    </ButtonContainer>
-                  </ModuleContent>
-                ))}
-              </Accordion>
-            );
-          })
+          <Modules></Modules>
         ) : (
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
-            Click Add Modules to get started
-          </Typography>
+          <Centered>
+            <Typography variant="h6">
+              Click Add Modules to get started
+            </Typography>
+          </Centered>
         )}
-      </div>
+      </>
     </LayoutContainer>
   );
 }
