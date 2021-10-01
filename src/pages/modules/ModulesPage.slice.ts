@@ -29,6 +29,7 @@ export const moduleSlice = createSlice({
       state.isLoading = true;
       return state;
     },
+
     requestModulesSuccess: (
       state,
       action: PayloadAction<IModulesGETSuccess>
@@ -37,6 +38,7 @@ export const moduleSlice = createSlice({
       state.isLoading = false;
       return state;
     },
+
     requestModulesFailure: (
       state,
       action: PayloadAction<IModulesGETFailure>
@@ -58,6 +60,7 @@ export const moduleSlice = createSlice({
       console.log("adding modules reducer");
       return state;
     },
+
     requestNewModuleSuccess: (state, action: PayloadAction<IModule>) => {
       console.log("adding modules reducer end");
 
@@ -67,6 +70,7 @@ export const moduleSlice = createSlice({
 
       return state;
     },
+
     requestNewModuleFailure: (
       state,
       action: PayloadAction<IModulesPUTFailure>

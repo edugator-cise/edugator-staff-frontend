@@ -20,11 +20,11 @@ import {
 
 const moduleRequests = () =>
   axios.request<IModule[]>({ ...apiUrls["get modules"] });
+ 
 
-/*
-const moduleRequests = () =>
-  axios.request<GetModuleResponse>({ ...apiUrls["get modules and problems"] });
- */
+//const moduleRequests = () =>
+//  axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
+
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   console.log("sagas for GET Modules");

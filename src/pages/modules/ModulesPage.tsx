@@ -1,16 +1,9 @@
 import React from "react";
-import { Typography, CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
-import { styled } from "@mui/material/styles";
 import { NewModuleDialog, Modules } from "./components";
-
-const Centered = styled("div")({
-  display: "flex",
-  marginLeft: "auto",
-  marginRight: "auto",
-});
 
 interface INewModule {
   nameInput: string;
@@ -58,19 +51,14 @@ export function ModulesPage() {
           handleClose={handleDialogClose}
         />
 
-        {modulesState.isLoading ? (
-          <Centered>
-            <CircularProgress />
-          </Centered>
-        ) : modulesState.modules.length > 0 ? (
-          <Modules></Modules>
-        ) : (
-          <Centered>
-            <Typography variant="h6">
-              Click Add Modules to get started
-            </Typography>
-          </Centered>
-        )}
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {modulesState.isLoading ? <CircularProgress /> : <Modules />}
+        </Grid>
       </>
     </LayoutContainer>
   );
