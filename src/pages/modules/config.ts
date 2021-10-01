@@ -5,13 +5,13 @@ interface IApiConfig {
 }
 
 const noCache = { "Cache-Control": "no-cache" };
-//const auth = { "Authorization": `Bearer ${data.token}` };
+//const auth = { "Authorization": "Bearer " + token };
 
-// url = https://edugator-admin.com/v1/module => base
+const adminURL = "https://edugator-admin.com"; // => base
 
 const apiUrls: IApiConfig = {
   "get modules": {
-    url: "/v1/module",
+    url: adminURL + "/v1/module",
     method: "GET",
     headers: {
       ...noCache,

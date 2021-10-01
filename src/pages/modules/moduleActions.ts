@@ -15,7 +15,7 @@ export const getModules = (
   state: WritableDraft<IModuleState>,
   action: PayloadAction<void>
 ) => {
-  console.log("getting modules reducer");
+  //console.log("getting modules reducer");
   state.isLoading = true;
   return state;
 };
@@ -24,9 +24,12 @@ export const getModulesEnd = (
   state: WritableDraft<IModuleState>,
   action: PayloadAction<IModulesGETEnd>
 ) => {
-  state.isLoading = false;
-  console.log("getting modules reducer end");
+  
+  //console.log("printing payload received (module[])")
+  //console.log(action.payload.modules)
   state.modules = action.payload.modules;
+  //console.log("getting modules reducer end");
+  state.isLoading = false;
   return state;
 };
 
@@ -37,6 +40,7 @@ export const getModulesFail = (
   state.isLoading = false;
   console.log("getting modules reducer fail");
   state.errorMessage = action.payload.message;
+  console.log("error message: ", state.errorMessage);
   return state;
 };
 
@@ -71,6 +75,7 @@ export const addModuleFail = (
   // TODO: Add to sagas
   console.log("adding modules reducer fail");
   state.errorMessage = action.payload.message;
+  console.log("error message: ", state.errorMessage);
   return state;
 };
 

@@ -2,7 +2,7 @@
 // for now
 
 import { PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   requestModules,
@@ -23,11 +23,11 @@ const moduleRequests = () =>
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   console.log("sagas for GET Modules");
   try {
-    //const response = yield call(moduleRequests);
-    yield put(
-      //requestModulesSuccess(response.data)
-      requestModulesSuccess({ modules: [] })
-    );
+    const response: AxiosResponse = yield call(moduleRequests);
+    console.log("stuff:", response);
+
+    //yield put(requestModulesSuccess({ modules: [] }));
+    yield put(requestModulesSuccess({ modules: response.data }));
   } catch (e) {
     yield put(requestModulesFailure(e as Error));
   }

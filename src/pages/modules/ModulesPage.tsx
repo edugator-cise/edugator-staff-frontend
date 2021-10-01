@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  CircularProgress,
 } from "@mui/material";
 import { ExpandMore, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { NewModuleDialog, ModuleMenu /*ProblemButtons*/ } from "./components";
@@ -27,12 +28,18 @@ const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   borderBottom: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const ProblemTitle = styled(Typography)(({ theme }) => ({
+const ProblemTitle = styled(Typography)(({
   marginTop: "auto",
   marginBottom: "auto",
 }));
 
-const ButtonContainer = styled("div")(({ theme }) => ({
+const Centered = styled("div")(({
+  display:  "flex",
+  marginLeft: "auto",
+  marginRight: "auto",
+}));
+
+const ButtonContainer = styled("div")(({
   marginLeft: "auto",
 }));
 
@@ -87,7 +94,9 @@ export default function Modules() {
           handleClose={handleDialogClose}
         />
 
-        {modulesState.modules.length > 0 ? (
+        {modulesState.isLoading ? (
+          <Centered><CircularProgress/></Centered>
+        ) : modulesState.modules.length > 0 ? (
           modulesState.modules.map((module, i) => {
             return (
               <Accordion key={i}>
@@ -97,6 +106,8 @@ export default function Modules() {
                   </Typography>
                   <ModuleMenu />
                 </ModuleSummary>
+
+                {/** For now, until getting modules with problems works */}
 
                 {[0, 1].map((value) => (
                   <ModuleContent key={value}>
@@ -125,7 +136,9 @@ export default function Modules() {
             );
           })
         ) : (
-          <Typography variant="h6">Click Add Modules to get started</Typography>
+          <Typography variant="h6" sx={{ textAlign: "center" }}>
+            Click Add Modules to get started
+          </Typography>
         )}
       </div>
     </LayoutContainer>
