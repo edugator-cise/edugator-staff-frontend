@@ -3,37 +3,43 @@ import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
-import { NewModuleDialog, Modules } from "./components";
-
-interface INewModule {
-  nameInput: string;
-  numberInput: number;
-}
+import { ModuleDialog, Modules } from "./components";
+import { INewModule, DialogStatus } from "./types";
 
 export function ModulesPage() {
+  const [moduleDialog, setModuleDialog] = React.useState(DialogStatus.CLOSED);
+  const [moduleInput, setModuleInput] = React.useState<INewModule>({
+    numberInput: 0,
+    nameInput: "",
+  });
+
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
 
-  const [newModuleDialog, setNewModuleDialog] = React.useState(false);
+  const handleDialogSubmit = () => {
+    if (moduleDialog === DialogStatus.CREATE) {
+      dispatch(
+        requestNewModule({
+          moduleName: moduleInput.nameInput,
+          moduleNum: moduleInput.numberInput,
+        })
+      );
+    } else if (moduleDialog === DialogStatus.EDIT) {
+      // dispatch rename module
+    }
+
+    setModuleDialog(DialogStatus.CLOSED);
+  };
+
   const handleDialogClose = () => {
-    setNewModuleDialog(false);
+    setModuleDialog(DialogStatus.CLOSED);
   };
 
-  const handleNewModule = (moduleInput: INewModule) => {
-    setNewModuleDialog(false);
-    dispatch(
-      requestNewModule({
-        moduleName: moduleInput.nameInput,
-        moduleNum: moduleInput.numberInput,
-      })
-    );
-  };
-
-  const moduleButtons = [
+  const moduleHeaderButtons = [
     {
       label: "Add Module",
       onClick: () => {
-        setNewModuleDialog(true);
+        setModuleDialog(DialogStatus.CREATE);
       },
     },
   ];
@@ -43,12 +49,15 @@ export function ModulesPage() {
   }, [dispatch]);
 
   return (
-    <LayoutContainer pageTitle={"Modules"} actionButtons={moduleButtons}>
+    <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
       <>
-        <NewModuleDialog
-          open={newModuleDialog}
-          handleSubmit={handleNewModule}
+        <ModuleDialog
+          moduleValues={moduleInput}
+          dialogOperation={moduleDialog}
+          handleSubmit={handleDialogSubmit}
           handleClose={handleDialogClose}
+          moduleValuesInput={setModuleInput}
+          open={moduleDialog !== DialogStatus.CLOSED}
         />
 
         <Grid

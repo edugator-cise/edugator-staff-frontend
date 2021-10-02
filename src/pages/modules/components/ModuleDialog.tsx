@@ -9,6 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { INewModule, DialogStatus } from "../types";
 
 const Form = styled("div")({
   display: "flex",
@@ -37,24 +38,34 @@ const Footer = styled("div")({
   float: "right",
 });
 
-export interface NewModuleDialogProps {
+const dialogTitle = (status: DialogStatus) => {
+  if (status === DialogStatus.CREATE) {
+    return "Creating a new module";
+  } else if (status === DialogStatus.EDIT) {
+    return "Editing an existing module";
+  } else {
+    return "This dialog should not be here";
+  }
+};
+
+export interface ModuleDialogProps {
   open: boolean;
+  moduleValues: INewModule;
+  dialogOperation: DialogStatus;
   handleClose: () => void;
-  handleSubmit: (moduleInput: INewModule) => void;
+  handleSubmit: () => void;
+  moduleValuesInput: (input: INewModule) => void;
 }
 
-export interface INewModule {
-  nameInput: string;
-  numberInput: number;
-}
-
-export function NewModuleDialog(props: NewModuleDialogProps) {
-  const { open, handleClose, handleSubmit } = props;
-
-  const [moduleValues, setModuleValues] = React.useState<INewModule>({
-    numberInput: 0,
-    nameInput: "",
-  });
+export function ModuleDialog(props: ModuleDialogProps) {
+  const {
+    open,
+    moduleValues,
+    dialogOperation,
+    handleClose,
+    handleSubmit,
+    moduleValuesInput,
+  } = props;
 
   return (
     <Dialog
@@ -65,16 +76,18 @@ export function NewModuleDialog(props: NewModuleDialogProps) {
       fullWidth
     >
       <Paper elevation={3}>
-        <DialogTitle id="module-title-dialog">Add a new module</DialogTitle>
+        <DialogTitle id="module-title-dialog">
+          {dialogTitle(dialogOperation)}
+        </DialogTitle>
         <Divider />
         <Form>
           <NumberField
-            id="outlined-new-module"
+            id="outlined-module-number"
             label="Number"
             variant="filled"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             onChange={(event) => {
-              setModuleValues({
+              moduleValuesInput({
                 ...moduleValues,
                 numberInput: parseInt(event.target.value),
               });
@@ -87,7 +100,7 @@ export function NewModuleDialog(props: NewModuleDialogProps) {
             label="Module Name"
             variant="filled"
             onChange={(event) => {
-              setModuleValues({
+              moduleValuesInput({
                 ...moduleValues,
                 nameInput: event.target.value,
               });
@@ -98,10 +111,7 @@ export function NewModuleDialog(props: NewModuleDialogProps) {
         </Form>
 
         <Footer>
-          <AddButton
-            onClick={() => handleSubmit(moduleValues)}
-            variant="outlined"
-          >
+          <AddButton onClick={() => handleSubmit()} variant="outlined">
             Add module
           </AddButton>
         </Footer>

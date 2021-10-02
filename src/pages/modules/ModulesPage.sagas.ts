@@ -15,47 +15,58 @@ import {
   IModule,
   //IModulesGETSuccess,
   IModulesPUT,
-  IModulesPUTSuccess,
+  //IModulesPUTSuccess,
 } from "./types";
-
-const moduleRequests = () =>
-  axios.request<IModule[]>({ ...apiUrls["get modules"] });
- 
 
 //const moduleRequests = () =>
 //  axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
 
-
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   console.log("sagas for GET Modules");
+  // request
+  let modulesRequest = () =>
+    axios.request<IModule[]>({ ...apiUrls["get modules"] });
+
   try {
     //const response = yield call(moduleRequests); // response: any???????????
-    const response: AxiosResponse<IModule[]> = yield call(moduleRequests);
-    console.log("stuff:", response);
-    console.log("data:", response.data);
+    const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
+    //console.log("stuff:", response);
+    //console.log("data:", response.data);
 
-    yield put(requestModulesSuccess({ modules: response.data }));
+    yield put(requestModulesSuccess(response.data));
   } catch (e) {
     yield put(requestModulesFailure(e as Error));
   }
 }
 
-const moduleAddRequest = () =>
-  axios.request<IModulesPUTSuccess>({ ...apiUrls["get modules"] });
-
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
+  console.log("sagas for POST Modules");
+
+  // request
+  let moduleAddRequest = () =>
+    axios.request<string>({
+      ...apiUrls["get modules"],
+      data: {
+        name: action.payload.moduleName,
+        number: action.payload.moduleNum,
+      },
+    });
+
+  console.log("request:", moduleAddRequest);
+
   try {
     // Add response content to sagas
-    //const response = yield call(moduleAddRequest);
+    const response = yield call(moduleAddRequest);
+    //console.log("stuff:", response);
+    //console.log("data:", response.data);
+
     let new_module: IModule = {
       name: action.payload.moduleName,
       number: action.payload.moduleNum,
       problemList: [],
+      _id: response.data,
     };
-    yield put(
-      //requestNewModuleSuccess(response.data)
-      requestNewModuleSuccess(new_module)
-    );
+    yield put(requestNewModuleSuccess(new_module));
   } catch (e) {
     yield put(requestNewModuleFailure(e as Error));
   }

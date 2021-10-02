@@ -1,4 +1,5 @@
 export interface IProblem {
+  _id?: string;
   problemType: string;
   title: string;
   hidden: boolean;
@@ -25,9 +26,22 @@ export interface IProblem {
 }
 
 export interface IModule {
+  _id?: string;
   name: string;
   number: number;
   problemList: IProblem[];
+}
+
+/** Creating a New Module dialog */
+export interface INewModule {
+  nameInput: string;
+  numberInput: number;
+}
+
+export enum DialogStatus {
+  EDIT = "edit",
+  CREATE = "create",
+  CLOSED = "closed",
 }
 
 /* Redux State - Modules */
@@ -38,11 +52,7 @@ export interface IModuleState {
 }
 
 /* GET Request Actions - Modules */
-export interface IModulesGET {}
-export interface IModulesGETSuccess { 
-  modules: IModule[];
-}
-export interface IModulesGETFailure { 
+export interface IModulesGETFailure {
   message: string | null;
 }
 
@@ -52,10 +62,6 @@ export interface IModulesPUT {
   moduleNum: number;
 }
 
-export interface IModulesPUTSuccess {
-  module: IModule;
-}
-
 export interface IModulesPUTFailure {
   message: string | null;
 }
@@ -63,4 +69,3 @@ export interface IModulesPUTFailure {
 /* POST Request Actions - Modules */
 
 /* DELETE Request Actions - Modules */
-

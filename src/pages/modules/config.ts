@@ -38,6 +38,13 @@ const apiUrls: IApiConfig = {
       ...noCache,
     },
   },
+  "delete module": {
+    url: adminAPI + "/v1/module",
+    method: "DELETE",
+    headers: {
+      ...noCache,
+    },
+  },
 };
 
 export default apiUrls;

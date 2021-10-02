@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IModuleState,
-  IModulesGETSuccess,
+  /*IModulesGETSuccess,*/
   IModulesGETFailure,
   IModulesPUT,
   /*IModulesPUTEnd,*/
@@ -26,17 +26,15 @@ export const moduleSlice = createSlice({
     /* GET Request Modules */
 
     requestModules: (state, action: PayloadAction<void>) => {
-      state.isLoading = true;
-      return state;
+      return { ...state, isLoading: true };
     },
 
-    requestModulesSuccess: (
-      state,
-      action: PayloadAction<IModulesGETSuccess>
-    ) => {
-      state.modules = action.payload.modules;
-      state.isLoading = false;
-      return state;
+    requestModulesSuccess: (state, action: PayloadAction<IModule[]>) => {
+      return {
+        ...state,
+        modules: action.payload,
+        isLoading: true,
+      };
     },
 
     requestModulesFailure: (
@@ -46,29 +44,27 @@ export const moduleSlice = createSlice({
       console.log("getting modules reducer fail");
       console.log("error message: ", state.errorMessage);
 
-      state.isLoading = true;
-      state.errorMessage = action.payload.message;
-
-      return state;
+      return {
+        ...state,
+        isLoading: true, // needs to retry
+        errorMessage: action.payload.message,
+      };
     },
 
-    /* PUT Request Modules */
+    /* POST Request Modules */
 
     requestNewModule: (state, action: PayloadAction<IModulesPUT>) => {
-      state.isLoading = true;
-
       console.log("adding modules reducer");
-      return state;
+      return { ...state, isLoading: true };
     },
 
     requestNewModuleSuccess: (state, action: PayloadAction<IModule>) => {
       console.log("adding modules reducer end");
-
-      let newModule = action.payload;
-      state.modules = [...state.modules, newModule];
-      state.isLoading = false;
-
-      return state;
+      return {
+        ...state,
+        modules: [...state.modules, action.payload],
+        isLoading: false,
+      };
     },
 
     requestNewModuleFailure: (
@@ -78,12 +74,14 @@ export const moduleSlice = createSlice({
       console.log("adding modules reducer fail");
       console.log("error message: ", state.errorMessage);
 
-      state.isLoading = false;
-      state.errorMessage = action.payload.message;
-      return state;
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload.message,
+      };
     },
 
-    /* POST Request Modules */
+    /* PUT Request Modules */
     requestModifyModule: (state, action) => {},
     requestModifyModuleSuccess: (state, action) => {},
     requestModifyModuleFailure: (state, action) => {},
@@ -95,12 +93,16 @@ export const moduleSlice = createSlice({
 });
 
 export const {
+  /* GET Request Modules */
   requestModules,
   requestModulesSuccess,
   requestModulesFailure,
+  /* POST Request Modules */
   requestNewModule,
   requestNewModuleSuccess,
   requestNewModuleFailure,
+  /* PUT Request Modules */
+  /* DELETE Request Modules */
 } = moduleSlice.actions;
 
 export default moduleSlice;
