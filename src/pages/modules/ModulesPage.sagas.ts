@@ -11,12 +11,7 @@ import {
 } from "./ModulesPage.slice";
 
 import apiUrls from "./config";
-import {
-  IModule,
-  //IModulesGETSuccess,
-  IModulesPUT,
-  //IModulesPUTSuccess,
-} from "./types";
+import { IModule, IModulesPUT } from "./types";
 
 //const moduleRequests = () =>
 //  axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
@@ -30,8 +25,6 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
   try {
     //const response = yield call(moduleRequests); // response: any???????????
     const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
-    //console.log("stuff:", response);
-    //console.log("data:", response.data);
 
     yield put(requestModulesSuccess(response.data));
   } catch (e) {
@@ -45,19 +38,17 @@ function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   // request
   let moduleAddRequest = () =>
     axios.request<string>({
-      ...apiUrls["get modules"],
+      ...apiUrls["add module"],
       data: {
         name: action.payload.moduleName,
         number: action.payload.moduleNum,
       },
     });
 
-  console.log("request:", moduleAddRequest);
-
   try {
     // Add response content to sagas
-    const response = yield call(moduleAddRequest);
-    //console.log("stuff:", response);
+    const response: AxiosResponse<string> = yield call(moduleAddRequest);
+    console.log("stuff:", response);
     //console.log("data:", response.data);
 
     let new_module: IModule = {

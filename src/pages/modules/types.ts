@@ -45,10 +45,12 @@ export enum DialogStatus {
 }
 
 /* Redux State - Modules */
+
 export interface IModuleState {
   modules: IModule[];
   isLoading: boolean;
   errorMessage: string | null;
+  latestAction: string | null;
 }
 
 /* GET Request Actions - Modules */

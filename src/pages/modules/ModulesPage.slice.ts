@@ -12,6 +12,7 @@ import {
 const initialModuleState: IModuleState = {
   modules: [],
   isLoading: true,
+  latestAction: null,
   errorMessage: null,
 };
 
@@ -24,7 +25,7 @@ export const moduleSlice = createSlice({
   initialState: getInitialModuleState(),
   reducers: {
     /* GET Request Modules */
-
+    // TYPE = "modules/requestModules"
     requestModules: (state, action: PayloadAction<void>) => {
       return { ...state, isLoading: true };
     },
@@ -33,7 +34,8 @@ export const moduleSlice = createSlice({
       return {
         ...state,
         modules: action.payload,
-        isLoading: true,
+        latestAction: action.type,
+        isLoading: false,
       };
     },
 
@@ -47,6 +49,7 @@ export const moduleSlice = createSlice({
       return {
         ...state,
         isLoading: true, // needs to retry
+        latestAction: action.type,
         errorMessage: action.payload.message,
       };
     },
@@ -62,6 +65,7 @@ export const moduleSlice = createSlice({
       console.log("adding modules reducer end");
       return {
         ...state,
+        latestAction: action.type,
         modules: [...state.modules, action.payload],
         isLoading: false,
       };
@@ -77,6 +81,7 @@ export const moduleSlice = createSlice({
       return {
         ...state,
         isLoading: false,
+        latestAction: action.type,
         errorMessage: action.payload.message,
       };
     },
@@ -89,6 +94,11 @@ export const moduleSlice = createSlice({
     requestDeleteModule: (state, action) => {},
     requestDeleteModuleSuccess: (state, action) => {},
     requestDeleteModuleFailure: (state, action) => {},
+
+    /* Other reducers */
+    resetLatestAction: (state, action: PayloadAction<void>) => {
+      state.latestAction = null;
+    },
   },
 });
 
@@ -103,6 +113,8 @@ export const {
   requestNewModuleFailure,
   /* PUT Request Modules */
   /* DELETE Request Modules */
+  /* Other Reducers */
+  resetLatestAction,
 } = moduleSlice.actions;
 
 export default moduleSlice;

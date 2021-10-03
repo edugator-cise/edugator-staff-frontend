@@ -3,7 +3,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import { requestModules, requestNewModule } from "./ModulesPage.slice";
-import { ModuleDialog, Modules } from "./components";
+import { ModuleDialog, Modules, ModulesSnackbar } from "./components";
 import { INewModule, DialogStatus } from "./types";
 
 export function ModulesPage() {
@@ -59,6 +59,8 @@ export function ModulesPage() {
           moduleValuesInput={setModuleInput}
           open={moduleDialog !== DialogStatus.CLOSED}
         />
+
+        <ModulesSnackbar />
 
         <Grid
           container
