@@ -1,7 +1,9 @@
 import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
-import React, { useState } from "react";
+import { FormikValues } from "formik";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
+import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import {
   validateCode,
@@ -79,10 +81,25 @@ export const ProblemEditorContainer = () => {
     }
   };
 
+  const ActiveForm = () => {
+    switch (activeStep) {
+      case 1:
+        return <ProblemEditorForm formRef={formRef} />;
+      default:
+        return (
+          <ExampleValidator
+            handleValidation={(isValid: boolean) => handleValidation(isValid)}
+            validationStatus={() => getValidationStatus()}
+          />
+        );
+    }
+  };
+
   const handleNext = () => {
     if (activeStep === steps.length - 1) {
       console.log("Submitted!");
     } else {
+      formRef.current?.submitForm();
       setActiveStep(activeStep + 1);
     }
   };
@@ -90,6 +107,8 @@ export const ProblemEditorContainer = () => {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  const formRef = useRef<FormikValues>();
 
   return (
     <Box display="flex" flexDirection="column" flexGrow={1}>
@@ -111,15 +130,13 @@ export const ProblemEditorContainer = () => {
         flexDirection="column"
         marginTop="1rem"
       >
-        <ExampleValidator
-          handleValidation={(isValid: boolean) => handleValidation(isValid)}
-          validationStatus={() => getValidationStatus()}
-        />
+        {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
+        <ActiveForm />
         <Box marginTop="auto" display="flex" justifyContent="space-between">
           <Button onClick={handleBack} disabled={activeStep === 0}>
             Back
           </Button>
-          <Button onClick={handleNext} disabled={!getValidationStatus()}>
+          <Button onClick={handleNext} disabled={false}>
             {activeStep === steps.length - 1 ? "Submit" : "Next"}
           </Button>
         </Box>
