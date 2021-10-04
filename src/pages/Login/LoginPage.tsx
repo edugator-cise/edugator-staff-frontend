@@ -8,8 +8,6 @@ import { LayoutContainer } from "../../shared/LayoutContainer";
 import { Routes } from "../../shared/Routes.constants";
 import { Redirect } from "react-router";
 import { LocalStorage } from "../../app/common/LocalStorage";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import {
 	Alert,
 	Button,
@@ -17,34 +15,33 @@ import {
 	CardActions,
 	CardContent,
 	CircularProgress,
-	Theme,
+	Stack,
 } from "@mui/material";
+import styled from "@emotion/styled";
 
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
-const useStyles = makeStyles((theme: Theme) =>
-	createStyles({
-		container: {
-			display: "grow",
-			flexWrap: "wrap",
-			alignItems: "center",
-			justifyContent: "center",
-			width: "50%",
-			margin: `${theme.spacing(0)} auto`,
-			left: "50%",
-			top: "50%",
-		},
-		loginBtn: {
-			marginTop: theme.spacing(2),
-			flexGrow: 1,
-		},
-		card: {
-			marginTop: theme.spacing(10),
-		},
-	})
-);
+
+const FancyForm = styled(Form)`
+	display: inline-block;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	width: 50%;
+	margin: 12px auto;
+	left: 50%;
+	top: 50%;
+`;
+
+const FancyButton = styled(Button)`
+	flex-grow: 1;
+`;
+
+const FancyCard = styled(Card)`
+	margin-top: 12px;
+`;
 
 export function LoginPage(): React.ReactElement {
-	const classes = useStyles();
+	// const classes = useStyles();
 	const dispatch = useDispatch();
 	const authState = useSelector((state: RootState) => state.login);
 	return LocalStorage.getToken() ? (
@@ -56,7 +53,7 @@ export function LoginPage(): React.ReactElement {
 		/>
 	) : (
 		<LayoutContainer pageTitle="Admin Login">
-			<div>
+			<Stack>
 				{authState.isLoading && <CircularProgress />}
 				{authState.errorMessage && (
 					<Alert
@@ -75,8 +72,8 @@ export function LoginPage(): React.ReactElement {
 					}}
 				>
 					{() => (
-						<Form className={classes.container}>
-							<Card className={classes.card}>
+						<FancyForm>
+							<FancyCard>
 								<CardContent>
 									<div>
 										<Field
@@ -103,21 +100,20 @@ export function LoginPage(): React.ReactElement {
 									</div>
 								</CardContent>
 								<CardActions>
-									<Button
+									<FancyButton
 										type="submit"
 										variant="contained"
 										size="large"
 										color="secondary"
-										className={classes.loginBtn}
 									>
 										Submit
-									</Button>
+									</FancyButton>
 								</CardActions>
-							</Card>
-						</Form>
+							</FancyCard>
+						</FancyForm>
 					)}
 				</Formik>
-			</div>
+			</Stack>
 		</LayoutContainer>
 	);
 }
