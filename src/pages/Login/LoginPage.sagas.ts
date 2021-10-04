@@ -14,7 +14,7 @@ function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
 		const url = `${baseAPIURL}v1/user/login?username=${action.payload.username}&password=${action.payload.password}`;
 		const { data } = yield call(async () => {
-			return axios.get(url);
+			return axios.get(url, { data: action.payload });
 		});
 		const { token } = data;
 		LocalStorage.setToken(token);
