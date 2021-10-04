@@ -12,9 +12,9 @@ import {
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
 	try {
-		const url = `${baseAPIURL}v1/user/login?username=${action.payload.username}&password=${action.payload.password}`;
+		const url = `${baseAPIURL}v1/user/login`;
 		const { data } = yield call(async () => {
-			return axios.get(url, { data: action.payload });
+			return axios.post(url, { data: action.payload });
 		});
 		const { token } = data;
 		LocalStorage.setToken(token);
