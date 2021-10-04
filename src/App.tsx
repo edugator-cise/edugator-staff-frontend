@@ -8,6 +8,7 @@ import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import Modules from "./pages/modules/ModulesView";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 
 function App() {
   const theme = createTheme();
@@ -26,6 +27,9 @@ function App() {
             <PrivateRoute exact path={Routes.Modules}>
               <Modules />
             </PrivateRoute>
+            <Route exact path={Routes.Code}>
+              <CodeEditorPage/>
+            </Route>
           </Switch>
         </div>
       </ThemeProvider>
