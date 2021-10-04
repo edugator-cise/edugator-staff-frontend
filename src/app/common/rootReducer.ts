@@ -7,8 +7,8 @@ import { loginSlice } from "../../pages/Login/LoginPage.slice";
     e.g. key : keyReducer
 */
 const rootReducer = combineReducers({
-	login: loginSlice.reducer,
-	problemEditorContainer: problemEditorContainerReducer,
+  login: loginSlice.reducer,
+  problemEditorContainer: problemEditorContainerReducer,
 });
 
 export default rootReducer;
