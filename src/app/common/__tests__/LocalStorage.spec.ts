@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { LocalStorage } from "../../app/common/LocalStorage";
+import { LocalStorage } from "../LocalStorage";
 
 describe("LocalStorage", () => {
   describe("checkUnauthorized", () => {
