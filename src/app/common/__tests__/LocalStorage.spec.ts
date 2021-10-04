@@ -2,6 +2,23 @@ import { AxiosError } from "axios";
 import { LocalStorage } from "../LocalStorage";
 
 describe("LocalStorage", () => {
+  describe("getToken", () => {
+    it("should return null if the token is not set", () => {
+      expect(LocalStorage.getToken()).toBeNull();
+    });
+
+    it("should return the token if it is set", () => {
+      LocalStorage.setToken("test");
+      expect(LocalStorage.getToken()).not.toBeNull();
+    });
+
+    it("should return null if the token is deleted", () => {
+      LocalStorage.setToken("test");
+      LocalStorage.removeToken();
+      expect(LocalStorage.getToken()).toBeNull();
+    });
+  });
+
   describe("checkUnauthorized", () => {
     it("should handle AxiosErrors 401 Unauthorized", () => {
       const param: AxiosError<any> = {
