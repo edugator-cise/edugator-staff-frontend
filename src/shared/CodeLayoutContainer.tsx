@@ -20,8 +20,6 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-
-
 interface ButtonProps {
   label: string;
   onClick(): any;
@@ -45,15 +43,15 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  sideNav: JSX.Element
+  children: JSX.Element
 }
 
-export const CodeLayoutContainer = ({ sideNav }: Props) => {
+export const CodeLayoutContainer = ({ children }: Props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   return (
-    <Box minHeight="100vh" display="flex" flexDirection="column">
+    <Box minHeight="100vh" display="flex" flexDirection="column" sx={{bgcolor: "#f0f0f0"}}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" component="h1">
@@ -61,17 +59,7 @@ export const CodeLayoutContainer = ({ sideNav }: Props) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Grid container spacing={0}>
-        <Grid item xs={12} md={1}>
-          <Item>xs=12 md=1</Item>  
-        </Grid>
-        <Grid item xs={12} md={2}>
-          {sideNav}
-        </Grid>
-        <Grid item xs={12} md={9}>
-          <Item>xs=12, md=9</Item>
-        </Grid>
-      </Grid>
+      {children}
     </Box>
   );
 };

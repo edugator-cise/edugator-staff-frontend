@@ -16,12 +16,13 @@ export interface IProblem {
       expectedOutput: string;
       hint: string;
       visibility: number;
-      templatePackage: string;
     }
   ];
+  templatePackage: string;
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
+  _id: string;
 }
 
 export interface IModule {
