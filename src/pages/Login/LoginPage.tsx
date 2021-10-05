@@ -33,7 +33,7 @@ const LoginForm = styled(Form)(
 `
 );
 
-const FancyButton = styled(Button)`
+const LoginButton = styled(Button)`
   flex-grow: 1;
 `;
 
@@ -100,14 +100,14 @@ export function LoginPage(): React.ReactElement {
                   </div>
                 </CardContent>
                 <CardActions>
-                  <FancyButton
+                  <LoginButton
                     type="submit"
                     variant="contained"
                     size="large"
                     color="secondary"
                   >
                     Submit
-                  </FancyButton>
+                  </LoginButton>
                 </CardActions>
               </LoginFormCard>
             </LoginForm>
