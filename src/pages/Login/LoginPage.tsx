@@ -20,7 +20,7 @@ import {
 import { styled } from "@mui/material/styles";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
-const FancyForm = styled(Form)(
+const LoginForm = styled(Form)(
   ({ theme }) => `
   display: inline-block;
   flex-wrap: wrap;
@@ -37,7 +37,7 @@ const FancyButton = styled(Button)`
   flex-grow: 1;
 `;
 
-const FancyCard = styled(Card)(({ theme }) => ({
+const LoginFormCard = styled(Card)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
@@ -72,8 +72,8 @@ export function LoginPage(): React.ReactElement {
           }}
         >
           {() => (
-            <FancyForm>
-              <FancyCard>
+            <LoginForm>
+              <LoginFormCard>
                 <CardContent>
                   <div>
                     <Field
@@ -109,8 +109,8 @@ export function LoginPage(): React.ReactElement {
                     Submit
                   </FancyButton>
                 </CardActions>
-              </FancyCard>
-            </FancyForm>
+              </LoginFormCard>
+            </LoginForm>
           )}
         </Formik>
       </Stack>
