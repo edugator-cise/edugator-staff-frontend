@@ -9,111 +9,111 @@ import { Routes } from "../../shared/Routes.constants";
 import { Redirect } from "react-router";
 import { LocalStorage } from "../../app/common/LocalStorage";
 import {
-  Alert,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Stack,
+	Alert,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	CircularProgress,
+	Stack,
 } from "@mui/material";
-import styled from "@emotion/styled";
-
+import { styled } from "@mui/material/styles";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
-const FancyForm = styled(Form)`
+const FancyForm = styled(Form)(
+	({ theme }) => `
   display: inline-block;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   width: 50%;
-  margin: 12px auto;
+  margin: ${theme.spacing(2)} auto;
   left: 50%;
   top: 50%;
-`;
+`
+);
 
 const FancyButton = styled(Button)`
-  flex-grow: 1;
+	flex-grow: 1;
 `;
 
-const FancyCard = styled(Card)`
-  margin-top: 12px;
-`;
+const FancyCard = styled(Card)(({ theme }) => ({
+	marginTop: theme.spacing(2),
+}));
 
 export function LoginPage(): React.ReactElement {
-  // const classes = useStyles();
-  const dispatch = useDispatch();
-  const authState = useSelector((state: RootState) => state.login);
-  return LocalStorage.getToken() ? (
-    <Redirect
-      to={{
-        pathname: Routes.Modules,
-        state: { from: Routes.Login },
-      }}
-    />
-  ) : (
-    <LayoutContainer pageTitle="Admin Login">
-      <Stack>
-        {authState.isLoading && <CircularProgress />}
-        {authState.errorMessage && (
-          <Alert
-            severity="error"
-            onClose={() => {
-              dispatch(resetErrorMessage());
-            }}
-          >
-            {authState.errorMessage}
-          </Alert>
-        )}
-        <Formik
-          initialValues={{ username: "", password: "" }}
-          onSubmit={(values: IRequestLoginAction) => {
-            dispatch(requestLogin(values));
-          }}
-        >
-          {() => (
-            <FancyForm>
-              <FancyCard>
-                <CardContent>
-                  <div>
-                    <Field
-                      name="username"
-                      label="Username"
-                      placeholder="Username"
-                      margin="normal"
-                      fullWidth
-                      required
-                      component={FormTextField}
-                    />
-                  </div>
-                  <div>
-                    <Field
-                      name="password"
-                      placeholder="Password"
-                      label="Password"
-                      type="password"
-                      margin="normal"
-                      fullWidth
-                      required
-                      component={FormTextField}
-                    />
-                  </div>
-                </CardContent>
-                <CardActions>
-                  <FancyButton
-                    type="submit"
-                    variant="contained"
-                    size="large"
-                    color="secondary"
-                  >
-                    Submit
-                  </FancyButton>
-                </CardActions>
-              </FancyCard>
-            </FancyForm>
-          )}
-        </Formik>
-      </Stack>
-    </LayoutContainer>
-  );
+	const dispatch = useDispatch();
+	const authState = useSelector((state: RootState) => state.login);
+	return LocalStorage.getToken() ? (
+		<Redirect
+			to={{
+				pathname: Routes.Modules,
+				state: { from: Routes.Login },
+			}}
+		/>
+	) : (
+		<LayoutContainer pageTitle="Admin Login">
+			<Stack>
+				{authState.isLoading && <CircularProgress />}
+				{authState.errorMessage && (
+					<Alert
+						severity="error"
+						onClose={() => {
+							dispatch(resetErrorMessage());
+						}}
+					>
+						{authState.errorMessage}
+					</Alert>
+				)}
+				<Formik
+					initialValues={{ username: "", password: "" }}
+					onSubmit={(values: IRequestLoginAction) => {
+						dispatch(requestLogin(values));
+					}}
+				>
+					{() => (
+						<FancyForm>
+							<FancyCard>
+								<CardContent>
+									<div>
+										<Field
+											name="username"
+											label="Username"
+											placeholder="Username"
+											margin="normal"
+											fullWidth
+											required
+											component={FormTextField}
+										/>
+									</div>
+									<div>
+										<Field
+											name="password"
+											placeholder="Password"
+											label="Password"
+											type="password"
+											margin="normal"
+											fullWidth
+											required
+											component={FormTextField}
+										/>
+									</div>
+								</CardContent>
+								<CardActions>
+									<FancyButton
+										type="submit"
+										variant="contained"
+										size="large"
+										color="secondary"
+									>
+										Submit
+									</FancyButton>
+								</CardActions>
+							</FancyCard>
+						</FancyForm>
+					)}
+				</Formik>
+			</Stack>
+		</LayoutContainer>
+	);
 }
