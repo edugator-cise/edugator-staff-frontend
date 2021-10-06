@@ -12,6 +12,7 @@ export interface ProblemEditorContainerState {
   codeIsValid: boolean;
   serverConfigIsValid: boolean;
   testEditorIsValid: boolean;
+  activeStep: number;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -20,6 +21,7 @@ const initialState: ProblemEditorContainerState = {
   codeIsValid: false,
   serverConfigIsValid: false,
   testEditorIsValid: false,
+  activeStep: 0,
 };
 
 export const problemEditorContainerSlice = createSlice({
@@ -41,6 +43,12 @@ export const problemEditorContainerSlice = createSlice({
     validateTestEditor: (state, action: PayloadAction<boolean>) => {
       state.testEditorIsValid = action.payload;
     },
+    incrementActiveStep: (state) => {
+      state.activeStep += 1;
+    },
+    decrementActiveStep: (state) => {
+      state.activeStep -= 1;
+    },
   },
 });
 
@@ -50,5 +58,7 @@ export const {
   validateCode,
   validateServerConfig,
   validateTestEditor,
+  incrementActiveStep,
+  decrementActiveStep,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

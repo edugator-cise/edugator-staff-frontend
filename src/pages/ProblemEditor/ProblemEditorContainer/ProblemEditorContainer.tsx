@@ -1,6 +1,6 @@
-import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
+import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
@@ -12,6 +12,7 @@ import {
   validateServerConfig,
   validateTestEditor,
 } from "./problemEditorContainerSlice";
+import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 
 const steps = [
   "Metadata",
@@ -22,10 +23,9 @@ const steps = [
 ];
 
 export const ProblemEditorContainer = () => {
-  const [activeStep, setActiveStep] = useState(0);
   const dispatch = useDispatch();
 
-  /* STEP SELECTORS */
+  /* STEP SELECTORS */ //TODO put this logic in the reducer
   const metadataIsValid = useAppSelector(
     (state) => state.problemEditorContainer.metadataIsValid
   );
@@ -40,6 +40,10 @@ export const ProblemEditorContainer = () => {
   );
   const testEditorIsValid = useAppSelector(
     (state) => state.problemEditorContainer.testEditorIsValid
+  );
+
+  const activeStep = useAppSelector(
+    (state) => state.problemEditorContainer.activeStep
   );
 
   /* Dispatches the correct action based on the current active step */
@@ -83,9 +87,10 @@ export const ProblemEditorContainer = () => {
 
   const ActiveForm = () => {
     switch (activeStep) {
-      case 1:
+      case 10:
         return <ProblemEditorForm formRef={formRef} />;
       default:
+        // TODO make this happen in the example validator using redux and remove the functions from this container
         return (
           <ExampleValidator
             handleValidation={(isValid: boolean) => handleValidation(isValid)}
@@ -95,20 +100,11 @@ export const ProblemEditorContainer = () => {
     }
   };
 
-  const handleNext = () => {
-    if (activeStep === steps.length - 1) {
-      console.log("Submitted!");
-    } else {
-      formRef.current?.submitForm();
-      setActiveStep(activeStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
-
   const formRef = useRef<FormikValues>();
+
+  const getOtherValidation = () => {
+    return formRef.current?.isValid;
+  };
 
   return (
     <Box display="flex" flexDirection="column" flexGrow={1}>
@@ -132,14 +128,7 @@ export const ProblemEditorContainer = () => {
       >
         {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
         <ActiveForm />
-        <Box marginTop="auto" display="flex" justifyContent="space-between">
-          <Button onClick={handleBack} disabled={activeStep === 0}>
-            Back
-          </Button>
-          <Button onClick={handleNext} disabled={false}>
-            {activeStep === steps.length - 1 ? "Submit" : "Next"}
-          </Button>
-        </Box>
+        <ProblemEditorNavigator />
       </Box>
     </Box>
   );
