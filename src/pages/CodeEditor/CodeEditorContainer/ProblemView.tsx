@@ -9,6 +9,7 @@ interface Props {
 
 const ProblemDescriptionPaper = styled(Paper)(({theme}) => `
   margin: ${theme.spacing(2)};
+  padding: ${theme.spacing(1)};
   ${theme.breakpoints.up('md')} {
     height: 80vh;
 
