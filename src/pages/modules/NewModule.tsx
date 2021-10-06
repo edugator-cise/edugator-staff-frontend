@@ -1,6 +1,13 @@
-import React from 'react';
-import { Button, TextField, DialogTitle, Dialog, Paper, Divider } from '@material-ui/core';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React from "react";
+import {
+  Button,
+  TextField,
+  DialogTitle,
+  Dialog,
+  Paper,
+  Divider,
+} from "@material-ui/core";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,9 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
     footer: {
       float: "right",
     },
-  }),
+  })
 );
-
 
 export interface NewModuleDialogProps {
   open: boolean;
@@ -32,7 +38,7 @@ export interface NewModuleDialogProps {
 
 export default function NewModuleDialog(props: NewModuleDialogProps) {
   const { open, handleClose, handleSubmit } = props;
-  const [moduleName, setModuleName] = React.useState('');
+  const [moduleName, setModuleName] = React.useState("");
 
   const classes = useStyles();
 
@@ -52,7 +58,9 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
           id="outlined-new-module"
           label="Module Name"
           variant="outlined"
-          onChange={(event) => { setModuleName(event.target.value) }}
+          onChange={(event) => {
+            setModuleName(event.target.value);
+          }}
           placeholder="Module X: Sorting Algorithms"
           className={classes.textfield}
           fullWidth
