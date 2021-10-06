@@ -1,6 +1,6 @@
-import { Typography, Fade, Grow, Slide, Button } from "@material-ui/core";
+import { Typography, Fade, Grow, Slide, Button } from "@mui/material";
 import React from "react";
-import { styled } from "@material-ui/core/styles";
+import { styled } from "@mui/styles";
 import LightModeLogo from "../../assets/LightModeLogo.svg";
 import CodingPage from "../../assets/CodingPage.png";
 import theme from "../../shared/theme";
@@ -16,7 +16,7 @@ const Holder = styled("div")({
   alignItems: "center",
   backgroundImage:
     'url("https://www.transparenttextures.com/patterns/inspiration-geometry.png")',
-  backgroundSize: "13em",
+  backgroundSize: "35em",
   [theme.breakpoints.up("xl")]: {
     height: 800,
     flexDirection: "row",
@@ -94,7 +94,7 @@ function LandingHome() {
           <img
             src={CodingPage}
             style={{
-              height: "12em",
+              height: "32em",
               borderRadius: 20,
               marginLeft: 50,
               boxShadow:

@@ -6,10 +6,10 @@ import {
   Menu,
   MenuItem,
   Grid,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, { useRef, useState } from "react";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import LightModeLogo from "../../assets/LightModeLogo.svg";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import LightModeLogo from "../assets/LightModeLogo.svg";
 
 function VerticalNavigation() {
   const [anchorProjects, setAnchorProjects] = useState<any>(null);
@@ -136,7 +136,7 @@ function VerticalNavigation() {
               <Menu
                 id={item.id}
                 anchorEl={item.anchor}
-                getContentAnchorEl={null}
+                //getContentAnchorEl={null}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 transformOrigin={{ vertical: "top", horizontal: "center" }}
                 keepMounted

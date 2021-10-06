@@ -1,13 +1,15 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Theme } from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
 import {
-  Button,
   Typography,
   Accordion,
   AccordionDetails,
   AccordionSummary,
-} from "@material-ui/core";
-import { ExpandMore, Edit, AssignmentTurnedIn } from "@material-ui/icons";
+  Button,
+} from "@mui/material";
+import { AssignmentTurnedIn, Edit, ExpandMore } from "@mui/icons-material";
 import { IModule } from "./types";
 import NewModuleDialog from "./NewModule";
 import ModuleOptions from "./ModuleOptions";
@@ -106,8 +108,16 @@ export default function Modules() {
 
                     <span className={classes.buttons}>
                       <Button
-                        //variant="contained"
-                        color="default"
+                        className={classes.button}
+                        startIcon={<AssignmentTurnedIn />}
+                        size="small"
+                      >
+                        Problem {value}
+                      </Button>
+                    </span>
+
+                    <span className={classes.buttons}>
+                      <Button
                         className={classes.button}
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
@@ -116,8 +126,6 @@ export default function Modules() {
                       </Button>
 
                       <Button
-                        //variant="contained"
-                        color="default"
                         className={classes.button}
                         startIcon={<Edit />}
                         size="small"

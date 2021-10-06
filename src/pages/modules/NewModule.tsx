@@ -6,8 +6,11 @@ import {
   Dialog,
   Paper,
   Divider,
-} from "@material-ui/core";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { Theme } from "@mui/material/styles";
+
+import makeStyles from "@mui/styles/makeStyles";
+import createStyles from "@mui/styles/createStyles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,7 +61,7 @@ export default function NewModuleDialog(props: NewModuleDialogProps) {
           id="outlined-new-module"
           label="Module Name"
           variant="outlined"
-          onChange={(event) => {
+          onChange={(event: any) => {
             setModuleName(event.target.value);
           }}
           placeholder="Module X: Sorting Algorithms"

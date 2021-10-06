@@ -1,26 +1,43 @@
+import { ThemeProvider, StyledEngineProvider } from "@mui/system";
 import React from "react";
 import "./App.css";
 import { LoginPage } from "./app/Login/Login";
-import { Typography } from "@material-ui/core";
-import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { Typography } from "@mui/material";
 import VerticalNavigation from "./shared/VerticalNavigation";
 import LandingHome from "./pages/LandingPage/LandingHome";
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import theme from './shared/theme';
+import { Route, Switch } from "react-router-dom";
+import { Routes } from "./shared/Routes.constants";
+import { PrivateRoute } from "./shared/PrivateRoute";
+import Modules from "./pages/modules/ModulesView";
+import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 
 function App() {
+
   return (
-    <div className="App">
-      
+    <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-      <Typography variant="h3" color="textSecondary">
-        <VerticalNavigation />
-        <LandingHome />
-        {/* <ProblemEditorPage></ProblemEditorPage> */}
-        <div style={{height: 800, backgroundColor: '#0f287a', width: '100%'}} />
-      </Typography>
+        <div className="App">
+          <Switch>
+            <Route exact path={Routes.Login}>
+              <LoginPage />
+            </Route>
+            <PrivateRoute exact path={Routes.ProblemEditor}>
+              <ProblemEditorPage />
+            </PrivateRoute>
+            <PrivateRoute exact path={Routes.Modules}>
+              <Modules />
+            </PrivateRoute>
+            <Route exact path='/'>
+            <VerticalNavigation />
+              <LandingHome />
+              {/* <ProblemEditorPage></ProblemEditorPage> */}
+              <div style={{height: 800, backgroundColor: '#0f287a', width: '100%'}} />
+            </Route>
+          </Switch>
+        </div>
       </ThemeProvider>
-    </div>
+    </StyledEngineProvider>
   );
 }
 

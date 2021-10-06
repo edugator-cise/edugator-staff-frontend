@@ -10,9 +10,9 @@ import {
   Fade,
   Grow,
   Slide,
-} from "@material-ui/core";
+} from "@mui/material";
 import React from "react";
-import { styled } from "@material-ui/core/styles";
+import { styled } from "@mui/styles";
 
 const Holder = styled("div")({
   height: 800,

@@ -1,6 +1,8 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
+import { baseAPIURL } from "../../shared/constants";
+import { LocalStorage } from "../common/LocalStorage";
 import {
   requestLogin,
   receiveLoginFailure,
@@ -10,14 +12,19 @@ import {
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
   try {
-    //Dummy URL until we get the env
-    const url = `/v1/health`; //user/login?username=${action.payload.username}&password=${action.payload.password}`;
-    const token = yield call(async () => {
+    const url = `${baseAPIURL}v1/user/login?username=${action.payload.username}&password=${action.payload.password}`;
+    const { data } = yield call(async () => {
       return axios.get(url);
     });
+    const { token } = data;
+    LocalStorage.setToken(token);
     yield put(receiveLoginSuccess(token));
   } catch (e) {
-    yield put(receiveLoginFailure((e as Error)?.message));
+    yield put(
+      receiveLoginFailure(
+        "The username or password is incorrect. Please try again."
+      )
+    );
   }
 }
 

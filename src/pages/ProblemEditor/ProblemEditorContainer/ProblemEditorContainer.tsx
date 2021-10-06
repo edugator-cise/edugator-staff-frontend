@@ -1,4 +1,4 @@
-import { Box, Button, Step, StepLabel, Stepper } from "@material-ui/core";
+import { Box, Button, Step, StepLabel, Stepper } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
@@ -108,7 +108,8 @@ export const ProblemEditorContainer = () => {
         flexGrow={1}
         padding="1rem"
         display="flex"
-        flexDirection="Column"
+        flexDirection="column"
+        marginTop="1rem"
       >
         <ExampleValidator
           handleValidation={(isValid: boolean) => handleValidation(isValid)}

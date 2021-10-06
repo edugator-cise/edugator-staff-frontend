@@ -1,7 +1,7 @@
-import { blue, blueGrey } from "@material-ui/core/colors";
-import { createTheme } from "@material-ui/core/styles";
+import { blue, blueGrey } from "@mui/material/colors";
+import { createTheme } from "@mui/material/styles";
 
-declare module "@material-ui/core/styles" {
+declare module "@mui/material/styles" {
   interface Theme {
     
     background?: { default: string };
@@ -13,21 +13,22 @@ declare module "@material-ui/core/styles" {
   }
 }
 
+
+
 const theme = createTheme({
-  
-  props: {
+  components: {
     MuiButton: {
-      disableElevation: true,
-    },
-  },
-  overrides: {
-    MuiButton: {
-      sizeLarge: {
-        height: 50,
-        paddingLeft: 30,
-        paddingRight: 30,
-        borderRadius: 9,
+      defaultProps: {
+        disableElevation: true,
       },
+      styleOverrides: {
+        sizeLarge: {
+          height: 50,
+          paddingLeft: 30,
+          paddingRight: 30,
+          borderRadius: 9,
+        }
+      }
     },
   },
   typography: {
