@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export interface Problem {
+  problemStatement: string;
+  templatePackage: string;
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -12,7 +17,10 @@ export interface ProblemEditorContainerState {
   codeIsValid: boolean;
   serverConfigIsValid: boolean;
   testEditorIsValid: boolean;
+
   activeStep: number;
+
+  problem: Problem;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -22,6 +30,10 @@ const initialState: ProblemEditorContainerState = {
   serverConfigIsValid: false,
   testEditorIsValid: false,
   activeStep: 0,
+  problem: {
+    problemStatement: "",
+    templatePackage: "",
+  },
 };
 
 export const problemEditorContainerSlice = createSlice({
@@ -43,11 +55,16 @@ export const problemEditorContainerSlice = createSlice({
     validateTestEditor: (state, action: PayloadAction<boolean>) => {
       state.testEditorIsValid = action.payload;
     },
+
     incrementActiveStep: (state) => {
       state.activeStep += 1;
     },
     decrementActiveStep: (state) => {
       state.activeStep -= 1;
+    },
+
+    updateProblem: (state, action: PayloadAction<Problem>) => {
+      state.problem = action.payload;
     },
   },
 });
@@ -60,5 +77,6 @@ export const {
   validateTestEditor,
   incrementActiveStep,
   decrementActiveStep,
+  updateProblem,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
