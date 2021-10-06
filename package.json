@@ -42,7 +42,7 @@
 		"format": "prettier --write src/**/*.ts{,x}",
 		"lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
 		"lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
-		"pre-pr": "npm run build && npm run format && npm run lint-fix && npm run test"
+		"pre-pr": "npm run format && npm run lint-fix && npm run test && npm run build"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
