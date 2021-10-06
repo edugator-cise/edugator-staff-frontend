@@ -21,10 +21,6 @@ export const ProblemEditorForm = (props: Props) => {
     template: "",
   };
 
-  useEffect(() => {
-    console.log("rerender");
-  }, []);
-
   const validate = (values: ProblemFields) => {
     const errors: any = {};
     if (!values.problem) {

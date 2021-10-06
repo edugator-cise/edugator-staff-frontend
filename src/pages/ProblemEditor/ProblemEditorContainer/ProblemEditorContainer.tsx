@@ -21,7 +21,7 @@ export const ProblemEditorContainer = () => {
 
   const ActiveForm = () => {
     switch (activeStep) {
-      case 10:
+      case 1:
         return <ProblemEditorForm formRef={formRef} />;
       default:
         return <ExampleValidator />;
@@ -29,10 +29,6 @@ export const ProblemEditorContainer = () => {
   };
 
   const formRef = useRef<FormikValues>();
-
-  const getOtherValidation = () => {
-    return formRef.current?.isValid;
-  };
 
   return (
     <Box display="flex" flexDirection="column" flexGrow={1}>

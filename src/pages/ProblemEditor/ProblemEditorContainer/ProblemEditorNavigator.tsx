@@ -66,12 +66,17 @@ export const ProblemEditorNavigator = ({}: Props) => {
 
   return (
     <Box marginTop="auto" display="flex" justifyContent="space-between">
-      <Button onClick={handleBack} disabled={activeStep === 0}>
+      <Button
+        onClick={handleBack}
+        disabled={activeStep === 0}
+        variant="outlined"
+      >
         Back
       </Button>
       <Button
         onClick={handleNext}
         disabled={!getValidationStatus() /*&& !getOtherValidation()*/}
+        variant="outlined"
       >
         {activeStep === 4 ? "Submit" : "Next"}
       </Button>

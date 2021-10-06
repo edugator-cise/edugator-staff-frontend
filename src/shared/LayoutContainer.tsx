@@ -65,7 +65,11 @@ export const LayoutContainer = ({
             {pageTitle}
           </Typography>
           {actionButtons.map((button) => (
-            <Button onClick={button.onClick} key={button.label}>
+            <Button
+              onClick={button.onClick}
+              key={button.label}
+              variant="outlined"
+            >
               {button.label}
             </Button>
           ))}
