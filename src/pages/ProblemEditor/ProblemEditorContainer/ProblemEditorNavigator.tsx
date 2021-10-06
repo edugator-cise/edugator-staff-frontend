@@ -7,9 +7,11 @@ import {
   decrementActiveStep,
 } from "./problemEditorContainerSlice";
 
-interface Props {}
+interface Props {
+  formRef: any;
+}
 
-export const ProblemEditorNavigator = ({}: Props) => {
+export const ProblemEditorNavigator = ({ formRef }: Props) => {
   const dispatch = useDispatch();
   const activeStep = useAppSelector(
     (state) => state.problemEditorContainer.activeStep
@@ -59,7 +61,7 @@ export const ProblemEditorNavigator = ({}: Props) => {
     if (activeStep === 4) {
       console.log("Submitted!");
     } else {
-      //formRef.current?.submitForm();
+      formRef.current?.submitForm();
       dispatch(incrementActiveStep());
     }
   };

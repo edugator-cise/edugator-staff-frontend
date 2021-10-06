@@ -1,33 +1,35 @@
+import { ErrorSharp } from "@mui/icons-material";
 import { Button, TextField } from "@mui/material";
 import { Form, Formik, FormikValues } from "formik";
-import React, { Ref, useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { validateProblem } from "../ProblemEditorContainer/problemEditorContainerSlice";
+import { useAppSelector } from "../../../app/common/hooks";
+import {
+  ProblemFields,
+  updateProblem,
+  validateProblem,
+} from "../ProblemEditorContainer/problemEditorContainerSlice";
 
 interface Props {
   formRef: any;
 }
 
-interface ProblemFields {
-  problem: string;
-  template: URL | string;
-}
-
 export const ProblemEditorForm = (props: Props) => {
   const dispatch = useDispatch();
 
-  const initialValues: ProblemFields = {
-    problem: "",
-    template: "",
-  };
+  const initialValues = useAppSelector(
+    (state) => state.problemEditorContainer.problem
+  );
 
   const validate = (values: ProblemFields) => {
     const errors: any = {};
-    if (!values.problem) {
-      errors.problem = "Required";
+    if (!values.problemStatement) {
+      errors.problemStatement = "Required";
     }
 
-    console.log("errors!!!", errors);
+    if (!values.templatePackage) {
+      errors.templatePackage = "Required";
+    }
 
     dispatch(validateProblem(Object.entries(errors).length === 0));
 
@@ -37,15 +39,25 @@ export const ProblemEditorForm = (props: Props) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={() => console.log("submit problem")}
+      onSubmit={(values) => {
+        dispatch(updateProblem(values));
+      }}
       innerRef={props.formRef}
       validate={validate}
     >
       {({ values, handleChange, handleBlur }) => (
         <Form>
           <TextField
-            name="problem"
-            value={values.problem}
+            name="problemStatement"
+            label="Problem statement"
+            value={values.problemStatement}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          <TextField
+            name="templatePackage"
+            label="Template package"
+            value={values.templatePackage}
             onChange={handleChange}
             onBlur={handleBlur}
           />

@@ -52,7 +52,7 @@ export const ProblemEditorContainer = () => {
       >
         {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
         <ActiveForm />
-        <ProblemEditorNavigator />
+        <ProblemEditorNavigator formRef={formRef} />
       </Box>
     </Box>
   );

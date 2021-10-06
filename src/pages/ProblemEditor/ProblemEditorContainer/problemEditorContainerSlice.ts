@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface Problem {
+export interface ProblemFields {
   problemStatement: string;
   templatePackage: string;
 }
@@ -20,7 +20,7 @@ export interface ProblemEditorContainerState {
 
   activeStep: number;
 
-  problem: Problem;
+  problem: ProblemFields;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -63,7 +63,7 @@ export const problemEditorContainerSlice = createSlice({
       state.activeStep -= 1;
     },
 
-    updateProblem: (state, action: PayloadAction<Problem>) => {
+    updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
   },
