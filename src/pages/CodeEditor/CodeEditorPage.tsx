@@ -21,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export const CodeEditorPage = () => {
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootState) => state.codeEditor.isLoading)
+  const currentProblem = useSelector((state: RootState) => state.codeEditor.currentProblem)
   useEffect(() => {
     console.log("Reload Code Editor")
     dispatch(requestModulesAndProblems(true))
@@ -44,7 +45,9 @@ export const CodeEditorPage = () => {
           </Grid>
           <Grid container item xs={12} md={10} spacing={2} sx={{height: "100%"}}>
             <Grid item xs={12} md={4} sx={{height: "100%"}}>
-              <ProblemView problemTitle={"problem string"} problemStatement={"# problem statement"}/>
+              {currentProblem === undefined ? <div/> : 
+              <ProblemView problemTitle={currentProblem.title} problemStatement={currentProblem.problemType}/>
+              }
             </Grid>
             <Grid item xs={12} md={8}>
               <CodeEditorView/>

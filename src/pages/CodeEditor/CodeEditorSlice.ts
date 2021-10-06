@@ -25,6 +25,7 @@ const initialState: CodeEditorContainerState = {
 };
 
 function filterProblemById(state: CodeEditorContainerState, id: string): IProblem | undefined {
+  console.log(state.problems)
   if (!state.problems || state.problems.length === 0) {
     return undefined
   }
@@ -47,6 +48,8 @@ export const codeEditorSlice = createSlice({
       }
     },
     setCurrentProblem: (state, action: PayloadAction<string>) => {
+      console.log("this happened")
+      console.log(state.problems)
       const currentProblem = filterProblemById(state, action.payload)
       if (!currentProblem) {
         return {

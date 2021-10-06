@@ -10,8 +10,10 @@ import {IModuleWithProblems, IModuleItem} from "./types"
 import {IProblem} from "../modules/types"
 
 function filterForProblems(moduleProblemStructure: IModuleWithProblems[]) {
-  const problems: IProblem[] = []
-  moduleProblemStructure.forEach(element => problems.concat(element.problems))
+  let problems: IProblem[] = []
+  moduleProblemStructure.forEach(element => {
+    problems = [...problems, ...element.problems]
+  })
   return problems;
 }
 function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
