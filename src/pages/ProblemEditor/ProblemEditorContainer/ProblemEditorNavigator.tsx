@@ -76,7 +76,8 @@ export const ProblemEditorNavigator = ({}: Props) => {
       <Button
         onClick={handleNext}
         disabled={!getValidationStatus() /*&& !getOtherValidation()*/}
-        variant="outlined"
+        variant={activeStep === 4 ? "contained" : "outlined"}
+        color={activeStep === 4 ? "success" : "primary"}
       >
         {activeStep === 4 ? "Submit" : "Next"}
       </Button>

@@ -8,11 +8,17 @@ import {
   Button,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
+import { MuiStyledOptions } from "@mui/system";
 import React from "react";
+
+type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
+type ButtonVariant = "text" | "contained" | "outlined";
 
 interface ButtonProps {
   label: string;
-  onClick(): any;
+  onClick(): void;
+  variant?: string;
+  color?: string;
 }
 
 interface Props {
@@ -68,7 +74,8 @@ export const LayoutContainer = ({
             <Button
               onClick={button.onClick}
               key={button.label}
-              variant="outlined"
+              variant={button.variant as ButtonVariant}
+              color={button.color as ButtonColor}
             >
               {button.label}
             </Button>
