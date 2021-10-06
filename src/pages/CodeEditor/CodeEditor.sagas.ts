@@ -6,8 +6,6 @@ import {
   setIsLoading
 } from "./CodeEditorSlice";
 import api from "../../app/common/api"
-import {IModuleWithProblems, IModuleItem} from "./types"
-import {IProblem} from "../modules/types"
 
 function filterForProblems(moduleProblemStructure: IModuleWithProblems[]) {
   let problems: IProblem[] = []
@@ -17,7 +15,7 @@ function filterForProblems(moduleProblemStructure: IModuleWithProblems[]) {
   return problems;
 }
 function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
-  const moduleItems: IModuleItem[] = []
+  const moduleItems: INavigationItem[] = []
   moduleProblemStructure.forEach(element => {
     const payload = {
       _id: element._id,

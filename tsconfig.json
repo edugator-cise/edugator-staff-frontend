@@ -16,5 +16,8 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src", "src/__tests__", "auth", "src/__tests__"]
+	"include": ["src", "src/__tests__", "auth", "src/__tests__"],
+	"paths": {
+		"*": ["src/types/*.d.ts"]
+	}
 }

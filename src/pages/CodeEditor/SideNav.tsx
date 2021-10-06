@@ -5,7 +5,6 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import {IModuleItem, IProblemItem} from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import {RootState} from "../../app/common/store"
 import { setCurrentProblem } from "./CodeEditorSlice";
@@ -41,7 +40,7 @@ export const Sidenav = () => {
           </ListSubheader>
         }
       >
-        {navStructure.map((value: IModuleItem, indexVal: number) => (
+        {navStructure.map((value: INavigationItem, indexVal: number) => (
           <>
           <CustomListItemButton key={value.name + "_" + indexVal} onClick={() => {
             handleClick(value.name)

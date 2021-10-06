@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {IProblem} from '../modules/types';
-import {IModuleItem } from './types';
 export interface CodeEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -10,7 +8,7 @@ export interface CodeEditorContainerState {
   */
   hasReceivedProblems: boolean
   currentProblem: IProblem | undefined,
-  navStructure: IModuleItem[],
+  navStructure: INavigationItem[],
   isLoading: boolean,
   problems: IProblem[],
 }
@@ -62,7 +60,7 @@ export const codeEditorSlice = createSlice({
         }
       }
     },
-    setNavStructure: (state, action: PayloadAction<IModuleItem[]>) => {
+    setNavStructure: (state, action: PayloadAction<INavigationItem[]>) => {
       return {
         ...state,
         navStructure: action.payload
