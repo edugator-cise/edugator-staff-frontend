@@ -11,6 +11,7 @@ export interface CodeEditorContainerState {
   navStructure: INavigationItem[],
   isLoading: boolean,
   problems: IProblem[],
+  codeBody: string
 }
 
 const initialState: CodeEditorContainerState = {
@@ -18,7 +19,8 @@ const initialState: CodeEditorContainerState = {
   isLoading: true,
   currentProblem: undefined,
   navStructure: [],
-  problems: []
+  problems: [],
+  codeBody: ""
 
 };
 
@@ -46,8 +48,6 @@ export const codeEditorSlice = createSlice({
       }
     },
     setCurrentProblem: (state, action: PayloadAction<string>) => {
-      console.log("this happened")
-      console.log(state.problems)
       const currentProblem = filterProblemById(state, action.payload)
       if (!currentProblem) {
         return {
@@ -56,7 +56,8 @@ export const codeEditorSlice = createSlice({
       } else {
         return {
           ...state,
-          currentProblem: {...currentProblem}
+          currentProblem: {...currentProblem},
+          codeBody: currentProblem.code.body
         }
       }
     },
@@ -83,6 +84,13 @@ export const codeEditorSlice = createSlice({
         ...state,
         isLoading: action.payload
       }
+    },
+    setCodeBody: (state, action: PayloadAction<string>) => {
+      console.log(action.payload)
+      return {
+        ...state,
+        codeBody: action.payload
+      }
     }
   },
 });
@@ -90,6 +98,7 @@ export const codeEditorSlice = createSlice({
 export const {
   setReceivedProblems,
   setCurrentProblem,
+  setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
   setProblems,

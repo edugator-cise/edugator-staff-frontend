@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles'
 
 const TabBar = styled('div')(({theme}) => `
@@ -11,6 +12,10 @@ const TabBar = styled('div')(({theme}) => `
   width: 100%;
   background-color: rgb(250,250,250);
 `)
+
+// const ActiveTab = styled(Tab)(({theme}) => `
+//   background-color: white;
+// `)
 
 export const InputOutputView = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -32,11 +37,14 @@ export const InputOutputView = () => {
           indicatorColor="secondary"
           textColor="inherit"
         >
-          <Tab label="Stdin"></Tab>
-          <Tab label="Compiler Output"></Tab>
-          <Tab label="Submission"></Tab>
+          <Tab disableRipple label="Stdin"></Tab>
+          <Tab disableRipple label="Compiler Output"></Tab>
+          <Tab disableRipple label="Submission"></Tab>
         </Tabs>
       </TabBar>
+    <Box sx={{height: '20vh'}}>
+      Hello world
+    </Box>
     </Paper>
   )
 }

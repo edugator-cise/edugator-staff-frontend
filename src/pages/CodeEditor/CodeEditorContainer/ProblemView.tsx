@@ -10,6 +10,7 @@ interface Props {
 const ProblemDescriptionPaper = styled(Paper)(({theme}) => `
   margin: ${theme.spacing(2)};
   padding: ${theme.spacing(1)};
+  text-align: left;
   ${theme.breakpoints.up('md')} {
     height: 80vh;
 
@@ -18,7 +19,7 @@ const ProblemDescriptionPaper = styled(Paper)(({theme}) => `
 export const ProblemView = ({problemTitle, problemStatement}: Props) => {
   return (
     <ProblemDescriptionPaper>
-      <Typography variant="h6">
+      <Typography variant="h6" sx={{textAlign: "center"}}>
         {problemTitle}
       </Typography>
       <Markdown markdownString={problemStatement} />

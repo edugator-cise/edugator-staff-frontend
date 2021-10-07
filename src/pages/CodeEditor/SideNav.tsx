@@ -16,7 +16,6 @@ interface ClickedMenu {
 const CustomListItemButton = styled(ListItemButton)(({theme}) => `
   background-color: "#ffffff";
   border-left: solid 1px #e2e2e2;
-  border-right: solid 1px #e2e2e2;
   border-bottom: solid 1px #e2e2e2;
 `)
 

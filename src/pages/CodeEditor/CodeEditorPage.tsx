@@ -9,7 +9,8 @@ import { styled } from '@mui/material/styles';
 import {ProblemView} from "./CodeEditorContainer/ProblemView"
 import {CodeEditorView} from "./CodeEditorContainer/CodeEditorView"
 import {InputOutputView} from "./CodeEditorContainer/InputOutputView"
-
+import {EmptyState} from "./CodeEditorContainer/EmptyState"
+import { problemEditorContainerSlice } from '../ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice';
 export const CodeEditorPage = () => {
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootState) => state.codeEditor.isLoading)
@@ -31,24 +32,26 @@ export const CodeEditorPage = () => {
   } else {
     return (
       <CodeLayoutContainer>
-        <Grid container spacing={0} sx={{height: "100%"}}>
-          <Grid item xs={12} md={2} sx={{height: "100%"}}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} md={2}>
             <Sidenav/>
           </Grid>
+
           <Grid container item xs={12} md={10} spacing={2}>
-            <Grid item xs={12} md={4} sx={{height: "100%"}}>
-              {currentProblem === undefined ? <div/> : 
-              <ProblemView problemTitle={currentProblem.title} problemStatement={currentProblem.statement}/>
-              }
-            </Grid>
-            <Grid item xs={12} md={8} container direction="column" spacing={3} sx={{ padding: 2 }}>
-              <Grid item sx={{ marginTop: 2}}>
-                <CodeEditorView/>
+          {currentProblem === undefined ? (<EmptyState />) : 
+            (
+            <>
+              <Grid item xs={12} md={4}>
+                <ProblemView problemTitle={currentProblem.title} problemStatement={currentProblem.statement}/>
               </Grid>
-              <Grid item>
-              <InputOutputView/>
+              <Grid item xs={12} md={8}>
+                <Stack spacing={2} sx={{margin: 2}}>
+                  <CodeEditorView code={currentProblem.code.body} templatePackage={currentProblem.templatePackage}/>
+                  <InputOutputView/>
+                </Stack>
               </Grid>
-            </Grid>
+          </>)
+          }
           </Grid>
         </Grid>
       </CodeLayoutContainer>
