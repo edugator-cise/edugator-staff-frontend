@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material";
 import { ThemeProvider, StyledEngineProvider } from "@mui/system";
 import React from "react";
 import "./App.css";
-import { LoginPage } from "./app/Login/Login";
+import { LoginPage } from "./pages/Login/LoginPage";
 import { Route, Switch } from "react-router-dom";
 import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";

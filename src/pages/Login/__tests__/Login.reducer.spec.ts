@@ -1,9 +1,9 @@
-import store from "../../app/common/store";
+import store from "../../../app/common/store";
 import {
   receiveLoginFailure,
   receiveLoginSuccess,
   requestLogin,
-} from "../../app/Login/Login.slice";
+} from "../LoginPage.slice";
 
 describe("Auth Reducer", () => {
   it("should handle request login", () => {
