@@ -10,7 +10,10 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { INewModule, DialogStatus } from "../types";
+import { INewModule, DialogStatus } from "../../../shared/types";
+
+import { useAppDispatch } from "../../../app/common/hooks";
+import { requestNewModule } from "../ModulesPage.slice";
 
 const Form = styled("div")({
   display: "flex",
@@ -57,7 +60,6 @@ export interface ModuleDialogProps {
   moduleValues: INewModule;
   dialogOperation: DialogStatus;
   handleClose: () => void;
-  handleSubmit: () => void;
   moduleValuesInput: (input: INewModule) => void;
 }
 
@@ -67,9 +69,28 @@ export function ModuleDialog(props: ModuleDialogProps) {
     moduleValues,
     dialogOperation,
     handleClose,
-    handleSubmit,
     moduleValuesInput,
   } = props;
+
+  const dispatch = useAppDispatch();
+
+  const handleDialogSubmit = () => {
+    if (dialogOperation === DialogStatus.CREATE) {
+      dispatch(
+        requestNewModule({
+          moduleName: moduleValues.nameInput,
+          moduleNum: moduleValues.numberInput,
+        })
+      );
+    } else if (dialogOperation === DialogStatus.EDIT) {
+      // dispatch rename module
+    }
+
+    // TODO:
+    //  dont close before checking
+    //  if action was successful
+    handleClose();
+  };
 
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="sm" fullWidth>
@@ -111,7 +132,7 @@ export function ModuleDialog(props: ModuleDialogProps) {
         </Form>
 
         <Footer>
-          <AddButton onClick={() => handleSubmit()} variant="outlined">
+          <AddButton onClick={() => handleDialogSubmit()} variant="outlined">
             Add module
           </AddButton>
         </Footer>

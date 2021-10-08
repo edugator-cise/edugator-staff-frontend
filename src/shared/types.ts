@@ -32,7 +32,7 @@ export interface IModule {
   problemList: IProblem[];
 }
 
-/** Creating a New Module dialog */
+/** Creating a New-Module dialog */
 export interface INewModule {
   nameInput: string;
   numberInput: number;
@@ -44,19 +44,30 @@ export enum DialogStatus {
   CLOSED = "closed",
 }
 
-/* Redux State - Modules */
+/** Useful Structs */
+export enum AlertType {
+  info = "info",
+  error = "error",
+  success = "success",
+}
 
+export interface IFeedback {
+  message: string | null;
+  display: boolean;
+  type: AlertType;
+}
+
+/* Redux State - Modules */
 export interface IModuleState {
   modules: IModule[];
   isLoading: boolean;
-  errorMessage: string | null;
-  latestAction: string | null;
+  feedback: IFeedback;
 }
 
 /* GET Request Actions - Modules */
 export interface IModulesGETFailure {
   message: string | null;
-}
+} // might add generic failure interface
 
 /* PUT Request Actions - Modules */
 export interface IModulesPUT {

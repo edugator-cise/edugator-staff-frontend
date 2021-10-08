@@ -11,21 +11,15 @@ import {
 } from "./ModulesPage.slice";
 
 import apiUrls from "./config";
-import { IModule, IModulesPUT } from "./types";
-
-//const moduleRequests = () =>
-//  axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
+import { IModule, IModulesPUT } from "../../shared/types";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   console.log("sagas for GET Modules");
   // request
   let modulesRequest = () =>
-    axios.request<IModule[]>({ ...apiUrls["get modules"] });
-
+    axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
   try {
-    //const response = yield call(moduleRequests); // response: any???????????
     const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
-
     yield put(requestModulesSuccess(response.data));
   } catch (e) {
     yield put(requestModulesFailure(e as Error));

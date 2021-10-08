@@ -10,13 +10,6 @@ const noCache = { "Cache-Control": "no-cache" };
 const adminAPI = "https://edugator-admin.com"; // => base
 
 const apiUrls: IApiConfig = {
-  "get modules": {
-    url: adminAPI + "/v1/module",
-    method: "GET",
-    headers: {
-      ...noCache,
-    },
-  },
   "get modules and problems": {
     url: adminAPI + "/v1/module/WithProblems",
     method: "GET",
@@ -59,13 +52,6 @@ interface ISnackBarConfig {
  *  Take error code into consideration
  *  Take error message into consideration
  */
-
-export enum ModulesAlertEnum {
-  requestModulesSuccess = "modules/requestModulesSuccess",
-  requestModulesFailure = "modules/requestModulesFailure",
-  requestNewModuleSuccess = "modules/requestNewModuleSuccess",
-  requestNewModuleFailure = "modules/requestNewModuleFailure",
-}
 
 export const AlertMsg: ISnackBarConfig = {
   "modules/requestModulesSuccess": "Modules received successfully",

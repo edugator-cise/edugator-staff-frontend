@@ -61,7 +61,7 @@ export function Modules() {
                   </NewProblemButton>
                 </ModuleSummary>
 
-                {[0, 1].map((problem, i) => (
+                {module.problemList.map((problem, i) => (
                   <ModuleContent key={i}>
                     <ProblemTitle>Problem {i}</ProblemTitle>
 
@@ -73,6 +73,8 @@ export function Modules() {
           })}
         </>
       ) : (
+        // Needs to say something else when getting modules failed
+        // and allow user to retry
         <Typography variant="h6">Click Add Modules to get started</Typography>
       )}
     </>

@@ -1,19 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IModuleState,
-  /*IModulesGETSuccess,*/
   IModulesGETFailure,
   IModulesPUT,
-  /*IModulesPUTEnd,*/
   IModulesPUTFailure,
   IModule,
-} from "./types";
+  AlertType,
+} from "../../shared/types";
+import { AlertMsg } from "./config";
+//import { LocalStorage } from "../../app/common/LocalStorage";
 
 const initialModuleState: IModuleState = {
   modules: [],
   isLoading: true,
-  latestAction: null,
-  errorMessage: null,
+  feedback: {
+    message: "",
+    display: false,
+    type: AlertType.info,
+  },
 };
 
 export function getInitialModuleState(): IModuleState {
@@ -25,16 +29,20 @@ export const moduleSlice = createSlice({
   initialState: getInitialModuleState(),
   reducers: {
     /* GET Request Modules */
-    // TYPE = "modules/requestModules"
     requestModules: (state, action: PayloadAction<void>) => {
       return { ...state, isLoading: true };
     },
 
+    // action.type = "modules/requestModules"
     requestModulesSuccess: (state, action: PayloadAction<IModule[]>) => {
       return {
         ...state,
         modules: action.payload,
-        latestAction: action.type,
+        feedback: {
+          message: AlertMsg[action.type],
+          type: AlertType.success,
+          display: true,
+        },
         isLoading: false,
       };
     },
@@ -44,13 +52,18 @@ export const moduleSlice = createSlice({
       action: PayloadAction<IModulesGETFailure>
     ) => {
       console.log("getting modules reducer fail");
-      console.log("error message: ", state.errorMessage);
+      console.log("error message: ", action.payload.message);
+
+      
 
       return {
         ...state,
-        isLoading: true, // needs to retry
-        latestAction: action.type,
-        errorMessage: action.payload.message,
+        feedback: {
+          message: action.payload.message,
+          type: AlertType.error,
+          display: true,
+        },
+        isLoading: false, // needs to retry
       };
     },
 
@@ -63,10 +76,15 @@ export const moduleSlice = createSlice({
 
     requestNewModuleSuccess: (state, action: PayloadAction<IModule>) => {
       console.log("adding modules reducer end");
+
       return {
         ...state,
-        latestAction: action.type,
         modules: [...state.modules, action.payload],
+        feedback: {
+          message: AlertMsg[action.type],
+          type: AlertType.success,
+          display: true,
+        },
         isLoading: false,
       };
     },
@@ -76,13 +94,16 @@ export const moduleSlice = createSlice({
       action: PayloadAction<IModulesPUTFailure>
     ) => {
       console.log("adding modules reducer fail");
-      console.log("error message: ", state.errorMessage);
+      console.log("error message: ", action.payload.message);
 
       return {
         ...state,
+        feedback: {
+          message: action.payload.message,
+          type: AlertType.error,
+          display: true,
+        },
         isLoading: false,
-        latestAction: action.type,
-        errorMessage: action.payload.message,
       };
     },
 
@@ -96,8 +117,8 @@ export const moduleSlice = createSlice({
     requestDeleteModuleFailure: (state, action) => {},
 
     /* Other reducers */
-    resetLatestAction: (state, action: PayloadAction<void>) => {
-      state.latestAction = null;
+    resetDisplayMessage: (state, action: PayloadAction<void>) => {
+      state.feedback.display = false;
     },
   },
 });
@@ -114,7 +135,7 @@ export const {
   /* PUT Request Modules */
   /* DELETE Request Modules */
   /* Other Reducers */
-  resetLatestAction,
+  resetDisplayMessage,
 } = moduleSlice.actions;
 
 export default moduleSlice;

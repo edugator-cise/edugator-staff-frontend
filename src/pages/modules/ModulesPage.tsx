@@ -2,9 +2,9 @@ import React from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
-import { requestModules, requestNewModule } from "./ModulesPage.slice";
+import { requestModules } from "./ModulesPage.slice";
 import { ModuleDialog, Modules, ModulesSnackbar } from "./components";
-import { INewModule, DialogStatus } from "./types";
+import { INewModule, DialogStatus } from "../../shared/types";
 
 export function ModulesPage() {
   const [moduleDialog, setModuleDialog] = React.useState(DialogStatus.CLOSED);
@@ -15,21 +15,6 @@ export function ModulesPage() {
 
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
-
-  const handleDialogSubmit = () => {
-    if (moduleDialog === DialogStatus.CREATE) {
-      dispatch(
-        requestNewModule({
-          moduleName: moduleInput.nameInput,
-          moduleNum: moduleInput.numberInput,
-        })
-      );
-    } else if (moduleDialog === DialogStatus.EDIT) {
-      // dispatch rename module
-    }
-
-    setModuleDialog(DialogStatus.CLOSED);
-  };
 
   const handleDialogClose = () => {
     setModuleDialog(DialogStatus.CLOSED);
@@ -54,7 +39,6 @@ export function ModulesPage() {
         <ModuleDialog
           moduleValues={moduleInput}
           dialogOperation={moduleDialog}
-          handleSubmit={handleDialogSubmit}
           handleClose={handleDialogClose}
           moduleValuesInput={setModuleInput}
           open={moduleDialog !== DialogStatus.CLOSED}
