@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import problemEditorContainerReducer from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
-import { loginSlice } from "../Login/Login.slice";
+import { loginSlice } from "../../pages/Login/LoginPage.slice";
 import { moduleSlice } from "../../pages/modules/ModulesPage.slice";
 /* import slices of state here */
 
