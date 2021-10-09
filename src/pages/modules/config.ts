@@ -6,10 +6,10 @@ interface IApiConfig {
 }
 
 const adminAPI = "https://edugator-admin.com"; // => base
-const token = LocalStorage.getToken()
+const token = LocalStorage.getToken();
 
 const noCache = { "Cache-Control": "no-cache" };
-const auth = { "Authorization": "Bearer " + token };
+const auth = { Authorization: "Bearer " + token };
 
 const apiUrls: IApiConfig = {
   "get modules and problems": {
