@@ -1,13 +1,15 @@
 import { AxiosRequestConfig } from "axios";
+import { LocalStorage } from "../../app/common/LocalStorage";
 
 interface IApiConfig {
   [desc: string]: AxiosRequestConfig;
 }
 
-const noCache = { "Cache-Control": "no-cache" };
-//const auth = { "Authorization": "Bearer " + token };
-
 const adminAPI = "https://edugator-admin.com"; // => base
+const token = LocalStorage.getToken()
+
+const noCache = { "Cache-Control": "no-cache" };
+const auth = { "Authorization": "Bearer " + token };
 
 const apiUrls: IApiConfig = {
   "get modules and problems": {
@@ -15,7 +17,7 @@ const apiUrls: IApiConfig = {
     method: "GET",
     headers: {
       ...noCache,
-      //...auth,
+      ...auth, // because previous way is gone on refresh
     },
   },
   "add module": {
@@ -23,6 +25,7 @@ const apiUrls: IApiConfig = {
     method: "POST",
     headers: {
       ...noCache,
+      ...auth,
     },
   },
   "modify module": {
@@ -30,6 +33,7 @@ const apiUrls: IApiConfig = {
     method: "PUT",
     headers: {
       ...noCache,
+      ...auth,
     },
   },
   "delete module": {
@@ -37,6 +41,7 @@ const apiUrls: IApiConfig = {
     method: "DELETE",
     headers: {
       ...noCache,
+      ...auth,
     },
   },
 };
