@@ -61,9 +61,9 @@ export function Modules() {
                   </NewProblemButton>
                 </ModuleSummary>
 
-                {module.problemList.map((problem, i) => (
+                {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
-                    <ProblemTitle>Problem {i}</ProblemTitle>
+                    <ProblemTitle>Problem {i+1}: {problem.title}</ProblemTitle>
 
                     <ProblemButtons />
                   </ModuleContent>

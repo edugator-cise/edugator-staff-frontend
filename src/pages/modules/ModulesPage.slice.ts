@@ -8,7 +8,6 @@ import {
   AlertType,
 } from "../../shared/types";
 import { AlertMsg } from "./config";
-//import { LocalStorage } from "../../app/common/LocalStorage";
 
 const initialModuleState: IModuleState = {
   modules: [],
@@ -33,8 +32,10 @@ export const moduleSlice = createSlice({
       return { ...state, isLoading: true };
     },
 
-    // action.type = "modules/requestModules"
+    // action.type = "modules/requestModulesSuccess"
     requestModulesSuccess: (state, action: PayloadAction<IModule[]>) => {
+      console.log("getting modules success");
+      console.log(action);
       return {
         ...state,
         modules: action.payload,
@@ -52,9 +53,6 @@ export const moduleSlice = createSlice({
       action: PayloadAction<IModulesGETFailure>
     ) => {
       console.log("getting modules reducer fail");
-      console.log("error message: ", action.payload.message);
-
-      
 
       return {
         ...state,
@@ -94,7 +92,6 @@ export const moduleSlice = createSlice({
       action: PayloadAction<IModulesPUTFailure>
     ) => {
       console.log("adding modules reducer fail");
-      console.log("error message: ", action.payload.message);
 
       return {
         ...state,
@@ -117,7 +114,7 @@ export const moduleSlice = createSlice({
     requestDeleteModuleFailure: (state, action) => {},
 
     /* Other reducers */
-    resetDisplayMessage: (state, action: PayloadAction<void>) => {
+    closeAlert: (state, action: PayloadAction<void>) => {
       state.feedback.display = false;
     },
   },
@@ -135,7 +132,7 @@ export const {
   /* PUT Request Modules */
   /* DELETE Request Modules */
   /* Other Reducers */
-  resetDisplayMessage,
+  closeAlert,
 } = moduleSlice.actions;
 
 export default moduleSlice;

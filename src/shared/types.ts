@@ -29,7 +29,7 @@ export interface IModule {
   _id?: string;
   name: string;
   number: number;
-  problemList: IProblem[];
+  problems: IProblem[];
 }
 
 /** Creating a New-Module dialog */
@@ -45,6 +45,10 @@ export enum DialogStatus {
 }
 
 /** Useful Structs */
+/**
+ * @type error
+ * @type success
+ */
 export enum AlertType {
   info = "info",
   error = "error",

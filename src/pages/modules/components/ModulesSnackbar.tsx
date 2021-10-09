@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Snackbar, Alert } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
-import { resetDisplayMessage } from "../ModulesPage.slice";
+import { closeAlert } from "../ModulesPage.slice";
 
 export function ModulesSnackbar() {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ export function ModulesSnackbar() {
       return;
     }
 
-    dispatch(resetDisplayMessage());
+    dispatch(closeAlert());
   };
 
   return (

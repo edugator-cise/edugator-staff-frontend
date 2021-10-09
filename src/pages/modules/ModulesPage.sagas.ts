@@ -48,7 +48,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
     let new_module: IModule = {
       name: action.payload.moduleName,
       number: action.payload.moduleNum,
-      problemList: [],
+      problems: [],
       _id: response.data,
     };
     yield put(requestNewModuleSuccess(new_module));

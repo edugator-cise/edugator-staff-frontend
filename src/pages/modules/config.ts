@@ -15,6 +15,7 @@ const apiUrls: IApiConfig = {
     method: "GET",
     headers: {
       ...noCache,
+      //...auth,
     },
   },
   "add module": {
