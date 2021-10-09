@@ -1,20 +1,16 @@
 import React from "react";
-import { Theme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
-import createStyles from "@mui/styles/createStyles";
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import { MoreVert } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
+import { MoreVert } from "@mui/icons-material/";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      padding: theme.spacing(0.5),
-      marginLeft: theme.spacing(0.5),
-    },
-  })
-);
+const MenuButton = styled(IconButton)(({ theme }) => ({
+  padding: theme.spacing(0.5),
+  marginLeft: theme.spacing(0.5),
+  marginTop: "auto",
+  marginBottom: "auto",
+}));
 
-export default function ModuleMenu() {
+export function ModuleMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (
@@ -34,21 +30,17 @@ export default function ModuleMenu() {
     setAnchorEl(null);
   };
 
-  const classes = useStyles();
-
   return (
     <div>
-      <IconButton
+      <MenuButton
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={(event) => {
           handleClick(event);
         }}
-        className={classes.root}
-        size="large"
       >
         <MoreVert />
-      </IconButton>
+      </MenuButton>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
