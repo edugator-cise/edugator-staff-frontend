@@ -1,7 +1,6 @@
 import React from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { Theme } from "@mui/material";
 
 export const ProblemEditorPage = () => {
   const actions = [
