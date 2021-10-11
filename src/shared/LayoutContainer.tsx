@@ -8,7 +8,6 @@ import {
   Button,
 } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
-import { MuiStyledOptions } from "@mui/system";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
