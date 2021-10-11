@@ -57,10 +57,14 @@ export const problemEditorContainerSlice = createSlice({
     },
 
     incrementActiveStep: (state) => {
-      state.activeStep += 1;
+      if (state.activeStep < 4) {
+        state.activeStep += 1;
+      }
     },
     decrementActiveStep: (state) => {
-      state.activeStep -= 1;
+      if (state.activeStep > 0) {
+        state.activeStep -= 1;
+      }
     },
 
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
