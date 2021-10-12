@@ -32,7 +32,7 @@ export const CodeEditorPage = () => {
   } else {
     return (
       <CodeLayoutContainer>
-        <Grid container spacing={0}>
+        <Grid container spacing={0} sx={{ height: 'calc(100vh - 64px)'}}>
           <Grid item xs={12} md={2}>
             <Sidenav/>
           </Grid>

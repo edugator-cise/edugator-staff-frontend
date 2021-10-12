@@ -1,4 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface ICompilerOutput {
+  compilerMessage: string,
+  compilerBody: string
+}
 export interface CodeEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -11,7 +16,13 @@ export interface CodeEditorContainerState {
   navStructure: INavigationItem[],
   isLoading: boolean,
   problems: IProblem[],
-  codeBody: string
+  codeBody: string,
+  runningSubmission: boolean,
+  stdin: string,
+  isAcceptedOutput: boolean | undefined,
+  compilerOutput: ICompilerOutput,
+  submissionOutput: ISubmissionOutput | undefined,
+  activeTab: number
 }
 
 const initialState: CodeEditorContainerState = {
@@ -20,9 +31,27 @@ const initialState: CodeEditorContainerState = {
   currentProblem: undefined,
   navStructure: [],
   problems: [],
-  codeBody: ""
-
+  codeBody: "",
+  runningSubmission: false,
+  stdin: "",
+  isAcceptedOutput: undefined,
+  compilerOutput: {
+    compilerMessage: "",
+    compilerBody: ""
+  },
+  submissionOutput: undefined,
+  activeTab: 0, // stdin tab is active
 };
+
+const resetinputOutputViewState = () => ({
+  stdin: "",
+  isAcceptedOutput: undefined,
+  compilerOutput: {
+    compilerMessage: "",
+    compilerBody: ""
+  },
+  submissionOutput: undefined
+})
 
 function filterProblemById(state: CodeEditorContainerState, id: string): IProblem | undefined {
   console.log(state.problems)
@@ -57,7 +86,8 @@ export const codeEditorSlice = createSlice({
         return {
           ...state,
           currentProblem: {...currentProblem},
-          codeBody: currentProblem.code.body
+          codeBody: currentProblem.code.body,
+
         }
       }
     },
@@ -86,10 +116,51 @@ export const codeEditorSlice = createSlice({
       }
     },
     setCodeBody: (state, action: PayloadAction<string>) => {
-      console.log(action.payload)
       return {
         ...state,
         codeBody: action.payload
+      }
+    },
+    setRunningSubmission: (state, action: PayloadAction<boolean>) => {
+      return {
+        ...state,
+        runningSubmission: action.payload
+      }
+    },
+    requestRunCode: (state, action: PayloadAction<ICodeSubmission>) => {
+      return {
+        ...state,
+        runningSubmission: true
+      }
+    },
+    submitCode: (state, action: PayloadAction<ICodeSubmission & {problemId: string}>) => {
+      return {
+        ...state,
+        runningSubmission: true
+      }
+    },
+    setStdin: (state, action: PayloadAction<string>) => {
+      return {
+        ...state,
+        stdin: action.payload
+      }
+    },
+    setCompilerOutput: (state,action: PayloadAction<ICompilerOutput>) => {
+      return {
+        ...state,
+        compilerOutput: action.payload
+      }
+    },
+    setIsAcceptedOutput: (state, action: PayloadAction<boolean>) => {
+      return {
+        ...state,
+        isAcceptedOutput: action.payload
+      }
+    },
+    setActiveTab: (state, action: PayloadAction<number>) => {
+      return {
+        ...state,
+        activeTab: action.payload
       }
     }
   },
@@ -101,7 +172,14 @@ export const {
   setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
+  requestRunCode,
+  submitCode,
+  setStdin,
+  setCompilerOutput,
+  setActiveTab,
   setProblems,
-  setIsLoading
+  setIsLoading,
+  setRunningSubmission,
+  setIsAcceptedOutput
 } = codeEditorSlice.actions;
 export default codeEditorSlice.reducer;

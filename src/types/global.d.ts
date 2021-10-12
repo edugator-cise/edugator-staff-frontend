@@ -1,21 +1,51 @@
 
 declare interface IProblemItem {
-  problemName: string,
-  _id: string
+  problemName: string;
+  _id: string;
 }
 
+declare interface ISubmissionOutput {
+  input: string,
+  output: string,
+  expected: string,
+  passed: boolean
+}
+
+declare interface IToken {
+  token: string;
+}
 declare interface INavigationItem {
-  name: string,
-  _id: string,
-  problems: IProblemItem[]
+  name: string;
+  _id: string;
+  problems: IProblemItem[];
+}
+
+declare interface ICodeSubmission {
+  code: string;
+  header: string;
+  footer: string;
+  stdin: string;
+}
+
+declare interface IJudge0Response {
+  stdout: string | null,
+  stderr: string | null,
+  compile_output: string,
+  memory: number | null,
+  token: string,
+  message: string | null,
+  status: {
+    id: number,
+    description: string
+  }
 }
 
 
 declare interface IModuleWithProblems {
-  _id: string,
-  name: string,
-  number: number,
-  problems: IProblem[]
+  _id: string;
+  name: string;
+  number: number;
+  problems: IProblem[];
 }
 
 declare interface IProblem {

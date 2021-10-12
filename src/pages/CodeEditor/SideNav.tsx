@@ -45,14 +45,14 @@ export const Sidenav = () => {
             handleClick(value.name)
           }
           }>
-            <ListItemText primary={value.name} />
-            {menu[value.name] ? <ExpandLess /> : <ExpandMore />}
+            <ListItemText primary={`${indexVal + 1}. ${value.name}`} />
+            {menu[value.name + "_" + indexVal] ? <ExpandLess /> : <ExpandMore />}
           </CustomListItemButton>
           <Collapse in={!!(menu[value.name])} timeout="auto" unmountOnExit>
             <List component="div" disablePadding sx={{bgcolor: "#ffffff"}}>
               {value.problems.map((problemItem: IProblemItem, index: number) => (
-                <CustomListItemButton sx={{ pl: 4}} key={problemItem.problemName + "_" + index} onClick={() => dispatch(setCurrentProblem(problemItem._id))}>
-                  <ListItemText primary={problemItem.problemName}/>
+                <CustomListItemButton sx={{ pl: 4}} key={problemItem.problemName + "_" + indexVal + "_" + index} onClick={() => dispatch(setCurrentProblem(problemItem._id))}>
+                  <ListItemText primary={`${indexVal + 1}.${index + 1} ${problemItem.problemName}`}/>
                 </CustomListItemButton>
               ))}
             </List>

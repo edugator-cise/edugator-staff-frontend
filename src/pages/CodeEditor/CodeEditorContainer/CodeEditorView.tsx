@@ -5,14 +5,22 @@ import * as monaco from "monaco-editor"
 import { styled } from '@mui/material/styles'
 import { GetApp, Add, RotateLeft, CloudDownload } from '@mui/icons-material'
 import {useDispatch, useSelector} from "react-redux";
-import { setCodeBody } from "../CodeEditorSlice"
+import { setCodeBody, requestRunCode, submitCode } from "../CodeEditorSlice"
 import {RootState} from "../../../app/common/store"
+import Backdrop from "@mui/material/Backdrop"
+import CircularProgress from '@mui/material/CircularProgress'
 const ColumnContainer = styled('div')(({theme}) => `
   display: flex;
   justify-content: flex-end;
+  padding-top: ${theme.spacing(1)};
+  padding-bottom:${theme.spacing(1)};
   
 `)
 
+const EditorContainer = styled('div')(({theme}) => `
+  position: relative;
+  display: block;
+`)
 
 interface CodeEditorProps {
   code: string;
@@ -25,6 +33,9 @@ export const CodeEditorView = ({code, templatePackage}: CodeEditorProps) => {
   const currentCode = useSelector((state: RootState) => state.codeEditor.codeBody)
   const header = useSelector((state:RootState) => state.codeEditor.currentProblem?.code.header)
   const footer = useSelector((state:RootState) => state.codeEditor.currentProblem?.code.footer)
+  const isSubmissionRunning = useSelector((state:RootState) => state.codeEditor.runningSubmission)
+  const stdin = useSelector((state: RootState) => state.codeEditor.stdin)
+  const problemId = useSelector((state: RootState) => state.codeEditor.currentProblem?._id)
   const hiddenFileInput = useRef<HTMLInputElement>(null)
   useEffect(() => {
     if (editorRef.current) {
@@ -111,13 +122,37 @@ export const CodeEditorView = ({code, templatePackage}: CodeEditorProps) => {
           sx={{marginRight: 1, marginTop: 1}}
         >Reset Code</Button>
       </ColumnContainer>
-      <Editor
-        height="50vh"
-        defaultLanguage="cpp"
-        defaultValue={currentCode}
-        onChange={(value) => {dispatch(setCodeBody(value as string))}}
-        onMount={handleEditorMount}
-      />
+      <EditorContainer>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, position: "absolute" }}
+          open={isSubmissionRunning}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Editor
+          height="50vh"
+          defaultLanguage="cpp"
+          defaultValue={currentCode}
+          onChange={(value) => {dispatch(setCodeBody(value as string))}}
+          onMount={handleEditorMount}
+        />
+      </EditorContainer>
+      <ColumnContainer>
+        <Button
+          sx={{mr: 2}}
+          onClick={() => dispatch(requestRunCode({ code: currentCode, header: header as string, footer: footer as string, stdin}))}
+        >
+          Run Code
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{mr: 2}}
+          onClick={() => dispatch(submitCode({ code: currentCode, header: header as string, footer: footer as string, stdin, problemId: problemId as string}))}
+        >
+          Submit
+        </Button>
+      </ColumnContainer>
     </Paper>
   )
 }
