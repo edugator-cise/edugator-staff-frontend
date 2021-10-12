@@ -1,6 +1,6 @@
 import { all } from "redux-saga/effects";
-import loginSaga from "../Login/Login.sagas";
 import codeEditorsaga from "../../pages/CodeEditor/CodeEditor.sagas"
+import loginSaga from "../../pages/Login/LoginPage.sagas";
 
 /** Place additional saga functions in the array */
 export default function* rootSaga() {

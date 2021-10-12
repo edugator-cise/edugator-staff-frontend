@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocalStorage } from "../common/LocalStorage";
-import setAuthToken from "../common/setAuthToken";
+import { LocalStorage } from "../../app/common/LocalStorage";
+import setAuthToken from "../../app/common/setAuthToken";
 
 export interface IAuthState {
   isLoading: boolean;
