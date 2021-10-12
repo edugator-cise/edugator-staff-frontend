@@ -1,22 +1,24 @@
-import { Box, FormControlLabel, FormGroup, Switch } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import {
-  validateCode,
-  validateMetadata,
-  validateProblem,
-  validateServerConfig,
-  validateTestEditor,
+  incrementActiveStep,
+  decrementActiveStep,
 } from "./problemEditorContainerSlice";
 
-export const ExampleValidator = () => {
+interface Props {
+  formRef: any;
+}
+
+export const ProblemEditorNavigator = ({ formRef }: Props) => {
   const dispatch = useDispatch();
   const activeStep = useAppSelector(
     (state) => state.problemEditorContainer.activeStep
   );
 
-  /* STEP SELECTORS */ //TODO put this logic in the reducer
+  //TODO put this logic in the reducer
+  /* STEP SELECTORS */
   const metadataIsValid = useAppSelector(
     (state) => state.problemEditorContainer.metadataIsValid
   );
@@ -32,27 +34,6 @@ export const ExampleValidator = () => {
   const testEditorIsValid = useAppSelector(
     (state) => state.problemEditorContainer.testEditorIsValid
   );
-
-  /* Dispatches the correct action based on the current active step */
-  const handleValidation = (isValid: boolean): void => {
-    switch (activeStep) {
-      case 0:
-        dispatch(validateMetadata(isValid));
-        break;
-      case 1:
-        dispatch(validateProblem(isValid));
-        break;
-      case 2:
-        dispatch(validateCode(isValid));
-        break;
-      case 3:
-        dispatch(validateServerConfig(isValid));
-        break;
-      case 4:
-        dispatch(validateTestEditor(isValid));
-        break;
-    }
-  };
 
   /* Selects the correct member of state based on the current active step */
   const getValidationStatus = (): boolean => {
@@ -72,20 +53,36 @@ export const ExampleValidator = () => {
     }
   };
 
+  const handleBack = () => {
+    dispatch(decrementActiveStep());
+  };
+
+  const handleNext = () => {
+    if (activeStep === 4) {
+      console.log("Submitted!");
+    } else {
+      formRef.current?.submitForm();
+      dispatch(incrementActiveStep());
+    }
+  };
+
   return (
-    <Box mt="auto" ml="auto" mr="auto">
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              color="primary"
-              onChange={(event) => handleValidation(event.target.checked)}
-              checked={getValidationStatus()}
-            />
-          }
-          label="Validated"
-        />
-      </FormGroup>
+    <Box marginTop="auto" display="flex" justifyContent="space-between">
+      <Button
+        onClick={handleBack}
+        disabled={activeStep === 0}
+        variant="outlined"
+      >
+        Back
+      </Button>
+      <Button
+        onClick={handleNext}
+        disabled={!getValidationStatus() /*&& !getOtherValidation()*/}
+        variant={activeStep === 4 ? "contained" : "outlined"}
+        color={activeStep === 4 ? "success" : "primary"}
+      >
+        {activeStep === 4 ? "Submit" : "Next"}
+      </Button>
     </Box>
   );
 };
