@@ -9,9 +9,9 @@ import {
 } from "../../shared/types";
 import { AlertMsg } from "./config";
 
-const initialModuleState: IModuleState = {
+const baseModuleState: IModuleState = {
   modules: [],
-  isLoading: true,
+  isLoading: false,
   feedback: {
     message: "",
     display: false,
@@ -19,13 +19,13 @@ const initialModuleState: IModuleState = {
   },
 };
 
-export function getInitialModuleState(): IModuleState {
-  return { ...initialModuleState };
+export function getBaseModuleState(): IModuleState {
+  return { ...baseModuleState };
 }
 
 export const moduleSlice = createSlice({
   name: "modules",
-  initialState: getInitialModuleState(),
+  initialState: getBaseModuleState(),
   reducers: {
     /* GET Request Modules */
     requestModules: (state, action: PayloadAction<void>) => {
@@ -34,8 +34,6 @@ export const moduleSlice = createSlice({
 
     // action.type = "modules/requestModulesSuccess"
     requestModulesSuccess: (state, action: PayloadAction<IModule[]>) => {
-      console.log("getting modules success");
-      console.log(action);
       return {
         ...state,
         modules: action.payload,
@@ -52,8 +50,6 @@ export const moduleSlice = createSlice({
       state,
       action: PayloadAction<IModulesGETFailure>
     ) => {
-      console.log("getting modules reducer fail");
-
       return {
         ...state,
         feedback: {
@@ -68,13 +64,10 @@ export const moduleSlice = createSlice({
     /* POST Request Modules */
 
     requestNewModule: (state, action: PayloadAction<IModulesPUT>) => {
-      console.log("adding modules reducer");
       return { ...state, isLoading: true };
     },
 
     requestNewModuleSuccess: (state, action: PayloadAction<IModule>) => {
-      console.log("adding modules reducer end");
-
       return {
         ...state,
         modules: [...state.modules, action.payload],
@@ -91,8 +84,6 @@ export const moduleSlice = createSlice({
       state,
       action: PayloadAction<IModulesPUTFailure>
     ) => {
-      console.log("adding modules reducer fail");
-
       return {
         ...state,
         feedback: {
@@ -114,8 +105,15 @@ export const moduleSlice = createSlice({
     requestDeleteModuleFailure: (state, action) => {},
 
     /* Other reducers */
-    closeAlert: (state, action: PayloadAction<void>) => {
+    closeAlert: (state) => {
       state.feedback.display = false;
+    },
+    clearState: (state) => {
+      state.modules = [];
+      state.isLoading = false;
+      state.feedback.message = "";
+      state.feedback.display = false;
+      state.feedback.type = AlertType.info;
     },
   },
 });
@@ -133,6 +131,7 @@ export const {
   /* DELETE Request Modules */
   /* Other Reducers */
   closeAlert,
+  clearState,
 } = moduleSlice.actions;
 
 export default moduleSlice;

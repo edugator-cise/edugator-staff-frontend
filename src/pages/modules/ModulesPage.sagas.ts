@@ -14,7 +14,6 @@ import apiUrls from "./config";
 import { IModule, IModulesPUT } from "../../shared/types";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
-  console.log("sagas for GET Modules");
   // request
   let modulesRequest = () =>
     axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
@@ -27,8 +26,6 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
 }
 
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
-  console.log("sagas for POST Modules");
-
   // request
   let moduleAddRequest = () =>
     axios.request<string>({
@@ -42,8 +39,6 @@ function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   try {
     // Add response content to sagas
     const response: AxiosResponse<string> = yield call(moduleAddRequest);
-    console.log("stuff:", response);
-    //console.log("data:", response.data);
 
     let new_module: IModule = {
       name: action.payload.moduleName,
