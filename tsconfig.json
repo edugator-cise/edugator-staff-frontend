@@ -16,12 +16,8 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-<<<<<<< HEAD
-	"include": ["src", "src/__tests__", "auth", "src/__tests__"],
 	"paths": {
 		"*": ["src/types/*.d.ts"]
-	}
-=======
+	},
 	"include": ["src"]
->>>>>>> d439c47181cb2eefffbbb2a90bf1e26e6fe12eb6
 }

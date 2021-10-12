@@ -28,7 +28,7 @@ function App() {
               <Modules />
             </PrivateRoute>
             <Route exact path={Routes.Code}>
-              <CodeEditorPage/>
+              <CodeEditorPage />
             </Route>
           </Switch>
         </div>
