@@ -24,7 +24,6 @@ export function ModulesSnackbar() {
         open={feedback.display}
         autoHideDuration={6000}
         onClose={handleClose} // called after 6000 ms = 6 seconds
-        //anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert variant="filled" severity={feedback.type} sx={{ width: "100%" }}>
           {feedback.message}
