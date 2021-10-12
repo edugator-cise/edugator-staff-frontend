@@ -7,7 +7,6 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -31,29 +30,11 @@ interface Props {
   actionButtons?: ButtonProps[];
 }
 
-const useStyles = makeStyles({
-  mainContainer: {
-    flexGrow: 1,
-    paddingTop: "3rem",
-    display: "flex",
-    flexDirection: "column",
-  },
-  pageTitle: {
-    paddingLeft: "2rem",
-    flexGrow: 1,
-  },
-  divider: {
-    marginTop: "1rem",
-    marginBottom: "2rem",
-  },
-});
-
 export const LayoutContainer = ({
   pageTitle,
   children,
   actionButtons = [],
 }: Props) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   return (
@@ -79,13 +60,23 @@ export const LayoutContainer = ({
           )}
         </Toolbar>
       </AppBar>
-      <Container className={classes.mainContainer}>
+      <Container
+        sx={{
+          flexGrow: 1,
+          paddingTop: "3rem",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Box display="flex">
           <Typography
             variant="h4"
             component="h2"
             align="left"
-            className={classes.pageTitle}
+            sx={{
+              paddingLeft: "2rem",
+              flexGrow: 1,
+            }}
           >
             {pageTitle}
           </Typography>
@@ -100,7 +91,7 @@ export const LayoutContainer = ({
             </Button>
           ))}
         </Box>
-        <Divider className={classes.divider} />
+        <Divider sx={{ marginTop: "1rem", marginBottom: "2rem" }} />
         <Box
           display="flex"
           flexDirection="column"
