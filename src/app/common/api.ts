@@ -2,14 +2,14 @@ import axios from "axios";
 import { baseAPIURL } from "../../shared/constants";
 
 const client = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "http://localhost:8080",
   headers: {
     accept: "application/json",
     "content-type": "application/json",
   },
 });
 
-export default {
+const apiWrapper =  {
   getStudentModulesAndProblems() {
     return client.get("v1/module/WithNonHiddenProblems");
   },
@@ -51,3 +51,5 @@ export default {
     return client.post(`v1/code/run/evaluate`, payload);
   },
 };
+
+export default apiWrapper;

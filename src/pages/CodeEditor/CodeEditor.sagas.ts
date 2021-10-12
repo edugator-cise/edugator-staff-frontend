@@ -18,11 +18,6 @@ const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
   return data.status.id >= 3;
 };
 
-const judeg0Interrupt = (data: IJudge0Response): boolean => {
-  console.log(data);
-  return data.status.id > 3;
-};
-
 const poll = async (
   fn: Function,
   payload: any,
@@ -38,7 +33,7 @@ const poll = async (
     if (validate(result)) {
       console.log(result);
       return resolve(result);
-    } else if (maxAttempts && attempts == maxAttempts) {
+    } else if (maxAttempts && attempts === maxAttempts) {
       return reject(new Error("Exceeded max Attempts"));
     } else {
       console.log("timingout");
@@ -151,7 +146,6 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
 function* runCodeSubmission(
   action: PayloadAction<ICodeSubmission & { problemId: string }>
 ) {
-  let token = "";
   try {
     const { code, header, footer, stdin, problemId } = action.payload;
     const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
