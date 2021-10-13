@@ -2,14 +2,7 @@ import { Box, FormControlLabel, FormGroup, Switch } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
-import {
-  validateCode,
-  validateCurrentStep,
-  validateMetadata,
-  validateProblem,
-  validateServerConfig,
-  validateTestEditor,
-} from "./problemEditorContainerSlice";
+import { validateCurrentStep } from "./problemEditorContainerSlice";
 
 export const ExampleValidator = () => {
   const dispatch = useDispatch();
