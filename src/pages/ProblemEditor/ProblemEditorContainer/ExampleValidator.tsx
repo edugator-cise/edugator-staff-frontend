@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import {
   validateCode,
+  validateCurrentStep,
   validateMetadata,
   validateProblem,
   validateServerConfig,
@@ -35,23 +36,7 @@ export const ExampleValidator = () => {
 
   /* Dispatches the correct action based on the current active step */
   const handleValidation = (isValid: boolean): void => {
-    switch (activeStep) {
-      case 0:
-        dispatch(validateMetadata(isValid));
-        break;
-      case 1:
-        dispatch(validateProblem(isValid));
-        break;
-      case 2:
-        dispatch(validateCode(isValid));
-        break;
-      case 3:
-        dispatch(validateServerConfig(isValid));
-        break;
-      case 4:
-        dispatch(validateTestEditor(isValid));
-        break;
-    }
+    dispatch(validateCurrentStep(isValid));
   };
 
   /* Selects the correct member of state based on the current active step */

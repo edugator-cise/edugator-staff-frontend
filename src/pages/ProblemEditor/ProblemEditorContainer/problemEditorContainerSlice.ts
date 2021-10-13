@@ -5,6 +5,13 @@ export interface ProblemFields {
   templatePackage: string;
 }
 
+export interface MetadataFields {
+  title: string;
+  hidden: boolean;
+  language: string;
+  dueDate: Date;
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -21,6 +28,7 @@ export interface ProblemEditorContainerState {
   activeStep: number;
 
   problem: ProblemFields;
+  metadata: MetadataFields;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -33,6 +41,12 @@ const initialState: ProblemEditorContainerState = {
   problem: {
     problemStatement: "",
     templatePackage: "",
+  },
+  metadata: {
+    title: "",
+    hidden: false,
+    language: "",
+    dueDate: new Date(),
   },
 };
 
@@ -91,6 +105,9 @@ export const problemEditorContainerSlice = createSlice({
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
+    updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
+      state.metadata = action.payload;
+    },
   },
 });
 
@@ -104,5 +121,6 @@ export const {
   incrementActiveStep,
   decrementActiveStep,
   updateProblem,
+  updateMetadata,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

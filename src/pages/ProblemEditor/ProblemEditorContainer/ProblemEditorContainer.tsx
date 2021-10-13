@@ -2,6 +2,7 @@ import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
 import React, { useRef } from "react";
 import { useAppSelector } from "../../../app/common/hooks";
+import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
@@ -21,6 +22,8 @@ export const ProblemEditorContainer = () => {
 
   const ActiveForm = () => {
     switch (activeStep) {
+      case 0:
+        return <MetadataForm formRef={formRef} />;
       case 1:
         return <ProblemEditorForm formRef={formRef} />;
       default:

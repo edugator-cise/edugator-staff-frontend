@@ -17,41 +17,22 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
     (state) => state.problemEditorContainer.activeStep
   );
 
-  //TODO put this logic in the reducer
-  /* STEP SELECTORS */
-  const metadataIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.metadataIsValid
-  );
-  const problemIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.problemIsValid
-  );
-  const codeIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.codeIsValid
-  );
-  const serverConfigIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.serverConfigIsValid
-  );
-  const testEditorIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.testEditorIsValid
-  );
-
-  /* Selects the correct member of state based on the current active step */
-  const getValidationStatus = (): boolean => {
-    switch (activeStep) {
+  const currentStepIsValid = useAppSelector((state) => {
+    switch (state.problemEditorContainer.activeStep) {
       case 0:
-        return metadataIsValid;
+        return state.problemEditorContainer.metadataIsValid;
       case 1:
-        return problemIsValid;
+        return state.problemEditorContainer.problemIsValid;
       case 2:
-        return codeIsValid;
+        return state.problemEditorContainer.codeIsValid;
       case 3:
-        return serverConfigIsValid;
+        return state.problemEditorContainer.serverConfigIsValid;
       case 4:
-        return testEditorIsValid;
+        return state.problemEditorContainer.testEditorIsValid;
       default:
         return false;
     }
-  };
+  });
 
   const handleBack = () => {
     dispatch(decrementActiveStep());
@@ -77,7 +58,7 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
       </Button>
       <Button
         onClick={handleNext}
-        disabled={!getValidationStatus() /*&& !getOtherValidation()*/}
+        disabled={!currentStepIsValid}
         variant={activeStep === 4 ? "contained" : "outlined"}
         color={activeStep === 4 ? "success" : "primary"}
       >
