@@ -45,7 +45,7 @@ const initialState: ProblemEditorContainerState = {
   metadata: {
     title: "",
     hidden: false,
-    language: "",
+    language: "C++",
     dueDate: new Date(),
   },
 };
