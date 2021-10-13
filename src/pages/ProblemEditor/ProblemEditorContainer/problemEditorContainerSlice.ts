@@ -55,6 +55,27 @@ export const problemEditorContainerSlice = createSlice({
     validateTestEditor: (state, action: PayloadAction<boolean>) => {
       state.testEditorIsValid = action.payload;
     },
+    validateCurrentStep: (state, action: PayloadAction<boolean>) => {
+      switch (state.activeStep) {
+        case 0:
+          state.metadataIsValid = action.payload;
+          break;
+        case 1:
+          state.problemIsValid = action.payload;
+          break;
+        case 2:
+          state.codeIsValid = action.payload;
+          break;
+        case 3:
+          state.serverConfigIsValid = action.payload;
+          break;
+        case 4:
+          state.testEditorIsValid = action.payload;
+          break;
+        default:
+          break;
+      }
+    },
 
     incrementActiveStep: (state) => {
       if (state.activeStep < 4) {
@@ -79,6 +100,7 @@ export const {
   validateCode,
   validateServerConfig,
   validateTestEditor,
+  validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
   updateProblem,
