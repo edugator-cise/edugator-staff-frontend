@@ -49,7 +49,7 @@ export function Modules() {
         <>
           {modulesState.modules.map((module, i) => {
             return (
-              <Module key={i}>
+              <Module key={i} disableGutters>
                 <ModuleSummary expandIcon={<ExpandMore />}>
                   <Typography variant="h6">
                     Module {module.number}: {module.name}

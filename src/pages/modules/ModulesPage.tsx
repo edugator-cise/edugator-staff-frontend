@@ -2,29 +2,24 @@ import React from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
-import { requestModules } from "./ModulesPage.slice";
 import { ModuleDialog, Modules, ModulesSnackbar } from "./components";
-import { INewModule, DialogStatus } from "../../shared/types";
+import { requestModules } from "./ModulesPage.slice";
+import { DialogStatus } from "./types";
 
 export function ModulesPage() {
-  const [moduleDialog, setModuleDialog] = React.useState(DialogStatus.CLOSED);
-  const [moduleInput, setModuleInput] = React.useState<INewModule>({
-    numberInput: 0,
-    nameInput: "",
-  });
-
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
 
+  const [dialogState, setDialogState] = React.useState(DialogStatus.CLOSED);
   const handleDialogClose = () => {
-    setModuleDialog(DialogStatus.CLOSED);
+    setDialogState(DialogStatus.CLOSED);
   };
 
   const moduleHeaderButtons = [
     {
       label: "Add Module",
       onClick: () => {
-        setModuleDialog(DialogStatus.CREATE);
+        setDialogState(DialogStatus.CREATE);
       },
     },
   ];
@@ -37,11 +32,9 @@ export function ModulesPage() {
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
       <>
         <ModuleDialog
-          moduleValues={moduleInput}
-          dialogOperation={moduleDialog}
+          dialogOperation={dialogState}
           handleClose={handleDialogClose}
-          moduleValuesInput={setModuleInput}
-          open={moduleDialog !== DialogStatus.CLOSED}
+          open={dialogState !== DialogStatus.CLOSED}
         />
 
         <ModulesSnackbar />

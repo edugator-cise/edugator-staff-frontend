@@ -10,8 +10,7 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { INewModule, DialogStatus } from "../../../shared/types";
-
+import { INewModule, DialogStatus } from "../types";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { requestNewModule } from "../ModulesPage.slice";
 
@@ -57,20 +56,17 @@ const dialogTitle = (status: DialogStatus) => {
 
 export interface ModuleDialogProps {
   open: boolean;
-  moduleValues: INewModule;
   dialogOperation: DialogStatus;
   handleClose: () => void;
-  moduleValuesInput: (input: INewModule) => void;
 }
 
 export function ModuleDialog(props: ModuleDialogProps) {
-  const {
-    open,
-    moduleValues,
-    dialogOperation,
-    handleClose,
-    moduleValuesInput,
-  } = props;
+  const { open, dialogOperation, handleClose } = props;
+
+  const [moduleInput, setModuleInput] = React.useState<INewModule>({
+    numberInput: 0,
+    nameInput: "",
+  });
 
   const dispatch = useAppDispatch();
 
@@ -78,8 +74,8 @@ export function ModuleDialog(props: ModuleDialogProps) {
     if (dialogOperation === DialogStatus.CREATE) {
       dispatch(
         requestNewModule({
-          moduleName: moduleValues.nameInput,
-          moduleNum: moduleValues.numberInput,
+          moduleName: moduleInput.nameInput,
+          moduleNum: moduleInput.numberInput,
         })
       );
     } else if (dialogOperation === DialogStatus.EDIT) {
@@ -109,8 +105,8 @@ export function ModuleDialog(props: ModuleDialogProps) {
             variant="filled"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             onChange={(event) => {
-              moduleValuesInput({
-                ...moduleValues,
+              setModuleInput({
+                ...moduleInput,
                 numberInput: parseInt(event.target.value),
               });
             }}
@@ -121,8 +117,8 @@ export function ModuleDialog(props: ModuleDialogProps) {
             label="Module Name"
             variant="filled"
             onChange={(event) => {
-              moduleValuesInput({
-                ...moduleValues,
+              setModuleInput({
+                ...moduleInput,
                 nameInput: event.target.value,
               });
             }}

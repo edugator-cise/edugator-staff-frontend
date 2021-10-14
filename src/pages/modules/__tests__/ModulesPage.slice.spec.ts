@@ -1,6 +1,6 @@
 import axios from "axios";
 import store from "../../../app/common/store";
-import { IModule, IModuleState } from "../../../shared/types";
+import { IModule, IModuleState } from "../types";
 import {
   getBaseModuleState,
   requestModules,

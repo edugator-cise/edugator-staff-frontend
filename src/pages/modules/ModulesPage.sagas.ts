@@ -11,7 +11,7 @@ import {
 } from "./ModulesPage.slice";
 
 import apiUrls from "./config";
-import { IModule, IModulesPUT } from "../../shared/types";
+import { IModule, IModulesPUT } from "./types";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   // request

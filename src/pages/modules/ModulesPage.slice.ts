@@ -6,7 +6,7 @@ import {
   IModulesPUTFailure,
   IModule,
   AlertType,
-} from "../../shared/types";
+} from "./types";
 import { AlertMsg } from "./config";
 
 const baseModuleState: IModuleState = {
