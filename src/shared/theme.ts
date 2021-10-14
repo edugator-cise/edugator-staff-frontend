@@ -1,14 +1,18 @@
-import { blue, blueGrey } from "@mui/material/colors";
+import { blue, blueGrey, orange } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
+//for custom theme overrides
 declare module "@mui/material/styles" {
   interface Theme {
     
-    background?: { default: string };
+    
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
     
+    
+  }
+  interface PaletteOptions {
     
   }
 }
@@ -16,6 +20,17 @@ declare module "@mui/material/styles" {
 
 
 const theme = createTheme({
+  transitions: {
+    duration: {
+      shortest: 150,
+      shorter: 200,
+      short: 250,
+      standard: 300,
+      complex: 375,
+      enteringScreen: 225,
+      leavingScreen: 195,
+    }
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -40,11 +55,25 @@ const theme = createTheme({
       fontWeight: 600,
       lineHeight: 1.3,
     },
+    h3: {
+      fontWeight: 600,
+      lineHeight: 1.3,
+    },
+    h4: {
+      fontWeight: 600,
+      lineHeight: 1.3,
+    },
   },
   palette: {
     primary: {
       main: blue[500],
+      light: blue[100],
+      dark: blue[900]
     },
+    secondary: {
+      main: orange[500],
+      light: orange[100]
+    }
   },
   breakpoints: {
     values: {
