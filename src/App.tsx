@@ -19,9 +19,6 @@ function App() {
           <Route exact path={Routes.Login}>
             <LoginPage />
           </Route>
-          <Route exact path={"/test"}>
-            <MarkdownEditor />
-          </Route>
           <PrivateRoute exact path={Routes.ProblemEditor}>
             <ProblemEditorPage />
           </PrivateRoute>
