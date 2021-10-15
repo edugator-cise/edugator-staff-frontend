@@ -42,6 +42,9 @@ const theme = createTheme({
           paddingLeft: 30,
           paddingRight: 30,
           borderRadius: 9,
+        },
+        text: {
+          color: 'black',
         }
       }
     },
@@ -50,6 +53,7 @@ const theme = createTheme({
     fontFamily: "Inter",
     button: {
       textTransform: "none",
+      
     },
     h2: {
       fontWeight: 600,
@@ -72,7 +76,7 @@ const theme = createTheme({
     },
     secondary: {
       main: orange[500],
-      light: orange[100]
+      light: '#FDF4DD'
     }
   },
   breakpoints: {
