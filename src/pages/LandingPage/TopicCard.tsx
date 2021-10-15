@@ -1,42 +1,68 @@
 import {
+    Button,
     Typography,
 } from "@mui/material";
 import { Card } from '@mui/material'
 import { styled } from '@mui/styles'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import theme from '../../shared/theme'
 
 interface topicInfo {
     name: string;
     staticImg: any,
     animatedImg: any,
-    description: string
+    description: string,
+    position: string,
+    zIndex: number
 }
 
 const Topic = styled('div')({
     height: 300,
     width: 250,
     backgroundColor: 'white',
-    borderTop: '5px solid ' + theme.palette.primary.main,
+    //borderTop: '5px solid ' + theme.palette.primary.main,
     borderRadius: 15,
     boxShadow:
-    '-1rem 0 2rem rgba(149, 157, 165, 0.3)',
+    'rgba(149, 157, 165, 0.3) 0px 8px 24px',
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'relative',
+    
 })
 
 
 
 function TopicCard(props:topicInfo) {
     const gif = useRef<any>(null); 
+    const [hover, setHover] = useState<boolean>(false);
 
     return (
         <Topic 
-            onMouseOver={() => {gif.current.src = props.animatedImg}}
-            onMouseOut={() => {gif.current.src = props.staticImg}} 
+            onMouseOver={(e) => {
+                gif.current.src = props.animatedImg;
+                setHover(true);
+            }}
+            onMouseOut={() => {
+                gif.current.src = props.staticImg;
+                setHover(false);
+            }} 
+            style={
+                
+                props.position === "top" ? 
+                hover ?
+                {transform: 'translateY(0px) translateX(-150px)', WebkitTransform: 'translateY(0px) translateX(-150px)', transition: 'transform 800ms', zIndex: props.zIndex} 
+                :
+                {transform: 'translateY(100px) translateX(-150px)', WebkitTransform: 'translateY(100px) translateX(-150px)', transition: 'transform 800ms', zIndex: props.zIndex}
+                : 
+                hover ?
+                {transform: 'translateY(0px) translateX(50px)', WebkitTransform: 'translateY(0px) translateX(50px)', transition: 'transform 800ms', zIndex: props.zIndex} 
+                :
+                {transform: 'translateY(-80px) translateX(50px)', WebkitTransform: 'translateY(-80px) translateX(50px)', transition: 'transform 800ms', zIndex: props.zIndex}
+
+            }
         >
             <img 
                 height={100} 
@@ -44,8 +70,9 @@ function TopicCard(props:topicInfo) {
                 src={props.staticImg} 
                 ref={gif}
             />
-            <Typography variant="h5" color="#3A4F58"><b>{props.name}</b></Typography>
-            <Typography variant="body2" color="#3A4F58" sx={{maxWidth: '80%'}}>{props.description}</Typography>
+            <Typography variant="h5" color="#3A4F58" sx={{maxWidth: '80%'}}><b>{props.name}</b></Typography>
+            <Typography variant="body2" color="#3A4F58" sx={{maxWidth: '80%', paddingBottom: 10}}>{props.description}</Typography>
+            <Button variant="contained" size="small" sx={{width: '80%', position: 'absolute', bottom: 20}}>Learn</Button>
         </Topic>
     )
 }

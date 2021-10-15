@@ -1,6 +1,7 @@
 import {
     Container,
     Typography,
+    Button
 } from "@mui/material";
 import React, { useRef } from "react";
 import { styled } from "@mui/styles";
@@ -20,12 +21,12 @@ import MapStatic from '../../assets/icons8-thumbnail-view-100.png'
 import TopicCard from "./TopicCard";
 
 const Holder = styled("div")({
-    height: 800,
+    height: 1000,
     width: "100%",
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: "center",
     background: 'linear-gradient(white, transparent, transparent, transparent), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
     backgroundSize: "35em",
@@ -36,43 +37,47 @@ const Holder = styled("div")({
 const TopicList = styled('div')({
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    maxWidth: 1000,
+    minWidth: 800,
 })
 
 function LandingTopics() {
     const topics = [
         {
             name: "Sorting",
-            description: "Sort through arrays and vectors with different conditions.",
+            description: "Sort through arrays and vectors with different conditions",
             staticImg: SortingStatic,
             animatedImg: SortingGif,
         },
         {
             name: "Linked Lists",
-            description: "Connected data sets in node format.",
+            description: "Connected data sets in node format",
             staticImg: LinkedStatic,
             animatedImg: LinkedGif,
         },
         {
             name: "Stacks and Queues",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "An intro about stacks and queues",
             staticImg: StackStatic,
             animatedImg: StackGif,
         },
         {
             name: "Heaps",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "Fundamentals of min and max heap and priority queue",
             staticImg: HeapStatic,
             animatedImg: HeapGif,
         },
         {
             name: "Sets and Maps",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "Module on understanding the type of sets and maps",
             staticImg: MapStatic,
             animatedImg: MapGif,
         },
         {
             name: "Recursion",
-            description: "Lorem ipsum dolor sit amet.",
+            description: "Everything recursive happens recursively",
             staticImg: RecursiveStatic,
             animatedImg: RecursiveGif,
         },
@@ -80,22 +85,38 @@ function LandingTopics() {
     
     return (
         <Holder>
+        
+            <Typography variant="h3" color="#3A4F58">Choose your learning path by topic </Typography>
+            <Typography variant="body1" color="#3A4F58" sx={{paddingTop: 5}}>Browse the available course topics, choose your favourite one, and start learning. </Typography>
             
-            <Typography variant="h3">Choose your learning path by</Typography>
-            <Typography variant="h3" color="primary">Topic</Typography>
             
-            <TopicList>
-            {topics.map((topic, index) =>
-                <TopicCard 
-                    key={index}
-                    name={topic.name}
-                    description={topic.description}
-                    staticImg={topic.staticImg}
-                    animatedImg={topic.animatedImg}    
-                />
-            )}
+            <TopicList style={{paddingTop: 30}}>
+                {topics.slice(0,3).map((topic, index) =>
+                    <TopicCard 
+                        key={index}
+                        name={topic.name}
+                        description={topic.description}
+                        staticImg={topic.staticImg}
+                        animatedImg={topic.animatedImg}
+                        position="top"    
+                        zIndex={index}
+                    />
+                )}
             </TopicList>
-            
+            <TopicList>
+                {topics.slice(3,6).map((topic, index) =>
+                    <TopicCard 
+                        key={index}
+                        name={topic.name}
+                        description={topic.description}
+                        staticImg={topic.staticImg}
+                        animatedImg={topic.animatedImg}    
+                        position="bottom"
+                        zIndex={index}
+                    />
+                )}
+            </TopicList>
+            <Button variant="text" sx={{color: theme.palette.primary.main}}>Browse all Topics</Button>
             
         </Holder>
         
