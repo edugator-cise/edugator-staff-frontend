@@ -1,8 +1,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import CodeMirror from "@uiw/react-codemirror";
-import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import Editor from "@monaco-editor/react";
 
 export function MarkdownEditor(): React.ReactElement {
   const [markdownText, setMarkdown] = React.useState("# Your markdown here");
@@ -17,13 +16,10 @@ export function MarkdownEditor(): React.ReactElement {
       <Stack width="50%" spacing={1}>
         <Typography component="h3">Markdown Editor</Typography>
         <Divider />
-        <CodeMirror
-          value={markdownText}
-          height="500px"
-          theme="light"
-          extensions={[markdown({ base: markdownLanguage })]}
-          onChange={(value, viewUpdate) => {
-            setMarkdown(value);
+        <Editor
+          defaultLanguage="markdown"
+          onChange={(value) => {
+            setMarkdown(value as string);
           }}
         />
       </Stack>
