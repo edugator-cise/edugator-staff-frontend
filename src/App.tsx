@@ -7,6 +7,7 @@ import { PrivateRoute } from "./shared/PrivateRoute";
 import { LoginPage } from "./pages/Login/LoginPage";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { MarkdownEditor } from "./pages/ProblemEditor/MarkdownEditor/MarkdownEditor";
 
 function App() {
   const theme = createTheme();
@@ -17,6 +18,9 @@ function App() {
         <Switch>
           <Route exact path={Routes.Login}>
             <LoginPage />
+          </Route>
+          <Route exact path={"/test"}>
+            <MarkdownEditor />
           </Route>
           <PrivateRoute exact path={Routes.ProblemEditor}>
             <ProblemEditorPage />
