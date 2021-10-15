@@ -9,14 +9,17 @@ import theme from "./theme";
 
 const FooterHolder = styled('div')({
     width: '100%',
-    height: 400,
+    height: 150,
     backgroundColor: theme.palette.primary.dark,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
 })
 
 function Footer() {
     return (
         <FooterHolder>
-            
+            <Typography variant="body1" color={theme.palette.primary.light}>Edugator, 2021</Typography>
         </FooterHolder>
     )
 }

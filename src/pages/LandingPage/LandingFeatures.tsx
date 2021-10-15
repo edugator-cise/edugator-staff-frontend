@@ -1,5 +1,6 @@
 import {
   Typography,
+  Grow
 } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
@@ -69,40 +70,41 @@ const IconHolder = styled('div')({
 
 function LandingFeatures() {
   return (
-    <Holder>
-        <Typography variant="h3" color="white">Start your journey learning</Typography>
-        <Typography variant="h3" color="primary">Computer Science</Typography>
-        <Typography variant="body1" color="white" sx={{marginTop: '2em'}}>Understand, analyze, and apply Data Structures and Algorithms in your everyday life.</Typography>
-      <FeatureHolder>
-        <Feature>
-          <IconHolder>
-            <Typography color="white">
-              <img src={Glasses} width={100} height={100}/>
-            </Typography>
-          </IconHolder>
-          <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Built for students</b></Typography>
-          <Typography variant="body2" color="white" sx={{maxWidth: 250}}>Edugator is built to make your life easier. Modules, sample problems, documentation, and more!</Typography>
-        </Feature>
-        <Feature>
-          <IconHolder>
-            <Typography color="white">
-              <img src={Diamond} width={100} height={100}/>
-            </Typography>
-          </IconHolder>
-          <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Designed to be modern</b></Typography>
-          <Typography variant="body2" color="white" sx={{maxWidth: 250}}>Designed with the latest design trends in mind. Edugator feels modern, minimal, and beautiful.</Typography>
-        </Feature>
-        <Feature>
-          <IconHolder>
-            <Typography color="white">
-              <img src={FlipChart} width={100} height={100}/>
-            </Typography>
-          </IconHolder>
-          <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Lessons for everything</b></Typography>
-          <Typography variant="body2" color="white" sx={{maxWidth: 250}}>We’ve written extensive documentation for what you need to know for COP3530.</Typography>
-        </Feature>
-      </FeatureHolder>
-    </Holder>
+      <Holder>
+          <Typography variant="h3" color="white">Start your journey learning</Typography>
+          <Typography variant="h3" color="primary">Computer Science</Typography>
+          <Typography variant="body1" color="white" sx={{marginTop: '2em'}}>Understand, analyze, and apply Data Structures and Algorithms in your everyday life.</Typography>
+          
+        <FeatureHolder>
+          <Feature>
+            <IconHolder>
+              <Typography color="white">
+                <img src={Glasses} width={100} height={100}/>
+              </Typography>
+            </IconHolder>
+            <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Built for students</b></Typography>
+            <Typography variant="body2" color="white" sx={{maxWidth: 250}}>Edugator is built to make your life easier. Modules, sample problems, documentation, and more!</Typography>
+          </Feature>
+          <Feature>
+            <IconHolder>
+              <Typography color="white">
+                <img src={Diamond} width={100} height={100}/>
+              </Typography>
+            </IconHolder>
+            <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Designed to be modern</b></Typography>
+            <Typography variant="body2" color="white" sx={{maxWidth: 250}}>Designed with the latest design trends in mind. Edugator feels modern, minimal, and beautiful.</Typography>
+          </Feature>
+          <Feature>
+            <IconHolder>
+              <Typography color="white">
+                <img src={FlipChart} width={100} height={100}/>
+              </Typography>
+            </IconHolder>
+            <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Lessons for everything</b></Typography>
+            <Typography variant="body2" color="white" sx={{maxWidth: 250}}>We’ve written extensive documentation for what you need to know for COP3530.</Typography>
+          </Feature>
+        </FeatureHolder>
+      </Holder>
   );
 }
 
