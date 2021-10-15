@@ -1,4 +1,5 @@
 import {
+  Box,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -47,56 +48,61 @@ export const MetadataForm = (props: Props) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
+        const metadataValues = { ...values };
         if (dueDate) {
-          values.dueDate = dueDate;
+          metadataValues.dueDate = dueDate;
         }
-        dispatch(updateMetadata(values));
+        dispatch(updateMetadata(metadataValues));
       }}
       innerRef={props.formRef}
       validate={validate}
     >
       {({ values, handleChange, handleBlur }) => (
         <Form>
-          <TextField
-            name="title"
-            label="Title"
-            value={values.title}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="hidden"
-                onChange={handleChange}
-                checked={values.hidden}
-              />
-            }
-            label="Hidden"
-          />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Due date"
-              value={dueDate}
-              onChange={(newValue) => {
-                setDueDate(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <FormControl>
-            <InputLabel>Language</InputLabel>
-            <Select
-              name="language"
-              value={values.language}
-              label="Language"
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <TextField
+              name="title"
+              label="Title"
+              value={values.title}
               onChange={handleChange}
-            >
-              <MenuItem value="Java">Java</MenuItem>
-              <MenuItem value="C++">C++</MenuItem>
-            </Select>
-          </FormControl>
-          <pre>{JSON.stringify(values, null, 2)}</pre>
+              onBlur={handleBlur}
+              sx={{ width: "50%" }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="hidden"
+                  onChange={handleChange}
+                  checked={values.hidden}
+                />
+              }
+              label="Hidden"
+            />
+            <Box>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Due date"
+                  value={dueDate}
+                  onChange={(newValue) => {
+                    setDueDate(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Box>
+            <FormControl sx={{ width: "25%" }}>
+              <InputLabel>Language</InputLabel>
+              <Select
+                name="language"
+                value={values.language}
+                label="Language"
+                onChange={handleChange}
+              >
+                <MenuItem value="Java">Java</MenuItem>
+                <MenuItem value="C++">C++</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Form>
       )}
     </Formik>
