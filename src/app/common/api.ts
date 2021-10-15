@@ -1,15 +1,15 @@
 import axios from "axios";
 import { baseAPIURL } from "../../shared/constants";
-
+import { LocalStorage } from "../../app/common/LocalStorage";
 const client = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: baseAPIURL,
   headers: {
     accept: "application/json",
     "content-type": "application/json",
   },
 });
 
-const apiWrapper =  {
+const apiWrapper = {
   getStudentModulesAndProblems() {
     return client.get("v1/module/WithNonHiddenProblems");
   },

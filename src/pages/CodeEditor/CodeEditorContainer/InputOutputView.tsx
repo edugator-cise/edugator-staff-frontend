@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { SubmitOutput } from "./SubmitOutput";
 const TabBar = styled("div")(
   ({ theme }) => `
   display: flex;
@@ -34,9 +35,6 @@ const OutputPaper = styled(Paper)(
   background-color: #f7f9fa;
 `
 );
-// const ActiveTab = styled(Tab)(({theme}) => `
-//   background-color: white;
-// `)
 
 export const InputOutputView = () => {
   const dispatch = useDispatch();
@@ -65,10 +63,6 @@ export const InputOutputView = () => {
     dispatch(setStdin(event.target.value));
   };
 
-  // const handleChangeIndex = (index) => {
-  //   setTabValue(index);
-  // };
-  console.log(activeTab);
   return (
     <Paper>
       <TabBar>
@@ -116,7 +110,7 @@ export const InputOutputView = () => {
             />
           </>
         ) : (
-          <OutputPaper>Press Submit to run code</OutputPaper>
+          <SubmitOutput results={submissionOutput} />
         )}
       </Box>
     </Paper>

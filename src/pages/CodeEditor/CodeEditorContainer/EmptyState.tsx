@@ -16,7 +16,7 @@ export const EmptyState = () => {
       sx={{ height: "100%", display: "flex", justifyContent: "center" }}
     >
       <Fade in appear>
-        <div>
+        <div style={{ textAlign: "center" }}>
           <DeveloperImage src={DeveloperIcon} />
           <div>
             <Typography variant="h4">Get Started</Typography>

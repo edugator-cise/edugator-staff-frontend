@@ -4,8 +4,7 @@ import { Sidenav } from "./SideNav";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "./CodeEditorSlice";
-import { Grid, Paper, CircularProgress, Box, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Grid, CircularProgress, Box, Stack } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
@@ -20,7 +19,6 @@ export const CodeEditorPage = () => {
     (state: RootState) => state.codeEditor.currentProblem
   );
   useEffect(() => {
-    console.log("Reload Code Editor");
     dispatch(requestModulesAndProblems(true));
   }, [dispatch]);
   if (isLoading) {
@@ -40,7 +38,7 @@ export const CodeEditorPage = () => {
   } else {
     return (
       <CodeLayoutContainer>
-        <Grid container spacing={0} sx={{ height: "calc(100vh - 64px)" }}>
+        <Grid container spacing={0}>
           <Grid item xs={12} md={2}>
             <Sidenav />
           </Grid>

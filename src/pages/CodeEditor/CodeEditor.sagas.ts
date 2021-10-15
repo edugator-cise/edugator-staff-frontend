@@ -1,4 +1,11 @@
-import { call, put, takeEvery, delay } from "redux-saga/effects";
+import {
+  call,
+  cancelled,
+  put,
+  takeEvery,
+  fork,
+  take,
+} from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,
@@ -11,6 +18,7 @@ import {
   setActiveTab,
   setIsAcceptedOutput,
   submitCode,
+  setResultSubmission,
 } from "./CodeEditorSlice";
 import api from "../../app/common/api";
 
@@ -31,12 +39,10 @@ const poll = async (
     const result = await fn(payload);
     attempts++;
     if (validate(result)) {
-      console.log(result);
       return resolve(result);
     } else if (maxAttempts && attempts === maxAttempts) {
       return reject(new Error("Exceeded max Attempts"));
     } else {
-      console.log("timingout");
       setTimeout(executePoll, interval, resolve, reject);
     }
   };
@@ -78,7 +84,6 @@ function* handleRequestModulesAndProblems() {
 }
 
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
-  let token = "";
   try {
     const { code, header, footer, stdin } = action.payload;
     const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
@@ -91,27 +96,24 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
         stdinPayload.toString("base64")
       );
     });
-    token = data.token;
-  } catch (e) {
-    console.log(e);
+    if (!data.token || data.token === "") {
+      throw new Error("Token not pressent");
+    }
+    const result = yield call(async () => {
+      return poll(
+        api.getCodeRequest,
+        { runId: data.token, base_64: true },
+        judge0Validator,
+        3000,
+        4
+      );
+    });
+    const resultData: IJudge0Response = result.data;
     yield put(setRunningSubmission(false));
-  }
-
-  if (token !== "") {
-    yield delay(200);
-    try {
-      const result = yield call(async () => {
-        return poll(
-          api.getCodeRequest,
-          { runId: token, base_64: true },
-          judge0Validator,
-          3000,
-          4
-        );
-      });
-
-      const resultData: IJudge0Response = result.data;
-      console.log({
+    yield put(setActiveTab(1));
+    yield put(setIsAcceptedOutput(resultData.status.id === 3));
+    yield put(
+      setCompilerOutput({
         compilerMessage:
           resultData.status.id === 3
             ? "Accepted"
@@ -120,26 +122,15 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
           resultData.status.id === 3 && resultData.stdout
             ? Buffer.from(resultData.stdout as string, "base64").toString()
             : Buffer.from(resultData.compile_output, "base64").toString(),
-      });
-      yield put(setActiveTab(1));
-      yield put(setIsAcceptedOutput(resultData.status.id === 3));
-      yield put(
-        setCompilerOutput({
-          compilerMessage:
-            resultData.status.id === 3
-              ? "Accepted"
-              : resultData.status.description,
-          compilerBody:
-            resultData.status.id === 3 && resultData.stdout
-              ? Buffer.from(resultData.stdout as string, "base64").toString()
-              : Buffer.from(resultData.compile_output, "base64").toString(),
-        })
-      );
-      console.log(result.data);
-      yield put(setRunningSubmission(false));
-    } catch (e) {}
-  } else {
+      })
+    );
+  } catch (e) {
+    //TODO notify user
     yield put(setRunningSubmission(false));
+  } finally {
+    if (yield cancelled()) {
+      //TODO notifiy user
+    }
   }
 }
 
@@ -150,7 +141,7 @@ function* runCodeSubmission(
     const { code, header, footer, stdin, problemId } = action.payload;
     const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
     const stdinPayload = Buffer.from(stdin, "utf-8");
-    const { data } = yield call(async () => {
+    const { data }: { data: IResultSubmission[] } = yield call(async () => {
       return api.runCodeSubmission(
         paylodBuffer.toString("base64"),
         54,
@@ -159,11 +150,11 @@ function* runCodeSubmission(
         problemId
       );
     });
-    console.log(data);
     yield put(setActiveTab(2));
     yield put(setRunningSubmission(false));
+    yield put(setResultSubmission(data));
   } catch (e) {
-    console.log(e);
+    //notify user
     yield put(setRunningSubmission(false));
   }
 }

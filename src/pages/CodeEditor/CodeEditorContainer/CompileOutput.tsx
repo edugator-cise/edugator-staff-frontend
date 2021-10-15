@@ -58,8 +58,8 @@ export const CompileOutput = ({
           sx={{
             backgroundColor: "#fce4ec",
             color: "#d81b60",
-            height: "60%",
             p: 2,
+            whiteSpace: "pre-wrap",
           }}
         >
           {compileBody}

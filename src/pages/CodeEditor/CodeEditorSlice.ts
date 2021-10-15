@@ -21,7 +21,7 @@ export interface CodeEditorContainerState {
   stdin: string;
   isAcceptedOutput: boolean | undefined;
   compilerOutput: ICompilerOutput;
-  submissionOutput: ISubmissionOutput | undefined;
+  submissionOutput: IResultSubmission[] | undefined;
   activeTab: number;
 }
 
@@ -57,7 +57,6 @@ function filterProblemById(
   state: CodeEditorContainerState,
   id: string
 ): IProblem | undefined {
-  console.log(state.problems);
   if (!state.problems || state.problems.length === 0) {
     return undefined;
   }
@@ -91,7 +90,9 @@ export const codeEditorSlice = createSlice({
         return {
           ...state,
           currentProblem: { ...currentProblem },
+          ...resetinputOutputViewState(),
           codeBody: currentProblem.code.body,
+          runningSubmission: false,
         };
       }
     },
@@ -158,6 +159,15 @@ export const codeEditorSlice = createSlice({
         compilerOutput: action.payload,
       };
     },
+    setResultSubmission: (
+      state,
+      action: PayloadAction<IResultSubmission[]>
+    ) => {
+      return {
+        ...state,
+        submissionOutput: action.payload,
+      };
+    },
     setIsAcceptedOutput: (state, action: PayloadAction<boolean>) => {
       return {
         ...state,
@@ -188,5 +198,6 @@ export const {
   setIsLoading,
   setRunningSubmission,
   setIsAcceptedOutput,
+  setResultSubmission,
 } = codeEditorSlice.actions;
 export default codeEditorSlice.reducer;

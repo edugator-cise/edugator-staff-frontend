@@ -3,13 +3,12 @@ declare interface IProblemItem {
   _id: string;
 }
 
-declare interface ISubmissionOutput {
-  input: string;
+declare interface IResultSubmission {
+  stdin: string;
   output: string;
-  expected: string;
-  passed: boolean;
+  expectedOutput: string;
+  result: boolean;
 }
-
 declare interface IToken {
   token: string;
 }

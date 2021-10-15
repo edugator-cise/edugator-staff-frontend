@@ -5,6 +5,8 @@ import problemEditorContainerSlice, {
   validateCode,
   validateServerConfig,
   validateTestEditor,
+  incrementActiveStep,
+  decrementActiveStep,
 } from "./problemEditorContainerSlice";
 
 describe("problemEditorContainer reducer", () => {
@@ -14,6 +16,8 @@ describe("problemEditorContainer reducer", () => {
     codeIsValid: false,
     serverConfigIsValid: false,
     testEditorIsValid: false,
+    activeStep: 0,
+    problem: { problemStatement: "", templatePackage: "" },
   };
 
   it("initial states should default to false", () => {
@@ -24,6 +28,11 @@ describe("problemEditorContainer reducer", () => {
         codeIsValid: false,
         serverConfigIsValid: false,
         testEditorIsValid: false,
+        activeStep: 0,
+        problem: {
+          problemStatement: "",
+          templatePackage: "",
+        },
       }
     );
   });
@@ -66,5 +75,43 @@ describe("problemEditorContainer reducer", () => {
       validateTestEditor(true)
     );
     expect(actual.testEditorIsValid).toBe(true);
+  });
+
+  it("increment adds 1 to activeStep", () => {
+    const actual = problemEditorContainerSlice(
+      initialState,
+      incrementActiveStep()
+    );
+    expect(actual.activeStep).toBe(1);
+  });
+
+  it("increment will not increase activeStep past 4", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 4,
+      },
+      incrementActiveStep()
+    );
+    expect(actual.activeStep).toBe(4);
+  });
+
+  it("decrement subtracts 1 from activeStep", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 4,
+      },
+      decrementActiveStep()
+    );
+    expect(actual.activeStep).toBe(3);
+  });
+
+  it("decrement will not decreaase activeStep past 0", () => {
+    const actual = problemEditorContainerSlice(
+      initialState,
+      decrementActiveStep()
+    );
+    expect(actual.activeStep).toBe(0);
   });
 });

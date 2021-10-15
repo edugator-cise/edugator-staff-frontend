@@ -55,7 +55,7 @@ export const loginSlice = createSlice({
     requestLogout(state) {
       LocalStorage.removeToken();
       setAuthToken(false);
-      return { ...state, isLoading: false, authorizationToken: "" };
+      return { ...state, isLoading: false };
     },
     resetErrorMessage(state) {
       return {
