@@ -1,19 +1,19 @@
 import { ThemeProvider, StyledEngineProvider } from "@mui/system";
 import React from "react";
 import "./App.css";
-import { LoginPage } from "./app/Login/Login";
+import { LoginPage } from "./pages/Login/LoginPage";
 import { Typography } from "@mui/material";
 import VerticalNavigation from "./shared/VerticalNavigation";
 import LandingHome from "./pages/LandingPage/LandingHome";
+import LandingFeatures from "./pages/LandingPage/LandingFeatures";
+import LandingTopics from "./pages/LandingPage/LandingTopics";
 import theme from './shared/theme';
 import { Route, Switch } from "react-router-dom";
 import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
-import Modules from "./pages/modules/ModulesView";
+import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
-import LandingFeatures from "./pages/LandingPage/LandingFeatures";
-import LandingTopics from "./pages/LandingPage/LandingTopics";
-import Footer from "./shared/Footer";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
 
@@ -29,15 +29,10 @@ function App() {
               <ProblemEditorPage />
             </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
-              <Modules />
+              <ModulesPage />
             </PrivateRoute>
             <Route exact path='/'>
-            <VerticalNavigation />
-              <LandingHome />
-              {/* <ProblemEditorPage></ProblemEditorPage> */}
-              <LandingFeatures />
-              <LandingTopics />
-              <Footer />
+              <LandingPage />
             </Route>
           </Switch>
         </div>

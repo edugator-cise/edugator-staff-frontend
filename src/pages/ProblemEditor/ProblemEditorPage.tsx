@@ -4,10 +4,12 @@ import { LayoutContainer } from "../../shared/LayoutContainer";
 
 export const ProblemEditorPage = () => {
   const actions = [
-    { label: "Test", onClick: () => console.log("It works!") },
     {
-      label: "Another button",
-      onClick: () => console.log("Hey this works too!"),
+      label: "Back to Modules",
+      onClick: () =>
+        console.log("TODO: route back to modules and handle delete logic"),
+      variant: "contained",
+      color: "error",
     },
   ];
 

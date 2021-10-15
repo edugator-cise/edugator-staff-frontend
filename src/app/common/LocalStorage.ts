@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 /** Wrapper class for the window.localStorage that enables access to its methods */
 export class LocalStorage {
   static jwtToken = "jwtToken";
@@ -20,5 +22,19 @@ export class LocalStorage {
   /** Deletes the token if it exists safely */
   static removeToken(): void {
     localStorage.removeItem(this.jwtToken);
+  }
+
+  /**
+   * Checks whether the error is a 401 Axios Error. If so, it removes the token.
+   * @param e, treats it like an Axios error.
+   * If it is an axios error with a 401 response status, returns true.
+   * Otherwise, it returns false.
+   */
+  static checkUnauthorized(e: any): boolean {
+    if ((e as AxiosError)?.response?.status === 401) {
+      this.removeToken();
+      return true;
+    }
+    return false;
   }
 }

@@ -10,7 +10,6 @@
 		"@mui/styles": "^5.0.1",
 		"@reduxjs/toolkit": "^1.5.1",
 		"@testing-library/jest-dom": "^4.2.4",
-		"@testing-library/react": "^9.3.2",
 		"@testing-library/user-event": "^7.1.2",
 		"@types/jest": "^24.0.0",
 		"@types/node": "^12.0.0",
@@ -34,12 +33,13 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test --passWithNoTests --watchAll=false",
+		"test-modules": "react-scripts test ModulesPage.slice.spec.ts --watchAll=false",
 		"eject": "react-scripts eject",
 		"prettier-check": "prettier --check src/**/*.ts{,x}",
 		"format": "prettier --write src/**/*.ts{,x}",
 		"lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
 		"lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
-		"pre-pr": "npm run build && npm run format && npm run lint-fix && npm run test"
+		"pre-pr": "npm run format && npm run lint-fix && npm run test && npm run build"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -57,6 +57,7 @@
 		]
 	},
 	"devDependencies": {
+		"@testing-library/react": "^9.5.0",
 		"@types/react-router-dom": "^5.3.0",
 		"@typescript-eslint/eslint-plugin": "^4.31.0",
 		"@typescript-eslint/parser": "^4.31.0",
