@@ -11,6 +11,8 @@ import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import Modules from "./pages/modules/ModulesView";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import LandingFeatures from "./pages/LandingPage/LandingFeatures";
+import LandingTopics from "./pages/LandingPage/LandingTopics";
 
 function App() {
 
@@ -32,7 +34,8 @@ function App() {
             <VerticalNavigation />
               <LandingHome />
               {/* <ProblemEditorPage></ProblemEditorPage> */}
-              <div style={{height: 800, backgroundColor: '#0f287a', width: '100%'}} />
+              <LandingFeatures />
+              <LandingTopics />
             </Route>
           </Switch>
         </div>
