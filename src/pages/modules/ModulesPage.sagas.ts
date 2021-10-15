@@ -12,11 +12,12 @@ import {
 
 import apiUrls from "./config";
 import { IModule, IModulesPUT } from "../../shared/types";
+import apiClient from "../../app/common/apiWrapper";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   // request
   let modulesRequest = () =>
-    axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
+    apiClient.request<IModule[]>({ ...apiUrls["get modules and problems"] });
   try {
     const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
     yield put(requestModulesSuccess(response.data));
@@ -28,7 +29,7 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   // request
   let moduleAddRequest = () =>
-    axios.request<string>({
+    apiClient.request<string>({
       ...apiUrls["add module"],
       data: {
         name: action.payload.moduleName,

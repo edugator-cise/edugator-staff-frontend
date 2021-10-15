@@ -9,12 +9,13 @@ import {
   receiveLoginSuccess,
   IRequestLoginAction,
 } from "./LoginPage.slice";
+import apiClient from "../../app/common/apiWrapper";
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
   try {
     const url = `${baseAPIURL}v1/user/login`;
     const { data } = yield call(async () => {
-      return axios.post(url, action.payload);
+      return apiClient.post(url, action.payload);
     });
     const { token } = data;
     LocalStorage.setToken(token);
