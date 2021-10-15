@@ -7,7 +7,6 @@ import { PrivateRoute } from "./shared/PrivateRoute";
 import { LoginPage } from "./pages/Login/LoginPage";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
-import { MarkdownEditor } from "./pages/ProblemEditor/MarkdownEditor/MarkdownEditor";
 
 function App() {
   const theme = createTheme();
