@@ -14,7 +14,7 @@ const Holder = styled("div")({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  background: 'linear-gradient(transparent, transparent, transparent, white, white), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
+  background: 'linear-gradient(transparent, transparent, transparent, white), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
   backgroundSize: "35em",
   [theme.breakpoints.up("xl")]: {
     height: 800,

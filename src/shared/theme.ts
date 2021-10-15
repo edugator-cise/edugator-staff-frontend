@@ -72,7 +72,7 @@ const theme = createTheme({
     primary: {
       main: blue[500],
       light: blue[100],
-      dark: '#0f265e'
+      dark: '#142F73'
     },
     secondary: {
       main: orange[500],

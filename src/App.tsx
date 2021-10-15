@@ -13,6 +13,7 @@ import Modules from "./pages/modules/ModulesView";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import LandingFeatures from "./pages/LandingPage/LandingFeatures";
 import LandingTopics from "./pages/LandingPage/LandingTopics";
+import Footer from "./shared/Footer";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
               {/* <ProblemEditorPage></ProblemEditorPage> */}
               <LandingFeatures />
               <LandingTopics />
+              <Footer />
             </Route>
           </Switch>
         </div>
