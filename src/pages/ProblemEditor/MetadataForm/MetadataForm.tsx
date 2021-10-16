@@ -8,8 +8,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import { Field, FieldProps, Form, Formik } from "formik";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import {
@@ -18,12 +18,14 @@ import {
   validateMetadata,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+import DatePicker, { DatePickerProps } from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 interface Props {
   formRef: any;
 }
+
+interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
@@ -31,41 +33,81 @@ export const MetadataForm = (props: Props) => {
   const initialValues = useAppSelector(
     (state) => state.problemEditorContainer.metadata
   );
-  const [dueDate, setDueDate] = useState<Date | null>(initialValues.dueDate);
+
+  const dateError: any = {};
 
   const validate = (values: MetadataFields) => {
     const errors: any = {};
-    if (!values.title) {
+    if (values.title === "") {
       errors.title = "Required";
     }
 
-    dispatch(validateMetadata(Object.entries(errors).length === 0));
+    if (dateError.message) {
+      errors.dueDate = dateError.message;
+    }
 
+    dispatch(validateMetadata(Object.entries(errors).length === 0));
     return errors;
+  };
+
+  // https://formik.org/docs/api/field
+  //https://next.material-ui-pickers.dev/guides/forms
+  const IntegratedDatePicker = ({
+    field,
+    form,
+    ...props
+  }: DatePickerFieldProps) => {
+    return (
+      <DatePicker
+        onError={(reason, value) => {
+          if (reason) {
+            dateError.message = "Invalid date";
+          } else {
+            dateError.message = undefined;
+          }
+          form.setFieldValue("dueDate", value, true);
+        }}
+        onChange={(newValue) => {
+          form.setFieldValue("dueDate", newValue, false);
+        }}
+        label="Due date"
+        value={field.value}
+        renderInput={(params) => (
+          <TextField {...params} helperText={dateError.message} />
+        )}
+      />
+    );
   };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        const metadataValues = { ...values };
-        if (dueDate) {
-          metadataValues.dueDate = dueDate;
-        }
-        dispatch(updateMetadata(metadataValues));
+        dispatch(validateMetadata(true));
+        dispatch(updateMetadata(values));
       }}
       innerRef={props.formRef}
       validate={validate}
     >
-      {({ values, handleChange, handleBlur }) => (
-        <Form>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+      {({ errors, values, handleChange, handleBlur, touched }) => (
+        <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexGrow: 1,
+              marginBottom: 5,
+            }}
+          >
             <TextField
               name="title"
               label="Title"
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
+              required
+              error={touched.title && Boolean(errors.title)}
+              helperText={touched.title && errors.title}
               sx={{ width: "50%" }}
             />
             <FormControlLabel
@@ -76,32 +118,29 @@ export const MetadataForm = (props: Props) => {
                   checked={values.hidden}
                 />
               }
+              sx={{ marginTop: "auto" }}
               label="Hidden"
             />
-            <Box>
+            <Box sx={{ marginTop: 4 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Due date"
-                  value={dueDate}
-                  onChange={(newValue) => {
-                    setDueDate(newValue);
-                  }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
+                <Field component={IntegratedDatePicker} name="dueDate" />
               </LocalizationProvider>
             </Box>
-            <FormControl sx={{ width: "25%" }}>
-              <InputLabel>Language</InputLabel>
-              <Select
-                name="language"
-                value={values.language}
-                label="Language"
-                onChange={handleChange}
-              >
-                <MenuItem value="Java">Java</MenuItem>
-                <MenuItem value="C++">C++</MenuItem>
-              </Select>
-            </FormControl>
+            <Box sx={{ marginTop: 4 }}>
+              <FormControl>
+                <InputLabel>Language</InputLabel>
+                <Select
+                  name="language"
+                  value={values.language}
+                  label="Language"
+                  onChange={handleChange}
+                  sx={{ minWidth: "5rem" }} // this is to ensure the label is not cut off
+                >
+                  <MenuItem value="Java">Java</MenuItem>
+                  <MenuItem value="C++">C++</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
         </Form>
       )}

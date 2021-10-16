@@ -43,12 +43,17 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
       console.log("Submitted!");
     } else {
       formRef.current?.submitForm();
-      dispatch(incrementActiveStep());
+      if (currentStepIsValid) dispatch(incrementActiveStep());
     }
   };
 
   return (
-    <Box marginTop="auto" display="flex" justifyContent="space-between">
+    <Box
+      marginTop="auto"
+      display="flex"
+      justifyContent="space-between"
+      paddingTop={3}
+    >
       <Button
         onClick={handleBack}
         disabled={activeStep === 0}
@@ -58,7 +63,6 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
       </Button>
       <Button
         onClick={handleNext}
-        disabled={!currentStepIsValid}
         variant={activeStep === 4 ? "contained" : "outlined"}
         color={activeStep === 4 ? "success" : "primary"}
       >
