@@ -19,6 +19,12 @@ describe("problemEditorContainer reducer", () => {
     testEditorIsValid: false,
     activeStep: 0,
     problem: { problemStatement: "", templatePackage: "" },
+    metadata: {
+      hidden: false,
+      dueDate: new Date(0),
+      title: "",
+      language: "C++",
+    },
   };
 
   it("initial states should default to false", () => {
@@ -33,6 +39,12 @@ describe("problemEditorContainer reducer", () => {
         problem: {
           problemStatement: "",
           templatePackage: "",
+        },
+        metadata: {
+          hidden: false,
+          dueDate: new Date(0),
+          title: "",
+          language: "C++",
         },
       }
     );

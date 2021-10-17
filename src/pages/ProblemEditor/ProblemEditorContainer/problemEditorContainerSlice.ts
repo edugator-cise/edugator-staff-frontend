@@ -46,7 +46,7 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     language: "C++",
-    dueDate: new Date(),
+    dueDate: new Date(0),
   },
 };
 
