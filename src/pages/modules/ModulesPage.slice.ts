@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IAdminModule } from "./types";
+import { IModuleBase } from "../../shared/types";
 import {
   IModuleState,
-  IModulesGETFailure,
-  IModulesPUT,
-  IModulesPUTFailure,
-  IModule,
+  IRequestFailure,
+  DialogStatus,
   AlertType,
 } from "./types";
 import { AlertMsg } from "./config";
@@ -17,6 +17,14 @@ const baseModuleState: IModuleState = {
     display: false,
     type: AlertType.info,
   },
+  dialogState: {
+    action: DialogStatus.CLOSED,
+    open: false,
+    module: {
+      name: "",
+      number: 0,
+    },
+  },
 };
 
 export function getBaseModuleState(): IModuleState {
@@ -28,12 +36,12 @@ export const moduleSlice = createSlice({
   initialState: getBaseModuleState(),
   reducers: {
     /* GET Request Modules */
-    requestModules: (state, action: PayloadAction<void>) => {
+    requestModules: (state) => {
       return { ...state, isLoading: true };
     },
 
     // action.type = "modules/requestModulesSuccess"
-    requestModulesSuccess: (state, action: PayloadAction<IModule[]>) => {
+    requestModulesSuccess: (state, action: PayloadAction<IAdminModule[]>) => {
       return {
         ...state,
         modules: action.payload,
@@ -46,10 +54,7 @@ export const moduleSlice = createSlice({
       };
     },
 
-    requestModulesFailure: (
-      state,
-      action: PayloadAction<IModulesGETFailure>
-    ) => {
+    requestModulesFailure: (state, action: PayloadAction<IRequestFailure>) => {
       return {
         ...state,
         feedback: {
@@ -63,11 +68,11 @@ export const moduleSlice = createSlice({
 
     /* POST Request Modules */
 
-    requestNewModule: (state, action: PayloadAction<IModulesPUT>) => {
+    requestNewModule: (state, action: PayloadAction<IModuleBase>) => {
       return { ...state, isLoading: true };
     },
 
-    requestNewModuleSuccess: (state, action: PayloadAction<IModule>) => {
+    requestNewModuleSuccess: (state, action: PayloadAction<IAdminModule>) => {
       return {
         ...state,
         modules: [...state.modules, action.payload],
@@ -82,7 +87,7 @@ export const moduleSlice = createSlice({
 
     requestNewModuleFailure: (
       state,
-      action: PayloadAction<IModulesPUTFailure>
+      action: PayloadAction<IRequestFailure>
     ) => {
       return {
         ...state,
@@ -96,24 +101,72 @@ export const moduleSlice = createSlice({
     },
 
     /* PUT Request Modules */
-    requestModifyModule: (state, action) => {},
-    requestModifyModuleSuccess: (state, action) => {},
+    requestModifyModule: (state, action: PayloadAction<IModuleBase>) => {
+      return { ...state, isLoading: true };
+    },
+    requestModifyModuleSuccess: (state, action) => {
+      return {
+        ...state,
+        modules: [...state.modules, action.payload],
+        feedback: {
+          message: AlertMsg[action.type],
+          type: AlertType.success,
+          display: true,
+        },
+        isLoading: false,
+      };
+    },
     requestModifyModuleFailure: (state, action) => {},
     /* DELETE Request Modules */
     requestDeleteModule: (state, action) => {},
     requestDeleteModuleSuccess: (state, action) => {},
     requestDeleteModuleFailure: (state, action) => {},
 
+    /* Dialog Reducers  */
+    openCreateDialog: (state) => {
+      state.dialogState.open = true;
+      state.dialogState.action = DialogStatus.CREATE;
+    },
+    openEditDialog: (state, action: PayloadAction<IModuleBase>) => {
+      return {
+        ...state,
+        dialogState: {
+          open: true,
+          action: DialogStatus.EDIT,
+          module: action.payload,
+        },
+      };
+    },
+    closeDialog: (state) => {
+      return {
+        ...state,
+        dialogState: {
+          open: false,
+          action: DialogStatus.CLOSED, // will remove after some testing
+          module: {
+            name: "",
+            number: 0,
+          },
+        },
+      };
+    },
+
     /* Other reducers */
     closeAlert: (state) => {
       state.feedback.display = false;
     },
+    // good for testing purposes
     clearState: (state) => {
-      state.modules = [];
-      state.isLoading = false;
-      state.feedback.message = "";
-      state.feedback.display = false;
-      state.feedback.type = AlertType.info;
+      return {
+        ...state,
+        modules: [],
+        isLoading: false,
+        feedback: {
+          message: "",
+          display: false,
+          type: AlertType.info,
+        },
+      };
     },
   },
 });
@@ -129,6 +182,10 @@ export const {
   requestNewModuleFailure,
   /* PUT Request Modules */
   /* DELETE Request Modules */
+  /* Dialog Reducers */
+  openCreateDialog,
+  openEditDialog,
+  closeDialog,
   /* Other Reducers */
   closeAlert,
   clearState,

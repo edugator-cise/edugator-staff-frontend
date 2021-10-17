@@ -1,42 +1,12 @@
-export interface IProblem {
-  _id?: string;
-  problemType: string;
-  title: string;
-  hidden: boolean;
-  language: string;
-  dueDate: Date;
-  code: {
-    header: string;
-    body: string;
-    footer: string;
-  };
-  fileExtension: string;
-  testCases: [
-    {
-      input: string;
-      expectedOutput: string;
-      hint: string;
-      visibility: number;
-      templatePackage: string;
-    }
-  ];
-  timeLimit: number;
-  memoryLimit: number;
-  buildCommand: string;
-}
+import { IProblem, IModuleBase } from "../../shared/types";
 
-export interface IModule {
-  _id?: string;
-  name: string;
-  number: number;
+/** Admin Module Interface */
+
+export interface IAdminModule extends IModuleBase {
   problems: IProblem[];
 }
 
 /** Creating a New-Module dialog */
-export interface INewModule {
-  nameInput: string;
-  numberInput: number;
-}
 
 export enum DialogStatus {
   EDIT = "edit",
@@ -44,10 +14,16 @@ export enum DialogStatus {
   CLOSED = "closed",
 }
 
+export interface IDialog {
+  open: boolean;
+  action: DialogStatus;
+  module: IModuleBase;
+}
+
 /** Useful Structs */
 /**
- * @type error
- * @type success
+ * @property error
+ * @property success
  */
 export enum AlertType {
   info = "info",
@@ -56,31 +32,28 @@ export enum AlertType {
 }
 
 export interface IFeedback {
-  message: string | null;
+  message?: string;
   display: boolean;
   type: AlertType;
 }
 
 /* Redux State - Modules */
 export interface IModuleState {
-  modules: IModule[];
+  modules: IAdminModule[];
   isLoading: boolean;
   feedback: IFeedback;
+  dialogState: IDialog;
 }
 
-/* GET Request Actions - Modules */
-export interface IModulesGETFailure {
-  message: string | null;
-} // might add generic failure interface
+/* Request Actions - Modules */
+export interface IRequestFailure {
+  message?: string;
+}
 
 /* PUT Request Actions - Modules */
 export interface IModulesPUT {
   moduleName: string;
   moduleNum: number;
-}
-
-export interface IModulesPUTFailure {
-  message: string | null;
 }
 
 /* POST Request Actions - Modules */

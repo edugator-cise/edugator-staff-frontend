@@ -11,28 +11,29 @@ import {
 } from "./ModulesPage.slice";
 
 import apiUrls from "./config";
-import { IModule, IModulesPUT } from "./types";
+import { IModuleBase } from "../../shared/types";
+import { IAdminModule } from "./types";
 
-function* handleGetModulesRequest(action: PayloadAction<void>): any {
+function* handleGetModulesRequest(): any {
   // request
   let modulesRequest = () =>
-    axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
+    axios.request<IAdminModule[]>({ ...apiUrls["get modules and problems"] });
   try {
-    const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
+    const response: AxiosResponse<IAdminModule[]> = yield call(modulesRequest);
     yield put(requestModulesSuccess(response.data));
   } catch (e) {
     yield put(requestModulesFailure(e as Error));
   }
 }
 
-function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
+function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
   // request
   let moduleAddRequest = () =>
     axios.request<string>({
       ...apiUrls["add module"],
       data: {
-        name: action.payload.moduleName,
-        number: action.payload.moduleNum,
+        name: action.payload.name,
+        number: action.payload.number,
       },
     });
 
@@ -40,9 +41,9 @@ function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
     // Add response content to sagas
     const response: AxiosResponse<string> = yield call(moduleAddRequest);
 
-    let new_module: IModule = {
-      name: action.payload.moduleName,
-      number: action.payload.moduleNum,
+    let new_module: IAdminModule = {
+      name: action.payload.name,
+      number: action.payload.number,
       problems: [],
       _id: response.data,
     };

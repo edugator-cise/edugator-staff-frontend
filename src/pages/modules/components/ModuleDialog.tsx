@@ -10,11 +10,12 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { INewModule, DialogStatus } from "../types";
-import { useAppDispatch } from "../../../app/common/hooks";
-import { requestNewModule } from "../ModulesPage.slice";
+import { IModuleBase } from "../../../shared/types";
+import { DialogStatus } from "../types";
+import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { requestNewModule, closeDialog } from "../ModulesPage.slice";
 
-const Form = styled("div")({
+const Form = styled("form")({
   display: "flex",
 });
 
@@ -54,51 +55,52 @@ const dialogTitle = (status: DialogStatus) => {
   }
 };
 
-export interface ModuleDialogProps {
-  open: boolean;
-  dialogOperation: DialogStatus;
-  handleClose: () => void;
-}
-
-export function ModuleDialog(props: ModuleDialogProps) {
-  const { open, dialogOperation, handleClose } = props;
-
-  const [moduleInput, setModuleInput] = React.useState<INewModule>({
-    numberInput: 0,
-    nameInput: "",
+export function ModuleDialog() {
+  // for the module information on the dialog
+  const [moduleInput, setModuleInput] = React.useState<IModuleBase>({
+    name: "",
+    number: 0,
   });
 
   const dispatch = useAppDispatch();
+  const { open, action, module } = useAppSelector(
+    (state) => state.modules.dialogState
+  );
 
   const handleDialogSubmit = () => {
-    if (dialogOperation === DialogStatus.CREATE) {
-      dispatch(
-        requestNewModule({
-          moduleName: moduleInput.nameInput,
-          moduleNum: moduleInput.numberInput,
-        })
-      );
-    } else if (dialogOperation === DialogStatus.EDIT) {
+    if (action === DialogStatus.CREATE) {
+      dispatch(requestNewModule(moduleInput));
+    } else if (action === DialogStatus.EDIT) {
       // dispatch rename module
     }
 
     // TODO:
     //  dont close before checking
     //  if action was successful
-    handleClose();
+    dispatch(closeDialog());
+
+    // make sure feedback is visible
+    // when the dialog is open
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="sm" fullWidth>
+    <Dialog
+      onClose={() => dispatch(closeDialog())}
+      open={open}
+      maxWidth="sm"
+      fullWidth
+    >
       <Paper elevation={3}>
         <DialogTitle id="module-title-dialog">
-          {dialogTitle(dialogOperation)}
+          {dialogTitle(action)}
         </DialogTitle>
         <Divider />
+
         <DialogContent>
           To add a new module, or to modify a module's name and number, please
           use the form below.
         </DialogContent>
+
         <Form>
           <NumberField
             label="Number"
@@ -107,10 +109,14 @@ export function ModuleDialog(props: ModuleDialogProps) {
             onChange={(event) => {
               setModuleInput({
                 ...moduleInput,
-                numberInput: parseInt(event.target.value),
+                number: parseInt(event.target.value),
               });
             }}
+            // TODO
+            // needs to not be set when adding a new module
+            defaultValue={module.number}
             fullWidth
+            required
             focused
           />
           <NameTextField
@@ -119,19 +125,25 @@ export function ModuleDialog(props: ModuleDialogProps) {
             onChange={(event) => {
               setModuleInput({
                 ...moduleInput,
-                nameInput: event.target.value,
+                name: event.target.value,
               });
             }}
+            defaultValue={module.name}
             fullWidth
+            required
             focused
           />
-        </Form>
 
-        <Footer>
-          <AddButton onClick={() => handleDialogSubmit()} variant="outlined">
-            Add module
-          </AddButton>
-        </Footer>
+          <Footer>
+            <AddButton
+              onClick={() => handleDialogSubmit()}
+              variant="outlined"
+              type="submit"
+            >
+              Add module
+            </AddButton>
+          </Footer>
+        </Form>
       </Paper>
     </Dialog>
   );

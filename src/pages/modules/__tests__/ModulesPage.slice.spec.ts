@@ -31,7 +31,7 @@ describe("Modules Reducer Base State", () => {
 
 const mockData = {
   newModule: {
-    payload: { moduleName: "Test 0", moduleNum: 0 },
+    payload: { name: "Test 0", number: 0 },
     response: { data: "asdfgh" },
   },
   modulesFound: {
@@ -82,8 +82,8 @@ describe("Modules: Adding a Module", () => {
       Promise.resolve(mockData.newModule.response)
     );
     let expected: IModule = {
-      name: mockData.newModule.payload.moduleName,
-      number: mockData.newModule.payload.moduleNum,
+      name: mockData.newModule.payload.name,
+      number: mockData.newModule.payload.number,
       problems: [],
       _id: mockData.newModule.response.data,
     };
