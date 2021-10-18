@@ -9,7 +9,6 @@ import {
   requestNewModuleSuccess,
   requestNewModuleFailure,
 } from "./ModulesPage.slice";
-
 import apiUrls from "./config";
 import { IModule, IModulesPUT } from "../../shared/types";
 
