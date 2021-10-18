@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   requestModules,
@@ -12,12 +12,11 @@ import {
 
 import apiUrls from "./config";
 import { IModule, IModulesPUT } from "../../shared/types";
-import apiClient from "../../app/common/apiClient";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   // request
   const modulesRequest = async () =>
-    apiClient.request<IModule[]>({ ...apiUrls["get modules and problems"] });
+    axios.request<IModule[]>({ ...apiUrls["get modules and problems"] });
   try {
     const response: AxiosResponse<IModule[]> = yield call(modulesRequest);
     yield put(requestModulesSuccess(response.data));
@@ -28,8 +27,8 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
 
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   // request
-  let moduleAddRequest = async () =>
-    apiClient.request<string>({
+  const moduleAddRequest = async () =>
+    axios.request<string>({
       ...apiUrls["add module"],
       data: {
         name: action.payload.moduleName,
