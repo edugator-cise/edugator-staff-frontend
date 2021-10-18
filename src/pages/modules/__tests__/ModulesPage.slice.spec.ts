@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios from "axios";
 import apiClient from "../../../app/common/apiClient";
 import store from "../../../app/common/store";
 import { IModule, IModuleState } from "../../../shared/types";
@@ -47,55 +47,14 @@ const mockData = {
   },
 };
 
-// jest.mock("axios", () => {
-//   return {
-//     interceptors: {
-//       request: { use: jest.fn(), eject: jest.fn() },
-//       response: { use: jest.fn(), eject: jest.fn() },
-//     },
-//   };
-// });
-// jest.mock("../../../app/common/apiClient");
-// const axios_mock = apiClient as jest.Mocked<typeof axios>;
-// const axios_mock: jest.Mocked<typeof axios> = jest.genMockFromModule("axios");
-// axios_mock.create = jest.fn(() => axios_mock);
-// axios_mock.interceptors = {
-//   request: { use: jest.fn(), eject: jest.fn() },
-//   response: { use: jest.fn(), eject: jest.fn() },
-// };
-
-// mockedApiClient.request = jest.fn();
-// const axios_mock = axios as jest.Mocked<typeof axios>;
-// jest.mock("../../../app/common/apiClient", () => {
-//   return {
-//     interceptors: {
-//       request: { use: jest.fn(), eject: jest.fn() },
-//       response: { use: jest.fn(), eject: jest.fn() },
-//     },
-//   };
-// });
-// const mockedApiClient: jest.Mocked<typeof apiClient> = jest.genMockFromModule(
-//   "../../../app/common/apiClient"
-// );
-// mockedApiClient.interceptors = {
-//   request: { use: jest.fn(), eject: jest.fn() },
-//   response: { use: jest.fn(), eject: jest.fn() },
-// };
-
-jest.mock("axios", () => {
-  return {
-    create: jest.fn(),
-    interceptors: {
-      request: { use: jest.fn(), eject: jest.fn() },
-      response: { use: jest.fn(), eject: jest.fn() },
-    },
-  };
-});
+jest.mock("axios");
 const axios_mock = axios as jest.Mocked<typeof axios>;
 
 describe("Modules: Getting Modules", () => {
   test("it should get modules when fetching from v1/module/WithProblems", async () => {
-    axios_mock.request.mockResolvedValueOnce(mockData.modulesFound);
+    axios_mock.request.mockImplementationOnce(
+      () => Promise.resolve(mockData.modulesFound) // success
+    );
     let expected = mockData.modulesFound.data;
 
     await dispatch(requestModules()); // await does have an effect
