@@ -1,5 +1,4 @@
 import axios from "axios";
-import apiClient from "../../../app/common/apiClient";
 import store from "../../../app/common/store";
 import { IModule, IModuleState } from "../../../shared/types";
 import {
