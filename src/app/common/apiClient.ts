@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useHistory } from "react-router";
-import { baseAPIURL } from "../../shared/constants";
-import { Routes } from "../../shared/Routes.constants";
+import { baseAPIURL, unauthorizedErrorMessage } from "../../shared/constants";
 import { LocalStorage } from "./LocalStorage";
 
 const apiClient = axios.create({
@@ -12,26 +10,35 @@ const apiClient = axios.create({
   },
 });
 
+const authHeaderKey = "Authorization";
+
 apiClient.interceptors.request.use(
   function (config) {
-    console.log("here");
     const token = LocalStorage.getToken();
-    console.log(token);
     if (token) {
       // Apply authorization token to every request if logged in
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const bearer = `Bearer ${token}`;
+      apiClient.defaults.headers.common[authHeaderKey] = bearer;
+      config.headers.common[authHeaderKey] = bearer;
     } else {
       // Delete auth header
-      delete apiClient.defaults.headers.common["Authorization"];
+      delete apiClient.defaults.headers.common[authHeaderKey];
     }
     return config;
   },
   function (error) {
-    console.log("error");
-    console.log(error);
+    return Promise.reject(error);
+  }
+);
+
+apiClient.interceptors.response.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
     if (LocalStorage.checkUnauthorized(error)) {
-      const history = useHistory();
-      history.push(Routes.Login);
+      LocalStorage.removeToken();
+      (error as Error).message = unauthorizedErrorMessage;
     }
     return Promise.reject(error);
   }
