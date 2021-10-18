@@ -16,6 +16,7 @@ apiClient.interceptors.request.use(
   function (config) {
     console.log("here");
     const token = LocalStorage.getToken();
+    console.log(token);
     if (token) {
       // Apply authorization token to every request if logged in
       apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -26,6 +27,8 @@ apiClient.interceptors.request.use(
     return config;
   },
   function (error) {
+    console.log("error");
+    console.log(error);
     if (LocalStorage.checkUnauthorized(error)) {
       const history = useHistory();
       history.push(Routes.Login);
