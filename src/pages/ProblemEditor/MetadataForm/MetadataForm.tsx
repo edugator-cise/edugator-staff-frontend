@@ -26,6 +26,15 @@ interface Props {
   formRef: any;
 }
 
+interface Errors {
+  title?: string;
+  dueDate?: string;
+}
+
+interface DateError {
+  message?: string;
+}
+
 interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
 
 export const MetadataForm = (props: Props) => {
@@ -35,10 +44,10 @@ export const MetadataForm = (props: Props) => {
     (state) => state.problemEditorContainer.metadata
   );
 
-  const dateError: any = {};
+  const dateError: DateError = {};
 
   const validate = (values: MetadataFields) => {
-    const errors: any = {};
+    const errors: Errors = {};
     if (values.title === "") {
       errors.title = "Required";
     }
