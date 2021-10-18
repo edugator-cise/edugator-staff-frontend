@@ -6,9 +6,10 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import { ExpandMore, Add } from "@mui/icons-material";
+import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
+import { useHistory } from "react-router";
 import { useAppSelector } from "../../../app/common/hooks";
-import { ModuleMenu, ProblemButtons } from "./";
+import { ModuleMenu } from "./";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 
@@ -40,7 +41,17 @@ const NewProblemButton = styled(Button)(({ theme }) => ({
   color: grey["A700"],
 }));
 
+const ButtonContainer = styled("div")({
+  marginLeft: "auto",
+});
+
+const ProblemAction = styled(Button)(({ theme }) => ({
+  marginRight: theme.spacing(1),
+  color: grey["A700"],
+}));
+
 export function Modules() {
+  const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
   return (
@@ -54,7 +65,7 @@ export function Modules() {
                   <Typography variant="h6">
                     Module {module.number}: {module.name}
                   </Typography>
-                  <ModuleMenu />
+                  <ModuleMenu module={module} />
 
                   <NewProblemButton startIcon={<Add />}>
                     Add Problem
@@ -67,7 +78,24 @@ export function Modules() {
                       Problem {i + 1}: {problem.title}
                     </ProblemTitle>
 
-                    <ProblemButtons />
+                    <ButtonContainer>
+                      <ProblemAction
+                        startIcon={<AssignmentTurnedIn />}
+                        size="small"
+                      >
+                        Grade
+                      </ProblemAction>
+
+                      <ProblemAction
+                        startIcon={<Edit />}
+                        size="small"
+                        onClick={() => {
+                          history.push("/problem/edit/" + problem._id);
+                        }}
+                      >
+                        Edit
+                      </ProblemAction>
+                    </ButtonContainer>
                   </ModuleContent>
                 ))}
               </Module>

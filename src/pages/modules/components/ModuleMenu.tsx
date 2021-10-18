@@ -2,6 +2,9 @@ import React from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { MoreVert } from "@mui/icons-material/";
+import { IAdminModule } from "../types";
+import { useAppDispatch } from "../../../app/common/hooks";
+import { openEditDialog, requestDeleteModule } from "../ModulesPage.slice";
 
 const MenuButton = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(0.5),
@@ -10,20 +13,14 @@ const MenuButton = styled(IconButton)(({ theme }) => ({
   marginBottom: "auto",
 }));
 
-export function ModuleMenu() {
+interface MenuProps {
+  module: IAdminModule;
+}
+
+export function ModuleMenu({ module }: MenuProps) {
+  const dispatch = useAppDispatch();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-    event.stopPropagation();
-    setAnchorEl(null);
-  };
 
   const handleClickAway = (event: any) => {
     if (event) event.stopPropagation();
@@ -36,11 +33,13 @@ export function ModuleMenu() {
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={(event) => {
-          handleClick(event);
+          event.stopPropagation();
+          setAnchorEl(event.currentTarget);
         }}
       >
         <MoreVert />
       </MenuButton>
+
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -51,14 +50,22 @@ export function ModuleMenu() {
       >
         <MenuItem
           onClick={(event) => {
-            handleClose(event);
+            event.stopPropagation();
+            setAnchorEl(null);
+            /// Functionality below
+            console.log("On module menu:", module);
+            dispatch(openEditDialog(module));
           }}
         >
           Rename
         </MenuItem>
         <MenuItem
           onClick={(event) => {
-            handleClose(event);
+            event.stopPropagation();
+            setAnchorEl(null);
+            /// Functionality below
+            console.log("On module menu: (id)", module);
+            dispatch(requestDeleteModule(module._id));
           }}
         >
           Delete

@@ -10,18 +10,21 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { IModuleBase } from "../../../shared/types";
 import { DialogStatus } from "../types";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
-import { requestNewModule, closeDialog } from "../ModulesPage.slice";
+import {
+  requestNewModule,
+  requestModifyModule,
+  closeDialog,
+  updateDialogModule,
+} from "../ModulesPage.slice";
 
 const Form = styled("form")({
-  display: "flex",
+  display: "block",
 });
 
 const NumberField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  minWidth: "11%",
-  maxWidth: "13%",
+  width: "12%",
   margin: theme.spacing(1),
   marginLeft: theme.spacing(3),
 }));
@@ -56,12 +59,6 @@ const dialogTitle = (status: DialogStatus) => {
 };
 
 export function ModuleDialog() {
-  // for the module information on the dialog
-  const [moduleInput, setModuleInput] = React.useState<IModuleBase>({
-    name: "",
-    number: 0,
-  });
-
   const dispatch = useAppDispatch();
   const { open, action, module } = useAppSelector(
     (state) => state.modules.dialogState
@@ -69,16 +66,16 @@ export function ModuleDialog() {
 
   const handleDialogSubmit = () => {
     if (action === DialogStatus.CREATE) {
-      dispatch(requestNewModule(moduleInput));
+      dispatch(requestNewModule(module));
     } else if (action === DialogStatus.EDIT) {
-      // dispatch rename module
+      console.log("dialog state module:", module);
+      dispatch(requestModifyModule(module));
     }
 
     // TODO:
     //  dont close before checking
     //  if action was successful
     dispatch(closeDialog());
-
     // make sure feedback is visible
     // when the dialog is open
   };
@@ -107,14 +104,21 @@ export function ModuleDialog() {
             variant="filled"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             onChange={(event) => {
-              setModuleInput({
-                ...moduleInput,
-                number: parseInt(event.target.value),
-              });
+              // needs better alternative
+              // using component hook didnt work
+              // research on updating the hook every time
+              dispatch(
+                updateDialogModule({
+                  ...module,
+                  number: parseInt(event.target.value),
+                })
+              );
             }}
             // TODO
-            // needs to not be set when adding a new module
-            defaultValue={module.number}
+            // needs to be set only when editing a module
+            defaultValue={
+              action === DialogStatus.EDIT ? module.number : undefined
+            }
             fullWidth
             required
             focused
@@ -123,12 +127,16 @@ export function ModuleDialog() {
             label="Module Name"
             variant="filled"
             onChange={(event) => {
-              setModuleInput({
-                ...moduleInput,
-                name: event.target.value,
-              });
+              dispatch(
+                updateDialogModule({
+                  ...module,
+                  name: event.target.value,
+                })
+              );
             }}
-            defaultValue={module.name}
+            defaultValue={
+              action === DialogStatus.EDIT ? module.name : undefined
+            }
             fullWidth
             required
             focused
@@ -136,11 +144,14 @@ export function ModuleDialog() {
 
           <Footer>
             <AddButton
-              onClick={() => handleDialogSubmit()}
+              onClick={(event) => {
+                event.preventDefault();
+                handleDialogSubmit();
+              }}
               variant="outlined"
               type="submit"
             >
-              Add module
+              {action === DialogStatus.CREATE ? "Add Module" : "Edit Module"}
             </AddButton>
           </Footer>
         </Form>

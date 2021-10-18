@@ -3,7 +3,7 @@ import { IAdminModule } from "./types";
 import { IModuleBase } from "../../shared/types";
 import {
   IModuleState,
-  IRequestFailure,
+  IRequestMessage,
   DialogStatus,
   AlertType,
 } from "./types";
@@ -45,16 +45,11 @@ export const moduleSlice = createSlice({
       return {
         ...state,
         modules: action.payload,
-        feedback: {
-          message: AlertMsg[action.type],
-          type: AlertType.success,
-          display: true,
-        },
         isLoading: false,
       };
     },
 
-    requestModulesFailure: (state, action: PayloadAction<IRequestFailure>) => {
+    requestModulesFailure: (state, action: PayloadAction<IRequestMessage>) => {
       return {
         ...state,
         feedback: {
@@ -87,7 +82,7 @@ export const moduleSlice = createSlice({
 
     requestNewModuleFailure: (
       state,
-      action: PayloadAction<IRequestFailure>
+      action: PayloadAction<IRequestMessage>
     ) => {
       return {
         ...state,
@@ -102,25 +97,89 @@ export const moduleSlice = createSlice({
 
     /* PUT Request Modules */
     requestModifyModule: (state, action: PayloadAction<IModuleBase>) => {
+      console.log("on edit module start:", action.payload);
       return { ...state, isLoading: true };
     },
-    requestModifyModuleSuccess: (state, action) => {
+    requestModifyModuleSuccess: (state, action: PayloadAction<IModuleBase>) => {
+      // get modified element from array
+      let modified = action.payload._id;
+      let index = state.modules.findIndex((module) => module._id === modified);
+      
+      // weird workaround since module from backend
+      // doesnt have the "problems" property
+      let new_module = { ...action.payload, problems: [] };
+
+      console.log("module after modification (reducer):", new_module);
+
+      // TODO
+      // Planning to add a title to the feedback message
+
+      // replace old module with new module
+      state.modules = state.modules.fill(new_module, index, index + 1);
+
+      state.feedback.message = AlertMsg[action.type];
+      state.feedback.type = AlertType.success;
+      state.feedback.display = true;
+
+      state.isLoading = false;
+    },
+    requestModifyModuleFailure: (
+      state,
+      action: PayloadAction<IRequestMessage>
+    ) => {
+      // Very similar to requestAddModuleFailure currently
+
+      // TODO
+      // Add title to feedback and default message
+      // in case message property of response is undefined due to weird error
       return {
         ...state,
-        modules: [...state.modules, action.payload],
         feedback: {
-          message: AlertMsg[action.type],
+          message: action.payload.message,
+          type: AlertType.error,
+          display: true,
+        },
+        isLoading: false,
+      };
+    },
+    /* DELETE Request Modules */
+    requestDeleteModule: (state, action: PayloadAction<string | undefined>) => {
+      state.isLoading = true;
+    },
+    requestDeleteModuleSuccess: (
+      state,
+      action: PayloadAction<{ response: IRequestMessage; id: string }>
+    ) => {
+      let removed = action.payload.id;
+      let new_modules = state.modules.filter(
+        (module) => module._id !== removed
+      );
+
+      return {
+        ...state,
+        modules: new_modules,
+        feedback: {
+          message: action.payload.response.message,
           type: AlertType.success,
           display: true,
         },
         isLoading: false,
       };
     },
-    requestModifyModuleFailure: (state, action) => {},
-    /* DELETE Request Modules */
-    requestDeleteModule: (state, action) => {},
-    requestDeleteModuleSuccess: (state, action) => {},
-    requestDeleteModuleFailure: (state, action) => {},
+    requestDeleteModuleFailure: (
+      state,
+      action: PayloadAction<IRequestMessage>
+    ) => {
+      return {
+        ...state,
+        feedback: {
+          message: action.payload.message,
+          type: AlertType.error,
+          display: true,
+        },
+        isLoading: false,
+      };
+    },
 
     /* Dialog Reducers  */
     openCreateDialog: (state) => {
@@ -128,6 +187,7 @@ export const moduleSlice = createSlice({
       state.dialogState.action = DialogStatus.CREATE;
     },
     openEditDialog: (state, action: PayloadAction<IModuleBase>) => {
+      console.log("On openEditDialog:", action.payload);
       return {
         ...state,
         dialogState: {
@@ -142,13 +202,17 @@ export const moduleSlice = createSlice({
         ...state,
         dialogState: {
           open: false,
-          action: DialogStatus.CLOSED, // will remove after some testing
+          action: DialogStatus.CLOSED, // might remove after some testing
           module: {
             name: "",
             number: 0,
+            _id: undefined,
           },
         },
       };
+    },
+    updateDialogModule: (state, action: PayloadAction<IModuleBase>) => {
+      state.dialogState.module = action.payload;
     },
 
     /* Other reducers */
@@ -181,8 +245,15 @@ export const {
   requestNewModuleSuccess,
   requestNewModuleFailure,
   /* PUT Request Modules */
+  requestModifyModule,
+  requestModifyModuleSuccess,
+  requestModifyModuleFailure,
   /* DELETE Request Modules */
+  requestDeleteModule,
+  requestDeleteModuleSuccess,
+  requestDeleteModuleFailure,
   /* Dialog Reducers */
+  updateDialogModule,
   openCreateDialog,
   openEditDialog,
   closeDialog,

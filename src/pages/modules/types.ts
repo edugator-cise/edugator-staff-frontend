@@ -46,7 +46,7 @@ export interface IModuleState {
 }
 
 /* Request Actions - Modules */
-export interface IRequestFailure {
+export interface IRequestMessage {
   message?: string;
 }
 
