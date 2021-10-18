@@ -1,7 +1,6 @@
 import { Typography, Fade, Grow, Slide, Button } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import LightModeLogo from "../../assets/LightModeLogo.svg";
 import CodingPage from "../../assets/CodingPage.png";
 import theme from "../../shared/theme";
 
@@ -29,7 +28,6 @@ const TextHolder = styled("div")({
   width: "50%",
   maxWidth: 600,
   display: "flex",
-  //backgroundColor: 'red',
   flexDirection: "column",
   textAlign: "center",
   [theme.breakpoints.up("xl")]: {
@@ -92,14 +90,13 @@ function LandingHome() {
         <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={{enter: 1000}}>
           <img
             src={CodingPage}
+            alt="Edugator Coding Page"
             style={{
               height: "32em",
               borderRadius: 20,
               marginLeft: 50,
               boxShadow:
                 "rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px",
-              //boxShadow: 'rgba(3, 102, 214, 0.3) 0px 0px 0px 3px',
-              //boxShadow: 'rgba(3, 102, 214, 0.4) 5px 5px, rgba(3, 102, 214, 0.3) 10px 10px, rgba(3, 102, 214, 0.2) 15px 15px, rgba(3, 102, 214, 0.1) 20px 20px, rgba(3, 102, 214, 0.05) 25px 25px'
             }}
           />
         </Slide>

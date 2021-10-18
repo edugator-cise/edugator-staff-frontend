@@ -2,10 +2,8 @@ import {
     Button,
     Typography,
 } from "@mui/material";
-import { Card } from '@mui/material'
 import { styled } from '@mui/styles'
 import React, { useRef, useState } from 'react'
-import theme from '../../shared/theme'
 
 interface topicInfo {
     name: string;
@@ -20,7 +18,6 @@ const Topic = styled('div')({
     height: 300,
     width: 250,
     backgroundColor: 'white',
-    //borderTop: '5px solid ' + theme.palette.primary.main,
     borderRadius: 15,
     boxShadow:
     'rgba(149, 157, 165, 0.3) 0px 8px 24px',
@@ -69,6 +66,7 @@ function TopicCard(props:topicInfo) {
                 width={100} 
                 src={props.staticImg} 
                 ref={gif}
+                alt={`${props.name} gif`}
             />
             <Typography variant="h5" color="#3A4F58" sx={{maxWidth: '80%'}}><b>{props.name}</b></Typography>
             <Typography variant="body2" color="#3A4F58" sx={{maxWidth: '80%', paddingBottom: 10}}>{props.description}</Typography>

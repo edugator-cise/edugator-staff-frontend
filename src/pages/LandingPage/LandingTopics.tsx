@@ -1,9 +1,8 @@
 import {
-    Container,
     Typography,
     Button
 } from "@mui/material";
-import React, { useRef } from "react";
+import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
 import SortingGif from '../../assets/icons8-alphabetical-sorting.gif'

@@ -7,7 +7,7 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LightModeLogo from "../assets/LightModeLogo.svg";
 
@@ -15,8 +15,6 @@ function VerticalNavigation() {
   const [anchorProjects, setAnchorProjects] = useState<any>(null);
   const [anchorModules, setAnchorModules] = useState<any>(null);
   const [anchorLearn, setAnchorLearn] = useState<any>(null);
-
-  const modulesButton = useRef(null);
 
   interface menu {
     title: string;

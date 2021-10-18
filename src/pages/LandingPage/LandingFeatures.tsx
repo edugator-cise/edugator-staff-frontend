@@ -1,6 +1,5 @@
 import {
-  Typography,
-  Grow
+  Typography
 } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
@@ -52,7 +51,6 @@ const Feature = styled('div')({
   justifyContent: 'center',
   background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent)',
   borderTop: '5px solid ' + theme.palette.primary.main,
-  //borderBottom: '5px solid ' + theme.palette.secondary.light,
 })
 
 const IconHolder = styled('div')({
@@ -79,7 +77,7 @@ function LandingFeatures() {
           <Feature>
             <IconHolder>
               <Typography color="white">
-                <img src={Glasses} width={100} height={100}/>
+                <img src={Glasses} width={100} height={100} alt="Built for students"/>
               </Typography>
             </IconHolder>
             <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Built for students</b></Typography>
@@ -88,7 +86,7 @@ function LandingFeatures() {
           <Feature>
             <IconHolder>
               <Typography color="white">
-                <img src={Diamond} width={100} height={100}/>
+                <img src={Diamond} width={100} height={100} alt="Modern design"/>
               </Typography>
             </IconHolder>
             <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Designed to be modern</b></Typography>
@@ -97,7 +95,7 @@ function LandingFeatures() {
           <Feature>
             <IconHolder>
               <Typography color="white">
-                <img src={FlipChart} width={100} height={100}/>
+                <img src={FlipChart} width={100} height={100} alt="Lessons for everything"/>
               </Typography>
             </IconHolder>
             <Typography variant="h5" color="white" sx={{maxWidth: 200, marginTop: '0.5em', marginBottom: '0.5em'}}><b>Lessons for everything</b></Typography>

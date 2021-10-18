@@ -1,4 +1,4 @@
-import { blue, blueGrey, orange } from "@mui/material/colors";
+import { blue, orange } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 //for custom theme overrides
