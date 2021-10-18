@@ -6,6 +6,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
 } from "@mui/material";
 import { Field, FieldProps, Form, Formik } from "formik";
@@ -91,14 +92,7 @@ export const MetadataForm = (props: Props) => {
     >
       {({ errors, values, handleChange, handleBlur, touched }) => (
         <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              flexGrow: 1,
-              marginBottom: 5,
-            }}
-          >
+          <Stack spacing={5}>
             <TextField
               name="title"
               label="Title"
@@ -121,12 +115,12 @@ export const MetadataForm = (props: Props) => {
               sx={{ marginTop: "auto" }}
               label="Hidden"
             />
-            <Box sx={{ marginTop: 4 }}>
+            <Box>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Field component={IntegratedDatePicker} name="dueDate" />
               </LocalizationProvider>
             </Box>
-            <Box sx={{ marginTop: 4 }}>
+            <Box>
               <FormControl>
                 <InputLabel>Language</InputLabel>
                 <Select
@@ -141,7 +135,7 @@ export const MetadataForm = (props: Props) => {
                 </Select>
               </FormControl>
             </Box>
-          </Box>
+          </Stack>
         </Form>
       )}
     </Formik>
