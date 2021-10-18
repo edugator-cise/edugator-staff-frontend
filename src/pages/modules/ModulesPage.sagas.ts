@@ -28,7 +28,7 @@ function* handleGetModulesRequest(action: PayloadAction<void>): any {
 
 function* handleAddModulesRequest(action: PayloadAction<IModulesPUT>): any {
   // request
-  let moduleAddRequest = () =>
+  let moduleAddRequest = async () =>
     apiClient.request<string>({
       ...apiUrls["add module"],
       data: {
