@@ -1,4 +1,5 @@
 import axios from "axios";
+import apiClient from "../../../app/common/apiClient";
 import store from "../../../app/common/store";
 import { IModule, IModuleState } from "../../../shared/types";
 import {
@@ -46,8 +47,8 @@ const mockData = {
   },
 };
 
-jest.mock("axios");
-const axios_mock = axios as jest.Mocked<typeof axios>;
+jest.mock("../../../app/common/apiClient");
+const axios_mock = apiClient as jest.Mocked<typeof axios>;
 
 describe("Modules: Getting Modules", () => {
   test("it should get modules when fetching from v1/module/WithProblems", async () => {

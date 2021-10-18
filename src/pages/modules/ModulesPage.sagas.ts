@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   requestModules,
@@ -12,10 +12,11 @@ import {
 
 import apiUrls from "./config";
 import { IModule, IModulesPUT } from "../../shared/types";
-import apiClient from "../../app/common/apiWrapper";
+import apiClient from "../../app/common/apiClient";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   // request
+  console.log("request modules with problems");
   let modulesRequest = () =>
     apiClient.request<IModule[]>({ ...apiUrls["get modules and problems"] });
   try {

@@ -1,5 +1,4 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { baseAPIURL } from "../../shared/constants";
 import { LocalStorage } from "../../app/common/LocalStorage";
@@ -9,7 +8,7 @@ import {
   receiveLoginSuccess,
   IRequestLoginAction,
 } from "./LoginPage.slice";
-import apiClient from "../../app/common/apiWrapper";
+import apiClient from "../../app/common/apiClient";
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
   try {
@@ -18,6 +17,7 @@ function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
       return apiClient.post(url, action.payload);
     });
     const { token } = data;
+    console.log("token received");
     LocalStorage.setToken(token);
     yield put(receiveLoginSuccess(token));
   } catch (e) {
