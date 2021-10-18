@@ -1,47 +1,40 @@
 import { AxiosRequestConfig } from "axios";
-import { LocalStorage } from "../../app/common/LocalStorage";
+import { baseAPIURL } from "../../shared/constants";
 
 interface IApiConfig {
   [desc: string]: AxiosRequestConfig;
 }
 
-const adminAPI = "https://edugator-admin.com"; // => base
-const token = LocalStorage.getToken();
-
+const adminAPI = baseAPIURL; // => base
 const noCache = { "Cache-Control": "no-cache" };
-const auth = { Authorization: "Bearer " + token };
 
 const apiUrls: IApiConfig = {
   "get modules and problems": {
-    url: adminAPI + "/v1/module/WithProblems",
+    url: adminAPI + "v1/module/WithProblems",
     method: "GET",
     headers: {
       ...noCache,
-      ...auth, // because previous way is gone on refresh
     },
   },
   "add module": {
-    url: adminAPI + "/v1/module",
+    url: adminAPI + "v1/module",
     method: "POST",
     headers: {
       ...noCache,
-      ...auth,
     },
   },
   "modify module": {
-    url: adminAPI + "/v1/module",
+    url: adminAPI + "v1/module",
     method: "PUT",
     headers: {
       ...noCache,
-      ...auth,
     },
   },
   "delete module": {
-    url: adminAPI + "/v1/module",
+    url: adminAPI + "v1/module",
     method: "DELETE",
     headers: {
       ...noCache,
-      ...auth,
     },
   },
 };

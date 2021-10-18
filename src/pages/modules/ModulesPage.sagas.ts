@@ -16,8 +16,7 @@ import apiClient from "../../app/common/apiClient";
 
 function* handleGetModulesRequest(action: PayloadAction<void>): any {
   // request
-  console.log("request modules with problems");
-  let modulesRequest = () =>
+  const modulesRequest = async () =>
     apiClient.request<IModule[]>({ ...apiUrls["get modules and problems"] });
   try {
     const response: AxiosResponse<IModule[]> = yield call(modulesRequest);

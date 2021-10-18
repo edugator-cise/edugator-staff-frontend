@@ -17,7 +17,6 @@ function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
       return apiClient.post(url, action.payload);
     });
     const { token } = data;
-    console.log("token received");
     LocalStorage.setToken(token);
     yield put(receiveLoginSuccess(token));
   } catch (e) {
