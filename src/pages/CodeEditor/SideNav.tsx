@@ -13,6 +13,11 @@ interface ClickedMenu {
   [key: string]: Boolean;
 }
 
+interface IProblemItem {
+  problemName: string;
+  _id: string;
+}
+
 const CustomListItemButton = styled(ListItemButton)(
   ({ theme }) => `
   background-color: "#ffffff";
@@ -35,7 +40,7 @@ export const Sidenav = () => {
   return (
     <List
       component="nav"
-      sx={{ height: "calc(100vh - 64px)", width: "100%", bgcolor: "#ffffff" }}
+      sx={{ height: "calc(100vh - 64px)", width: "100%", bgcolor: "#ffffff", overflowY: 'auto' }}
       aria-labelledby="nested-exercises-list"
       subheader={
         <ListSubheader

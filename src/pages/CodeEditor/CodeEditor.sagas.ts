@@ -3,8 +3,6 @@ import {
   cancelled,
   put,
   takeEvery,
-  fork,
-  take,
 } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
@@ -19,6 +17,7 @@ import {
   setIsAcceptedOutput,
   submitCode,
   setResultSubmission,
+  setRunCodeError,
 } from "./CodeEditorSlice";
 import api from "../../app/common/api";
 
@@ -86,8 +85,9 @@ function* handleRequestModulesAndProblems() {
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   try {
     const { code, header, footer, stdin } = action.payload;
-    const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
-    const stdinPayload = Buffer.from(stdin, "utf-8");
+    const fullCodePayload = header + code + footer;
+    const paylodBuffer = Buffer.from(fullCodePayload || "", "utf-8");
+    const stdinPayload = Buffer.from(stdin || "", "utf-8");
     const { data }: { data: IToken } = yield call(async () => {
       return api.runCodeRequest(
         paylodBuffer.toString("base64"),
@@ -120,12 +120,12 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
             : resultData.status.description,
         compilerBody:
           resultData.status.id === 3 && resultData.stdout
-            ? Buffer.from(resultData.stdout as string, "base64").toString()
-            : Buffer.from(resultData.compile_output, "base64").toString(),
+            ? Buffer.from(resultData.stdout || "", "base64").toString()
+            : Buffer.from(resultData.compile_output || "", "base64").toString(),
       })
     );
   } catch (e) {
-    //TODO notify user
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message}))
     yield put(setRunningSubmission(false));
   } finally {
     if (yield cancelled()) {
@@ -154,7 +154,7 @@ function* runCodeSubmission(
     yield put(setRunningSubmission(false));
     yield put(setResultSubmission(data));
   } catch (e) {
-    //notify user
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message}))
     yield put(setRunningSubmission(false));
   }
 }

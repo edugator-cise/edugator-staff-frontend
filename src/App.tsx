@@ -19,16 +19,10 @@ function App() {
           <Route exact path={Routes.Login}>
             <LoginPage />
           </Route>
-          <PrivateRoute
-            exact
-            path={Routes.ProblemEditor}
-          >
+          <PrivateRoute exact path={Routes.ProblemEditor}>
             <ProblemEditorPage />
           </PrivateRoute>
-          <PrivateRoute
-            exact
-            path={Routes.Modules}
-          >
+          <PrivateRoute exact path={Routes.Modules}>
             <ModulesPage />
           </PrivateRoute>
           <Route exact path={Routes.Code}>

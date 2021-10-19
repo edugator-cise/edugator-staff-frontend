@@ -10,13 +10,14 @@ import CheckCircle from "@mui/icons-material/CheckCircle";
 import Cancel from "@mui/icons-material/Cancel";
 import { styled } from "@mui/material/styles";
 
-const OutputPaper = styled(Paper)(
+const OutputPaper = styled('div')(
   ({ theme }) => `
-  height: 100%;
-  white-space: pre-wrap;
-  height: auto;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-shadow: none;
-  position: relative;
   padding: ${theme.spacing(1)} ${theme.spacing(2)};
   line-height: 20px;
   font-weight: 400;
@@ -83,6 +84,6 @@ export const SubmitOutput = ({ results }: Props) => {
       </CompileOutputContainer>
     );
   } else {
-    return <OutputPaper>Press Run to run code</OutputPaper>;
+    return <OutputPaper>Press Submit to submit code</OutputPaper>;
   }
 };

@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import { CodeLayoutContainer } from "../../shared/CodeLayoutContainer";
+import { CodeLayoutContainer } from "./CodeLayoutContainer";
 import { Sidenav } from "./SideNav";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "./CodeEditorSlice";
-import { Grid, CircularProgress, Box, Stack } from "@mui/material";
+import { Grid, CircularProgress, Box, Stack, Alert } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
-import { problemEditorContainerSlice } from "../ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
 export const CodeEditorPage = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(
@@ -18,9 +17,12 @@ export const CodeEditorPage = () => {
   const currentProblem = useSelector(
     (state: RootState) => state.codeEditor.currentProblem
   );
+  const runCodeError = useSelector(
+    (state: RootState) => state.codeEditor.runCodeError
+  )
   useEffect(() => {
     dispatch(requestModulesAndProblems(true));
-  }, [dispatch]);
+  }, []);
   if (isLoading) {
     return (
       <CodeLayoutContainer>
