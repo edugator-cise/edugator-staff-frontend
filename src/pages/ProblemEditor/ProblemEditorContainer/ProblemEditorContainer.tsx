@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { useAppSelector } from "../../../app/common/hooks";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
+import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 
@@ -26,6 +27,8 @@ export const ProblemEditorContainer = () => {
         return <MetadataForm formRef={formRef} />;
       case 1:
         return <ProblemEditorForm formRef={formRef} />;
+      case 3:
+        return <ServerConfigForm formRef={formRef} />;
       default:
         return <ExampleValidator />;
     }

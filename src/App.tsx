@@ -14,17 +14,7 @@ function App() {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
-        <Switch>
-          <Route exact path={Routes.Login}>
-            <LoginPage />
-          </Route>
-          <PrivateRoute exact path={Routes.ProblemEditor}>
-            <ProblemEditorPage />
-          </PrivateRoute>
-          <PrivateRoute exact path={Routes.Modules}>
-            <ModulesPage />
-          </PrivateRoute>
-        </Switch>
+        <ProblemEditorPage />
       </ThemeProvider>
     </StyledEngineProvider>
   );
