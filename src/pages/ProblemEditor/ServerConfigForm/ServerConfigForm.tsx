@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -27,13 +27,24 @@ export const ServerConfigForm = (props: Props) => {
 
   const validate = (values: ServerConfigFields) => {
     const errors: ServerConfigErrors = {};
+    if (!values.memoryLimit.toString().match(/^[0-9]+$/)) {
+      errors.memoryLimit = "Must contain digits only";
+    }
+    if (!values.timeLimit.toString().match(/^[0-9]+$/)) {
+      errors.timeLimit = "Must contain digits only";
+    }
+
+    dispatch(validateServerConfig(Object.entries(errors).length === 0));
+
     return errors;
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {}}
+      onSubmit={(values) => {
+        dispatch(updateServerConfig(values));
+      }}
       innerRef={props.formRef}
       validate={validate}
     >
@@ -42,20 +53,31 @@ export const ServerConfigForm = (props: Props) => {
           <TextField
             name="timeLimit"
             label="Time limit"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+            }}
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.timeLimit}
             error={touched.timeLimit && Boolean(errors.timeLimit)}
+            helperText={touched.timeLimit && errors.timeLimit}
           />
           <TextField
             name="memoryLimit"
             label="Memory limit"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">KB</InputAdornment>,
+            }}
             onChange={handleChange}
             onBlur={handleBlur}
             value={values.memoryLimit}
             error={touched.memoryLimit && Boolean(errors.memoryLimit)}
+            helperText={touched.memoryLimit && errors.memoryLimit}
           />
           <TextField
             name="buildCommand"
