@@ -5,6 +5,13 @@ export interface ProblemFields {
   templatePackage: string;
 }
 
+export interface MetadataFields {
+  title: string;
+  hidden: boolean;
+  language: string;
+  dueDate: Date;
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -21,6 +28,7 @@ export interface ProblemEditorContainerState {
   activeStep: number;
 
   problem: ProblemFields;
+  metadata: MetadataFields;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -33,6 +41,12 @@ const initialState: ProblemEditorContainerState = {
   problem: {
     problemStatement: "",
     templatePackage: "",
+  },
+  metadata: {
+    title: "",
+    hidden: false,
+    language: "C++",
+    dueDate: new Date(),
   },
 };
 
@@ -55,6 +69,27 @@ export const problemEditorContainerSlice = createSlice({
     validateTestEditor: (state, action: PayloadAction<boolean>) => {
       state.testEditorIsValid = action.payload;
     },
+    validateCurrentStep: (state, action: PayloadAction<boolean>) => {
+      switch (state.activeStep) {
+        case 0:
+          state.metadataIsValid = action.payload;
+          break;
+        case 1:
+          state.problemIsValid = action.payload;
+          break;
+        case 2:
+          state.codeIsValid = action.payload;
+          break;
+        case 3:
+          state.serverConfigIsValid = action.payload;
+          break;
+        case 4:
+          state.testEditorIsValid = action.payload;
+          break;
+        default:
+          break;
+      }
+    },
 
     incrementActiveStep: (state) => {
       if (state.activeStep < 4) {
@@ -70,6 +105,9 @@ export const problemEditorContainerSlice = createSlice({
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
+    updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
+      state.metadata = action.payload;
+    },
   },
 });
 
@@ -79,8 +117,10 @@ export const {
   validateCode,
   validateServerConfig,
   validateTestEditor,
+  validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
   updateProblem,
+  updateMetadata,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

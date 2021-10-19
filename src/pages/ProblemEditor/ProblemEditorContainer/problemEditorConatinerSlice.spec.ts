@@ -5,6 +5,7 @@ import problemEditorContainerSlice, {
   validateCode,
   validateServerConfig,
   validateTestEditor,
+  validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
 } from "./problemEditorContainerSlice";
@@ -18,24 +19,13 @@ describe("problemEditorContainer reducer", () => {
     testEditorIsValid: false,
     activeStep: 0,
     problem: { problemStatement: "", templatePackage: "" },
+    metadata: {
+      hidden: false,
+      dueDate: new Date(),
+      title: "",
+      language: "C++",
+    },
   };
-
-  it("initial states should default to false", () => {
-    expect(problemEditorContainerSlice(undefined, { type: "unknown" })).toEqual(
-      {
-        metadataIsValid: false,
-        problemIsValid: false,
-        codeIsValid: false,
-        serverConfigIsValid: false,
-        testEditorIsValid: false,
-        activeStep: 0,
-        problem: {
-          problemStatement: "",
-          templatePackage: "",
-        },
-      }
-    );
-  });
 
   it("should handle metadata validation", () => {
     const actual = problemEditorContainerSlice(
@@ -73,6 +63,61 @@ describe("problemEditorContainer reducer", () => {
     const actual = problemEditorContainerSlice(
       initialState,
       validateTestEditor(true)
+    );
+    expect(actual.testEditorIsValid).toBe(true);
+  });
+
+  it("should validate current step - metadata", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 0,
+      },
+      validateCurrentStep(true)
+    );
+    expect(actual.metadataIsValid).toBe(true);
+  });
+
+  it("should validate current step - problem", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 1,
+      },
+      validateCurrentStep(true)
+    );
+    expect(actual.problemIsValid).toBe(true);
+  });
+
+  it("should validate current step - code", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 2,
+      },
+      validateCurrentStep(true)
+    );
+    expect(actual.codeIsValid).toBe(true);
+  });
+
+  it("should validate current step - server config", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 3,
+      },
+      validateCurrentStep(true)
+    );
+    expect(actual.serverConfigIsValid).toBe(true);
+  });
+
+  it("should validate current step - test editor", () => {
+    const actual = problemEditorContainerSlice(
+      {
+        ...initialState,
+        activeStep: 4,
+      },
+      validateCurrentStep(true)
     );
     expect(actual.testEditorIsValid).toBe(true);
   });
