@@ -83,7 +83,6 @@ export function ModuleDialog() {
     if (action === DialogStatus.CREATE) {
       dispatch(requestNewModule(dialogInput));
     } else if (action === DialogStatus.EDIT) {
-      console.log("dialog state module:", module);
       dispatch(requestModifyModule(dialogInput));
     }
 
