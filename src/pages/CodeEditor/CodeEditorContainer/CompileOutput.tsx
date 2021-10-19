@@ -11,7 +11,7 @@ const CompileOutputContainer = styled("div")(
 `
 );
 
-const OutputPaper = styled('div')(
+const OutputPaper = styled("div")(
   ({ theme }) => `
   height: 80%;
   display: flex;

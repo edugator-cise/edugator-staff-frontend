@@ -10,7 +10,7 @@ import CheckCircle from "@mui/icons-material/CheckCircle";
 import Cancel from "@mui/icons-material/Cancel";
 import { styled } from "@mui/material/styles";
 
-const OutputPaper = styled('div')(
+const OutputPaper = styled("div")(
   ({ theme }) => `
   height: 80%;
   display: flex;

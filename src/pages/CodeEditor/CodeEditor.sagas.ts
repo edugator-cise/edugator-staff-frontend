@@ -1,9 +1,4 @@
-import {
-  call,
-  cancelled,
-  put,
-  takeEvery,
-} from "redux-saga/effects";
+import { call, cancelled, put, takeEvery } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,
@@ -125,7 +120,7 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
       })
     );
   } catch (e) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message}))
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
   } finally {
     if (yield cancelled()) {
@@ -154,7 +149,7 @@ function* runCodeSubmission(
     yield put(setRunningSubmission(false));
     yield put(setResultSubmission(data));
   } catch (e) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message}))
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
   }
 }

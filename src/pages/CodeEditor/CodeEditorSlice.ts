@@ -41,7 +41,7 @@ const initialState: CodeEditorContainerState = {
   },
   runCodeError: {
     hasError: false,
-    errorMessage: ""
+    errorMessage: "",
   },
   submissionOutput: undefined,
   activeTab: 0, // stdin tab is active
@@ -79,12 +79,12 @@ export const codeEditorSlice = createSlice({
   initialState: getInitialCodeEditorState(),
   reducers: {
     setReceivedProblems: (state, action: PayloadAction<boolean>) => {
-      state.hasReceivedProblems = action.payload
+      state.hasReceivedProblems = action.payload;
     },
     setCurrentProblem: (state, action: PayloadAction<string>) => {
       const currentProblem = filterProblemById(state, action.payload);
       if (currentProblem) {
-        state.currentProblem = {...currentProblem};
+        state.currentProblem = { ...currentProblem };
         state.codeBody = currentProblem.code.body;
         state.runningSubmission = false;
       }
@@ -102,7 +102,7 @@ export const codeEditorSlice = createSlice({
       state.isLoading = action.payload;
     },
     setCodeBody: (state, action: PayloadAction<string>) => {
-      state.codeBody = action.payload
+      state.codeBody = action.payload;
     },
     setRunningSubmission: (state, action: PayloadAction<boolean>) => {
       return {
@@ -123,7 +123,7 @@ export const codeEditorSlice = createSlice({
       state.stdin = action.payload;
     },
     setCompilerOutput: (state, action: PayloadAction<ICompilerOutput>) => {
-      state.compilerOutput = action.payload
+      state.compilerOutput = action.payload;
     },
     setResultSubmission: (
       state,
@@ -135,11 +135,11 @@ export const codeEditorSlice = createSlice({
       state.isAcceptedOutput = action.payload;
     },
     setActiveTab: (state, action: PayloadAction<number>) => {
-      state.activeTab = action.payload
+      state.activeTab = action.payload;
     },
     setRunCodeError: (state, action: PayloadAction<ErrorObject>) => {
-      state.runCodeError = {...action.payload}
-    }
+      state.runCodeError = { ...action.payload };
+    },
   },
 });
 
@@ -159,6 +159,6 @@ export const {
   setRunningSubmission,
   setIsAcceptedOutput,
   setResultSubmission,
-  setRunCodeError
+  setRunCodeError,
 } = codeEditorSlice.actions;
 export default codeEditorSlice.reducer;

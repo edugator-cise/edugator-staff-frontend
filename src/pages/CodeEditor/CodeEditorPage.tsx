@@ -19,10 +19,10 @@ export const CodeEditorPage = () => {
   );
   const runCodeError = useSelector(
     (state: RootState) => state.codeEditor.runCodeError
-  )
+  );
   useEffect(() => {
     dispatch(requestModulesAndProblems(true));
-  }, []);
+  }, [dispatch]);
   if (isLoading) {
     return (
       <CodeLayoutContainer>
