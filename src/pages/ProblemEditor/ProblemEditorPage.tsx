@@ -1,8 +1,12 @@
 import React from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
+import { useAppSelector } from "../../app/common/hooks";
 
 export const ProblemEditorPage = () => {
+  const problemTitle = useAppSelector(
+    (state) => state.problemEditorContainer.metadata.title
+  );
   const actions = [
     {
       label: "Back to Modules",
@@ -14,7 +18,10 @@ export const ProblemEditorPage = () => {
   ];
 
   return (
-    <LayoutContainer pageTitle="New Problem" actionButtons={actions}>
+    <LayoutContainer
+      pageTitle={problemTitle || "New Problem"}
+      actionButtons={actions}
+    >
       <ProblemEditorContainer />
     </LayoutContainer>
   );
