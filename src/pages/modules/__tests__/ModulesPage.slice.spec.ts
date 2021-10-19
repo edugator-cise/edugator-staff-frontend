@@ -47,14 +47,14 @@ const mockData = {
     response: { data: { id: "new0" } },
   },
   updatedModule: {
-    payload: {
+    data: {
       name: "Updated Name 0",
       number: 99,
       _id: "new0",
     },
   },
   deletingModule: {
-    payload: {
+    data: {
       response: { message: "Module successfully deleted" },
       _id: "new0",
     },
@@ -132,11 +132,11 @@ describe("Modules: Editing a Module", () => {
 
     // modifying fake module
     adminAPI_mock.put.mockResolvedValueOnce(mockData.updatedModule);
-    await dispatch(requestModifyModule(mockData.updatedModule.payload));
+    await dispatch(requestModifyModule(mockData.updatedModule.data));
     // I expect my changes to have gone through
 
     modulesState = store.getState().modules;
-    let expected = mockData.updatedModule.payload;
+    let expected = { ...mockData.updatedModule.data, problems: [] };
 
     expect(modulesState.modules).toEqual([expected]);
     // could check for positive feedback messages as well
@@ -164,7 +164,7 @@ describe("Modules: Deleting a Module", () => {
 
     // delete fake module
     adminAPI_mock.delete.mockResolvedValueOnce(mockData.deletingModule);
-    await dispatch(requestDeleteModule(mockData.deletingModule.payload._id));
+    await dispatch(requestDeleteModule(mockData.deletingModule.data._id));
     // I expect fake module to be gone
 
     modulesState = store.getState().modules;
@@ -175,7 +175,7 @@ describe("Modules: Deleting a Module", () => {
   test("it should offer feedback when deleting a module fails", async () => {
     adminAPI_mock.delete.mockRejectedValueOnce(mockData.get_failure);
 
-    await dispatch(requestNewModule(mockData.newModule.payload));
+    await dispatch(requestDeleteModule(mockData.deletingModule.data._id));
     let expected_msg = mockData.get_failure.message;
 
     modulesState = store.getState().modules;
