@@ -104,7 +104,7 @@ export const moduleSlice = createSlice({
       // get modified element from array
       let modified = action.payload._id;
       let index = state.modules.findIndex((module) => module._id === modified);
-      
+
       // weird workaround since module from backend
       // doesnt have the "problems" property
       let new_module = { ...action.payload, problems: [] };
@@ -183,8 +183,18 @@ export const moduleSlice = createSlice({
 
     /* Dialog Reducers  */
     openCreateDialog: (state) => {
-      state.dialogState.open = true;
-      state.dialogState.action = DialogStatus.CREATE;
+      return {
+        ...state,
+        dialogState: {
+          open: true,
+          action: DialogStatus.CREATE,
+          module: {
+            name: "",
+            number: 0,
+            _id: undefined,
+          },
+        },
+      };
     },
     openEditDialog: (state, action: PayloadAction<IModuleBase>) => {
       console.log("On openEditDialog:", action.payload);
@@ -210,9 +220,6 @@ export const moduleSlice = createSlice({
           },
         },
       };
-    },
-    updateDialogModule: (state, action: PayloadAction<IModuleBase>) => {
-      state.dialogState.module = action.payload;
     },
 
     /* Other reducers */
@@ -253,7 +260,6 @@ export const {
   requestDeleteModuleSuccess,
   requestDeleteModuleFailure,
   /* Dialog Reducers */
-  updateDialogModule,
   openCreateDialog,
   openEditDialog,
   closeDialog,

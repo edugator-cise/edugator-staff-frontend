@@ -39,7 +39,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
     name: action.payload.name,
     number: action.payload.number,
   };
-  let moduleAddRequest = () => adminAPI.post<string>("/v1/module/", body);
+  let moduleAddRequest = () => adminAPI.post<string>("/v1/module", body);
 
   try {
     // Add response content to sagas

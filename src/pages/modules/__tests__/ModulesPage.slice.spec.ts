@@ -52,26 +52,22 @@ const adminAPI_mock = adminAPI as jest.Mocked<typeof adminAPI>;
 
 describe("Modules: Getting Modules", () => {
   test("it should get modules when fetching from v1/module/WithProblems", async () => {
-    /*
-    adminAPI_mock.get.mockImplementationOnce(
-      () => Promise.resolve(mockData.modulesFound) // success
-    );*/
     adminAPI_mock.get.mockResolvedValueOnce(mockData.modulesFound);
-    let expected = mockData.modulesFound.data;
 
     await dispatch(requestModules()); // await does have an effect
+    let expected = mockData.modulesFound.data;
+
     modulesState = store.getState().modules;
 
     expect(modulesState.modules).toEqual(expected);
   });
 
   test("it should offer feedback when fetching modules fails", async () => {
-    adminAPI_mock.get.mockImplementationOnce(
-      () => Promise.reject(mockData.get_failure) // reject
-    );
-    let expected_msg = mockData.get_failure.message;
+    adminAPI_mock.get.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestModules());
+    let expected_msg = mockData.get_failure.message;
+
     modulesState = store.getState().modules;
 
     expect(modulesState.feedback.message).toEqual(expected_msg);
@@ -81,9 +77,9 @@ describe("Modules: Getting Modules", () => {
 
 describe("Modules: Adding a Module", () => {
   test("it should add a module successfully", async () => {
-    adminAPI_mock.post.mockImplementationOnce(() =>
-      Promise.resolve(mockData.newModule.response)
-    );
+    adminAPI_mock.post.mockResolvedValueOnce(mockData.newModule.response);
+
+    await dispatch(requestNewModule(mockData.newModule.payload));
     let expected: IAdminModule = {
       name: mockData.newModule.payload.name,
       number: mockData.newModule.payload.number,
@@ -91,19 +87,17 @@ describe("Modules: Adding a Module", () => {
       _id: mockData.newModule.response.data.id,
     };
 
-    await dispatch(requestNewModule(mockData.newModule.payload));
     modulesState = store.getState().modules;
 
     expect(modulesState.modules).toEqual([expected]);
   });
 
   test("it should offer feedback when adding a module fails", async () => {
-    adminAPI_mock.post.mockImplementationOnce(() =>
-      Promise.reject(mockData.get_failure)
-    );
-    let expected_msg = mockData.get_failure.message;
+    adminAPI_mock.post.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestNewModule(mockData.newModule.payload));
+    let expected_msg = mockData.get_failure.message;
+
     modulesState = store.getState().modules;
 
     // needs more error message variety

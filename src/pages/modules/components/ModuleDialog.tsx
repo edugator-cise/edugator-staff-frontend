@@ -16,8 +16,8 @@ import {
   requestNewModule,
   requestModifyModule,
   closeDialog,
-  updateDialogModule,
 } from "../ModulesPage.slice";
+import { IModuleBase } from "../../../shared/types";
 
 const Form = styled("form")({
   display: "block",
@@ -48,6 +48,8 @@ const Footer = styled("div")({
   float: "right",
 });
 
+const newModule: IModuleBase = { name: "", number: 0 };
+
 const dialogTitle = (status: DialogStatus) => {
   if (status === DialogStatus.CREATE) {
     return "Creating a new module";
@@ -64,12 +66,25 @@ export function ModuleDialog() {
     (state) => state.modules.dialogState
   );
 
+  const [dialogInput, setDialogInput] = React.useState<IModuleBase>(newModule);
+
+  React.useEffect(() => {
+    // when the dialog loads,
+    // update the input fields
+    // to have the values of the values of the dialog to be edited
+    if (action === DialogStatus.EDIT) {
+      setDialogInput(module);
+    } else {
+      setDialogInput(newModule);
+    }
+  }, [action, module]);
+
   const handleDialogSubmit = () => {
     if (action === DialogStatus.CREATE) {
-      dispatch(requestNewModule(module));
+      dispatch(requestNewModule(dialogInput));
     } else if (action === DialogStatus.EDIT) {
       console.log("dialog state module:", module);
-      dispatch(requestModifyModule(module));
+      dispatch(requestModifyModule(dialogInput));
     }
 
     // TODO:
@@ -104,18 +119,11 @@ export function ModuleDialog() {
             variant="filled"
             inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
             onChange={(event) => {
-              // needs better alternative
-              // using component hook didnt work
-              // research on updating the hook every time
-              dispatch(
-                updateDialogModule({
-                  ...module,
-                  number: parseInt(event.target.value),
-                })
-              );
+              setDialogInput({
+                ...dialogInput,
+                number: parseInt(event.target.value),
+              });
             }}
-            // TODO
-            // needs to be set only when editing a module
             defaultValue={
               action === DialogStatus.EDIT ? module.number : undefined
             }
@@ -127,12 +135,10 @@ export function ModuleDialog() {
             label="Module Name"
             variant="filled"
             onChange={(event) => {
-              dispatch(
-                updateDialogModule({
-                  ...module,
-                  name: event.target.value,
-                })
-              );
+              setDialogInput({
+                ...dialogInput,
+                name: event.target.value,
+              });
             }}
             defaultValue={
               action === DialogStatus.EDIT ? module.name : undefined
@@ -145,7 +151,10 @@ export function ModuleDialog() {
           <Footer>
             <AddButton
               onClick={(event) => {
+                // disables html5 validation & refresh
+                // TODO search how to keep validation
                 event.preventDefault();
+                // handle submit
                 handleDialogSubmit();
               }}
               variant="outlined"
