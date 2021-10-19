@@ -1,4 +1,4 @@
-import { blue, orange } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 //for custom theme overrides
@@ -75,8 +75,7 @@ const theme = createTheme({
       dark: '#142F73'
     },
     secondary: {
-      main: orange[500],
-      light: '#FDF4DD'
+      main: '#3A4F58',
     }
   },
   breakpoints: {

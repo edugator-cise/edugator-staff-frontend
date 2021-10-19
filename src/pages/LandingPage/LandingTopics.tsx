@@ -85,8 +85,8 @@ function LandingTopics() {
     return (
         <Holder>
         
-            <Typography variant="h3" color="#3A4F58">Choose your learning path by topic </Typography>
-            <Typography variant="body1" color="#3A4F58" sx={{paddingTop: 5}}>Browse the available course topics, choose your favourite one, and start learning. </Typography>
+            <Typography variant="h3" color={theme.palette.secondary.main}>Choose your learning path by topic </Typography>
+            <Typography variant="body1" color={theme.palette.secondary.main} sx={{paddingTop: 5}}>Browse the available course topics, choose your favourite one, and start learning. </Typography>
             
             
             <TopicList style={{paddingTop: 30}}>
