@@ -44,7 +44,7 @@ export function ModuleMenu({ module }: MenuProps) {
       >
         <MoreVert />
       </MenuButton>
-      
+
       {/*TODO: Move dialog component outside of Menu component*/}
       <DeleteDialog
         open={confirmDelete}

@@ -52,11 +52,7 @@ export function GradingDialog(props: GradingDialogProps) {
         </DialogContent>
 
         <label htmlFor="student-solutions-file">
-          <Input
-            accept=".zip"
-            id="student-solutions-file"
-            type="file"
-          />
+          <Input accept=".zip" id="student-solutions-file" type="file" />
           <Button variant="contained" component="span">
             Upload
           </Button>
