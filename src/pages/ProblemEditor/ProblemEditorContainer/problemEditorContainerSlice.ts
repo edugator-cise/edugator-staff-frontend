@@ -53,7 +53,7 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     language: "C++",
-    dueDate: new Date(0),
+    dueDate: new Date(),
   },
   serverConfig: {
     timeLimit: 0,

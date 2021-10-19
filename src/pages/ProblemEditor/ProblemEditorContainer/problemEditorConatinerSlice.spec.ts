@@ -21,34 +21,16 @@ describe("problemEditorContainer reducer", () => {
     problem: { problemStatement: "", templatePackage: "" },
     metadata: {
       hidden: false,
-      dueDate: new Date(0),
+      dueDate: new Date(),
       title: "",
       language: "C++",
     },
+    serverConfig: {
+      buildCommand: "",
+      timeLimit: 0,
+      memoryLimit: 0
+    }
   };
-
-  it("initial states should default to false", () => {
-    expect(problemEditorContainerSlice(undefined, { type: "unknown" })).toEqual(
-      {
-        metadataIsValid: false,
-        problemIsValid: false,
-        codeIsValid: false,
-        serverConfigIsValid: false,
-        testEditorIsValid: false,
-        activeStep: 0,
-        problem: {
-          problemStatement: "",
-          templatePackage: "",
-        },
-        metadata: {
-          hidden: false,
-          dueDate: new Date(0),
-          title: "",
-          language: "C++",
-        },
-      }
-    );
-  });
 
   it("should handle metadata validation", () => {
     const actual = problemEditorContainerSlice(
