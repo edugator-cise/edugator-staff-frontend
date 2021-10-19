@@ -5,6 +5,8 @@ import {
   getBaseModuleState,
   requestModules,
   requestNewModule,
+  requestModifyModule,
+  requestDeleteModule,
   clearState,
 } from "../ModulesPage.slice";
 import adminAPI from "../../../app/common/apiClient";
@@ -14,6 +16,9 @@ let modulesState: IModuleState;
 let baseState: IModuleState;
 
 beforeEach(() => {
+  // TODO need to use better,
+  // more specialized to every case
+  // for better setup, in the future
   baseState = getBaseModuleState();
   dispatch(clearState());
 });
@@ -31,15 +36,28 @@ describe("Modules Reducer Base State", () => {
 });
 
 const mockData = {
-  newModule: {
-    payload: { name: "Test 0", number: 0 },
-    response: { data: { id: "asdfgh" } },
-  },
   modulesFound: {
     data: [
       { name: "Test 1", number: 0, problems: [] },
       { name: "Test 2", number: 1, problems: [] },
     ],
+  },
+  newModule: {
+    payload: { name: "Test 0", number: 0 },
+    response: { data: { id: "new0" } },
+  },
+  updatedModule: {
+    payload: {
+      name: "Updated Name 0",
+      number: 99,
+      _id: "new0",
+    },
+  },
+  deletingModule: {
+    payload: {
+      response: { message: "Module successfully deleted" },
+      _id: "new0",
+    },
   },
   get_failure: {
     // needs more error message variety
@@ -94,6 +112,68 @@ describe("Modules: Adding a Module", () => {
 
   test("it should offer feedback when adding a module fails", async () => {
     adminAPI_mock.post.mockRejectedValueOnce(mockData.get_failure);
+
+    await dispatch(requestNewModule(mockData.newModule.payload));
+    let expected_msg = mockData.get_failure.message;
+
+    modulesState = store.getState().modules;
+
+    // needs more error message variety
+    expect(modulesState.feedback.message).toEqual(expected_msg);
+    expect(modulesState.feedback.display).toEqual(true);
+  });
+});
+
+describe("Modules: Editing a Module", () => {
+  test("it should edit a module successfully", async () => {
+    // adding fake module
+    adminAPI_mock.post.mockResolvedValueOnce(mockData.newModule.response);
+    await dispatch(requestNewModule(mockData.newModule.payload));
+
+    // modifying fake module
+    adminAPI_mock.put.mockResolvedValueOnce(mockData.updatedModule);
+    await dispatch(requestModifyModule(mockData.updatedModule.payload));
+    // I expect my changes to have gone through
+
+    modulesState = store.getState().modules;
+    let expected = mockData.updatedModule.payload;
+
+    expect(modulesState.modules).toEqual([expected]);
+    // could check for positive feedback messages as well
+  });
+
+  test("it should offer feedback when modifying a module fails", async () => {
+    adminAPI_mock.post.mockRejectedValueOnce(mockData.get_failure);
+
+    await dispatch(requestNewModule(mockData.newModule.payload));
+    let expected_msg = mockData.get_failure.message;
+
+    modulesState = store.getState().modules;
+
+    // needs more error message variety
+    expect(modulesState.feedback.message).toEqual(expected_msg);
+    expect(modulesState.feedback.display).toEqual(true);
+  });
+});
+
+describe("Modules: Deleting a Module", () => {
+  test("it should delete an existing module successfully", async () => {
+    // adding fake module
+    adminAPI_mock.post.mockResolvedValueOnce(mockData.newModule.response);
+    await dispatch(requestNewModule(mockData.newModule.payload));
+
+    // delete fake module
+    adminAPI_mock.delete.mockResolvedValueOnce(mockData.deletingModule);
+    await dispatch(requestDeleteModule(mockData.deletingModule.payload._id));
+    // I expect fake module to be gone
+
+    modulesState = store.getState().modules;
+
+    expect(modulesState.modules).toEqual([]);
+  });
+
+  test("it should offer feedback when deleting a module fails", async () => {
+    adminAPI_mock.delete.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestNewModule(mockData.newModule.payload));
     let expected_msg = mockData.get_failure.message;

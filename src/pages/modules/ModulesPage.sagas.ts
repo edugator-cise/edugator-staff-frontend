@@ -51,7 +51,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
       problems: [],
       _id: response.data.id,
     };
-    console.log("id from created module:", response.data);
+
     yield put(requestNewModuleSuccess(new_module));
   } catch (e) {
     yield put(requestNewModuleFailure(e as Error));
@@ -59,7 +59,6 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
 }
 
 function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
-  console.log("on edit module sagas:", action.payload);
   // request & body
   let body = {
     name: action.payload.name,
@@ -73,9 +72,8 @@ function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
     const response: AxiosResponse<IAdminModule> = yield call(
       moduleModifyRequest
     );
-    console.log("module after modification (backend):", response.data);
 
-    //doesnt have the IAdminModule.problems property (10/18/2021)
+    // reminder: doesnt have the IAdminModule.problems property
     let new_module: IAdminModule = response.data;
     yield put(requestModifyModuleSuccess(new_module));
   } catch (e) {

@@ -97,7 +97,6 @@ export const moduleSlice = createSlice({
 
     /* PUT Request Modules */
     requestModifyModule: (state, action: PayloadAction<IModuleBase>) => {
-      console.log("on edit module start:", action.payload);
       return { ...state, isLoading: true };
     },
     requestModifyModuleSuccess: (state, action: PayloadAction<IModuleBase>) => {
@@ -105,18 +104,14 @@ export const moduleSlice = createSlice({
       let modified = action.payload._id;
       let index = state.modules.findIndex((module) => module._id === modified);
 
-      // weird workaround since module from backend
+      // workaround since module from backend
       // doesnt have the "problems" property
       let new_module = { ...action.payload, problems: [] };
-
-      console.log("module after modification (reducer):", new_module);
-
-      // TODO
-      // Planning to add a title to the feedback message
-
       // replace old module with new module
       state.modules = state.modules.fill(new_module, index, index + 1);
 
+      // TODO
+      // Planning to add a title to the feedback message
       state.feedback.message = AlertMsg[action.type];
       state.feedback.type = AlertType.success;
       state.feedback.display = true;
@@ -197,7 +192,6 @@ export const moduleSlice = createSlice({
       };
     },
     openEditDialog: (state, action: PayloadAction<IModuleBase>) => {
-      console.log("On openEditDialog:", action.payload);
       return {
         ...state,
         dialogState: {
