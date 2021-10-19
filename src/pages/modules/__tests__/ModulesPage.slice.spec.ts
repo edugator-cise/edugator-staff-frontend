@@ -1,12 +1,13 @@
-import axios from "axios";
 import store from "../../../app/common/store";
-import { IModule, IModuleState } from "../types";
+import { IModuleState } from "../types";
+import { IAdminModule } from "../types";
 import {
   getBaseModuleState,
   requestModules,
   requestNewModule,
   clearState,
 } from "../ModulesPage.slice";
+import adminAPI from "../../../app/common/apiClient";
 
 const dispatch = store.dispatch;
 let modulesState: IModuleState;
@@ -32,7 +33,7 @@ describe("Modules Reducer Base State", () => {
 const mockData = {
   newModule: {
     payload: { name: "Test 0", number: 0 },
-    response: { data: "asdfgh" },
+    response: { data: { id: "asdfgh" } },
   },
   modulesFound: {
     data: [
@@ -46,14 +47,16 @@ const mockData = {
   },
 };
 
-jest.mock("axios");
-const axios_mock = axios as jest.Mocked<typeof axios>;
+jest.mock("../../../app/common/apiClient");
+const adminAPI_mock = adminAPI as jest.Mocked<typeof adminAPI>;
 
 describe("Modules: Getting Modules", () => {
   test("it should get modules when fetching from v1/module/WithProblems", async () => {
-    axios_mock.request.mockImplementationOnce(
+    /*
+    adminAPI_mock.get.mockImplementationOnce(
       () => Promise.resolve(mockData.modulesFound) // success
-    );
+    );*/
+    adminAPI_mock.get.mockResolvedValueOnce(mockData.modulesFound);
     let expected = mockData.modulesFound.data;
 
     await dispatch(requestModules()); // await does have an effect
@@ -63,7 +66,7 @@ describe("Modules: Getting Modules", () => {
   });
 
   test("it should offer feedback when fetching modules fails", async () => {
-    axios_mock.request.mockImplementationOnce(
+    adminAPI_mock.get.mockImplementationOnce(
       () => Promise.reject(mockData.get_failure) // reject
     );
     let expected_msg = mockData.get_failure.message;
@@ -78,14 +81,14 @@ describe("Modules: Getting Modules", () => {
 
 describe("Modules: Adding a Module", () => {
   test("it should add a module successfully", async () => {
-    axios_mock.request.mockImplementationOnce(() =>
+    adminAPI_mock.post.mockImplementationOnce(() =>
       Promise.resolve(mockData.newModule.response)
     );
-    let expected: IModule = {
+    let expected: IAdminModule = {
       name: mockData.newModule.payload.name,
       number: mockData.newModule.payload.number,
       problems: [],
-      _id: mockData.newModule.response.data,
+      _id: mockData.newModule.response.data.id,
     };
 
     await dispatch(requestNewModule(mockData.newModule.payload));
@@ -95,7 +98,7 @@ describe("Modules: Adding a Module", () => {
   });
 
   test("it should offer feedback when adding a module fails", async () => {
-    axios_mock.request.mockImplementationOnce(() =>
+    adminAPI_mock.post.mockImplementationOnce(() =>
       Promise.reject(mockData.get_failure)
     );
     let expected_msg = mockData.get_failure.message;

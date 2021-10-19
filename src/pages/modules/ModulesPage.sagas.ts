@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   requestModules,
@@ -15,23 +15,9 @@ import {
   requestDeleteModuleSuccess,
   requestDeleteModuleFailure,
 } from "./ModulesPage.slice";
-
+import adminAPI from "../../app/common/apiClient";
 import { IModuleBase } from "../../shared/types";
 import { IAdminModule, IRequestMessage } from "./types";
-
-import { LocalStorage } from "../../app/common/LocalStorage";
-const adminAPIurl = "https://edugator-admin.com"; // => base
-
-// unnecessary when interceptor is ready
-const token = LocalStorage.getToken();
-
-// switching to common one later
-const adminAPI = axios.create({
-  baseURL: adminAPIurl,
-  headers: {
-    Authorization: "Bearer " + token,
-  },
-});
 
 function* handleGetModulesRequest(): any {
   // request
@@ -65,7 +51,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
       problems: [],
       _id: response.data.id,
     };
-    console.log("id from created module:", response.data)
+    console.log("id from created module:", response.data);
     yield put(requestNewModuleSuccess(new_module));
   } catch (e) {
     yield put(requestNewModuleFailure(e as Error));
@@ -73,7 +59,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
 }
 
 function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
-  console.log("on edit module sagas:", action.payload)
+  console.log("on edit module sagas:", action.payload);
   // request & body
   let body = {
     name: action.payload.name,
@@ -87,7 +73,7 @@ function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
     const response: AxiosResponse<IAdminModule> = yield call(
       moduleModifyRequest
     );
-    console.log("module after modification (backend):", response.data)
+    console.log("module after modification (backend):", response.data);
 
     //doesnt have the IAdminModule.problems property (10/18/2021)
     let new_module: IAdminModule = response.data;
@@ -109,9 +95,9 @@ function* handleDeleteModulesRequest(action: PayloadAction<string>): any {
     );
 
     let payload = {
-      response: response.data, 
+      response: response.data,
       id: moduleID,
-    }
+    };
 
     yield put(requestDeleteModuleSuccess(payload));
   } catch (e) {
