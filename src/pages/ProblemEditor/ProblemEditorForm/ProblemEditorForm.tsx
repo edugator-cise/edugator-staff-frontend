@@ -1,8 +1,9 @@
-import { TextField } from "@mui/material";
-import { Form, Formik } from "formik";
+import { Paper, TextField } from "@mui/material";
+import { Field, Form, Formik, FieldProps } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
+import { MarkdownEditor } from "../MarkdownEditor/MarkdownEditor";
 import {
   ProblemFields,
   updateProblem,
@@ -12,6 +13,8 @@ import {
 interface Props {
   formRef: any;
 }
+
+//interface MarkdownFieldProps extends FieldProps {}
 
 export const ProblemEditorForm = (props: Props) => {
   const dispatch = useDispatch();
@@ -30,9 +33,18 @@ export const ProblemEditorForm = (props: Props) => {
       errors.templatePackage = "Required";
     }
 
+    console.log(values);
+
     dispatch(validateProblem(Object.entries(errors).length === 0));
 
     return errors;
+  };
+
+  const MarkdownField = ({
+    field, // { name, value, onChange, onBlur }
+    form, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  }: FieldProps) => {
+    return <MarkdownEditor form={form} />;
   };
 
   return (
@@ -46,14 +58,12 @@ export const ProblemEditorForm = (props: Props) => {
     >
       {({ values, handleChange, handleBlur }) => (
         <Form>
+          {/* <Paper elevation={0} variant="outlined">
+            <MarkdownEditor />
+          </Paper> */}
+          <Field name="problemStatement" component={MarkdownField} />
           <TextField
-            name="problemStatement"
-            label="Problem statement"
-            value={values.problemStatement}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <TextField
+            id="template-package"
             name="templatePackage"
             label="Template package"
             value={values.templatePackage}

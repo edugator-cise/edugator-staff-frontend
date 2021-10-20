@@ -1,9 +1,15 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import Editor from "@monaco-editor/react";
+import { PropsOf } from "@mui/lab/node_modules/@mui/system";
+import { FormikProps } from "formik";
 
-export function MarkdownEditor(): React.ReactElement {
+interface Props {
+  form: FormikProps<any>;
+}
+
+export function MarkdownEditor({ form }: Props): React.ReactElement {
   const [markdownText, setMarkdown] = React.useState("# Your markdown here");
   return (
     <Stack
@@ -19,6 +25,7 @@ export function MarkdownEditor(): React.ReactElement {
         <Editor
           defaultLanguage="markdown"
           onChange={(value) => {
+            form.setFieldValue("problemStatement", value);
             setMarkdown(value as string);
           }}
         />
