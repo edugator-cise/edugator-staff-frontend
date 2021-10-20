@@ -32,7 +32,6 @@ export class LocalStorage {
    */
   static checkUnauthorized(e: any): boolean {
     if ((e as AxiosError)?.response?.status === 401) {
-      this.removeToken();
       return true;
     }
     return false;
