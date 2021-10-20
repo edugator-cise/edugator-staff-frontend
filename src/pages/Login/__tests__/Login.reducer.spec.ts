@@ -6,6 +6,8 @@ import {
 } from "../LoginPage.slice";
 
 describe("Auth Reducer", () => {
+  jest.mock("../../../app/common/apiClient");
+
   it("should handle request login", () => {
     const baseLoginState = store.getState().login;
 
