@@ -53,10 +53,8 @@ export const CodeEditorPage = () => {
           </Box>
           <Grid
             container
-            xs={12}
-            md={10}
             spacing={2}
-            sx={{ margin: 0, padding: 0, height: "100%", maxWidth: "100%" }}
+            sx={{ margin: 0, pr: 4, height: "100%", maxWidth: "100%" }}
           >
             {currentProblem === undefined ? (
               <EmptyState />

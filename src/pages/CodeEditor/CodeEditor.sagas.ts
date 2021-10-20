@@ -1,9 +1,10 @@
-import { call, cancelled, put, takeEvery } from "redux-saga/effects";
+import { call, cancelled, put, takeEvery, race, take } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,
   setNavStructure,
   setProblems,
+  setCurrentProblem,
   setIsLoading,
   setRunningSubmission,
   requestRunCode,
@@ -125,6 +126,7 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   } finally {
     if (yield cancelled()) {
       //TODO notifiy user
+      yield put(setRunningSubmission(false))
     }
   }
 }
@@ -151,7 +153,18 @@ function* runCodeSubmission(
   } catch (e) {
     yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
+  } finally {
+    if (yield(cancelled())) {
+      yield put(setRunningSubmission(false))
+    }
   }
+}
+
+function* submissionRace(action: PayloadAction<ICodeSubmission & { problemId: string }>) {
+  yield race({
+    task: call(runCodeSubmission, action),
+    cancel: take(setCurrentProblem.type)
+  })
 }
 
 function* codeEditorSaga() {
@@ -160,7 +173,7 @@ function* codeEditorSaga() {
     handleRequestModulesAndProblems
   );
   yield takeEvery(requestRunCode.type, runCodeRequest);
-  yield takeEvery(submitCode.type, runCodeSubmission);
+  yield takeEvery(submitCode.type, submissionRace);
 }
 
 export default codeEditorSaga;

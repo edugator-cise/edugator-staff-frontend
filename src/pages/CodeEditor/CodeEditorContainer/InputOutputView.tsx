@@ -77,6 +77,7 @@ export const InputOutputView = () => {
               id="outlined-stdin"
               multiline
               minRows={6}
+              maxRows={6}
               value={stdin}
               onChange={handleStdinChange}
               aria-describedby="outlined-stdin-text"

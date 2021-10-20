@@ -10,7 +10,6 @@ interface ErrorObject {
   errorMessage: string;
 }
 export interface CodeEditorContainerState {
-  hasReceivedProblems: boolean;
   currentProblem: IProblem | undefined;
   navStructure: INavigationItem[];
   isLoading: boolean;
@@ -26,7 +25,6 @@ export interface CodeEditorContainerState {
 }
 
 const initialState: CodeEditorContainerState = {
-  hasReceivedProblems: false,
   isLoading: true,
   currentProblem: undefined,
   navStructure: [],
@@ -78,9 +76,6 @@ export const codeEditorSlice = createSlice({
   name: "CodeEditor",
   initialState: getInitialCodeEditorState(),
   reducers: {
-    setReceivedProblems: (state, action: PayloadAction<boolean>) => {
-      state.hasReceivedProblems = action.payload;
-    },
     setCurrentProblem: (state, action: PayloadAction<string>) => {
       const currentProblem = filterProblemById(state, action.payload);
       if (!currentProblem) {
@@ -149,7 +144,6 @@ export const codeEditorSlice = createSlice({
 });
 
 export const {
-  setReceivedProblems,
   setCurrentProblem,
   setCodeBody,
   setNavStructure,

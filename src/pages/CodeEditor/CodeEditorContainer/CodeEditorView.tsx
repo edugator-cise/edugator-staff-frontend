@@ -109,6 +109,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   return (
     <Paper>
       <ColumnContainer>
+        <a href={templatePackage} style={{textDecoration: "none"}} target="_blank" rel="noreferrer">
         <Button
           title="Download Template"
           variant="outlined"
@@ -117,6 +118,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         >
           Download Template
         </Button>
+        </a>
         <input
           style={{ display: "none" }}
           ref={hiddenFileInput}
@@ -176,6 +178,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         <Button
           variant="outlined"
           color="primary"
+          disabled={isSubmissionRunning}
           sx={{ mr: 2 }}
           onClick={() =>
             dispatch(
@@ -193,6 +196,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         <Button
           variant="contained"
           color="primary"
+          disabled={isSubmissionRunning}
           sx={{ mr: 2 }}
           onClick={() =>
             dispatch(
