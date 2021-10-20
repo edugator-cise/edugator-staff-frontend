@@ -4,7 +4,7 @@ import { Sidenav } from "./SideNav";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "./CodeEditorSlice";
-import { Grid, CircularProgress, Box, Stack, Alert } from "@mui/material";
+import { Grid, CircularProgress, Box, Container } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
@@ -17,9 +17,6 @@ export const CodeEditorPage = () => {
   const currentProblem = useSelector(
     (state: RootState) => state.codeEditor.currentProblem
   );
-  const runCodeError = useSelector(
-    (state: RootState) => state.codeEditor.runCodeError
-  );
   useEffect(() => {
     dispatch(requestModulesAndProblems(true));
   }, [dispatch]);
@@ -31,21 +28,36 @@ export const CodeEditorPage = () => {
           justifyContent="center"
           direction="column"
           alignItems="center"
+          sx={{ height: "calc(100vh-64px)" }}
         >
-          <Box minHeight="20vh" />
-          <CircularProgress />
+          <Box>
+            <CircularProgress />
+          </Box>
         </Grid>
       </CodeLayoutContainer>
     );
   } else {
     return (
       <CodeLayoutContainer>
-        <Grid container spacing={0}>
-          <Grid item xs={12} md={2}>
+        <Box
+          sx={{
+            height: "calc(100vh - 64px)",
+            m: 0,
+            display: "flex",
+            flex: "1 1 auto",
+          }}
+        >
+          <Box sx={{ height: "100%", width: 56, backgroundColor: "#2340a5" }} />
+          <Box sx={{ height: "100%", width: 216, backgroundColor: "#ffffff" }}>
             <Sidenav />
-          </Grid>
-
-          <Grid container item xs={12} md={10} spacing={2}>
+          </Box>
+          <Grid
+            container
+            xs={12}
+            md={10}
+            spacing={2}
+            sx={{ margin: 0, padding: 0, height: "100%", maxWidth: "100%" }}
+          >
             {currentProblem === undefined ? (
               <EmptyState />
             ) : (
@@ -57,18 +69,21 @@ export const CodeEditorPage = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={8}>
-                  <Stack spacing={2} sx={{ margin: 2 }}>
+                  <Container
+                    disableGutters
+                    sx={{ flexDirection: "column", pt: 2 }}
+                  >
                     <CodeEditorView
                       code={currentProblem.code.body}
                       templatePackage={currentProblem.templatePackage}
                     />
                     <InputOutputView />
-                  </Stack>
+                  </Container>
                 </Grid>
               </>
             )}
           </Grid>
-        </Grid>
+        </Box>
       </CodeLayoutContainer>
     );
   }

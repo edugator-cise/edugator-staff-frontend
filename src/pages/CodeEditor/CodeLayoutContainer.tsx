@@ -1,8 +1,9 @@
-import { AppBar, Toolbar, Typography, Box, Alert, Grow } from "@mui/material";
+import { Box, Alert, Grow } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { setRunCodeError } from "./CodeEditorSlice";
+import VerticalNavigation from "../../shared/VerticalNavigation";
 interface Props {
   children: JSX.Element[] | JSX.Element;
 }
@@ -19,13 +20,7 @@ export const CodeLayoutContainer = ({ children }: Props) => {
       flexDirection="column"
       sx={{ bgcolor: "#f0f0f0" }}
     >
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h5" component="h1">
-            EDUGATOR
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <VerticalNavigation light={false} />
       {errorMessage.hasError && (
         <Grow in timeout={500}>
           <Alert

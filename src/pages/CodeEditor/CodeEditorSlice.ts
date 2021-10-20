@@ -83,11 +83,16 @@ export const codeEditorSlice = createSlice({
     },
     setCurrentProblem: (state, action: PayloadAction<string>) => {
       const currentProblem = filterProblemById(state, action.payload);
-      if (currentProblem) {
-        state.currentProblem = { ...currentProblem };
-        state.codeBody = currentProblem.code.body;
-        state.runningSubmission = false;
+      if (!currentProblem) {
+        return state;
       }
+      return {
+        ...state,
+        ...resetinputOutputViewState(),
+        currentProblem: { ...currentProblem },
+        codeBody: currentProblem.code.body,
+        runningSubmission: false,
+      };
     },
     setNavStructure: (state, action: PayloadAction<INavigationItem[]>) => {
       state.navStructure = action.payload;

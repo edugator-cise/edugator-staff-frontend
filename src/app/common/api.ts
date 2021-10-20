@@ -1,6 +1,5 @@
 import axios from "axios";
 import { baseAPIURL } from "../../shared/constants";
-import { LocalStorage } from "../../app/common/LocalStorage";
 const client = axios.create({
   baseURL: baseAPIURL,
   headers: {

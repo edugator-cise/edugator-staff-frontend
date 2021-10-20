@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
-import { setActiveTab, setStdin, setCompilerOutput } from "../CodeEditorSlice";
+import { setActiveTab, setStdin } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/common/store";
@@ -12,27 +12,11 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
 const TabBar = styled("div")(
-  ({ theme }) => `
+  () => `
   display: flex;
   justify-content: flex-start;
   width: 100%;
   background-color: rgb(250,250,250);
-`
-);
-
-const OutputPaper = styled(Paper)(
-  ({ theme }) => `
-  height: 100%;
-  white-space: pre-wrap;
-  height: auto;
-  box-shadow: none;
-  position: relative;
-  padding: ${theme.spacing(1)} ${theme.spacing(2)};
-  line-height: 20px;
-  font-weight: 400;
-  border-radius: 0;
-  overflow: auto;
-  background-color: #f7f9fa;
 `
 );
 
@@ -64,7 +48,7 @@ export const InputOutputView = () => {
   };
 
   return (
-    <Paper>
+    <Paper sx={{ mt: 2 }}>
       <TabBar>
         <Tabs
           value={activeTab}
@@ -86,7 +70,7 @@ export const InputOutputView = () => {
           <Tab disableRipple label="Submission"></Tab>
         </Tabs>
       </TabBar>
-      <Box sx={{ height: "20vh", padding: 2 }}>
+      <Box sx={{ height: "20vh", pt: 2, pr: 2, pl: 2, pb: 1.5 }}>
         {activeTab === 0 ? (
           <FormControl sx={{ width: "100%" }} variant="outlined">
             <OutlinedInput

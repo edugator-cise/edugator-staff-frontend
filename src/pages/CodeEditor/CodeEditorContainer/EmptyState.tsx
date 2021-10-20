@@ -13,7 +13,7 @@ const DeveloperImage = styled("img")(
 export const EmptyState = () => {
   return (
     <Container
-      sx={{ height: "100%", display: "flex", justifyContent: "center" }}
+      sx={{ height: "100vh - 64px", display: "flex", justifyContent: "center" }}
     >
       <Fade in appear>
         <div style={{ textAlign: "center" }}>

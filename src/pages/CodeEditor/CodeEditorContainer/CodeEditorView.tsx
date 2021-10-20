@@ -23,6 +23,9 @@ const EditorContainer = styled("div")(
   ({ theme }) => `
   position: relative;
   display: block;
+  margin-left: ${theme.spacing(2)};
+  margin-right: ${theme.spacing(2)};
+  border: solid 1px #e2e2e2;
 `
 );
 
@@ -104,11 +107,11 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     }
   };
   return (
-    <Paper sx={{ minHeight: "50vh" }}>
+    <Paper>
       <ColumnContainer>
         <Button
           title="Download Template"
-          // variant="contained"
+          variant="outlined"
           startIcon={<CloudDownload />}
           sx={{ marginRight: 1, marginTop: 1 }}
         >
@@ -122,7 +125,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         />
         <Button
           title="Choose File"
-          // variant="contained"
+          variant="outlined"
           startIcon={<Add />}
           onClick={(e) => handleChooseFile(e)}
           sx={{ marginRight: 1, marginTop: 1 }}
@@ -131,6 +134,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         </Button>
         <Button
           title="Download Submission"
+          variant="outlined"
           startIcon={<GetApp />}
           onClick={handleDownload}
           sx={{ marginRight: 1, marginTop: 1 }}
@@ -139,6 +143,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         </Button>
         <Button
           title="Reset Code"
+          variant="outlined"
           startIcon={<RotateLeft />}
           onClick={handleReset}
           sx={{ marginRight: 1, marginTop: 1 }}
@@ -158,7 +163,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
           <CircularProgress color="inherit" />
         </Backdrop>
         <Editor
-          height="50vh"
+          height="40vh"
           defaultLanguage="cpp"
           defaultValue={currentCode}
           onChange={(value) => {
@@ -169,6 +174,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
       </EditorContainer>
       <ColumnContainer>
         <Button
+          variant="outlined"
+          color="primary"
           sx={{ mr: 2 }}
           onClick={() =>
             dispatch(

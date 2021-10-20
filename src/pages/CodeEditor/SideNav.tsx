@@ -41,7 +41,7 @@ export const Sidenav = () => {
     <List
       component="nav"
       sx={{
-        height: "calc(100vh - 64px)",
+        height: "calc(100vh - 80px)",
         width: "100%",
         bgcolor: "#ffffff",
         overflowY: "auto",
@@ -65,7 +65,12 @@ export const Sidenav = () => {
               handleClick(value.name);
             }}
           >
-            <ListItemText primary={`${indexVal + 1}. ${value.name}`} />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontSize: "0.8rem" },
+              }}
+              primary={`${indexVal + 1}. ${value.name}`}
+            />
             {menu[value.name + "_" + indexVal] ? (
               <ExpandLess />
             ) : (
@@ -82,6 +87,9 @@ export const Sidenav = () => {
                     onClick={() => dispatch(setCurrentProblem(problemItem._id))}
                   >
                     <ListItemText
+                      primaryTypographyProps={{
+                        sx: { fontSize: "0.8rem" },
+                      }}
                       primary={`${indexVal + 1}.${index + 1} ${
                         problemItem.problemName
                       }`}

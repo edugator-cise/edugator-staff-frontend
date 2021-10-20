@@ -10,8 +10,12 @@ import {
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LightModeLogo from "../assets/LightModeLogo.svg";
+import DarkModeLogo from "../assets/DarkModeLogo.svg";
 
-function VerticalNavigation() {
+interface Props {
+  light: boolean;
+}
+function VerticalNavigation(props: Props) {
   const [anchorProjects, setAnchorProjects] = useState<any>(null);
   const [anchorModules, setAnchorModules] = useState<any>(null);
   const [anchorLearn, setAnchorLearn] = useState<any>(null);
@@ -108,8 +112,18 @@ function VerticalNavigation() {
   ];
 
   return (
-    <Toolbar style={{ paddingLeft: 100, paddingRight: 100, height: 80 }}>
-      <Avatar alt="Example Alt" src={LightModeLogo} />
+    <Toolbar
+      style={{
+        paddingLeft: 100,
+        paddingRight: 100,
+        height: 64,
+        backgroundColor: props.light ? "transparent" : "#152c7c",
+      }}
+    >
+      <Avatar
+        alt="Example Alt"
+        src={props.light ? LightModeLogo : DarkModeLogo}
+      />
       <Typography variant="h5" component="h1"></Typography>
 
       <Grid
@@ -123,7 +137,10 @@ function VerticalNavigation() {
             <>
               <Button
                 key={item.id}
-                style={{ marginRight: 30 }}
+                sx={{
+                  color: props.light ? "inherit" : "#ffffff",
+                  marginRight: 4,
+                }}
                 aria-controls={item.id}
                 aria-haspopup="true"
                 onClick={(event) => item.anchorSet(event.currentTarget)}
@@ -152,7 +169,12 @@ function VerticalNavigation() {
             </>
           );
         })}
-        <Button onClick={() => {}}>Schedule</Button>
+        <Button
+          sx={{ color: props.light ? "inherit" : "#ffffff" }}
+          onClick={() => {}}
+        >
+          Schedule
+        </Button>
       </Grid>
     </Toolbar>
   );
