@@ -25,6 +25,11 @@ describe("problemEditorContainer reducer", () => {
       title: "",
       language: "C++",
     },
+    serverConfig: {
+      buildCommand: "",
+      timeLimit: 0,
+      memoryLimit: 0
+    }
   };
 
   it("should handle metadata validation", () => {

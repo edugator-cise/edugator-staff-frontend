@@ -108,7 +108,7 @@ function VerticalNavigation() {
   ];
 
   return (
-    <Toolbar style={{paddingLeft: 100, paddingRight: 100, height: 80}}>
+    <Toolbar style={{ paddingLeft: 100, paddingRight: 100, height: 80 }}>
       <Avatar alt="Example Alt" src={LightModeLogo} />
       <Typography variant="h5" component="h1"></Typography>
 

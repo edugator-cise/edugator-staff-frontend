@@ -93,7 +93,6 @@ export const MetadataForm = (props: Props) => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        dispatch(validateMetadata(true));
         dispatch(updateMetadata(values));
       }}
       innerRef={props.formRef}

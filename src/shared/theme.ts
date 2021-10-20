@@ -3,21 +3,11 @@ import { createTheme } from "@mui/material/styles";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
-  interface Theme {
-    
-    
-  }
+  interface Theme {}
   // allow configuration using `createTheme`
-  interface ThemeOptions {
-    
-    
-  }
-  interface PaletteOptions {
-    
-  }
+  interface ThemeOptions {}
+  interface PaletteOptions {}
 }
-
-
 
 const theme = createTheme({
   transitions: {
@@ -29,7 +19,7 @@ const theme = createTheme({
       complex: 375,
       enteringScreen: 225,
       leavingScreen: 195,
-    }
+    },
   },
   components: {
     MuiButton: {
@@ -44,16 +34,15 @@ const theme = createTheme({
           borderRadius: 9,
         },
         text: {
-          color: 'black',
-        }
-      }
+          color: "black",
+        },
+      },
     },
   },
   typography: {
     fontFamily: "Inter",
     button: {
       textTransform: "none",
-      
     },
     h2: {
       fontWeight: 600,
@@ -72,11 +61,11 @@ const theme = createTheme({
     primary: {
       main: blue[500],
       light: blue[100],
-      dark: '#142F73'
+      dark: "#142F73",
     },
     secondary: {
-      main: '#3A4F58',
-    }
+      main: "#3A4F58",
+    },
   },
   breakpoints: {
     values: {
