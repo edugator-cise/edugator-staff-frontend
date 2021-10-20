@@ -37,7 +37,7 @@ export const ProblemEditorContainer = () => {
   const formRef = useRef<FormikValues>();
 
   return (
-    <Box display="flex" flexDirection="column" flexGrow={1}>
+    <Box display="flex" flexDirection="column" flexGrow={1} textAlign="left">
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           return (
