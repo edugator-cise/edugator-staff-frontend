@@ -17,7 +17,6 @@ const ProblemDescriptionPaper = styled(Paper)(
   }
   overflow-y: auto;
 `
-
 );
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (

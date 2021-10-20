@@ -109,15 +109,20 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   return (
     <Paper>
       <ColumnContainer>
-        <a href={templatePackage} style={{textDecoration: "none"}} target="_blank" rel="noreferrer">
-        <Button
-          title="Download Template"
-          variant="outlined"
-          startIcon={<CloudDownload />}
-          sx={{ marginRight: 1, marginTop: 1 }}
+        <a
+          href={templatePackage}
+          style={{ textDecoration: "none" }}
+          target="_blank"
+          rel="noreferrer"
         >
-          Download Template
-        </Button>
+          <Button
+            title="Download Template"
+            variant="outlined"
+            startIcon={<CloudDownload />}
+            sx={{ marginRight: 1, marginTop: 1 }}
+          >
+            Download Template
+          </Button>
         </a>
         <input
           style={{ display: "none" }}
