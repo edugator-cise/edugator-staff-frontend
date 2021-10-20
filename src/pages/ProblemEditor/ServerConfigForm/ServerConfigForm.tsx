@@ -52,6 +52,7 @@ export const ServerConfigForm = (props: Props) => {
         <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <Stack spacing={5}>
             <TextField
+              id="time-limit"
               name="timeLimit"
               label="Time limit"
               inputProps={{
@@ -71,6 +72,7 @@ export const ServerConfigForm = (props: Props) => {
               sx={{ width: "25%" }}
             />
             <TextField
+              id="memory-limit"
               name="memoryLimit"
               label="Memory limit"
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
@@ -87,6 +89,7 @@ export const ServerConfigForm = (props: Props) => {
               sx={{ width: "25%" }}
             />
             <TextField
+              id="build-command"
               name="buildCommand"
               label="Build command"
               onChange={handleChange}
