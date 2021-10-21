@@ -13,7 +13,8 @@ const Holder = styled("div")({
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  background: 'linear-gradient(transparent, transparent, transparent, white), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
+  background:
+    "linear-gradient(transparent, transparent, transparent, white), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)",
   backgroundSize: "35em",
   [theme.breakpoints.up("xl")]: {
     height: 800,
@@ -53,7 +54,11 @@ function LandingHome() {
   return (
     <Fade in={true}>
       <Holder>
-        <Grow in={true} style={{ transitionDelay: "50ms" }} timeout={{enter: 1000}}>
+        <Grow
+          in={true}
+          style={{ transitionDelay: "50ms" }}
+          timeout={{ enter: 1000 }}
+        >
           <TextHolder>
             <Typography variant="h2">Learn and practice</Typography>
             <Typography variant="h2" color="primary">
@@ -87,7 +92,13 @@ function LandingHome() {
             </ButtonHolder>
           </TextHolder>
         </Grow>
-        <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={{enter: 1000}}>
+        <Slide
+          direction="left"
+          in={true}
+          mountOnEnter
+          unmountOnExit
+          timeout={{ enter: 1000 }}
+        >
           <img
             src={CodingPage}
             alt="Edugator Coding Page"

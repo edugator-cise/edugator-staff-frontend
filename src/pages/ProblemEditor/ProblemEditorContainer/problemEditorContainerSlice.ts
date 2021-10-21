@@ -12,6 +12,12 @@ export interface MetadataFields {
   dueDate: Date;
 }
 
+export interface ServerConfigFields {
+  timeLimit: number;
+  memoryLimit: number;
+  buildCommand: string;
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -29,6 +35,7 @@ export interface ProblemEditorContainerState {
 
   problem: ProblemFields;
   metadata: MetadataFields;
+  serverConfig: ServerConfigFields;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -47,6 +54,11 @@ const initialState: ProblemEditorContainerState = {
     hidden: false,
     language: "C++",
     dueDate: new Date(),
+  },
+  serverConfig: {
+    timeLimit: 0,
+    memoryLimit: 0,
+    buildCommand: "",
   },
 };
 
@@ -108,6 +120,9 @@ export const problemEditorContainerSlice = createSlice({
     updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
       state.metadata = action.payload;
     },
+    updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
+      state.serverConfig = action.payload;
+    },
   },
 });
 
@@ -122,5 +137,6 @@ export const {
   decrementActiveStep,
   updateProblem,
   updateMetadata,
+  updateServerConfig,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
