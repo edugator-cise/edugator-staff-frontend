@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { INavigationItem, IResultSubmission, ICodeSubmission } from "./types";
+import { IProblem } from "../../shared/types";
 interface ICompilerOutput {
   compilerMessage: string;
   compilerBody: string;

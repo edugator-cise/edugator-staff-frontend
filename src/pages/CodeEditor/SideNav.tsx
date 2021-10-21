@@ -9,13 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { setCurrentProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
+import { INavigationItem, IProblemItem } from "./types";
 interface ClickedMenu {
   [key: string]: Boolean;
-}
-
-interface IProblemItem {
-  problemName: string;
-  _id: string;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -51,7 +47,11 @@ export const Sidenav = () => {
         <ListSubheader
           component="div"
           id="nested-list-subheader"
-          sx={{ borderBottom: "1px solid #e2e2e2" }}
+          sx={{
+            borderBottom: "1px solid #e2e2e2",
+            textAlign: "left",
+            color: "#000000",
+          }}
         >
           Exercises
         </ListSubheader>

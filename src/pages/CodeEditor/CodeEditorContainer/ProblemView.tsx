@@ -1,6 +1,6 @@
 import React from "react";
 import { Markdown } from "../../../shared/Markdown";
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, Grow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 interface Props {
   problemTitle: string;
@@ -20,11 +20,13 @@ const ProblemDescriptionPaper = styled(Paper)(
 );
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
-    <ProblemDescriptionPaper>
-      <Typography variant="h4" sx={{ textAlign: "left" }}>
-        {problemTitle}
-      </Typography>
-      <Markdown markdownString={problemStatement} />
-    </ProblemDescriptionPaper>
+    <Grow in appear timeout={500}>
+      <ProblemDescriptionPaper>
+        <Typography variant="h4" sx={{ textAlign: "left" }}>
+          {problemTitle}
+        </Typography>
+        <Markdown markdownString={problemStatement} />
+      </ProblemDescriptionPaper>
+    </Grow>
   );
 };

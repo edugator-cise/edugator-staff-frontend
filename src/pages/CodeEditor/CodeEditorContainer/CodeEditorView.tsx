@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
-import { Paper, Button } from "@mui/material";
+import { Paper, Button, Grow } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
@@ -107,117 +107,119 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     }
   };
   return (
-    <Paper>
-      <ColumnContainer>
-        <a
-          href={templatePackage}
-          style={{ textDecoration: "none" }}
-          target="_blank"
-          rel="noreferrer"
-        >
+    <Grow in appear timeout={500}>
+      <Paper>
+        <ColumnContainer>
+          <a
+            href={templatePackage}
+            style={{ textDecoration: "none" }}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button
+              title="Download Template"
+              variant="outlined"
+              startIcon={<CloudDownload />}
+              sx={{ marginRight: 1, marginTop: 1 }}
+            >
+              Download Template
+            </Button>
+          </a>
+          <input
+            style={{ display: "none" }}
+            ref={hiddenFileInput}
+            type="file"
+            onChange={(e) => parseFile(e)}
+          />
           <Button
-            title="Download Template"
+            title="Choose File"
             variant="outlined"
-            startIcon={<CloudDownload />}
+            startIcon={<Add />}
+            onClick={(e) => handleChooseFile(e)}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            Download Template
+            Choose File
           </Button>
-        </a>
-        <input
-          style={{ display: "none" }}
-          ref={hiddenFileInput}
-          type="file"
-          onChange={(e) => parseFile(e)}
-        />
-        <Button
-          title="Choose File"
-          variant="outlined"
-          startIcon={<Add />}
-          onClick={(e) => handleChooseFile(e)}
-          sx={{ marginRight: 1, marginTop: 1 }}
-        >
-          Choose File
-        </Button>
-        <Button
-          title="Download Submission"
-          variant="outlined"
-          startIcon={<GetApp />}
-          onClick={handleDownload}
-          sx={{ marginRight: 1, marginTop: 1 }}
-        >
-          Download Submission
-        </Button>
-        <Button
-          title="Reset Code"
-          variant="outlined"
-          startIcon={<RotateLeft />}
-          onClick={handleReset}
-          sx={{ marginRight: 1, marginTop: 1 }}
-        >
-          Reset Code
-        </Button>
-      </ColumnContainer>
-      <EditorContainer>
-        <Backdrop
-          sx={{
-            color: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-            position: "absolute",
-          }}
-          open={isSubmissionRunning}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-        <Editor
-          height="40vh"
-          defaultLanguage="cpp"
-          defaultValue={currentCode}
-          onChange={(value) => {
-            dispatch(setCodeBody(value as string));
-          }}
-          onMount={handleEditorMount}
-        />
-      </EditorContainer>
-      <ColumnContainer>
-        <Button
-          variant="outlined"
-          color="primary"
-          disabled={isSubmissionRunning}
-          sx={{ mr: 2 }}
-          onClick={() =>
-            dispatch(
-              requestRunCode({
-                code: currentCode,
-                header: header as string,
-                footer: footer as string,
-                stdin,
-              })
-            )
-          }
-        >
-          Run Code
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={isSubmissionRunning}
-          sx={{ mr: 2 }}
-          onClick={() =>
-            dispatch(
-              submitCode({
-                code: currentCode,
-                header: header as string,
-                footer: footer as string,
-                stdin,
-                problemId: problemId as string,
-              })
-            )
-          }
-        >
-          Submit
-        </Button>
-      </ColumnContainer>
-    </Paper>
+          <Button
+            title="Download Submission"
+            variant="outlined"
+            startIcon={<GetApp />}
+            onClick={handleDownload}
+            sx={{ marginRight: 1, marginTop: 1 }}
+          >
+            Download Submission
+          </Button>
+          <Button
+            title="Reset Code"
+            variant="outlined"
+            startIcon={<RotateLeft />}
+            onClick={handleReset}
+            sx={{ marginRight: 1, marginTop: 1 }}
+          >
+            Reset Code
+          </Button>
+        </ColumnContainer>
+        <EditorContainer>
+          <Backdrop
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+              position: "absolute",
+            }}
+            open={isSubmissionRunning}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+          <Editor
+            height="40vh"
+            defaultLanguage="cpp"
+            defaultValue={currentCode}
+            onChange={(value) => {
+              dispatch(setCodeBody(value as string));
+            }}
+            onMount={handleEditorMount}
+          />
+        </EditorContainer>
+        <ColumnContainer>
+          <Button
+            variant="outlined"
+            color="primary"
+            disabled={isSubmissionRunning}
+            sx={{ mr: 2 }}
+            onClick={() =>
+              dispatch(
+                requestRunCode({
+                  code: currentCode,
+                  header: header as string,
+                  footer: footer as string,
+                  stdin,
+                })
+              )
+            }
+          >
+            Run Code
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={isSubmissionRunning}
+            sx={{ mr: 2 }}
+            onClick={() =>
+              dispatch(
+                submitCode({
+                  code: currentCode,
+                  header: header as string,
+                  footer: footer as string,
+                  stdin,
+                  problemId: problemId as string,
+                })
+              )
+            }
+          >
+            Submit
+          </Button>
+        </ColumnContainer>
+      </Paper>
+    </Grow>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Typography, Fade } from "@mui/material";
+import { Container, Typography, Grow } from "@mui/material";
 import DeveloperIcon from "../../../assets/developer_activity.svg";
 import { styled } from "@mui/material/styles";
 
@@ -15,7 +15,7 @@ export const EmptyState = () => {
     <Container
       sx={{ height: "100vh - 64px", display: "flex", justifyContent: "center" }}
     >
-      <Fade in appear>
+      <Grow in appear timeout={500}>
         <div style={{ textAlign: "center" }}>
           <DeveloperImage src={DeveloperIcon} />
           <div>
@@ -25,7 +25,7 @@ export const EmptyState = () => {
             Choose a problem on the navigation bar to start!
           </Typography>
         </div>
-      </Fade>
+      </Grow>
     </Container>
   );
 };
