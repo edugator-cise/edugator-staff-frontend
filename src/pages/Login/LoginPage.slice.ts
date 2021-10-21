@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocalStorage } from "../../app/common/LocalStorage";
-import setAuthToken from "../../app/common/setAuthToken";
 
 export interface IAuthState {
   isLoading: boolean;
@@ -38,7 +37,6 @@ export const loginSlice = createSlice({
       };
     },
     receiveLoginSuccess(state, action) {
-      setAuthToken(action.payload);
       return {
         ...state,
         isLoading: false,
@@ -54,8 +52,7 @@ export const loginSlice = createSlice({
     },
     requestLogout(state) {
       LocalStorage.removeToken();
-      setAuthToken(false);
-      return { ...state, isLoading: false };
+      return { ...state, isLoading: false, authorizationToken: "" };
     },
     resetErrorMessage(state) {
       return {
