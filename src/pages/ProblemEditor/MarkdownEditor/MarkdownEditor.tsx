@@ -10,7 +10,9 @@ interface Props {
 }
 
 export function MarkdownEditor({ form }: Props): React.ReactElement {
-  const [markdownText, setMarkdown] = React.useState("# Your markdown here");
+  const [markdownText, setMarkdown] = React.useState(
+    form.values.problemStatement
+  );
   return (
     <Stack
       direction="row"
@@ -23,6 +25,7 @@ export function MarkdownEditor({ form }: Props): React.ReactElement {
         <Typography component="h3">Markdown Editor</Typography>
         <Divider />
         <Editor
+          defaultValue={form.values.problemStatement}
           defaultLanguage="markdown"
           onChange={(value) => {
             form.setFieldValue("problemStatement", value);
@@ -34,7 +37,9 @@ export function MarkdownEditor({ form }: Props): React.ReactElement {
       <Stack width="50%" spacing={1} overflow="auto">
         <Typography component="h3">Preview</Typography>
         <Divider />
-        <ReactMarkdown>{markdownText}</ReactMarkdown>
+        <ReactMarkdown>
+          {markdownText || "# Your problem statement here"}
+        </ReactMarkdown>
       </Stack>
     </Stack>
   );
