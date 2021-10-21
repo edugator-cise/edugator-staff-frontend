@@ -18,6 +18,19 @@ export interface ServerConfigFields {
   buildCommand: string;
 }
 
+export enum TestCaseVisibility {
+  IO_HIDDEN = 0,
+  I_VISIBLE_O_HIDDEN = 1,
+  IO_VISBILE = 2,
+}
+
+export interface TestCaseField {
+  hint: string;
+  visibility: TestCaseVisibility;
+  expectedOutput: string;
+  input: string;
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -36,6 +49,7 @@ export interface ProblemEditorContainerState {
   problem: ProblemFields;
   metadata: MetadataFields;
   serverConfig: ServerConfigFields;
+  testCases: TestCaseField[];
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -60,6 +74,7 @@ const initialState: ProblemEditorContainerState = {
     memoryLimit: 0,
     buildCommand: "",
   },
+  testCases: [],
 };
 
 export const problemEditorContainerSlice = createSlice({
@@ -123,6 +138,9 @@ export const problemEditorContainerSlice = createSlice({
     updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
       state.serverConfig = action.payload;
     },
+    updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
+      state.testCases = action.payload;
+    },
   },
 });
 
@@ -138,5 +156,6 @@ export const {
   updateProblem,
   updateMetadata,
   updateServerConfig,
+  updateTestCases,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
