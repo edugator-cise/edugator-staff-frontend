@@ -12,6 +12,15 @@ export interface MetadataFields {
   dueDate: Date;
 }
 
+export interface CodeEditorFields {
+  code: {
+    header: string;
+    body: string;
+    footer: string;
+  };
+  fileExtension: string;
+}
+
 export interface ServerConfigFields {
   timeLimit: number;
   memoryLimit: number;
@@ -33,8 +42,9 @@ export interface ProblemEditorContainerState {
 
   activeStep: number;
 
-  problem: ProblemFields;
   metadata: MetadataFields;
+  problem: ProblemFields;
+  codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
 }
 
@@ -45,15 +55,23 @@ const initialState: ProblemEditorContainerState = {
   serverConfigIsValid: false,
   testEditorIsValid: false,
   activeStep: 0,
-  problem: {
-    problemStatement: "",
-    templatePackage: "",
-  },
   metadata: {
     title: "",
     hidden: false,
     language: "C++",
     dueDate: new Date(),
+  },
+  problem: {
+    problemStatement: "",
+    templatePackage: "",
+  },
+  codeEditor: {
+    code: {
+      header: "",
+      body: "",
+      footer: "",
+    },
+    fileExtension: ".cpp",
   },
   serverConfig: {
     timeLimit: 0,
@@ -120,6 +138,9 @@ export const problemEditorContainerSlice = createSlice({
     updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
       state.metadata = action.payload;
     },
+    updateCodeEditor: (state, action: PayloadAction<CodeEditorFields>) => {
+      state.codeEditor = action.payload;
+    },
     updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
       state.serverConfig = action.payload;
     },
@@ -137,6 +158,7 @@ export const {
   decrementActiveStep,
   updateProblem,
   updateMetadata,
+  updateCodeEditor,
   updateServerConfig,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
