@@ -33,8 +33,6 @@ export const ProblemEditorForm = (props: Props) => {
       errors.templatePackage = "Required";
     }
 
-    console.log(values);
-
     dispatch(validateProblem(Object.entries(errors).length === 0));
 
     return errors;
