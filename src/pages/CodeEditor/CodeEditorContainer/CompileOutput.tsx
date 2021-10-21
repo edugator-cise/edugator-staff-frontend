@@ -2,6 +2,8 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import theme from "../../../shared/theme";
+import { colors } from "../../../shared/constants";
 
 const CompileOutputContainer = styled("div")(
   ({ theme }) => `
@@ -41,10 +43,10 @@ export const CompileOutput = ({
   if (accepted) {
     return (
       <CompileOutputContainer>
-        <Typography variant="h5" color="#388e3c">
+        <Typography variant="h5" color={theme.palette.success.main}>
           Accepted
         </Typography>
-        <Paper sx={{ backgroundColor: "#f0f0f0", height: "60%", p: 2 }}>
+        <Paper sx={{ backgroundColor: colors.lightGray, height: "60%", p: 2 }}>
           {compileBody}
         </Paper>
       </CompileOutputContainer>
@@ -52,13 +54,13 @@ export const CompileOutput = ({
   } else if (accepted === false) {
     return (
       <CompileOutputContainer>
-        <Typography variant="h5" color="#d81b60">
+        <Typography variant="h5" color={theme.palette.error.main}>
           {compileMessage}
         </Typography>
         <Paper
           sx={{
-            backgroundColor: "#fce4ec",
-            color: "#d81b60",
+            backgroundColor: colors.lightPink,
+            color: colors.redText,
             p: 2,
             whiteSpace: "pre-wrap",
           }}

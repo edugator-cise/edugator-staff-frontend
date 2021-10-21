@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { setRunCodeError } from "./CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
+import { colors } from "../../shared/constants";
 interface Props {
   children: JSX.Element[] | JSX.Element;
 }
@@ -18,7 +19,7 @@ export const CodeLayoutContainer = ({ children }: Props) => {
       minHeight="100%"
       display="flex"
       flexDirection="column"
-      sx={{ bgcolor: "#f0f0f0" }}
+      sx={{ bgcolor: colors.lightGray }}
     >
       <VerticalNavigation light={false} />
       {errorMessage.hasError && (
