@@ -30,6 +30,7 @@ describe("problemEditorContainer reducer", () => {
       timeLimit: 0,
       memoryLimit: 0,
     },
+    testCases: [],
   };
 
   it("should handle metadata validation", () => {

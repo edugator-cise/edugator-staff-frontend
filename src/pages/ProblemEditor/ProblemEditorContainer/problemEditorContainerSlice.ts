@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TestCaseField } from "../TestEditor/TestCase.utils";
 
 export interface ProblemFields {
   problemStatement: string;
@@ -16,19 +17,6 @@ export interface ServerConfigFields {
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
-}
-
-export enum TestCaseVisibility {
-  IO_HIDDEN = 0,
-  I_VISIBLE_O_HIDDEN = 1,
-  IO_VISBILE = 2,
-}
-
-export interface TestCaseField {
-  hint: string;
-  visibility: TestCaseVisibility;
-  expectedOutput: string;
-  input: string;
 }
 
 export interface ProblemEditorContainerState {
