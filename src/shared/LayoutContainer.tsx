@@ -45,7 +45,7 @@ export const LayoutContainer = ({
             EDUGATOR
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          {LocalStorage.getToken() && (
+          {history.location.pathname !== Routes.Login.toString() && (
             <Button
               size="large"
               color="secondary"
