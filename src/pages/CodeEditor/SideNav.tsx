@@ -10,15 +10,16 @@ import { RootState } from "../../app/common/store";
 import { setCurrentProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
+import { colors } from "../../shared/constants";
 interface ClickedMenu {
   [key: string]: Boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
   ({ theme }) => `
-  background-color: "#ffffff";
-  border-left: solid 1px #e2e2e2;
-  border-bottom: solid 1px #e2e2e2;
+  background-color: "white";
+  border-left: solid 1px ${colors.borderGray};
+  border-bottom: solid 1px ${colors.borderGray};
 `
 );
 
@@ -39,7 +40,7 @@ export const Sidenav = () => {
       sx={{
         height: "calc(100vh - 80px)",
         width: "100%",
-        bgcolor: "#ffffff",
+        bgcolor: "white",
         overflowY: "auto",
       }}
       aria-labelledby="nested-exercises-list"
@@ -48,7 +49,7 @@ export const Sidenav = () => {
           component="div"
           id="nested-list-subheader"
           sx={{
-            borderBottom: "1px solid #e2e2e2",
+            borderBottom: `1px solid ${colors.borderGray}`,
             textAlign: "left",
             color: "#000000",
           }}
@@ -78,7 +79,7 @@ export const Sidenav = () => {
             )}
           </CustomListItemButton>
           <Collapse in={!!menu[value.name]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding sx={{ bgcolor: "#ffffff" }}>
+            <List component="div" disablePadding sx={{ bgcolor: "white" }}>
               {value.problems.map(
                 (problemItem: IProblemItem, index: number) => (
                   <CustomListItemButton

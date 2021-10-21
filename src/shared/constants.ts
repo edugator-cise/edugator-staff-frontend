@@ -5,6 +5,7 @@ export const unauthorizedErrorMessage =
 
 export const colors = {
   lightGray: "#f0f0f0",
+  borderGray: "#e2e2e2",
   lightPink: "#fce4ec",
   redText: "#d81b60",
 };

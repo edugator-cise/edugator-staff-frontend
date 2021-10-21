@@ -138,7 +138,7 @@ function VerticalNavigation(props: Props) {
               <Button
                 key={item.id}
                 sx={{
-                  color: props.light ? "inherit" : "#ffffff",
+                  color: props.light ? "inherit" : "white",
                   marginRight: 4,
                 }}
                 aria-controls={item.id}

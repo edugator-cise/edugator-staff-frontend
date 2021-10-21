@@ -48,7 +48,7 @@ export const CodeEditorPage = () => {
           }}
         >
           <Box sx={{ height: "100%", width: 56, backgroundColor: "#2340a5" }} />
-          <Box sx={{ height: "100%", width: 216, backgroundColor: "#ffffff" }}>
+          <Box sx={{ height: "100%", width: 216, backgroundColor: "white" }}>
             <Sidenav />
           </Box>
           <Grid

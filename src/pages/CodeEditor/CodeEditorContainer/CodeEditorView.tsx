@@ -9,6 +9,7 @@ import { setCodeBody, requestRunCode, submitCode } from "../CodeEditorSlice";
 import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { colors } from "../../../shared/constants";
 const ColumnContainer = styled("div")(
   ({ theme }) => `
   display: flex;
@@ -25,7 +26,7 @@ const EditorContainer = styled("div")(
   display: block;
   margin-left: ${theme.spacing(2)};
   margin-right: ${theme.spacing(2)};
-  border: solid 1px #e2e2e2;
+  border: solid 1px ${colors.borderGray};
 `
 );
 
