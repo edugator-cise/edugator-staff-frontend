@@ -1,8 +1,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
-import React, { ChangeEvent } from "react";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import Editor from "@monaco-editor/react";
-import { PropsOf } from "@mui/lab/node_modules/@mui/system";
 import { FormikProps } from "formik";
 
 interface Props {
