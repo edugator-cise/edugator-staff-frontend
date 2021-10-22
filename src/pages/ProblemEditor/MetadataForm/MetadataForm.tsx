@@ -128,21 +128,6 @@ export const MetadataForm = (props: Props) => {
                 <Field component={IntegratedDatePicker} name="dueDate" />
               </LocalizationProvider>
             </Box>
-            <Box>
-              <FormControl>
-                <InputLabel>Language</InputLabel>
-                <Select
-                  name="language"
-                  value={values.language}
-                  label="Language"
-                  onChange={handleChange}
-                  sx={{ minWidth: "5rem" }} // this is to ensure the label is not cut off
-                >
-                  <MenuItem value="Java">Java</MenuItem>
-                  <MenuItem value="C++">C++</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
           </Stack>
         </Form>
       )}
