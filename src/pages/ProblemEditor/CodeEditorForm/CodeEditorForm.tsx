@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { Stack } from "@mui/material";
+import { Box, InputLabel, Paper, Stack, TextField } from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -15,6 +15,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
   const initialValues = useAppSelector(
     (state) => state.problemEditorContainer.codeEditor
   );
+
   return (
     <Formik
       initialValues={initialValues}
@@ -25,10 +26,47 @@ export const CodeEditorForm = ({ formRef }: Props) => {
       //validate={validate}
     >
       {({ errors, values, handleChange, handleBlur, touched }) => (
-        <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <Stack>
-            <Editor />
-          </Stack>
+        <Form
+          style={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <InputLabel>Header</InputLabel>
+            <Paper
+              elevation={0}
+              variant="outlined"
+              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
+            >
+              <Editor language="cpp" height="unset" />
+            </Paper>
+          </Box>
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <InputLabel>Header</InputLabel>
+            <Paper
+              elevation={0}
+              variant="outlined"
+              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
+            >
+              <Editor language="cpp" height="unset" />
+            </Paper>
+          </Box>
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <InputLabel>Header</InputLabel>
+            <Paper
+              elevation={0}
+              variant="outlined"
+              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
+            >
+              <Editor language="cpp" height="unset" />
+            </Paper>
+          </Box>
+
+          <Box>
+            <TextField></TextField>
+          </Box>
         </Form>
       )}
     </Formik>
