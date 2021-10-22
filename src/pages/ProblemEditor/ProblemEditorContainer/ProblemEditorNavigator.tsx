@@ -40,6 +40,7 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
 
   const handleNext = () => {
     if (activeStep === 4) {
+      formRef.current?.submitForm();
       console.log("Submitted!");
     } else {
       formRef.current?.submitForm();
