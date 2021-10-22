@@ -9,6 +9,7 @@
 /coverage
 .cache
 /dist
+.vscode
 
 # react-scripts production
 /build
