@@ -2,12 +2,29 @@ import React from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
-import { ModuleDialog, Modules, ModulesSnackbar } from "./components";
+import {
+  Modules,
+  ModuleDialog,
+  DeleteDialog,
+  ModulesSnackbar,
+} from "./components";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
+import { IAdminModule, EmptyModule } from "./types";
 
 export function ModulesPage() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
+
+  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
+  const onDialogClose = () => {
+    setConfirmDelete(false);
+  };
+
+  const [toDelete, setToDelete] = React.useState<IAdminModule>(EmptyModule);
+  const setModuleToDelete = (module: IAdminModule) => {
+    setConfirmDelete(true);
+    setToDelete(module);
+  };
 
   const moduleHeaderButtons = [
     {
@@ -26,6 +43,11 @@ export function ModulesPage() {
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
       <>
         <ModuleDialog />
+        <DeleteDialog
+          open={confirmDelete}
+          handleClose={onDialogClose}
+          toDelete={toDelete}
+        />
         <ModulesSnackbar />
 
         <Grid
@@ -34,7 +56,11 @@ export function ModulesPage() {
           justifyContent="center"
           alignItems="center"
         >
-          {modulesState.isLoading ? <CircularProgress /> : <Modules />}
+          {modulesState.isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Modules setModuleToDelete={setModuleToDelete} />
+          )}
         </Grid>
       </>
     </LayoutContainer>

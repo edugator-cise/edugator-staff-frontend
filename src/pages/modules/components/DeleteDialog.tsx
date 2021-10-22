@@ -62,19 +62,8 @@ export function DeleteDialog(props: DeleteDialogProps) {
     handleClose();
   };
 
-  const handleClickAway = (event: any) => {
-    // necessary to stop propagation
-    // that cause the accordion to open/close
-    if (event) event.stopPropagation();
-    handleClose();
-  };
-
   return (
-    <Dialog
-      onClose={(event) => handleClickAway(event)}
-      open={open}
-      maxWidth="md"
-    >
+    <Dialog onClose={handleClose} open={open} maxWidth="md">
       <Paper elevation={3}>
         <DialogTitle>Confirm Module Deletion</DialogTitle>
         <Divider />
@@ -92,7 +81,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
               <BulletList>
                 {toDelete.problems.map((problem, i) => {
                   return (
-                    <li>
+                    <li key={i}>
                       <Text variant="subtitle1">
                         {`Problem ${i}: ${problem.title}`}
                       </Text>
@@ -115,21 +104,12 @@ export function DeleteDialog(props: DeleteDialogProps) {
         <Divider />
 
         <Footer>
-          <FooterButton
-            onClick={(event) => {
-              event.stopPropagation();
-              handleClose();
-            }}
-            variant="contained"
-          >
+          <FooterButton onClick={handleClose} variant="contained">
             Cancel
           </FooterButton>
 
           <FooterButton
-            onClick={(event) => {
-              event.stopPropagation();
-              handleDialogSubmit();
-            }}
+            onClick={handleDialogSubmit}
             variant="contained"
             color="error"
           >

@@ -6,6 +6,12 @@ export interface IAdminModule extends IModuleBase {
   problems: IProblem[];
 }
 
+export const EmptyModule: IAdminModule = {
+  name: "",
+  number: 0,
+  problems: [],
+};
+
 /** Creating a New-Module dialog */
 
 export enum DialogStatus {

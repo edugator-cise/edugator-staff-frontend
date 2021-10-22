@@ -12,6 +12,7 @@ import { useAppSelector } from "../../../app/common/hooks";
 import { ModuleMenu } from "./";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
+import { IAdminModule } from "../types";
 
 const Module = styled(Accordion)({
   width: "100%",
@@ -50,7 +51,11 @@ const ProblemAction = styled(Button)(({ theme }) => ({
   color: grey["A700"],
 }));
 
-export function Modules() {
+interface moduleProps {
+  setModuleToDelete: (module: IAdminModule) => void;
+}
+
+export function Modules({ setModuleToDelete }: moduleProps) {
   const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
@@ -65,7 +70,10 @@ export function Modules() {
                   <Typography variant="h6">
                     Module {module.number}: {module.name}
                   </Typography>
-                  <ModuleMenu module={module} />
+                  <ModuleMenu
+                    module={module}
+                    setModuleToDelete={setModuleToDelete}
+                  />
 
                   <NewProblemButton startIcon={<Add />}>
                     Add Problem
