@@ -8,7 +8,7 @@ import Footer from "../../shared/Footer";
 function LandingPage() {
   return (
     <>
-      <VerticalNavigation />
+      <VerticalNavigation light />
       <LandingHome />
       <LandingFeatures />
       <LandingTopics />

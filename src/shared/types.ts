@@ -2,11 +2,11 @@
 
 export interface IProblem {
   _id?: string;
-  problemType: string;
   title: string;
   hidden: boolean;
   language: string;
   dueDate: Date;
+  statement: string;
   code: {
     header: string;
     body: string;
@@ -19,9 +19,9 @@ export interface IProblem {
       expectedOutput: string;
       hint: string;
       visibility: number;
-      templatePackage: string;
     }
   ];
+  templatePackage: string;
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;

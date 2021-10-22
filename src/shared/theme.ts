@@ -22,6 +22,15 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          "@media (min-width: 900px)": {
+            maxWidth: "100%",
+          },
+        },
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
