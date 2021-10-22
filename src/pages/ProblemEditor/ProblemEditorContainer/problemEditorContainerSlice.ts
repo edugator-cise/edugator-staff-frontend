@@ -8,7 +8,6 @@ export interface ProblemFields {
 export interface MetadataFields {
   title: string;
   hidden: boolean;
-  language: string;
   dueDate: Date;
 }
 
@@ -58,7 +57,6 @@ const initialState: ProblemEditorContainerState = {
   metadata: {
     title: "",
     hidden: false,
-    language: "C++",
     dueDate: new Date(),
   },
   problem: {

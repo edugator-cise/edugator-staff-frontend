@@ -2,6 +2,7 @@ import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
 import React, { useRef } from "react";
 import { useAppSelector } from "../../../app/common/hooks";
+import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
@@ -27,6 +28,8 @@ export const ProblemEditorContainer = () => {
         return <MetadataForm formRef={formRef} />;
       case 1:
         return <ProblemEditorForm formRef={formRef} />;
+      case 2:
+        return <CodeEditorForm formRef={formRef} />;
       case 3:
         return <ServerConfigForm formRef={formRef} />;
       default:

@@ -23,12 +23,15 @@ describe("problemEditorContainer reducer", () => {
       hidden: false,
       dueDate: new Date(),
       title: "",
-      language: "C++",
     },
     serverConfig: {
       buildCommand: "",
       timeLimit: 0,
       memoryLimit: 0,
+    },
+    codeEditor: {
+      code: { header: "", body: "", footer: "" },
+      fileExtension: "",
     },
   };
 
