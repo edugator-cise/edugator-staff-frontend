@@ -104,7 +104,3 @@ export const TestEditor = (props: Props) => {
     />
   );
 };
-
-// updateFn={(updated: TestCaseField) =>
-//   (values.testCases[index] = updated)
-// }

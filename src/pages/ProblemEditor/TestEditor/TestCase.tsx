@@ -22,46 +22,43 @@ interface TestCaseProps {
   setFieldValue: any;
 }
 
-// input: string;
-// expectedOutput: string;
-// hint: string;
-// visibility: TestCaseVisibility;
-
 export const TestCase = (props: TestCaseProps) => {
+  const { index, testCase, deleteFn, setFieldValue } = props;
   const name = `testCases.${props.index}`;
+  const inputName = `${name}.input`;
+  const outputName = `${name}.expectedOutput`;
+  const visibilityName = `${name}.visibility`;
+  const displayIndex = index + 1;
   return (
-    <Card sx={{ minWidth: 275 }} key={props.index}>
+    <Card sx={{ minWidth: 275 }} key={index}>
       <CardContent>
         <Stack direction="column" spacing={2}>
           <Typography sx={{ fontSize: 14 }}>
-            Test Case {props.index + 1}
+            Test Case {displayIndex}
           </Typography>
           <Field
             title="Input"
             label="Input"
-            value={props.testCase.input}
+            value={testCase.input}
             placeholder="Enter test case input"
-            name={`${name}.input`}
+            name={inputName}
             multiline
             required
             onChange={(event: any) => {
-              props.setFieldValue(`${name}.input`, event.currentTarget.value);
+              setFieldValue(inputName, event.currentTarget.value);
             }}
             component={FormTextField}
           />
           <Field
             title="Output"
             label="Output"
-            value={props.testCase.expectedOutput}
+            value={testCase.expectedOutput}
             placeholder="Enter expected output"
-            name={`${name}.expectedOutput`}
+            name={outputName}
             multiline
             required
             onChange={(event: any) => {
-              props.setFieldValue(
-                `${name}.expectedOutput`,
-                event.currentTarget.value
-              );
+              setFieldValue(outputName, event.currentTarget.value);
             }}
             component={FormTextField}
           />
@@ -71,12 +68,9 @@ export const TestCase = (props: TestCaseProps) => {
               <RadioGroup
                 name={`${name}.visibility`}
                 row
-                value={props.testCase.visibility}
+                value={testCase.visibility}
                 onChange={(event) => {
-                  props.setFieldValue(
-                    `${name}.visibility`,
-                    event.currentTarget.value
-                  );
+                  setFieldValue(visibilityName, event.currentTarget.value);
                 }}
               >
                 <FormControlLabel
@@ -96,50 +90,16 @@ export const TestCase = (props: TestCaseProps) => {
                 />
               </RadioGroup>
             </FormControl>
-
-            {/* <div id="my-radio-group">Picked</div>
-            <div role="group" aria-labelledby="my-radio-group">
-              <label>
-                <Field
-                  type="radio"
-                  name={`testCases.${props.index}.visibility`}
-                  label="Input and output visible"
-                  value={TestCaseVisibility.IO_VISBILE}
-                  // component={<Radio />}
-                />
-                Input and output visible
-              </label>
-              <label>
-                <Field
-                  type="radio"
-                  name={`testCases.${props.index}.visibility`}
-                  label="Input visible, output hidden"
-                  value={TestCaseVisibility.I_VISIBLE_O_HIDDEN}
-                  // component={<Radio />}
-                />
-                Input visible, output hidden
-              </label>
-              <label>
-                <Field
-                  type="radio"
-                  name={`testCases.${props.index}.visibility`}
-                  label="Input and output hidden"
-                  value={TestCaseVisibility.IO_HIDDEN}
-                  // component={<Radio />}
-                />
-                Input and output hidden
-              </label>
-            </div> */}
           </Stack>
           <Field
             title="Hint"
             label="Hint"
-            value={props.testCase.hint}
+            value={testCase.hint}
             placeholder="Enter hint"
-            name={`testCases.${props.index}.hint`}
+            name={`testCases.${index}.hint`}
             multiline
             onChange={(event: any) => {
-              props.setFieldValue(`${name}.hint`, event.currentTarget.value);
+              setFieldValue(`${name}.hint`, event.currentTarget.value);
             }}
             component={FormTextField}
           />
@@ -148,25 +108,10 @@ export const TestCase = (props: TestCaseProps) => {
       <CardActions>
         <ConfirmDelete
           title={"Delete test case?"}
-          body={`Are you sure you want to delete test case ${props.index + 1}?`}
-          onConfirm={props.deleteFn}
+          body={`Are you sure you want to delete test case ${displayIndex}?`}
+          onConfirm={deleteFn}
         />
       </CardActions>
     </Card>
   );
 };
-// <div key={index}>
-//                        <Field name={`friends.${index}`} />
-//                        <button
-//                          type="button"
-//                          onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-//                        >
-//                          -
-//                        </button>
-//                        <button
-//                          type="button"
-//                          onClick={() => arrayHelpers.insert(index, '')} // insert an empty string at a position
-//                        >
-//                          +
-//                        </button>
-//                      </div>
