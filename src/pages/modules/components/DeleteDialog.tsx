@@ -5,19 +5,13 @@ import {
   Dialog,
   Paper,
   Divider,
-  DialogContentText,
+  DialogContent,
   Typography,
 } from "@mui/material";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { requestDeleteModule } from "../ModulesPage.slice";
 import { IAdminModule } from "../types";
 import { styled } from "@mui/material/styles";
-
-const DialogContent = styled(DialogContentText)(({ theme }) => ({
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
-  marginRight: theme.spacing(3),
-}));
 
 const FooterButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
@@ -70,20 +64,21 @@ export function DeleteDialog(props: DeleteDialogProps) {
 
         <DialogContent>
           <Text variant="h5" gutterBottom>
-            Attempting to delete: "Module {toDelete.number}: {toDelete.name}"
+            Deleting: "Module {toDelete.number} - {toDelete.name}"
           </Text>
 
           {toDelete.problems.length > 0 ? (
             <>
-              <Text variant="h6">
+              <Text variant="subtitle1">
                 This action will also delete the following problems:
               </Text>
+
               <BulletList>
                 {toDelete.problems.map((problem, i) => {
                   return (
                     <li key={i}>
                       <Text variant="subtitle1">
-                        {`Problem ${i}: ${problem.title}`}
+                        {`Problem ${i + 1}: ${problem.title}`}
                       </Text>
                     </li>
                   );
@@ -113,7 +108,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
             variant="contained"
             color="error"
           >
-            Confirm
+            Delete
           </FooterButton>
         </Footer>
       </Paper>
