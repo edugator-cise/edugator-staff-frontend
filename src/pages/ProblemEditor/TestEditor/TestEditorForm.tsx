@@ -7,7 +7,12 @@ import {
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
 import { Stack, Button } from "@mui/material";
 import { TestCase } from "./TestCase";
-import { generateDefaultTestCase, TestCaseField } from "./TestCase.utils";
+import {
+  generateDefaultTestCase,
+  TestCaseError,
+  TestCaseField,
+  TestCaseFormError,
+} from "./TestCase.utils";
 
 interface Props {
   formRef: any;
@@ -25,29 +30,35 @@ export const TestEditor = (props: Props) => {
     (state) => state.problemEditorContainer.testEditorIsValid
   );
 
-  const validate = (values: { testCases: TestCaseField[] }) => {
-    const errors: any = {};
+  const validate = (values: {
+    testCases: TestCaseField[];
+  }): TestCaseFormError => {
+    const errors: TestCaseFormError = {
+      testCases: [],
+      lengthError: "",
+    };
+    let hasError = false;
     if (values.testCases?.length === 0) {
       errors.lengthError = "There must be at least one test case.";
+      hasError = true;
     } else {
       for (let i = 0; i < values.testCases.length; i++) {
+        const error: TestCaseError = {
+          expectedOutput: false,
+          input: false,
+        };
         if (values.testCases[i].expectedOutput === "") {
-          errors.expectedOutput = "Required";
+          error.expectedOutput = true;
+          hasError = true;
         }
         if (values.testCases[i].input === "") {
-          errors.input = "Required";
+          error.input = true;
+          hasError = true;
         }
-        if (
-          !!!values.testCases[i].visibility ||
-          values.testCases[i].visibility < 0 ||
-          values.testCases[i].visibility > 2
-        ) {
-          errors.visibility = "Visibility must be validly selected";
-        }
+        errors.testCases.push(error);
       }
     }
-    console.log(errors);
-    dispatch(validateTestEditor(Object.entries(errors).length === 0));
+    dispatch(validateTestEditor(hasError));
     return errors;
   };
 
@@ -56,13 +67,12 @@ export const TestEditor = (props: Props) => {
       initialValues={{ testCases: testCases }}
       onSubmit={(values: { testCases: TestCaseField[] }) => {
         if (testEditorIsValid) {
-          console.log("submitted actually");
           dispatch(updateTestCases(values.testCases));
         }
       }}
       innerRef={props.formRef}
       validate={validate}
-      render={({ values, setFieldValue }) => (
+      render={({ values, setFieldValue, touched, errors }) => (
         <Form>
           <FieldArray name="testCases">
             {(arrayHelpers: ArrayHelpers) => {
@@ -77,6 +87,8 @@ export const TestEditor = (props: Props) => {
                         arrayHelpers.remove(index);
                       }}
                       setFieldValue={setFieldValue}
+                      error={errors.testCases}
+                      touched={touched.testCases}
                     />
                   );
                 }
@@ -96,7 +108,6 @@ export const TestEditor = (props: Props) => {
                   <Button
                     onClick={() => {
                       arrayHelpers.push(generateDefaultTestCase());
-                      console.log(values);
                     }}
                     variant="contained"
                   >

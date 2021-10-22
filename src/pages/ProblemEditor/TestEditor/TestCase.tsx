@@ -20,10 +20,12 @@ interface TestCaseProps {
   testCase: TestCaseField;
   deleteFn: any;
   setFieldValue: any;
+  error?: any;
+  touched?: any;
 }
 
 export const TestCase = (props: TestCaseProps) => {
-  const { index, testCase, deleteFn, setFieldValue } = props;
+  const { index, testCase, deleteFn, setFieldValue, error, touched } = props;
   const name = `testCases.${props.index}`;
   const inputName = `${name}.input`;
   const outputName = `${name}.expectedOutput`;
@@ -43,6 +45,12 @@ export const TestCase = (props: TestCaseProps) => {
             placeholder="Enter test case input"
             name={inputName}
             multiline
+            error={
+              touched?.length > index &&
+              error?.length > index &&
+              touched[index].input &&
+              error[index].input
+            }
             required
             onChange={(event: any) => {
               setFieldValue(inputName, event.currentTarget.value);
@@ -56,6 +64,12 @@ export const TestCase = (props: TestCaseProps) => {
             placeholder="Enter expected output"
             name={outputName}
             multiline
+            error={
+              touched?.length > index &&
+              error?.length > index &&
+              touched[index].expectedOutput &&
+              error[index].expectedOutput
+            }
             required
             onChange={(event: any) => {
               setFieldValue(outputName, event.currentTarget.value);
