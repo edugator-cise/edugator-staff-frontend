@@ -5,7 +5,7 @@ import {
   updateTestCases,
   validateTestEditor,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
-import { Stack, Button } from "@mui/material";
+import { Stack, Button, Alert } from "@mui/material";
 import { TestCase } from "./TestCase";
 import {
   generateDefaultTestCase,
@@ -26,20 +26,14 @@ export const TestEditor = (props: Props) => {
     (state) => state.problemEditorContainer.testCases
   );
 
-  const testEditorIsValid = useAppSelector(
-    (state) => state.problemEditorContainer.testEditorIsValid
-  );
-
   const validate = (values: {
     testCases: TestCaseField[];
   }): TestCaseFormError => {
     const errors: TestCaseFormError = {
       testCases: [],
-      lengthError: "",
     };
     let hasError = false;
     if (values.testCases?.length === 0) {
-      errors.lengthError = "There must be at least one test case.";
       hasError = true;
     } else {
       for (let i = 0; i < values.testCases.length; i++) {
@@ -66,14 +60,17 @@ export const TestEditor = (props: Props) => {
     <Formik
       initialValues={{ testCases: testCases }}
       onSubmit={(values: { testCases: TestCaseField[] }) => {
-        if (testEditorIsValid) {
-          dispatch(updateTestCases(values.testCases));
-        }
+        dispatch(updateTestCases(values.testCases));
       }}
       innerRef={props.formRef}
       validate={validate}
       render={({ values, setFieldValue, touched, errors }) => (
         <Form>
+          {values.testCases.length === 0 && (
+            <Alert severity="error">
+              There needs to be at least one test case.
+            </Alert>
+          )}
           <FieldArray name="testCases">
             {(arrayHelpers: ArrayHelpers) => {
               const testCaseComponents = values.testCases.map(

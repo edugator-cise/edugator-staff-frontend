@@ -32,7 +32,7 @@ export const TestCase = (props: TestCaseProps) => {
   const visibilityName = `${name}.visibility`;
   const displayIndex = index + 1;
   return (
-    <Card sx={{ minWidth: 275 }} key={index}>
+    <Card sx={{ minWidth: 275 }} key={index} variant="outlined">
       <CardContent>
         <Stack direction="column" spacing={2}>
           <Typography sx={{ fontSize: 14 }}>

@@ -18,7 +18,6 @@ export interface TestCaseError {
 
 export interface TestCaseFormError {
   testCases: TestCaseError[];
-  lengthError: string;
 }
 
 export function generateDefaultTestCase(): TestCaseField {
