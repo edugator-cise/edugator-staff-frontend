@@ -46,7 +46,7 @@ const initialState: ProblemEditorContainerState = {
   codeIsValid: false,
   serverConfigIsValid: false,
   testEditorIsValid: false,
-  activeStep: 4,
+  activeStep: 0,
   problem: {
     problemStatement: "",
     templatePackage: "",
