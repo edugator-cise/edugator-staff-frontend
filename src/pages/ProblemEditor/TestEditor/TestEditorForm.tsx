@@ -49,11 +49,14 @@ export const TestEditor = (props: Props) => {
           error.input = true;
           hasError = true;
         }
-        errors.testCases.push(error);
+        errors.testCases?.push(error);
       }
     }
     dispatch(validateTestEditor(hasError));
-    return errors;
+    if (hasError) {
+      return errors;
+    }
+    return {};
   };
 
   return (

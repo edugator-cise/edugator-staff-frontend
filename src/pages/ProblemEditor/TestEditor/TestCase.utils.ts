@@ -12,12 +12,12 @@ export interface TestCaseField {
 }
 
 export interface TestCaseError {
-  input: boolean;
-  expectedOutput: boolean;
+  input?: boolean;
+  expectedOutput?: boolean;
 }
 
 export interface TestCaseFormError {
-  testCases: TestCaseError[];
+  testCases?: TestCaseError[];
 }
 
 export function generateDefaultTestCase(): TestCaseField {
