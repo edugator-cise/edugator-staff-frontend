@@ -1,18 +1,10 @@
 import { Formik, Form, FieldArray, ArrayHelpers } from "formik";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
-import {
-  updateTestCases,
-  validateTestEditor,
-} from "../ProblemEditorContainer/problemEditorContainerSlice";
+import { updateTestCases } from "../ProblemEditorContainer/problemEditorContainerSlice";
 import { Stack, Button, Alert } from "@mui/material";
 import { TestCase } from "./TestCase";
-import {
-  generateDefaultTestCase,
-  TestCaseError,
-  TestCaseField,
-  TestCaseFormError,
-} from "./TestCase.utils";
+import { generateDefaultTestCase, TestCaseField } from "./TestCase.utils";
 
 interface Props {
   formRef: any;
@@ -26,48 +18,23 @@ export const TestEditor = (props: Props) => {
     (state) => state.problemEditorContainer.testCases
   );
 
-  const validate = (values: {
-    testCases: TestCaseField[];
-  }): TestCaseFormError => {
-    const errors: TestCaseFormError = {
-      testCases: [],
-    };
-    let hasError = false;
-    if (values.testCases?.length === 0) {
-      hasError = true;
-    } else {
-      for (let i = 0; i < values.testCases.length; i++) {
-        const error: TestCaseError = {
-          expectedOutput: false,
-          input: false,
-        };
-        if (values.testCases[i].expectedOutput === "") {
-          error.expectedOutput = true;
-          hasError = true;
-        }
-        if (values.testCases[i].input === "") {
-          error.input = true;
-          hasError = true;
-        }
-        errors.testCases?.push(error);
-      }
-    }
-    dispatch(validateTestEditor(hasError));
-    if (hasError) {
-      return errors;
-    }
-    return {};
-  };
-
   return (
     <Formik
       initialValues={{ testCases: testCases }}
       onSubmit={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
+        //TODO: dispatch API call to add/edit problem
+      }}
+      validate={(values: { testCases: TestCaseField[] }) => {
+        dispatch(updateTestCases(values.testCases));
       }}
       innerRef={props.formRef}
-      validate={validate}
-      render={({ values, setFieldValue, touched, errors }) => (
+      validateOnBlur={false}
+      validateOnSubmit
+      validateOnChange={false}
+      validateOnMount={false}
+    >
+      {({ values, setFieldValue, errors }) => (
         <Form>
           {values.testCases.length === 0 && (
             <Alert severity="error">
@@ -87,8 +54,7 @@ export const TestEditor = (props: Props) => {
                         arrayHelpers.remove(index);
                       }}
                       setFieldValue={setFieldValue}
-                      error={errors.testCases}
-                      touched={touched.testCases}
+                      error={errors}
                     />
                   );
                 }
@@ -119,6 +85,6 @@ export const TestEditor = (props: Props) => {
           </FieldArray>
         </Form>
       )}
-    />
+    </Formik>
   );
 };

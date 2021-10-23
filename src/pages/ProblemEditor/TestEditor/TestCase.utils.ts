@@ -11,15 +11,6 @@ export interface TestCaseField {
   visibility: TestCaseVisibility;
 }
 
-export interface TestCaseError {
-  input?: boolean;
-  expectedOutput?: boolean;
-}
-
-export interface TestCaseFormError {
-  testCases?: TestCaseError[];
-}
-
 export function generateDefaultTestCase(): TestCaseField {
   return {
     input: "",

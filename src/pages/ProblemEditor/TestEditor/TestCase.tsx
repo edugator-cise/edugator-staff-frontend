@@ -21,11 +21,18 @@ interface TestCaseProps {
   deleteFn: any;
   setFieldValue: any;
   error?: any;
-  touched?: any;
+}
+
+function validateNotEmpty(value: string) {
+  let error = false;
+  if (!!!value || value.length === 0) {
+    error = true;
+  }
+  return error;
 }
 
 export const TestCase = (props: TestCaseProps) => {
-  const { index, testCase, deleteFn, setFieldValue, error, touched } = props;
+  const { index, testCase, deleteFn, setFieldValue, error } = props;
   const name = `testCases.${props.index}`;
   const inputName = `${name}.input`;
   const outputName = `${name}.expectedOutput`;
@@ -46,16 +53,14 @@ export const TestCase = (props: TestCaseProps) => {
             name={inputName}
             multiline
             error={
-              touched?.length > index &&
-              error?.length > index &&
-              touched[index].input &&
-              error[index].input
+              error?.testCases?.length > index && error?.testCases[index]?.input
             }
             required
             onChange={(event: any) => {
               setFieldValue(inputName, event.currentTarget.value);
             }}
             component={FormTextField}
+            validate={validateNotEmpty}
           />
           <Field
             title="Output"
@@ -65,15 +70,14 @@ export const TestCase = (props: TestCaseProps) => {
             name={outputName}
             multiline
             error={
-              touched?.length > index &&
-              error?.length > index &&
-              touched[index].expectedOutput &&
-              error[index].expectedOutput
+              error?.testCases?.length > index &&
+              error?.testCases[index]?.expectedOutput
             }
             required
             onChange={(event: any) => {
               setFieldValue(outputName, event.currentTarget.value);
             }}
+            validate={validateNotEmpty}
             component={FormTextField}
           />
           {/* https://levelup.gitconnected.com/create-a-controlled-radio-group-in-react-formik-material-ui-and-typescript-7ed314081a0e */}
