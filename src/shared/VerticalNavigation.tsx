@@ -253,17 +253,6 @@ function VerticalNavigation() {
                     </ListItemButton>
                   </Box>
 
-                  <Box sx={{
-                    display: "flex", 
-                    justifyContent:"center", 
-                    position: "absolute", 
-                    bottom: "0", 
-                    left: "50%", 
-                    transform: "translate(-50%, 0)"}}
-                  >
-                    <Button variant="contained" sx={{m:1, width: .5}}>Register</Button>
-                    <Button variant="outlined" sx={{m:1, width: .5}}>Login</Button> 
-                  </Box>
                 </Box>
         </Drawer>
       </>
