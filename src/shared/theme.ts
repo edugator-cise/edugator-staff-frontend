@@ -1,6 +1,5 @@
 import { blue } from "@mui/material/colors";
 import { createTheme, responsiveFontSizes  } from "@mui/material/styles";
-import { breakpoints } from "@mui/system";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -10,7 +9,6 @@ declare module "@mui/material/styles" {
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
-    
     
   }
   interface PaletteOptions {

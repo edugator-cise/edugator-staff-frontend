@@ -10,7 +10,6 @@ import Diamond from '../../assets/icons8-diamond-100.png'
 import FlipChart from '../../assets/icons8-flip-chart-100.png'
 import Glasses from '../../assets/icons8-glasses-100.png'
 import FeatureCard from "./FeatureCard";
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Holder = styled("div")({
   height: 700,
@@ -36,19 +35,7 @@ const Holder = styled("div")({
   },
 });
 
-const FeatureHolder = styled("div")({
-  height: '55%',
-  width: '70%',
-  maxWidth: 1100,
-  minWidth: 1000,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'flex-end',
-})
-
 function LandingFeatures() {
-  const md = useMediaQuery(theme.breakpoints.up('md'));
 
   const features = [
     {
@@ -85,14 +72,14 @@ function LandingFeatures() {
           >
             {features.map((feature, index) => {
               return(
-            <Grid item xl={4} lg={4} md={4} sm={12} xs={12} style={{ height: '25em', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <FeatureCard
-                key={index}
-                title={feature.title}
-                img={feature.img}
-                description={feature.description}
-              />
-            </Grid>
+                <Grid item xl={4} lg={4} md={4} sm={12} xs={12} style={{ height: '25em', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <FeatureCard
+                    key={index}
+                    title={feature.title}
+                    img={feature.img}
+                    description={feature.description}
+                  />
+                </Grid>
             )})}
           </Grid>
       </Holder>

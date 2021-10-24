@@ -1,6 +1,7 @@
 import {
     Typography,
-    Button
+    Button,
+    Grid
 } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
@@ -18,19 +19,20 @@ import RecursiveStatic from '../../assets/icons8-replay-100.png'
 import MapGif from '../../assets/icons8-thumbnail-view.gif'
 import MapStatic from '../../assets/icons8-thumbnail-view-100.png'
 import TopicCard from "./TopicCard";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Holder = styled("div")({
-    height: 1000,
+    height: 'auto',
     width: "100%",
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: "center",
-    background: 'linear-gradient(white, transparent, transparent, transparent), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
+    paddingTop: 80,
+    backgroundImage: 'url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)',
     backgroundSize: "35em",
-    [theme.breakpoints.up("xl")]: {
-    },
+    paddingBottom: 90
 });
 
 const TopicList = styled('div')({
@@ -43,6 +45,8 @@ const TopicList = styled('div')({
 })
 
 function LandingTopics() {
+    const lg = useMediaQuery(theme.breakpoints.up('lg'));
+
     const topics = [
         {
             name: "Sorting",
@@ -86,35 +90,61 @@ function LandingTopics() {
         <Holder>
         
             <Typography variant="h3" color={theme.palette.secondary.main}>Choose your learning path by topic </Typography>
-            <Typography variant="body1" color={theme.palette.secondary.main} sx={{paddingTop: 5}}>Browse the available course topics, choose your favourite one, and start learning. </Typography>
+            <Typography variant="body1" color={theme.palette.secondary.main} sx={{marginTop: '2em', marginBottom: '2em', maxWidth: 400}}>Browse the available course topics, choose your favourite one, and start learning. </Typography>
             
-            
-            <TopicList style={{paddingTop: 30}}>
-                {topics.slice(0,3).map((topic, index) =>
-                    <TopicCard 
-                        key={index}
-                        name={topic.name}
-                        description={topic.description}
-                        staticImg={topic.staticImg}
-                        animatedImg={topic.animatedImg}
-                        position="top"    
-                        zIndex={index}
-                    />
-                )}
-            </TopicList>
-            <TopicList>
-                {topics.slice(3,6).map((topic, index) =>
-                    <TopicCard 
-                        key={index}
-                        name={topic.name}
-                        description={topic.description}
-                        staticImg={topic.staticImg}
-                        animatedImg={topic.animatedImg}    
-                        position="bottom"
-                        zIndex={index}
-                    />
-                )}
-            </TopicList>
+            {lg ? 
+            <>
+                <TopicList style={{paddingTop: 30}}>
+                    {topics.slice(0,3).map((topic, index) =>
+                        <TopicCard 
+                            key={index}
+                            name={topic.name}
+                            description={topic.description}
+                            staticImg={topic.staticImg}
+                            animatedImg={topic.animatedImg}
+                            position="top"    
+                            zIndex={index}
+                        />
+                    )}
+                </TopicList>
+                <TopicList>
+                    {topics.slice(3,6).map((topic, index) =>
+                        <TopicCard 
+                            key={index}
+                            name={topic.name}
+                            description={topic.description}
+                            staticImg={topic.staticImg}
+                            animatedImg={topic.animatedImg}    
+                            position="bottom"
+                            zIndex={index}
+                        />
+                    )}
+                </TopicList>
+            </>
+            : 
+                <Grid 
+                    container 
+                    direction="row" 
+                    justifyContent="space-between" 
+                    alignItems="flex-end" 
+                    maxWidth={850}
+                    spacing={2}
+                >
+                        {topics.map((topic, index) =>
+                            <Grid item lg={6} md={4} sm={6} xs={12} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                <TopicCard 
+                                    key={index}
+                                    name={topic.name}
+                                    description={topic.description}
+                                    staticImg={topic.staticImg}
+                                    animatedImg={topic.animatedImg}
+                                    position="top"    
+                                    zIndex={index}
+                                />
+                            </Grid>
+                        )}
+                </Grid>
+            }
             <Button variant="text" sx={{color: theme.palette.primary.main}}>Browse all Topics</Button>
             
         </Holder>
