@@ -18,6 +18,10 @@ const FileDropButton = styled(Button)(({ theme }) => ({
     color: theme.palette.primary.main,
     borderColor: theme.palette.primary.main,
   },
+  "&:dragOver": { // doesnt do anything, find working solution
+    color: theme.palette.primary.main,
+    borderColor: theme.palette.primary.main,
+  },
 }));
 
 interface GradingDialogProps {
@@ -28,6 +32,17 @@ interface GradingDialogProps {
 
 export function GradingDialog(props: GradingDialogProps) {
   const { open, problem_id, handleClose } = props;
+
+  const preventDefaults = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const onFileCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /*Selected files data can be collected here.*/
+    console.log(event.target.files);
+  };
 
   const handleDialogSubmit = () => {
     // TODO:
@@ -50,23 +65,39 @@ export function GradingDialog(props: GradingDialogProps) {
     },
   ];
 
-  const handleHover = () => {};
-
   return (
     <Dialog
       open={open}
       fullWidth
       maxWidth="md"
-      title={"Grading dialog"}
+      title={`Currently grading Problem_ID: ${problem_id}`}
       handleClose={handleClose}
       footerContent={FooterButtons}
     >
       <>
-        Currently grading Problem_ID: {problem_id}
         <label htmlFor="student-solutions-file">
-          <Input accept=".zip" id="student-solutions-file" type="file" />
+          <Input
+            id="student-solutions-file"
+            type="file"
+            accept=".zip"
+            ref={fileInputRef}
+            onChangeCapture={onFileCapture}
+          />
 
-          <FileDropButton onMouseOver={handleHover}>
+          <FileDropButton
+            onDragOver={(event) => {
+              preventDefaults(event);
+              console.log("dragging over?");
+            }}
+            onDrop={(event) => {
+              preventDefaults(event);
+              console.log("did you just drop soemthing?");
+            }}
+            onClick={() => {
+              // trigger file input dialog
+              fileInputRef.current?.click();
+            }}
+          >
             Drag file here or click to begin
           </FileDropButton>
         </label>
