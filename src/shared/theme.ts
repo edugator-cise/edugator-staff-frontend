@@ -1,5 +1,6 @@
 import { blue } from "@mui/material/colors";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes  } from "@mui/material/styles";
+import { breakpoints } from "@mui/system";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -19,7 +20,7 @@ declare module "@mui/material/styles" {
 
 
 
-const theme = createTheme({
+let theme = createTheme({ 
   transitions: {
     duration: {
       shortest: 150,
@@ -55,6 +56,10 @@ const theme = createTheme({
       textTransform: "none",
       
     },
+    h1: {
+      
+      
+    },
     h2: {
       fontWeight: 600,
       lineHeight: 1.3,
@@ -88,5 +93,7 @@ const theme = createTheme({
     },
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 export default theme;
