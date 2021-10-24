@@ -1,39 +1,33 @@
 import React from "react";
-import {
-  Button,
-  DialogTitle,
-  Dialog,
-  Paper,
-  Divider,
-  DialogContentText,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-const DialogContent = styled(DialogContentText)(({ theme }) => ({
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
-  marginRight: theme.spacing(3),
-}));
+import Dialog from "./GenericDialog";
 
 const Input = styled("input")({
   display: "none",
 });
 
-const GradeButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
+const FileDropButton = styled(Button)(({ theme }) => ({
+  width: "100%",
+  height: "100%",
+  minHeight: "30vh",
+  marginTop: theme.spacing(1),
+  borderRadius: 0,
+  border: "dashed",
+  "&:hover": {
+    color: theme.palette.primary.main,
+    borderColor: theme.palette.primary.main,
+  },
 }));
-
-const Footer = styled("div")({
-  float: "right",
-});
 
 interface GradingDialogProps {
   open: boolean;
+  problem_id: string;
   handleClose: () => void;
 }
 
 export function GradingDialog(props: GradingDialogProps) {
-  const { open, handleClose } = props;
+  const { open, problem_id, handleClose } = props;
 
   const handleDialogSubmit = () => {
     // TODO:
@@ -42,28 +36,41 @@ export function GradingDialog(props: GradingDialogProps) {
     // handleClose();
   };
 
-  return (
-    <Dialog onClose={handleClose} open={open} maxWidth="md" fullWidth>
-      <Paper elevation={3}>
-        <DialogTitle>Grading dialog</DialogTitle>
-        <Divider />
-        <DialogContent>
-          To grade student submissions, drag and drop them into the box below.
-        </DialogContent>
+  const FooterButtons = [
+    {
+      label: "Cancel",
+      onClick: () => handleDialogSubmit(),
+      variant: "contained",
+      color: "error",
+    },
+    {
+      label: "Add Module",
+      onClick: () => handleDialogSubmit(),
+      variant: "contained",
+    },
+  ];
 
+  const handleHover = () => {};
+
+  return (
+    <Dialog
+      open={open}
+      fullWidth
+      maxWidth="md"
+      title={"Grading dialog"}
+      handleClose={handleClose}
+      footerContent={FooterButtons}
+    >
+      <>
+        Currently grading Problem_ID: {problem_id}
         <label htmlFor="student-solutions-file">
           <Input accept=".zip" id="student-solutions-file" type="file" />
-          <Button variant="contained" component="span">
-            Upload
-          </Button>
-        </label>
 
-        <Footer>
-          <GradeButton onClick={() => handleDialogSubmit()} variant="outlined">
-            Grade
-          </GradeButton>
-        </Footer>
-      </Paper>
+          <FileDropButton onMouseOver={handleHover}>
+            Drag file here or click to begin
+          </FileDropButton>
+        </label>
+      </>
     </Dialog>
   );
 }

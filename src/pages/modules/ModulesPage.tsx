@@ -8,6 +8,7 @@ import {
   DeleteDialog,
   ModulesSnackbar,
 } from "./components";
+import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
 import { IAdminModule, EmptyModule } from "./types";
 
@@ -15,8 +16,10 @@ export function ModulesPage() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
 
+  // Module to delete - hooks
+
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
-  const onDialogClose = () => {
+  const onDeleteDialogClose = () => {
     setConfirmDelete(false);
   };
 
@@ -24,6 +27,19 @@ export function ModulesPage() {
   const setModuleToDelete = (module: IAdminModule) => {
     setConfirmDelete(true);
     setToDelete(module);
+  };
+
+  // Problem to grade - hooks
+
+  const [grading, setGrading] = React.useState<boolean>(false);
+  const onGradingDialogClose = () => {
+    setGrading(false);
+  };
+
+  const [toGrade, setToGrade] = React.useState<string>("");
+  const setProblemToGrade = (problemID: string) => {
+    setGrading(true);
+    setToGrade(problemID);
   };
 
   const moduleHeaderButtons = [
@@ -43,11 +59,18 @@ export function ModulesPage() {
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
       <>
         <ModuleDialog />
+
         <DeleteDialog
           open={confirmDelete}
-          handleClose={onDialogClose}
+          handleClose={onDeleteDialogClose}
           toDelete={toDelete}
         />
+        <GradingDialog
+          open={grading}
+          problem_id={toGrade}
+          handleClose={onGradingDialogClose}
+        />
+
         <ModulesSnackbar />
 
         <Grid
@@ -59,7 +82,10 @@ export function ModulesPage() {
           {modulesState.isLoading ? (
             <CircularProgress />
           ) : (
-            <Modules setModuleToDelete={setModuleToDelete} />
+            <Modules
+              setModuleToDelete={setModuleToDelete}
+              setProblemToGrade={setProblemToGrade}
+            />
           )}
         </Grid>
       </>

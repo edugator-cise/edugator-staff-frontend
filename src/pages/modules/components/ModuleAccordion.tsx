@@ -53,9 +53,10 @@ const ProblemAction = styled(Button)(({ theme }) => ({
 
 interface moduleProps {
   setModuleToDelete: (module: IAdminModule) => void;
+  setProblemToGrade: (problem_ID: string) => void;
 }
 
-export function Modules({ setModuleToDelete }: moduleProps) {
+export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
   const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
@@ -90,6 +91,9 @@ export function Modules({ setModuleToDelete }: moduleProps) {
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
+                        onClick={() => {
+                          setProblemToGrade(problem._id ?? "Error: no p_ID");
+                        }}
                       >
                         Grade
                       </ProblemAction>
