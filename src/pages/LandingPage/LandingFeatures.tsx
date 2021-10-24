@@ -1,5 +1,6 @@
 import {
-  Typography
+  Typography,
+  Grid
 } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
@@ -9,14 +10,15 @@ import Diamond from '../../assets/icons8-diamond-100.png'
 import FlipChart from '../../assets/icons8-flip-chart-100.png'
 import Glasses from '../../assets/icons8-glasses-100.png'
 import FeatureCard from "./FeatureCard";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Holder = styled("div")({
-  height: 800,
+  height: 700,
   width: "100%",
   backgroundColor: "red",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "center",
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center center',
@@ -24,9 +26,13 @@ const Holder = styled("div")({
   backgroundImage:
     `url(${FeaturesBG})`, //obtained from https://bgjar.com/simple-shiny
   backgroundSize: "13em",
-  paddingTop: 80,
+  paddingTop: 170,
   [theme.breakpoints.up("xl")]: {
-    paddingTop: 20,
+    paddingTop: 80,
+  },
+  [theme.breakpoints.down("md")]: {
+    paddingTop: 80,
+    height: 1500
   },
 });
 
@@ -42,6 +48,7 @@ const FeatureHolder = styled("div")({
 })
 
 function LandingFeatures() {
+  const md = useMediaQuery(theme.breakpoints.up('md'));
 
   const features = [
     {
@@ -65,20 +72,29 @@ function LandingFeatures() {
       <Holder>
           <Typography variant="h3" color="white">Start your journey learning</Typography>
           <Typography variant="h3" color="primary">Computer Science</Typography>
-          <Typography variant="body1" color="white" sx={{marginTop: '2em'}}>Understand, analyze, and apply Data Structures and Algorithms in your everyday life.</Typography>
+          <Typography variant="body1" color="white" sx={{marginTop: '2em', maxWidth: 400}}>Understand, analyze, and apply Data Structures and Algorithms in your everyday life.</Typography>
           
-        <FeatureHolder>
-          {features.map((feature, index) => {
-            return(
-            <FeatureCard
-              key={index}
-              title={feature.title}
-              img={feature.img}
-              description={feature.description}
-            />
-            )
-          })}
-        </FeatureHolder>
+        
+          <Grid
+            container 
+            direction="row" 
+            justifyContent="space-between" 
+            alignItems="flex-end" 
+            style={{height:'55%', maxWidth: 1200, marginTop: 40}}
+            spacing={1}
+          >
+            {features.map((feature, index) => {
+              return(
+            <Grid item xl={4} lg={4} md={4} sm={12} xs={12} style={{ height: '25em', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <FeatureCard
+                key={index}
+                title={feature.title}
+                img={feature.img}
+                description={feature.description}
+              />
+            </Grid>
+            )})}
+          </Grid>
       </Holder>
   );
 }

@@ -87,9 +87,9 @@ let theme = createTheme({
     values: {
       xs: 0,
       sm: 600,
-      md: 900,
+      md: 800,
       lg: 1200,
-      xl: 1670,
+      xl: 1700,
     },
   },
 });
