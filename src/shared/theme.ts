@@ -1,5 +1,5 @@
-import { blue } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
+import { blue, lightBlue, grey } from "@mui/material/colors";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -44,6 +44,22 @@ const theme = createTheme({
         },
         text: {
           color: "black",
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          backgroundColor: lightBlue[100],
+
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          backgroundColor: grey[100],
+          borderBottom: `1px solid ${grey[400]}`,
         },
       },
     },

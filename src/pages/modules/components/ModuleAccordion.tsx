@@ -14,21 +14,15 @@ import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { IAdminModule } from "../types";
 
-const Module = styled(Accordion)({
+const Module = styled(Accordion)(({ theme }) => ({
   width: "100%",
-});
-
-const ModuleSummary = styled(AccordionSummary)({
-  backgroundColor: "rgba(0, 0, 0, .1)", // background of module
-  borderBottom: "1px solid rgba(0, 0, 0, .125)", // bottom line of module
-});
+  marginBottom: theme.spacing(0.5),
+}));
 
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(1),
   paddingLeft: theme.spacing(2),
-  backgroundColor: "rgba(0, 0, 0, .02)",
-  borderBottom: "1px solid rgba(0, 0, 0, .125)",
 }));
 
 const ProblemTitle = styled(Typography)({
@@ -49,6 +43,7 @@ const ButtonContainer = styled("div")({
 const ProblemAction = styled(Button)(({ theme }) => ({
   marginRight: theme.spacing(1),
   color: grey["A700"],
+  borderColor: grey["A700"],
 }));
 
 interface moduleProps {
@@ -67,10 +62,11 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
           {modulesState.modules.map((module, i) => {
             return (
               <Module key={module._id} disableGutters>
-                <ModuleSummary expandIcon={<ExpandMore />}>
+                <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography variant="h6">
                     Module {module.number}: {module.name}
                   </Typography>
+
                   <ModuleMenu
                     module={module}
                     setModuleToDelete={setModuleToDelete}
@@ -79,7 +75,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   <NewProblemButton startIcon={<Add />}>
                     Add Problem
                   </NewProblemButton>
-                </ModuleSummary>
+                </AccordionSummary>
 
                 {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
@@ -91,6 +87,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
+                        variant="outlined"
                         onClick={() => {
                           setProblemToGrade(problem._id ?? "Error: no p_ID");
                         }}
@@ -101,6 +98,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<Edit />}
                         size="small"
+                        variant="outlined"
                         onClick={() => {
                           history.push("/problem/edit/" + problem._id);
                         }}

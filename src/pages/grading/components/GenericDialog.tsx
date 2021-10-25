@@ -26,8 +26,8 @@ const FooterButton = styled(Button)(({ theme }) => ({
 interface GenericDialogProps {
   title: string;
   open: boolean;
+  fullWidth?: boolean;
   maxWidth: Breakpoint; // decent for now
-  fullWidth: boolean | undefined;
   footerContent: ButtonProps[];
   handleClose: () => void;
   children: JSX.Element;
@@ -35,8 +35,8 @@ interface GenericDialogProps {
 
 export default function GenericDialog(props: GenericDialogProps) {
   const {
-    title,
     open,
+    title,
     maxWidth,
     fullWidth,
     footerContent,
@@ -60,7 +60,7 @@ export default function GenericDialog(props: GenericDialogProps) {
       onClose={handleClose}
       open={open}
       maxWidth={maxWidth}
-      fullWidth={fullWidth ? fullWidth : false}
+      fullWidth={fullWidth}
     >
       <Paper elevation={3}>
         <DialogTitle>{title}</DialogTitle>

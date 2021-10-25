@@ -48,6 +48,7 @@ export function ModulesPage() {
       onClick: () => {
         dispatch(openCreateDialog());
       },
+      variant: "contained",
     },
   ];
 
