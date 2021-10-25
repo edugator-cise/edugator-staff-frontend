@@ -8,6 +8,7 @@ import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
@@ -15,7 +16,27 @@ function App() {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <div className="App">
+<<<<<<< HEAD
           <ProblemEditorPage />
+=======
+          <Switch>
+            <Route exact path={Routes.Login}>
+              <LoginPage />
+            </Route>
+            <PrivateRoute exact path={Routes.ProblemEditor}>
+              <ProblemEditorPage />
+            </PrivateRoute>
+            <PrivateRoute exact path={Routes.Modules}>
+              <ModulesPage />
+            </PrivateRoute>
+            <Route exact path={Routes.Code}>
+              <CodeEditorPage />
+            </Route>
+            <Route exact path="/">
+              <LandingPage />
+            </Route>
+          </Switch>
+>>>>>>> dba071fb153b726e2055a0b7ca8c584ce5841249
         </div>
       </ThemeProvider>
     </StyledEngineProvider>
