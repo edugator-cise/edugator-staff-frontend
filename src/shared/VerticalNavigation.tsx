@@ -25,11 +25,16 @@ import ProjectsIcon from "@mui/icons-material/BorderColor";
 import LearnIcon from "@mui/icons-material/Book";
 import ScheduleIcon from "@mui/icons-material/CalendarToday";
 import LightModeLogo from "../assets/LightModeLogo.svg";
+import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
-function VerticalNavigation() {
+interface Props {
+  light: boolean;
+}
+
+function VerticalNavigation(props: Props) {
   const md = useMediaQuery(theme.breakpoints.up('md'));
   const [openProjects, setOpenProjects] = useState<any>(null);
   const [openModules, setOpenModules] = useState<any>(null);
@@ -38,7 +43,6 @@ function VerticalNavigation() {
   const [anchorModules, setAnchorModules] = useState<any>(null);
   const [anchorLearn, setAnchorLearn] = useState<any>(null);
   const [open, setOpen] = useState<boolean>(false);
-
   interface menu {
     title: string;
     id: string;
@@ -148,8 +152,8 @@ function VerticalNavigation() {
   ];
 
   return (
-    <Toolbar style={md ? {paddingLeft: 100, paddingRight: 100, height: 80} : {paddingLeft: 30, paddingRight: 30, height: 80}}>
-      <Avatar alt="Example Alt" src={LightModeLogo} />
+    <Toolbar style={{paddingLeft: md ? 100 : 30, paddingRight: md ? 100 : 30, height: 64, backgroundColor: props.light ? "transparent" : "#152c7c"}} >
+      <Avatar alt="Example Alt" src={props.light ? LightModeLogo : DarkModeLogo} />
       <Typography variant="h5" component="h1"></Typography>
 
       {md ? 
@@ -165,7 +169,10 @@ function VerticalNavigation() {
             <>
               <Button
                 key={item.id}
-                style={{ marginRight: 30 }}
+                sx={{
+                  color: props.light ? "inherit" : "white",
+                  marginRight: 4,
+                }}
                 aria-controls={item.id}
                 aria-haspopup="true"
                 onClick={(event) => item.anchorSet(event.currentTarget)}
@@ -194,12 +201,17 @@ function VerticalNavigation() {
             </>
           );
         })}
-        <Button onClick={() => {}}>Schedule</Button>
+        <Button
+          sx={{ color: props.light ? "inherit" : "#ffffff" }}
+          onClick={() => {}}
+        >
+          Schedule
+        </Button>
       </Grid>
       :
       //hamburger menu navigation
       <>
-        <IconButton edge="start" color="inherit" aria-label="open drawer" sx={{position: 'absolute', right: 20}} onClick={() => {toggleDrawer()}}>
+        <IconButton edge="start" style={{color: props.light ? "black" : "white"}} aria-label="open drawer" sx={{position: 'absolute', right: 20}} onClick={() => {toggleDrawer()}}>
           <MenuIcon fontSize="large" />
         </IconButton>
         <Drawer
