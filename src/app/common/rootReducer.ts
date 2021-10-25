@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import problemEditorContainerReducer from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
+import codeEditorReducer from "../../pages/CodeEditor/CodeEditorSlice";
 import { loginSlice } from "../../pages/Login/LoginPage.slice";
 import { moduleSlice } from "../../pages/modules/ModulesPage.slice";
 /* import slices of state here */
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   login: loginSlice.reducer,
   modules: moduleSlice.reducer,
   problemEditorContainer: problemEditorContainerReducer,
+  codeEditor: codeEditorReducer,
 });
 
 export default rootReducer;

@@ -3,16 +3,12 @@ import { createTheme, responsiveFontSizes  } from "@mui/material/styles";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
-  interface Theme {
-    
-    
+  interface Theme {  
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
-    
   }
   interface PaletteOptions {
-    
   }
 }
 
@@ -28,9 +24,18 @@ let theme = createTheme({
       complex: 375,
       enteringScreen: 225,
       leavingScreen: 195,
-    }
+    },
   },
   components: {
+    MuiGrid: {
+      styleOverrides: {
+        root: {
+          "@media (min-width: 900px)": {
+            maxWidth: "100%",
+          },
+        },
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
