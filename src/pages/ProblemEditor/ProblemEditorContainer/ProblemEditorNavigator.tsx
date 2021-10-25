@@ -35,12 +35,15 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
   });
 
   const handleBack = () => {
+    if (activeStep === 4) {
+      formRef.current?.submitForm();
+    }
     dispatch(decrementActiveStep());
   };
 
   const handleNext = () => {
     if (activeStep === 4) {
-      console.log("Submitted!");
+      formRef.current?.submitForm();
     } else {
       formRef.current?.submitForm();
       if (currentStepIsValid) dispatch(incrementActiveStep());
