@@ -16,9 +16,6 @@ function App() {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <div className="App">
-<<<<<<< HEAD
-          <ProblemEditorPage />
-=======
           <Switch>
             <Route exact path={Routes.Login}>
               <LoginPage />
@@ -36,7 +33,6 @@ function App() {
               <LandingPage />
             </Route>
           </Switch>
->>>>>>> dba071fb153b726e2055a0b7ca8c584ce5841249
         </div>
       </ThemeProvider>
     </StyledEngineProvider>
