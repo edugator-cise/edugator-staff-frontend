@@ -26,46 +26,38 @@ export const CodeEditorForm = ({ formRef }: Props) => {
       //validate={validate}
     >
       {({ errors, values, handleChange, handleBlur, touched }) => (
-        <Form
-          style={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Box flexGrow={1} display="flex" flexDirection="column">
-            <InputLabel>Header</InputLabel>
-            <Paper
-              elevation={0}
-              variant="outlined"
-              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
+        <Form>
+          <Paper elevation={0} variant="outlined">
+            <Stack
+              overflow="auto"
+              spacing={5}
+              maxHeight="50vh"
+              pr={5}
+              pl={5}
+              pt={2}
             >
-              <Editor language="cpp" height="unset" />
-            </Paper>
-          </Box>
-          <Box flexGrow={1} display="flex" flexDirection="column">
-            <InputLabel>Header</InputLabel>
-            <Paper
-              elevation={0}
-              variant="outlined"
-              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
-            >
-              <Editor language="cpp" height="unset" />
-            </Paper>
-          </Box>
-          <Box flexGrow={1} display="flex" flexDirection="column">
-            <InputLabel>Header</InputLabel>
-            <Paper
-              elevation={0}
-              variant="outlined"
-              sx={{ flexGrow: 1, display: "flex", alignItems: "stretch" }}
-            >
-              <Editor language="cpp" height="unset" />
-            </Paper>
-          </Box>
-
-          <Box>
-            <TextField></TextField>
+              <Box>
+                <InputLabel>Header</InputLabel>
+                <Paper elevation={0} variant="outlined">
+                  <Editor language="cpp" height="250px" />
+                </Paper>
+              </Box>
+              <Box>
+                <InputLabel>Body</InputLabel>
+                <Paper elevation={0} variant="outlined">
+                  <Editor language="cpp" height="250px" />
+                </Paper>
+              </Box>
+              <Box flexGrow={1} display="flex" flexDirection="column">
+                <InputLabel>Footer</InputLabel>
+                <Paper elevation={0} variant="outlined">
+                  <Editor language="cpp" height="250px" />
+                </Paper>
+              </Box>
+            </Stack>
+          </Paper>
+          <Box mt={3}>
+            <TextField label="Codebox file extension" />
           </Box>
         </Form>
       )}
