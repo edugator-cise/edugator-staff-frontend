@@ -72,9 +72,8 @@ function LandingFeatures() {
           >
             {features.map((feature, index) => {
               return(
-                <Grid item xl={4} lg={4} md={4} sm={12} xs={12} style={{ height: '25em', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Grid key={index} item xl={4} lg={4} md={4} sm={12} xs={12} style={{ height: '25em', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                   <FeatureCard
-                    key={index}
                     title={feature.title}
                     img={feature.img}
                     description={feature.description}

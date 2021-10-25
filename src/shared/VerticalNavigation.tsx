@@ -164,11 +164,10 @@ function VerticalNavigation(props: Props) {
         justifyContent="flex-end"
         alignItems="flex-end"
       >
-        {menus.map((item) => {
+        {menus.map((item, index) => {
           return (
-            <>
+            <div key={index}>
               <Button
-                key={item.id}
                 sx={{
                   color: props.light ? "inherit" : "white",
                   marginRight: 4,
@@ -190,15 +189,15 @@ function VerticalNavigation(props: Props) {
                 open={Boolean(item.anchor)}
                 onClose={() => item.anchorSet(null)}
               >
-                {item.subitems.map((subitem) => {
+                {item.subitems.map((subitem, i) => {
                   return (
-                    <MenuItem onClick={() => item.anchorSet(null)}>
+                    <MenuItem key={i} onClick={() => item.anchorSet(null)}>
                       {subitem.title}
                     </MenuItem>
                   );
                 })}
               </Menu>
-            </>
+            </div>
           );
         })}
         <Button
@@ -235,8 +234,8 @@ function VerticalNavigation(props: Props) {
                   <Box sx={{mb: 2}}>
                     {menus.map((menu, index) => {
                       return (
-                      <>
-                        <ListItemButton onClick={() => {menu.setMenuOpen(!menu.menuOpen)}}>
+                      <div key={index}>
+                        <ListItemButton key={index} onClick={() => {menu.setMenuOpen(!menu.menuOpen)}}>
                           <ListItemIcon>
                             {menu.icon}
                           </ListItemIcon>
@@ -244,9 +243,9 @@ function VerticalNavigation(props: Props) {
                           {menu.menuOpen ? <ExpandLess /> : <ExpandMore />}
                         </ListItemButton>
                         <Collapse in={menu.menuOpen} timeout="auto" unmountOnExit>
-                          {menu.subitems.map((subitem, index) => {
+                          {menu.subitems.map((subitem, i) => {
                             return (
-                              <List component="div" disablePadding>
+                              <List key={i} component="div" disablePadding>
                                 <ListItemButton sx={{ pl: 6 }}>
                                   <ListItemText secondary={subitem.title} />
                                 </ListItemButton>
@@ -254,7 +253,7 @@ function VerticalNavigation(props: Props) {
                             )
                           })}
                         </Collapse>
-                      </>
+                      </div>
                       )
                     })}
                     <ListItemButton>

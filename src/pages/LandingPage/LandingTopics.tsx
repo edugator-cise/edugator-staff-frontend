@@ -131,9 +131,8 @@ function LandingTopics() {
                     spacing={2}
                 >
                         {topics.map((topic, index) =>
-                            <Grid item lg={6} md={4} sm={6} xs={12} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                            <Grid item key={index} lg={6} md={4} sm={6} xs={12} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                 <TopicCard 
-                                    key={index}
                                     name={topic.name}
                                     description={topic.description}
                                     staticImg={topic.staticImg}
