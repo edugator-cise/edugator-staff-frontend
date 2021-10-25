@@ -8,32 +8,12 @@ import problemEditorContainerSlice, {
   validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
+  getProblemEditorInitialState,
 } from "./problemEditorContainerSlice";
 
 describe("problemEditorContainer reducer", () => {
-  const initialState: ProblemEditorContainerState = {
-    metadataIsValid: false,
-    problemIsValid: false,
-    codeIsValid: false,
-    serverConfigIsValid: false,
-    testEditorIsValid: false,
-    activeStep: 0,
-    problem: { problemStatement: "", templatePackage: "" },
-    metadata: {
-      hidden: false,
-      dueDate: new Date(),
-      title: "",
-    },
-    serverConfig: {
-      buildCommand: "",
-      timeLimit: 0,
-      memoryLimit: 0,
-    },
-    codeEditor: {
-      code: { header: "", body: "", footer: "" },
-      fileExtension: "",
-    },
-  };
+  const initialState: ProblemEditorContainerState =
+    getProblemEditorInitialState();
 
   it("should handle metadata validation", () => {
     const actual = problemEditorContainerSlice(

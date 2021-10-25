@@ -78,6 +78,10 @@ const initialState: ProblemEditorContainerState = {
   },
 };
 
+export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
+  return { ...initialState };
+};
+
 export const problemEditorContainerSlice = createSlice({
   name: "problemEditorContainer",
   initialState,
