@@ -1,64 +1,153 @@
 import Editor from "@monaco-editor/react";
-import { Box, InputLabel, Paper, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
-import { updateCodeEditor } from "../ProblemEditorContainer/problemEditorContainerSlice";
+import {
+  CodeEditorFields,
+  updateCodeEditor,
+  validateCode,
+} from "../ProblemEditorContainer/problemEditorContainerSlice";
 
 interface Props {
   formRef: any;
 }
 
+interface FlattenedCodeFields {
+  fileExtension: string;
+  header: string;
+  body: string;
+  footer: string;
+}
+
+interface Errors {
+  fileExtension?: string;
+  header?: string;
+  body?: string;
+  footer?: string;
+}
+
 export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
-  const initialValues = useAppSelector(
-    (state) => state.problemEditorContainer.codeEditor
-  );
+
+  const initialValues = useAppSelector((state) => {
+    const formattedFields: CodeEditorFields =
+      state.problemEditorContainer.codeEditor;
+    const fileExtension = formattedFields.fileExtension;
+    const code = formattedFields.code;
+    const flattenedFields: FlattenedCodeFields = {
+      fileExtension,
+      ...code,
+    };
+    return flattenedFields;
+  });
+
+  const validation = (values: FlattenedCodeFields) => {
+    const errors: Errors = {};
+    dispatch(validateCode(Object.entries(errors).length === 0));
+    return errors;
+  };
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        dispatch(updateCodeEditor(values));
+        const formattedFields: CodeEditorFields = {
+          fileExtension: values.fileExtension,
+          code: {
+            header: values.header,
+            body: values.body,
+            footer: values.footer,
+          },
+        };
+        dispatch(updateCodeEditor(formattedFields));
       }}
       innerRef={formRef}
-      //validate={validate}
+      validate={validation}
     >
-      {({ errors, values, handleChange, handleBlur, touched }) => (
+      {({
+        errors,
+        values,
+        handleChange,
+        handleBlur,
+        touched,
+        setFieldValue,
+      }) => (
         <Form>
-          <Paper elevation={0} variant="outlined">
-            <Stack
-              overflow="auto"
-              spacing={5}
-              maxHeight="50vh"
-              pr={5}
-              pl={5}
-              pt={2}
-            >
-              <Box>
-                <InputLabel>Header</InputLabel>
-                <Paper elevation={0} variant="outlined">
-                  <Editor language="cpp" height="250px" />
-                </Paper>
-              </Box>
-              <Box>
-                <InputLabel>Body</InputLabel>
-                <Paper elevation={0} variant="outlined">
-                  <Editor language="cpp" height="250px" />
-                </Paper>
-              </Box>
-              <Box flexGrow={1} display="flex" flexDirection="column">
-                <InputLabel>Footer</InputLabel>
-                <Paper elevation={0} variant="outlined">
-                  <Editor language="cpp" height="250px" />
-                </Paper>
-              </Box>
-            </Stack>
-          </Paper>
-          <Box mt={3}>
-            <TextField label="Codebox file extension" />
-          </Box>
+          <Stack overflow="auto" spacing={5}>
+            <Box>
+              <InputLabel>Header</InputLabel>
+              <Paper
+                elevation={0}
+                variant="outlined"
+                sx={{ marginTop: 1, paddingTop: 1 }}
+              >
+                <Editor
+                  language="cpp"
+                  height="250px"
+                  value={values.header}
+                  onChange={(value) => setFieldValue("header", value)}
+                />
+              </Paper>
+            </Box>
+            <Box>
+              <InputLabel>Body</InputLabel>
+              <Paper
+                elevation={0}
+                variant="outlined"
+                sx={{ marginTop: 1, paddingTop: 1 }}
+              >
+                <Editor
+                  language="cpp"
+                  height="250px"
+                  value={values.body}
+                  onChange={(value) => setFieldValue("body", value)}
+                />
+              </Paper>
+            </Box>
+            <Box flexGrow={1} display="flex" flexDirection="column">
+              <InputLabel>Footer</InputLabel>
+              <Paper
+                elevation={0}
+                variant="outlined"
+                sx={{ marginTop: 1, paddingTop: 1 }}
+              >
+                <Editor
+                  language="cpp"
+                  height="250px"
+                  value={values.footer}
+                  onChange={(value) => setFieldValue("footer", value)}
+                />
+              </Paper>
+            </Box>
+            <Box>
+              <FormControl>
+                <InputLabel>Codebox file extension</InputLabel>
+                <Select
+                  name="fileExtension"
+                  value={values.fileExtension}
+                  label="fileExtension"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  sx={{ minWidth: "10rem" }}
+                  variant="filled"
+                >
+                  <MenuItem value=".h">.h</MenuItem>
+                  <MenuItem value=".cpp">.cpp</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Stack>
         </Form>
       )}
     </Formik>
