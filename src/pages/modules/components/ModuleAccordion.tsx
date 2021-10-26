@@ -33,7 +33,6 @@ const ProblemTitle = styled(Typography)({
 const NewProblemButton = styled(Button)(({ theme }) => ({
   marginLeft: "auto",
   marginRight: theme.spacing(1),
-  color: grey["A700"],
 }));
 
 const ButtonContainer = styled("div")({
@@ -87,7 +86,6 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
-                        variant="outlined"
                         onClick={() => {
                           setProblemToGrade(problem._id ?? "Error: no p_ID");
                         }}
@@ -98,7 +96,6 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<Edit />}
                         size="small"
-                        variant="outlined"
                         onClick={() => {
                           history.push("/problem/edit/" + problem._id);
                         }}

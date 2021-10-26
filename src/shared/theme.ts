@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { blue, lightBlue, grey } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -50,8 +50,7 @@ const theme = createTheme({
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          backgroundColor: lightBlue[100],
-
+          backgroundColor: blue["700"],
         },
       },
     },
