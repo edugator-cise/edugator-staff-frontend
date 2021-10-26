@@ -1,7 +1,6 @@
 import React from "react";
-import { Button, ButtonProps, Stack } from "@mui/material";
+import { Button, ButtonProps, Stack, Icon } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import UploadIcon from "../../../assets/folder_upload.svg";
 import Dialog from "./GenericDialog";
 
 interface DropAreaButtonProps extends ButtonProps {
@@ -16,29 +15,15 @@ const FileDropButton = styled(Button)<DropAreaButtonProps>(
     marginTop: theme.spacing(1),
     borderRadius: 0,
     border: "dashed",
-    // styles for the svg image
-    "& img": {
-      transition: "all 0.2s",
-    },
     "&:hover": {
       color: theme.palette.primary.main,
       borderColor: theme.palette.primary.main,
-      "& img": {
-        // to go from black to current theme.primary.main
-        filter:
-          "invert(47%) sepia(99%) saturate(2049%) hue-rotate(184deg) brightness(97%) contrast(97%)",
-      },
     },
     // styles when hovering with file
     // "&:hoverDragging": (pretend)
     ...(hoverDragging && {
       color: theme.palette.primary.main,
       borderColor: theme.palette.primary.main,
-      "& img": {
-        transition: "all 0.2s",
-        filter:
-          "invert(47%) sepia(99%) saturate(2049%) hue-rotate(184deg) brightness(97%) contrast(97%)",
-      },
     }),
   })
 );
@@ -132,11 +117,7 @@ export function GradingDialog(props: GradingDialogProps) {
           >
             <Stack alignItems="center" justifyContent="center">
               <p>Drag file here or click to begin</p>
-              <img
-                src={UploadIcon}
-                alt="Upload .zip file"
-                style={{ width: "40%" }}
-              />
+              <Icon style={{ fontSize: "6rem" }}>drive_folder_upload</Icon>
             </Stack>
           </FileDropButton>
         </label>
