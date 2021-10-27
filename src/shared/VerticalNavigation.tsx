@@ -14,6 +14,7 @@ import DarkModeLogo from "../assets/DarkModeLogo.svg";
 
 interface Props {
   light: boolean;
+  modules: string[];
 }
 function VerticalNavigation(props: Props) {
   const [anchorProjects, setAnchorProjects] = useState<any>(null);
@@ -34,20 +35,10 @@ function VerticalNavigation(props: Props) {
       id: "modules",
       anchor: anchorModules,
       anchorSet: setAnchorModules,
-      subitems: [
-        {
-          title: "1. C++ Review",
-          link: "",
-        },
-        {
-          title: "2. Arrays and Maps",
-          link: "",
-        },
-        {
-          title: "3. Stacks",
-          link: "",
-        },
-      ],
+      subitems: props.modules.map((value, index) => ({
+        title: `${index + 1}. ${value}`,
+        link: "",
+      })),
     },
     {
       title: "Projects",
