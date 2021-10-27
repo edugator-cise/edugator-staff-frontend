@@ -47,6 +47,8 @@ export interface ProblemEditorContainerState {
   codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
   testCases: TestCaseField[];
+
+  isSubmitting: boolean;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -79,6 +81,7 @@ const initialState: ProblemEditorContainerState = {
     buildCommand: "",
   },
   testCases: [],
+  isSubmitting: false,
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -152,6 +155,9 @@ export const problemEditorContainerSlice = createSlice({
     updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
       state.testCases = action.payload;
     },
+    requestAddProblem: (state) => {
+      state.isSubmitting = true;
+    },
   },
 });
 
@@ -169,5 +175,6 @@ export const {
   updateCodeEditor,
   updateServerConfig,
   updateTestCases,
+  requestAddProblem,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
