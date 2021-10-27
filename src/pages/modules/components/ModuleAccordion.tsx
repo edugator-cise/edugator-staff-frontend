@@ -6,18 +6,12 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { useHistory } from "react-router";
 import { useAppSelector } from "../../../app/common/hooks";
-import { ModuleMenu } from "./";
-import { styled } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
 import { IAdminModule } from "../types";
-
-const Module = styled(Accordion)(({ theme }) => ({
-  width: "100%",
-  marginBottom: theme.spacing(0.5),
-}));
+import { ModuleMenu } from "./";
 
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   display: "flex",
@@ -25,14 +19,20 @@ const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   paddingLeft: theme.spacing(2),
 }));
 
-const ProblemTitle = styled(Typography)({
+const Title = styled(Typography)(({ theme }) => ({
   marginTop: "auto",
   marginBottom: "auto",
-});
+  padding: theme.spacing(0.5),
+}));
 
 const NewProblemButton = styled(Button)(({ theme }) => ({
   marginLeft: "auto",
   marginRight: theme.spacing(1),
+  color: "black",
+  backgroundColor: theme.palette.primary.light,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
 }));
 
 const ButtonContainer = styled("div")({
@@ -40,9 +40,11 @@ const ButtonContainer = styled("div")({
 });
 
 const ProblemAction = styled(Button)(({ theme }) => ({
-  marginRight: theme.spacing(1),
-  color: grey["A700"],
-  borderColor: grey["A700"],
+  marginRight: theme.spacing(2),
+  color: "black",
+  "&:hover": {
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
 interface moduleProps {
@@ -58,36 +60,39 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
     <>
       {modulesState.modules.length > 0 ? (
         <>
-          {modulesState.modules.map((module, i) => {
+          {modulesState.modules.map((module) => {
             return (
-              <Module key={module._id} disableGutters>
+              <Accordion key={module._id} disableGutters>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">
+                  <Title variant="h6">
                     Module {module.number}: {module.name}
-                  </Typography>
+                  </Title>
 
                   <ModuleMenu
                     module={module}
                     setModuleToDelete={setModuleToDelete}
                   />
 
-                  <NewProblemButton startIcon={<Add />}>
+                  <NewProblemButton startIcon={<Add />} variant="outlined">
                     Add Problem
                   </NewProblemButton>
                 </AccordionSummary>
 
                 {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
-                    <ProblemTitle>
-                      Problem {i + 1}: {problem.title}
-                    </ProblemTitle>
+                    <Title>
+                      <b>
+                        Problem {module.number}.{i + 1}:
+                      </b>
+                      {` ${problem.title}`}
+                    </Title>
 
                     <ButtonContainer>
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
                         onClick={() => {
-                          setProblemToGrade(problem._id ?? "Error: no p_ID");
+                          setProblemToGrade(problem._id ?? "Error: no ID");
                         }}
                       >
                         Grade
@@ -105,7 +110,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Module>
+              </Accordion>
             );
           })}
         </>

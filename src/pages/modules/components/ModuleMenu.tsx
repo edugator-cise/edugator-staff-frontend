@@ -1,17 +1,9 @@
 import React from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { MoreVert } from "@mui/icons-material/";
 import { IAdminModule } from "../types";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { openEditDialog } from "../ModulesPage.slice";
-
-const MenuButton = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  marginLeft: theme.spacing(0.5),
-  marginTop: "auto",
-  marginBottom: "auto",
-}));
 
 interface MenuProps {
   module: IAdminModule;
@@ -29,8 +21,8 @@ export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
   };
 
   return (
-    <div>
-      <MenuButton
+    <>
+      <IconButton
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={(event) => {
@@ -39,7 +31,7 @@ export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
         }}
       >
         <MoreVert />
-      </MenuButton>
+      </IconButton>
 
       <Menu
         id="simple-menu"
@@ -70,6 +62,6 @@ export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
           Delete
         </MenuItem>
       </Menu>
-    </div>
+    </>
   );
 }

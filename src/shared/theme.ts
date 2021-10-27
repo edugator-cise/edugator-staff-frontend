@@ -47,18 +47,31 @@ const theme = createTheme({
         },
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          width: "100%",
+          marginBottom: 8,
+        },
+      },
+    },
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          backgroundColor: blue["700"],
+          height: "9vh",
+          borderLeft: `6px solid ${blue[500]}`,
+          backgroundColor: blue[50],
+          //backgroundColor: grey[100],
         },
       },
     },
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          backgroundColor: grey[100],
-          borderBottom: `1px solid ${grey[400]}`,
+          height: "4vh",
+          borderLeft: `6px solid ${blue[200]}`,
+          borderBottom: `1px solid ${grey[300]}`,
+          backgroundColor: grey[50],
         },
       },
     },
