@@ -1,20 +1,15 @@
 import { blue } from "@mui/material/colors";
-import { createTheme, responsiveFontSizes  } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
-  interface Theme {  
-  }
+  interface Theme {}
   // allow configuration using `createTheme`
-  interface ThemeOptions {
-  }
-  interface PaletteOptions {
-  }
+  interface ThemeOptions {}
+  interface PaletteOptions {}
 }
 
-
-
-let theme = createTheme({ 
+let theme = createTheme({
   transitions: {
     duration: {
       shortest: 150,
@@ -48,21 +43,17 @@ let theme = createTheme({
           borderRadius: 9,
         },
         text: {
-          color: 'black',
-        }
-      }
+          color: "black",
+        },
+      },
     },
   },
   typography: {
     fontFamily: "Inter",
     button: {
       textTransform: "none",
-      
     },
-    h1: {
-      
-      
-    },
+    h1: {},
     h2: {
       fontWeight: 600,
       lineHeight: 1.3,
@@ -80,12 +71,12 @@ let theme = createTheme({
     primary: {
       main: blue[500],
       light: blue[100],
-      dark: '#142F73'
+      dark: "#142F73",
     },
     secondary: {
-      main: '#3A4F58',
-      light: '#fff'
-    }
+      main: "#3A4F58",
+      light: "#fff",
+    },
   },
   breakpoints: {
     values: {
