@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TestCaseField } from "../TestEditor/TestCase.utils";
 
 export interface ProblemFields {
   problemStatement: string;
@@ -45,6 +46,7 @@ export interface ProblemEditorContainerState {
   problem: ProblemFields;
   codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
+  testCases: TestCaseField[];
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -76,6 +78,7 @@ const initialState: ProblemEditorContainerState = {
     memoryLimit: 0,
     buildCommand: "",
   },
+  testCases: [],
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -146,6 +149,9 @@ export const problemEditorContainerSlice = createSlice({
     updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
       state.serverConfig = action.payload;
     },
+    updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
+      state.testCases = action.payload;
+    },
   },
 });
 
@@ -162,5 +168,6 @@ export const {
   updateMetadata,
   updateCodeEditor,
   updateServerConfig,
+  updateTestCases,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
