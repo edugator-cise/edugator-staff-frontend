@@ -1,12 +1,19 @@
 /** Problem Interfaces */
 
+export interface ITestCase {
+  input: string;
+  expectedOutput: string;
+  hint: string;
+  visibility: number;
+}
+
 export interface IProblem {
   _id?: string;
   moduleId: string;
   title: string;
   hidden: boolean;
   language: string;
-  dueDate: Date;
+  dueDate: string; //iso format
   statement: string;
   code: {
     header: string;
@@ -14,14 +21,7 @@ export interface IProblem {
     footer: string;
   };
   fileExtension: string;
-  testCases: [
-    {
-      input: string;
-      expectedOutput: string;
-      hint: string;
-      visibility: number;
-    }
-  ];
+  testCases: ITestCase[];
   templatePackage: string;
   timeLimit: number;
   memoryLimit: number;
