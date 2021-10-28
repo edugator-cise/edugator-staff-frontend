@@ -1,19 +1,7 @@
 import React from "react";
-import {
-  Icon,
-  Stack,
-  Alert,
-  Button,
-  ButtonProps,
-  Typography,
-  Collapse,
-} from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Icon, Stack, Button, ButtonProps, Typography } from "@mui/material";
 import { IFeedback, AlertType } from "../../modules/types";
-
-const UploadAlert = styled(Alert)(({ theme }) => ({
-  marginTop: theme.spacing(1),
-}));
 
 interface DropAreaButtonProps extends ButtonProps {
   hover_dragging?: boolean;
@@ -167,12 +155,6 @@ export function GradingDropArea(props: GradingDropAreaProps) {
           </Stack>
         </FileDropButton>
       </label>
-
-      <Collapse in={feedback.display}>
-        <UploadAlert variant="filled" severity={feedback.type}>
-          {feedback.message}
-        </UploadAlert>
-      </Collapse>
     </>
   );
 }

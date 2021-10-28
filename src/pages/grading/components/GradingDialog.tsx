@@ -1,8 +1,24 @@
 import React from "react";
-import { Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Stack,
+  Collapse,
+  TextField,
+  TextFieldProps,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { IFeedback, AlertType } from "../../modules/types";
 import { GradingDropArea } from "./GradingDropArea";
-import Dialog from "./GenericDialog";
+import Dialog from "../../../shared/GenericDialog";
+
+const EmailField = styled(TextField)<TextFieldProps>({
+  minWidth: "21rem",
+  maxWidth: "45%",
+});
+
+const UploadAlert = styled(Alert)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+}));
 
 const noFeedback = { display: false, type: AlertType.info };
 
@@ -26,13 +42,13 @@ export function GradingDialog(props: GradingDialogProps) {
     // TODO:
     //  dont close before checking
     //  if action was successful
-    // handleClose();
+    handleClose();
   };
 
   const FooterButtons = [
     {
       label: "Cancel",
-      onClick: () => handleDialogSubmit(),
+      onClick: () => handleClose(),
       variant: "contained",
       color: "error",
     },
@@ -53,13 +69,25 @@ export function GradingDialog(props: GradingDialogProps) {
       footerContent={FooterButtons}
     >
       <Stack spacing={1}>
-        <TextField />
+        <EmailField
+          label="Email"
+          variant="filled"
+          required
+          helperText="Please enter an email to receive the graded solutions"
+        />
+
         <GradingDropArea
           feedback={feedback}
           setFeedback={setFeedback}
           fileToGrade={fileToGrade}
           setFileToGrade={setFileToGrade}
         />
+
+        <Collapse in={feedback.display}>
+          <UploadAlert variant="filled" severity={feedback.type}>
+            {feedback.message}
+          </UploadAlert>
+        </Collapse>
       </Stack>
     </Dialog>
   );

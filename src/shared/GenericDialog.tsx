@@ -12,7 +12,7 @@ import {
   ButtonProps,
   ButtonColor,
   ButtonVariant,
-} from "../../../shared/LayoutContainer";
+} from "./LayoutContainer";
 import { Breakpoint } from "@mui/system";
 
 const Footer = styled("div")({

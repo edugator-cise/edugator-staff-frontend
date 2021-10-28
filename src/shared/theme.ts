@@ -58,17 +58,16 @@ const theme = createTheme({
     MuiAccordionSummary: {
       styleOverrides: {
         root: {
-          height: "9vh",
+          height: "auto",
           borderLeft: `6px solid ${blue[500]}`,
           backgroundColor: blue[50],
-          //backgroundColor: grey[100],
         },
       },
     },
     MuiAccordionDetails: {
       styleOverrides: {
         root: {
-          height: "4vh",
+          height: "auto",
           borderLeft: `6px solid ${blue[200]}`,
           borderBottom: `1px solid ${grey[300]}`,
           backgroundColor: grey[50],

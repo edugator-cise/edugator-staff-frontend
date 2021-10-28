@@ -73,7 +73,14 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                     setModuleToDelete={setModuleToDelete}
                   />
 
-                  <NewProblemButton startIcon={<Add />} variant="outlined">
+                  <NewProblemButton
+                    startIcon={<Add />}
+                    variant="outlined"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      history.push("/problem/create/" + module._id);
+                    }}
+                  >
                     Add Problem
                   </NewProblemButton>
                 </AccordionSummary>
@@ -91,6 +98,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
+                        variant="outlined"
                         onClick={() => {
                           setProblemToGrade(problem._id ?? "Error: no ID");
                         }}
@@ -101,6 +109,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       <ProblemAction
                         startIcon={<Edit />}
                         size="small"
+                        variant="outlined"
                         onClick={() => {
                           history.push("/problem/edit/" + problem._id);
                         }}
