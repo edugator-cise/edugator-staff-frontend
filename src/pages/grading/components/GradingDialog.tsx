@@ -7,7 +7,7 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { IFeedback, AlertType } from "../../../shared/types";
+import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
 import { GradingDropArea } from "./GradingDropArea";
 import Dialog from "../../../shared/GenericDialog";
 
@@ -24,12 +24,12 @@ const noFeedback = { display: false, type: AlertType.info };
 
 interface GradingDialogProps {
   open: boolean;
-  problem_id: string;
+  problem: IProblemBase;
   handleClose: () => void;
 }
 
 export function GradingDialog(props: GradingDialogProps) {
-  const { open, problem_id, handleClose } = props;
+  const { open, problem, handleClose } = props;
 
   // set when file is uploaded, used if file is good
   const [fileToGrade, setFileToGrade] = React.useState<File>();
@@ -64,7 +64,7 @@ export function GradingDialog(props: GradingDialogProps) {
       open={open}
       fullWidth
       maxWidth="md"
-      title={`Currently grading Problem_ID: ${problem_id}`}
+      title={`Grading: "${problem.title}"`}
       handleClose={handleClose}
       footerContent={FooterButtons}
     >

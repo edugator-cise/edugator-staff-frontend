@@ -27,6 +27,7 @@ export interface IProblem {
   buildCommand: string;
 }
 
+// please extend problem interfaces from here
 export interface IProblemBase {
   _id?: string;
   title: string;

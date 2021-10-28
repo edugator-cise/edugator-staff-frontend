@@ -6,10 +6,11 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router";
 import { useAppSelector } from "../../../app/common/hooks";
+import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { ModuleMenu } from "./";
 
@@ -49,7 +50,7 @@ const ProblemAction = styled(Button)(({ theme }) => ({
 
 interface moduleProps {
   setModuleToDelete: (module: IAdminModule) => void;
-  setProblemToGrade: (problem_ID: string) => void;
+  setProblemToGrade: (problem: IProblemBase) => void;
 }
 
 export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
@@ -100,7 +101,11 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                         size="small"
                         variant="outlined"
                         onClick={() => {
-                          setProblemToGrade(problem._id ?? "Error: no ID");
+                          let toGrade: IProblemBase = {
+                            _id: problem._id,
+                            title: problem.title,
+                          };
+                          setProblemToGrade(toGrade);
                         }}
                       >
                         Grade

@@ -38,13 +38,3 @@ export interface IModuleState {
 export interface IRequestMessage {
   message?: string;
 }
-
-/* PUT Request Actions - Modules */
-export interface IModulesPUT {
-  moduleName: string;
-  moduleNum: number;
-}
-
-/* POST Request Actions - Modules */
-
-/* DELETE Request Actions - Modules */

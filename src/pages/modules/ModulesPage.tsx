@@ -11,6 +11,7 @@ import {
 import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
 import { IAdminModule, EmptyModule } from "./types";
+import { IProblemBase } from "../../shared/types";
 
 export function ModulesPage() {
   const dispatch = useAppDispatch();
@@ -32,14 +33,14 @@ export function ModulesPage() {
   // Problem to grade - hooks
 
   const [grading, setGrading] = React.useState<boolean>(false);
-  const onGradingDialogClose = () => {
-    setGrading(false);
-  };
+  const onGradingDialogClose = () => setGrading(false);
 
-  const [toGrade, setToGrade] = React.useState<string>("");
-  const setProblemToGrade = (problemID: string) => {
+  const EmptyProblem: IProblemBase = { title: "" };
+
+  const [toGrade, setToGrade] = React.useState<IProblemBase>(EmptyProblem);
+  const setProblemToGrade = (problem: IProblemBase) => {
     setGrading(true);
-    setToGrade(problemID);
+    setToGrade(problem);
   };
 
   const moduleHeaderButtons = [
@@ -68,7 +69,7 @@ export function ModulesPage() {
         />
         <GradingDialog
           open={grading}
-          problem_id={toGrade}
+          problem={toGrade}
           handleClose={onGradingDialogClose}
         />
 
