@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TestCaseField } from "../TestEditor/TestCase.utils";
 
 export interface ProblemFields {
   problemStatement: string;
@@ -8,8 +9,16 @@ export interface ProblemFields {
 export interface MetadataFields {
   title: string;
   hidden: boolean;
-  language: string;
   dueDate: Date;
+}
+
+export interface CodeEditorFields {
+  code: {
+    header: string;
+    body: string;
+    footer: string;
+  };
+  fileExtension: string;
 }
 
 export interface ServerConfigFields {
@@ -33,9 +42,11 @@ export interface ProblemEditorContainerState {
 
   activeStep: number;
 
-  problem: ProblemFields;
   metadata: MetadataFields;
+  problem: ProblemFields;
+  codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
+  testCases: TestCaseField[];
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -45,21 +56,33 @@ const initialState: ProblemEditorContainerState = {
   serverConfigIsValid: false,
   testEditorIsValid: false,
   activeStep: 0,
+  metadata: {
+    title: "",
+    hidden: false,
+    dueDate: new Date(),
+  },
   problem: {
     problemStatement: "",
     templatePackage: "",
   },
-  metadata: {
-    title: "",
-    hidden: false,
-    language: "C++",
-    dueDate: new Date(),
+  codeEditor: {
+    code: {
+      header: "",
+      body: "",
+      footer: "",
+    },
+    fileExtension: ".cpp",
   },
   serverConfig: {
     timeLimit: 0,
     memoryLimit: 0,
     buildCommand: "",
   },
+  testCases: [],
+};
+
+export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
+  return { ...initialState };
 };
 
 export const problemEditorContainerSlice = createSlice({
@@ -120,8 +143,14 @@ export const problemEditorContainerSlice = createSlice({
     updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
       state.metadata = action.payload;
     },
+    updateCodeEditor: (state, action: PayloadAction<CodeEditorFields>) => {
+      state.codeEditor = action.payload;
+    },
     updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
       state.serverConfig = action.payload;
+    },
+    updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
+      state.testCases = action.payload;
     },
   },
 });
@@ -137,6 +166,8 @@ export const {
   decrementActiveStep,
   updateProblem,
   updateMetadata,
+  updateCodeEditor,
   updateServerConfig,
+  updateTestCases,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
