@@ -2,6 +2,7 @@
 
 export interface IProblem {
   _id?: string;
+  moduleId: string;
   title: string;
   hidden: boolean;
   language: string;

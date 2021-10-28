@@ -1,7 +1,11 @@
 import { Formik, Form, FieldArray, ArrayHelpers } from "formik";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
-import { updateTestCases } from "../ProblemEditorContainer/problemEditorContainerSlice";
+import {
+  requestAddProblem,
+  updateTestCases,
+  validateTestEditor,
+} from "../ProblemEditorContainer/problemEditorContainerSlice";
 import { Stack, Button, Alert } from "@mui/material";
 import { TestCase } from "./TestCase";
 import { generateDefaultTestCase, TestCaseField } from "./TestCase.utils";
@@ -23,7 +27,7 @@ export const TestEditor = (props: Props) => {
       initialValues={{ testCases: testCases }}
       onSubmit={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
-        //TODO: dispatch API call to add/edit problem
+        dispatch(requestAddProblem());
       }}
       validate={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
