@@ -50,9 +50,8 @@ export function GradingDropArea(props: GradingDropAreaProps) {
   // handler for clicking the drop area
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const clickInputRef = () => {
-    fileInputRef.current?.click();
-  };
+  const clickInputRef = () => fileInputRef.current?.click();
+
   const onFileCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
     /*Selected files data can be collected here.*/
     console.log(event.target.files);
@@ -60,13 +59,8 @@ export function GradingDropArea(props: GradingDropAreaProps) {
 
   // handler for dropping in the drop area
 
-  const setHoverStyles = () => {
-    setHoverDragging(true);
-  };
-
-  const resetHoverStyles = () => {
-    setHoverDragging(false);
-  };
+  const setHoverStyles = () => setHoverDragging(true);
+  const resetHoverStyles = () => setHoverDragging(false);
 
   const handleDrop = (event: React.DragEvent<HTMLButtonElement>) => {
     preventDefaults(event);
@@ -117,44 +111,39 @@ export function GradingDropArea(props: GradingDropAreaProps) {
   const dropAreaTitle = (filename?: string) => {
     if (hoverDragging) {
       return "Drop a .zip file here to grade solutions";
-    } else if (feedback.display) {
-      if (feedback.type === AlertType.success) {
-        return "File uploaded: " + filename;
-      }
-      if (feedback.type === AlertType.error) {
-        return "Something went wrong";
-      }
+    } else if (feedback.display && feedback.type === AlertType.success) {
+      return "File uploaded: " + filename;
+    } else if (feedback.display && feedback.type === AlertType.error) {
+      return "Something went wrong";
     } else {
       return "Click or Drag file here to begin";
     }
   };
 
   return (
-    <>
-      <label htmlFor="student-solutions-file">
-        <input
-          id="student-solutions-file"
-          type="file"
-          accept=".zip"
-          ref={fileInputRef}
-          onChangeCapture={onFileCapture}
-          style={{ display: "none" }}
-        />
+    <label htmlFor="student-solutions-file">
+      <input
+        id="student-solutions-file"
+        type="file"
+        accept=".zip"
+        ref={fileInputRef}
+        onChangeCapture={onFileCapture}
+        style={{ display: "none" }}
+      />
 
-        <FileDropButton
-          onDragEnter={setHoverStyles}
-          onDragExit={resetHoverStyles}
-          onDragOver={preventDefaults} // necessary
-          onDrop={handleDrop}
-          onClick={clickInputRef}
-          hover_dragging={hoverDragging}
-        >
-          <Stack alignItems="center" justifyContent="center">
-            <Typography>{dropAreaTitle(fileToGrade?.name)}</Typography>
-            <Icon style={{ fontSize: "6rem" }}>drive_folder_upload</Icon>
-          </Stack>
-        </FileDropButton>
-      </label>
-    </>
+      <FileDropButton
+        onDragEnter={setHoverStyles}
+        onDragExit={resetHoverStyles}
+        onDragOver={preventDefaults} // necessary
+        onDrop={handleDrop}
+        onClick={clickInputRef}
+        hover_dragging={hoverDragging}
+      >
+        <Stack alignItems="center" justifyContent="center">
+          <Typography>{dropAreaTitle(fileToGrade?.name)}</Typography>
+          <Icon style={{ fontSize: "6rem" }}>drive_folder_upload</Icon>
+        </Stack>
+      </FileDropButton>
+    </label>
   );
 }

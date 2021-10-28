@@ -8,11 +8,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import {
-  ButtonProps,
-  ButtonColor,
-  ButtonVariant,
-} from "./LayoutContainer";
+import { ButtonProps, ButtonColor, ButtonVariant } from "./LayoutContainer";
 import { Breakpoint } from "@mui/system";
 
 const Footer = styled("div")({

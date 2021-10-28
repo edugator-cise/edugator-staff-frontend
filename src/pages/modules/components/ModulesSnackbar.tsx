@@ -19,16 +19,14 @@ export function ModulesSnackbar() {
   };
 
   return (
-    <>
-      <Snackbar
-        open={feedback.display}
-        autoHideDuration={3000}
-        onClose={handleClose} // called after 6000 ms = 6 seconds
-      >
-        <Alert variant="filled" severity={feedback.type} sx={{ width: "100%" }}>
-          {feedback.message}
-        </Alert>
-      </Snackbar>
-    </>
+    <Snackbar
+      open={feedback.display}
+      autoHideDuration={3000}
+      onClose={handleClose} // called after 6000 ms = 6 seconds
+    >
+      <Alert variant="filled" severity={feedback.type} sx={{ width: "100%" }}>
+        {feedback.message}
+      </Alert>
+    </Snackbar>
   );
 }
