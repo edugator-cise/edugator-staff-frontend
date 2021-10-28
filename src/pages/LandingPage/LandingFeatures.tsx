@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
@@ -9,33 +9,26 @@ import Glasses from "../../assets/icons8-glasses-100.png";
 import FeatureCard from "./FeatureCard";
 
 const Holder = styled("div")({
-  height: 800,
+  height: 700,
   width: "100%",
   backgroundColor: "red",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   alignItems: "center",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center center",
   WebkitBackgroundSize: "cover",
   backgroundImage: `url(${FeaturesBG})`, //obtained from https://bgjar.com/simple-shiny
   backgroundSize: "13em",
-  paddingTop: 80,
+  paddingTop: 170,
   [theme.breakpoints.up("xl")]: {
-    paddingTop: 20,
+    paddingTop: 80,
   },
-});
-
-const FeatureHolder = styled("div")({
-  height: "55%",
-  width: "70%",
-  maxWidth: 1100,
-  minWidth: 1000,
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "flex-end",
+  [theme.breakpoints.down("md")]: {
+    paddingTop: 80,
+    height: 1500,
+  },
 });
 
 function LandingFeatures() {
@@ -68,23 +61,49 @@ function LandingFeatures() {
       <Typography variant="h3" color="primary">
         Computer Science
       </Typography>
-      <Typography variant="body1" color="white" sx={{ marginTop: "2em" }}>
+      <Typography
+        variant="body1"
+        color="white"
+        sx={{ marginTop: "2em", maxWidth: 400 }}
+      >
         Understand, analyze, and apply Data Structures and Algorithms in your
         everyday life.
       </Typography>
 
-      <FeatureHolder>
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="flex-end"
+        style={{ height: "55%", maxWidth: 1200, marginTop: 40 }}
+        spacing={1}
+      >
         {features.map((feature, index) => {
           return (
-            <FeatureCard
+            <Grid
               key={index}
-              title={feature.title}
-              img={feature.img}
-              description={feature.description}
-            />
+              item
+              xl={4}
+              lg={4}
+              md={4}
+              sm={12}
+              xs={12}
+              style={{
+                height: "25em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FeatureCard
+                title={feature.title}
+                img={feature.img}
+                description={feature.description}
+              />
+            </Grid>
           );
         })}
-      </FeatureHolder>
+      </Grid>
     </Holder>
   );
 }
