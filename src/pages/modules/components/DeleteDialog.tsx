@@ -45,7 +45,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
     },
   ];
 
-  const dialogTitle = `Confirm Delete: "Module ${toDelete.number} - ${toDelete.name}"?`;
+  const dialogTitle = `Confirm Delete: "Module ${toDelete.number} - ${toDelete.name}"`;
 
   return (
     <Dialog
@@ -66,7 +66,9 @@ export function DeleteDialog(props: DeleteDialogProps) {
               <Typography>
                 {toDelete.problems.map((problem, i) => {
                   return (
-                    <li key={i}>{`Problem ${i + 1}: ${problem.title}`}</li>
+                    <li key={i}>
+                      {`Problem ${toDelete.number}.${i + 1}: ${problem.title}`}
+                    </li>
                   );
                 })}
               </Typography>

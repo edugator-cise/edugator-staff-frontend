@@ -7,7 +7,7 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { IFeedback, AlertType } from "../../modules/types";
+import { IFeedback, AlertType } from "../../../shared/types";
 import { GradingDropArea } from "./GradingDropArea";
 import Dialog from "../../../shared/GenericDialog";
 

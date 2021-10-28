@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAdminModule } from "./types";
 import { IModuleBase } from "../../shared/types";
-import {
-  IModuleState,
-  IRequestMessage,
-  DialogStatus,
-  AlertType,
-} from "./types";
+import { IModuleState, IRequestMessage, DialogStatus } from "./types";
+import { AlertType } from "../../shared/types";
 import { AlertMsg } from "./config";
 
 const baseModuleState: IModuleState = {

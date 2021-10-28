@@ -1,4 +1,4 @@
-import { IProblem, IModuleBase } from "../../shared/types";
+import { IProblem, IModuleBase, IFeedback } from "../../shared/types";
 
 /** Admin Module Interface */
 
@@ -24,23 +24,6 @@ export interface IDialog {
   open: boolean;
   action: DialogStatus;
   module: IModuleBase;
-}
-
-/** Useful Structs */
-/**
- * @property error
- * @property success
- */
-export enum AlertType {
-  info = "info",
-  error = "error",
-  success = "success",
-}
-
-export interface IFeedback {
-  message?: string;
-  display: boolean;
-  type: AlertType;
 }
 
 /* Redux State - Modules */

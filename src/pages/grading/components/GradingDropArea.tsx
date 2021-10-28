@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { Icon, Stack, Button, ButtonProps, Typography } from "@mui/material";
-import { IFeedback, AlertType } from "../../modules/types";
+import { IFeedback, AlertType } from "../../../shared/types";
 
 interface DropAreaButtonProps extends ButtonProps {
   hover_dragging?: boolean;
