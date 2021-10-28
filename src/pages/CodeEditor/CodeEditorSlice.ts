@@ -1,15 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { INavigationItem, IResultSubmission, ICodeSubmission } from "./types";
 import { IProblem } from "../../shared/types";
-interface ICompilerOutput {
-  compilerMessage: string;
-  compilerBody: string;
-}
-
-interface ErrorObject {
-  hasError: boolean;
-  errorMessage: string;
-}
+import { ICompilerOutput, ErrorObject } from "./types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   navStructure: INavigationItem[];
@@ -46,7 +38,7 @@ const initialState: CodeEditorContainerState = {
   activeTab: 0, // stdin tab is active
 };
 
-const resetinputOutputViewState = () => ({
+export const resetinputOutputViewState = () => ({
   stdin: "",
   isAcceptedOutput: undefined,
   compilerOutput: {

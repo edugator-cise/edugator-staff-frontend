@@ -1,14 +1,23 @@
 import React, { useEffect } from "react";
-import { CodeLayoutContainer } from "./CodeLayoutContainer";
 import { Sidenav } from "./SideNav";
+import { setRunCodeError } from "./CodeEditorSlice";
+import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "./CodeEditorSlice";
-import { Grid, CircularProgress, Box, Container } from "@mui/material";
+import {
+  Grid,
+  CircularProgress,
+  Box,
+  Container,
+  Alert,
+  Grow,
+} from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
+import { colors } from "../../shared/constants";
 export const CodeEditorPage = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(
@@ -17,28 +26,62 @@ export const CodeEditorPage = () => {
   const currentProblem = useSelector(
     (state: RootState) => state.codeEditor.currentProblem
   );
+  const errorMessage = useSelector(
+    (state: RootState) => state.codeEditor.runCodeError
+  );
+  const modules = useSelector((state: RootState) => {
+    const sortedModules = state.codeEditor.navStructure;
+    return sortedModules.map((value) => value.name);
+  });
   useEffect(() => {
     dispatch(requestModulesAndProblems(true));
   }, [dispatch]);
   if (isLoading) {
     return (
-      <CodeLayoutContainer>
-        <Grid
-          container
-          justifyContent="center"
-          direction="column"
-          alignItems="center"
-          sx={{ height: "calc(100vh-64px)" }}
-        >
-          <Box>
-            <CircularProgress />
-          </Box>
-        </Grid>
-      </CodeLayoutContainer>
+      <Grid
+        container
+        justifyContent="center"
+        direction="column"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        <Box>
+          <CircularProgress />
+        </Box>
+      </Grid>
     );
   } else {
     return (
-      <CodeLayoutContainer>
+      <Box
+        minHeight="100%"
+        display="flex"
+        flexDirection="column"
+        sx={{ bgcolor: colors.lightGray }}
+      >
+        <VerticalNavigation light={false} modules={modules} />
+        {errorMessage.hasError && (
+          <Grow in timeout={500}>
+            <Alert
+              severity="error"
+              sx={{
+                position: "absolute",
+                left: "0",
+                right: "0",
+                width: "50%",
+                marginTop: 5,
+                marginRight: "auto",
+                marginLeft: "auto",
+              }}
+              onClose={() => {
+                dispatch(
+                  setRunCodeError({ hasError: false, errorMessage: "" })
+                );
+              }}
+            >
+              {errorMessage.errorMessage}
+            </Alert>
+          </Grow>
+        )}
         <Box
           sx={{
             height: "calc(100vh - 64px)",
@@ -82,7 +125,7 @@ export const CodeEditorPage = () => {
             )}
           </Grid>
         </Box>
-      </CodeLayoutContainer>
+      </Box>
     );
   }
 };

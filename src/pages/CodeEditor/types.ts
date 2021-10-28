@@ -8,6 +8,7 @@ export interface IProblemItem {
 export interface INavigationItem {
   name: string;
   _id: string;
+  number: number;
   problems: IProblemItem[];
 }
 
@@ -48,4 +49,14 @@ export interface IResultSubmission {
   output: string;
   expectedOutput: string;
   result: boolean;
+}
+
+export interface ICompilerOutput {
+  compilerMessage: string;
+  compilerBody: string;
+}
+
+export interface ErrorObject {
+  hasError: boolean;
+  errorMessage: string;
 }

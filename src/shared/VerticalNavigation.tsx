@@ -32,6 +32,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface Props {
   light: boolean;
+  modules: string[];
 }
 
 function VerticalNavigation(props: Props) {
@@ -66,22 +67,12 @@ function VerticalNavigation(props: Props) {
       icon: <ModulesIcon sx={{ color: "primary.main" }} />,
       anchor: anchorModules,
       anchorSet: setAnchorModules,
+      subitems: props.modules.map((value, index) => ({
+        title: `${value}`,
+        link: "",
+      })),
       menuOpen: openModules,
-      setMenuOpen: setOpenModules,
-      subitems: [
-        {
-          title: "1. C++ Review",
-          link: "",
-        },
-        {
-          title: "2. Arrays and Maps",
-          link: "",
-        },
-        {
-          title: "3. Stacks",
-          link: "",
-        },
-      ],
+      setMenuOpen: setOpenModules
     },
     {
       title: "Projects",
