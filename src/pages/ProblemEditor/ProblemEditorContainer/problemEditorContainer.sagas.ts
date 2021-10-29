@@ -12,7 +12,7 @@ function* handleAddProblemRequest(): any {
   const language = "C++";
 
   const newProblem: IProblem = {
-    moduleId: "111111111111111111111111",
+    //moduleId: "111111111111111111111111",
     ...problemState.metadata,
     language,
     dueDate: problemState.metadata.dueDate.toISOString(),

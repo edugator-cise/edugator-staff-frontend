@@ -6,6 +6,7 @@ import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
+import { FailureDialog } from "../SubmissionDialogs/FailureDialog";
 import { SuccessDialog } from "../SubmissionDialogs/SuccessDialog";
 import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
@@ -67,6 +68,7 @@ export const ProblemEditorContainer = () => {
         <ActiveForm />
         <ProblemEditorNavigator formRef={formRef} />
         <SuccessDialog />
+        <FailureDialog />
       </Box>
     </Box>
   );

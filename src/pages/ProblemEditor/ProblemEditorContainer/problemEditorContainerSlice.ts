@@ -160,6 +160,10 @@ export const problemEditorContainerSlice = createSlice({
       state.testCases = action.payload;
     },
 
+    closeFailureModal: (state) => {
+      state.showFailureModal = false;
+    },
+
     /* API calls */
 
     requestAddProblem: (state) => {
@@ -190,6 +194,7 @@ export const {
   updateCodeEditor,
   updateServerConfig,
   updateTestCases,
+  closeFailureModal,
   requestAddProblem,
   requestAddProblemSuccess,
   requestAddProblemFailure,

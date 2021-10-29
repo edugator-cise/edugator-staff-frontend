@@ -11,11 +11,7 @@ export const SuccessDialog = (props: Props) => {
   );
   const history = useHistory();
   return (
-    <Dialog
-      open={true}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
+    <Dialog open={showSuccessModal} aria-labelledby="alert-dialog-title">
       <DialogTitle id="alert-dialog-title">
         Problem added successfully!
       </DialogTitle>
