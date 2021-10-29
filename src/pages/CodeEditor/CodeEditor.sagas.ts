@@ -73,6 +73,7 @@ function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
     const payload = {
       _id: element._id as string,
       name: element.name,
+      number: element.number,
       problems: element.problems.map((el) => ({
         problemName: el.title,
         _id: el._id,

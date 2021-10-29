@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import React from "react";
 import theme from "../../shared/theme";
 
-interface featureInfo {
+interface FeatureInfo {
   title: string;
   img: any;
   description: string;
@@ -36,7 +36,7 @@ const IconHolder = styled("div")({
   borderBottom: "5px solid " + theme.palette.primary.main,
 });
 
-function FeatureCard(props: featureInfo) {
+function FeatureCard(props: FeatureInfo) {
   return (
     <Feature>
       <IconHolder>

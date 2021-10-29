@@ -1,5 +1,5 @@
 import { blue } from "@mui/material/colors";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -9,7 +9,7 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {}
 }
 
-const theme = createTheme({
+let theme = createTheme({
   transitions: {
     duration: {
       shortest: 150,
@@ -53,6 +53,7 @@ const theme = createTheme({
     button: {
       textTransform: "none",
     },
+    h1: {},
     h2: {
       fontWeight: 600,
       lineHeight: 1.3,
@@ -74,17 +75,20 @@ const theme = createTheme({
     },
     secondary: {
       main: "#3A4F58",
+      light: "#fff",
     },
   },
   breakpoints: {
     values: {
       xs: 0,
       sm: 600,
-      md: 900,
+      md: 800,
       lg: 1200,
-      xl: 1670,
+      xl: 1700,
     },
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 export default theme;
