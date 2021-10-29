@@ -1,69 +1,94 @@
 import React from "react";
 import {
-  Button,
-  DialogTitle,
-  Dialog,
-  Paper,
-  Divider,
-  DialogContentText,
+  Alert,
+  Stack,
+  Collapse,
+  TextField,
+  TextFieldProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
+import { GradingDropArea } from "./GradingDropArea";
+import Dialog from "../../../shared/GenericDialog";
 
-const DialogContent = styled(DialogContentText)(({ theme }) => ({
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
-  marginRight: theme.spacing(3),
-}));
-
-const Input = styled("input")({
-  display: "none",
+const EmailField = styled(TextField)<TextFieldProps>({
+  minWidth: "21rem",
+  maxWidth: "45%",
 });
 
-const GradeButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
+const UploadAlert = styled(Alert)(({ theme }) => ({
+  marginTop: theme.spacing(1),
 }));
 
-const Footer = styled("div")({
-  float: "right",
-});
+const noFeedback = { display: false, type: AlertType.info };
 
 interface GradingDialogProps {
   open: boolean;
+  problem: IProblemBase;
   handleClose: () => void;
 }
 
 export function GradingDialog(props: GradingDialogProps) {
-  const { open, handleClose } = props;
+  const { open, problem, handleClose } = props;
 
+  // set when file is uploaded, used if file is good
+  const [fileToGrade, setFileToGrade] = React.useState<File>();
+
+  // error alert status
+  const [feedback, setFeedback] = React.useState<IFeedback>(noFeedback);
+
+  // handler when clicking submit solutions
   const handleDialogSubmit = () => {
     // TODO:
     //  dont close before checking
     //  if action was successful
-    // handleClose();
+    handleClose();
   };
 
+  const FooterButtons = [
+    {
+      label: "Cancel",
+      onClick: () => handleClose(),
+      variant: "contained",
+      color: "error",
+    },
+    {
+      label: "Submit solutions",
+      onClick: () => handleDialogSubmit(),
+      variant: "contained",
+    },
+  ];
+
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="md" fullWidth>
-      <Paper elevation={3}>
-        <DialogTitle>Grading dialog</DialogTitle>
-        <Divider />
-        <DialogContent>
-          To grade student submissions, drag and drop them into the box below.
-        </DialogContent>
+    <Dialog
+      open={open}
+      fullWidth
+      maxWidth="md"
+      title={`Grading: "${problem.title}"`}
+      handleClose={handleClose}
+      footerContent={FooterButtons}
+    >
+      <Stack spacing={1}>
+        <EmailField
+          label="Email"
+          variant="filled"
+          required
+          helperText="Please enter an email to receive the graded solutions"
+        />
 
-        <label htmlFor="student-solutions-file">
-          <Input accept=".zip" id="student-solutions-file" type="file" />
-          <Button variant="contained" component="span">
-            Upload
-          </Button>
-        </label>
+        <GradingDropArea
+          feedback={feedback}
+          setFeedback={setFeedback}
+          fileToGrade={fileToGrade}
+          setFileToGrade={setFileToGrade}
+        />
 
-        <Footer>
-          <GradeButton onClick={() => handleDialogSubmit()} variant="outlined">
-            Grade
-          </GradeButton>
-        </Footer>
-      </Paper>
+        <Collapse in={feedback.display}>
+          <UploadAlert variant="filled" severity={feedback.type}>
+            {feedback.message}
+          </UploadAlert>
+        </Collapse>
+      </Stack>
     </Dialog>
   );
 }

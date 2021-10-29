@@ -1,8 +1,6 @@
 /** Problem Interfaces */
 
-export interface IProblem {
-  _id?: string;
-  title: string;
+export interface IProblem extends IProblemBase {
   hidden: boolean;
   language: string;
   dueDate: Date;
@@ -27,12 +25,34 @@ export interface IProblem {
   buildCommand: string;
 }
 
+// please extend problem interfaces from here
+export interface IProblemBase {
+  _id?: string;
+  title: string;
+  // add more basic details as necessary
+}
+
 /** Module interfaces */
 
 export interface IModuleBase {
   _id?: string;
   name: string;
   number: number;
+}
+
+/** Feedback Interfaces */
+
+/** Useful Enum */
+export enum AlertType {
+  info = "info",
+  error = "error",
+  success = "success",
+}
+
+export interface IFeedback {
+  message?: string;
+  display: boolean;
+  type: AlertType;
 }
 
 /** Other Interfaces */
