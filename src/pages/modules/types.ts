@@ -1,9 +1,9 @@
-import { IProblem, IModuleBase, IFeedback } from "../../shared/types";
+import { IProblemBase, IModuleBase, IFeedback } from "../../shared/types";
 
 /** Admin Module Interface */
 
 export interface IAdminModule extends IModuleBase {
-  problems: IProblem[];
+  problems: IProblemBase[];
 }
 
 export const EmptyModule: IAdminModule = {
