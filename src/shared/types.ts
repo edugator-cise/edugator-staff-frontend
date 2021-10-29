@@ -1,8 +1,6 @@
 /** Problem Interfaces */
 
-export interface IProblem {
-  _id?: string;
-  title: string;
+export interface IProblem extends IProblemBase {
   hidden: boolean;
   language: string;
   dueDate: Date;
