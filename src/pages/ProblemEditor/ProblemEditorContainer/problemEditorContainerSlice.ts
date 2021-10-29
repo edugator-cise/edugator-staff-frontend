@@ -49,6 +49,8 @@ export interface ProblemEditorContainerState {
   testCases: TestCaseField[];
 
   isSubmitting: boolean;
+  showSuccessModal: boolean;
+  showFailureModal: boolean;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -82,6 +84,8 @@ const initialState: ProblemEditorContainerState = {
   },
   testCases: [],
   isSubmitting: false,
+  showFailureModal: false,
+  showSuccessModal: false,
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -155,8 +159,17 @@ export const problemEditorContainerSlice = createSlice({
     updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
       state.testCases = action.payload;
     },
+
+    /* API calls */
+
     requestAddProblem: (state) => {
       state.isSubmitting = true;
+    },
+    requestAddProblemSuccess: (state, action: PayloadAction<any>) => {
+      state.isSubmitting = false;
+    },
+    requestAddProblemFailure: (state, action: PayloadAction<any>) => {
+      state.isSubmitting = false;
     },
   },
 });
@@ -176,5 +189,7 @@ export const {
   updateServerConfig,
   updateTestCases,
   requestAddProblem,
+  requestAddProblemSuccess,
+  requestAddProblemFailure,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
