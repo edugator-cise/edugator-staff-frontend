@@ -6,6 +6,7 @@ import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
+import { SuccessDialog } from "../SubmissionDialogs/SuccessDialog";
 import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
@@ -65,6 +66,7 @@ export const ProblemEditorContainer = () => {
         {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
         <ActiveForm />
         <ProblemEditorNavigator formRef={formRef} />
+        <SuccessDialog />
       </Box>
     </Box>
   );

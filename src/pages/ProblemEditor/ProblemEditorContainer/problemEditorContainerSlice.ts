@@ -167,9 +167,11 @@ export const problemEditorContainerSlice = createSlice({
     },
     requestAddProblemSuccess: (state, action: PayloadAction<any>) => {
       state.isSubmitting = false;
+      state.showSuccessModal = true;
     },
     requestAddProblemFailure: (state, action: PayloadAction<any>) => {
       state.isSubmitting = false;
+      state.showFailureModal = true;
     },
   },
 });
