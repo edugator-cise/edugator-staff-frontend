@@ -1,6 +1,7 @@
 export enum Routes {
-  Login = "/login",
-  Modules = "/modules",
-  ProblemEditor = "/problem/edit/:id",
+  Login = "/admin/login",
+  Modules = "/admin/modules",
+  ProblemEditor = "/admin/problem/edit/:problemId",
+  ProblemCreator = "/admin/problem/create/:moduleId",
   Code = "/code",
 }
