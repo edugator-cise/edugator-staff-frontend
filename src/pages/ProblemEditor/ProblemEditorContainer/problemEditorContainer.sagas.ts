@@ -1,7 +1,11 @@
-import { call, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import { RootState } from "../../../app/common/store";
 import { IProblem } from "../../../shared/types";
-import { requestAddProblem } from "./problemEditorContainerSlice";
+import {
+  requestAddProblem,
+  requestAddProblemFailure,
+  requestAddProblemSuccess,
+} from "./problemEditorContainerSlice";
 import apiClient from "../../../app/common/apiClient";
 
 function* handleAddProblemRequest(): any {
@@ -12,7 +16,7 @@ function* handleAddProblemRequest(): any {
   const language = "C++";
 
   const newProblem: IProblem = {
-    //moduleId: "111111111111111111111111",
+    moduleId: "111111111111111111111111",
     ...problemState.metadata,
     language,
     dueDate: problemState.metadata.dueDate.toISOString(),
@@ -29,8 +33,10 @@ function* handleAddProblemRequest(): any {
   try {
     const response = yield call(newProblemRequest);
     console.log(response);
+    yield put(requestAddProblemSuccess());
   } catch (e) {
     console.log(e);
+    yield put(requestAddProblemFailure());
   }
 }
 

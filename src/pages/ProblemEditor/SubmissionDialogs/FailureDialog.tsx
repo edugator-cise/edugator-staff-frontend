@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React from "react";
-import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import { closeFailureModal } from "../ProblemEditorContainer/problemEditorContainerSlice";
 
