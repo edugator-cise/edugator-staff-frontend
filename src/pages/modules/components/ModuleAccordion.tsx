@@ -14,6 +14,18 @@ import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { ModuleMenu } from "./";
 
+const Module = styled(Accordion)(({ theme }) => ({
+  borderRadius: theme.spacing(0.5),
+  "& .Mui-expanded": {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+}));
+
+const ModuleTitle = styled(AccordionSummary)({
+  borderRadius: "inherit",
+});
+
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(1),
@@ -63,16 +75,16 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
         <>
           {modulesState.modules.map((module) => {
             return (
-              <Accordion key={module._id} disableGutters>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Title variant="h6">
-                    Module {module.number}: {module.name}
-                  </Title>
-
+              <Module key={module._id} disableGutters>
+                <ModuleTitle expandIcon={<ExpandMore />}>
                   <ModuleMenu
                     module={module}
                     setModuleToDelete={setModuleToDelete}
                   />
+
+                  <Title variant="h6">
+                    Module {module.number}: {module.name}
+                  </Title>
 
                   <NewProblemButton
                     startIcon={<Add />}
@@ -84,7 +96,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   >
                     Add Problem
                   </NewProblemButton>
-                </AccordionSummary>
+                </ModuleTitle>
 
                 {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
@@ -124,7 +136,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Accordion>
+              </Module>
             );
           })}
         </>

@@ -28,54 +28,66 @@ const FileDropButton = styled(Button, {
   }),
 }));
 
+const preventDefaults = (e: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
+
 const noFeedback = { display: false, type: AlertType.info };
 
 interface GradingDropAreaProps {
-  feedback: IFeedback;
   setFeedback: (feedback: IFeedback) => void;
   fileToGrade?: File;
-  setFileToGrade: (toGrade: File) => void;
+  setFileToGrade: (toGrade?: File) => void;
+  error: boolean;
+  setError: (error: boolean) => void;
 }
 
 export function GradingDropArea(props: GradingDropAreaProps) {
-  const { feedback, setFeedback, fileToGrade, setFileToGrade } = props;
+  const {
+    setFeedback,
+    fileToGrade,
+    setFileToGrade,
+    error,
+    setError,
+  } = props;
 
   const [hoverDragging, setHoverDragging] = React.useState(false);
-
-  const preventDefaults = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  // handler for clicking the drop area
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
-
-  const clickInputRef = () => fileInputRef.current?.click();
-
-  const onFileCapture = (event: React.ChangeEvent<HTMLInputElement>) => {
-    /*Selected files data can be collected here.*/
-    console.log(event.target.files);
-  };
-
-  // handler for dropping in the drop area
-
   const setHoverStyles = () => setHoverDragging(true);
   const resetHoverStyles = () => setHoverDragging(false);
 
+  // handler for clicking the drop area
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const clickInputRef = () => fileInputRef.current?.click();
+
+  const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.files);
+    if (event.target.files !== null) {
+      handleFiles(event.target.files);
+    }
+    resetHoverStyles();
+  };
+
+  // handler for dropping in the drop area
   const handleDrop = (event: React.DragEvent<HTMLButtonElement>) => {
     preventDefaults(event);
 
-    let checkFeedback = checkFiles(event.dataTransfer.files);
-    setFeedback(checkFeedback);
-
-    if (checkFeedback.type === AlertType.success) {
-      setFileToGrade(event.dataTransfer.files[0]);
-    }
+    handleFiles(event.dataTransfer.files);
 
     resetHoverStyles();
   };
 
   // error handlers
+  const handleFiles = (files: FileList) => {
+    let checkFeedback = checkFiles(files);
+    setFeedback(checkFeedback);
+
+    if (checkFeedback.type === AlertType.success) {
+      setFileToGrade(files[0]);
+    } else {
+      setFileToGrade(undefined);
+    }
+  };
 
   const checkFiles = (dropped_items: FileList) => {
     // reset feedback, set it at the end
@@ -83,38 +95,30 @@ export function GradingDropArea(props: GradingDropAreaProps) {
 
     let newFeedback: IFeedback = {
       display: true,
-      message: "File uploaded without issues",
-      type: AlertType.success,
+      type: AlertType.error,
     };
 
-    // check
-
     if (dropped_items.length > 1) {
-      newFeedback.type = AlertType.error;
       newFeedback.message = "Please only drop one file";
+      setError(true);
+    } else if (dropped_items[0].name.split(".").pop() !== "zip") {
+      newFeedback.message = "Please drop a .zip file";
+      setError(true);
     } else {
-      let extension = dropped_items[0].name.split(".").pop();
-
-      // just checking if the extension is .zip,
-      // maybe its not secure enough?
-      if (extension !== "zip") {
-        newFeedback.type = AlertType.error;
-        newFeedback.message = "Please drop a .zip file";
-      }
+      newFeedback.type = AlertType.success;
+      newFeedback.message = "Please drop a .zip file";
+      setError(false);
     }
 
     return newFeedback;
   };
 
   // drop area title handler
-
   const dropAreaTitle = (filename?: string) => {
     if (hoverDragging) {
       return "Drop a .zip file here to grade solutions";
-    } else if (feedback.display && feedback.type === AlertType.success) {
+    } else if (!error) {
       return "File uploaded: " + filename;
-    } else if (feedback.display && feedback.type === AlertType.error) {
-      return "Something went wrong";
     } else {
       return "Click or Drag file here to begin";
     }
@@ -127,7 +131,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
         type="file"
         accept=".zip"
         ref={fileInputRef}
-        onChangeCapture={onFileCapture}
+        onChange={onFileSelect}
         style={{ display: "none" }}
       />
 
