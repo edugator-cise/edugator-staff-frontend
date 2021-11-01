@@ -1,5 +1,5 @@
-import { blue } from "@mui/material/colors";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { blue, grey } from "@mui/material/colors";
 
 //for custom theme overrides
 declare module "@mui/material/styles" {
@@ -44,6 +44,33 @@ let theme = createTheme({
         },
         text: {
           color: "black",
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          width: "100%",
+          marginBottom: 8,
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          height: "auto",
+          borderLeft: `6px solid ${blue[500]}`,
+          backgroundColor: blue[50],
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          height: "auto",
+          borderLeft: `6px solid ${blue[200]}`,
+          borderBottom: `1px solid ${grey[300]}`,
+          backgroundColor: grey[50],
         },
       },
     },

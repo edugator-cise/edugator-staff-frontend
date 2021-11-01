@@ -7,38 +7,34 @@ import {
   Typography,
 } from "@mui/material";
 import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
-import { useHistory } from "react-router";
-import { useAppSelector } from "../../../app/common/hooks";
-import { ModuleMenu } from "./";
 import { styled } from "@mui/material/styles";
-import { grey } from "@mui/material/colors";
-
-const Module = styled(Accordion)({
-  width: "100%",
-});
-
-const ModuleSummary = styled(AccordionSummary)({
-  backgroundColor: "rgba(0, 0, 0, .1)", // background of module
-  borderBottom: "1px solid rgba(0, 0, 0, .125)", // bottom line of module
-});
+import { useAppSelector } from "../../../app/common/hooks";
+import { IProblemBase } from "../../../shared/types";
+import { IAdminModule } from "../types";
+import { ModuleMenu } from "./";
+import { Routes } from "../../../shared/Routes.constants";
+import { Link } from "react-router-dom";
 
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(1),
   paddingLeft: theme.spacing(2),
-  backgroundColor: "rgba(0, 0, 0, .02)",
-  borderBottom: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-const ProblemTitle = styled(Typography)({
+const Title = styled(Typography)(({ theme }) => ({
   marginTop: "auto",
   marginBottom: "auto",
-});
+  padding: theme.spacing(0.5),
+}));
 
 const NewProblemButton = styled(Button)(({ theme }) => ({
   marginLeft: "auto",
   marginRight: theme.spacing(1),
-  color: grey["A700"],
+  color: "black",
+  backgroundColor: theme.palette.primary.light,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
 }));
 
 const ButtonContainer = styled("div")({
@@ -46,59 +42,102 @@ const ButtonContainer = styled("div")({
 });
 
 const ProblemAction = styled(Button)(({ theme }) => ({
-  marginRight: theme.spacing(1),
-  color: grey["A700"],
+  marginRight: theme.spacing(2),
+  color: "black",
+  "&:hover": {
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
-export function Modules() {
-  const history = useHistory();
+interface moduleProps {
+  setModuleToDelete: (module: IAdminModule) => void;
+  setProblemToGrade: (problem: IProblemBase) => void;
+}
+
+export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
   const modulesState = useAppSelector((state) => state.modules);
 
   return (
     <>
       {modulesState.modules.length > 0 ? (
         <>
-          {modulesState.modules.map((module, i) => {
+          {modulesState.modules.map((module) => {
             return (
-              <Module key={module._id} disableGutters>
-                <ModuleSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h6">
+              <Accordion key={module._id} disableGutters>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  <Title variant="h6">
                     Module {module.number}: {module.name}
-                  </Typography>
-                  <ModuleMenu module={module} />
+                  </Title>
 
-                  <NewProblemButton startIcon={<Add />}>
-                    Add Problem
+                  <ModuleMenu
+                    module={module}
+                    setModuleToDelete={setModuleToDelete}
+                  />
+                  <NewProblemButton
+                    startIcon={<Add />}
+                    variant="outlined"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <Link
+                      to={{
+                        pathname:
+                          Routes.ProblemCreatorBaseWithoutId + module._id,
+                        state: { moduleName: module.name },
+                      }}
+                      style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                      Add Problem
+                    </Link>
                   </NewProblemButton>
-                </ModuleSummary>
+                </AccordionSummary>
 
                 {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
-                    <ProblemTitle>
-                      Problem {i + 1}: {problem.title}
-                    </ProblemTitle>
+                    <Title>
+                      <b>
+                        Problem {module.number}.{i + 1}:
+                      </b>
+                      {` ${problem.title}`}
+                    </Title>
 
                     <ButtonContainer>
                       <ProblemAction
                         startIcon={<AssignmentTurnedIn />}
                         size="small"
+                        variant="outlined"
+                        onClick={() => {
+                          let toGrade: IProblemBase = {
+                            _id: problem._id,
+                            title: problem.title,
+                          };
+                          setProblemToGrade(toGrade);
+                        }}
                       >
                         Grade
                       </ProblemAction>
-
                       <ProblemAction
                         startIcon={<Edit />}
                         size="small"
-                        onClick={() => {
-                          history.push("/problem/edit/" + problem._id);
-                        }}
+                        variant="outlined"
                       >
-                        Edit
+                        <Link
+                          to={{
+                            pathname:
+                              Routes.ProblemEditorBaseWithoutId + problem._id,
+                            state: { moduleName: module.name },
+                          }}
+                          style={{
+                            color: "inherit",
+                            textDecoration: "inherit",
+                          }}
+                        >
+                          Edit
+                        </Link>
                       </ProblemAction>
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Module>
+              </Accordion>
             );
           })}
         </>

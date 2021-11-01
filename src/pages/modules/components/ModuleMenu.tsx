@@ -1,31 +1,19 @@
 import React from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { MoreVert } from "@mui/icons-material/";
-import { DeleteDialog } from ".";
 import { IAdminModule } from "../types";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { openEditDialog } from "../ModulesPage.slice";
 
-const MenuButton = styled(IconButton)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  marginLeft: theme.spacing(0.5),
-  marginTop: "auto",
-  marginBottom: "auto",
-}));
-
 interface MenuProps {
   module: IAdminModule;
+  setModuleToDelete: (module: IAdminModule) => void;
 }
 
-export function ModuleMenu({ module }: MenuProps) {
+export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
   const dispatch = useAppDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
-  const onDialogClose = () => {
-    setConfirmDelete(false);
-  };
 
   const handleClickAway = (event: any) => {
     if (event) event.stopPropagation();
@@ -33,8 +21,8 @@ export function ModuleMenu({ module }: MenuProps) {
   };
 
   return (
-    <div>
-      <MenuButton
+    <>
+      <IconButton
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={(event) => {
@@ -43,14 +31,7 @@ export function ModuleMenu({ module }: MenuProps) {
         }}
       >
         <MoreVert />
-      </MenuButton>
-
-      {/*TODO: Move dialog component outside of Menu component*/}
-      <DeleteDialog
-        open={confirmDelete}
-        handleClose={onDialogClose}
-        toDelete={module}
-      />
+      </IconButton>
 
       <Menu
         id="simple-menu"
@@ -75,12 +56,12 @@ export function ModuleMenu({ module }: MenuProps) {
             event.stopPropagation();
             setAnchorEl(null);
             /// Functionality below
-            setConfirmDelete(true);
+            setModuleToDelete(module);
           }}
         >
           Delete
         </MenuItem>
       </Menu>
-    </div>
+    </>
   );
 }

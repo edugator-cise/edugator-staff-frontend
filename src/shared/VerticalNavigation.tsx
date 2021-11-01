@@ -72,7 +72,7 @@ function VerticalNavigation(props: Props) {
         link: "",
       })),
       menuOpen: openModules,
-      setMenuOpen: setOpenModules
+      setMenuOpen: setOpenModules,
     },
     {
       title: "Projects",

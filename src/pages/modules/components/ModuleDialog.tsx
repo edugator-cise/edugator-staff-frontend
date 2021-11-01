@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  Button,
-  TextField,
-  TextFieldProps,
-  DialogTitle,
-  Dialog,
-  Paper,
-  Divider,
-  DialogContentText,
-} from "@mui/material";
+import { TextField, Typography, TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { DialogStatus } from "../types";
+import { DialogStatus, EmptyModule } from "../types";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import {
   requestNewModule,
@@ -18,37 +9,18 @@ import {
   closeDialog,
 } from "../ModulesPage.slice";
 import { IModuleBase } from "../../../shared/types";
-
-const Form = styled("form")({
-  display: "block",
-});
+import Dialog from "../../../shared/GenericDialog";
 
 const NumberField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  width: "12%",
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
+  width: "18%",
+  marginTop: theme.spacing(2),
+  marginRight: theme.spacing(1),
 }));
 
 const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  margin: theme.spacing(1),
   maxWidth: "70%",
+  marginTop: theme.spacing(2),
 }));
-
-const DialogContent = styled(DialogContentText)(({ theme }) => ({
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
-  marginRight: theme.spacing(3),
-}));
-
-const AddButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
-
-const Footer = styled("div")({
-  float: "right",
-});
-
-const newModule: IModuleBase = { name: "", number: 0 };
 
 const dialogTitle = (status: DialogStatus) => {
   if (status === DialogStatus.CREATE) {
@@ -66,16 +38,14 @@ export function ModuleDialog() {
     (state) => state.modules.dialogState
   );
 
-  const [dialogInput, setDialogInput] = React.useState<IModuleBase>(newModule);
+  const [dialogInput, setDialogInput] =
+    React.useState<IModuleBase>(EmptyModule);
 
   React.useEffect(() => {
-    // when the dialog loads,
-    // update the input fields
-    // to have the values of the values of the dialog to be edited
     if (action === DialogStatus.EDIT) {
       setDialogInput(module);
     } else {
-      setDialogInput(newModule);
+      setDialogInput(EmptyModule);
     }
   }, [action, module]);
 
@@ -94,76 +64,68 @@ export function ModuleDialog() {
     // when the dialog is open
   };
 
+  const FooterButtons = [
+    {
+      label: "Cancel",
+      onClick: () => dispatch(closeDialog()),
+      variant: "contained",
+      color: "error",
+    },
+    {
+      label: action === DialogStatus.CREATE ? "Add Module" : "Edit Module",
+      onClick: () => handleDialogSubmit(),
+      variant: "contained",
+    },
+  ];
+
   return (
     <Dialog
-      onClose={() => dispatch(closeDialog())}
       open={open}
       maxWidth="sm"
       fullWidth
+      title={dialogTitle(action)}
+      handleClose={() => dispatch(closeDialog())}
+      footerContent={FooterButtons}
     >
-      <Paper elevation={3}>
-        <DialogTitle id="module-title-dialog">
-          {dialogTitle(action)}
-        </DialogTitle>
-        <Divider />
-
-        <DialogContent>
+      <>
+        <Typography>
           To add a new module, or to modify a module's name and number, please
           use the form below.
-        </DialogContent>
+        </Typography>
 
-        <Form>
-          <NumberField
-            label="Number"
-            variant="filled"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            onChange={(event) => {
-              setDialogInput({
-                ...dialogInput,
-                number: parseInt(event.target.value),
-              });
-            }}
-            defaultValue={
-              action === DialogStatus.EDIT ? module.number : undefined
-            }
-            fullWidth
-            required
-            focused
-          />
-          <NameTextField
-            label="Module Name"
-            variant="filled"
-            onChange={(event) => {
-              setDialogInput({
-                ...dialogInput,
-                name: event.target.value,
-              });
-            }}
-            defaultValue={
-              action === DialogStatus.EDIT ? module.name : undefined
-            }
-            fullWidth
-            required
-            focused
-          />
+        <NumberField
+          label="Number"
+          variant="filled"
+          inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+          onChange={(event) => {
+            setDialogInput({
+              ...dialogInput,
+              number: parseInt(event.target.value),
+            });
+          }}
+          defaultValue={
+            action === DialogStatus.EDIT ? module.number : undefined
+          }
+          fullWidth
+          required
+          focused
+        />
 
-          <Footer>
-            <AddButton
-              onClick={(event) => {
-                // disables html5 validation & refresh
-                // TODO search how to keep validation
-                event.preventDefault();
-                // handle submit
-                handleDialogSubmit();
-              }}
-              variant="outlined"
-              type="submit"
-            >
-              {action === DialogStatus.CREATE ? "Add Module" : "Edit Module"}
-            </AddButton>
-          </Footer>
-        </Form>
-      </Paper>
+        <NameTextField
+          label="Module Name"
+          variant="filled"
+          onChange={(event) => {
+            setDialogInput({
+              ...dialogInput,
+              name: event.target.value,
+            });
+          }}
+          defaultValue={action === DialogStatus.EDIT ? module.name : undefined}
+          fullWidth
+          required
+          focused
+        />
+      </>
     </Dialog>
   );
 }
