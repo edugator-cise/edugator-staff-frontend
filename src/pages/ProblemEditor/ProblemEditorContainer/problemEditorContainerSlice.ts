@@ -181,6 +181,10 @@ export const problemEditorContainerSlice = createSlice({
       state.showFailureModal = false;
     },
 
+    resetState: (state) => {
+      return getProblemEditorInitialState();
+    },
+
     /* API calls */
 
     requestAddProblem: (state) => {
@@ -218,5 +222,6 @@ export const {
   updateModuleId,
   updateModuleName,
   updateProblemId,
+  resetState,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

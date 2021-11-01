@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
+  resetState,
   updateModuleId,
   updateModuleName,
   updateProblemId,
@@ -49,6 +50,10 @@ export const ProblemEditorPage = () => {
     }
     dispatch(updateProblemId(problemId));
     dispatch(updateModuleName(moduleName));
+
+    return () => {
+      dispatch(resetState());
+    };
   }, []);
 
   return (
