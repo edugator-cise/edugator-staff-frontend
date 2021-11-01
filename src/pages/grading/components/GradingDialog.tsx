@@ -8,8 +8,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
+import { useAppDispatch } from "../../../app/common/hooks";
+import { requestGrading } from "../GradingDialog.slice";
 import { GradingDropArea } from "./GradingDropArea";
 import Dialog from "../../../shared/GenericDialog";
+import { IGradeRequest } from "../types";
+
+const errorHelperText = "Please enter a valid email";
+const helperText = "Please enter an email to receive the graded solutions";
 
 const EmailField = styled(TextField)<TextFieldProps>({
   minWidth: "21rem",
@@ -31,9 +37,15 @@ interface GradingDialogProps {
 export function GradingDialog(props: GradingDialogProps) {
   const { open, problem, handleClose } = props;
 
+  const dispatch = useAppDispatch();
+
   // email validation status
   const [email, setEmail] = React.useState<string>("");
-  const [error, setError] = React.useState<boolean>(false);
+  const [touched, setTouched] = React.useState<boolean>(false);
+
+  // email textfiel ref
+  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const validEmail = emailInputRef.current?.validity.valid;
 
   // set when file is uploaded, used if file is good
   const [fileToGrade, setFileToGrade] = React.useState<File>();
@@ -42,11 +54,11 @@ export function GradingDialog(props: GradingDialogProps) {
   // feedback status
   const [feedback, setFeedback] = React.useState<IFeedback>(noFeedback);
 
-  const errorHelperText = "Please enter a valid email";
-  const defaultHelperText =
-    "Please enter an email to receive the graded solutions";
+  const updateEmail = (email: string) => {
+    setTouched(true);
+    setEmail(email);
+  };
 
-  // handler when clicking submit solutions
   const handleDialogSubmit = () => {
     // TODO:
     //  dont close before checking
@@ -55,22 +67,28 @@ export function GradingDialog(props: GradingDialogProps) {
     let newFeedback: IFeedback = {
       display: true,
       type: AlertType.error,
-      message: "Some fields were incomplete",
+      message: "Something went wrong",
     };
 
-    if (error) {
+    if (!validEmail) {
       newFeedback.message = "There an error in the email field";
     } else if (!email) {
       newFeedback.message = "Please enter an email to get the results back";
-      setError(true);
     } else if (fileError) {
       newFeedback.message = "There is error with the file selected";
     } else if (!fileToGrade) {
       newFeedback.message = "Please select a .zip file";
     } else {
       newFeedback.type = AlertType.success;
-      newFeedback.message = "All checks passed";
-      // create dispatch for when eveything is fine
+      newFeedback.message = "Check redux now!";
+
+      let payload: IGradeRequest = {
+        email: email,
+        toGrade: fileToGrade,
+        problemID: problem._id ?? "",
+      };
+
+      dispatch(requestGrading(payload));
     }
 
     setFeedback(newFeedback);
@@ -81,28 +99,23 @@ export function GradingDialog(props: GradingDialogProps) {
 
   const handleDialogClose = () => {
     setEmail("");
-    setError(false);
+    setTouched(false);
     setFileToGrade(undefined);
     setFileError(false);
     setFeedback(noFeedback);
     handleClose();
   };
 
-  const validateEmail = (email: string) => {
-    setError(false);
-    setEmail(email);
-  };
-
   const FooterButtons = [
     {
       label: "Cancel",
-      onClick: () => handleClose(),
+      onClick: handleDialogClose,
       variant: "contained",
       color: "error",
     },
     {
       label: "Submit solutions",
-      onClick: () => handleDialogSubmit(),
+      onClick: handleDialogSubmit,
       variant: "contained",
     },
   ];
@@ -118,12 +131,14 @@ export function GradingDialog(props: GradingDialogProps) {
     >
       <Stack spacing={1}>
         <EmailField
+          type="email"
           label="Email"
           variant="filled"
+          error={!validEmail && touched}
+          helperText={!validEmail && touched ? errorHelperText : helperText}
+          onChange={(event) => updateEmail(event.target.value)}
+          inputRef={emailInputRef}
           required
-          helperText={error ? errorHelperText : defaultHelperText}
-          onChange={(event) => validateEmail(event.target.value)}
-          error={error}
         />
 
         <GradingDropArea

@@ -1,4 +1,10 @@
-export interface IGradeable {
-  filename: string;
-  // TODO: finish interface of grading file
+export interface IGradeRequest {
+  toGrade: File;
+  email: string;
+  problemID: string;
+}
+
+export interface IGradingState {
+  uploading: boolean;
+  progress: number;
 }

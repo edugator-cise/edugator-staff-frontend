@@ -44,13 +44,7 @@ interface GradingDropAreaProps {
 }
 
 export function GradingDropArea(props: GradingDropAreaProps) {
-  const {
-    setFeedback,
-    fileToGrade,
-    setFileToGrade,
-    error,
-    setError,
-  } = props;
+  const { setFeedback, fileToGrade, setFileToGrade, error, setError } = props;
 
   const [hoverDragging, setHoverDragging] = React.useState(false);
   const setHoverStyles = () => setHoverDragging(true);
@@ -106,7 +100,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
       setError(true);
     } else {
       newFeedback.type = AlertType.success;
-      newFeedback.message = "Please drop a .zip file";
+      newFeedback.message = "File selected without issues";
       setError(false);
     }
 
@@ -117,7 +111,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
   const dropAreaTitle = (filename?: string) => {
     if (hoverDragging) {
       return "Drop a .zip file here to grade solutions";
-    } else if (!error) {
+    } else if (!error && filename) {
       return "File uploaded: " + filename;
     } else {
       return "Click or Drag file here to begin";
