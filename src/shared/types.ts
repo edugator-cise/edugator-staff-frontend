@@ -25,6 +25,10 @@ export interface IProblem extends IProblemBase {
   buildCommand: string;
 }
 
+export interface INewProblem extends IProblem {
+  moduleId: string;
+}
+
 // please extend problem interfaces from here
 export interface IProblemBase {
   _id?: string;

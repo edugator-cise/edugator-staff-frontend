@@ -48,6 +48,10 @@ export interface ProblemEditorContainerState {
   serverConfig: ServerConfigFields;
   testCases: TestCaseField[];
 
+  problemId: string | undefined;
+  moduleId: string;
+  moduleName: string | undefined;
+
   isSubmitting: boolean;
   showSuccessModal: boolean;
   showFailureModal: boolean;
@@ -83,6 +87,9 @@ const initialState: ProblemEditorContainerState = {
     buildCommand: "",
   },
   testCases: [],
+  problemId: undefined,
+  moduleId: "",
+  moduleName: "",
   isSubmitting: false,
   showFailureModal: false,
   showSuccessModal: false,
@@ -160,6 +167,16 @@ export const problemEditorContainerSlice = createSlice({
       state.testCases = action.payload;
     },
 
+    updateProblemId: (state, action: PayloadAction<string | undefined>) => {
+      state.problemId = action.payload;
+    },
+    updateModuleId: (state, action: PayloadAction<string>) => {
+      state.moduleId = action.payload;
+    },
+    updateModuleName: (state, action: PayloadAction<string | undefined>) => {
+      state.moduleName = action.payload;
+    },
+
     closeFailureModal: (state) => {
       state.showFailureModal = false;
     },
@@ -198,5 +215,8 @@ export const {
   requestAddProblem,
   requestAddProblemSuccess,
   requestAddProblemFailure,
+  updateModuleId,
+  updateModuleName,
+  updateProblemId,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

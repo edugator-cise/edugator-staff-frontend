@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppSelector } from "../../app/common/hooks";
 import { useHistory } from "react-router";
 import { useLocation, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  updateModuleId,
+  updateModuleName,
+  updateProblemId,
+} from "./ProblemEditorContainer/problemEditorContainerSlice";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -22,26 +28,34 @@ export const ProblemEditorPage = () => {
     ProblemEditorURL & ProblemCreatorURL
   >();
   const { moduleName } = useLocation<ProblemLocationState>().state;
-  console.log("moduleId: " + moduleId);
-  console.log("problemId: " + problemId);
-  console.log("moduleName: " + moduleName);
 
   const problemTitle = useAppSelector(
     (state) => state.problemEditorContainer.metadata.title
   );
   const history = useHistory();
+  const dispatch = useDispatch();
   const actions = [
     {
       label: "Back to Modules",
-      onClick: () => history.push("/modules"),
+      onClick: () => history.push("/admin/modules"),
       variant: "contained",
       color: "error",
     },
   ];
 
+  useEffect(() => {
+    if (moduleId) {
+      dispatch(updateModuleId(moduleId));
+    }
+    dispatch(updateProblemId(problemId));
+    dispatch(updateModuleName(moduleName));
+  }, []);
+
   return (
     <LayoutContainer
-      pageTitle={problemTitle || "New Problem"}
+      pageTitle={`${moduleName ? moduleName + " - " : ""}${
+        problemTitle || "New Problem"
+      }`}
       actionButtons={actions}
     >
       <ProblemEditorContainer />

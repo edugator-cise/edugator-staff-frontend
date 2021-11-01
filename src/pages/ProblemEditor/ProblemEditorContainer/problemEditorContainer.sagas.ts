@@ -1,6 +1,6 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
 import { RootState } from "../../../app/common/store";
-import { IProblem } from "../../../shared/types";
+import { INewProblem } from "../../../shared/types";
 import {
   requestAddProblem,
   requestAddProblemFailure,
@@ -15,18 +15,19 @@ function* handleAddProblemRequest(): any {
   // preparing the payload
   const language = "C++";
 
-  const newProblem: IProblem = {
-    //moduleId: "111111111111111111111111",
+  const newProblem: INewProblem = {
+    moduleId: problemState.moduleId,
     ...problemState.metadata,
     language,
     dueDate: problemState.metadata.dueDate.toISOString(),
-    ...problemState.problem,
+    templatePackage: problemState.problem.templatePackage,
     statement: problemState.problem.problemStatement,
     ...problemState.codeEditor,
     testCases: problemState.testCases,
     ...problemState.serverConfig,
   };
 
+  console.log(newProblem);
   const newProblemRequest = () =>
     apiClient.post("/v1/admin/problem/", newProblem);
 
