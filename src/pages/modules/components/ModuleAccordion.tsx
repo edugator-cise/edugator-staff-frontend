@@ -6,15 +6,14 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-import { useHistory } from "react-router";
+import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { useAppSelector } from "../../../app/common/hooks";
+import { Routes } from "../../../shared/Routes.constants";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
-import { ModuleMenu } from "./";
-import { Routes } from "../../../shared/Routes.constants";
 import { Link } from "react-router-dom";
+import { ModuleMenu } from "./";
 
 const Module = styled(Accordion)(({ theme }) => ({
   borderRadius: theme.spacing(0.5),
@@ -133,9 +132,6 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                         startIcon={<Edit />}
                         size="small"
                         variant="outlined"
-                        onClick={() => {
-                          history.push("/problem/edit/" + problem._id);
-                        }}
                       >
                         <Link
                           to={{
@@ -154,7 +150,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Accordion>
+              </Module>
             );
           })}
         </>
