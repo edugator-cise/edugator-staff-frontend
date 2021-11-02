@@ -17,7 +17,7 @@ export const SuccessDialog = (props: Props) => {
       </DialogTitle>
       <DialogActions>
         <Button
-          onClick={() => history.push("admin/modules")}
+          onClick={() => history.push("/admin/modules")}
           variant="contained"
           color="success"
         >

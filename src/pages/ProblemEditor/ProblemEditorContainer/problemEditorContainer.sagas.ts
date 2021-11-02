@@ -27,16 +27,13 @@ function* handleAddProblemRequest(): any {
     ...problemState.serverConfig,
   };
 
-  console.log(newProblem);
   const newProblemRequest = () =>
     apiClient.post("/v1/admin/problem/", newProblem);
 
   try {
     const response = yield call(newProblemRequest);
-    console.log(response);
     yield put(requestAddProblemSuccess());
   } catch (e) {
-    console.log("errorrrr", e);
     yield put(requestAddProblemFailure());
   }
 }

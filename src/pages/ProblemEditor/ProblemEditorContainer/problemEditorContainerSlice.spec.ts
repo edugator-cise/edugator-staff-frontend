@@ -9,8 +9,17 @@ import problemEditorContainerSlice, {
   incrementActiveStep,
   decrementActiveStep,
   getProblemEditorInitialState,
+  requestAddProblem,
+  resetState,
 } from "./problemEditorContainerSlice";
 import apiClient from "../../../app/common/apiClient";
+import store from "../../../app/common/store";
+
+const dispatch = store.dispatch;
+
+beforeEach(() => {
+  dispatch(resetState());
+});
 
 describe("problemEditorContainer reducer", () => {
   const initialState: ProblemEditorContainerState =
@@ -154,7 +163,27 @@ jest.mock("../../../app/common/apiClient");
 const mockApi = apiClient as jest.Mocked<typeof apiClient>;
 
 describe("Adding a new problem", () => {
-  it("should successfully add a problem", () => {});
+  it("should successfully add a problem", async () => {
+    mockApi.post.mockResolvedValueOnce({});
 
-  it("should fail to add a new problem", () => {});
+    await dispatch(requestAddProblem());
+    expect(store.getState().problemEditorContainer.showSuccessModal).toEqual(
+      true
+    );
+    expect(store.getState().problemEditorContainer.showFailureModal).toEqual(
+      false
+    );
+  });
+
+  it("should fail to add a new problem", async () => {
+    mockApi.post.mockRejectedValueOnce({});
+
+    await dispatch(requestAddProblem());
+    expect(store.getState().problemEditorContainer.showSuccessModal).toEqual(
+      false
+    );
+    expect(store.getState().problemEditorContainer.showFailureModal).toEqual(
+      true
+    );
+  });
 });
