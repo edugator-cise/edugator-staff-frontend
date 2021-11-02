@@ -13,6 +13,8 @@ import { useAppSelector } from "../../../app/common/hooks";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { ModuleMenu } from "./";
+import { Routes } from "../../../shared/Routes.constants";
+import { Link } from "react-router-dom";
 
 const Module = styled(Accordion)(({ theme }) => ({
   borderRadius: theme.spacing(0.5),
@@ -66,7 +68,6 @@ interface moduleProps {
 }
 
 export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
-  const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
   return (
@@ -89,12 +90,18 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   <NewProblemButton
                     startIcon={<Add />}
                     variant="outlined"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      history.push("/problem/create/" + module._id);
-                    }}
+                    onClick={(event) => event.stopPropagation()}
                   >
-                    Add Problem
+                    <Link
+                      to={{
+                        pathname:
+                          Routes.ProblemCreatorBaseWithoutId + module._id,
+                        state: { moduleName: module.name },
+                      }}
+                      style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                      Add Problem
+                    </Link>
                   </NewProblemButton>
                 </ModuleTitle>
 
@@ -122,7 +129,6 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                       >
                         Grade
                       </ProblemAction>
-
                       <ProblemAction
                         startIcon={<Edit />}
                         size="small"
@@ -131,12 +137,24 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                           history.push("/problem/edit/" + problem._id);
                         }}
                       >
-                        Edit
+                        <Link
+                          to={{
+                            pathname:
+                              Routes.ProblemEditorBaseWithoutId + problem._id,
+                            state: { moduleName: module.name },
+                          }}
+                          style={{
+                            color: "inherit",
+                            textDecoration: "inherit",
+                          }}
+                        >
+                          Edit
+                        </Link>
                       </ProblemAction>
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Module>
+              </Accordion>
             );
           })}
         </>

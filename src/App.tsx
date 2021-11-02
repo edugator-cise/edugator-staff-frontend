@@ -23,6 +23,9 @@ function App() {
             <PrivateRoute exact path={Routes.ProblemEditor}>
               <ProblemEditorPage />
             </PrivateRoute>
+            <PrivateRoute exact path={Routes.ProblemCreator}>
+              <ProblemEditorPage />
+            </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
             </PrivateRoute>
