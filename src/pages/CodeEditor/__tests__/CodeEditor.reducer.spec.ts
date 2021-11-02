@@ -26,7 +26,7 @@ const sampleProblems: IProblem[] = [
     title: "string",
     hidden: true,
     language: "language",
-    dueDate: new Date(),
+    dueDate: new Date().toISOString(),
     statement: "string",
     code: {
       header: "string",

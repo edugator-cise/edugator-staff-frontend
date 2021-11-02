@@ -54,7 +54,7 @@ export const ProblemEditorPage = () => {
     return () => {
       dispatch(resetState());
     };
-  }, []);
+  }, [moduleId, problemId, moduleName, dispatch]);
 
   return (
     <LayoutContainer
