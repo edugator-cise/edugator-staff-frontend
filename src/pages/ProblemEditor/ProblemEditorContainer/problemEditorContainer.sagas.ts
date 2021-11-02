@@ -36,7 +36,7 @@ function* handleAddProblemRequest(): any {
     console.log(response);
     yield put(requestAddProblemSuccess());
   } catch (e) {
-    console.log(e);
+    console.log("errorrrr", e);
     yield put(requestAddProblemFailure());
   }
 }

@@ -10,6 +10,7 @@ import problemEditorContainerSlice, {
   decrementActiveStep,
   getProblemEditorInitialState,
 } from "./problemEditorContainerSlice";
+import apiClient from "../../../app/common/apiClient";
 
 describe("problemEditorContainer reducer", () => {
   const initialState: ProblemEditorContainerState =
@@ -147,4 +148,13 @@ describe("problemEditorContainer reducer", () => {
     );
     expect(actual.activeStep).toBe(0);
   });
+});
+
+jest.mock("../../../app/common/apiClient");
+const mockApi = apiClient as jest.Mocked<typeof apiClient>;
+
+describe("Adding a new problem", () => {
+  it("should successfully add a problem", () => {});
+
+  it("should fail to add a new problem", () => {});
 });
