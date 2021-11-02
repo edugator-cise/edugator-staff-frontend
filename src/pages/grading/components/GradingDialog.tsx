@@ -7,6 +7,7 @@ import {
   TextFieldProps,
   LinearProgress,
   Typography,
+  Divider,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
@@ -41,9 +42,9 @@ const ProgressHolder = styled("div")({
 const UploadProgress = styled(LinearProgress)(({ theme }) => ({
   height: 6,
   width: "100%",
+  margin: theme.spacing(1),
   marginTop: "auto",
   marginBottom: "auto",
-  marginRight: theme.spacing(1),
 }));
 
 interface GradingDialogProps {
@@ -54,7 +55,7 @@ interface GradingDialogProps {
 
 export function GradingDialog(props: GradingDialogProps) {
   const { open, problem, handleClose } = props;
-  //const uploading = useAppSelector((state) => state.grading.uploading);
+  const uploading = useAppSelector((state) => state.grading.uploading);
   const uploadState = useAppSelector((state) => state.grading.uploadState);
   const feedback = useAppSelector((state) => state.grading.feedback);
 
@@ -78,10 +79,6 @@ export function GradingDialog(props: GradingDialogProps) {
   };
 
   const handleDialogSubmit = () => {
-    // TODO:
-    //  dont close before checking
-    //  if action was successful
-
     let newFeedback: IFeedback = {
       display: true,
       type: AlertType.error,
@@ -169,7 +166,10 @@ export function GradingDialog(props: GradingDialogProps) {
         </Collapse>
 
         <Collapse in={uploadState.display}>
+          <Divider />
           <ProgressHolder>
+            <Typography>{uploading ? "In-Progress:" : "Done!"}</Typography>
+
             <UploadProgress
               variant="determinate"
               value={uploadState.progress}

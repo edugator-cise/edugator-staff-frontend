@@ -58,8 +58,8 @@ export const gradingSlice = createSlice({
       state.feedback = action.payload;
     },
     /** Other Reducers */
-    resetGradingState: (state) => {
-      state = baseGradingState;
+    resetGradingState: () => {
+      return getBaseGradingState();
     },
   },
 });

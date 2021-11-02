@@ -17,9 +17,7 @@ export interface IUploadState {
   display: boolean;
 }
 
-export const GRADING_REQUEST_PROGRESS = "GRADING_REQUEST_PROGRESS";
-
-export interface IProgressUpdate {
+export interface IUploadProgress {
   loaded: number;
   total: number;
 }

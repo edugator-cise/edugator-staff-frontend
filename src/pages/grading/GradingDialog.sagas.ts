@@ -7,27 +7,16 @@ import {
   requestGradingFail,
   setUploadProgress,
 } from "./GradingDialog.slice";
-import {
-  IGradeRequest,
-  //IProgressUpdate,
-  //GRADING_REQUEST_PROGRESS,
-} from "./types";
+import { IGradeRequest, IUploadProgress } from "./types";
 import { AxiosRequestConfig } from "axios";
 import adminAPI from "../../app/common/apiClient";
 import { eventChannel, END, EventChannel } from "redux-saga";
-
-// dispatching my own stuff for progress handling
-interface IUploadProgress {
-  loaded: number;
-  total: number;
-}
 
 function* handleGradingRequest(action: PayloadAction<IGradeRequest>): any {
   const query_payload = {
     problemID: action.payload.problemID,
     email: action.payload.email,
   };
-  console.log("on grading sagas");
   const params = new URLSearchParams(query_payload).toString();
   const route = "v1/submission/upload?" + params;
 
@@ -50,7 +39,6 @@ function* handleGradingRequest(action: PayloadAction<IGradeRequest>): any {
 
   try {
     const response: AxiosResponse<IGradeRequest> = yield call(gradingRequest);
-    console.log("response", response);
     yield put(requestGradingEnd(response.data));
   } catch (e) {
     yield put(requestGradingFail(e as Error));
@@ -58,14 +46,15 @@ function* handleGradingRequest(action: PayloadAction<IGradeRequest>): any {
 }
 
 // to emit when there is progress
-
 let progressEmitter: (loaded: unknown) => void;
 
+// channel to check the emissions
 const progressChannel = eventChannel((emitter) => {
   progressEmitter = emitter;
   return () => {};
 });
 
+// called onUploadProgress
 const emitProgress = ({ loaded, total }: IUploadProgress) => {
   const progress_amount = Math.floor((loaded * 100) / total);
 
@@ -78,7 +67,6 @@ const emitProgress = ({ loaded, total }: IUploadProgress) => {
 // then take that emit's value and use
 // wrapper for dispatching updates of progress
 function* watchUploadProgress(progressChannel: EventChannel<unknown>): any {
-  console.log("bruhhhhhhhhh");
   while (true) {
     const loaded = yield take(progressChannel);
     yield put(setUploadProgress(loaded));
