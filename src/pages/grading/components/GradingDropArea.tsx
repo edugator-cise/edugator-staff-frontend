@@ -15,7 +15,6 @@ const FileDropButton = styled(Button, {
   width: "100%",
   height: "100%",
   minHeight: "30vh",
-  //marginTop: theme.spacing(1),
   borderRadius: 0,
   border: "dashed",
   "&:hover": {
