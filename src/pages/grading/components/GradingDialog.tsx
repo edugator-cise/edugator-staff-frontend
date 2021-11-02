@@ -5,13 +5,19 @@ import {
   Collapse,
   TextField,
   TextFieldProps,
+  LinearProgress,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
-import { useAppDispatch } from "../../../app/common/hooks";
-import { requestGrading } from "../GradingDialog.slice";
+import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import { GradingDropArea } from "./GradingDropArea";
 import Dialog from "../../../shared/GenericDialog";
+import {
+  requestGrading,
+  resetGradingState,
+  setFeedback,
+} from "../GradingDialog.slice";
 import { IGradeRequest } from "../types";
 
 const errorHelperText = "Please enter a valid email";
@@ -24,9 +30,21 @@ const EmailField = styled(TextField)<TextFieldProps>({
 
 const UploadAlert = styled(Alert)(({ theme }) => ({
   marginTop: theme.spacing(1),
+  transitionProperty: "all",
+  transitionDuration: "400ms",
 }));
 
-const noFeedback = { display: false, type: AlertType.info };
+const ProgressHolder = styled("div")({
+  display: "flex",
+});
+
+const UploadProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 6,
+  width: "100%",
+  marginTop: "auto",
+  marginBottom: "auto",
+  marginRight: theme.spacing(1),
+}));
 
 interface GradingDialogProps {
   open: boolean;
@@ -36,6 +54,9 @@ interface GradingDialogProps {
 
 export function GradingDialog(props: GradingDialogProps) {
   const { open, problem, handleClose } = props;
+  //const uploading = useAppSelector((state) => state.grading.uploading);
+  const uploadState = useAppSelector((state) => state.grading.uploadState);
+  const feedback = useAppSelector((state) => state.grading.feedback);
 
   const dispatch = useAppDispatch();
 
@@ -50,9 +71,6 @@ export function GradingDialog(props: GradingDialogProps) {
   // set when file is uploaded, used if file is good
   const [fileToGrade, setFileToGrade] = React.useState<File>();
   const [fileError, setFileError] = React.useState<boolean>(false);
-
-  // feedback status
-  const [feedback, setFeedback] = React.useState<IFeedback>(noFeedback);
 
   const updateEmail = (email: string) => {
     setTouched(true);
@@ -79,22 +97,18 @@ export function GradingDialog(props: GradingDialogProps) {
     } else if (!fileToGrade) {
       newFeedback.message = "Please select a .zip file";
     } else {
-      newFeedback.type = AlertType.success;
-      newFeedback.message = "Check redux now!";
+      newFeedback.type = AlertType.info;
+      newFeedback.message = "Uploading student submissions to the grader";
 
       let payload: IGradeRequest = {
         email: email,
         toGrade: fileToGrade,
         problemID: problem._id ?? "",
       };
-
       dispatch(requestGrading(payload));
     }
 
-    setFeedback(newFeedback);
-
-    //close after dispatch response
-    //handleDialogClose();
+    dispatch(setFeedback(newFeedback));
   };
 
   const handleDialogClose = () => {
@@ -102,7 +116,7 @@ export function GradingDialog(props: GradingDialogProps) {
     setTouched(false);
     setFileToGrade(undefined);
     setFileError(false);
-    setFeedback(noFeedback);
+    dispatch(resetGradingState());
     handleClose();
   };
 
@@ -142,7 +156,6 @@ export function GradingDialog(props: GradingDialogProps) {
         />
 
         <GradingDropArea
-          setFeedback={setFeedback}
           fileToGrade={fileToGrade}
           setFileToGrade={setFileToGrade}
           error={fileError}
@@ -153,6 +166,17 @@ export function GradingDialog(props: GradingDialogProps) {
           <UploadAlert variant="filled" severity={feedback.type}>
             {feedback.message}
           </UploadAlert>
+        </Collapse>
+
+        <Collapse in={uploadState.display}>
+          <ProgressHolder>
+            <UploadProgress
+              variant="determinate"
+              value={uploadState.progress}
+            />
+
+            <Typography>{`${uploadState.progress}%`}</Typography>
+          </ProgressHolder>
         </Collapse>
       </Stack>
     </Dialog>

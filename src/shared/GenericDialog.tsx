@@ -11,9 +11,10 @@ import { styled } from "@mui/material/styles";
 import { ButtonProps, ButtonColor, ButtonVariant } from "./LayoutContainer";
 import { Breakpoint } from "@mui/system";
 
-const Footer = styled("div")({
+const Footer = styled("div")(({ theme }) => ({
   float: "right",
-});
+  marginRight: theme.spacing(1),
+}));
 
 const FooterButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),

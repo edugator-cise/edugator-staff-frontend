@@ -2,6 +2,8 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { Icon, Stack, Button, ButtonProps, Typography } from "@mui/material";
 import { IFeedback, AlertType } from "../../../shared/types";
+import { useAppDispatch } from "../../../app/common/hooks";
+import { setFeedback } from "../GradingDialog.slice";
 
 interface DropAreaButtonProps extends ButtonProps {
   hover_dragging?: boolean;
@@ -13,7 +15,7 @@ const FileDropButton = styled(Button, {
   width: "100%",
   height: "100%",
   minHeight: "30vh",
-  marginTop: theme.spacing(1),
+  //marginTop: theme.spacing(1),
   borderRadius: 0,
   border: "dashed",
   "&:hover": {
@@ -36,7 +38,6 @@ const preventDefaults = (e: any) => {
 const noFeedback = { display: false, type: AlertType.info };
 
 interface GradingDropAreaProps {
-  setFeedback: (feedback: IFeedback) => void;
   fileToGrade?: File;
   setFileToGrade: (toGrade?: File) => void;
   error: boolean;
@@ -44,7 +45,9 @@ interface GradingDropAreaProps {
 }
 
 export function GradingDropArea(props: GradingDropAreaProps) {
-  const { setFeedback, fileToGrade, setFileToGrade, error, setError } = props;
+  const { fileToGrade, setFileToGrade, error, setError } = props;
+
+  const dispatch = useAppDispatch();
 
   const [hoverDragging, setHoverDragging] = React.useState(false);
   const setHoverStyles = () => setHoverDragging(true);
@@ -74,7 +77,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
   // error handlers
   const handleFiles = (files: FileList) => {
     let checkFeedback = checkFiles(files);
-    setFeedback(checkFeedback);
+    dispatch(setFeedback(checkFeedback));
 
     if (checkFeedback.type === AlertType.success) {
       setFileToGrade(files[0]);
@@ -85,7 +88,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
 
   const checkFiles = (dropped_items: FileList) => {
     // reset feedback, set it at the end
-    setFeedback(noFeedback);
+    dispatch(setFeedback(noFeedback));
 
     let newFeedback: IFeedback = {
       display: true,

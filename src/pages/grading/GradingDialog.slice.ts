@@ -1,9 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IGradingState, IGradeRequest } from "./types";
+import { AlertType, IFeedback } from "../../shared/types";
 
 const baseGradingState: IGradingState = {
   uploading: false,
-  progress: 0,
+  uploadState: {
+    display: false,
+    progress: 0,
+  },
+  feedback: {
+    message: "",
+    display: false,
+    type: AlertType.info,
+  },
 };
 
 export function getBaseGradingState(): IGradingState {
@@ -14,21 +23,43 @@ export const gradingSlice = createSlice({
   name: "grading",
   initialState: getBaseGradingState(),
   reducers: {
-    /* Grade Solutions */
+    /** Grade Solutions */
     requestGrading: (state, action: PayloadAction<IGradeRequest>) => {
       state.uploading = true;
-      state.progress = 0;
+      state.uploadState.display = true;
+      state.uploadState.progress = 0;
     },
     requestGradingEnd: (state, action) => {
       state.uploading = false;
-      //state.progress = 100;
+
+      state.feedback = {
+        display: true,
+        type: AlertType.success,
+        message: `File received successfully. \n 
+          Check your email for the results in approximately 40 minutes`,
+      };
     },
     requestGradingFail: (state, action) => {
       state.uploading = false;
-      //state.progress = 0;
+      // add feedback
+      state.feedback = {
+        display: true,
+        type: AlertType.error,
+        message: `There was an error during the upload`,
+      };
     },
+    /** Upload Progress */
     setUploadProgress: (state, action: PayloadAction<number>) => {
-      state.progress = action.payload;
+      state.uploadState.progress = action.payload;
+      console.log("progress on redux: ", action.payload);
+    },
+    /** Feedback Reducers */
+    setFeedback: (state, action: PayloadAction<IFeedback>) => {
+      state.feedback = action.payload;
+    },
+    /** Other Reducers */
+    resetGradingState: (state) => {
+      state = baseGradingState;
     },
   },
 });
@@ -40,5 +71,8 @@ export const {
   requestGradingFail,
   /* Upload Progress Reducers */
   setUploadProgress,
+  /* Feddback Reducers */
+  setFeedback,
   /* Other Reducers */
+  resetGradingState,
 } = gradingSlice.actions;
