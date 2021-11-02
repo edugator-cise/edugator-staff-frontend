@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppSelector } from "../../app/common/hooks";
-import { useHistory } from "react-router";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
+  openWarningModal,
   resetState,
   updateModuleId,
   updateModuleName,
@@ -33,12 +33,12 @@ export const ProblemEditorPage = () => {
   const problemTitle = useAppSelector(
     (state) => state.problemEditorContainer.metadata.title
   );
-  const history = useHistory();
+
   const dispatch = useDispatch();
   const actions = [
     {
       label: "Back to Modules",
-      onClick: () => history.push("/admin/modules"),
+      onClick: () => dispatch(openWarningModal()),
       variant: "contained",
       color: "error",
     },

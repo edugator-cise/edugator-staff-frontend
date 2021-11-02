@@ -6,11 +6,12 @@ import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
-import { FailureDialog } from "../SubmissionDialogs/FailureDialog";
-import { SuccessDialog } from "../SubmissionDialogs/SuccessDialog";
+import { FailureDialog } from "../Dialogs/FailureDialog";
+import { SuccessDialog } from "../Dialogs/SuccessDialog";
 import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
+import { WarningDialog } from "../Dialogs/WarningDialog";
 
 const steps = [
   "Metadata",
@@ -69,6 +70,7 @@ export const ProblemEditorContainer = () => {
         <ProblemEditorNavigator formRef={formRef} />
         <SuccessDialog />
         <FailureDialog />
+        <WarningDialog />
       </Box>
     </Box>
   );

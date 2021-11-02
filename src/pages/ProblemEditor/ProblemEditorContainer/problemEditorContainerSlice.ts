@@ -55,6 +55,7 @@ export interface ProblemEditorContainerState {
   isSubmitting: boolean;
   showSuccessModal: boolean;
   showFailureModal: boolean;
+  showWarningModal: boolean;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -93,6 +94,7 @@ const initialState: ProblemEditorContainerState = {
   isSubmitting: false,
   showFailureModal: false,
   showSuccessModal: false,
+  showWarningModal: false,
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -181,6 +183,13 @@ export const problemEditorContainerSlice = createSlice({
       state.showFailureModal = false;
     },
 
+    openWarningModal: (state) => {
+      state.showWarningModal = true;
+    },
+    closeWarningModal: (state) => {
+      state.showWarningModal = false;
+    },
+
     resetState: (state) => {
       return getProblemEditorInitialState();
     },
@@ -223,5 +232,7 @@ export const {
   updateModuleName,
   updateProblemId,
   resetState,
+  openWarningModal,
+  closeWarningModal,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
