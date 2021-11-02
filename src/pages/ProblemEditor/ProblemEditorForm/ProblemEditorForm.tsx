@@ -33,7 +33,7 @@ export const ProblemEditorForm = (props: Props) => {
       errors.templatePackage = "Required";
     } else if (
       !values.templatePackage.match(
-        /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g //https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
+        /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g //https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
       )
     ) {
       errors.templatePackage =

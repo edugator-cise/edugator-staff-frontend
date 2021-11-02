@@ -4,7 +4,6 @@ import { useAppSelector } from "../../../app/common/hooks";
 import {
   requestAddProblem,
   updateTestCases,
-  validateTestEditor,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
 import { Stack, Button, Alert } from "@mui/material";
 import { TestCase } from "./TestCase";
