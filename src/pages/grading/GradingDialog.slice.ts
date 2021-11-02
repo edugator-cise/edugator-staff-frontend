@@ -51,7 +51,6 @@ export const gradingSlice = createSlice({
     /** Upload Progress */
     setUploadProgress: (state, action: PayloadAction<number>) => {
       state.uploadState.progress = action.payload;
-      console.log("progress on redux: ", action.payload);
     },
     /** Feedback Reducers */
     setFeedback: (state, action: PayloadAction<IFeedback>) => {
