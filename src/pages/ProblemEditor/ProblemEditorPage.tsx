@@ -6,6 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   openWarningModal,
+  requestGetProblem,
   resetState,
   updateModuleId,
   updateModuleName,
@@ -35,14 +36,24 @@ export const ProblemEditorPage = () => {
   );
 
   const dispatch = useDispatch();
-  const actions = [
-    {
-      label: "Back to Modules",
-      onClick: () => dispatch(openWarningModal()),
-      variant: "contained",
-      color: "error",
-    },
-  ];
+  const actions = {
+    create: [
+      {
+        label: "Back to Modules",
+        onClick: () => dispatch(openWarningModal()),
+        variant: "contained",
+        color: "error",
+      },
+    ],
+    edit: [
+      {
+        label: "Delete Problem",
+        onClick: () => {},
+        variant: "contained",
+        color: "error",
+      },
+    ],
+  };
 
   useEffect(() => {
     if (moduleId) {
@@ -56,12 +67,18 @@ export const ProblemEditorPage = () => {
     };
   }, [moduleId, problemId, moduleName, dispatch]);
 
+  useEffect(() => {
+    if (problemId) {
+      dispatch(requestGetProblem(problemId));
+    }
+  }, [problemId, dispatch]);
+
   return (
     <LayoutContainer
       pageTitle={`${moduleName ? moduleName + " - " : ""}${
         problemTitle || "New Problem"
       }`}
-      actionButtons={actions}
+      actionButtons={actions.create}
     >
       <ProblemEditorContainer />
     </LayoutContainer>
