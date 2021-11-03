@@ -47,6 +47,15 @@ export interface ProblemEditorContainerState {
   codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
   testCases: TestCaseField[];
+
+  problemId: string | undefined;
+  moduleId: string;
+  moduleName: string | undefined;
+
+  isSubmitting: boolean;
+  showSuccessModal: boolean;
+  showFailureModal: boolean;
+  showWarningModal: boolean;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -79,6 +88,13 @@ const initialState: ProblemEditorContainerState = {
     buildCommand: "",
   },
   testCases: [],
+  problemId: undefined,
+  moduleId: "",
+  moduleName: "",
+  isSubmitting: false,
+  showFailureModal: false,
+  showSuccessModal: false,
+  showWarningModal: false,
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -152,6 +168,45 @@ export const problemEditorContainerSlice = createSlice({
     updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
       state.testCases = action.payload;
     },
+
+    updateProblemId: (state, action: PayloadAction<string | undefined>) => {
+      state.problemId = action.payload;
+    },
+    updateModuleId: (state, action: PayloadAction<string>) => {
+      state.moduleId = action.payload;
+    },
+    updateModuleName: (state, action: PayloadAction<string | undefined>) => {
+      state.moduleName = action.payload;
+    },
+
+    closeFailureModal: (state) => {
+      state.showFailureModal = false;
+    },
+
+    openWarningModal: (state) => {
+      state.showWarningModal = true;
+    },
+    closeWarningModal: (state) => {
+      state.showWarningModal = false;
+    },
+
+    resetState: (state) => {
+      return getProblemEditorInitialState();
+    },
+
+    /* API calls */
+
+    requestAddProblem: (state) => {
+      state.isSubmitting = true;
+    },
+    requestAddProblemSuccess: (state) => {
+      state.isSubmitting = false;
+      state.showSuccessModal = true;
+    },
+    requestAddProblemFailure: (state) => {
+      state.isSubmitting = false;
+      state.showFailureModal = true;
+    },
   },
 });
 
@@ -169,5 +224,15 @@ export const {
   updateCodeEditor,
   updateServerConfig,
   updateTestCases,
+  closeFailureModal,
+  requestAddProblem,
+  requestAddProblemSuccess,
+  requestAddProblemFailure,
+  updateModuleId,
+  updateModuleName,
+  updateProblemId,
+  resetState,
+  openWarningModal,
+  closeWarningModal,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;
