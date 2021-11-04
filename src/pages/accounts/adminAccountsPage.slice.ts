@@ -24,16 +24,17 @@ export const dashboardSlice = createSlice({
       state.loading = true;
     },
     requestAccountsEnd: (state, action: PayloadAction<IAccount[]>) => {
+      console.log("end?");
+      //state.accounts = action.payload;
       state.loading = false;
-      state.accounts = action.payload;
     },
     requestAccountsFail: (state, action: PayloadAction<IRequestMessage>) => {
-      state.loading = true;
       state.feedback = {
         display: true,
         type: AlertType.error,
         message: action.payload.message,
       };
+      state.loading = false;
     },
   },
 });

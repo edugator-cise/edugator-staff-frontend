@@ -4,7 +4,8 @@ export interface IAccount {
   role: string;
   username: string;
   // future values
-  email?: string;
+  name?: string;
+  //email?: string;
   phone?: string;
 }
 

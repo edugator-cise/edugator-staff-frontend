@@ -13,6 +13,8 @@ import { requestModules, openCreateDialog } from "./ModulesPage.slice";
 import { IAdminModule, EmptyModule } from "./types";
 import { IProblemBase } from "../../shared/types";
 
+const EmptyProblem: IProblemBase = { title: "" };
+
 export function ModulesPage() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
@@ -20,9 +22,7 @@ export function ModulesPage() {
   // Module to delete - hooks
 
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
-  const onDeleteDialogClose = () => {
-    setConfirmDelete(false);
-  };
+  const onDeleteDialogClose = () => setConfirmDelete(false);
 
   const [toDelete, setToDelete] = React.useState<IAdminModule>(EmptyModule);
   const setModuleToDelete = (module: IAdminModule) => {
@@ -35,8 +35,6 @@ export function ModulesPage() {
   const [grading, setGrading] = React.useState<boolean>(false);
   const onGradingDialogClose = () => setGrading(false);
 
-  const EmptyProblem: IProblemBase = { title: "" };
-
   const [toGrade, setToGrade] = React.useState<IProblemBase>(EmptyProblem);
   const setProblemToGrade = (problem: IProblemBase) => {
     setGrading(true);
@@ -46,9 +44,7 @@ export function ModulesPage() {
   const moduleHeaderButtons = [
     {
       label: "Add Module",
-      onClick: () => {
-        dispatch(openCreateDialog());
-      },
+      onClick: () => dispatch(openCreateDialog()),
       variant: "contained",
     },
   ];

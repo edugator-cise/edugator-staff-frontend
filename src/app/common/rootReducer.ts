@@ -2,9 +2,9 @@ import { combineReducers } from "redux";
 import problemEditorContainerReducer from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
 import codeEditorReducer from "../../pages/CodeEditor/CodeEditorSlice";
 import { loginSlice } from "../../pages/Login/LoginPage.slice";
-import { moduleSlice } from "../../pages/modules/ModulesPage.slice";
-import { gradingSlice } from "../../pages/grading/GradingDialog.slice";
-import adminDashboardReducer from "../../pages/accounts/adminAccountsPage.slice";
+import moduleReducer from "../../pages/modules/ModulesPage.slice";
+import gradingReducer from "../../pages/grading/GradingDialog.slice";
+import adminDashboardReducer from "../../pages/accounts/AdminAccountsPage.slice";
 import landingPageReducer from "../../pages/LandingPage/LandingPageSlice";
 /* import slices of state here */
 
@@ -13,8 +13,8 @@ import landingPageReducer from "../../pages/LandingPage/LandingPageSlice";
 */
 const rootReducer = combineReducers({
   login: loginSlice.reducer,
-  modules: moduleSlice.reducer,
-  grading: gradingSlice.reducer,
+  modules: moduleReducer,
+  grading: gradingReducer,
   adminDashboard: adminDashboardReducer,
   problemEditorContainer: problemEditorContainerReducer,
   codeEditor: codeEditorReducer,

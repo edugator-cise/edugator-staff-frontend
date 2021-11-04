@@ -1,36 +1,51 @@
 import React from "react";
-import { Stack, CircularProgress } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import { Stack } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
+import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import {
+  requestAccounts,
+  requestAccountsEnd,
+} from ".//AdminAccountsPage.slice";
+import {
+  NewAccountDialog,
+  AccountsTable,
+  DashboardProgress,
+} from "./components";
 
-export function adminAccountsPage() {
+export function AdminAccountsPage() {
   const dispatch = useAppDispatch();
-  const dashboardState = useAppSelector((state) => state.modules);
+  const dashboardState = useAppSelector((state) => state.adminDashboard);
+
+  const [newUserDialog, setNewUserDialog] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    dispatch(requestAccounts());
+  }, [dispatch]);
 
   const accountsHeaderButtons = [
     {
       label: "Add Admin User",
-      onClick: () => {
-        //dispatch(openCreateDialog());
-      },
+      onClick: () => dispatch(requestAccountsEnd([])),
+      //onClick: () => setNewUserDialog(true),
       variant: "contained",
     },
-  ];
-
-  React.useEffect(() => {
-    //dispatch(requestModules());
-  }, [dispatch]);
-
-  // <ModulesSnackbar />
+  ]; // <ModulesSnackbar />
 
   return (
     <LayoutContainer
       pageTitle={"Admin Accounts"}
       actionButtons={accountsHeaderButtons}
     >
-      <Stack alignItems="center">
-        {dashboardState.isLoading ? <CircularProgress /> : <p>a</p>}
-      </Stack>
+      <>
+        <NewAccountDialog
+          open={newUserDialog}
+          handleClose={() => setNewUserDialog(false)}
+        />
+
+        <Stack alignItems="center">
+          {dashboardState.loading ? <DashboardProgress /> : <AccountsTable />}
+        </Stack>
+      </>
     </LayoutContainer>
   );
 }

@@ -10,6 +10,7 @@ import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
             </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
+            </PrivateRoute>
+            <PrivateRoute exact path={Routes.Accounts}>
+              <AdminAccountsPage />
             </PrivateRoute>
             <Route exact path={Routes.Code}>
               <CodeEditorPage />

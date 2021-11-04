@@ -33,8 +33,3 @@ export interface IModuleState {
   feedback: IFeedback;
   dialogState: IDialog;
 }
-
-/* Request Actions - Modules */
-export interface IRequestMessage {
-  message?: string;
-}
