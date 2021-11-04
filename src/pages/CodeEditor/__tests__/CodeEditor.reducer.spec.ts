@@ -18,7 +18,7 @@ import {
 import { resetinputOutputViewState } from "../CodeEditorSlice";
 import { IProblem } from "../../../shared/types";
 import { INavigationItem, IProblemItem, ICompilerOutput } from "../types";
-
+import apiClient from "../../../app/common/apiClient";
 const sampleProblems: IProblem[] = [
   {
     _id: "string",
@@ -50,7 +50,20 @@ const sampleProblems: IProblem[] = [
 
 describe("CodeEditor Reducer", () => {
   jest.mock("../../../app/common/apiClient");
+  const apiClientMock = apiClient as jest.Mocked<typeof apiClient>
+  it("sets current problem", () => {
+    const baseState = store.getState().codeEditor;
+    store.dispatch(setCurrentProblem(sampleProblems[0]));
 
+    const expected = {
+      ...baseState,
+      ...resetinputOutputViewState(),
+      currentProblem: sampleProblems[0],
+      codeBody: sampleProblems[0].code.body,
+      runningSubmission: false,
+    };
+    expect(store.getState().codeEditor).toEqual(expected);
+  });
   it("requests modules and problems", () => {
     const baseState = store.getState().codeEditor;
 
@@ -182,7 +195,6 @@ describe("CodeEditor Reducer", () => {
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });
-
   it("set result submission", () => {
     const baseState = store.getState().codeEditor;
 
@@ -199,19 +211,6 @@ describe("CodeEditor Reducer", () => {
     const expected = {
       ...baseState,
       submissionOutput: resultSubmission,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-  it("sets current problem", () => {
-    const baseState = store.getState().codeEditor;
-    store.dispatch(setCurrentProblem(sampleProblems[0]));
-
-    const expected = {
-      ...baseState,
-      ...resetinputOutputViewState(),
-      currentProblem: sampleProblems[0],
-      codeBody: sampleProblems[0].code.body,
-      runningSubmission: false,
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });
