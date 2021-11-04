@@ -31,6 +31,13 @@ export const ProblemEditorForm = (props: Props) => {
 
     if (!values.templatePackage) {
       errors.templatePackage = "Required";
+    } else if (
+      !values.templatePackage.match(
+        /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g //https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
+      )
+    ) {
+      errors.templatePackage =
+        "Must be a valid uri starting with http:// or https://";
     }
 
     dispatch(validateProblem(Object.entries(errors).length === 0));

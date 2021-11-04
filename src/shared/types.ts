@@ -1,9 +1,16 @@
 /** Problem Interfaces */
 
+export interface ITestCase {
+  input: string;
+  expectedOutput: string;
+  hint: string;
+  visibility: number;
+}
+
 export interface IProblem extends IProblemBase {
   hidden: boolean;
   language: string;
-  dueDate: Date;
+  dueDate: string; //iso format
   statement: string;
   code: {
     header: string;
@@ -11,18 +18,15 @@ export interface IProblem extends IProblemBase {
     footer: string;
   };
   fileExtension: string;
-  testCases: [
-    {
-      input: string;
-      expectedOutput: string;
-      hint: string;
-      visibility: number;
-    }
-  ];
+  testCases: ITestCase[];
   templatePackage: string;
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
+}
+
+export interface INewProblem extends IProblem {
+  moduleId: string;
 }
 
 // please extend problem interfaces from here
