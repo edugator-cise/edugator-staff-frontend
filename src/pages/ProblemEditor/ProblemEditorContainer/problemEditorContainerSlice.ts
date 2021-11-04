@@ -263,7 +263,7 @@ export const problemEditorContainerSlice = createSlice({
     },
     requestUpdateProblemFailure: (state, action: PayloadAction<any>) => {
       state.isSubmitting = false;
-      alert(action.payload);
+      state.showFailureModal = true;
     },
   },
 });
