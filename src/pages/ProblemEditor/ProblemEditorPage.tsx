@@ -48,7 +48,7 @@ export const ProblemEditorPage = () => {
     edit: [
       {
         label: "Delete Problem",
-        onClick: () => {},
+        onClick: () => console.log("DELETE to come in next PR"),
         variant: "contained",
         color: "error",
       },
@@ -78,7 +78,7 @@ export const ProblemEditorPage = () => {
       pageTitle={`${moduleName ? moduleName + " - " : ""}${
         problemTitle || "New Problem"
       }`}
-      actionButtons={actions.create}
+      actionButtons={problemId ? actions.edit : actions.create}
     >
       <ProblemEditorContainer />
     </LayoutContainer>

@@ -34,8 +34,7 @@ function* handleUpdateProblemRequest(): any {
 
   const language = "C++";
 
-  const updatedProblem: INewProblem = {
-    moduleId: problemState.moduleId,
+  const updatedProblem: IProblem = {
     ...problemState.metadata,
     language,
     dueDate: problemState.metadata.dueDate.toISOString(),
@@ -45,8 +44,6 @@ function* handleUpdateProblemRequest(): any {
     testCases: problemState.testCases,
     ...problemState.serverConfig,
   };
-
-  console.log(updatedProblem);
 
   const updateProblemRequest = () =>
     apiClient.put(
