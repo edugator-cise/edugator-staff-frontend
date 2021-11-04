@@ -29,6 +29,7 @@ export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
           event.stopPropagation();
           setAnchorEl(event.currentTarget);
         }}
+        sx={{ padding: 0.5 }}
       >
         <MoreVert />
       </IconButton>
@@ -37,9 +38,7 @@ export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
         id="simple-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={(event) => {
-          handleClickAway(event);
-        }}
+        onClose={handleClickAway}
       >
         <MenuItem
           onClick={(event) => {

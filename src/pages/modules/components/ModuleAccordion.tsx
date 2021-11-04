@@ -6,14 +6,26 @@ import {
   AccordionSummary,
   Typography,
 } from "@mui/material";
-import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
 import { useAppSelector } from "../../../app/common/hooks";
+import { Routes } from "../../../shared/Routes.constants";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
+import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
-import { Routes } from "../../../shared/Routes.constants";
-import { Link } from "react-router-dom";
+
+const Module = styled(Accordion)(({ theme }) => ({
+  borderRadius: theme.spacing(0.5),
+  "& .Mui-expanded": {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+}));
+
+const ModuleTitle = styled(AccordionSummary)({
+  borderRadius: "inherit",
+});
 
 const ModuleContent = styled(AccordionDetails)(({ theme }) => ({
   display: "flex",
@@ -55,6 +67,7 @@ interface moduleProps {
 }
 
 export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
+  const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
   return (
@@ -63,33 +76,31 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
         <>
           {modulesState.modules.map((module) => {
             return (
-              <Accordion key={module._id} disableGutters>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  <Title variant="h6">
-                    Module {module.number}: {module.name}
-                  </Title>
-
+              <Module key={module._id} disableGutters>
+                <ModuleTitle expandIcon={<ExpandMore />}>
                   <ModuleMenu
                     module={module}
                     setModuleToDelete={setModuleToDelete}
                   />
+
+                  <Title variant="h6">
+                    Module {module.number}: {module.name}
+                  </Title>
+
                   <NewProblemButton
                     startIcon={<Add />}
                     variant="outlined"
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      history.push(
+                        Routes.ProblemCreatorBaseWithoutId + module._id,
+                        { moduleName: module.name }
+                      );
+                    }}
                   >
-                    <Link
-                      to={{
-                        pathname:
-                          Routes.ProblemCreatorBaseWithoutId + module._id,
-                        state: { moduleName: module.name },
-                      }}
-                      style={{ color: "inherit", textDecoration: "inherit" }}
-                    >
-                      Add Problem
-                    </Link>
+                    Add Problem
                   </NewProblemButton>
-                </AccordionSummary>
+                </ModuleTitle>
 
                 {module.problems.map((problem, i) => (
                   <ModuleContent key={i}>
@@ -119,25 +130,19 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                         startIcon={<Edit />}
                         size="small"
                         variant="outlined"
+                        onClick={() => {
+                          history.push(
+                            Routes.ProblemEditorBaseWithoutId + problem._id,
+                            { moduleName: module.name }
+                          );
+                        }}
                       >
-                        <Link
-                          to={{
-                            pathname:
-                              Routes.ProblemEditorBaseWithoutId + problem._id,
-                            state: { moduleName: module.name },
-                          }}
-                          style={{
-                            color: "inherit",
-                            textDecoration: "inherit",
-                          }}
-                        >
-                          Edit
-                        </Link>
+                        Edit
                       </ProblemAction>
                     </ButtonContainer>
                   </ModuleContent>
                 ))}
-              </Accordion>
+              </Module>
             );
           })}
         </>

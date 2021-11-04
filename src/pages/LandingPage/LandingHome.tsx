@@ -4,6 +4,8 @@ import { styled } from "@mui/styles";
 import CodingPage from "../../assets/CodingPage.png";
 import theme from "../../shared/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Link } from "react-router-dom";
+import { Routes } from "../../shared/Routes.constants";
 
 const Holder = styled("div")({
   height: 800,
@@ -95,14 +97,21 @@ function LandingHome() {
               their programming skills.
             </Typography>
             <ButtonHolder>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                style={{ marginRight: 15 }}
+              <Link
+                to={{
+                  pathname: Routes.Code,
+                }}
+                style={{ color: "inherit", textDecoration: "inherit" }}
               >
-                Start Coding
-              </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  style={{ marginRight: 15 }}
+                >
+                  Start Coding
+                </Button>
+              </Link>
               <Button variant="outlined" color="primary" size="large">
                 Learn
               </Button>
