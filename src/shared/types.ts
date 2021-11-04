@@ -59,4 +59,8 @@ export interface IFeedback {
   type: AlertType;
 }
 
+export interface IRequestMessage {
+  message?: string;
+}
+
 /** Other Interfaces */
