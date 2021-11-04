@@ -9,7 +9,6 @@ import {
   setStdin,
   setCompilerOutput,
   setActiveTab,
-  setProblems,
   setIsLoading,
   setRunningSubmission,
   setIsAcceptedOutput,
@@ -18,8 +17,14 @@ import {
 } from "../CodeEditorSlice";
 import { resetinputOutputViewState } from "../CodeEditorSlice";
 import { IProblem } from "../../../shared/types";
-import { INavigationItem, IProblemItem, ICompilerOutput } from "../types";
-
+import {
+  INavigationItem,
+  IProblemItem,
+  ICompilerOutput,
+  IModuleWithProblems,
+} from "../types";
+import apiClient from "../../../app/common/apiClient";
+import { AxiosResponse } from "axios";
 const sampleProblems: IProblem[] = [
   {
     _id: "string",
@@ -49,13 +54,50 @@ const sampleProblems: IProblem[] = [
   },
 ];
 
-describe("CodeEditor Reducer", () => {
-  jest.mock("../../../app/common/apiClient");
+const mockedModulesWithProblems: IModuleWithProblems = {
+  _id: "samplemod id",
+  name: "module 1",
+  number: 5,
+  problems: [
+    {
+      _id: "problem 1",
+      title: "problem 2",
+    },
+  ],
+};
 
-  it("requests modules and problems", () => {
+describe("CodeEditor Reducer", () => {
+  jest.mock("../../../app/common/apiClient", () => jest.fn());
+  const apiClientMock = apiClient as jest.Mocked<typeof apiClient>;
+  it("sets current problem", () => {
+    const baseState = store.getState().codeEditor;
+    store.dispatch(setCurrentProblem(sampleProblems[0]));
+
+    const expected = {
+      ...baseState,
+      ...resetinputOutputViewState(),
+      currentProblem: sampleProblems[0],
+      codeBody: sampleProblems[0].code.body,
+      runningSubmission: false,
+    };
+    expect(store.getState().codeEditor).toEqual(expected);
+  });
+  it("requests modules and problems", async () => {
+    apiClientMock.get = jest.fn((url: string): Promise<any> => {
+      if (url === "v1/module/WithNonHiddenProblems") {
+        return Promise.resolve({ data: mockedModulesWithProblems });
+      } else {
+        return Promise.resolve({ data: sampleProblems[0] });
+      }
+    });
     const baseState = store.getState().codeEditor;
 
-    store.dispatch(requestModulesAndProblems(true));
+    store.dispatch(
+      requestModulesAndProblems({
+        moduleName: mockedModulesWithProblems.name,
+        problemId: mockedModulesWithProblems.problems[0]._id,
+      })
+    );
     const expected = {
       ...baseState,
       isLoading: true,
@@ -180,7 +222,6 @@ describe("CodeEditor Reducer", () => {
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });
-
   it("set result submission", () => {
     const baseState = store.getState().codeEditor;
 
@@ -197,35 +238,6 @@ describe("CodeEditor Reducer", () => {
     const expected = {
       ...baseState,
       submissionOutput: resultSubmission,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-
-  it("sets problems", () => {
-    const baseState = store.getState().codeEditor;
-
-    store.dispatch(setProblems(sampleProblems));
-
-    const expected = {
-      ...baseState,
-      problems: sampleProblems,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-
-  it("sets current problem", () => {
-    const baseState = store.getState().codeEditor;
-
-    store.dispatch(setProblems(sampleProblems));
-    store.dispatch(setCurrentProblem("string"));
-
-    const expected = {
-      ...baseState,
-      problems: sampleProblems,
-      ...resetinputOutputViewState(),
-      currentProblem: { ...sampleProblems[0] },
-      codeBody: sampleProblems[0].code.body,
-      runningSubmission: false,
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });

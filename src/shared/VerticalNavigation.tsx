@@ -153,10 +153,12 @@ function VerticalNavigation(props: Props) {
         backgroundColor: props.light ? "transparent" : "#152c7c",
       }}
     >
-      <Avatar
-        alt="Example Alt"
-        src={props.light ? LightModeLogo : DarkModeLogo}
-      />
+      <Link to={"/"}>
+        <Avatar
+          alt="Example Alt"
+          src={props.light ? LightModeLogo : DarkModeLogo}
+        />
+      </Link>
       <Typography variant="h5" component="h1"></Typography>
 
       {md ? (

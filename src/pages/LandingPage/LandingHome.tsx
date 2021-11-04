@@ -101,6 +101,7 @@ function LandingHome() {
                 to={{
                   pathname: Routes.Code,
                 }}
+                style={{ color: "inherit", textDecoration: "inherit" }}
               >
                 <Button
                   variant="contained"

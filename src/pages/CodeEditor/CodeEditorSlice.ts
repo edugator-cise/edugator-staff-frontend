@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { INavigationItem, IResultSubmission, ICodeSubmission } from "./types";
 import { IProblem } from "../../shared/types";
-import { ICompilerOutput, ErrorObject } from "./types";
+import { ICompilerOutput, ErrorObject, ModuleProblemRequest } from "./types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   navStructure: INavigationItem[];
   isLoading: boolean;
-  problems: IProblem[];
   codeBody: string;
   runningSubmission: boolean;
   stdin: string;
@@ -15,13 +14,13 @@ export interface CodeEditorContainerState {
   submissionOutput: IResultSubmission[] | undefined;
   activeTab: number;
   runCodeError: ErrorObject;
+  isLoadingProblem: boolean;
 }
 
 const initialState: CodeEditorContainerState = {
   isLoading: true,
   currentProblem: undefined,
   navStructure: [],
-  problems: [],
   codeBody: "",
   runningSubmission: false,
   stdin: "",
@@ -36,6 +35,7 @@ const initialState: CodeEditorContainerState = {
   },
   submissionOutput: undefined,
   activeTab: 0, // stdin tab is active
+  isLoadingProblem: false,
 };
 
 export const resetinputOutputViewState = () => ({
@@ -48,19 +48,6 @@ export const resetinputOutputViewState = () => ({
   submissionOutput: undefined,
 });
 
-function filterProblemById(
-  state: CodeEditorContainerState,
-  id: string
-): IProblem | undefined {
-  if (!state.problems || state.problems.length === 0) {
-    return undefined;
-  }
-  const problemValues: IProblem[] = state.problems.filter(
-    (val: IProblem) => id === val._id
-  );
-  return problemValues.length === 0 ? undefined : problemValues[0];
-}
-
 export function getInitialCodeEditorState(): CodeEditorContainerState {
   return { ...initialState };
 }
@@ -69,27 +56,29 @@ export const codeEditorSlice = createSlice({
   name: "CodeEditor",
   initialState: getInitialCodeEditorState(),
   reducers: {
-    setCurrentProblem: (state, action: PayloadAction<string>) => {
-      const currentProblem = filterProblemById(state, action.payload);
-      if (!currentProblem) {
-        return state;
-      }
+    requestProblem: (state, action: PayloadAction<string>) => {
       return {
         ...state,
         ...resetinputOutputViewState(),
-        currentProblem: { ...currentProblem },
-        codeBody: currentProblem.code.body,
-        runningSubmission: false,
+        isLoadingProblem: true,
       };
+    },
+    setCurrentProblem: (state, action: PayloadAction<IProblem | undefined>) => {
+      state.currentProblem = action.payload ? { ...action.payload } : undefined;
+      state.runningSubmission = false;
+      state.isLoadingProblem = false;
+      if (action.payload) {
+        state.codeBody = action.payload.code.body;
+      }
     },
     setNavStructure: (state, action: PayloadAction<INavigationItem[]>) => {
       state.navStructure = action.payload;
     },
-    requestModulesAndProblems: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setProblems: (state, action: PayloadAction<IProblem[]>) => {
-      state.problems = action.payload;
+    requestModulesAndProblems: (
+      state,
+      action: PayloadAction<ModuleProblemRequest>
+    ) => {
+      state.isLoading = true;
     },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -142,11 +131,11 @@ export const {
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,
+  requestProblem,
   submitCode,
   setStdin,
   setCompilerOutput,
   setActiveTab,
-  setProblems,
   setIsLoading,
   setRunningSubmission,
   setIsAcceptedOutput,
