@@ -5,6 +5,7 @@ import CodingPage from "../../assets/CodingPage.png";
 import theme from "../../shared/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link } from "react-router-dom";
+import { Routes } from "../../shared/Routes.constants";
 
 const Holder = styled("div")({
   height: 800,
@@ -98,7 +99,7 @@ function LandingHome() {
             <ButtonHolder>
               <Link
                 to={{
-                  pathname: "/code",
+                  pathname: Routes.Code,
                 }}
               >
                 <Button
