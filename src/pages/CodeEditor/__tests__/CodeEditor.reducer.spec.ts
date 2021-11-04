@@ -17,8 +17,14 @@ import {
 } from "../CodeEditorSlice";
 import { resetinputOutputViewState } from "../CodeEditorSlice";
 import { IProblem } from "../../../shared/types";
-import { INavigationItem, IProblemItem, ICompilerOutput } from "../types";
+import {
+  INavigationItem,
+  IProblemItem,
+  ICompilerOutput,
+  IModuleWithProblems,
+} from "../types";
 import apiClient from "../../../app/common/apiClient";
+import { AxiosResponse } from "axios";
 const sampleProblems: IProblem[] = [
   {
     _id: "string",
@@ -48,9 +54,21 @@ const sampleProblems: IProblem[] = [
   },
 ];
 
+const mockedModulesWithProblems: IModuleWithProblems = {
+  _id: "samplemod id",
+  name: "module 1",
+  number: 5,
+  problems: [
+    {
+      _id: "problem 1",
+      title: "problem 2",
+    },
+  ],
+};
+
 describe("CodeEditor Reducer", () => {
-  jest.mock("../../../app/common/apiClient");
-  const apiClientMock = apiClient as jest.Mocked<typeof apiClient>
+  jest.mock("../../../app/common/apiClient", () => jest.fn());
+  const apiClientMock = apiClient as jest.Mocked<typeof apiClient>;
   it("sets current problem", () => {
     const baseState = store.getState().codeEditor;
     store.dispatch(setCurrentProblem(sampleProblems[0]));
@@ -64,13 +82,22 @@ describe("CodeEditor Reducer", () => {
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });
-  it("requests modules and problems", () => {
+  it("requests modules and problems", async () => {
+    apiClientMock.get = jest.fn((url: string): Promise<any> => {
+      if (url === "v1/module/WithNonHiddenProblems") {
+        return Promise.resolve({ data: mockedModulesWithProblems });
+      } else {
+        return Promise.resolve({ data: sampleProblems[0] });
+      }
+    });
     const baseState = store.getState().codeEditor;
 
-    store.dispatch(requestModulesAndProblems({
-      moduleName: "extra",
-      problemId: "extra"
-    }));
+    store.dispatch(
+      requestModulesAndProblems({
+        moduleName: mockedModulesWithProblems.name,
+        problemId: mockedModulesWithProblems.problems[0]._id,
+      })
+    );
     const expected = {
       ...baseState,
       isLoading: true,

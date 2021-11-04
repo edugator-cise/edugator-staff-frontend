@@ -97,7 +97,6 @@ function* handleRequestModulesAndProblems(
     const { data }: { data: IModuleWithProblems[] } = yield call(async () => {
       return apiClient.get("v1/module/WithNonHiddenProblems");
     });
-    console.log(data)
     yield put(setNavStructure(createNavStructure(data)));
     if (action.payload.problemId) {
       const responseObject: { data: IProblem } = yield call(async () => {
