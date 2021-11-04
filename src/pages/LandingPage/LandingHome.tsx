@@ -100,6 +100,7 @@ function LandingHome() {
                 to={{
                   pathname: "/code",
                 }}
+                style={{ color: "inherit", textDecoration: "inherit" }}
               >
                 <Button
                   variant="contained"

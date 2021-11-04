@@ -7,7 +7,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { setCurrentProblem } from "./CodeEditorSlice";
+import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
 import { colors } from "../../shared/constants";
@@ -89,7 +89,7 @@ export const Sidenav = () => {
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
                     onClick={() => {
-                      dispatch(setCurrentProblem(problemItem._id));
+                      dispatch(requestProblem(problemItem._id));
                       history.replace({
                         pathname: Routes.Code + `/${problemItem._id}`,
                       });

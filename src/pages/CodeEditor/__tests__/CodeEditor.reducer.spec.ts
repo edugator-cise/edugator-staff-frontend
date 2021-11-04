@@ -9,7 +9,6 @@ import {
   setStdin,
   setCompilerOutput,
   setActiveTab,
-  setProblems,
   setIsLoading,
   setRunningSubmission,
   setIsAcceptedOutput,
@@ -55,7 +54,10 @@ describe("CodeEditor Reducer", () => {
   it("requests modules and problems", () => {
     const baseState = store.getState().codeEditor;
 
-    store.dispatch(requestModulesAndProblems(true));
+    store.dispatch(requestModulesAndProblems({
+      moduleName: "extra",
+      problemId: "extra"
+    }));
     const expected = {
       ...baseState,
       isLoading: true,
@@ -200,30 +202,14 @@ describe("CodeEditor Reducer", () => {
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });
-
-  it("sets problems", () => {
-    const baseState = store.getState().codeEditor;
-
-    store.dispatch(setProblems(sampleProblems));
-
-    const expected = {
-      ...baseState,
-      problems: sampleProblems,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-
   it("sets current problem", () => {
     const baseState = store.getState().codeEditor;
-
-    store.dispatch(setProblems(sampleProblems));
-    store.dispatch(setCurrentProblem("string"));
+    store.dispatch(setCurrentProblem(sampleProblems[0]));
 
     const expected = {
       ...baseState,
-      problems: sampleProblems,
       ...resetinputOutputViewState(),
-      currentProblem: { ...sampleProblems[0] },
+      currentProblem: sampleProblems[0],
       codeBody: sampleProblems[0].code.body,
       runningSubmission: false,
     };

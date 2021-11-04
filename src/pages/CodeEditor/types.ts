@@ -5,6 +5,11 @@ export interface IProblemItem {
   _id: string;
 }
 
+export interface ModuleProblemRequest {
+  problemId: string | undefined;
+  moduleName: string | undefined;
+}
+
 export interface INavigationItem {
   name: string;
   _id: string;
@@ -38,10 +43,10 @@ export interface IJudge0Response {
 
 type IModuleBaseWithID = IModuleBase & { _id: string };
 
-type IProblemWithID = IProblem & { _id: string };
+type IProblemMetaWithID = { _id: string; title: string };
 
 export interface IModuleWithProblems extends IModuleBaseWithID {
-  problems: IProblemWithID[];
+  problems: IProblemMetaWithID[];
 }
 
 export interface IResultSubmission {
