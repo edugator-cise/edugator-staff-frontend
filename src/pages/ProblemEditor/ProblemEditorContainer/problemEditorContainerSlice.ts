@@ -241,10 +241,29 @@ export const problemEditorContainerSlice = createSlice({
         memoryLimit: action.payload.memoryLimit,
         buildCommand: action.payload.buildCommand,
       };
-      state.testCases = action.payload.testCases;
+      state.testCases = action.payload.testCases.map((testCase) => ({
+        input: testCase.input,
+        expectedOutput: testCase.expectedOutput,
+        hint: testCase.hint,
+        visibility: testCase.visibility,
+      }));
     },
-    requestGetProblemFailure: (state) => {
+    requestGetProblemFailure: (state, action: PayloadAction<any>) => {
       state.fetchingProblem = false;
+      alert(action.payload);
+    },
+
+    requestUpdateProblem: (state) => {
+      state.isSubmitting = true;
+    },
+    requestUpdateProblemSuccess: (state) => {
+      state.isSubmitting = false;
+      state.showSuccessModal = true;
+      // TODO some kind of edit confirmation then back to modules
+    },
+    requestUpdateProblemFailure: (state, action: PayloadAction<any>) => {
+      state.isSubmitting = false;
+      alert(action.payload);
     },
   },
 });
@@ -270,6 +289,9 @@ export const {
   requestGetProblem,
   requestGetProblemSuccess,
   requestGetProblemFailure,
+  requestUpdateProblem,
+  requestUpdateProblemSuccess,
+  requestUpdateProblemFailure,
   updateModuleId,
   updateModuleName,
   updateProblemId,

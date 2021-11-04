@@ -187,3 +187,9 @@ describe("Adding a new problem", () => {
     );
   });
 });
+
+describe("Getting a problem", () => {
+  it("should successfully fetch a problem", async () => {});
+
+  it("should fail to get a problem", async () => {});
+});

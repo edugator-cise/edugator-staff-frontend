@@ -6,7 +6,11 @@ import {
   requestAddProblemFailure,
   requestAddProblemSuccess,
   requestGetProblem,
+  requestGetProblemFailure,
   requestGetProblemSuccess,
+  requestUpdateProblem,
+  requestUpdateProblemFailure,
+  requestUpdateProblemSuccess,
 } from "./problemEditorContainerSlice";
 import apiClient from "../../../app/common/apiClient";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -20,7 +24,41 @@ function* handleGetProblemRequest(action: PayloadAction<string>): any {
     const response: AxiosResponse<IProblem> = yield call(getProblemRequest);
     yield put(requestGetProblemSuccess(response.data));
   } catch (e) {
-    console.log(e);
+    yield put(requestGetProblemFailure(e));
+  }
+}
+
+function* handleUpdateProblemRequest(): any {
+  const state: RootState = yield select();
+  const problemState = state.problemEditorContainer;
+
+  const language = "C++";
+
+  const updatedProblem: INewProblem = {
+    moduleId: problemState.moduleId,
+    ...problemState.metadata,
+    language,
+    dueDate: problemState.metadata.dueDate.toISOString(),
+    templatePackage: problemState.problem.templatePackage,
+    statement: problemState.problem.problemStatement,
+    ...problemState.codeEditor,
+    testCases: problemState.testCases,
+    ...problemState.serverConfig,
+  };
+
+  console.log(updatedProblem);
+
+  const updateProblemRequest = () =>
+    apiClient.put(
+      `/v1/admin/problem/${problemState.problemId}`,
+      updatedProblem
+    );
+
+  try {
+    yield call(updateProblemRequest);
+    yield put(requestUpdateProblemSuccess());
+  } catch (e) {
+    yield put(requestUpdateProblemFailure(e));
   }
 }
 
@@ -57,6 +95,7 @@ function* handleAddProblemRequest(): any {
 function* problemSaga() {
   yield takeEvery(requestAddProblem.type, handleAddProblemRequest);
   yield takeEvery(requestGetProblem.type, handleGetProblemRequest);
+  yield takeEvery(requestUpdateProblem.type, handleUpdateProblemRequest);
 }
 
 export default problemSaga;

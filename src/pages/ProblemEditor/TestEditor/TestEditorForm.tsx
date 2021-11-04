@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
 import {
   requestAddProblem,
+  requestUpdateProblem,
   updateTestCases,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
 import { Stack, Button, Alert } from "@mui/material";
@@ -20,13 +21,21 @@ export const TestEditor = (props: Props) => {
   const testCases = useAppSelector(
     (state) => state.problemEditorContainer.testCases
   );
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
+  );
 
   return (
     <Formik
       initialValues={{ testCases: testCases }}
       onSubmit={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
-        dispatch(requestAddProblem());
+
+        if (problemId) {
+          dispatch(requestUpdateProblem());
+        } else {
+          dispatch(requestAddProblem());
+        }
       }}
       validate={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
