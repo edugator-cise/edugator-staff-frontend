@@ -55,7 +55,9 @@ export const CodeEditorPage = () => {
         problemId: params ? params["problemId"] : undefined,
       })
     );
-  }, [dispatch, location, params]);
+    //disabling lint for next line because it asks to make location and params a dependency when we don't have to
+    //eslint-disable-next-line
+  }, [dispatch]);
   if (isLoading) {
     return (
       <Grid
