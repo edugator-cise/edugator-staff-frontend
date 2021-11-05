@@ -13,6 +13,7 @@ import problemEditorContainerSlice, {
   resetState,
   requestGetProblem,
   requestUpdateProblem,
+  requestDeleteProblem,
 } from "./problemEditorContainerSlice";
 import apiClient from "../../../app/common/apiClient";
 import store from "../../../app/common/store";
@@ -275,7 +276,7 @@ describe("Updating a problem", () => {
       false
     );
   });
-  it("should failt to update a problem", async () => {
+  it("should fail to update a problem", async () => {
     mockApi.put.mockRejectedValueOnce({});
 
     await dispatch(requestUpdateProblem());

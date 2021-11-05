@@ -6,6 +6,8 @@ import {
   requestAddProblemFailure,
   requestAddProblemSuccess,
   requestDeleteProblem,
+  requestDeleteProblemFailure,
+  requestDeleteProblemSuccess,
   requestGetProblem,
   requestGetProblemFailure,
   requestGetProblemSuccess,
@@ -90,7 +92,20 @@ function* handleAddProblemRequest(): any {
   }
 }
 
-function* handleDeleteProblemRequest(): any {}
+function* handleDeleteProblemRequest(): any {
+  const state: RootState = yield select();
+  const problemState = state.problemEditorContainer;
+
+  const deleteProblemRequest = () =>
+    apiClient.delete(`/v1/admin/problem/${problemState.problemId}`);
+
+  try {
+    yield call(deleteProblemRequest);
+    yield put(requestDeleteProblemSuccess());
+  } catch (e) {
+    yield put(requestDeleteProblemFailure(e));
+  }
+}
 
 function* problemSaga() {
   yield takeEvery(requestAddProblem.type, handleAddProblemRequest);

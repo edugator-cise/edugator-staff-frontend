@@ -268,7 +268,9 @@ export const problemEditorContainerSlice = createSlice({
 
     requestDeleteProblem: (state) => {},
     requestDeleteProblemSuccess: (state) => {},
-    requestDeleteProblemFailure: (state) => {},
+    requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
+      alert(action.payload);
+    },
   },
 });
 
