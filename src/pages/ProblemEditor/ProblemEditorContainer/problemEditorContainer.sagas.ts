@@ -5,6 +5,7 @@ import {
   requestAddProblem,
   requestAddProblemFailure,
   requestAddProblemSuccess,
+  requestDeleteProblem,
   requestGetProblem,
   requestGetProblemFailure,
   requestGetProblemSuccess,
@@ -89,10 +90,13 @@ function* handleAddProblemRequest(): any {
   }
 }
 
+function* handleDeleteProblemRequest(): any {}
+
 function* problemSaga() {
   yield takeEvery(requestAddProblem.type, handleAddProblemRequest);
   yield takeEvery(requestGetProblem.type, handleGetProblemRequest);
   yield takeEvery(requestUpdateProblem.type, handleUpdateProblemRequest);
+  yield takeEvery(requestDeleteProblem.type, handleDeleteProblemRequest);
 }
 
 export default problemSaga;
