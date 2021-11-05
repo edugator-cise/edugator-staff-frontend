@@ -19,6 +19,9 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
   const isSubmitting = useAppSelector(
     (state) => state.problemEditorContainer.isSubmitting
   );
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
+  );
 
   const currentStepIsValid = useAppSelector((state) => {
     switch (state.problemEditorContainer.activeStep) {
@@ -73,7 +76,7 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
         color={activeStep === 4 ? "success" : "primary"}
         disabled={isSubmitting}
       >
-        {activeStep === 4 ? "Submit" : "Next"}
+        {activeStep === 4 ? (problemId ? "Save changes" : "Submit") : "Next"}
       </Button>
     </Box>
   );

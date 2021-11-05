@@ -18,6 +18,9 @@ export const FailureDialog = (props: Props) => {
     (state) => state.problemEditorContainer.showFailureModal
   );
 
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
+  );
   const dispatch = useDispatch();
 
   return (
@@ -27,7 +30,7 @@ export const FailureDialog = (props: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Failed to add new problem.
+        Failed to {problemId ? "update" : "add new"} problem.
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">

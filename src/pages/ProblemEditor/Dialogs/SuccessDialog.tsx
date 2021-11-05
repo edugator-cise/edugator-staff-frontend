@@ -9,11 +9,14 @@ export const SuccessDialog = (props: Props) => {
   const showSuccessModal = useAppSelector(
     (state) => state.problemEditorContainer.showSuccessModal
   );
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
+  );
   const history = useHistory();
   return (
     <Dialog open={showSuccessModal} aria-labelledby="alert-dialog-title">
       <DialogTitle id="alert-dialog-title">
-        Problem added successfully!
+        Problem {problemId ? "updated" : "added"} successfully!
       </DialogTitle>
       <DialogActions>
         <Button
