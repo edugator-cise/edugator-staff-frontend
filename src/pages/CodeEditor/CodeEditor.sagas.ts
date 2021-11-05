@@ -195,7 +195,8 @@ function* runCodeSubmission(
 ) {
   try {
     const { code, header, footer, stdin, problemId } = action.payload;
-    const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
+    const fullCodePayload = header + code + footer;
+    const paylodBuffer = Buffer.from(fullCodePayload, "utf-8");
     const stdinPayload = Buffer.from(stdin, "utf-8");
     const { data }: { data: IResultSubmission[] } = yield call(async () => {
       return apiClient.post("v1/code/run/evaluate", {
