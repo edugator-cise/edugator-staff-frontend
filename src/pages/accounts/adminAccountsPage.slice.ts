@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertType, IRequestMessage } from "../../shared/types";
-import { IAccountDashboardState, IAccount } from "./types";
+import { IAccountDashboardState, IAccount /*rolesEnum*/ } from "./types";
 
 const baseDashboardState: IAccountDashboardState = {
   accounts: [],
@@ -36,6 +36,21 @@ export const dashboardSlice = createSlice({
       };
       state.loading = false;
     },
+    /** Accounts Dashboard Reducers */
+    setSelectedAccount: (state, action: PayloadAction<IAccount>) => {
+      state.selectedAccount = action.payload;
+    },
+    unsetSelectedAccount: (state) => {
+      state.selectedAccount = undefined;
+    },
+    setCurrentAccount: (state, action: PayloadAction<IAccount>) => {
+      state.currentAccount = action.payload;
+    },
+
+    /** Other */
+    closeAlert: (state) => {
+      state.feedback.display = false;
+    },
   },
 });
 
@@ -44,6 +59,12 @@ export const {
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
+  /** Accounts Dashboard Reducers */
+  setSelectedAccount,
+  unsetSelectedAccount,
+  setCurrentAccount,
+  /** Ohter */
+  closeAlert,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

@@ -5,18 +5,25 @@ import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import {
   requestAccounts,
   requestAccountsEnd,
+  unsetSelectedAccount,
 } from ".//AdminAccountsPage.slice";
 import {
-  NewAccountDialog,
   AccountsTable,
+  AccountDialog,
+  NewAccountDialog,
   DashboardProgress,
+  AccountSnackbar,
 } from "./components";
 
 export function AdminAccountsPage() {
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.adminDashboard);
 
+  // whether we want to add a new account
   const [newUserDialog, setNewUserDialog] = React.useState<boolean>(false);
+
+  // whether there is a selected account from the table
+  const selectingAccount = dashboardState.selectedAccount ? true : false;
 
   React.useEffect(() => {
     dispatch(requestAccounts());
@@ -29,17 +36,24 @@ export function AdminAccountsPage() {
       //onClick: () => setNewUserDialog(true),
       variant: "contained",
     },
-  ]; // <ModulesSnackbar />
+  ]; //
 
   return (
     <LayoutContainer
-      pageTitle={"Admin Accounts"}
+      pageTitle={"Admin Accounts Information"}
       actionButtons={accountsHeaderButtons}
     >
       <>
+        <AccountSnackbar />
+
         <NewAccountDialog
           open={newUserDialog}
           handleClose={() => setNewUserDialog(false)}
+        />
+
+        <AccountDialog
+          open={selectingAccount}
+          handleClose={() => dispatch(unsetSelectedAccount())}
         />
 
         <Stack alignItems="center">

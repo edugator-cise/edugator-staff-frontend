@@ -1,16 +1,23 @@
 import { IFeedback } from "../../shared/types";
 
+export enum rolesEnum {
+  TA = "TA",
+  Professor = "Professor",
+}
+
 export interface IAccount {
-  role: string;
+  role: rolesEnum;
   username: string;
   // future values
   name?: string;
-  //email?: string;
+  //email?: string; // ?
   phone?: string;
 }
 
 export interface IAccountDashboardState {
   loading: boolean;
-  accounts: IAccount[];
   feedback: IFeedback;
+  accounts: IAccount[];
+  currentAccount?: IAccount;
+  selectedAccount?: IAccount;
 }
