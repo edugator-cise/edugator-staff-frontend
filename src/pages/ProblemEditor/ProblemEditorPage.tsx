@@ -48,7 +48,7 @@ export const ProblemEditorPage = () => {
     edit: [
       {
         label: "Delete Problem",
-        onClick: () => console.log("DELETE to come in next PR"),
+        onClick: () => dispatch(openWarningModal()),
         variant: "contained",
         color: "error",
       },
