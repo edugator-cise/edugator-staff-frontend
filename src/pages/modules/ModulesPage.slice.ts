@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAdminModule } from "./types";
 import { IModuleBase } from "../../shared/types";
-import {
-  IModuleState,
-  IRequestMessage,
-  DialogStatus,
-  AlertType,
-} from "./types";
+import { IModuleState, IRequestMessage, DialogStatus } from "./types";
+import { AlertType } from "../../shared/types";
 import { AlertMsg } from "./config";
 
 const baseModuleState: IModuleState = {
@@ -106,7 +102,11 @@ export const moduleSlice = createSlice({
 
       // workaround since module from backend
       // doesnt have the "problems" property
-      let new_module = { ...action.payload, problems: [] };
+      let new_module = {
+        ...action.payload,
+        problems: state.modules[index].problems,
+      };
+
       // replace old module with new module
       state.modules = state.modules.fill(new_module, index, index + 1);
 

@@ -8,6 +8,7 @@ import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 
 function App() {
@@ -22,9 +23,15 @@ function App() {
             <PrivateRoute exact path={Routes.ProblemEditor}>
               <ProblemEditorPage />
             </PrivateRoute>
+            <PrivateRoute exact path={Routes.ProblemCreator}>
+              <ProblemEditorPage />
+            </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
             </PrivateRoute>
+            <Route path={Routes.CodeWithProblem}>
+              <CodeEditorPage />
+            </Route>
             <Route exact path="/">
               <LandingPage />
             </Route>
