@@ -2,12 +2,46 @@ import React from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
-import { ModuleDialog, Modules, ModulesSnackbar } from "./components";
+import {
+  Modules,
+  ModuleDialog,
+  DeleteDialog,
+  ModulesSnackbar,
+} from "./components";
+import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
+import { IAdminModule, EmptyModule } from "./types";
+import { IProblemBase } from "../../shared/types";
 
 export function ModulesPage() {
   const dispatch = useAppDispatch();
   const modulesState = useAppSelector((state) => state.modules);
+
+  // Module to delete - hooks
+
+  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
+  const onDeleteDialogClose = () => {
+    setConfirmDelete(false);
+  };
+
+  const [toDelete, setToDelete] = React.useState<IAdminModule>(EmptyModule);
+  const setModuleToDelete = (module: IAdminModule) => {
+    setConfirmDelete(true);
+    setToDelete(module);
+  };
+
+  // Problem to grade - hooks
+
+  const [grading, setGrading] = React.useState<boolean>(false);
+  const onGradingDialogClose = () => setGrading(false);
+
+  const EmptyProblem: IProblemBase = { title: "" };
+
+  const [toGrade, setToGrade] = React.useState<IProblemBase>(EmptyProblem);
+  const setProblemToGrade = (problem: IProblemBase) => {
+    setGrading(true);
+    setToGrade(problem);
+  };
 
   const moduleHeaderButtons = [
     {
@@ -15,6 +49,7 @@ export function ModulesPage() {
       onClick: () => {
         dispatch(openCreateDialog());
       },
+      variant: "contained",
     },
   ];
 
@@ -26,6 +61,18 @@ export function ModulesPage() {
     <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
       <>
         <ModuleDialog />
+
+        <DeleteDialog
+          open={confirmDelete}
+          handleClose={onDeleteDialogClose}
+          toDelete={toDelete}
+        />
+        <GradingDialog
+          open={grading}
+          problem={toGrade}
+          handleClose={onGradingDialogClose}
+        />
+
         <ModulesSnackbar />
 
         <Grid
@@ -34,7 +81,14 @@ export function ModulesPage() {
           justifyContent="center"
           alignItems="center"
         >
-          {modulesState.isLoading ? <CircularProgress /> : <Modules />}
+          {modulesState.isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Modules
+              setModuleToDelete={setModuleToDelete}
+              setProblemToGrade={setProblemToGrade}
+            />
+          )}
         </Grid>
       </>
     </LayoutContainer>
