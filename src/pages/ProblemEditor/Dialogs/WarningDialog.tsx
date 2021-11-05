@@ -10,6 +10,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../../app/common/hooks";
+import { Routes } from "../../../shared/Routes.constants";
 import {
   closeWarningModal,
   requestDeleteProblem,
@@ -48,7 +49,7 @@ export const WarningDialog = (props: Props) => {
             if (problemId) {
               dispatch(requestDeleteProblem());
             }
-            history.push("/admin/modules");
+            history.push(Routes.Modules);
           }}
           variant="contained"
           color="error"
