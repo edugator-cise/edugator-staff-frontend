@@ -10,6 +10,7 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { LocalStorage } from "../app/common/LocalStorage";
 import { requestLogout } from "../pages/Login/LoginPage.slice";
 import { Routes } from "../shared/Routes.constants";
 
@@ -44,7 +45,7 @@ export const LayoutContainer = ({
             EDUGATOR
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          {history.location.pathname !== Routes.Login.toString() && (
+          {LocalStorage.getToken() && (
             <Button
               size="large"
               color="secondary"
