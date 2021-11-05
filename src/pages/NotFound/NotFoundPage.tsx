@@ -8,7 +8,6 @@ import { Routes } from "../../shared/Routes.constants";
 
 export function NotFoundPage() {
   const history = useHistory();
-  //history.location.pathname.indexOf("admin");
   return (
     <LayoutContainer pageTitle={"404: Page Not Found"}>
       <Stack>
