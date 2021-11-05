@@ -153,7 +153,7 @@ function VerticalNavigation(props: Props) {
         backgroundColor: props.light ? "transparent" : "#152c7c",
       }}
     >
-      <Link to={"/"}>
+      <Link to={Routes.Landing}>
         <Avatar
           alt="Example Alt"
           src={props.light ? LightModeLogo : DarkModeLogo}
