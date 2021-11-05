@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
 import { useAppSelector } from "../../../app/common/hooks";
+import { Routes } from "../../../shared/Routes.constants";
 
 interface Props {}
 
@@ -20,7 +21,7 @@ export const SuccessDialog = (props: Props) => {
       </DialogTitle>
       <DialogActions>
         <Button
-          onClick={() => history.push("/admin/modules")}
+          onClick={() => history.push(Routes.Modules)}
           variant="contained"
           color="success"
         >

@@ -265,6 +265,12 @@ export const problemEditorContainerSlice = createSlice({
       state.isSubmitting = false;
       state.showFailureModal = true;
     },
+
+    requestDeleteProblem: (state) => {},
+    requestDeleteProblemSuccess: (state) => {},
+    requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
+      alert(action.payload);
+    },
   },
 });
 
@@ -292,6 +298,9 @@ export const {
   requestUpdateProblem,
   requestUpdateProblemSuccess,
   requestUpdateProblemFailure,
+  requestDeleteProblem,
+  requestDeleteProblemSuccess,
+  requestDeleteProblemFailure,
   updateModuleId,
   updateModuleName,
   updateProblemId,
