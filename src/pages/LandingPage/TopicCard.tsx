@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/styles";
 import React, { useRef, useState } from "react";
 import theme from "../../shared/theme";
@@ -29,6 +29,7 @@ const Topic = styled("div")({
 function TopicCard(props: topicInfo) {
   const gif = useRef<any>(null);
   const [hover, setHover] = useState<boolean>(false);
+  const lg = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <Topic
@@ -41,33 +42,35 @@ function TopicCard(props: topicInfo) {
         setHover(false);
       }}
       style={
-        props.position === "top"
-          ? hover
+        lg
+          ? props.position === "top"
+            ? hover
+              ? {
+                  transform: "translateY(0px) translateX(-100px)",
+                  WebkitTransform: "translateY(0px) translateX(-100px)",
+                  transition: "transform 800ms",
+                  zIndex: props.zIndex,
+                }
+              : {
+                  transform: "translateY(100px) translateX(-100px)",
+                  WebkitTransform: "translateY(100px) translateX(-100px)",
+                  transition: "transform 800ms",
+                  zIndex: props.zIndex,
+                }
+            : hover
             ? {
-                transform: "translateY(0px) translateX(-150px)",
-                WebkitTransform: "translateY(0px) translateX(-150px)",
+                transform: "translateY(0px) translateX(100px)",
+                WebkitTransform: "translateY(0px) translateX(100px)",
                 transition: "transform 800ms",
                 zIndex: props.zIndex,
               }
             : {
-                transform: "translateY(100px) translateX(-150px)",
-                WebkitTransform: "translateY(100px) translateX(-150px)",
+                transform: "translateY(-80px) translateX(100px)",
+                WebkitTransform: "translateY(-80px) translateX(100px)",
                 transition: "transform 800ms",
                 zIndex: props.zIndex,
               }
-          : hover
-          ? {
-              transform: "translateY(0px) translateX(50px)",
-              WebkitTransform: "translateY(0px) translateX(50px)",
-              transition: "transform 800ms",
-              zIndex: props.zIndex,
-            }
-          : {
-              transform: "translateY(-80px) translateX(50px)",
-              WebkitTransform: "translateY(-80px) translateX(50px)",
-              transition: "transform 800ms",
-              zIndex: props.zIndex,
-            }
+          : {}
       }
     >
       <img

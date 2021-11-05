@@ -16,6 +16,12 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
   const activeStep = useAppSelector(
     (state) => state.problemEditorContainer.activeStep
   );
+  const isSubmitting = useAppSelector(
+    (state) => state.problemEditorContainer.isSubmitting
+  );
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
+  );
 
   const currentStepIsValid = useAppSelector((state) => {
     switch (state.problemEditorContainer.activeStep) {
@@ -35,12 +41,15 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
   });
 
   const handleBack = () => {
+    if (activeStep === 4) {
+      formRef.current?.validateForm();
+    }
     dispatch(decrementActiveStep());
   };
 
   const handleNext = () => {
     if (activeStep === 4) {
-      console.log("Submitted!");
+      formRef.current?.submitForm();
     } else {
       formRef.current?.submitForm();
       if (currentStepIsValid) dispatch(incrementActiveStep());
@@ -56,7 +65,7 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
     >
       <Button
         onClick={handleBack}
-        disabled={activeStep === 0}
+        disabled={activeStep === 0 || isSubmitting}
         variant="outlined"
       >
         Back
@@ -65,8 +74,9 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
         onClick={handleNext}
         variant={activeStep === 4 ? "contained" : "outlined"}
         color={activeStep === 4 ? "success" : "primary"}
+        disabled={isSubmitting}
       >
-        {activeStep === 4 ? "Submit" : "Next"}
+        {activeStep === 4 ? (problemId ? "Save changes" : "Submit") : "Next"}
       </Button>
     </Box>
   );

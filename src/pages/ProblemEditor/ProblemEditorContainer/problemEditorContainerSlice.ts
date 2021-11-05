@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IProblem } from "../../../shared/types";
+import { TestCaseField } from "../TestEditor/TestCase.utils";
 
 export interface ProblemFields {
   problemStatement: string;
@@ -8,8 +10,16 @@ export interface ProblemFields {
 export interface MetadataFields {
   title: string;
   hidden: boolean;
-  language: string;
   dueDate: Date;
+}
+
+export interface CodeEditorFields {
+  code: {
+    header: string;
+    body: string;
+    footer: string;
+  };
+  fileExtension: string;
 }
 
 export interface ServerConfigFields {
@@ -33,9 +43,21 @@ export interface ProblemEditorContainerState {
 
   activeStep: number;
 
-  problem: ProblemFields;
   metadata: MetadataFields;
+  problem: ProblemFields;
+  codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
+  testCases: TestCaseField[];
+
+  problemId: string | undefined;
+  moduleId: string;
+  moduleName: string | undefined;
+
+  isSubmitting: boolean;
+  fetchingProblem: boolean;
+  showSuccessModal: boolean;
+  showFailureModal: boolean;
+  showWarningModal: boolean;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -45,21 +67,41 @@ const initialState: ProblemEditorContainerState = {
   serverConfigIsValid: false,
   testEditorIsValid: false,
   activeStep: 0,
+  metadata: {
+    title: "",
+    hidden: false,
+    dueDate: new Date(),
+  },
   problem: {
     problemStatement: "",
     templatePackage: "",
   },
-  metadata: {
-    title: "",
-    hidden: false,
-    language: "C++",
-    dueDate: new Date(),
+  codeEditor: {
+    code: {
+      header: "",
+      body: "",
+      footer: "",
+    },
+    fileExtension: ".cpp",
   },
   serverConfig: {
     timeLimit: 0,
     memoryLimit: 0,
     buildCommand: "",
   },
+  testCases: [],
+  problemId: undefined,
+  moduleId: "",
+  moduleName: "",
+  isSubmitting: false,
+  fetchingProblem: false,
+  showFailureModal: false,
+  showSuccessModal: false,
+  showWarningModal: false,
+};
+
+export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
+  return { ...initialState };
 };
 
 export const problemEditorContainerSlice = createSlice({
@@ -120,8 +162,114 @@ export const problemEditorContainerSlice = createSlice({
     updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
       state.metadata = action.payload;
     },
+    updateCodeEditor: (state, action: PayloadAction<CodeEditorFields>) => {
+      state.codeEditor = action.payload;
+    },
     updateServerConfig: (state, action: PayloadAction<ServerConfigFields>) => {
       state.serverConfig = action.payload;
+    },
+    updateTestCases: (state, action: PayloadAction<TestCaseField[]>) => {
+      state.testCases = action.payload;
+    },
+
+    updateProblemId: (state, action: PayloadAction<string | undefined>) => {
+      state.problemId = action.payload;
+    },
+    updateModuleId: (state, action: PayloadAction<string>) => {
+      state.moduleId = action.payload;
+    },
+    updateModuleName: (state, action: PayloadAction<string | undefined>) => {
+      state.moduleName = action.payload;
+    },
+
+    closeFailureModal: (state) => {
+      state.showFailureModal = false;
+    },
+
+    openWarningModal: (state) => {
+      state.showWarningModal = true;
+    },
+    closeWarningModal: (state) => {
+      state.showWarningModal = false;
+    },
+
+    resetState: (state) => {
+      return getProblemEditorInitialState();
+    },
+
+    /* API calls */
+
+    requestAddProblem: (state) => {
+      state.isSubmitting = true;
+    },
+    requestAddProblemSuccess: (state) => {
+      state.isSubmitting = false;
+      state.showSuccessModal = true;
+    },
+    requestAddProblemFailure: (state) => {
+      state.isSubmitting = false;
+      state.showFailureModal = true;
+    },
+
+    requestGetProblem: (state, action: PayloadAction<string>) => {
+      state.fetchingProblem = true;
+    },
+    requestGetProblemSuccess: (state, action: PayloadAction<IProblem>) => {
+      state.fetchingProblem = false;
+
+      state.metadataIsValid = true;
+      state.problemIsValid = true;
+      state.codeIsValid = true;
+      state.serverConfigIsValid = true;
+      state.testEditorIsValid = true;
+
+      state.metadata = {
+        title: action.payload.title,
+        hidden: action.payload.hidden,
+        dueDate: new Date(action.payload.dueDate),
+      };
+      state.codeEditor = {
+        code: { ...action.payload.code },
+        fileExtension: action.payload.fileExtension,
+      };
+      state.problem = {
+        problemStatement: action.payload.statement,
+        templatePackage: action.payload.templatePackage,
+      };
+      state.serverConfig = {
+        timeLimit: action.payload.timeLimit,
+        memoryLimit: action.payload.memoryLimit,
+        buildCommand: action.payload.buildCommand,
+      };
+      state.testCases = action.payload.testCases.map((testCase) => ({
+        input: testCase.input,
+        expectedOutput: testCase.expectedOutput,
+        hint: testCase.hint,
+        visibility: testCase.visibility,
+      }));
+    },
+    requestGetProblemFailure: (state, action: PayloadAction<any>) => {
+      state.fetchingProblem = false;
+      alert(action.payload);
+    },
+
+    requestUpdateProblem: (state) => {
+      state.isSubmitting = true;
+    },
+    requestUpdateProblemSuccess: (state) => {
+      state.isSubmitting = false;
+      state.showSuccessModal = true;
+      // TODO some kind of edit confirmation then back to modules
+    },
+    requestUpdateProblemFailure: (state, action: PayloadAction<any>) => {
+      state.isSubmitting = false;
+      state.showFailureModal = true;
+    },
+
+    requestDeleteProblem: (state) => {},
+    requestDeleteProblemSuccess: (state) => {},
+    requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
+      alert(action.payload);
     },
   },
 });
@@ -137,6 +285,27 @@ export const {
   decrementActiveStep,
   updateProblem,
   updateMetadata,
+  updateCodeEditor,
   updateServerConfig,
+  updateTestCases,
+  closeFailureModal,
+  requestAddProblem,
+  requestAddProblemSuccess,
+  requestAddProblemFailure,
+  requestGetProblem,
+  requestGetProblemSuccess,
+  requestGetProblemFailure,
+  requestUpdateProblem,
+  requestUpdateProblemSuccess,
+  requestUpdateProblemFailure,
+  requestDeleteProblem,
+  requestDeleteProblemSuccess,
+  requestDeleteProblemFailure,
+  updateModuleId,
+  updateModuleName,
+  updateProblemId,
+  resetState,
+  openWarningModal,
+  closeWarningModal,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

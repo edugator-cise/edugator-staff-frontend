@@ -13,10 +13,10 @@ import { useHistory } from "react-router";
 import { requestLogout } from "../pages/Login/LoginPage.slice";
 import { Routes } from "../shared/Routes.constants";
 
-type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
-type ButtonVariant = "text" | "contained" | "outlined";
+export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
+export type ButtonVariant = "text" | "contained" | "outlined";
 
-interface ButtonProps {
+export interface ButtonProps {
   label: string;
   onClick(): void;
   variant?: string;

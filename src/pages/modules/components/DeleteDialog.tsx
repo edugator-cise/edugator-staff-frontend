@@ -1,47 +1,16 @@
 import React from "react";
-import {
-  Button,
-  DialogTitle,
-  Dialog,
-  Paper,
-  Divider,
-  DialogContentText,
-  Typography,
-} from "@mui/material";
+import { Stack, Alert, AlertTitle, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { requestDeleteModule } from "../ModulesPage.slice";
+import Dialog from "../../../shared/GenericDialog";
 import { IAdminModule } from "../types";
-import { styled } from "@mui/material/styles";
-
-const DialogContent = styled(DialogContentText)(({ theme }) => ({
-  margin: theme.spacing(1),
-  marginLeft: theme.spacing(3),
-  marginRight: theme.spacing(3),
-}));
-
-const FooterButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
 
 const BulletList = styled("ul")(({ theme }) => ({
   marginTop: theme.spacing(0),
   marginBottom: theme.spacing(0),
-  paddingLeft: theme.spacing(3),
+  paddingLeft: theme.spacing(2),
 }));
-
-// weird workaround since header variants had different shades of black
-const Text = styled(Typography)(({ theme }) => ({
-  color: theme.palette.common.black,
-}));
-
-const Warning = styled(Typography)(({ theme }) => ({
-  marginTop: theme.spacing(1),
-  color: theme.palette.error.main,
-}));
-
-const Footer = styled("div")({
-  float: "right",
-});
 
 interface DeleteDialogProps {
   open: boolean;
@@ -62,81 +31,60 @@ export function DeleteDialog(props: DeleteDialogProps) {
     handleClose();
   };
 
-  const handleClickAway = (event: any) => {
-    // necessary to stop propagation
-    // that cause the accordion to open/close
-    if (event) event.stopPropagation();
-    handleClose();
-  };
+  const FooterButtons = [
+    {
+      label: "Cancel",
+      onClick: () => handleClose(),
+      variant: "contained",
+    },
+    {
+      label: "Confirm Delete",
+      onClick: () => handleDialogSubmit(),
+      variant: "contained",
+      color: "error",
+    },
+  ];
+
+  const dialogTitle = `Confirm Delete: "Module ${toDelete.number} - ${toDelete.name}"`;
 
   return (
     <Dialog
-      onClose={(event) => handleClickAway(event)}
       open={open}
       maxWidth="md"
+      handleClose={handleClose}
+      title={dialogTitle}
+      footerContent={FooterButtons}
     >
-      <Paper elevation={3}>
-        <DialogTitle>Confirm Module Deletion</DialogTitle>
-        <Divider />
+      <Stack spacing={2}>
+        {toDelete.problems.length > 0 ? (
+          <>
+            <Typography>
+              This action will also delete the following problems:
+            </Typography>
 
-        <DialogContent>
-          <Text variant="h5" gutterBottom>
-            Attempting to delete: "Module {toDelete.number}: {toDelete.name}"
-          </Text>
-
-          {toDelete.problems.length > 0 ? (
-            <>
-              <Text variant="h6">
-                This action will also delete the following problems:
-              </Text>
-              <BulletList>
+            <BulletList>
+              <Typography>
                 {toDelete.problems.map((problem, i) => {
                   return (
-                    <li>
-                      <Text variant="subtitle1">
-                        {`Problem ${i}: ${problem.title}`}
-                      </Text>
+                    <li key={i}>
+                      {`Problem ${toDelete.number}.${i + 1}: ${problem.title}`}
                     </li>
                   );
                 })}
-              </BulletList>
-            </>
-          ) : (
-            <Text variant="subtitle1" gutterBottom>
-              This module has no problems associated with it
-            </Text>
-          )}
+              </Typography>
+            </BulletList>
+          </>
+        ) : (
+          <Typography gutterBottom>
+            This module has no problems associated with it
+          </Typography>
+        )}
 
-          <Warning variant="body1">
-            This an action that can't be undone. Are you sure?
-          </Warning>
-        </DialogContent>
-
-        <Divider />
-
-        <Footer>
-          <FooterButton
-            onClick={(event) => {
-              event.stopPropagation();
-              handleClose();
-            }}
-            variant="contained"
-          >
-            Cancel
-          </FooterButton>
-
-          <FooterButton
-            onClick={(event) => {
-              event.stopPropagation();
-              handleDialogSubmit();
-            }}
-            variant="contained"
-            color="error"
-          >
-            Confirm
-          </FooterButton>
-        </Footer>
-      </Paper>
+        <Alert severity="error">
+          <AlertTitle>Warning</AlertTitle>
+          This an action that can't be undone. Are you sure?
+        </Alert>
+      </Stack>
     </Dialog>
   );
 }
