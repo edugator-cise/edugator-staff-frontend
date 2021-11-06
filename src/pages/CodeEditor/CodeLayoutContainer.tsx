@@ -1,5 +1,6 @@
 import { Box, Alert, Grow } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+import { requestModules } from "../LandingPage/LandingPageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { setRunCodeError } from "./CodeEditorSlice";
@@ -37,6 +38,11 @@ export const CodeLayoutContainer = ({ children }: Props) => {
   const errorMessage = useSelector(
     (state: RootState) => state.codeEditor.runCodeError
   );
+
+  const modules = useSelector((state: RootState) => state.landingPage.modules);
+  useEffect(() => {
+    dispatch(requestModules());
+  }, [dispatch]);
 
   const topics:TopicProps[] = [
     {
@@ -99,7 +105,7 @@ export const CodeLayoutContainer = ({ children }: Props) => {
         })}
       </TopicsSidebar>
       <Box sx={{height: '100%', width: '100%'}}>
-      <VerticalNavigation light={true} codingPage={true} />
+      <VerticalNavigation light={true} codingPage={true} modules={modules} />
       {errorMessage.hasError && (
         <Grow in timeout={500}>
           <Alert

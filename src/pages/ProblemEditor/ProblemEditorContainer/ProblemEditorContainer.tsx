@@ -2,11 +2,16 @@ import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
 import React, { useRef } from "react";
 import { useAppSelector } from "../../../app/common/hooks";
+import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "../ProblemEditorForm/ProblemEditorForm";
 import { ServerConfigForm } from "../ServerConfigForm/ServerConfigForm";
+import { FailureDialog } from "../Dialogs/FailureDialog";
+import { SuccessDialog } from "../Dialogs/SuccessDialog";
+import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
+import { WarningDialog } from "../Dialogs/WarningDialog";
 
 const steps = [
   "Metadata",
@@ -27,8 +32,12 @@ export const ProblemEditorContainer = () => {
         return <MetadataForm formRef={formRef} />;
       case 1:
         return <ProblemEditorForm formRef={formRef} />;
+      case 2:
+        return <CodeEditorForm formRef={formRef} />;
       case 3:
         return <ServerConfigForm formRef={formRef} />;
+      case 4:
+        return <TestEditor formRef={formRef} />;
       default:
         return <ExampleValidator />;
     }
@@ -59,6 +68,9 @@ export const ProblemEditorContainer = () => {
         {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
         <ActiveForm />
         <ProblemEditorNavigator formRef={formRef} />
+        <SuccessDialog />
+        <FailureDialog />
+        <WarningDialog />
       </Box>
     </Box>
   );

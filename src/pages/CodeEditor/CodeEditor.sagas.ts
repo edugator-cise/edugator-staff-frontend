@@ -10,7 +10,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,
   setNavStructure,
-  setProblems,
+  requestProblem,
   setCurrentProblem,
   setIsLoading,
   setRunningSubmission,
@@ -30,6 +30,7 @@ import {
   ICodeSubmission,
   IJudge0Response,
   IModuleWithProblems,
+  ModuleProblemRequest,
 } from "./types";
 import { IProblem } from "../../shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
@@ -60,12 +61,18 @@ const poll = async (
   return new Promise(executePoll);
 };
 
-function filterForProblems(moduleProblemStructure: IModuleWithProblems[]) {
-  let problems: IProblem[] = [];
-  moduleProblemStructure.forEach((element) => {
-    problems = [...problems, ...element.problems];
-  });
-  return problems;
+function filterForProblem(
+  moduleProblemStructure: IModuleWithProblems[],
+  moduleName: string
+): string | undefined {
+  let module: IModuleWithProblems[] = moduleProblemStructure.filter(
+    (moduleWithProblem: IModuleWithProblems) =>
+      moduleWithProblem.name === moduleName
+  );
+  if (module.length !== 0 && module[0].problems.length !== 0) {
+    return module[0].problems[0]._id;
+  }
+  return undefined;
 }
 function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
   const moduleItems: INavigationItem[] = [];
@@ -73,6 +80,7 @@ function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
     const payload = {
       _id: element._id as string,
       name: element.name,
+      number: element.number,
       problems: element.problems.map((el) => ({
         problemName: el.title,
         _id: el._id,
@@ -82,15 +90,38 @@ function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
   });
   return moduleItems;
 }
-function* handleRequestModulesAndProblems() {
+function* handleRequestModulesAndProblems(
+  action: PayloadAction<ModuleProblemRequest>
+) {
   try {
     const { data }: { data: IModuleWithProblems[] } = yield call(async () => {
       return apiClient.get("v1/module/WithNonHiddenProblems");
     });
-    yield put(setProblems(filterForProblems(data)));
     yield put(setNavStructure(createNavStructure(data)));
+    if (action.payload.problemId) {
+      const responseObject: { data: IProblem } = yield call(async () => {
+        return apiClient.get(`v1/student/problem/${action.payload.problemId}`);
+      });
+      yield put(setCurrentProblem(responseObject.data));
+    } else if (action.payload.moduleName) {
+      const problemId: string | undefined = filterForProblem(
+        data,
+        action.payload.moduleName
+      );
+      if (problemId) {
+        const responseObject: { data: IProblem } = yield call(async () => {
+          return apiClient.get(`v1/student/problem/${problemId}`);
+        });
+        yield put(setCurrentProblem(responseObject.data));
+      } else {
+        yield put(setCurrentProblem(undefined));
+      }
+    }
     yield put(setIsLoading(false));
-  } catch (e) {}
+  } catch (e) {
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
+    yield put(setRunningSubmission(false));
+  }
 }
 
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
@@ -193,8 +224,21 @@ function* submissionRace(
 ) {
   yield race({
     task: call(runCodeSubmission, action),
-    cancel: take(setCurrentProblem.type),
+    cancel: take(requestProblem.type),
   });
+}
+
+function* requestProblemSaga(action: PayloadAction<string>) {
+  const id: string = action.payload;
+  try {
+    const { data }: { data: IProblem } = yield call(async () => {
+      return apiClient.get(`v1/student/problem/${id}`);
+    });
+    yield put(setCurrentProblem(data));
+  } catch (e) {
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
+    yield put(setRunningSubmission(false));
+  }
 }
 
 function* codeEditorSaga() {
@@ -204,6 +248,7 @@ function* codeEditorSaga() {
   );
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
+  yield takeEvery(requestProblem.type, requestProblemSaga);
 }
 
 export default codeEditorSaga;

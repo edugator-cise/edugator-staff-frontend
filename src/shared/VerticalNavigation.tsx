@@ -29,9 +29,12 @@ import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { Routes } from "../shared/Routes.constants";
 
 interface Props {
   light: boolean;
+  modules: string[];
   codingPage?: boolean;
 }
 
@@ -67,22 +70,12 @@ function VerticalNavigation(props: Props) {
       icon: <ModulesIcon sx={{ color: "primary.main" }} />,
       anchor: anchorModules,
       anchorSet: setAnchorModules,
+      subitems: props.modules.map((value, index) => ({
+        title: `${value}`,
+        link: "",
+      })),
       menuOpen: openModules,
       setMenuOpen: setOpenModules,
-      subitems: [
-        {
-          title: "1. C++ Review",
-          link: "",
-        },
-        {
-          title: "2. Arrays and Maps",
-          link: "",
-        },
-        {
-          title: "3. Stacks",
-          link: "",
-        },
-      ],
     },
     {
       title: "Projects",
@@ -162,10 +155,12 @@ function VerticalNavigation(props: Props) {
       }}
     >
       {!props.codingPage &&
+      <Link to={"/"}>
         <Avatar
           alt="Example Alt"
           src={props.light ? LightModeLogo : DarkModeLogo}
         />
+      </Link>
       }
       <Typography variant="h5" component="h1"></Typography>
 
@@ -195,7 +190,6 @@ function VerticalNavigation(props: Props) {
                 <Menu
                   id={item.id}
                   anchorEl={item.anchor}
-                  //getContentAnchorEl={null}
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
                   keepMounted
@@ -204,9 +198,20 @@ function VerticalNavigation(props: Props) {
                 >
                   {item.subitems.map((subitem, i) => {
                     return (
-                      <MenuItem key={i} onClick={() => item.anchorSet(null)}>
-                        {subitem.title}
-                      </MenuItem>
+                      <Link
+                        to={{
+                          pathname: Routes.Code,
+                          state: { moduleName: subitem.title },
+                        }}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                      >
+                        <MenuItem key={i} onClick={() => item.anchorSet(null)}>
+                          {subitem.title}
+                        </MenuItem>
+                      </Link>
                     );
                   })}
                 </Menu>

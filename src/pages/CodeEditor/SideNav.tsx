@@ -7,10 +7,12 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { setCurrentProblem } from "./CodeEditorSlice";
+import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
 import { colors } from "../../shared/constants";
+import { useHistory } from "react-router";
+import { Routes } from "../../shared/Routes.constants";
 interface ClickedMenu {
   [key: string]: Boolean;
 }
@@ -28,6 +30,7 @@ export const Sidenav = () => {
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
   );
+  const history = useHistory();
   const [menu, setMenu] = useState<ClickedMenu>({});
 
   const handleClick = (item: string) => {
@@ -86,7 +89,12 @@ export const Sidenav = () => {
                   <CustomListItemButton
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
-                    onClick={() => dispatch(setCurrentProblem(problemItem._id))}
+                    onClick={() => {
+                      dispatch(requestProblem(problemItem._id));
+                      history.replace({
+                        pathname: Routes.Code + `/${problemItem._id}`,
+                      });
+                    }}
                   >
                     <ListItemText
                       primaryTypographyProps={{
