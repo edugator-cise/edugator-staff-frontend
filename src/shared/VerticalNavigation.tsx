@@ -32,6 +32,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface Props {
   light: boolean;
+  codingPage?: boolean;
 }
 
 function VerticalNavigation(props: Props) {
@@ -155,15 +156,17 @@ function VerticalNavigation(props: Props) {
     <Toolbar
       style={{
         paddingLeft: md ? 100 : 30,
-        paddingRight: md ? 100 : 30,
+        paddingRight: props.codingPage ? 30 : md ? 100 : 30,
         height: 64,
-        backgroundColor: props.light ? "transparent" : "#152c7c",
+        backgroundColor: props.codingPage ? 'white' : props.light ? "transparent" : "#152c7c",
       }}
     >
-      <Avatar
-        alt="Example Alt"
-        src={props.light ? LightModeLogo : DarkModeLogo}
-      />
+      {!props.codingPage &&
+        <Avatar
+          alt="Example Alt"
+          src={props.light ? LightModeLogo : DarkModeLogo}
+        />
+      }
       <Typography variant="h5" component="h1"></Typography>
 
       {md ? (
