@@ -40,7 +40,7 @@ export const Sidenav = () => {
       sx={{
         height: "calc(100vh - 80px)",
         width: "100%",
-        bgcolor: "white",
+        bgcolor: "#F9F9F9",
         overflowY: "auto",
       }}
       aria-labelledby="nested-exercises-list"
@@ -52,6 +52,7 @@ export const Sidenav = () => {
             borderBottom: `1px solid ${colors.borderGray}`,
             textAlign: "left",
             color: "#000000",
+            bgcolor: '#F9F9F9'
           }}
         >
           Exercises
@@ -79,7 +80,7 @@ export const Sidenav = () => {
             )}
           </CustomListItemButton>
           <Collapse in={!!menu[value.name]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding sx={{ bgcolor: "white" }}>
+            <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
               {value.problems.map(
                 (problemItem: IProblemItem, index: number) => (
                   <CustomListItemButton

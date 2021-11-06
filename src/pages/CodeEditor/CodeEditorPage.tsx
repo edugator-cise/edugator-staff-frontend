@@ -9,6 +9,9 @@ import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
+
+
+
 export const CodeEditorPage = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(
@@ -47,8 +50,7 @@ export const CodeEditorPage = () => {
             flex: "1 1 auto",
           }}
         >
-          <Box sx={{ height: "100%", width: 56, backgroundColor: "#2340a5" }} />
-          <Box sx={{ height: "100%", width: 216, backgroundColor: "white" }}>
+          <Box sx={{ height: "100%", width: 320, backgroundColor: "#F9F9F9" }}>
             <Sidenav />
           </Box>
           <Grid
