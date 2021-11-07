@@ -4,7 +4,7 @@ import { IAccountDashboardState, IAccount /*rolesEnum*/ } from "./types";
 
 const baseDashboardState: IAccountDashboardState = {
   accounts: [],
-  loading: false,
+  loading: true,
   feedback: {
     display: false,
     type: AlertType.info,

@@ -36,7 +36,7 @@ export function AccountsTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <DataCell>Username</DataCell>
+            <DataCell>Email</DataCell>
             <DataCell>Name</DataCell>
             <DataCell>Phone</DataCell>
             <DataCell align="right">Role</DataCell>
@@ -44,44 +44,62 @@ export function AccountsTable() {
         </TableHead>
         <TableBody>
           {
-            // until backend sends me some accounts
-            dummyAccounts.map((row, i) => (
-              <AccountTableRow
-                key={i}
-                hover
-                onClick={() => dispatch(setSelectedAccount(row))}
-                selected={state.selectedAccount === row}
-              >
-                <DataCell>
-                  {row.username}{" "}
-                  {
-                    // remember to replace this with
-                    // person who did the request
-                    row.username === "susus@fake.account" ? (
-                      <Chip label="you" size="small" color="primary" />
-                    ) : (
-                      <></>
-                    )
-                  }
-                </DataCell>
-                <DataCell>{row.name ?? "Not set yet"}</DataCell>
-                <DataCell>{row.phone ?? "Not set yet"}</DataCell>
-                <DataCell align="right">
-                  <Chip
-                    label={row.role}
-                    size="small"
-                    // when more roles are added, use a function
-                    color={row.role === "Professor" ? "primary" : undefined}
-                  />
-                </DataCell>
-              </AccountTableRow>
-            ))
+            // accounts to be display, could be a filtered array
+            dummyAccounts.length > 0 ? (
+              <>
+                {
+                  // until backend sends me some accounts
+                  dummyAccounts.map((row, i) => (
+                    <AccountTableRow
+                      key={i}
+                      hover
+                      onClick={() => dispatch(setSelectedAccount(row))}
+                      selected={state.selectedAccount === row}
+                    >
+                      <DataCell>
+                        {row.username}{" "}
+                        {
+                          // remember to replace this with
+                          // person who did the request
+                          row.username === "susus@fake.account" ? (
+                            <Chip label="you" size="small" color="primary" />
+                          ) : (
+                            <></>
+                          )
+                        }
+                      </DataCell>
+                      <DataCell>{row.name ?? "Not set yet"}</DataCell>
+                      <DataCell>{row.phone ?? "Not set yet"}</DataCell>
+                      <DataCell align="right">
+                        <Chip
+                          label={row.role}
+                          size="small"
+                          // when more roles are added, use a function
+                          color={
+                            row.role === "Professor" ? "primary" : undefined
+                          }
+                        />
+                      </DataCell>
+                    </AccountTableRow>
+                  ))
+                }
+              </>
+            ) : (
+              // shouldn't happen in current build,
+              // to see this page you need an account
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  No accounts to show
+                </TableCell>
+              </TableRow>
+            )
           }
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
+
 
 const dummyAccounts: IAccount[] = [
   { username: "mark@test.com", role: rolesEnum.Professor },
