@@ -217,6 +217,7 @@ export const CodeEditorPage = () => {
             container
             sx={{ margin: 0, pr: 4, height: "100%", maxHeight: '100%', maxWidth: "100%", overflow: 'scroll', backgroundColor: 'blue' }}
           >
+            {/* <Container> */}
             {isLoadingProblem ? (
               <Grid
                 container
@@ -267,6 +268,7 @@ export const CodeEditorPage = () => {
               </>
             )}
           </Grid>
+          {/* </Container> */}
         </Box>
         </Box>
       </Box>
