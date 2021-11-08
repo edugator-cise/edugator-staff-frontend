@@ -10,6 +10,8 @@ import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "../../../shared/constants";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 const ColumnContainer = styled("div")(
   ({ theme }) => `
   display: flex;
@@ -37,6 +39,8 @@ interface CodeEditorProps {
 
 export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const currentCode = useSelector(
     (state: RootState) => state.codeEditor.codeBody
@@ -123,7 +127,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               startIcon={<CloudDownload />}
               sx={{ marginRight: 1, marginTop: 1 }}
             >
-              Download Template
+              {matches && "Download Template"}
             </Button>
           </a>
           <input
@@ -139,7 +143,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onClick={(e) => handleChooseFile(e)}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            Choose File
+            {matches && "Choose File"}
           </Button>
           <Button
             title="Download Submission"
@@ -148,7 +152,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onClick={handleDownload}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            Download Submission
+            {matches && "Download Submission"}
           </Button>
           <Button
             title="Reset Code"
@@ -157,7 +161,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onClick={handleReset}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            Reset Code
+            {matches && "Download Submission"}
           </Button>
         </ColumnContainer>
         <EditorContainer>

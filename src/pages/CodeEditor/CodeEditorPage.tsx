@@ -119,8 +119,15 @@ export const CodeEditorPage = () => {
           <Grid
             container
             spacing={2}
-            sx={{ margin: 0, pr: 4, height: "100%", maxWidth: "100%" }}
+            sx={{
+              margin: 0,
+              pr: 4,
+              height: "100%",
+              maxWidth: "100%",
+              overflowY: "auto",
+            }}
           >
+            {/* <Container> */}
             {isLoadingProblem ? (
               <Grid
                 container
@@ -137,13 +144,20 @@ export const CodeEditorPage = () => {
               <EmptyState />
             ) : (
               <>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} lg={4}>
                   <ProblemView
                     problemTitle={currentProblem.title}
                     problemStatement={currentProblem.statement}
                   />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid
+                  item
+                  xs={12}
+                  lg={8}
+                  container
+                  direction="column"
+                  sx={{ pt: 4 }}
+                >
                   <Container
                     disableGutters
                     sx={{ flexDirection: "column", pt: 2 }}
@@ -158,6 +172,7 @@ export const CodeEditorPage = () => {
               </>
             )}
           </Grid>
+          {/* </Container> */}
         </Box>
       </Box>
     );
