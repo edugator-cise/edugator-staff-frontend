@@ -127,7 +127,6 @@ export const CodeEditorPage = () => {
               overflowY: "auto",
             }}
           >
-            {/* <Container> */}
             {isLoadingProblem ? (
               <Grid
                 container
@@ -172,7 +171,6 @@ export const CodeEditorPage = () => {
               </>
             )}
           </Grid>
-          {/* </Container> */}
         </Box>
       </Box>
     );
