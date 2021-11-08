@@ -1,4 +1,4 @@
-import { Box, Alert, Grow } from "@mui/material";
+import { Box, Alert, Grow, Avatar } from "@mui/material";
 import React, { useEffect } from "react";
 import { requestModules } from "../LandingPage/LandingPageSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { colors } from "../../shared/constants";
 import { styled } from "@mui/material/styles";
 import theme from "../../shared/theme";
 import { Stack, TreeStructure, ArrowsDownUp, ShareNetwork, Table, MathOperations } from "phosphor-react";
+import LightModeLogo from '../../assets/LightModeLogo.svg'
 
 
 interface Props {
@@ -89,9 +90,14 @@ export const CodeLayoutContainer = ({ children }: Props) => {
           sx={{
             height: 64, 
             width: '100%', 
-            backgroundColor: theme.palette.primary.main
+            backgroundColor: theme.palette.primary.main,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
-        />
+        >
+          
+        </Box>
         {topics.map((topic, i) => {
           return(
           <TopicLink 

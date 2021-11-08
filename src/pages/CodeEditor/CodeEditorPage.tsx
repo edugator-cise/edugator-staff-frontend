@@ -12,6 +12,7 @@ import {
   Container,
   Alert,
   Grow,
+  Avatar,
 } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
@@ -19,10 +20,11 @@ import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
 import { colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
-import { Stack, TreeStructure, ArrowsDownUp, ShareNetwork, Table, MathOperations } from "phosphor-react";
+import { Stack, TreeStructure, ArrowsDownUp, ShareNetwork, Table, MathOperations, House, BookOpen, ListBullets } from "phosphor-react";
 import { styled } from "@mui/material/styles";
 import theme from "../../shared/theme";
 import TopicLink from "./TopicLink";
+import LightModeLogo from '../../assets/LightModeLogo.svg'
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -46,7 +48,8 @@ const TopicsSidebar = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'flex-start'
+  justifyContent: 'flex-start',
+  position: 'fixed'
 })
 
 export const CodeEditorPage = () => {
@@ -130,19 +133,38 @@ export const CodeEditorPage = () => {
   } else {
     return (
       <Box
-        minHeight="100%"
+        height="100vh"
         display="flex"
         flexDirection="row"
-        sx={{ bgcolor: colors.lightGray }}
+        sx={{ bgcolor: colors.lightGray, overflow: 'hidden' }}
       >
         <TopicsSidebar>
         <Box
           sx={{
             height: 64, 
             width: '100%', 
-            backgroundColor: theme.palette.primary.main
+            backgroundColor: theme.palette.primary.main,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 1
           }}
+        >
+          <Avatar src={LightModeLogo} sx={{height: 30, width: 40}}/>
+        </Box>
+        <TopicLink
+          name="Home"
+          active={false}
+          icon={<House weight="fill" size={28} />}
+          link=''
         />
+        <TopicLink
+          name="View All"
+          active={true}
+          icon={<ListBullets weight="fill" size={28} />}
+          link=''
+        />
+        <Box sx={{height: '1px', width: '60%', margin: '10px', borderBottom: '1px solid #939aa6'}} />
         {topics.map((topic, i) => {
           return(
           <TopicLink 
@@ -182,26 +204,23 @@ export const CodeEditorPage = () => {
         )}
         <Box
           sx={{
-            height: "calc(100vh - 64px)",
+            height: "100%",
             m: 0,
             display: "flex",
             flex: "1 1 auto",
           }}
         >
-          <Box sx={{ height: "100%", width: 320, backgroundColor: "#F9F9F9" }}>
+          
             <Sidenav />
-          </Box>
+          
           <Grid
             container
-            spacing={2}
-            sx={{ margin: 0, pr: 4, height: "100%", maxWidth: "100%" }}
+            sx={{ margin: 0, pr: 4, height: "100%", maxHeight: '100%', maxWidth: "100%", overflow: 'scroll', backgroundColor: 'blue' }}
           >
             {isLoadingProblem ? (
               <Grid
                 container
-                justifyContent="center"
                 direction="column"
-                alignItems="center"
                 sx={{ height: "100vh" }}
               >
                 <Box>
@@ -212,15 +231,30 @@ export const CodeEditorPage = () => {
               <EmptyState />
             ) : (
               <>
-                <Grid item xs={12} md={4}>
+                <Grid 
+                  item 
+                  lg={5}
+                  md={12}
+                  sm={12}
+                  xs={12}
+                  sx={{backgroundColor: 'red', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start'}}
+                  
+                >
                   <ProblemView
                     problemTitle={currentProblem.title}
                     problemStatement={currentProblem.statement}
                   />
                 </Grid>
-                <Grid item xs={12} md={8}>
-                  <Container
-                    disableGutters
+                <Grid 
+                  item 
+                  lg={7}
+                  md={12}
+                  sm={12}
+                  xs={12}
+                  sx={{backgroundColor: 'yellow', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start'}}
+                >
+                  <Box
+                    
                     sx={{ flexDirection: "column", pt: 2 }}
                   >
                     <CodeEditorView
@@ -228,7 +262,7 @@ export const CodeEditorPage = () => {
                       templatePackage={currentProblem.templatePackage}
                     />
                     <InputOutputView />
-                  </Container>
+                  </Box>
                 </Grid>
               </>
             )}

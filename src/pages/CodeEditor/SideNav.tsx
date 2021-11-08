@@ -41,10 +41,12 @@ export const Sidenav = () => {
     <List
       component="nav"
       sx={{
-        height: "calc(100vh - 80px)",
-        width: "100%",
+        height: "100%",
+        width: 320,
+        minWidth: 220,
         bgcolor: "#F9F9F9",
         overflowY: "auto",
+        marginLeft: '80px'
       }}
       aria-labelledby="nested-exercises-list"
       subheader={

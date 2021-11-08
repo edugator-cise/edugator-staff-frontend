@@ -1,3 +1,4 @@
+import { Tooltip, Zoom } from '@mui/material'
 import { styled } from '@mui/styles'
 import React from 'react'
 
@@ -20,10 +21,10 @@ function TopicLink(props:TopicProps) {
         justifyContent: 'center',
         margin: 7,
         borderRadius: 10,
-        color: '#939aa6',
+        color: props.active ? '#ebebeb' : '#939aa6',
         '&:hover': {
             backgroundColor: '#111827',
-            color: '#dedede',
+            color: '#ebebeb',
             cursor: 'pointer'
         },
         WebkitTransition: 'background-color 100ms linear, color 100ms linear',
@@ -32,9 +33,11 @@ function TopicLink(props:TopicProps) {
     })
     
     return (
-        <IconHolder>
-            {React.cloneElement(props.icon, {})}
-        </IconHolder>
+        <Tooltip sx={{fontSize: 20}} title={props.name} placement="right" >
+            <IconHolder>
+                {React.cloneElement(props.icon)}
+            </IconHolder>
+        </Tooltip>
     )
 }
 

@@ -32,6 +32,7 @@
     "react-scripts": "4.0.3",
     "redux-saga": "^1.1.3",
     "remark-gfm": "^3.0.0",
+    "simplebar-react": "^2.3.6",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "~4.1.5"

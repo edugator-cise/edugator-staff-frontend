@@ -16,7 +16,7 @@ const ColumnContainer = styled("div")(
   justify-content: flex-end;
   padding-top: ${theme.spacing(1)};
   padding-bottom:${theme.spacing(1)};
-  
+  width: 100%;
 `
 );
 
@@ -27,6 +27,7 @@ const EditorContainer = styled("div")(
   margin-left: ${theme.spacing(2)};
   margin-right: ${theme.spacing(2)};
   border: solid 1px ${colors.borderGray};
+  width: 90%;
 `
 );
 
