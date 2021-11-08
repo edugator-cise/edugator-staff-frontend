@@ -21,7 +21,13 @@ const ProblemDescriptionPaper = styled(Paper)(
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
     <Grow in appear timeout={500}>
-      <ProblemDescriptionPaper>
+      <ProblemDescriptionPaper
+        sx={{
+          "& pre": {
+            whiteSpace: "pre-wrap",
+          },
+        }}
+      >
         <Typography variant="h4" sx={{ textAlign: "left" }}>
           {problemTitle}
         </Typography>
