@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Paper, Button, Grow } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setCodeBody, requestRunCode, submitCode } from "../CodeEditorSlice";
+import { requestRunCode, submitCode } from "../CodeEditorSlice";
 import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -42,9 +42,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const currentCode = useSelector(
-    (state: RootState) => state.codeEditor.codeBody
-  );
+  const [currentCode, setCurrentCode] = useState(code);
   const header = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?.code.header
   );
@@ -161,7 +159,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onClick={handleReset}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            {matches && "Download Submission"}
+            {matches && "Reset Code"}
           </Button>
         </ColumnContainer>
         <EditorContainer>
@@ -178,9 +176,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
           <Editor
             height="40vh"
             defaultLanguage="cpp"
-            defaultValue={currentCode}
+            defaultValue={code}
             onChange={(value) => {
-              dispatch(setCodeBody(value as string));
+              setCurrentCode(value as string);
             }}
             onMount={handleEditorMount}
           />
