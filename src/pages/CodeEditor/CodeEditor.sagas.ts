@@ -128,7 +128,6 @@ function* handleRequestModulesAndProblems(
 function* deleteCodeRequest(token: string) {
   try {
     // axios delete request with two query params
-    // written by github copilot
     yield call(async () => {
       return apiClient.delete("v1/code/run/submission", {
         params: {
