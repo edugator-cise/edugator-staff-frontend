@@ -1,10 +1,10 @@
 import React from "react";
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 import { Paper, Stack, Typography, LinearProgress } from "@mui/material";
 
 const ProgressContainer = styled(Paper)(({ theme }) => ({
-  width: "100%",
-  height: "40vh",
+  height: "60vh",
+  boxShadow: `0 0 5px 3px ${theme.palette.primary.light}`,
 }));
 
 const TallStack = styled(Stack)({
@@ -17,10 +17,10 @@ const ProgressBar = styled(LinearProgress)({
 
 export function DashboardProgress() {
   return (
-    <ProgressContainer elevation={3}>
-      <TallStack alignItems="center" justifyContent="space-evenly">
+    <ProgressContainer>
+      <TallStack alignItems="center" justifyContent="center" spacing={4}>
         <Typography variant="h5">
-          Getting Admin Accounts from the Database
+          Loading Admin Accounts
         </Typography>
         <ProgressBar />
       </TallStack>

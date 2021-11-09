@@ -1,7 +1,6 @@
 import React from "react";
-import { Stack } from "@mui/material";
 import Dialog from "../../../shared/GenericDialog";
-import { AccountInfo, AdminActions, AccountEditForm } from ".";
+import { AccountEditForm, AccountView } from ".";
 
 interface AccountDialogProps {
   open: boolean;
@@ -16,10 +15,6 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       label: "Close",
       onClick: () => handleClose(),
       color: "error",
-    },
-    {
-      label: "Edit",
-      onClick: () => setEditMode(true),
       variant: "contained",
     },
   ];
@@ -50,17 +45,13 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       open={open}
       maxWidth={!editMode ? "sm" : "xs"}
       fullWidth
-      title={getAccountDialogTitle(editMode)}
       handleClose={handleClose}
+      title={getAccountDialogTitle(editMode)}
       footerContent={!editMode ? FooterButtons : EditFooterButtons}
     >
       <>
         {!editMode ? (
-          <Stack spacing={2}>
-            <AccountInfo />
-
-            <AdminActions />
-          </Stack>
+          <AccountView setEditMode={setEditMode} />
         ) : (
           <AccountEditForm />
         )}

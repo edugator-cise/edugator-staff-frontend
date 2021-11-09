@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Button, IconButton, Typography } from "@mui/material";
+import { Stack, Icon, ButtonBase, IconButton, Typography } from "@mui/material";
 import { /*useAppDispatch,*/ useAppSelector } from "../../../app/common/hooks";
 import { IAccount } from "../types";
 
@@ -10,27 +10,37 @@ export function AccountInfo() {
   // under the assumption that account always exists in this component
   const account = state.selectedAccount as IAccount;
 
-  const onCopyClick = () => {};
+  const onCopyClick = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
 
   return (
-    <div>
-      {
-        // always displaying a phone for demonstration purposes
-        account?.phone || true ? (
-          <>
-            <Typography>Contact Information</Typography>
-            <Button variant="outlined" fullWidth={false}>
-              <Icon sx={{ mr: 1 }}>phone</Icon>
-              111-111-1111
-              <IconButton sx={{ ml: 3 }} onClick={onCopyClick}>
-                <Icon>link</Icon>
-              </IconButton>
-            </Button>
-          </>
-        ) : (
-          <></>
-        )
-      }
-    </div>
+    <>
+      <Typography>Contact Information</Typography>
+      <Stack direction="row">
+        <ButtonBase>
+          <Icon sx={{ mr: 2 }}>email</Icon>
+          {account?.username}
+          <IconButton sx={{ ml: 2 }} onClick={onCopyClick}>
+            <Icon>link</Icon>
+          </IconButton>
+        </ButtonBase>
+        {
+          // always displaying a phone for demonstration purposes
+          (account?.phone || true) && (
+            <>
+              <ButtonBase>
+                <Icon sx={{ mr: 2 }}>phone</Icon>
+                111-111-1111
+                <IconButton sx={{ ml: 2 }} onClick={onCopyClick}>
+                  <Icon>link</Icon>
+                </IconButton>
+              </ButtonBase>
+            </>
+          )
+        }
+      </Stack>
+    </>
   );
 }
