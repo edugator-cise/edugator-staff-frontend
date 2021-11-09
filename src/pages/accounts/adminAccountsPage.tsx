@@ -1,12 +1,12 @@
 import React from "react";
-import { Stack } from "@mui/material";
+import { Fade, Stack, duration, Container } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import {
   requestAccounts,
   requestAccountsEnd,
   unsetSelectedAccount,
-} from ".//AdminAccountsPage.slice";
+} from "./AdminAccountsPage.slice";
 import {
   AccountsTable,
   AccountDialog,
@@ -19,15 +19,32 @@ export function AdminAccountsPage() {
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.adminDashboard);
 
-  // whether we want to add a new account
-  const [newUserDialog, setNewUserDialog] = React.useState<boolean>(false);
-
   // whether there is a selected account from the table
   const selectingAccount = dashboardState.selectedAccount ? true : false;
+
+  // getting accounts or not
+  const loading = dashboardState.loading;
+
+  // whether we want start transitioning
+  const [displayTable, setDisplayTable] = React.useState<boolean>(false);
+
+  // whether we want to add a new account (dialog)
+  const [newUserDialog, setNewUserDialog] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch(requestAccounts());
   }, [dispatch]);
+
+  // for a smooth transition
+  React.useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        setDisplayTable(true);
+      }, duration.leavingScreen);
+    } else {
+      setDisplayTable(false);
+    }
+  }, [loading]);
 
   const accountsHeaderButtons = [
     {
@@ -40,7 +57,7 @@ export function AdminAccountsPage() {
 
   return (
     <LayoutContainer
-      pageTitle={"Admin Accounts Information"}
+      pageTitle={"Admin Accounts"}
       actionButtons={accountsHeaderButtons}
     >
       <>
@@ -57,7 +74,15 @@ export function AdminAccountsPage() {
         />
 
         <Stack alignItems="center">
-          {dashboardState.loading ? <DashboardProgress /> : <AccountsTable />}
+          {displayTable ? (
+            <AccountsTable />
+          ) : (
+            <Fade in={loading}>
+              <Container>
+                <DashboardProgress />
+              </Container>
+            </Fade>
+          )}
         </Stack>
       </>
     </LayoutContainer>
