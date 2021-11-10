@@ -4,7 +4,7 @@ import codeEditorReducer from "../../pages/CodeEditor/CodeEditorSlice";
 import { loginSlice } from "../../pages/Login/LoginPage.slice";
 import moduleReducer from "../../pages/modules/ModulesPage.slice";
 import gradingReducer from "../../pages/grading/GradingDialog.slice";
-import adminDashboardReducer from "../../pages/accounts/AdminAccountsPage.slice";
+import accountManagerReducer from "../../pages/accounts/AdminAccountsPage.slice";
 import landingPageReducer from "../../pages/LandingPage/LandingPageSlice";
 /* import slices of state here */
 
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   login: loginSlice.reducer,
   modules: moduleReducer,
   grading: gradingReducer,
-  adminDashboard: adminDashboardReducer,
+  accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
   codeEditor: codeEditorReducer,
   landingPage: landingPageReducer,

@@ -14,7 +14,7 @@ export interface IAccount {
   phone?: string;
 }
 
-export interface IAccountDashboardState {
+export interface IAccountManagerState {
   loading: boolean;
   feedback: IFeedback;
   accounts: IAccount[];

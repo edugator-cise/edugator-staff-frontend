@@ -26,7 +26,7 @@ const rowsPerPage = 6;
 
 export function AccountsTable() {
   const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => state.adminDashboard);
+  const state = useAppSelector((state) => state.accountManager);
 
   const [page, setPage] = React.useState(0);
 
@@ -95,14 +95,16 @@ export function AccountsTable() {
               </TableRow>
             )
           }
+          <TableRow>
+            <TablePagination
+              page={page}
+              count={dummyAccounts.length}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[]}
+              onPageChange={(event, page) => setPage(page)}
+            />
+          </TableRow>
         </TableBody>
-        <TablePagination
-          page={page}
-          count={dummyAccounts.length}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[]}
-          onPageChange={(event, page) => setPage(page)}
-        />
       </Table>
     </TableContainer>
   );

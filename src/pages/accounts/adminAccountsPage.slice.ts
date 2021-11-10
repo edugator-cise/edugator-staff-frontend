@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertType, IRequestMessage } from "../../shared/types";
-import { IAccountDashboardState, IAccount /*rolesEnum*/ } from "./types";
+import { IAccountManagerState, IAccount /*rolesEnum*/ } from "./types";
 
-const baseDashboardState: IAccountDashboardState = {
+const baseManagerState: IAccountManagerState = {
   accounts: [],
   loading: true,
   feedback: {
@@ -11,15 +11,15 @@ const baseDashboardState: IAccountDashboardState = {
   },
 };
 
-export function getBaseDashboardState(): IAccountDashboardState {
-  return { ...baseDashboardState };
+export function getBaseManagerState(): IAccountManagerState {
+  return { ...baseManagerState };
 }
 
-export const dashboardSlice = createSlice({
-  name: "adminAccounts",
-  initialState: getBaseDashboardState(),
+export const managerSlice = createSlice({
+  name: "accountsManager",
+  initialState: getBaseManagerState(),
   reducers: {
-    /* GET Request Admin Accounts Dashboard */
+    /* GET Request Admin Accounts Manager */
     requestAccounts: (state) => {
       state.loading = true;
     },
@@ -36,7 +36,7 @@ export const dashboardSlice = createSlice({
       };
       state.loading = false;
     },
-    /** Accounts Dashboard Reducers */
+    /** Admin Accounts Dialog Reducers */
     setSelectedAccount: (state, action: PayloadAction<IAccount>) => {
       state.selectedAccount = action.payload;
     },
@@ -55,16 +55,16 @@ export const dashboardSlice = createSlice({
 });
 
 export const {
-  /* GET Request Admin Accounts */
+  /* GET Request Admin Accounts Manager */
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
-  /** Accounts Dashboard Reducers */
+  /** Admin Accounts Dialog Reducers */
   setSelectedAccount,
   unsetSelectedAccount,
   setCurrentAccount,
   /** Ohter */
   closeAlert,
-} = dashboardSlice.actions;
+} = managerSlice.actions;
 
-export default dashboardSlice.reducer;
+export default managerSlice.reducer;

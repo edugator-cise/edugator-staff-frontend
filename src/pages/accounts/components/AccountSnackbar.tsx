@@ -5,7 +5,7 @@ import { closeAlert } from "../AdminAccountsPage.slice";
 
 export function AccountSnackbar() {
   const dispatch = useAppDispatch();
-  const feedback = useAppSelector((state) => state.adminDashboard.feedback);
+  const feedback = useAppSelector((state) => state.accountManager.feedback);
 
   const handleClose = (
     event: React.SyntheticEvent | React.MouseEvent,

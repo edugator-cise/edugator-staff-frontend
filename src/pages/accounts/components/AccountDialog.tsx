@@ -1,6 +1,8 @@
 import React from "react";
+import { useAppSelector } from "../../../app/common/hooks";
 import Dialog from "../../../shared/GenericDialog";
 import { AccountEditForm, AccountView } from ".";
+import { Chip, Typography } from "@mui/material";
 
 interface AccountDialogProps {
   open: boolean;
@@ -10,12 +12,12 @@ interface AccountDialogProps {
 export function AccountDialog({ open, handleClose }: AccountDialogProps) {
   const [editMode, setEditMode] = React.useState<boolean>(false);
 
+  const { selectedAccount } = useAppSelector((state) => state.accountManager);
+
   const FooterButtons = [
     {
       label: "Close",
       onClick: () => handleClose(),
-      color: "error",
-      variant: "contained",
     },
   ];
 
@@ -32,13 +34,20 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
     },
   ];
 
-  const getAccountDialogTitle = (editing: boolean) => {
-    if (!editing) {
-      return "Account Information: <Insert Name>";
-    } else {
-      return "Editing Account: <Insert Name>";
-    }
-  };
+  const DialogTitle = (
+    <>
+      <Typography variant="button" fontSize="subtitle2" color="primary">
+        Account Information
+      </Typography>
+      <Typography variant="h5" component="div" fontWeight="bold">
+        {selectedAccount?.name ?? "undefined"}{" "}
+        <Chip
+          label={selectedAccount?.role}
+          color={selectedAccount?.role === "Professor" ? "primary" : undefined}
+        />
+      </Typography>
+    </>
+  );
 
   return (
     <Dialog
@@ -46,7 +55,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       maxWidth={!editMode ? "sm" : "xs"}
       fullWidth
       handleClose={handleClose}
-      title={getAccountDialogTitle(editMode)}
+      title={DialogTitle}
       footerContent={!editMode ? FooterButtons : EditFooterButtons}
     >
       <>

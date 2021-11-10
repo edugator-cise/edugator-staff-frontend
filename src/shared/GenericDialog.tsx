@@ -21,7 +21,7 @@ const FooterButton = styled(Button)(({ theme }) => ({
 }));
 
 interface GenericDialogProps {
-  title: string;
+  title: string | JSX.Element;
   open: boolean;
   fullWidth?: boolean;
   maxWidth: Breakpoint; // decent for now

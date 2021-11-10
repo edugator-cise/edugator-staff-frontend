@@ -17,7 +17,7 @@ import {
 
 export function AdminAccountsPage() {
   const dispatch = useAppDispatch();
-  const dashboardState = useAppSelector((state) => state.adminDashboard);
+  const dashboardState = useAppSelector((state) => state.accountManager);
 
   // whether there is a selected account from the table
   const selectingAccount = dashboardState.selectedAccount ? true : false;

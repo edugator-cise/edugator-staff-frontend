@@ -4,7 +4,7 @@ import { Paper, Stack, Typography, LinearProgress } from "@mui/material";
 
 const ProgressContainer = styled(Paper)(({ theme }) => ({
   height: "60vh",
-  boxShadow: `0 0 5px 3px ${theme.palette.primary.light}`,
+  boxShadow: `0 0 5px 2px ${theme.palette.primary.light}`,
 }));
 
 const TallStack = styled(Stack)({
