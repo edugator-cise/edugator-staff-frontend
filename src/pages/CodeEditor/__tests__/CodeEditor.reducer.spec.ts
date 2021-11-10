@@ -1,7 +1,6 @@
 import store from "../../../app/common/store";
 import {
   setCurrentProblem,
-  setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,
@@ -159,17 +158,6 @@ describe("CodeEditor Reducer", () => {
     const expected = {
       ...baseState,
       isLoading: true,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-
-  it("requests module and problems", () => {
-    const baseState = store.getState().codeEditor;
-
-    store.dispatch(setCodeBody("hello world"));
-    const expected = {
-      ...baseState,
-      codeBody: "hello world",
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });

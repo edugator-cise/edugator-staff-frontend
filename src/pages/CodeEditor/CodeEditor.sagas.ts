@@ -5,6 +5,7 @@ import {
   takeEvery,
   race,
   take,
+  fork,
 } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
@@ -124,6 +125,22 @@ function* handleRequestModulesAndProblems(
   }
 }
 
+function* deleteCodeRequest(token: string) {
+  try {
+    // axios delete request with two query params
+    yield call(async () => {
+      return apiClient.delete("v1/code/run/submission", {
+        params: {
+          base64: true,
+          token,
+        },
+      });
+    });
+  } catch (e) {
+    // do nothing
+  }
+}
+
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   try {
     const { code, header, footer, stdin } = action.payload;
@@ -164,6 +181,7 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
       );
     });
     const resultData: IJudge0Response = result.data;
+    yield fork(deleteCodeRequest, data.token);
     yield put(setRunningSubmission(false));
     yield put(setActiveTab(1));
     yield put(setIsAcceptedOutput(resultData.status.id === 3));
@@ -195,7 +213,8 @@ function* runCodeSubmission(
 ) {
   try {
     const { code, header, footer, stdin, problemId } = action.payload;
-    const paylodBuffer = Buffer.from(header + code + footer, "utf-8");
+    const fullCodePayload = header + code + footer;
+    const paylodBuffer = Buffer.from(fullCodePayload, "utf-8");
     const stdinPayload = Buffer.from(stdin, "utf-8");
     const { data }: { data: IResultSubmission[] } = yield call(async () => {
       return apiClient.post("v1/code/run/evaluate", {
