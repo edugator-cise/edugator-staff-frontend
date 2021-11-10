@@ -13,7 +13,6 @@ import problemEditorContainerSlice, {
   resetState,
   requestGetProblem,
   requestUpdateProblem,
-  requestDeleteProblem,
 } from "./problemEditorContainerSlice";
 import apiClient from "../../../app/common/apiClient";
 import store from "../../../app/common/store";
