@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { /*useAppDispatch,*/ useAppSelector } from "../../../app/common/hooks";
 import { IAccount, rolesEnum } from "../types";
 
 enum ActionsEnum {
@@ -21,7 +21,7 @@ enum ActionsEnum {
 const base: ActionsEnum = ActionsEnum.noAction;
 
 export function AdminActions() {
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);
@@ -50,7 +50,7 @@ export function AdminActions() {
       </Box>
 
       <Collapse in={selectedAction !== ActionsEnum.noAction}>
-        <Stack spacing={3}>
+        <Stack spacing={2}>
           <>
             {selectedAction === ActionsEnum.deleteAccount ? (
               <Alert severity="error">{actionSummary.description}</Alert>
