@@ -14,6 +14,7 @@ import {
   requestDeleteModule,
   requestDeleteModuleSuccess,
   requestDeleteModuleFailure,
+  closeDialog,
 } from "./ModulesPage.slice";
 import adminAPI from "../../app/common/apiClient";
 import { IModuleBase } from "../../shared/types";
@@ -53,6 +54,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
     };
 
     yield put(requestNewModuleSuccess(new_module));
+    yield put(closeDialog());
   } catch (e) {
     yield put(requestNewModuleFailure(e as Error));
   }
@@ -76,6 +78,7 @@ function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
     // reminder: doesnt have the IAdminModule.problems property
     let new_module: IAdminModule = response.data;
     yield put(requestModifyModuleSuccess(new_module));
+    yield put(closeDialog());
   } catch (e) {
     yield put(requestModifyModuleFailure(e as Error));
   }
