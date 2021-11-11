@@ -53,7 +53,7 @@ export function LoginPage(): React.ReactElement {
     />
   ) : (
     <LayoutContainer pageTitle="Admin Login">
-      <Stack>
+      <Stack justifyContent="center" alignItems="center">
         {authState.isLoading && <CircularProgress />}
         {authState.errorMessage && (
           <Alert
