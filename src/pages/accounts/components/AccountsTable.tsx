@@ -13,10 +13,26 @@ import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import { setSelectedAccount } from "../AdminAccountsPage.slice";
 import { IAccount, rolesEnum } from "../types";
+import { blue } from "@mui/material/colors";
 
 const AccountContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: theme.spacing(1),
-  boxShadow: `0 0 3px 3px ${theme.palette.primary.light}`,
+  boxShadow: `0 0 4px 3px ${theme.palette.grey[200]}`,
+  "& .MuiTableRow-head": {
+    backgroundColor: blue["200"],
+  },
+  "& .MuiTablePagination-toolbar": {
+    backgroundColor: blue["200"],
+  },
+  "& .MuiTableCell-body": {
+    backgroundColor: "inherit",
+  } /*
+  "& .MuiTableRow-hover :nth-of-type(odd)": {
+    backgroundColor: blue["100"],
+  },
+  "& .MuiTableRow-hover :nth-of-type(even)": {
+    backgroundColor: blue["A100"],
+  },*/,
 }));
 
 const DataCell = styled(TableCell)({
@@ -63,7 +79,6 @@ export function AccountsTable() {
                       <TableRow
                         key={i}
                         hover
-                        sx={{ backgroundColor: "inherit" }}
                         onClick={() => dispatch(setSelectedAccount(row))}
                         selected={state.selectedAccount === row}
                       >

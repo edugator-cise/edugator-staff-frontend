@@ -6,11 +6,11 @@ export enum rolesEnum {
 }
 
 export interface IAccount {
+  name?: string;
   role: rolesEnum;
   username: string;
   // future values
-  name?: string;
-  //email?: string; // ?
+  // unused, but there for example on how to add/use aditional features
   phone?: string;
 }
 
