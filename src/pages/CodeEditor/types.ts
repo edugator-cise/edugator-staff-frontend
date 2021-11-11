@@ -1,4 +1,4 @@
-import { IModuleBase, IProblem } from "../../shared/types";
+import { IModuleBase } from "../../shared/types";
 
 export interface IProblemItem {
   problemName: string;
@@ -23,9 +23,8 @@ export interface IToken {
 
 export interface ICodeSubmission {
   code: string;
-  header: string;
-  footer: string;
   stdin: string;
+  problemId: string;
 }
 
 export interface IJudge0Response {
