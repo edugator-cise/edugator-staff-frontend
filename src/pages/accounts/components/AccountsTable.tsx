@@ -26,7 +26,12 @@ const DataCell = styled(TableCell)({
   },
 });
 
-const rowsPerPage = 6;
+// attempting to get available vertical space
+const windowHeight = window.innerHeight * 0.7;
+// height of table row in pixels
+const rowHeight = 56.8;
+// possible number of rows based on previous numbers
+const rowsPerPage = Math.floor(windowHeight / rowHeight) - 2;
 
 export function AccountsTable() {
   const dispatch = useAppDispatch();
@@ -58,6 +63,7 @@ export function AccountsTable() {
                       <TableRow
                         key={i}
                         hover
+                        sx={{ backgroundColor: "inherit" }}
                         onClick={() => dispatch(setSelectedAccount(row))}
                         selected={state.selectedAccount === row}
                       >
