@@ -117,14 +117,9 @@ export const TestCase = (props: TestCaseProps) => {
             placeholder="Enter hint"
             name={`testCases.${index}.hint`}
             multiline
-            required
             onChange={(event: any) => {
               setFieldValue(`${name}.hint`, event.currentTarget.value);
             }}
-            error={
-              error?.testCases?.length > index && error?.testCases[index]?.hint
-            }
-            validate={validateNotEmpty}
             component={FormTextField}
           />
         </Stack>
