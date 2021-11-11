@@ -10,7 +10,11 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../../app/common/hooks";
-import { closeWarningModal } from "../ProblemEditorContainer/problemEditorContainerSlice";
+import { Routes } from "../../../shared/Routes.constants";
+import {
+  closeWarningModal,
+  requestDeleteProblem,
+} from "../ProblemEditorContainer/problemEditorContainerSlice";
 
 interface Props {}
 
@@ -18,6 +22,9 @@ export const WarningDialog = (props: Props) => {
   const history = useHistory();
   const showModal = useAppSelector(
     (state) => state.problemEditorContainer.showWarningModal
+  );
+  const problemId = useAppSelector(
+    (state) => state.problemEditorContainer.problemId
   );
   const dispatch = useDispatch();
   return (
@@ -27,28 +34,34 @@ export const WarningDialog = (props: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Are you sure you want to leave?
+        Are you sure you want to {problemId ? "delete" : "leave"}?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Leaving this page before submitting will mean losing your progress on
-          this problem.
+          {problemId
+            ? "This action will be permanent."
+            : "Leaving this page before submitting will mean losing your progress on this problem."}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => history.push("/admin/modules")}
+          onClick={() => {
+            if (problemId) {
+              dispatch(requestDeleteProblem());
+            }
+            history.push(Routes.Modules);
+          }}
           variant="contained"
           color="error"
         >
-          Leave
+          Yes
         </Button>
         <Button
           onClick={() => dispatch(closeWarningModal())}
           variant="contained"
           color="primary"
         >
-          Stay
+          No
         </Button>
       </DialogActions>
     </Dialog>

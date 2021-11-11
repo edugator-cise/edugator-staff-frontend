@@ -64,7 +64,9 @@ export const moduleSlice = createSlice({
     requestNewModuleSuccess: (state, action: PayloadAction<IAdminModule>) => {
       return {
         ...state,
-        modules: [...state.modules, action.payload],
+        modules: [...state.modules, action.payload].sort(
+          (a, b) => a.number - b.number
+        ),
         feedback: {
           message: AlertMsg[action.type],
           type: AlertType.success,
@@ -107,6 +109,7 @@ export const moduleSlice = createSlice({
 
       // replace old module with new module
       state.modules = state.modules.fill(new_module, index, index + 1);
+      state.modules = state.modules.sort((a, b) => a.number - b.number);
 
       // TODO
       // Planning to add a title to the feedback message

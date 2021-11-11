@@ -12,10 +12,11 @@ import { useAppSelector } from "../../../app/common/hooks";
 import { Routes } from "../../../shared/Routes.constants";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
 
 const Module = styled(Accordion)(({ theme }) => ({
+  position: "inherit",
   borderRadius: theme.spacing(0.5),
   "& .Mui-expanded": {
     borderBottomLeftRadius: 0,
@@ -67,6 +68,7 @@ interface moduleProps {
 }
 
 export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
+  const history = useHistory();
   const modulesState = useAppSelector((state) => state.modules);
 
   return (
@@ -89,67 +91,69 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   <NewProblemButton
                     startIcon={<Add />}
                     variant="outlined"
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      history.push(
+                        Routes.ProblemCreatorBaseWithoutId + module._id,
+                        { moduleName: module.name }
+                      );
+                    }}
                   >
-                    <Link
-                      to={{
-                        pathname:
-                          Routes.ProblemCreatorBaseWithoutId + module._id,
-                        state: { moduleName: module.name },
-                      }}
-                      style={{ color: "inherit", textDecoration: "inherit" }}
-                    >
-                      Add Problem
-                    </Link>
+                    Add Problem
                   </NewProblemButton>
                 </ModuleTitle>
 
-                {module.problems.map((problem, i) => (
-                  <ModuleContent key={i}>
-                    <Title>
-                      <b>
-                        Problem {module.number}.{i + 1}:
-                      </b>
-                      {` ${problem.title}`}
-                    </Title>
+                {module.problems.length > 0 ? (
+                  <>
+                    {module.problems.map((problem, i) => (
+                      <ModuleContent key={i}>
+                        <Title>
+                          <b>
+                            Problem {module.number}.{i + 1}:
+                          </b>
+                          {` ${problem.title}`}
+                        </Title>
 
-                    <ButtonContainer>
-                      <ProblemAction
-                        startIcon={<AssignmentTurnedIn />}
-                        size="small"
-                        variant="outlined"
-                        onClick={() => {
-                          let toGrade: IProblemBase = {
-                            _id: problem._id,
-                            title: problem.title,
-                          };
-                          setProblemToGrade(toGrade);
-                        }}
-                      >
-                        Grade
-                      </ProblemAction>
-                      <ProblemAction
-                        startIcon={<Edit />}
-                        size="small"
-                        variant="outlined"
-                      >
-                        <Link
-                          to={{
-                            pathname:
-                              Routes.ProblemEditorBaseWithoutId + problem._id,
-                            state: { moduleName: module.name },
-                          }}
-                          style={{
-                            color: "inherit",
-                            textDecoration: "inherit",
-                          }}
-                        >
-                          Edit
-                        </Link>
-                      </ProblemAction>
-                    </ButtonContainer>
+                        <ButtonContainer>
+                          <ProblemAction
+                            startIcon={<AssignmentTurnedIn />}
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                              let toGrade: IProblemBase = {
+                                _id: problem._id,
+                                title: problem.title,
+                              };
+                              setProblemToGrade(toGrade);
+                            }}
+                          >
+                            Grade
+                          </ProblemAction>
+                          <ProblemAction
+                            startIcon={<Edit />}
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                              history.push(
+                                Routes.ProblemEditorBaseWithoutId + problem._id,
+                                { moduleName: module.name }
+                              );
+                            }}
+                          >
+                            Edit
+                          </ProblemAction>
+                        </ButtonContainer>
+                      </ModuleContent>
+                    ))}
+                  </>
+                ) : (
+                  <ModuleContent>
+                    <Title>
+                      There are no problems for this module. Click add problem
+                      to begin.
+                    </Title>
                   </ModuleContent>
-                ))}
+                )}
               </Module>
             );
           })}

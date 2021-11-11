@@ -29,6 +29,8 @@ import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { Routes } from "../shared/Routes.constants";
 
 interface Props {
   light: boolean;
@@ -151,10 +153,12 @@ function VerticalNavigation(props: Props) {
         backgroundColor: props.light ? "transparent" : "#152c7c",
       }}
     >
-      <Avatar
-        alt="Example Alt"
-        src={props.light ? LightModeLogo : DarkModeLogo}
-      />
+      <Link to={Routes.Landing}>
+        <Avatar
+          alt="Example Alt"
+          src={props.light ? LightModeLogo : DarkModeLogo}
+        />
+      </Link>
       <Typography variant="h5" component="h1"></Typography>
 
       {md ? (
@@ -183,7 +187,6 @@ function VerticalNavigation(props: Props) {
                 <Menu
                   id={item.id}
                   anchorEl={item.anchor}
-                  //getContentAnchorEl={null}
                   anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                   transformOrigin={{ vertical: "top", horizontal: "center" }}
                   keepMounted
@@ -192,9 +195,20 @@ function VerticalNavigation(props: Props) {
                 >
                   {item.subitems.map((subitem, i) => {
                     return (
-                      <MenuItem key={i} onClick={() => item.anchorSet(null)}>
-                        {subitem.title}
-                      </MenuItem>
+                      <Link
+                        to={{
+                          pathname: Routes.Code,
+                          state: { moduleName: subitem.title },
+                        }}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                      >
+                        <MenuItem key={i} onClick={() => item.anchorSet(null)}>
+                          {subitem.title}
+                        </MenuItem>
+                      </Link>
                     );
                   })}
                 </Menu>

@@ -22,11 +22,17 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
+function isBlank(str: string) {
+  return !str || /^\s*$/.test(str);
+}
 export function ModuleDialog() {
   const dispatch = useAppDispatch();
   const { open, action, module } = useAppSelector(
     (state) => state.modules.dialogState
   );
+
+  const [numError, setNumError] = React.useState<boolean>(false);
+  const [nameError, setNameError] = React.useState<boolean>(false);
 
   const [dialogInput, setDialogInput] =
     React.useState<IModuleBase>(EmptyModule);
@@ -40,18 +46,19 @@ export function ModuleDialog() {
   }, [action, module]);
 
   const handleDialogSubmit = () => {
+    if (
+      numError ||
+      nameError ||
+      isBlank(dialogInput.name) ||
+      isNaN(dialogInput.number)
+    ) {
+      return;
+    }
     if (action === DialogStatus.CREATE) {
       dispatch(requestNewModule(dialogInput));
     } else if (action === DialogStatus.EDIT) {
       dispatch(requestModifyModule(dialogInput));
     }
-
-    // TODO:
-    //  dont close before checking
-    //  if action was successful
-    dispatch(closeDialog());
-    // make sure feedback is visible
-    // when the dialog is open
   };
 
   const FooterButtons = [
@@ -131,14 +138,19 @@ export function ModuleDialog() {
         </Typography>
 
         <NumberField
+          error={numError}
           label="Number"
+          id="standard-error-helper-text"
           variant="filled"
           inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
           onChange={(event) => {
+            const num = parseInt(event.target.value);
             setDialogInput({
               ...dialogInput,
-              number: parseInt(event.target.value),
+              number: num,
             });
+            if (isNaN(num) || num < 0 || num > 1000000) setNumError(true);
+            else setNumError(false);
           }}
           defaultValue={
             action === DialogStatus.EDIT ? module.number : undefined
@@ -149,13 +161,17 @@ export function ModuleDialog() {
         />
 
         <NameTextField
+          error={nameError}
           label="Module Name"
+          id="standard-error-helper-text"
           variant="filled"
           onChange={(event) => {
             setDialogInput({
               ...dialogInput,
               name: event.target.value,
             });
+            if (isBlank(event.target.value)) setNameError(true);
+            else setNameError(false);
           }}
           defaultValue={action === DialogStatus.EDIT ? module.name : undefined}
           fullWidth

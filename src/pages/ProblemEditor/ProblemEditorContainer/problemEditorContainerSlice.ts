@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IProblem } from "../../../shared/types";
 import { TestCaseField } from "../TestEditor/TestCase.utils";
 
 export interface ProblemFields {
@@ -53,6 +54,7 @@ export interface ProblemEditorContainerState {
   moduleName: string | undefined;
 
   isSubmitting: boolean;
+  fetchingProblem: boolean;
   showSuccessModal: boolean;
   showFailureModal: boolean;
   showWarningModal: boolean;
@@ -92,6 +94,7 @@ const initialState: ProblemEditorContainerState = {
   moduleId: "",
   moduleName: "",
   isSubmitting: false,
+  fetchingProblem: false,
   showFailureModal: false,
   showSuccessModal: false,
   showWarningModal: false,
@@ -207,6 +210,67 @@ export const problemEditorContainerSlice = createSlice({
       state.isSubmitting = false;
       state.showFailureModal = true;
     },
+
+    requestGetProblem: (state, action: PayloadAction<string>) => {
+      state.fetchingProblem = true;
+    },
+    requestGetProblemSuccess: (state, action: PayloadAction<IProblem>) => {
+      state.fetchingProblem = false;
+
+      state.metadataIsValid = true;
+      state.problemIsValid = true;
+      state.codeIsValid = true;
+      state.serverConfigIsValid = true;
+      state.testEditorIsValid = true;
+
+      state.metadata = {
+        title: action.payload.title,
+        hidden: action.payload.hidden,
+        dueDate: new Date(action.payload.dueDate),
+      };
+      state.codeEditor = {
+        code: { ...action.payload.code },
+        fileExtension: action.payload.fileExtension,
+      };
+      state.problem = {
+        problemStatement: action.payload.statement,
+        templatePackage: action.payload.templatePackage,
+      };
+      state.serverConfig = {
+        timeLimit: action.payload.timeLimit,
+        memoryLimit: action.payload.memoryLimit,
+        buildCommand: action.payload.buildCommand,
+      };
+      state.testCases = action.payload.testCases.map((testCase) => ({
+        input: testCase.input,
+        expectedOutput: testCase.expectedOutput,
+        hint: testCase.hint,
+        visibility: testCase.visibility,
+      }));
+    },
+    requestGetProblemFailure: (state, action: PayloadAction<any>) => {
+      state.fetchingProblem = false;
+      alert(action.payload);
+    },
+
+    requestUpdateProblem: (state) => {
+      state.isSubmitting = true;
+    },
+    requestUpdateProblemSuccess: (state) => {
+      state.isSubmitting = false;
+      state.showSuccessModal = true;
+      // TODO some kind of edit confirmation then back to modules
+    },
+    requestUpdateProblemFailure: (state, action: PayloadAction<any>) => {
+      state.isSubmitting = false;
+      state.showFailureModal = true;
+    },
+
+    requestDeleteProblem: (state) => {},
+    requestDeleteProblemSuccess: (state) => {},
+    requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
+      alert(action.payload);
+    },
   },
 });
 
@@ -228,6 +292,15 @@ export const {
   requestAddProblem,
   requestAddProblemSuccess,
   requestAddProblemFailure,
+  requestGetProblem,
+  requestGetProblemSuccess,
+  requestGetProblemFailure,
+  requestUpdateProblem,
+  requestUpdateProblemSuccess,
+  requestUpdateProblemFailure,
+  requestDeleteProblem,
+  requestDeleteProblemSuccess,
+  requestDeleteProblemFailure,
   updateModuleId,
   updateModuleName,
   updateProblemId,

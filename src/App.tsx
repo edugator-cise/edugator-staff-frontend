@@ -11,6 +11,7 @@ import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
+import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 
 function App() {
   return (
@@ -33,12 +34,13 @@ function App() {
             <PrivateRoute exact path={Routes.Accounts}>
               <AdminAccountsPage />
             </PrivateRoute>
-            <Route exact path={Routes.Code}>
+            <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
             </Route>
-            <Route exact path="/">
+            <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>
+            <Route component={NotFoundPage} />
           </Switch>
         </div>
       </ThemeProvider>

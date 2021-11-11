@@ -18,7 +18,19 @@ import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
 import { colors } from "../../shared/constants";
+import { useParams, useLocation } from "react-router-dom";
+
+interface ProblemEditorURL {
+  problemId?: string;
+}
+
+interface ProblemLocationState {
+  moduleName?: string;
+}
+
 export const CodeEditorPage = () => {
+  const params = useParams<ProblemEditorURL>();
+  const location = useLocation<ProblemLocationState>().state;
   const dispatch = useDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.codeEditor.isLoading
@@ -33,8 +45,18 @@ export const CodeEditorPage = () => {
     const sortedModules = state.codeEditor.navStructure;
     return sortedModules.map((value) => value.name);
   });
+  const isLoadingProblem = useSelector(
+    (state: RootState) => state.codeEditor.isLoadingProblem
+  );
   useEffect(() => {
-    dispatch(requestModulesAndProblems(true));
+    dispatch(
+      requestModulesAndProblems({
+        moduleName: location ? location["moduleName"] : undefined,
+        problemId: params ? params["problemId"] : undefined,
+      })
+    );
+    //disabling lint for next line because it asks to make location and params a dependency when we don't have to
+    //eslint-disable-next-line
   }, [dispatch]);
   if (isLoading) {
     return (
@@ -97,19 +119,44 @@ export const CodeEditorPage = () => {
           <Grid
             container
             spacing={2}
-            sx={{ margin: 0, pr: 4, height: "100%", maxWidth: "100%" }}
+            sx={{
+              margin: 0,
+              pr: 4,
+              height: "100%",
+              maxWidth: "100%",
+              overflowY: "auto",
+            }}
           >
-            {currentProblem === undefined ? (
+            {isLoadingProblem ? (
+              <Grid
+                container
+                justifyContent="center"
+                direction="column"
+                alignItems="center"
+                sx={{ height: "100vh" }}
+              >
+                <Box>
+                  <CircularProgress />
+                </Box>
+              </Grid>
+            ) : currentProblem === undefined ? (
               <EmptyState />
             ) : (
               <>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} lg={4}>
                   <ProblemView
                     problemTitle={currentProblem.title}
                     problemStatement={currentProblem.statement}
                   />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid
+                  item
+                  xs={12}
+                  lg={8}
+                  container
+                  direction="column"
+                  sx={{ pt: 4 }}
+                >
                   <Container
                     disableGutters
                     sx={{ flexDirection: "column", pt: 2 }}
