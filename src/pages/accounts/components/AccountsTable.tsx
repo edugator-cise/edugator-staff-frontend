@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Chip,
-  Paper,
   Table,
   TableRow,
   TableHead,
@@ -14,6 +13,11 @@ import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import { setSelectedAccount } from "../AdminAccountsPage.slice";
 import { IAccount, rolesEnum } from "../types";
+
+const AccountContainer = styled(TableContainer)(({ theme }) => ({
+  borderRadius: theme.spacing(1),
+  boxShadow: `0 0 3px 3px ${theme.palette.primary.light}`,
+}));
 
 const DataCell = styled(TableCell)({
   width: "30%",
@@ -31,7 +35,7 @@ export function AccountsTable() {
   const [page, setPage] = React.useState(0);
 
   return (
-    <TableContainer component={Paper}>
+    <AccountContainer>
       <Table>
         <TableHead>
           <TableRow>
@@ -106,7 +110,7 @@ export function AccountsTable() {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </AccountContainer>
   );
 }
 

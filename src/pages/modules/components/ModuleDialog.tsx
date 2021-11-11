@@ -22,16 +22,6 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const dialogTitle = (status: DialogStatus) => {
-  if (status === DialogStatus.CREATE) {
-    return "Creating a new module";
-  } else if (status === DialogStatus.EDIT) {
-    return "Editing an existing module";
-  } else {
-    return "Closing this dialog";
-  }
-};
-
 export function ModuleDialog() {
   const dispatch = useAppDispatch();
   const { open, action, module } = useAppSelector(
@@ -78,12 +68,59 @@ export function ModuleDialog() {
     },
   ];
 
+  const DialogTitle = (status: DialogStatus) => {
+    if (status === DialogStatus.CREATE) {
+      let display = {
+        number: dialogInput.number !== -1 ? dialogInput.number : "",
+        name: dialogInput.name ? dialogInput.name : "",
+      };
+
+      let newModuleTitle: string;
+
+      if (display.name && display.number) {
+        newModuleTitle = `Module ${display.number} - ${display.name}`;
+      } else {
+        newModuleTitle = "New Module";
+      }
+
+      return (
+        <>
+          <Typography variant="button" fontSize="subtitle2" color="primary">
+            Creating a new module
+          </Typography>
+
+          <Typography variant="h5" component="div" fontWeight="bold">
+            {newModuleTitle}
+          </Typography>
+        </>
+      );
+    } else if (status === DialogStatus.EDIT) {
+      return (
+        <>
+          <Typography variant="button" fontSize="subtitle2" color="primary">
+            Editing an existing module
+          </Typography>
+
+          <Typography variant="h5" component="div" fontWeight="bold">
+            {`Module ${module.number} - ${module.name}`}
+          </Typography>
+        </>
+      );
+    } else {
+      return (
+        <Typography variant="h5" component="div" fontWeight="bold">
+          Closing this dialog
+        </Typography>
+      );
+    }
+  };
+
   return (
     <Dialog
       open={open}
       maxWidth="sm"
       fullWidth
-      title={dialogTitle(action)}
+      title={DialogTitle(action)}
       handleClose={() => dispatch(closeDialog())}
       footerContent={FooterButtons}
     >

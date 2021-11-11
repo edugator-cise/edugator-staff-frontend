@@ -33,12 +33,14 @@ export function AdminActions() {
       <Typography variant="button" fontSize="h6.fontSize">
         Administrator Actions
       </Typography>
+
       <Box>
         <TextField
           select
           label="Current Action"
           value={selectedAction}
           onChange={(e) => setSelectedAction(e.target.value as ActionsEnum)}
+          sx={{ minWidth: 225 }}
         >
           <MenuItem value={ActionsEnum.noAction}>Select Action</MenuItem>
           <MenuItem value={ActionsEnum.createTA}>Change Role to TA</MenuItem>
@@ -131,7 +133,7 @@ const adminActionInfo = (
   } else {
     // (action === ActionsEnum.noAction)
     return {
-      description: "",
+      description: "This action does nothing",
       onClick: () => {},
       validOperation: false,
     };

@@ -16,7 +16,7 @@ const baseModuleState: IModuleState = {
     open: false,
     module: {
       name: "",
-      number: 0,
+      number: -1,
     },
   },
 };

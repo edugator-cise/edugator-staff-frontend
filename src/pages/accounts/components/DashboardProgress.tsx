@@ -4,7 +4,8 @@ import { Paper, Stack, Typography, LinearProgress } from "@mui/material";
 
 const ProgressContainer = styled(Paper)(({ theme }) => ({
   height: "60vh",
-  boxShadow: `0 0 5px 2px ${theme.palette.primary.light}`,
+  borderRadius: theme.spacing(2),
+  boxShadow: `0 0 3px 3px ${theme.palette.primary.light}`,
 }));
 
 const TallStack = styled(Stack)({
@@ -19,9 +20,7 @@ export function DashboardProgress() {
   return (
     <ProgressContainer>
       <TallStack alignItems="center" justifyContent="center" spacing={4}>
-        <Typography variant="h5">
-          Loading Admin Accounts
-        </Typography>
+        <Typography variant="h5">Loading Admin Accounts</Typography>
         <ProgressBar />
       </TallStack>
     </ProgressContainer>

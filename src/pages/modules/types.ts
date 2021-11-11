@@ -8,7 +8,7 @@ export interface IAdminModule extends IModuleBase {
 
 export const EmptyModule: IAdminModule = {
   name: "",
-  number: 0,
+  number: -1,
   problems: [],
 };
 

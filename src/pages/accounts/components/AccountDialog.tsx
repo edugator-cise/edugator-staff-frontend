@@ -32,6 +32,8 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
     {
       label: "Close",
       onClick: () => handleClose(),
+      color: "inherit",
+      variant: "outlined",
     },
   ];
 
@@ -64,7 +66,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       <Grid item>
         {!editMode ? (
           <TitleButton
-            variant="contained"
+            variant="outlined"
             onClick={() => setEditMode(true)}
             startIcon={<Icon>edit</Icon>}
           >
