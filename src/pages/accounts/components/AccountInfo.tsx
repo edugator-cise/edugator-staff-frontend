@@ -35,7 +35,7 @@ export function AccountInfo() {
         <ContactInfo icon="email">{account?.username}</ContactInfo>
         {
           // always displaying a phone for demonstration purposes
-          (account?.phone || true) && (
+          account?.phone && (
             <ContactInfo icon="phone">{account?.phone}</ContactInfo>
           )
         }

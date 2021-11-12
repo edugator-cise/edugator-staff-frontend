@@ -1,9 +1,10 @@
-import { MenuItem, TextField, Typography } from "@mui/material";
 import React from "react";
-//import { styled } from "@mui/material/styles";
-//import { useAppDispatch } from "../../../app/common/hooks";
+import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
+//import { /*useAppDispatch*/ useAppSelector } from "../../../app/common/hooks";
+import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
-import { rolesEnum } from "../types";
+
+// remember to refactor this file later
 
 interface NewAccountDialogProps {
   open: boolean;
@@ -12,6 +13,27 @@ interface NewAccountDialogProps {
 
 export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
   //const dispatch = useAppDispatch();
+
+  const [newAccount, setNewAccount] = React.useState<INewAccount>({
+    role: rolesEnum.TA,
+    username: "",
+    password: "",
+  });
+
+  const DialogTitle = (
+    <>
+      <Typography variant="button" fontSize="subtitle2" color="primary">
+        Creating New Account
+      </Typography>
+      <Typography variant="h5" component="div" fontWeight="bold">
+        {newAccount.name ? newAccount.name : "No name"}{" "}
+        <Chip
+          label={newAccount.role}
+          color={newAccount.role === "Professor" ? "primary" : undefined}
+        />
+      </Typography>
+    </>
+  );
 
   const FooterButtons = [
     {
@@ -31,61 +53,98 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
       open={open}
       maxWidth="sm"
       fullWidth
-      title="Creating new Admin Account"
+      title={DialogTitle}
       handleClose={handleClose}
       footerContent={FooterButtons}
     >
-      <>
+      <Grid container>
         <Typography>
-          After you enter the information of the new account, click save to send
-          it to the database.
+          After filling the account information, click save to send it to the
+          database.
         </Typography>
 
-        <TextField
-          required
-          margin="normal"
-          label="Name"
-          onChange={() => {}}
-          helperText=""
-        />
+        <Grid item xs={12}>
+          <TextField
+            label="Name"
+            required
+            fullWidth
+            margin="dense"
+            value={newAccount.name}
+            helperText="Firstname and lastname"
+            onChange={(event) =>
+              setNewAccount({ ...newAccount, name: event.target.value })
+            }
+          />
+        </Grid>
 
-        <TextField
-          required
-          type="email" // maybe?
-          margin="normal"
-          label="Username"
-          helperText="Usually an email"
-          onChange={() => {}}
-        />
+        <Grid item xs={12}>
+          <TextField
+            type="email"
+            label="Email"
+            required
+            fullWidth
+            margin="dense"
+            value={newAccount.username}
+            helperText="Used as the username"
+            onChange={(event) =>
+              setNewAccount({ ...newAccount, username: event.target.value })
+            }
+          />
+        </Grid>
 
-        <TextField
-          margin="normal"
-          type="password"
-          required
-          label="Password"
-          onChange={() => {}}
-        />
+        <Grid item xs={12}>
+          <TextField
+            type="password"
+            label="Password"
+            required
+            fullWidth
+            margin="dense"
+            value={newAccount.password}
+            helperText="Used as the username"
+            onChange={(event) =>
+              setNewAccount({ ...newAccount, password: event.target.value })
+            }
+          />
+        </Grid>
 
-        <TextField
-          type="tel"
-          margin="normal"
-          label="Phone number (optional)"
-          helperText="Contact information for this account"
-          onChange={() => {}}
-        />
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item xs={6}>
+            <TextField
+              type="tel"
+              label="Phone number (optional)"
+              margin="dense"
+              value={newAccount.phone}
+              helperText="Contact information for this account"
+              onChange={(event) =>
+                setNewAccount({ ...newAccount, phone: event.target.value })
+              }
+            />
+          </Grid>
 
-        <TextField
-          select
-          margin="normal"
-          label="Role"
-          helperText="Please select a role for this account"
-          required
-          onChange={() => {}}
-        >
-          <MenuItem value={rolesEnum.TA}>{rolesEnum.TA}</MenuItem>
-          <MenuItem value={rolesEnum.Professor}>{rolesEnum.Professor}</MenuItem>
-        </TextField>
-      </>
+          <Grid item xs={5}>
+            <TextField
+              select
+              label="Role"
+              required
+              fullWidth
+              margin="dense"
+              value={newAccount.role}
+              helperText="Permissions"
+              onChange={(event) =>
+                setNewAccount({
+                  ...newAccount,
+                  role: event.target.value as rolesEnum,
+                })
+              }
+            >
+              <MenuItem value={rolesEnum.TA}>{rolesEnum.TA}</MenuItem>
+              <MenuItem value={rolesEnum.Professor}>
+                {rolesEnum.Professor}
+              </MenuItem>
+            </TextField>
+          </Grid>
+        </Grid>
+      </Grid>
     </Dialog>
   );
 }

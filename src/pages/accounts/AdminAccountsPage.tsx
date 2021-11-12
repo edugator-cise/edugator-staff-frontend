@@ -4,7 +4,6 @@ import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
 import {
   requestAccounts,
-  requestAccountsEnd,
   unsetSelectedAccount,
 } from "./AdminAccountsPage.slice";
 import {
@@ -40,7 +39,7 @@ export function AdminAccountsPage() {
     if (!loading) {
       setTimeout(() => {
         setDisplayTable(true);
-      }, duration.leavingScreen);
+      }, duration.leavingScreen * 2);
     } else {
       setDisplayTable(false);
     }
@@ -49,11 +48,10 @@ export function AdminAccountsPage() {
   const accountsHeaderButtons = [
     {
       label: "Add Admin User",
-      onClick: () => dispatch(requestAccountsEnd([])),
-      //onClick: () => setNewUserDialog(true),
+      onClick: () => setNewUserDialog(true),
       variant: "contained",
     },
-  ]; //
+  ];
 
   return (
     <LayoutContainer
@@ -77,7 +75,11 @@ export function AdminAccountsPage() {
           {displayTable ? (
             <AccountsTable />
           ) : (
-            <Fade in={loading}>
+            <Fade
+              in={loading}
+              appear={false}
+              timeout={{ exit: duration.leavingScreen * 2 }}
+            >
               <Container>
                 <DashboardProgress />
               </Container>

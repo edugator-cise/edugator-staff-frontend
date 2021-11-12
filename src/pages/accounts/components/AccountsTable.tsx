@@ -13,26 +13,13 @@ import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import { setSelectedAccount } from "../AdminAccountsPage.slice";
 import { IAccount, rolesEnum } from "../types";
-import { blue } from "@mui/material/colors";
 
 const AccountContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: theme.spacing(1),
-  boxShadow: `0 0 4px 3px ${theme.palette.grey[200]}`,
-  "& .MuiTableRow-head": {
-    backgroundColor: blue["200"],
-  },
-  "& .MuiTablePagination-toolbar": {
-    backgroundColor: blue["200"],
-  },
+  boxShadow: `0 0 4px 4px ${theme.palette.grey[200]}`,
   "& .MuiTableCell-body": {
     backgroundColor: "inherit",
-  } /*
-  "& .MuiTableRow-hover :nth-of-type(odd)": {
-    backgroundColor: blue["100"],
   },
-  "& .MuiTableRow-hover :nth-of-type(even)": {
-    backgroundColor: blue["A100"],
-  },*/,
 }));
 
 const DataCell = styled(TableCell)({
@@ -141,16 +128,23 @@ const dummyAccounts: IAccount[] = [
   { username: "Tanner@ufl.edu", role: rolesEnum.TA },
   { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
   { username: "me@ufl.edu", role: rolesEnum.TA },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
+  { username: "mark@test.com", role: rolesEnum.Professor },
   { username: "me@ufl.edu", role: rolesEnum.TA },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
+  { username: "mark@test.com", role: rolesEnum.Professor },
   { username: "me@ufl.edu", role: rolesEnum.TA },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
+  { username: "mark@test.com", role: rolesEnum.Professor },
   { username: "me@ufl.edu", role: rolesEnum.TA },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
+  { username: "mark@test.com", role: rolesEnum.Professor },
   { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
+  { username: "mark@test.com", role: rolesEnum.Professor },
 ];

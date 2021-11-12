@@ -24,8 +24,7 @@ export const managerSlice = createSlice({
       state.loading = true;
     },
     requestAccountsEnd: (state, action: PayloadAction<IAccount[]>) => {
-      console.log("end?");
-      //state.accounts = action.payload;
+      state.accounts = action.payload;
       state.loading = false;
     },
     requestAccountsFail: (state, action: PayloadAction<IRequestMessage>) => {
