@@ -143,9 +143,8 @@ function* deleteCodeRequest(token: string) {
 
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   try {
-    const { code, header, footer, stdin } = action.payload;
-    const fullCodePayload = header + code + footer;
-    const payloadBuffer = Buffer.from(fullCodePayload || "", "utf-8");
+    const { code, stdin, problemId } = action.payload;
+    const payloadBuffer = Buffer.from(code || "", "utf-8");
     const stdinPayload = Buffer.from(stdin || "", "utf-8");
     const { data }: { data: IToken } = yield call(async () => {
       return apiClient.post("v1/code/run", {
@@ -153,6 +152,7 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
         language_id: 54,
         base_64: true,
         stdin: stdinPayload.toString("base64"),
+        problemId,
       });
     });
     if (!data.token || data.token === "") {
@@ -212,9 +212,8 @@ function* runCodeSubmission(
   action: PayloadAction<ICodeSubmission & { problemId: string }>
 ) {
   try {
-    const { code, header, footer, stdin, problemId } = action.payload;
-    const fullCodePayload = header + code + footer;
-    const paylodBuffer = Buffer.from(fullCodePayload, "utf-8");
+    const { code, stdin, problemId } = action.payload;
+    const paylodBuffer = Buffer.from(code, "utf-8");
     const stdinPayload = Buffer.from(stdin, "utf-8");
     const { data }: { data: IResultSubmission[] } = yield call(async () => {
       return apiClient.post("v1/code/run/evaluate", {

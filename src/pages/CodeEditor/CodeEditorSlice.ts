@@ -92,10 +92,7 @@ export const codeEditorSlice = createSlice({
     requestRunCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
-    submitCode: (
-      state,
-      action: PayloadAction<ICodeSubmission & { problemId: string }>
-    ) => {
+    submitCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
     setStdin: (state, action: PayloadAction<string>) => {
