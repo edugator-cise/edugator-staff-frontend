@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { /*useAppDispatch,*/ useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector } from "../../../app/common/hooks";
 import { IAccount, rolesEnum } from "../types";
 
 enum ActionsEnum {
@@ -21,7 +21,6 @@ enum ActionsEnum {
 const base: ActionsEnum = ActionsEnum.noAction;
 
 export function AdminActions() {
-  //const dispatch = useAppDispatch();
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);

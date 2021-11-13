@@ -7,7 +7,7 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { /*useAppDispatch,*/ useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector } from "../../../app/common/hooks";
 
 const ContactItem = styled(Typography)(({ theme }) => ({
   display: "flex",
@@ -21,7 +21,6 @@ const ContactItem = styled(Typography)(({ theme }) => ({
 }));
 
 export function AccountInfo() {
-  //const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.accountManager);
 
   const account = state.selectedAccount;

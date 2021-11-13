@@ -1,10 +1,7 @@
 import React from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
-//import { /*useAppDispatch*/ useAppSelector } from "../../../app/common/hooks";
 import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
-
-// remember to refactor this file later
 
 interface NewAccountDialogProps {
   open: boolean;
@@ -12,8 +9,6 @@ interface NewAccountDialogProps {
 }
 
 export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
-  //const dispatch = useAppDispatch();
-
   const [newAccount, setNewAccount] = React.useState<INewAccount>({
     role: rolesEnum.TA,
     username: "",

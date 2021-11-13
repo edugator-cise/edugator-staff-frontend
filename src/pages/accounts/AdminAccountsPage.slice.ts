@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertType, IRequestMessage } from "../../shared/types";
-import { IAccountManagerState, IAccount /*rolesEnum*/ } from "./types";
+import { IAccountManagerState, IAccount } from "./types";
 
 const baseManagerState: IAccountManagerState = {
   accounts: [],
