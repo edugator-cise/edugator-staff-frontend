@@ -57,6 +57,7 @@ export interface IFeedback {
   message?: string;
   display: boolean;
   type: AlertType;
+  title?: string;
 }
 
 export interface IRequestMessage {

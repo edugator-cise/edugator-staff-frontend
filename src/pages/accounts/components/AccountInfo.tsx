@@ -33,12 +33,10 @@ export function AccountInfo() {
       </Typography>
       <Grid container direction="row">
         <ContactInfo icon="email">{account?.username}</ContactInfo>
-        {
-          // always displaying a phone for demonstration purposes
-          account?.phone && (
-            <ContactInfo icon="phone">{account?.phone}</ContactInfo>
-          )
-        }
+
+        {account?.phone && (
+          <ContactInfo icon="phone">{account?.phone}</ContactInfo>
+        )}
       </Grid>
     </>
   );

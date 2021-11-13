@@ -1,7 +1,12 @@
 import * as React from "react";
-import { Snackbar, Alert } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import { closeAlert } from "../AdminAccountsPage.slice";
+
+const ManagerAlert = styled(Alert)({
+  textAlign: "left",
+});
 
 export function AccountSnackbar() {
   const dispatch = useAppDispatch();
@@ -18,17 +23,20 @@ export function AccountSnackbar() {
     dispatch(closeAlert());
   };
 
-  // may create generic component soon
-
   return (
     <Snackbar
       open={feedback.display}
       autoHideDuration={3000}
       onClose={handleClose}
     >
-      <Alert variant="filled" severity={feedback.type} sx={{ width: "100%" }}>
+      <ManagerAlert
+        variant="filled"
+        severity={feedback.type}
+        sx={{ width: "100%" }}
+      >
+        {feedback.title && <AlertTitle>{feedback.title}</AlertTitle>}
         {feedback.message}
-      </Alert>
+      </ManagerAlert>
     </Snackbar>
   );
 }

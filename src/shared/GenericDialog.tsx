@@ -11,6 +11,10 @@ import { styled } from "@mui/material/styles";
 import { ButtonProps, ButtonColor, ButtonVariant } from "./LayoutContainer";
 import { Breakpoint } from "@mui/system";
 
+interface DialogButtonProps extends ButtonProps {
+  disabled?: boolean;
+}
+
 const PaddedPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
@@ -28,7 +32,7 @@ interface GenericDialogProps {
   open: boolean;
   fullWidth?: boolean;
   maxWidth: Breakpoint; // decent for now
-  footerContent: ButtonProps[];
+  footerContent: DialogButtonProps[];
   handleClose: () => void;
   children: JSX.Element;
 }

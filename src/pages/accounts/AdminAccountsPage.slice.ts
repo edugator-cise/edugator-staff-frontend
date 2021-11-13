@@ -31,6 +31,7 @@ export const managerSlice = createSlice({
       state.feedback = {
         display: true,
         type: AlertType.error,
+        title: "Getting accounts failed (expected)",
         message: action.payload.message,
       };
       state.loading = false;
