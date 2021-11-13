@@ -6,7 +6,7 @@ export interface IAdminModule extends IModuleBase {
   problems: IProblemBase[];
 }
 
-export const EmptyModule: IAdminModule = {
+export const NullModule: IAdminModule = {
   name: "",
   number: -1,
   problems: [],

@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField, Typography, TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { DialogStatus, EmptyModule } from "../types";
+import { DialogStatus, NullModule } from "../types";
 import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
 import {
   requestNewModule,
@@ -12,7 +12,7 @@ import { IModuleBase } from "../../../shared/types";
 import Dialog from "../../../shared/GenericDialog";
 
 const NumberField = styled(TextField)<TextFieldProps>(({ theme }) => ({
-  width: "18%",
+  width: "22%",
   marginTop: theme.spacing(2),
   marginRight: theme.spacing(1),
 }));
@@ -25,6 +25,11 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
 function isBlank(str: string) {
   return !str || /^\s*$/.test(str);
 }
+
+function isInvalidNum(num: number) {
+  return isNaN(num) || num < 0 || num > 1000000;
+}
+
 export function ModuleDialog() {
   const dispatch = useAppDispatch();
   const { open, action, module } = useAppSelector(
@@ -34,37 +39,41 @@ export function ModuleDialog() {
   const [numError, setNumError] = React.useState<boolean>(false);
   const [nameError, setNameError] = React.useState<boolean>(false);
 
-  const [dialogInput, setDialogInput] =
-    React.useState<IModuleBase>(EmptyModule);
+  const [dialogInput, setDialogInput] = React.useState<IModuleBase>(NullModule);
 
   React.useEffect(() => {
     if (action === DialogStatus.EDIT) {
       setDialogInput(module);
     } else {
-      setDialogInput(EmptyModule);
+      setDialogInput(NullModule);
     }
   }, [action, module]);
 
   const handleDialogSubmit = () => {
-    if (
-      numError ||
-      nameError ||
-      isBlank(dialogInput.name) ||
-      isNaN(dialogInput.number)
-    ) {
+    const { name, number } = dialogInput;
+
+    setNameError(isBlank(name));
+    setNumError(isInvalidNum(number));
+
+    if (isBlank(name) || isInvalidNum(number)) {
       return;
-    }
-    if (action === DialogStatus.CREATE) {
+    } else if (action === DialogStatus.CREATE) {
       dispatch(requestNewModule(dialogInput));
     } else if (action === DialogStatus.EDIT) {
       dispatch(requestModifyModule(dialogInput));
     }
   };
 
+  const handleDialogClose = () => {
+    setNumError(false);
+    setNameError(false);
+    dispatch(closeDialog());
+  };
+
   const FooterButtons = [
     {
       label: "Cancel",
-      onClick: () => dispatch(closeDialog()),
+      onClick: handleDialogClose,
       variant: "contained",
       color: "error",
     },
@@ -72,14 +81,17 @@ export function ModuleDialog() {
       label: action === DialogStatus.CREATE ? "Add Module" : "Edit Module",
       onClick: () => handleDialogSubmit(),
       variant: "contained",
+      disabled: numError || nameError,
     },
   ];
 
   const DialogTitle = (status: DialogStatus) => {
     if (status === DialogStatus.CREATE) {
+      const { name, number } = dialogInput;
+
       let display = {
-        number: dialogInput.number !== -1 ? dialogInput.number : "",
-        name: dialogInput.name ? dialogInput.name : "",
+        number: !isInvalidNum(number) ? dialogInput.number : "",
+        name: !isBlank(name) ? dialogInput.name : "",
       };
 
       let newModuleTitle: string;
@@ -128,7 +140,7 @@ export function ModuleDialog() {
       maxWidth="sm"
       fullWidth
       title={DialogTitle(action)}
-      handleClose={() => dispatch(closeDialog())}
+      handleClose={handleDialogClose}
       footerContent={FooterButtons}
     >
       <>
@@ -149,8 +161,7 @@ export function ModuleDialog() {
               ...dialogInput,
               number: num,
             });
-            if (isNaN(num) || num < 0 || num > 1000000) setNumError(true);
-            else setNumError(false);
+            setNumError(isInvalidNum(num));
           }}
           defaultValue={
             action === DialogStatus.EDIT ? module.number : undefined
@@ -158,6 +169,7 @@ export function ModuleDialog() {
           fullWidth
           required
           focused
+          helperText={!numError ? "" : "Invalid Number"}
         />
 
         <NameTextField
@@ -166,17 +178,18 @@ export function ModuleDialog() {
           id="standard-error-helper-text"
           variant="filled"
           onChange={(event) => {
+            const name = event.target.value;
             setDialogInput({
               ...dialogInput,
-              name: event.target.value,
+              name: name,
             });
-            if (isBlank(event.target.value)) setNameError(true);
-            else setNameError(false);
+            setNameError(isBlank(name));
           }}
           defaultValue={action === DialogStatus.EDIT ? module.name : undefined}
           fullWidth
           required
           focused
+          helperText={!nameError ? "" : "Please enter a valid module name"}
         />
       </>
     </Dialog>

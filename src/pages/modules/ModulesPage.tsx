@@ -10,7 +10,7 @@ import {
 } from "./components";
 import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
-import { IAdminModule, EmptyModule } from "./types";
+import { IAdminModule, NullModule } from "./types";
 import { IProblemBase } from "../../shared/types";
 
 const EmptyProblem: IProblemBase = { title: "" };
@@ -24,7 +24,7 @@ export function ModulesPage() {
   const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
   const onDeleteDialogClose = () => setConfirmDelete(false);
 
-  const [toDelete, setToDelete] = React.useState<IAdminModule>(EmptyModule);
+  const [toDelete, setToDelete] = React.useState<IAdminModule>(NullModule);
   const setModuleToDelete = (module: IAdminModule) => {
     setConfirmDelete(true);
     setToDelete(module);

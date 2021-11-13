@@ -54,6 +54,7 @@ export default function GenericDialog(props: GenericDialogProps) {
       key={button.label}
       variant={button.variant as ButtonVariant}
       color={button.color as ButtonColor}
+      disabled={button.disabled}
     >
       {button.label}
     </FooterButton>
