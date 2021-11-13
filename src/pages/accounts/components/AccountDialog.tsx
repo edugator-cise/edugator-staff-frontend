@@ -28,10 +28,15 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
 
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
 
+  const handleDialogClose = () => {
+    setEditMode(false);
+    handleClose();
+  };
+
   const FooterButtons = [
     {
       label: "Close",
-      onClick: () => handleClose(),
+      onClick: handleDialogClose,
       color: "inherit",
       variant: "outlined",
     },
@@ -91,7 +96,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       open={open}
       maxWidth="sm"
       fullWidth
-      handleClose={handleClose}
+      handleClose={handleDialogClose}
       title={DialogTitle}
       footerContent={!editMode ? FooterButtons : EditFooterButtons}
     >

@@ -47,8 +47,8 @@ export function AccountsTable() {
       <Table>
         <TableHead>
           <TableRow>
-            <DataCell>Email</DataCell>
             <DataCell>Name</DataCell>
+            <DataCell>Email</DataCell>
             <DataCell>Phone</DataCell>
             <DataCell align="right">Role</DataCell>
           </TableRow>
@@ -70,18 +70,18 @@ export function AccountsTable() {
                         selected={state.selectedAccount === row}
                       >
                         <DataCell>
-                          {row.username}{" "}
+                          {row.name}{" "}
                           {
                             // remember to replace this with
                             // person who did the request
-                            row.username === "susus@fake.account" ? (
+                            row.username === "you@fake.account" ? (
                               <Chip label="you" size="small" color="primary" />
                             ) : (
                               <></>
                             )
                           }
                         </DataCell>
-                        <DataCell>{row.name ?? "Not set yet"}</DataCell>
+                        <DataCell>{row.username}</DataCell>
                         <DataCell>{row.phone ?? "Not set yet"}</DataCell>
                         <DataCell align="right">
                           <Chip
@@ -123,28 +123,28 @@ export function AccountsTable() {
 }
 
 const dummyAccounts: IAccount[] = [
-  { username: "mark@test.com", role: rolesEnum.Professor },
-  { username: "susus@fake.account", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "mark@test.com", role: rolesEnum.Professor },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "mark@test.com", role: rolesEnum.Professor },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "mark@test.com", role: rolesEnum.Professor },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "mark@test.com", role: rolesEnum.Professor },
-  { username: "me@ufl.edu", role: rolesEnum.TA },
-  { username: "Tanner@ufl.edu", role: rolesEnum.TA },
-  { username: "Dhruv@ufl.edu", role: rolesEnum.TA },
-  { username: "mark@test.com", role: rolesEnum.Professor },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
+  { username: "you@fake.account", role: rolesEnum.TA, name: "Test User" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "me@ufl.edu", role: rolesEnum.TA, name: "Creator" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
+  { username: "me@ufl.edu", role: rolesEnum.TA, name: "Creator" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
+  { username: "me@ufl.edu", role: rolesEnum.TA, name: "Creator" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
+  { username: "me@ufl.edu", role: rolesEnum.TA, name: "Creator" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
+  { username: "me@ufl.edu", role: rolesEnum.TA, name: "Creator" },
+  { username: "Tanner@ufl.edu", role: rolesEnum.TA, name: "Tanner" },
+  { username: "Dhruv@ufl.edu", role: rolesEnum.TA, name: "Dhruv" },
+  { username: "mark@test.com", role: rolesEnum.Professor, name: "Mark" },
 ];

@@ -55,7 +55,7 @@ export function AdminAccountsPage() {
 
   return (
     <LayoutContainer
-      pageTitle={"Admin Accounts"}
+      pageTitle={"Sample Admin Accounts"}
       actionButtons={accountsHeaderButtons}
     >
       <>

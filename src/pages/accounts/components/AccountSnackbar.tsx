@@ -33,6 +33,7 @@ export function AccountSnackbar() {
         variant="filled"
         severity={feedback.type}
         sx={{ width: "100%" }}
+        onClose={handleClose}
       >
         {feedback.title && <AlertTitle>{feedback.title}</AlertTitle>}
         {feedback.message}
