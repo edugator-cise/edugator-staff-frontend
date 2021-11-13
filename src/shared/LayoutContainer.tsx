@@ -75,7 +75,6 @@ export const LayoutContainer = ({
             component="h2"
             align="left"
             sx={{
-              paddingLeft: "2rem",
               flexGrow: 1,
             }}
           >
