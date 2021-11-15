@@ -23,7 +23,6 @@ import {
   IModuleWithProblems,
 } from "../types";
 import apiClient from "../../../app/common/apiClient";
-import { AxiosResponse } from "axios";
 const sampleProblems: IProblem[] = [
   {
     _id: "string",
@@ -119,8 +118,7 @@ describe("CodeEditor Reducer", () => {
     const baseState = store.getState().codeEditor;
     const codePayload = {
       code: "sample",
-      header: "sample",
-      footer: "sample",
+      problemId: "sample",
       stdin: "sample",
     };
     store.dispatch(requestRunCode(codePayload));

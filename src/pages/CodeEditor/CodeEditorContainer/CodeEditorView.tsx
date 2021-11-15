@@ -43,12 +43,6 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
-  const header = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.header
-  );
-  const footer = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.footer
-  );
   const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
   );
@@ -67,7 +61,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     editorRef.current = editor;
   };
   const handleDownload = () => {
-    const blob = new Blob([header + currentCode + footer]);
+    const blob = new Blob([currentCode]);
     const blobURL = URL.createObjectURL(blob);
     const filename = "edugator-code.cpp";
 
@@ -193,9 +187,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 requestRunCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
+                  problemId: problemId as string,
                 })
               )
             }
@@ -211,8 +204,6 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 submitCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
                   problemId: problemId as string,
                 })
