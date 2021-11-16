@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setCodeBody, requestRunCode, submitCode } from "../CodeEditorSlice";
+import { requestRunCode, submitCode } from "../CodeEditorSlice";
 import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -61,15 +61,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const xl = useMediaQuery(theme.breakpoints.up("xl"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const currentCode = useSelector(
-    (state: RootState) => state.codeEditor.codeBody
-  );
-  const header = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.header
-  );
-  const footer = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.footer
-  );
+  const [currentCode, setCurrentCode] = useState(code);
   const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
   );
@@ -88,7 +80,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     editorRef.current = editor;
   };
   const handleDownload = () => {
-    const blob = new Blob([header + currentCode + footer]);
+    const blob = new Blob([currentCode]);
     const blobURL = URL.createObjectURL(blob);
     const filename = "edugator-code.cpp";
 
@@ -198,9 +190,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
           <Editor
             height="40vh"
             defaultLanguage="cpp"
-            defaultValue={currentCode}
+            defaultValue={code}
             onChange={(value) => {
-              dispatch(setCodeBody(value as string));
+              setCurrentCode(value as string);
             }}
             onMount={handleEditorMount}
           />
@@ -215,9 +207,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 requestRunCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
+                  problemId: problemId as string,
                 })
               )
             }
@@ -233,8 +224,6 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 submitCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
                   problemId: problemId as string,
                 })

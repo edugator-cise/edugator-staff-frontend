@@ -83,9 +83,6 @@ export const codeEditorSlice = createSlice({
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setCodeBody: (state, action: PayloadAction<string>) => {
-      state.codeBody = action.payload;
-    },
     setRunningSubmission: (state, action: PayloadAction<boolean>) => {
       return {
         ...state,
@@ -95,10 +92,7 @@ export const codeEditorSlice = createSlice({
     requestRunCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
-    submitCode: (
-      state,
-      action: PayloadAction<ICodeSubmission & { problemId: string }>
-    ) => {
+    submitCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
     setStdin: (state, action: PayloadAction<string>) => {
@@ -127,7 +121,6 @@ export const codeEditorSlice = createSlice({
 
 export const {
   setCurrentProblem,
-  setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,

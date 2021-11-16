@@ -96,6 +96,7 @@ export const ServerConfigForm = (props: Props) => {
               onBlur={handleBlur}
               value={values.buildCommand}
               error={touched.buildCommand && Boolean(errors.buildCommand)}
+              helperText="Add compiler flags here e.g. '-Wall'"
             />
           </Stack>
         </Form>

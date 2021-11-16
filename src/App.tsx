@@ -10,6 +10,7 @@ import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 
 function App() {
   return (
@@ -33,9 +34,10 @@ function App() {
               <CodeEditorPage />
               {/* <TestSplitPane /> */}
             </Route>
-            <Route exact path="/">
+            <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>
+            <Route component={NotFoundPage} />
           </Switch>
         </div>
       </ThemeProvider>

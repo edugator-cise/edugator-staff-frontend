@@ -39,11 +39,14 @@ export const TestEditor = (props: Props) => {
       }}
       validate={(values: { testCases: TestCaseField[] }) => {
         dispatch(updateTestCases(values.testCases));
+        if (!values || !values.testCases || values.testCases.length === 0)
+          return { testCases: "empty" };
+        return {};
       }}
       innerRef={props.formRef}
       validateOnBlur={false}
       validateOnSubmit
-      validateOnChange={false}
+      validateOnChange
       validateOnMount={false}
     >
       {({ values, setFieldValue, errors }) => (
