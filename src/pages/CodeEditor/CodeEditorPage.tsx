@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { Sidenav } from "./SideNav";
-import { requestFirstProblemFromModule, requestProblem, setRunCodeError } from "./CodeEditorSlice";
+import {
+  requestFirstProblemFromModule,
+  requestProblem,
+  setRunCodeError,
+} from "./CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -45,7 +49,9 @@ export const CodeEditorPage = () => {
     const sortedModules = state.codeEditor.navStructure;
     return sortedModules.map((value) => value.name);
   });
-  const navigation = useSelector((state: RootState) => state.codeEditor.navStructure)
+  const navigation = useSelector(
+    (state: RootState) => state.codeEditor.navStructure
+  );
   const isLoadingProblem = useSelector(
     (state: RootState) => state.codeEditor.isLoadingProblem
   );
@@ -56,20 +62,34 @@ export const CodeEditorPage = () => {
         problemId: params ? params["problemId"] : undefined,
       })
     );
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
   }, [dispatch]);
 
   useEffect(() => {
     if (params && params["problemId"]) {
-      dispatch(
-        requestProblem(params["problemId"])
-      )
+      dispatch(requestProblem(params["problemId"]));
     }
-  }, [params])
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
+  }, [params]);
 
   useEffect(() => {
-    if (location && location["moduleName"] && navigation && navigation.length > 0) {
-      dispatch(requestFirstProblemFromModule({navigation, moduleName: location["moduleName"]}))
+    if (
+      location &&
+      location["moduleName"] &&
+      navigation &&
+      navigation.length > 0
+    ) {
+      dispatch(
+        requestFirstProblemFromModule({
+          navigation,
+          moduleName: location["moduleName"],
+        })
+      );
     }
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
   }, [location]);
 
   if (isLoading) {

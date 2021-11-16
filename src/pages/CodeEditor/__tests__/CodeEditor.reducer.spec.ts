@@ -122,7 +122,7 @@ describe("CodeEditor Reducer", () => {
       stdin: "sample",
       timeLimit: 5,
       memoryLimit: 5,
-      buildCommand: '-Wall'
+      buildCommand: "-Wall",
     };
     store.dispatch(requestRunCode(codePayload));
 
@@ -141,7 +141,7 @@ describe("CodeEditor Reducer", () => {
       stdin: "sample",
       timeLimit: 5,
       memoryLimit: 5,
-      buildCommand: '-Wall'
+      buildCommand: "-Wall",
     };
     store.dispatch(submitCode(codePayload));
 

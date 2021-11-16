@@ -108,8 +108,6 @@ function* handleRequestModulesAndProblems(
   }
 }
 
-
-
 function* deleteCodeRequest(token: string) {
   try {
     // axios delete request with two query params
@@ -251,15 +249,17 @@ function* requestProblemSaga(action: PayloadAction<string>) {
   }
 }
 
-function* requestFirstProblem(action: PayloadAction<{ navigation: INavigationItem[], moduleName: string}>) {
+function* requestFirstProblem(
+  action: PayloadAction<{ navigation: INavigationItem[]; moduleName: string }>
+) {
   try {
-    console.log(action.payload)
+    console.log(action.payload);
     const problemId: string | undefined = filterForProblem(
       action.payload.navigation,
       action.payload.moduleName
     );
     if (problemId) {
-      const {data}: { data: IProblem } = yield call(async () => {
+      const { data }: { data: IProblem } = yield call(async () => {
         return apiClient.get(`v1/student/problem/${problemId}`);
       });
       yield put(setCurrentProblem(data));
@@ -267,12 +267,12 @@ function* requestFirstProblem(action: PayloadAction<{ navigation: INavigationIte
         yield put(setStdin(data.testCases[0].input));
       }
     } else {
-      throw "module does not exist";
+      throw new Error("module does not exist");
     }
   } catch (e) {
-    yield put(setRunCodeError({hasError: true, errorMessage: e.message}))
+    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
-    yield put(setCurrentProblem(undefined))
+    yield put(setCurrentProblem(undefined));
   }
 }
 
@@ -284,7 +284,7 @@ function* codeEditorSaga() {
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
   yield takeEvery(requestProblem.type, requestProblemSaga);
-  yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem)
+  yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem);
 }
 
 export default codeEditorSaga;
