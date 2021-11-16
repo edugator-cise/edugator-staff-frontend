@@ -1,7 +1,6 @@
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import { styled } from "@mui/material/styles";
@@ -18,6 +17,21 @@ const TabBar = styled("div")(
   justify-content: flex-start;
   width: 100%;
   background-color: rgb(250,250,250);
+`
+);
+
+const CodeHolder = styled('div')(
+  
+  ({ theme }) => `
+  max-height: 80%;
+  background-color: white;
+  margin: ${theme.spacing(1)};
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
 `
 );
 
@@ -50,7 +64,7 @@ export const InputOutputView = () => {
 
   return (
     <Grow in appear timeout={500}>
-      <Paper sx={{ mt: 2 }}>
+      <CodeHolder>
         <TabBar>
           <Tabs
             value={activeTab}
@@ -72,9 +86,9 @@ export const InputOutputView = () => {
             <Tab disableRipple label="Submission"></Tab>
           </Tabs>
         </TabBar>
-        <Box sx={{ height: "20vh", pt: 2, pr: 2, pl: 2, pb: 1.5 }}>
+        <Box sx={{ height: "100%", width: '100%', pt: 2, pr: 2, pl: 2, pb: 1.5 }}>
           {activeTab === 0 ? (
-            <FormControl sx={{ width: "100%" }} variant="outlined">
+            <FormControl sx={{ width: "calc(100% - 20px)" }} variant="outlined">
               <OutlinedInput
                 id="outlined-stdin"
                 multiline
@@ -100,7 +114,7 @@ export const InputOutputView = () => {
             <SubmitOutput results={submissionOutput} />
           )}
         </Box>
-      </Paper>
+      </CodeHolder>
     </Grow>
   );
 };

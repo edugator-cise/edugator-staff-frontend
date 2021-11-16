@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
-import { Paper, Button, Grow } from "@mui/material";
+import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
@@ -11,26 +11,42 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "../../../shared/constants";
 import { useTheme } from "@mui/material/styles";
+import theme from "../../../shared/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
 const ColumnContainer = styled("div")(
   ({ theme }) => `
   display: flex;
-  justify-content: flex-end;
-  padding-top: ${theme.spacing(1)};
+  justify-content: space-between;
+  align-items: center;
+  padding: ${theme.spacing(1)};
   padding-bottom:${theme.spacing(1)};
-  width: 100%;
-`
+  width: 100%;`
 );
 
 const EditorContainer = styled("div")(
   ({ theme }) => `
-  position: relative;
-  display: block;
-  margin-left: ${theme.spacing(2)};
-  margin-right: ${theme.spacing(2)};
   border: solid 1px ${colors.borderGray};
-  width: 90%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
+);
+
+const CodeHolder = styled('div')(
+ 
+{
+  margin: theme.spacing(1),
+  height: '100%',
+  maxHeight: 650,
+  backgroundColor: 'white',
+  borderRadius: '4px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+}
 );
 
 interface CodeEditorProps {
@@ -42,6 +58,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const xl = useMediaQuery(theme.breakpoints.up("xl"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const currentCode = useSelector(
     (state: RootState) => state.codeEditor.codeBody
@@ -112,24 +130,36 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
       hiddenFileInput.current.click();
     }
   };
+
+  window.addEventListener("resize", () => {
+    if (editorRef.current) {
+      editorRef.current.layout();
+    }
+  })
+
+  if (matches) console.log("large")
+  if (md) console.log("medium")
+  if (xl) console.log("XL")
+  
   return (
-    <Grow in appear timeout={500}>
-      <Paper>
+    <Grow in appear timeout={500} >
+      <CodeHolder>
         <ColumnContainer>
+          <Box sx={{paddingLeft: 3, fontFamily: `'Inter', sans-serif`, fontWeight: 600}}>
+          Solution
+          </Box>
+          <Box sx={{paddingRight: 3}}>
           <a
             href={templatePackage}
             style={{ textDecoration: "none" }}
             target="_blank"
             rel="noreferrer"
           >
-            <Button
-              title="Download Template"
-              variant="outlined"
-              startIcon={<CloudDownload />}
-              sx={{ marginRight: 1, marginTop: 1 }}
-            >
-              {matches && "Download Template"}
-            </Button>
+            <Tooltip title="Download Template" placement="top">
+              <IconButton>
+                <CloudDownload />
+              </IconButton>
+            </Tooltip>
           </a>
           <input
             style={{ display: "none" }}
@@ -137,33 +167,22 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             type="file"
             onChange={(e) => parseFile(e)}
           />
-          <Button
-            title="Choose File"
-            variant="outlined"
-            startIcon={<Add />}
-            onClick={(e) => handleChooseFile(e)}
-            sx={{ marginRight: 1, marginTop: 1 }}
-          >
-            {matches && "Choose File"}
-          </Button>
-          <Button
-            title="Download Submission"
-            variant="outlined"
-            startIcon={<GetApp />}
-            onClick={handleDownload}
-            sx={{ marginRight: 1, marginTop: 1 }}
-          >
-            {matches && "Download Submission"}
-          </Button>
-          <Button
-            title="Reset Code"
-            variant="outlined"
-            startIcon={<RotateLeft />}
-            onClick={handleReset}
-            sx={{ marginRight: 1, marginTop: 1 }}
-          >
-            {matches && "Download Submission"}
-          </Button>
+          <Tooltip title="Choose File" placement="top">
+            <IconButton onClick={(e) => handleChooseFile(e)}>
+              <Add />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Download Submission" placement="top">
+            <IconButton onClick={handleDownload}>
+              <GetApp />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Reset Code" placement="top">
+            <IconButton onClick={handleReset}>
+              <RotateLeft />
+            </IconButton>
+          </Tooltip>
+          </Box>
         </ColumnContainer>
         <EditorContainer>
           <Backdrop
@@ -186,7 +205,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onMount={handleEditorMount}
           />
         </EditorContainer>
-        <ColumnContainer>
+        <ColumnContainer style={{justifyContent: 'flex-end'}}>
           <Button
             variant="outlined"
             color="primary"
@@ -225,7 +244,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             Submit
           </Button>
         </ColumnContainer>
-      </Paper>
+      </CodeHolder>
     </Grow>
   );
 };

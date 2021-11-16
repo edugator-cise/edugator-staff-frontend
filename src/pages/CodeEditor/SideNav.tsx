@@ -13,8 +13,13 @@ import { INavigationItem, IProblemItem } from "./types";
 import { colors } from "../../shared/constants";
 import { useHistory } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
+
 interface ClickedMenu {
   [key: string]: Boolean;
+}
+
+interface SidenavProps {
+  hidden: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -25,7 +30,7 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = () => {
+export const Sidenav = (props:SidenavProps) => {
   const dispatch = useDispatch();
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
@@ -42,11 +47,12 @@ export const Sidenav = () => {
       component="nav"
       sx={{
         height: "100%",
-        width: 320,
-        minWidth: 220,
+        width: 250,
+        minWidth: 250,
+        maxWidth: 250,
         bgcolor: "#F9F9F9",
         overflowY: "auto",
-        marginLeft: '80px'
+        display: props.hidden ? 'none' : 'block',
       }}
       aria-labelledby="nested-exercises-list"
       subheader={

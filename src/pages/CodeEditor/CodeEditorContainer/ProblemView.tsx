@@ -1,27 +1,24 @@
 import React from "react";
 import { Markdown } from "../../../shared/Markdown";
-import { Paper, Typography, Grow } from "@mui/material";
+import { Typography, Grow } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
 
 interface Props {
   problemTitle: string;
   problemStatement: string;
 }
 
-const ProblemDescriptionPaper = styled(Paper)(
+const ProblemDescriptionPaper = styled('div')(
   
   ({ theme }) => `
-  padding: 30px;
+  padding: ${theme.spacing(4)};
   text-align: left;
-  ${theme.breakpoints.up("md")} {
-    height: auto;
-  }
   overflow-y: auto;
-  width: 80%;
-  min-width: 530px
-  max-height: 200px
+  height: calc(100vh - 145px);
+  background-color: white;
+  margin: ${theme.spacing(1)};
+  border-radius: 4px;
+  min-width: 200px;
 `
 );
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {

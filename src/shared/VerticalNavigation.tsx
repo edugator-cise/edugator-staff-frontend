@@ -150,7 +150,6 @@ function VerticalNavigation(props: Props) {
       style={{
         paddingLeft: md ? 100 : 30,
         paddingRight:  md ? 100 : 30,
-        marginLeft: props.codingPage ? 80 : 0,
         height: 64,
         backgroundColor: props.codingPage ? 'white' : props.light ? "transparent" : "#152c7c",
       }}
