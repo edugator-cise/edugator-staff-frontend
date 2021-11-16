@@ -10,6 +10,7 @@ import {
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,
+  requestFirstProblemFromModule,
   setNavStructure,
   requestProblem,
   setCurrentProblem,
@@ -64,11 +65,11 @@ const poll = async (
 };
 
 function filterForProblem(
-  moduleProblemStructure: IModuleWithProblems[],
+  moduleProblemStructure: INavigationItem[],
   moduleName: string
 ): string | undefined {
-  let module: IModuleWithProblems[] = moduleProblemStructure.filter(
-    (moduleWithProblem: IModuleWithProblems) =>
+  let module: INavigationItem[] = moduleProblemStructure.filter(
+    (moduleWithProblem: INavigationItem) =>
       moduleWithProblem.name === moduleName
   );
   if (module.length !== 0 && module[0].problems.length !== 0) {
@@ -100,31 +101,14 @@ function* handleRequestModulesAndProblems(
       return apiClient.get("v1/module/WithNonHiddenProblems");
     });
     yield put(setNavStructure(createNavStructure(data)));
-    if (action.payload.problemId) {
-      const responseObject: { data: IProblem } = yield call(async () => {
-        return apiClient.get(`v1/student/problem/${action.payload.problemId}`);
-      });
-      yield put(setCurrentProblem(responseObject.data));
-    } else if (action.payload.moduleName) {
-      const problemId: string | undefined = filterForProblem(
-        data,
-        action.payload.moduleName
-      );
-      if (problemId) {
-        const responseObject: { data: IProblem } = yield call(async () => {
-          return apiClient.get(`v1/student/problem/${problemId}`);
-        });
-        yield put(setCurrentProblem(responseObject.data));
-      } else {
-        yield put(setCurrentProblem(undefined));
-      }
-    }
     yield put(setIsLoading(false));
   } catch (e) {
     yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
   }
 }
+
+
 
 function* deleteCodeRequest(token: string) {
   try {
@@ -267,6 +251,31 @@ function* requestProblemSaga(action: PayloadAction<string>) {
   }
 }
 
+function* requestFirstProblem(action: PayloadAction<{ navigation: INavigationItem[], moduleName: string}>) {
+  try {
+    console.log(action.payload)
+    const problemId: string | undefined = filterForProblem(
+      action.payload.navigation,
+      action.payload.moduleName
+    );
+    if (problemId) {
+      const {data}: { data: IProblem } = yield call(async () => {
+        return apiClient.get(`v1/student/problem/${problemId}`);
+      });
+      yield put(setCurrentProblem(data));
+      if (data.testCases.length > 0) {
+        yield put(setStdin(data.testCases[0].input));
+      }
+    } else {
+      throw "module does not exist";
+    }
+  } catch (e) {
+    yield put(setRunCodeError({hasError: true, errorMessage: e.message}))
+    yield put(setRunningSubmission(false));
+    yield put(setCurrentProblem(undefined))
+  }
+}
+
 function* codeEditorSaga() {
   yield takeEvery(
     requestModulesAndProblems.type,
@@ -275,6 +284,7 @@ function* codeEditorSaga() {
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
   yield takeEvery(requestProblem.type, requestProblemSaga);
+  yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem)
 }
 
 export default codeEditorSaga;

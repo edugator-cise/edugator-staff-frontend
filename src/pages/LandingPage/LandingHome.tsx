@@ -100,6 +100,7 @@ function LandingHome() {
               <Link
                 to={{
                   pathname: Routes.Code,
+                  state: { moduleName: undefined },
                 }}
                 style={{ color: "inherit", textDecoration: "inherit" }}
               >

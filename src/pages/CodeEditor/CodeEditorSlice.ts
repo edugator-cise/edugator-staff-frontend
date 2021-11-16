@@ -63,6 +63,13 @@ export const codeEditorSlice = createSlice({
         isLoadingProblem: true,
       };
     },
+    requestFirstProblemFromModule: (state, action: PayloadAction<{navigation: INavigationItem[], moduleName: string | undefined }>) => {
+      return {
+        ...state,
+        ...resetinputOutputViewState(),
+        isLoadingProblem: true,
+      }
+    },
     setCurrentProblem: (state, action: PayloadAction<IProblem | undefined>) => {
       state.currentProblem = action.payload ? { ...action.payload } : undefined;
       state.runningSubmission = false;
@@ -125,6 +132,7 @@ export const {
   requestModulesAndProblems,
   requestRunCode,
   requestProblem,
+  requestFirstProblemFromModule,
   submitCode,
   setStdin,
   setCompilerOutput,

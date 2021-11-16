@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Sidenav } from "./SideNav";
-import { setRunCodeError } from "./CodeEditorSlice";
+import { requestFirstProblemFromModule, requestProblem, setRunCodeError } from "./CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -45,6 +45,7 @@ export const CodeEditorPage = () => {
     const sortedModules = state.codeEditor.navStructure;
     return sortedModules.map((value) => value.name);
   });
+  const navigation = useSelector((state: RootState) => state.codeEditor.navStructure)
   const isLoadingProblem = useSelector(
     (state: RootState) => state.codeEditor.isLoadingProblem
   );
@@ -55,9 +56,22 @@ export const CodeEditorPage = () => {
         problemId: params ? params["problemId"] : undefined,
       })
     );
-    //disabling lint for next line because it asks to make location and params a dependency when we don't have to
-    //eslint-disable-next-line
   }, [dispatch]);
+
+  useEffect(() => {
+    if (params && params["problemId"]) {
+      dispatch(
+        requestProblem(params["problemId"])
+      )
+    }
+  }, [params])
+
+  useEffect(() => {
+    if (location && location["moduleName"] && navigation && navigation.length > 0) {
+      dispatch(requestFirstProblemFromModule({navigation, moduleName: location["moduleName"]}))
+    }
+  }, [location]);
+
   if (isLoading) {
     return (
       <Grid
