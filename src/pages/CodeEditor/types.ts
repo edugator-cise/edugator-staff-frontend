@@ -25,6 +25,9 @@ export interface ICodeSubmission {
   code: string;
   stdin: string;
   problemId: string;
+  timeLimit: number;
+  memoryLimit: number;
+  buildCommand: string;
 }
 
 export interface IJudge0Response {

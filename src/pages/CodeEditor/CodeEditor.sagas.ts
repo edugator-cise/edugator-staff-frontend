@@ -22,6 +22,7 @@ import {
   submitCode,
   setResultSubmission,
   setRunCodeError,
+  setStdin,
 } from "./CodeEditorSlice";
 import apiClient from "../../app/common/apiClient";
 import {
@@ -141,19 +142,31 @@ function* deleteCodeRequest(token: string) {
   }
 }
 
+function transformPayload(payload: ICodeSubmission) {
+  const base64EncodedCode = Buffer.from(payload.code || "", "utf-8").toString(
+    "base64"
+  );
+  const base64EncodedStdin = Buffer.from(payload.stdin || "", "utf-8").toString(
+    "base64"
+  );
+  const body = {
+    source_code: base64EncodedCode,
+    language_id: 54, //C++
+    base_64: true,
+    stdin: base64EncodedStdin,
+    problemId: payload.problemId,
+    cpu_time_limit: payload.timeLimit === 0 ? undefined : payload.timeLimit,
+    memory_limit: payload.memoryLimit === 0 ? undefined : payload.memoryLimit,
+    compiler_options:
+      payload.buildCommand === "" ? undefined : payload.buildCommand,
+  };
+  return body;
+}
+
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   try {
-    const { code, stdin, problemId } = action.payload;
-    const payloadBuffer = Buffer.from(code || "", "utf-8");
-    const stdinPayload = Buffer.from(stdin || "", "utf-8");
     const { data }: { data: IToken } = yield call(async () => {
-      return apiClient.post("v1/code/run", {
-        source_code: payloadBuffer.toString("base64"),
-        language_id: 54,
-        base_64: true,
-        stdin: stdinPayload.toString("base64"),
-        problemId,
-      });
+      return apiClient.post("v1/code/run", transformPayload(action.payload));
     });
     if (!data.token || data.token === "") {
       throw new Error("Token not pressent");
@@ -208,21 +221,13 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   }
 }
 
-function* runCodeSubmission(
-  action: PayloadAction<ICodeSubmission & { problemId: string }>
-) {
+function* runCodeSubmission(action: PayloadAction<ICodeSubmission>) {
   try {
-    const { code, stdin, problemId } = action.payload;
-    const paylodBuffer = Buffer.from(code, "utf-8");
-    const stdinPayload = Buffer.from(stdin, "utf-8");
     const { data }: { data: IResultSubmission[] } = yield call(async () => {
-      return apiClient.post("v1/code/run/evaluate", {
-        source_code: paylodBuffer.toString("base64"),
-        language_id: 54,
-        base_64: true,
-        stdin: stdinPayload.toString("base64"),
-        problemId,
-      });
+      return apiClient.post(
+        "v1/code/run/evaluate",
+        transformPayload(action.payload)
+      );
     });
     yield put(setActiveTab(2));
     yield put(setRunningSubmission(false));
@@ -253,6 +258,9 @@ function* requestProblemSaga(action: PayloadAction<string>) {
       return apiClient.get(`v1/student/problem/${id}`);
     });
     yield put(setCurrentProblem(data));
+    if (data.testCases.length > 0) {
+      yield put(setStdin(data.testCases[0].input));
+    }
   } catch (e) {
     yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
     yield put(setRunningSubmission(false));
