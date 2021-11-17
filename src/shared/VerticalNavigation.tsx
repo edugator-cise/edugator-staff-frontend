@@ -29,8 +29,9 @@ import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Routes } from "../shared/Routes.constants";
+import { adminPathRegex } from "../shared/constants";
 
 interface Props {
   light: boolean;
@@ -38,6 +39,7 @@ interface Props {
 }
 
 function VerticalNavigation(props: Props) {
+  const location = useLocation();
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const [openProjects, setOpenProjects] = useState<any>(null);
   const [openModules, setOpenModules] = useState<any>(null);
@@ -197,7 +199,9 @@ function VerticalNavigation(props: Props) {
                     return (
                       <Link
                         to={{
-                          pathname: Routes.Code,
+                          pathname: adminPathRegex.test(location.pathname)
+                            ? Routes.AdminCode
+                            : Routes.Code,
                           state: { moduleName: subitem.title },
                         }}
                         style={{

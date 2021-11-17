@@ -1,5 +1,4 @@
-// export const baseAPIURL = "https://edugator-admin.com/";
-export const baseAPIURL = "http://localhost:8080/";
+export const baseAPIURL = "https://edugator-admin.com/";
 export const unauthorizedErrorMessage =
   "You are not authorized to perform this action currently. Please log out and log back in.";
 
@@ -9,3 +8,5 @@ export const colors = {
   lightPink: "#fce4ec",
   redText: "#d81b60",
 };
+
+export const adminPathRegex = /\/admin\/code*/;

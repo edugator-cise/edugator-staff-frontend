@@ -21,7 +21,7 @@ import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
-import { colors } from "../../shared/constants";
+import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
 
 interface ProblemEditorURL {
@@ -34,7 +34,8 @@ interface ProblemLocationState {
 
 export const CodeEditorPage = () => {
   const params = useParams<ProblemEditorURL>();
-  const location = useLocation<ProblemLocationState>().state;
+  const locationState = useLocation<ProblemLocationState>();
+  const location = locationState.state;
   const dispatch = useDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.codeEditor.isLoading
@@ -58,8 +59,7 @@ export const CodeEditorPage = () => {
   useEffect(() => {
     dispatch(
       requestModulesAndProblems({
-        moduleName: location ? location["moduleName"] : undefined,
-        problemId: params ? params["problemId"] : undefined,
+        isAdmin: adminPathRegex.test(locationState.pathname),
       })
     );
     //disable exhaustive dependencies
@@ -68,7 +68,12 @@ export const CodeEditorPage = () => {
 
   useEffect(() => {
     if (params && params["problemId"]) {
-      dispatch(requestProblem(params["problemId"]));
+      dispatch(
+        requestProblem({
+          problemId: params["problemId"],
+          isAdmin: adminPathRegex.test(locationState.pathname),
+        })
+      );
     }
     //disable exhaustive dependencies
     //eslint-disable-next-line
@@ -77,7 +82,7 @@ export const CodeEditorPage = () => {
   useEffect(() => {
     if (
       location &&
-      location["moduleName"] &&
+      location["moduleName"] !== undefined &&
       navigation &&
       navigation.length > 0
     ) {
@@ -85,6 +90,7 @@ export const CodeEditorPage = () => {
         requestFirstProblemFromModule({
           navigation,
           moduleName: location["moduleName"],
+          isAdmin: adminPathRegex.test(locationState.pathname),
         })
       );
     }

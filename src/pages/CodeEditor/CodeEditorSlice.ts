@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { INavigationItem, IResultSubmission, ICodeSubmission } from "./types";
+import {
+  INavigationItem,
+  IResultSubmission,
+  ICodeSubmission,
+  ModuleProblemRequest,
+} from "./types";
 import { IProblem } from "../../shared/types";
-import { ICompilerOutput, ErrorObject, ModuleProblemRequest } from "./types";
+import { ICompilerOutput, ErrorObject } from "./types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   navStructure: INavigationItem[];
@@ -56,7 +61,10 @@ export const codeEditorSlice = createSlice({
   name: "CodeEditor",
   initialState: getInitialCodeEditorState(),
   reducers: {
-    requestProblem: (state, action: PayloadAction<string>) => {
+    requestProblem: (
+      state,
+      action: PayloadAction<{ problemId: string; isAdmin: boolean }>
+    ) => {
       return {
         ...state,
         ...resetinputOutputViewState(),
@@ -68,6 +76,7 @@ export const codeEditorSlice = createSlice({
       action: PayloadAction<{
         navigation: INavigationItem[];
         moduleName: string | undefined;
+        isAdmin: boolean;
       }>
     ) => {
       return {

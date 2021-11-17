@@ -98,6 +98,9 @@ function* handleRequestModulesAndProblems(
 ) {
   try {
     const { data }: { data: IModuleWithProblems[] } = yield call(async () => {
+      if (action.payload.isAdmin) {
+        return apiClient.get("v1/module/WithProblems");
+      }
       return apiClient.get("v1/module/WithNonHiddenProblems");
     });
     yield put(setNavStructure(createNavStructure(data)));
@@ -233,10 +236,15 @@ function* submissionRace(
   });
 }
 
-function* requestProblemSaga(action: PayloadAction<string>) {
-  const id: string = action.payload;
+function* requestProblemSaga(
+  action: PayloadAction<{ problemId: string; isAdmin: boolean }>
+) {
+  const id: string = action.payload.problemId;
   try {
     const { data }: { data: IProblem } = yield call(async () => {
+      if (action.payload.isAdmin) {
+        return apiClient.get(`v1/admin/problem/${id}`);
+      }
       return apiClient.get(`v1/student/problem/${id}`);
     });
     yield put(setCurrentProblem(data));
@@ -250,7 +258,11 @@ function* requestProblemSaga(action: PayloadAction<string>) {
 }
 
 function* requestFirstProblem(
-  action: PayloadAction<{ navigation: INavigationItem[]; moduleName: string }>
+  action: PayloadAction<{
+    navigation: INavigationItem[];
+    moduleName: string;
+    isAdmin: boolean;
+  }>
 ) {
   try {
     console.log(action.payload);
@@ -260,6 +272,9 @@ function* requestFirstProblem(
     );
     if (problemId) {
       const { data }: { data: IProblem } = yield call(async () => {
+        if (action.payload.isAdmin) {
+          return apiClient.get(`v1/admin/problem/${problemId}`);
+        }
         return apiClient.get(`v1/student/problem/${problemId}`);
       });
       yield put(setCurrentProblem(data));
@@ -267,7 +282,7 @@ function* requestFirstProblem(
         yield put(setStdin(data.testCases[0].input));
       }
     } else {
-      throw new Error("module does not exist");
+      yield put(setCurrentProblem(undefined));
     }
   } catch (e) {
     yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));

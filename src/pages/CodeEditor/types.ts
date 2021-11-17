@@ -1,13 +1,11 @@
 import { IModuleBase } from "../../shared/types";
 
+export interface ModuleProblemRequest {
+  isAdmin: boolean;
+}
 export interface IProblemItem {
   problemName: string;
   _id: string;
-}
-
-export interface ModuleProblemRequest {
-  problemId: string | undefined;
-  moduleName: string | undefined;
 }
 
 export interface INavigationItem {

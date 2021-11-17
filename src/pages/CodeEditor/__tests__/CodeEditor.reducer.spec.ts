@@ -92,8 +92,7 @@ describe("CodeEditor Reducer", () => {
 
     store.dispatch(
       requestModulesAndProblems({
-        moduleName: mockedModulesWithProblems.name,
-        problemId: mockedModulesWithProblems.problems[0]._id,
+        isAdmin: true,
       })
     );
     const expected = {
