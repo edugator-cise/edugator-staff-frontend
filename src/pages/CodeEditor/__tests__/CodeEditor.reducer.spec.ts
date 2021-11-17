@@ -92,8 +92,7 @@ describe("CodeEditor Reducer", () => {
 
     store.dispatch(
       requestModulesAndProblems({
-        moduleName: mockedModulesWithProblems.name,
-        problemId: mockedModulesWithProblems.problems[0]._id,
+        isAdmin: true,
       })
     );
     const expected = {
@@ -120,6 +119,9 @@ describe("CodeEditor Reducer", () => {
       code: "sample",
       problemId: "sample",
       stdin: "sample",
+      timeLimit: 5,
+      memoryLimit: 5,
+      buildCommand: "-Wall",
     };
     store.dispatch(requestRunCode(codePayload));
 
@@ -134,10 +136,11 @@ describe("CodeEditor Reducer", () => {
     const baseState = store.getState().codeEditor;
     const codePayload = {
       code: "sample",
-      header: "sample",
-      footer: "sample",
-      stdin: "sample",
       problemId: "sample",
+      stdin: "sample",
+      timeLimit: 5,
+      memoryLimit: 5,
+      buildCommand: "-Wall",
     };
     store.dispatch(submitCode(codePayload));
 

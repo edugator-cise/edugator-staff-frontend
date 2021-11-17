@@ -60,9 +60,7 @@ export const ServerConfigForm = (props: Props) => {
                 pattern: "[0-9]*",
               }}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">ms</InputAdornment>
-                ),
+                endAdornment: <InputAdornment position="end">s</InputAdornment>,
               }}
               onChange={handleChange}
               onBlur={handleBlur}

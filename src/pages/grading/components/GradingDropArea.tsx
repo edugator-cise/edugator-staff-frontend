@@ -57,7 +57,6 @@ export function GradingDropArea(props: GradingDropAreaProps) {
   const clickInputRef = () => fileInputRef.current?.click();
 
   const onFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
     if (event.target.files !== null) {
       handleFiles(event.target.files);
     }
