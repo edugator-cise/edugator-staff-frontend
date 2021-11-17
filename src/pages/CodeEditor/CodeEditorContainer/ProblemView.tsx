@@ -8,8 +8,7 @@ interface Props {
   problemStatement: string;
 }
 
-const ProblemDescriptionPaper = styled('div')(
-  
+const ProblemDescriptionPaper = styled("div")(
   ({ theme }) => `
   padding: ${theme.spacing(4)};
   text-align: left;

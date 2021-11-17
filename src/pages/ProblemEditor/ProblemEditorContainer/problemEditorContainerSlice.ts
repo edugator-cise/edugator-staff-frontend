@@ -28,6 +28,11 @@ export interface ServerConfigFields {
   buildCommand: string;
 }
 
+export enum WarningTypes {
+  Delete = "DELETE",
+  Quit = "QUIT",
+}
+
 export interface ProblemEditorContainerState {
   /* 
     Each of these represents a stage of the problem editor Stepper component.
@@ -58,6 +63,7 @@ export interface ProblemEditorContainerState {
   showSuccessModal: boolean;
   showFailureModal: boolean;
   showWarningModal: boolean;
+  warningType: WarningTypes | undefined;
 }
 
 const initialState: ProblemEditorContainerState = {
@@ -98,6 +104,7 @@ const initialState: ProblemEditorContainerState = {
   showFailureModal: false,
   showSuccessModal: false,
   showWarningModal: false,
+  warningType: undefined,
 };
 
 export const getProblemEditorInitialState = (): ProblemEditorContainerState => {
@@ -186,11 +193,13 @@ export const problemEditorContainerSlice = createSlice({
       state.showFailureModal = false;
     },
 
-    openWarningModal: (state) => {
+    openWarningModal: (state, action: PayloadAction<WarningTypes>) => {
       state.showWarningModal = true;
+      state.warningType = action.payload;
     },
     closeWarningModal: (state) => {
       state.showWarningModal = false;
+      state.warningType = undefined;
     },
 
     resetState: (state) => {

@@ -10,8 +10,8 @@ import { RootState } from "../../app/common/store";
 import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
-import { colors } from "../../shared/constants";
-import { useHistory } from "react-router";
+import { adminPathRegex, colors } from "../../shared/constants";
+import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
 
 interface ClickedMenu {
@@ -30,7 +30,8 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = (props:SidenavProps) => {
+export const Sidenav = (props: SidenavProps) => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
@@ -52,7 +53,7 @@ export const Sidenav = (props:SidenavProps) => {
         maxWidth: 250,
         bgcolor: "#F9F9F9",
         overflowY: "auto",
-        display: props.hidden ? 'none' : 'block',
+        display: props.hidden ? "none" : "block",
       }}
       aria-labelledby="nested-exercises-list"
       subheader={
@@ -63,7 +64,7 @@ export const Sidenav = (props:SidenavProps) => {
             borderBottom: `1px solid ${colors.borderGray}`,
             textAlign: "left",
             color: "#000000",
-            bgcolor: '#F9F9F9'
+            bgcolor: "#F9F9F9",
           }}
         >
           Exercises
@@ -98,9 +99,17 @@ export const Sidenav = (props:SidenavProps) => {
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
                     onClick={() => {
-                      dispatch(requestProblem(problemItem._id));
+                      dispatch(
+                        requestProblem({
+                          problemId: problemItem._id,
+                          isAdmin: adminPathRegex.test(location.pathname),
+                        })
+                      );
+                      const baseRoute = adminPathRegex.test(location.pathname)
+                        ? Routes.AdminCode
+                        : Routes.Code;
                       history.replace({
-                        pathname: Routes.Code + `/${problemItem._id}`,
+                        pathname: baseRoute + `/${problemItem._id}`,
                       });
                     }}
                   >

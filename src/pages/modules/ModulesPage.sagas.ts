@@ -17,8 +17,8 @@ import {
   closeDialog,
 } from "./ModulesPage.slice";
 import adminAPI from "../../app/common/apiClient";
-import { IModuleBase } from "../../shared/types";
-import { IAdminModule, IRequestMessage } from "./types";
+import { IModuleBase, IRequestMessage } from "../../shared/types";
+import { IAdminModule } from "./types";
 
 function* handleGetModulesRequest(): any {
   // request

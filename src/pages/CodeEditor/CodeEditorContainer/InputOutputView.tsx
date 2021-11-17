@@ -20,8 +20,7 @@ const TabBar = styled("div")(
 `
 );
 
-const CodeHolder = styled('div')(
-  
+const CodeHolder = styled("div")(
   ({ theme }) => `
   max-height: 80%;
   background-color: white;
@@ -86,7 +85,9 @@ export const InputOutputView = () => {
             <Tab disableRipple label="Submission"></Tab>
           </Tabs>
         </TabBar>
-        <Box sx={{ height: "100%", width: '100%', pt: 2, pr: 2, pl: 2, pb: 1.5 }}>
+        <Box
+          sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
+        >
           {activeTab === 0 ? (
             <FormControl sx={{ width: "calc(100% - 20px)" }} variant="outlined">
               <OutlinedInput

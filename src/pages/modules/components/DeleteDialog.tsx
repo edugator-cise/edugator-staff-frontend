@@ -45,14 +45,24 @@ export function DeleteDialog(props: DeleteDialogProps) {
     },
   ];
 
-  const dialogTitle = `Confirm Delete: "Module ${toDelete.number} - ${toDelete.name}"`;
+  const DialogTitle = (
+    <>
+      <Typography variant="button" fontSize="subtitle2" color="error">
+        Confirm Delete
+      </Typography>
+
+      <Typography variant="h5" component="div" fontWeight="bold">
+        {`Module ${toDelete.number} - ${toDelete.name}`}
+      </Typography>
+    </>
+  );
 
   return (
     <Dialog
       open={open}
       maxWidth="md"
       handleClose={handleClose}
-      title={dialogTitle}
+      title={DialogTitle}
       footerContent={FooterButtons}
     >
       <Stack spacing={2}>

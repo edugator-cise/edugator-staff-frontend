@@ -12,7 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "../../../shared/constants";
 import { useTheme } from "@mui/material/styles";
 import theme from "../../../shared/theme";
-import useMediaQuery from "@mui/material/useMediaQuery";
+// import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
   ({ theme }) => `
@@ -34,20 +34,17 @@ const EditorContainer = styled("div")(
 `
 );
 
-const CodeHolder = styled('div')(
- 
-{
+const CodeHolder = styled("div")({
   margin: theme.spacing(1),
-  height: '100%',
+  height: "100%",
   maxHeight: 650,
-  backgroundColor: 'white',
-  borderRadius: '4px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-}
-);
+  backgroundColor: "white",
+  borderRadius: "4px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start",
+});
 
 interface CodeEditorProps {
   code: string;
@@ -57,9 +54,9 @@ interface CodeEditorProps {
 export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("lg"));
-  const md = useMediaQuery(theme.breakpoints.up("md"));
-  const xl = useMediaQuery(theme.breakpoints.up("xl"));
+  // const matches = useMediaQuery(theme.breakpoints.up("lg"));
+  // const md = useMediaQuery(theme.breakpoints.up("md"));
+  // const xl = useMediaQuery(theme.breakpoints.up("xl"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
   const isSubmissionRunning = useSelector(
@@ -68,6 +65,15 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
   const problemId = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?._id
+  );
+  const { timeLimit, memoryLimit, buildCommand } = useSelector(
+    (state: RootState) => {
+      return {
+        timeLimit: state.codeEditor.currentProblem?.timeLimit,
+        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
+        buildCommand: state.codeEditor.currentProblem?.buildCommand,
+      };
+    }
   );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -127,53 +133,55 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     if (editorRef.current) {
       editorRef.current.layout();
     }
-  })
+  });
 
-  if (matches) console.log("large")
-  if (md) console.log("medium")
-  if (xl) console.log("XL")
-  
   return (
-    <Grow in appear timeout={500} >
+    <Grow in appear timeout={500}>
       <CodeHolder>
         <ColumnContainer>
-          <Box sx={{paddingLeft: 3, fontFamily: `'Inter', sans-serif`, fontWeight: 600}}>
-          Solution
-          </Box>
-          <Box sx={{paddingRight: 3}}>
-          <a
-            href={templatePackage}
-            style={{ textDecoration: "none" }}
-            target="_blank"
-            rel="noreferrer"
+          <Box
+            sx={{
+              paddingLeft: 3,
+              fontFamily: `'Inter', sans-serif`,
+              fontWeight: 600,
+            }}
           >
-            <Tooltip title="Download Template" placement="top">
-              <IconButton>
-                <CloudDownload />
+            Solution
+          </Box>
+          <Box sx={{ paddingRight: 3 }}>
+            <a
+              href={templatePackage}
+              style={{ textDecoration: "none" }}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Tooltip title="Download Template" placement="top">
+                <IconButton>
+                  <CloudDownload />
+                </IconButton>
+              </Tooltip>
+            </a>
+            <input
+              style={{ display: "none" }}
+              ref={hiddenFileInput}
+              type="file"
+              onChange={(e) => parseFile(e)}
+            />
+            <Tooltip title="Choose File" placement="top">
+              <IconButton onClick={(e) => handleChooseFile(e)}>
+                <Add />
               </IconButton>
             </Tooltip>
-          </a>
-          <input
-            style={{ display: "none" }}
-            ref={hiddenFileInput}
-            type="file"
-            onChange={(e) => parseFile(e)}
-          />
-          <Tooltip title="Choose File" placement="top">
-            <IconButton onClick={(e) => handleChooseFile(e)}>
-              <Add />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Download Submission" placement="top">
-            <IconButton onClick={handleDownload}>
-              <GetApp />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Reset Code" placement="top">
-            <IconButton onClick={handleReset}>
-              <RotateLeft />
-            </IconButton>
-          </Tooltip>
+            <Tooltip title="Download Submission" placement="top">
+              <IconButton onClick={handleDownload}>
+                <GetApp />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Reset Code" placement="top">
+              <IconButton onClick={handleReset}>
+                <RotateLeft />
+              </IconButton>
+            </Tooltip>
           </Box>
         </ColumnContainer>
         <EditorContainer>
@@ -197,7 +205,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onMount={handleEditorMount}
           />
         </EditorContainer>
-        <ColumnContainer style={{justifyContent: 'flex-end'}}>
+        <ColumnContainer style={{ justifyContent: "flex-end" }}>
           <Button
             variant="outlined"
             color="primary"
@@ -209,6 +217,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   code: currentCode,
                   stdin,
                   problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }
@@ -226,6 +237,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   code: currentCode,
                   stdin,
                   problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }

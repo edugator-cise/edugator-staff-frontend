@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAdminModule } from "./types";
-import { IModuleBase } from "../../shared/types";
-import { IModuleState, IRequestMessage, DialogStatus } from "./types";
-import { AlertType } from "../../shared/types";
+import { IModuleBase, AlertType, IRequestMessage } from "../../shared/types";
+import { IModuleState, IAdminModule, DialogStatus } from "./types";
 import { AlertMsg } from "./config";
 
 const baseModuleState: IModuleState = {
@@ -18,7 +16,7 @@ const baseModuleState: IModuleState = {
     open: false,
     module: {
       name: "",
-      number: 0,
+      number: -1,
     },
   },
 };
@@ -265,4 +263,4 @@ export const {
   clearState,
 } = moduleSlice.actions;
 
-export default moduleSlice;
+export default moduleSlice.reducer;

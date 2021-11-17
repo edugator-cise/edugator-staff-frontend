@@ -10,6 +10,7 @@ import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 
 function App() {
@@ -30,6 +31,12 @@ function App() {
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
             </PrivateRoute>
+            <PrivateRoute exact path={Routes.Accounts}>
+              <AdminAccountsPage />
+            </PrivateRoute>
+            <Route path={Routes.AdminCodeWithProblem}>
+              <CodeEditorPage />
+            </Route>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
               {/* <TestSplitPane /> */}
