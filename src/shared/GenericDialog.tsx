@@ -11,21 +11,28 @@ import { styled } from "@mui/material/styles";
 import { ButtonProps, ButtonColor, ButtonVariant } from "./LayoutContainer";
 import { Breakpoint } from "@mui/system";
 
-const Footer = styled("div")(({ theme }) => ({
-  float: "right",
-  marginRight: theme.spacing(1),
+interface DialogButtonProps extends ButtonProps {
+  disabled?: boolean;
+}
+
+const PaddedPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(1),
 }));
+
+const Footer = styled("div")({
+  float: "right",
+});
 
 const FooterButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(1),
 }));
 
 interface GenericDialogProps {
-  title: string;
+  title: string | JSX.Element;
   open: boolean;
   fullWidth?: boolean;
   maxWidth: Breakpoint; // decent for now
-  footerContent: ButtonProps[];
+  footerContent: DialogButtonProps[];
   handleClose: () => void;
   children: JSX.Element;
 }
@@ -47,6 +54,7 @@ export default function GenericDialog(props: GenericDialogProps) {
       key={button.label}
       variant={button.variant as ButtonVariant}
       color={button.color as ButtonColor}
+      disabled={button.disabled}
     >
       {button.label}
     </FooterButton>
@@ -59,7 +67,7 @@ export default function GenericDialog(props: GenericDialogProps) {
       maxWidth={maxWidth}
       fullWidth={fullWidth}
     >
-      <Paper elevation={3}>
+      <PaddedPaper elevation={3}>
         <DialogTitle>{title}</DialogTitle>
 
         <Divider />
@@ -67,7 +75,7 @@ export default function GenericDialog(props: GenericDialogProps) {
         <DialogContent>{children}</DialogContent>
 
         <Footer>{footerButtons}</Footer>
-      </Paper>
+      </PaddedPaper>
     </Dialog>
   );
 }

@@ -265,7 +265,6 @@ function* requestFirstProblem(
   }>
 ) {
   try {
-    console.log(action.payload);
     const problemId: string | undefined = filterForProblem(
       action.payload.navigation,
       action.payload.moduleName
