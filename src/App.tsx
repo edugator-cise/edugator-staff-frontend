@@ -34,6 +34,9 @@ function App() {
             <PrivateRoute exact path={Routes.Accounts}>
               <AdminAccountsPage />
             </PrivateRoute>
+            <Route path={Routes.AdminCodeWithProblem}>
+              <CodeEditorPage />
+            </Route>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
             </Route>

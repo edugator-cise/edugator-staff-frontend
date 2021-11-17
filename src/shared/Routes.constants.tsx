@@ -7,6 +7,8 @@ export enum Routes {
   ProblemCreatorBaseWithoutId = "/admin/problem/create/", //To be used only when pushing to a route.
   CodeWithProblem = "/code/:problemId?",
   Accounts = "/admin/accounts",
+  AdminCodeWithProblem = "/admin/code/:problemId?",
+  AdminCode = "/admin/code",
   Code = "/code",
   Landing = "/",
 }

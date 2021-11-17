@@ -50,6 +50,15 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const problemId = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?._id
   );
+  const { timeLimit, memoryLimit, buildCommand } = useSelector(
+    (state: RootState) => {
+      return {
+        timeLimit: state.codeEditor.currentProblem?.timeLimit,
+        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
+        buildCommand: state.codeEditor.currentProblem?.buildCommand,
+      };
+    }
+  );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (editorRef.current) {
@@ -189,6 +198,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   code: currentCode,
                   stdin,
                   problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }
@@ -206,6 +218,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   code: currentCode,
                   stdin,
                   problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }
