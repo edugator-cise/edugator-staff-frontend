@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
 
 const Module = styled(Accordion)(({ theme }) => ({
+  position: "inherit",
   borderRadius: theme.spacing(0.5),
   "& .Mui-expanded": {
     borderBottomLeftRadius: 0,
@@ -102,46 +103,57 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   </NewProblemButton>
                 </ModuleTitle>
 
-                {module.problems.map((problem, i) => (
-                  <ModuleContent key={i}>
-                    <Title>
-                      <b>
-                        Problem {module.number}.{i + 1}:
-                      </b>
-                      {` ${problem.title}`}
-                    </Title>
+                {module.problems.length > 0 ? (
+                  <>
+                    {module.problems.map((problem, i) => (
+                      <ModuleContent key={i}>
+                        <Title>
+                          <b>
+                            Problem {module.number}.{i + 1}:
+                          </b>
+                          {` ${problem.title}`}
+                        </Title>
 
-                    <ButtonContainer>
-                      <ProblemAction
-                        startIcon={<AssignmentTurnedIn />}
-                        size="small"
-                        variant="outlined"
-                        onClick={() => {
-                          let toGrade: IProblemBase = {
-                            _id: problem._id,
-                            title: problem.title,
-                          };
-                          setProblemToGrade(toGrade);
-                        }}
-                      >
-                        Grade
-                      </ProblemAction>
-                      <ProblemAction
-                        startIcon={<Edit />}
-                        size="small"
-                        variant="outlined"
-                        onClick={() => {
-                          history.push(
-                            Routes.ProblemEditorBaseWithoutId + problem._id,
-                            { moduleName: module.name }
-                          );
-                        }}
-                      >
-                        Edit
-                      </ProblemAction>
-                    </ButtonContainer>
+                        <ButtonContainer>
+                          <ProblemAction
+                            startIcon={<AssignmentTurnedIn />}
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                              let toGrade: IProblemBase = {
+                                _id: problem._id,
+                                title: problem.title,
+                              };
+                              setProblemToGrade(toGrade);
+                            }}
+                          >
+                            Grade
+                          </ProblemAction>
+                          <ProblemAction
+                            startIcon={<Edit />}
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                              history.push(
+                                Routes.ProblemEditorBaseWithoutId + problem._id,
+                                { moduleName: module.name }
+                              );
+                            }}
+                          >
+                            Edit
+                          </ProblemAction>
+                        </ButtonContainer>
+                      </ModuleContent>
+                    ))}
+                  </>
+                ) : (
+                  <ModuleContent>
+                    <Title>
+                      There are no problems for this module. Click add problem
+                      to begin.
+                    </Title>
                   </ModuleContent>
-                ))}
+                )}
               </Module>
             );
           })}

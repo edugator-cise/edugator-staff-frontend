@@ -2,6 +2,7 @@ import Editor from "@monaco-editor/react";
 import {
   Box,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Paper,
@@ -86,6 +87,9 @@ export const CodeEditorForm = ({ formRef }: Props) => {
           <Stack overflow="auto" spacing={5}>
             <Box>
               <InputLabel>Header</InputLabel>
+              <FormHelperText>
+                This code precedes the body and is not visible to students.
+              </FormHelperText>
               <Paper
                 elevation={0}
                 variant="outlined"
@@ -101,6 +105,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
             </Box>
             <Box>
               <InputLabel>Body</InputLabel>
+              <FormHelperText>This code is visible to students.</FormHelperText>
               <Paper
                 elevation={0}
                 variant="outlined"
@@ -116,6 +121,9 @@ export const CodeEditorForm = ({ formRef }: Props) => {
             </Box>
             <Box flexGrow={1} display="flex" flexDirection="column">
               <InputLabel>Footer</InputLabel>
+              <FormHelperText>
+                This code follows the body and is not visible to students.
+              </FormHelperText>
               <Paper
                 elevation={0}
                 variant="outlined"

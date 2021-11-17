@@ -8,3 +8,5 @@ export const colors = {
   lightPink: "#fce4ec",
   redText: "#d81b60",
 };
+
+export const adminPathRegex = /\/admin\/code*/;

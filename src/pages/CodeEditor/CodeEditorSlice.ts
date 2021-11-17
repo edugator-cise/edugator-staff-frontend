@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { INavigationItem, IResultSubmission, ICodeSubmission } from "./types";
+import {
+  INavigationItem,
+  IResultSubmission,
+  ICodeSubmission,
+  ModuleProblemRequest,
+} from "./types";
 import { IProblem } from "../../shared/types";
-import { ICompilerOutput, ErrorObject, ModuleProblemRequest } from "./types";
+import { ICompilerOutput, ErrorObject } from "./types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   navStructure: INavigationItem[];
@@ -56,7 +61,24 @@ export const codeEditorSlice = createSlice({
   name: "CodeEditor",
   initialState: getInitialCodeEditorState(),
   reducers: {
-    requestProblem: (state, action: PayloadAction<string>) => {
+    requestProblem: (
+      state,
+      action: PayloadAction<{ problemId: string; isAdmin: boolean }>
+    ) => {
+      return {
+        ...state,
+        ...resetinputOutputViewState(),
+        isLoadingProblem: true,
+      };
+    },
+    requestFirstProblemFromModule: (
+      state,
+      action: PayloadAction<{
+        navigation: INavigationItem[];
+        moduleName: string | undefined;
+        isAdmin: boolean;
+      }>
+    ) => {
       return {
         ...state,
         ...resetinputOutputViewState(),
@@ -83,9 +105,6 @@ export const codeEditorSlice = createSlice({
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setCodeBody: (state, action: PayloadAction<string>) => {
-      state.codeBody = action.payload;
-    },
     setRunningSubmission: (state, action: PayloadAction<boolean>) => {
       return {
         ...state,
@@ -95,10 +114,7 @@ export const codeEditorSlice = createSlice({
     requestRunCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
-    submitCode: (
-      state,
-      action: PayloadAction<ICodeSubmission & { problemId: string }>
-    ) => {
+    submitCode: (state, action: PayloadAction<ICodeSubmission>) => {
       state.runningSubmission = true;
     },
     setStdin: (state, action: PayloadAction<string>) => {
@@ -127,11 +143,11 @@ export const codeEditorSlice = createSlice({
 
 export const {
   setCurrentProblem,
-  setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,
   requestProblem,
+  requestFirstProblemFromModule,
   submitCode,
   setStdin,
   setCompilerOutput,

@@ -10,8 +10,8 @@ import { RootState } from "../../app/common/store";
 import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
-import { colors } from "../../shared/constants";
-import { useHistory } from "react-router";
+import { adminPathRegex, colors } from "../../shared/constants";
+import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
 interface ClickedMenu {
   [key: string]: Boolean;
@@ -26,6 +26,7 @@ const CustomListItemButton = styled(ListItemButton)(
 );
 
 export const Sidenav = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
@@ -89,9 +90,17 @@ export const Sidenav = () => {
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
                     onClick={() => {
-                      dispatch(requestProblem(problemItem._id));
+                      dispatch(
+                        requestProblem({
+                          problemId: problemItem._id,
+                          isAdmin: adminPathRegex.test(location.pathname),
+                        })
+                      );
+                      const baseRoute = adminPathRegex.test(location.pathname)
+                        ? Routes.AdminCode
+                        : Routes.Code;
                       history.replace({
-                        pathname: Routes.Code + `/${problemItem._id}`,
+                        pathname: baseRoute + `/${problemItem._id}`,
                       });
                     }}
                   >
