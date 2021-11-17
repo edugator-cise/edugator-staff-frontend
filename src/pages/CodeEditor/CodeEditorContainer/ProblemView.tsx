@@ -1,21 +1,23 @@
 import React from "react";
 import { Markdown } from "../../../shared/Markdown";
-import { Paper, Typography, Grow } from "@mui/material";
+import { Typography, Grow } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
 interface Props {
   problemTitle: string;
   problemStatement: string;
 }
 
-const ProblemDescriptionPaper = styled(Paper)(
+const ProblemDescriptionPaper = styled("div")(
   ({ theme }) => `
-  margin: ${theme.spacing(2)};
-  padding: ${theme.spacing(2)};
+  padding: ${theme.spacing(4)};
   text-align: left;
-  ${theme.breakpoints.up("md")} {
-    height: 80vh;
-  }
   overflow-y: auto;
+  height: calc(100vh - 145px);
+  background-color: white;
+  margin: ${theme.spacing(1)};
+  border-radius: 4px;
+  min-width: 200px;
 `
 );
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {

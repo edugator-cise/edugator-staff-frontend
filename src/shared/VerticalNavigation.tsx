@@ -36,6 +36,7 @@ import { adminPathRegex } from "../shared/constants";
 interface Props {
   light: boolean;
   modules: string[];
+  codingPage?: boolean;
 }
 
 function VerticalNavigation(props: Props) {
@@ -152,15 +153,21 @@ function VerticalNavigation(props: Props) {
         paddingLeft: md ? 100 : 30,
         paddingRight: md ? 100 : 30,
         height: 64,
-        backgroundColor: props.light ? "transparent" : "#152c7c",
+        backgroundColor: props.codingPage
+          ? "white"
+          : props.light
+          ? "transparent"
+          : "#152c7c",
       }}
     >
-      <Link to={Routes.Landing}>
-        <Avatar
-          alt="Example Alt"
-          src={props.light ? LightModeLogo : DarkModeLogo}
-        />
-      </Link>
+      {!props.codingPage && (
+        <Link to={"/"}>
+          <Avatar
+            alt="Example Alt"
+            src={props.light ? LightModeLogo : DarkModeLogo}
+          />
+        </Link>
+      )}
       <Typography variant="h5" component="h1"></Typography>
 
       {md ? (

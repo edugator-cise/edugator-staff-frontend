@@ -39,6 +39,7 @@ function App() {
             </Route>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
+              {/* <TestSplitPane /> */}
             </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
