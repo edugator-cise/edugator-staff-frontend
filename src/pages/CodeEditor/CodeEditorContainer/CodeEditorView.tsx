@@ -25,7 +25,7 @@ const ColumnContainer = styled("div")(
 );
 
 const EditorContainer = styled("div")(
-  ({ theme }) => `
+  () => `
   border: solid 1px ${colors.borderGray};
   width: 100%;
   display: flex;
