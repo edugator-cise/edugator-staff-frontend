@@ -60,9 +60,7 @@ export const ServerConfigForm = (props: Props) => {
                 pattern: "[0-9]*",
               }}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">ms</InputAdornment>
-                ),
+                endAdornment: <InputAdornment position="end">s</InputAdornment>,
               }}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -96,6 +94,7 @@ export const ServerConfigForm = (props: Props) => {
               onBlur={handleBlur}
               value={values.buildCommand}
               error={touched.buildCommand && Boolean(errors.buildCommand)}
+              helperText="Add compiler flags here e.g. '-Wall'"
             />
           </Stack>
         </Form>

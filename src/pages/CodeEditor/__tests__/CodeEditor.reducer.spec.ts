@@ -1,7 +1,6 @@
 import store from "../../../app/common/store";
 import {
   setCurrentProblem,
-  setCodeBody,
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,
@@ -24,7 +23,6 @@ import {
   IModuleWithProblems,
 } from "../types";
 import apiClient from "../../../app/common/apiClient";
-import { AxiosResponse } from "axios";
 const sampleProblems: IProblem[] = [
   {
     _id: "string",
@@ -94,8 +92,7 @@ describe("CodeEditor Reducer", () => {
 
     store.dispatch(
       requestModulesAndProblems({
-        moduleName: mockedModulesWithProblems.name,
-        problemId: mockedModulesWithProblems.problems[0]._id,
+        isAdmin: true,
       })
     );
     const expected = {
@@ -120,9 +117,11 @@ describe("CodeEditor Reducer", () => {
     const baseState = store.getState().codeEditor;
     const codePayload = {
       code: "sample",
-      header: "sample",
-      footer: "sample",
+      problemId: "sample",
       stdin: "sample",
+      timeLimit: 5,
+      memoryLimit: 5,
+      buildCommand: "-Wall",
     };
     store.dispatch(requestRunCode(codePayload));
 
@@ -137,10 +136,11 @@ describe("CodeEditor Reducer", () => {
     const baseState = store.getState().codeEditor;
     const codePayload = {
       code: "sample",
-      header: "sample",
-      footer: "sample",
-      stdin: "sample",
       problemId: "sample",
+      stdin: "sample",
+      timeLimit: 5,
+      memoryLimit: 5,
+      buildCommand: "-Wall",
     };
     store.dispatch(submitCode(codePayload));
 
@@ -159,17 +159,6 @@ describe("CodeEditor Reducer", () => {
     const expected = {
       ...baseState,
       isLoading: true,
-    };
-    expect(store.getState().codeEditor).toEqual(expected);
-  });
-
-  it("requests module and problems", () => {
-    const baseState = store.getState().codeEditor;
-
-    store.dispatch(setCodeBody("hello world"));
-    const expected = {
-      ...baseState,
-      codeBody: "hello world",
     };
     expect(store.getState().codeEditor).toEqual(expected);
   });

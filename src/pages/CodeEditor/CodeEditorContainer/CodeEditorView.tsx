@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { Paper, Button, Grow } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setCodeBody, requestRunCode, submitCode } from "../CodeEditorSlice";
+import { requestRunCode, submitCode } from "../CodeEditorSlice";
 import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -42,21 +42,22 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const currentCode = useSelector(
-    (state: RootState) => state.codeEditor.codeBody
-  );
-  const header = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.header
-  );
-  const footer = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.code.footer
-  );
+  const [currentCode, setCurrentCode] = useState(code);
   const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
   );
   const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
   const problemId = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?._id
+  );
+  const { timeLimit, memoryLimit, buildCommand } = useSelector(
+    (state: RootState) => {
+      return {
+        timeLimit: state.codeEditor.currentProblem?.timeLimit,
+        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
+        buildCommand: state.codeEditor.currentProblem?.buildCommand,
+      };
+    }
   );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -69,7 +70,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     editorRef.current = editor;
   };
   const handleDownload = () => {
-    const blob = new Blob([header + currentCode + footer]);
+    const blob = new Blob([currentCode]);
     const blobURL = URL.createObjectURL(blob);
     const filename = "edugator-code.cpp";
 
@@ -161,7 +162,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             onClick={handleReset}
             sx={{ marginRight: 1, marginTop: 1 }}
           >
-            {matches && "Download Submission"}
+            {matches && "Reset Code"}
           </Button>
         </ColumnContainer>
         <EditorContainer>
@@ -178,9 +179,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
           <Editor
             height="40vh"
             defaultLanguage="cpp"
-            defaultValue={currentCode}
+            defaultValue={code}
             onChange={(value) => {
-              dispatch(setCodeBody(value as string));
+              setCurrentCode(value as string);
             }}
             onMount={handleEditorMount}
           />
@@ -195,9 +196,11 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 requestRunCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
+                  problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }
@@ -213,10 +216,11 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               dispatch(
                 submitCode({
                   code: currentCode,
-                  header: header as string,
-                  footer: footer as string,
                   stdin,
                   problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
                 })
               )
             }
