@@ -42,7 +42,7 @@ export const ProblemEditorPage = () => {
       label: "Back to Modules",
       onClick: () => dispatch(openWarningModal(WarningTypes.Quit)),
       variant: "contained",
-      color: "error",
+      color: "primary",
     },
     delete: {
       label: "Delete Problem",
