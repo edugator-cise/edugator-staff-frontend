@@ -10,7 +10,7 @@ import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "../../../shared/constants";
-import { useTheme } from "@mui/material/styles";
+// import { useTheme } from "@mui/material/styles";
 import theme from "../../../shared/theme";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -53,7 +53,7 @@ interface CodeEditorProps {
 
 export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  // const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.up("lg"));
   // const md = useMediaQuery(theme.breakpoints.up("md"));
   // const xl = useMediaQuery(theme.breakpoints.up("xl"));
