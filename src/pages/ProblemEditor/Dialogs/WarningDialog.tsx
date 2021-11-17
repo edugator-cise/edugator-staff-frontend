@@ -14,6 +14,7 @@ import { Routes } from "../../../shared/Routes.constants";
 import {
   closeWarningModal,
   requestDeleteProblem,
+  WarningTypes,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
 
 interface Props {}
@@ -23,8 +24,8 @@ export const WarningDialog = (props: Props) => {
   const showModal = useAppSelector(
     (state) => state.problemEditorContainer.showWarningModal
   );
-  const problemId = useAppSelector(
-    (state) => state.problemEditorContainer.problemId
+  const warningType = useAppSelector(
+    (state) => state.problemEditorContainer.warningType
   );
   const dispatch = useDispatch();
   return (
@@ -34,11 +35,12 @@ export const WarningDialog = (props: Props) => {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Are you sure you want to {problemId ? "delete" : "leave"}?
+        Are you sure you want to{" "}
+        {warningType === WarningTypes.Delete ? "delete" : "leave"}?
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {problemId
+          {warningType === WarningTypes.Delete
             ? "This action will be permanent."
             : "Leaving this page before submitting will mean losing your progress on this problem."}
         </DialogContentText>
@@ -46,7 +48,7 @@ export const WarningDialog = (props: Props) => {
       <DialogActions>
         <Button
           onClick={() => {
-            if (problemId) {
+            if (warningType === WarningTypes.Delete) {
               dispatch(requestDeleteProblem());
             }
             history.push(Routes.Modules);
