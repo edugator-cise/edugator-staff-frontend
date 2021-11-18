@@ -10,6 +10,8 @@ const CompileOutputContainer = styled("div")(
   text-align: left;
   height: 100%;
   overflow-y: auto;
+  margin-right: ${theme.spacing(1)};
+  margin-left: ${theme.spacing(1)};
 `
 );
 
@@ -27,6 +29,8 @@ const OutputPaper = styled("div")(
   border-radius: 0;
   overflow: auto;
   background-color: #f7f9fa;
+  margin-right: ${theme.spacing(1)};
+  margin-left: ${theme.spacing(1)};
 `
 );
 
@@ -44,7 +48,7 @@ export const CompileOutput = ({
     return (
       <CompileOutputContainer>
         <Typography variant="h5" color={theme.palette.success.main}>
-          Accepted
+          Compilation Successful
         </Typography>
         <Paper sx={{ backgroundColor: colors.lightGray, height: "60%", p: 2 }}>
           {compileBody}

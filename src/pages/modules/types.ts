@@ -6,9 +6,9 @@ export interface IAdminModule extends IModuleBase {
   problems: IProblemBase[];
 }
 
-export const EmptyModule: IAdminModule = {
+export const NullModule: IAdminModule = {
   name: "",
-  number: 0,
+  number: -1,
   problems: [],
 };
 
@@ -32,9 +32,4 @@ export interface IModuleState {
   isLoading: boolean;
   feedback: IFeedback;
   dialogState: IDialog;
-}
-
-/* Request Actions - Modules */
-export interface IRequestMessage {
-  message?: string;
 }

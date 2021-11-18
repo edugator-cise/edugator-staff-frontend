@@ -1,6 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Sidenav } from "./SideNav";
-import { setRunCodeError } from "./CodeEditorSlice";
+import {
+  requestFirstProblemFromModule,
+  requestProblem,
+  setRunCodeError,
+} from "./CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -9,16 +13,32 @@ import {
   Grid,
   CircularProgress,
   Box,
-  Container,
   Alert,
   Grow,
+  Avatar,
 } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
-import { colors } from "../../shared/constants";
+import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
+import {
+  Stack,
+  TreeStructure,
+  ArrowsDownUp,
+  ShareNetwork,
+  Table,
+  MathOperations,
+  House,
+  ListBullets,
+} from "phosphor-react";
+import { styled } from "@mui/material/styles";
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
+import theme from "../../shared/theme";
+import TopicLink from "./TopicLink";
+import LightModeLogo from "../../assets/LightModeLogo.svg";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -28,9 +48,28 @@ interface ProblemLocationState {
   moduleName?: string;
 }
 
+interface TopicProps {
+  name: string;
+  icon: any;
+  link: string;
+}
+
+const TopicsSidebar = styled("div")({
+  width: 80,
+  minWidth: 80,
+  height: "100vh",
+  backgroundColor: "#1F2937",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start",
+});
+
 export const CodeEditorPage = () => {
+  const [isHidden, setIsHidden] = useState(false);
   const params = useParams<ProblemEditorURL>();
-  const location = useLocation<ProblemLocationState>().state;
+  const locationState = useLocation<ProblemLocationState>();
+  const location = locationState.state;
   const dispatch = useDispatch();
   const isLoading = useSelector(
     (state: RootState) => state.codeEditor.isLoading
@@ -45,19 +84,86 @@ export const CodeEditorPage = () => {
     const sortedModules = state.codeEditor.navStructure;
     return sortedModules.map((value) => value.name);
   });
+  const navigation = useSelector(
+    (state: RootState) => state.codeEditor.navStructure
+  );
   const isLoadingProblem = useSelector(
     (state: RootState) => state.codeEditor.isLoadingProblem
   );
   useEffect(() => {
     dispatch(
       requestModulesAndProblems({
-        moduleName: location ? location["moduleName"] : undefined,
-        problemId: params ? params["problemId"] : undefined,
+        isAdmin: adminPathRegex.test(locationState.pathname),
       })
     );
-    //disabling lint for next line because it asks to make location and params a dependency when we don't have to
+    //disable exhaustive dependencies
     //eslint-disable-next-line
   }, [dispatch]);
+
+  const topics: TopicProps[] = [
+    {
+      name: "Lists, Stacks, and Queues",
+      link: "",
+      icon: <Stack weight="fill" size={28} />,
+    },
+    {
+      name: "Trees",
+      link: "",
+      icon: <TreeStructure weight="fill" size={28} />,
+    },
+    {
+      name: "Heaps",
+      link: "",
+      icon: <ArrowsDownUp weight="fill" size={28} />,
+    },
+    {
+      name: "Graphs",
+      link: "",
+      icon: <ShareNetwork weight="fill" size={28} />,
+    },
+    {
+      name: "Sets, Maps, and Hash Tables",
+      link: "",
+      icon: <Table weight="fill" size={28} />,
+    },
+    {
+      name: "Algorithms",
+      link: "",
+      icon: <MathOperations weight="fill" size={28} />,
+    },
+  ];
+  useEffect(() => {
+    if (params && params["problemId"]) {
+      dispatch(
+        requestProblem({
+          problemId: params["problemId"],
+          isAdmin: adminPathRegex.test(locationState.pathname),
+        })
+      );
+    }
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
+  }, [params]);
+
+  useEffect(() => {
+    if (
+      location &&
+      location["moduleName"] !== undefined &&
+      navigation &&
+      navigation.length > 0
+    ) {
+      dispatch(
+        requestFirstProblemFromModule({
+          navigation,
+          moduleName: location["moduleName"],
+          isAdmin: adminPathRegex.test(locationState.pathname),
+        })
+      );
+    }
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
+  }, [location]);
+
   if (isLoading) {
     return (
       <Grid
@@ -75,66 +181,103 @@ export const CodeEditorPage = () => {
   } else {
     return (
       <Box
-        minHeight="100%"
+        height="100vh"
         display="flex"
-        flexDirection="column"
-        sx={{ bgcolor: colors.lightGray }}
+        flexDirection="row"
+        sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
       >
-        <VerticalNavigation light={false} modules={modules} />
-        {errorMessage.hasError && (
-          <Grow in timeout={500}>
-            <Alert
-              severity="error"
-              sx={{
-                position: "absolute",
-                left: "0",
-                right: "0",
-                width: "50%",
-                marginTop: 5,
-                marginRight: "auto",
-                marginLeft: "auto",
-              }}
-              onClose={() => {
-                dispatch(
-                  setRunCodeError({ hasError: false, errorMessage: "" })
-                );
-              }}
-            >
-              {errorMessage.errorMessage}
-            </Alert>
-          </Grow>
-        )}
-        <Box
-          sx={{
-            height: "calc(100vh - 64px)",
-            m: 0,
-            display: "flex",
-            flex: "1 1 auto",
-          }}
-        >
-          <Box sx={{ height: "100%", width: 56, backgroundColor: "#2340a5" }} />
-          <Box sx={{ height: "100%", width: 216, backgroundColor: "white" }}>
-            <Sidenav />
-          </Box>
-          <Grid
-            container
-            spacing={2}
+        <TopicsSidebar>
+          <Box
             sx={{
-              margin: 0,
-              pr: 4,
-              height: "100%",
-              maxWidth: "100%",
-              overflowY: "auto",
+              height: 64,
+              width: "100%",
+              backgroundColor: theme.palette.primary.main,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 1,
             }}
           >
-            {isLoadingProblem ? (
-              <Grid
-                container
-                justifyContent="center"
-                direction="column"
-                alignItems="center"
-                sx={{ height: "100vh" }}
+            <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
+          </Box>
+          <TopicLink
+            name="Home"
+            active={false}
+            icon={<House weight="fill" size={28} />}
+            link=""
+          />
+          <div
+            onClick={() => {
+              setIsHidden(!isHidden);
+            }}
+          >
+            <TopicLink
+              name="View All"
+              active={true}
+              icon={<ListBullets weight="fill" size={28} />}
+              link=""
+            />
+          </div>
+          <Box
+            sx={{
+              height: "1px",
+              width: "60%",
+              margin: "10px",
+              borderBottom: "1px solid #939aa6",
+            }}
+          />
+          {topics.map((topic, i) => {
+            return (
+              <TopicLink
+                key={i}
+                name={topic.name}
+                icon={topic.icon}
+                link={topic.link}
+                active={false}
+              />
+            );
+          })}
+        </TopicsSidebar>
+        <Box sx={{ height: "100%", width: "100%" }}>
+          <VerticalNavigation
+            light={true}
+            modules={modules}
+            codingPage={true}
+          />
+          {errorMessage.hasError && (
+            <Grow in timeout={500}>
+              <Alert
+                severity="error"
+                sx={{
+                  position: "absolute",
+                  left: "0",
+                  right: "0",
+                  width: "50%",
+                  marginTop: 5,
+                  marginRight: "auto",
+                  marginLeft: "auto",
+                }}
+                onClose={() => {
+                  dispatch(
+                    setRunCodeError({ hasError: false, errorMessage: "" })
+                  );
+                }}
               >
+                {errorMessage.errorMessage}
+              </Alert>
+            </Grow>
+          )}
+          <Box
+            sx={{
+              height: "100%",
+              width: "100%",
+              m: 0,
+              display: "flex",
+            }}
+          >
+            <Sidenav hidden={isHidden} />
+            {isLoadingProblem ? (
+              <Grid container direction="column" sx={{ height: "100vh" }}>
                 <Box>
                   <CircularProgress />
                 </Box>
@@ -142,35 +285,31 @@ export const CodeEditorPage = () => {
             ) : currentProblem === undefined ? (
               <EmptyState />
             ) : (
-              <>
-                <Grid item xs={12} lg={4}>
+              <Allotment snap={true}>
+                <Allotment.Pane minSize={310}>
                   <ProblemView
                     problemTitle={currentProblem.title}
                     problemStatement={currentProblem.statement}
                   />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  lg={8}
-                  container
-                  direction="column"
-                  sx={{ pt: 4 }}
-                >
-                  <Container
-                    disableGutters
-                    sx={{ flexDirection: "column", pt: 2 }}
+                </Allotment.Pane>
+                <Allotment.Pane minSize={350}>
+                  <div
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      overflow: "scroll",
+                    }}
                   >
                     <CodeEditorView
                       code={currentProblem.code.body}
                       templatePackage={currentProblem.templatePackage}
                     />
                     <InputOutputView />
-                  </Container>
-                </Grid>
-              </>
+                  </div>
+                </Allotment.Pane>
+              </Allotment>
             )}
-          </Grid>
+          </Box>
         </Box>
       </Box>
     );

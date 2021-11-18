@@ -11,6 +11,7 @@ import {
   updateModuleId,
   updateModuleName,
   updateProblemId,
+  WarningTypes,
 } from "./ProblemEditorContainer/problemEditorContainerSlice";
 
 interface ProblemEditorURL {
@@ -37,22 +38,18 @@ export const ProblemEditorPage = () => {
 
   const dispatch = useDispatch();
   const actions = {
-    create: [
-      {
-        label: "Back to Modules",
-        onClick: () => dispatch(openWarningModal()),
-        variant: "contained",
-        color: "error",
-      },
-    ],
-    edit: [
-      {
-        label: "Delete Problem",
-        onClick: () => dispatch(openWarningModal()),
-        variant: "contained",
-        color: "error",
-      },
-    ],
+    back: {
+      label: "Back to Modules",
+      onClick: () => dispatch(openWarningModal(WarningTypes.Quit)),
+      variant: "contained",
+      color: "primary",
+    },
+    delete: {
+      label: "Delete Problem",
+      onClick: () => dispatch(openWarningModal(WarningTypes.Delete)),
+      variant: "contained",
+      color: "error",
+    },
   };
 
   useEffect(() => {
@@ -78,7 +75,9 @@ export const ProblemEditorPage = () => {
       pageTitle={`${moduleName ? moduleName + " - " : ""}${
         problemTitle || "New Problem"
       }`}
-      actionButtons={problemId ? actions.edit : actions.create}
+      actionButtons={
+        problemId ? [actions.back, actions.delete] : [actions.back]
+      }
     >
       <ProblemEditorContainer />
     </LayoutContainer>

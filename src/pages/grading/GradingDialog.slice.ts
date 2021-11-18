@@ -75,3 +75,5 @@ export const {
   /* Other Reducers */
   resetGradingState,
 } = gradingSlice.actions;
+
+export default gradingSlice.reducer;

@@ -10,11 +10,16 @@ import { RootState } from "../../app/common/store";
 import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { INavigationItem, IProblemItem } from "./types";
-import { colors } from "../../shared/constants";
-import { useHistory } from "react-router";
+import { adminPathRegex, colors } from "../../shared/constants";
+import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
+
 interface ClickedMenu {
   [key: string]: Boolean;
+}
+
+interface SidenavProps {
+  hidden: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -25,7 +30,8 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = () => {
+export const Sidenav = (props: SidenavProps) => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
@@ -41,10 +47,13 @@ export const Sidenav = () => {
     <List
       component="nav"
       sx={{
-        height: "calc(100vh - 80px)",
-        width: "100%",
-        bgcolor: "white",
+        height: "100%",
+        width: 250,
+        minWidth: 250,
+        maxWidth: 250,
+        bgcolor: "#F9F9F9",
         overflowY: "auto",
+        display: props.hidden ? "none" : "block",
       }}
       aria-labelledby="nested-exercises-list"
       subheader={
@@ -55,6 +64,7 @@ export const Sidenav = () => {
             borderBottom: `1px solid ${colors.borderGray}`,
             textAlign: "left",
             color: "#000000",
+            bgcolor: "#F9F9F9",
           }}
         >
           Exercises
@@ -82,16 +92,24 @@ export const Sidenav = () => {
             )}
           </CustomListItemButton>
           <Collapse in={!!menu[value.name]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding sx={{ bgcolor: "white" }}>
+            <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
               {value.problems.map(
                 (problemItem: IProblemItem, index: number) => (
                   <CustomListItemButton
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
                     onClick={() => {
-                      dispatch(requestProblem(problemItem._id));
+                      dispatch(
+                        requestProblem({
+                          problemId: problemItem._id,
+                          isAdmin: adminPathRegex.test(location.pathname),
+                        })
+                      );
+                      const baseRoute = adminPathRegex.test(location.pathname)
+                        ? Routes.AdminCode
+                        : Routes.Code;
                       history.replace({
-                        pathname: Routes.Code + `/${problemItem._id}`,
+                        pathname: baseRoute + `/${problemItem._id}`,
                       });
                     }}
                   >
