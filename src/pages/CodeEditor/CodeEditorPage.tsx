@@ -5,6 +5,7 @@ import {
   requestProblem,
   setRunCodeError,
 } from "./CodeEditorSlice";
+import { Link } from "react-router-dom";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -198,7 +199,9 @@ export const CodeEditorPage = () => {
               marginBottom: 1,
             }}
           >
-            <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
+            <Link to={"/"}>
+              <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
+            </Link>
           </Box>
           <TopicLink
             name="Home"
