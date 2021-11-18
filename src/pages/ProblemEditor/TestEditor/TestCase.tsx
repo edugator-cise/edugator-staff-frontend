@@ -43,9 +43,9 @@ export const TestCase = (props: TestCaseProps) => {
       <CardContent>
         <Stack direction="column" spacing={2}>
           <Typography sx={{ fontSize: 14 }}>
-            Test Case {displayIndex}{" "}
+            Test Case {displayIndex}
             {index === 0 &&
-              "- one test case is required with visible input and output"}
+              " (at least one test case is required with visible input and output)"}
           </Typography>
           <Field
             title="Input"
