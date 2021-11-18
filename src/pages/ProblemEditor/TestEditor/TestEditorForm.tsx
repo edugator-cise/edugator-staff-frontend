@@ -21,6 +21,10 @@ export const TestEditor = (props: Props) => {
   const testCases = useAppSelector(
     (state) => state.problemEditorContainer.testCases
   );
+  if (testCases.length === 0) {
+    dispatch(updateTestCases([generateDefaultTestCase()]));
+  }
+
   const problemId = useAppSelector(
     (state) => state.problemEditorContainer.problemId
   );
