@@ -8,12 +8,17 @@ const ConfirmDelete = (props: {
   title: string;
   body: string;
   onConfirm: any;
+  disabled?: boolean;
 }) => {
-  const { title, body, onConfirm } = props;
+  const { title, body, onConfirm, disabled } = props;
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <IconButton aria-label="delete" onClick={() => setOpen(true)}>
+      <IconButton
+        aria-label="delete"
+        onClick={() => setOpen(true)}
+        disabled={disabled}
+      >
         <DeleteIcon />
       </IconButton>
       <ConfirmDialog
