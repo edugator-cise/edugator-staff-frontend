@@ -84,7 +84,8 @@ export const TestEditor = (props: Props) => {
                   spacing={4}
                   overflow="auto"
                   style={{
-                    maxHeight: "500px",
+                    minHeight: "500px",
+                    height: "100%",
                   }}
                 >
                   <Stack direction="column" spacing={4}>
