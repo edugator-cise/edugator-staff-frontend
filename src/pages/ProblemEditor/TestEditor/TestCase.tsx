@@ -43,7 +43,9 @@ export const TestCase = (props: TestCaseProps) => {
       <CardContent>
         <Stack direction="column" spacing={2}>
           <Typography sx={{ fontSize: 14 }}>
-            Test Case {displayIndex}
+            Test Case {displayIndex}{" "}
+            {index === 0 &&
+              "- one test case is required with visible input and output"}
           </Typography>
           <Field
             title="Input"
@@ -101,11 +103,13 @@ export const TestCase = (props: TestCaseProps) => {
                   value={TestCaseVisibility.I_VISIBLE_O_HIDDEN}
                   control={<Radio />}
                   label="Input visible, output hidden"
+                  disabled={props.index === 0}
                 />
                 <FormControlLabel
                   value={TestCaseVisibility.IO_HIDDEN}
                   control={<Radio />}
                   label="Input and output hidden"
+                  disabled={props.index === 0}
                 />
               </RadioGroup>
             </FormControl>
@@ -129,6 +133,7 @@ export const TestCase = (props: TestCaseProps) => {
           title={"Delete test case?"}
           body={`Are you sure you want to delete test case ${displayIndex}?`}
           onConfirm={deleteFn}
+          disabled={props.index === 0}
         />
       </CardActions>
     </Card>
