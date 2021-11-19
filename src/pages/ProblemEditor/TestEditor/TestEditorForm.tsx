@@ -21,6 +21,10 @@ export const TestEditor = (props: Props) => {
   const testCases = useAppSelector(
     (state) => state.problemEditorContainer.testCases
   );
+  if (testCases.length === 0) {
+    dispatch(updateTestCases([generateDefaultTestCase()]));
+  }
+
   const problemId = useAppSelector(
     (state) => state.problemEditorContainer.problemId
   );
@@ -80,7 +84,8 @@ export const TestEditor = (props: Props) => {
                   spacing={4}
                   overflow="auto"
                   style={{
-                    maxHeight: "500px",
+                    minHeight: "500px",
+                    height: "100%",
                   }}
                 >
                   <Stack direction="column" spacing={4}>
