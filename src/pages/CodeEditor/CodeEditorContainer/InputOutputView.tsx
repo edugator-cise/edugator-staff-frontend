@@ -22,15 +22,13 @@ const TabBar = styled("div")(
 
 const CodeHolder = styled("div")(
   ({ theme }) => `
-  max-height: 80%;
   background-color: white;
   margin: ${theme.spacing(1)};
-  border-radius: 4px;
+  border-radius: ${theme.spacing(0.5)};
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 60px;
+  height: calc(45% - 75px);
 `
 );
 
@@ -86,7 +84,13 @@ export const InputOutputView = () => {
           </Tabs>
         </TabBar>
         <Box
-          sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
+          sx={{ 
+            height: "100%", 
+            width: "100%", 
+            pt: 2, 
+            pr: 2, 
+            pl: 2, 
+            pb: 1.5 }}
         >
           {activeTab === 0 ? (
             <FormControl sx={{ width: "calc(100% - 20px)" }} variant="outlined">

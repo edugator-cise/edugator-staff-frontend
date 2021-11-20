@@ -50,7 +50,7 @@ export const CompileOutput = ({
         <Typography variant="h5" color={theme.palette.success.main}>
           Compilation Successful
         </Typography>
-        <Paper sx={{ backgroundColor: colors.lightGray, height: "60%", p: 2 }}>
+        <Paper sx={{ backgroundColor: colors.lightGray, height: "60%", overflowY: "auto", p: 2 }}>
           {compileBody}
         </Paper>
       </CompileOutputContainer>
@@ -67,6 +67,8 @@ export const CompileOutput = ({
             color: colors.redText,
             p: 2,
             whiteSpace: "pre-wrap",
+            height: "60%",
+            overflowY: "auto"
           }}
         >
           {compileBody}

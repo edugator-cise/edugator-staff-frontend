@@ -66,6 +66,24 @@ const TopicsSidebar = styled("div")({
   justifyContent: "flex-start",
 });
 
+const VerticalContent = styled("div")({
+  alignItems: "center",
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+  width: "100%",
+  justifyContent: "center",
+  overFlow: "scroll"
+})
+
+// align-items: center;
+// background: rgb(30, 30, 30);
+// color: rgb(255, 255, 255);
+// display: flex;
+// flex-direction: column;
+// height: 100%;
+// justify-content: center;
+
 export const CodeEditorPage = () => {
   const [isHidden, setIsHidden] = useState(false);
   const params = useParams<ProblemEditorURL>();
@@ -289,7 +307,7 @@ export const CodeEditorPage = () => {
               <EmptyState />
             ) : (
               <Allotment snap={true}>
-                <Allotment.Pane minSize={310}>
+                <Allotment.Pane minSize={310} >
                   <ProblemView
                     problemTitle={currentProblem.title}
                     problemStatement={currentProblem.statement}
@@ -298,15 +316,28 @@ export const CodeEditorPage = () => {
                 <Allotment.Pane minSize={350}>
                   <div
                     style={{
+                      // display: "flex",
+                      // flexDirection: "column",
                       height: "100%",
                       width: "100%",
                       overflow: "scroll",
                     }}
                   >
-                    <CodeEditorView
-                      code={currentProblem.code.body}
-                      templatePackage={currentProblem.templatePackage}
-                    />
+                  {/* <Allotment vertical>
+                    <Allotment.Pane minSize={200}>
+                      <CodeEditorView
+                        code={currentProblem.code.body}
+                        templatePackage={currentProblem.templatePackage}
+                      />
+                    </Allotment.Pane>
+                    <Allotment.Pane minSize={100}>
+                      <InputOutputView />
+                    </Allotment.Pane>
+                  </Allotment> */}
+                   <CodeEditorView
+                        code={currentProblem.code.body}
+                        templatePackage={currentProblem.templatePackage}
+                      />
                     <InputOutputView />
                   </div>
                 </Allotment.Pane>
