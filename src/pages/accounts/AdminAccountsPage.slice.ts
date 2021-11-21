@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AlertType, IRequestMessage } from "../../shared/types";
+import { AlertType, IFeedback, IRequestMessage } from "../../shared/types";
 import { IAccountManagerState, IAccount } from "./types";
 
 const baseManagerState: IAccountManagerState = {
@@ -31,7 +31,7 @@ export const managerSlice = createSlice({
       state.feedback = {
         display: true,
         type: AlertType.error,
-        title: "Getting accounts failed (expected)",
+        title: "Getting accounts failed",
         message: action.payload.message,
       };
       state.loading = false;
@@ -46,11 +46,14 @@ export const managerSlice = createSlice({
     setCurrentAccount: (state, action: PayloadAction<IAccount>) => {
       state.currentAccount = action.payload;
     },
-
-    /** Other */
+    /** Feddback Recucers*/
+    setFeedback: (state, action: PayloadAction<IFeedback>) => {
+      state.feedback = action.payload;
+    },
     closeAlert: (state) => {
       state.feedback.display = false;
     },
+    /** Other Reducers*/
   },
 });
 

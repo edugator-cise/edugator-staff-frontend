@@ -6,7 +6,7 @@ export enum rolesEnum {
 }
 
 export interface IAccount {
-  name?: string;
+  name: string;
   role: rolesEnum;
   username: string;
   // future values below
@@ -25,4 +25,11 @@ export interface IAccountManagerState {
   accounts: IAccount[];
   currentAccount?: IAccount;
   selectedAccount?: IAccount;
+}
+
+// interfaces for API calls
+
+export interface IAccountsGET {
+  users: IAccount[];
+  currentUser: string;
 }

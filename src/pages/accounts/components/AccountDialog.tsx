@@ -58,7 +58,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
         </Typography>
 
         <Typography variant="h5" component="div" fontWeight="bold">
-          {selectedAccount?.name ?? "undefined"}{" "}
+          {selectedAccount?.name}{" "}
           <Chip
             label={selectedAccount?.role}
             color={

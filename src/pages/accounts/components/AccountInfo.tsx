@@ -16,7 +16,7 @@ const ContactItem = styled(Typography)(({ theme }) => ({
   paddingLeft: theme.spacing(2),
   marginRight: theme.spacing(2),
   marginBottom: theme.spacing(1),
-  borderRadius: "4px",
+  borderRadius: theme.spacing(0.5),
   border: `1px solid ${theme.palette.grey[500]}`,
 }));
 
@@ -56,7 +56,7 @@ const ContactInfo: React.FC<ContactItemProps> = ({ icon, children }) => {
       <Icon sx={{ mr: 2 }}>{icon}</Icon>
 
       <Typography fontSize="default" component="span">
-        {children ?? "undefined"}
+        {children ?? ""}
       </Typography>
 
       <IconButton sx={{ ml: 2 }} onClick={onClick} component="span">

@@ -9,7 +9,7 @@ export function AccountEditForm() {
   const [edited, setEdited] = React.useState<IAccount>({
     role: selectedAccount?.role ?? rolesEnum.TA,
     username: selectedAccount?.username ?? "",
-    name: selectedAccount?.name,
+    name: selectedAccount?.name ?? "",
     phone: selectedAccount?.phone,
   });
 

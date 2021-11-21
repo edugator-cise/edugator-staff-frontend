@@ -4,18 +4,23 @@ import {
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
+  setCurrentAccount,
 } from "./AdminAccountsPage.slice";
 import adminAPI from "../../app/common/apiClient";
-import { IAccount } from "./types";
+import { IAccountsGET, IAccount } from "./types";
 
 function* handleGetAccountsRequest(): any {
-  // request to be functional next PR
-  let accountsRequest = () => adminAPI.get<IAccount[]>("/v1/user/accounts");
+  let accountsRequest = () => adminAPI.get("/v1/user/getUsers");
 
   try {
-    const response: AxiosResponse<IAccount[]> = yield call(accountsRequest);
+    const { data }: AxiosResponse<IAccountsGET> = yield call(accountsRequest);
 
-    yield put(requestAccountsEnd(response.data));
+    const { users, currentUser } = data;
+
+    const currentAccount = users.find((acc) => acc.username === currentUser);
+
+    yield put(requestAccountsEnd(users));
+    yield put(setCurrentAccount(currentAccount as IAccount));
   } catch (e) {
     yield put(requestAccountsFail(e as Error));
   }
