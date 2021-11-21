@@ -9,9 +9,9 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { AccountEditForm, AccountInfo, AdminActions } from ".";
-import Dialog from "../../../shared/GenericDialog";
+import { useAppSelector } from "../../../../app/common/hooks";
+import { AccountEditForm, AccountInfo, AdminActions } from "../";
+import Dialog from "../../../../shared/GenericDialog";
 
 const TitleButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(0.5),

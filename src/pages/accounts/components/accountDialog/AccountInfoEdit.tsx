@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Typography, TextField, MenuItem } from "@mui/material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { IAccount, rolesEnum } from "../types";
+import { useAppSelector } from "../../../../app/common/hooks";
+import { IAccount, rolesEnum } from "../../types";
 
 export function AccountEditForm() {
   const { selectedAccount } = useAppSelector((state) => state.accountManager);

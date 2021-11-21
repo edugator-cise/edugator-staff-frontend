@@ -7,9 +7,9 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppSelector, useAppDispatch } from "../../../app/common/hooks";
-import { AlertType, IFeedback } from "../../../shared/types";
-import { setAlert } from "../AdminAccountsPage.slice";
+import { useAppSelector, useAppDispatch } from "../../../../app/common/hooks";
+import { AlertType, IFeedback } from "../../../../shared/types";
+import { setAlert } from "../../AdminAccountsPage.slice";
 
 const ContactItem = styled(Typography)(({ theme }) => ({
   display: "flex",

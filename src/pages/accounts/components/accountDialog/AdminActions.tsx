@@ -9,8 +9,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { IAccount, rolesEnum } from "../types";
+import { useAppSelector } from "../../../../app/common/hooks";
+import { IAccount, rolesEnum } from "../../types";
 
 enum ActionsEnum {
   noAction = "noAction",
