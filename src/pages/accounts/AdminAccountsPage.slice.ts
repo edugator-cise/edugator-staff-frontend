@@ -71,7 +71,7 @@ export const managerSlice = createSlice({
       state.currentAccount = action.payload;
     },
     /** Feddback Recucers*/
-    setFeedback: (state, action: PayloadAction<IFeedback>) => {
+    setAlert: (state, action: PayloadAction<IFeedback>) => {
       state.feedback = action.payload;
     },
     closeAlert: (state) => {
@@ -95,6 +95,7 @@ export const {
   unsetSelectedAccount,
   setCurrentAccount,
   /** Ohter */
+  setAlert,
   closeAlert,
 } = managerSlice.actions;
 

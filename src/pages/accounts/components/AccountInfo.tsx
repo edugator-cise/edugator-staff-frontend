@@ -7,7 +7,9 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector, useAppDispatch } from "../../../app/common/hooks";
+import { AlertType, IFeedback } from "../../../shared/types";
+import { setAlert } from "../AdminAccountsPage.slice";
 
 const ContactItem = styled(Typography)(({ theme }) => ({
   display: "flex",
@@ -46,9 +48,24 @@ interface ContactItemProps extends ButtonBaseProps<"div"> {
 }
 
 const ContactInfo: React.FC<ContactItemProps> = ({ icon, children }) => {
-  const onClick = (e: any) => {
+  const dispatch = useAppDispatch();
+
+  const onCopy = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
+
+    // to copy information to clipboard
+    navigator.clipboard.writeText(children as string);
+
+    const capitalized_content = icon.charAt(0).toUpperCase() + icon.slice(1);
+
+    const copyFeedback: IFeedback = {
+      display: true,
+      type: AlertType.success,
+      message: `${capitalized_content} copied to the clipboard!`,
+    };
+
+    dispatch(setAlert(copyFeedback));
   };
 
   return (
@@ -56,10 +73,10 @@ const ContactInfo: React.FC<ContactItemProps> = ({ icon, children }) => {
       <Icon sx={{ mr: 2 }}>{icon}</Icon>
 
       <Typography fontSize="default" component="span">
-        {children ?? ""}
+        {children}
       </Typography>
 
-      <IconButton sx={{ ml: 2 }} onClick={onClick} component="span">
+      <IconButton sx={{ ml: 2 }} onClick={onCopy} component="span">
         <Icon>content_copy</Icon>
       </IconButton>
     </ContactItem>
