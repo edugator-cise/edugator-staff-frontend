@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertType, IFeedback, IRequestMessage } from "../../shared/types";
-import { IAccountManagerState, IAccount } from "./types";
+import { IAccountManagerState, IAccount, INewAccount } from "./types";
 
 const baseManagerState: IAccountManagerState = {
   accounts: [],
@@ -36,6 +36,30 @@ export const managerSlice = createSlice({
       };
       state.loading = false;
     },
+
+    /* POST Request Admin Accounts Manager */
+    requestNewAccount: (state, action: PayloadAction<INewAccount>) => {
+      state.loading = true;
+    },
+    requestNewAccountEnd: (state, action: PayloadAction<IAccount>) => {
+      state.accounts = [...state.accounts, action.payload];
+      state.feedback = {
+        display: true,
+        type: AlertType.success,
+        message: "Added new account successfully",
+      };
+      state.loading = false;
+    },
+    requestNewAccountFail: (state, action: PayloadAction<IRequestMessage>) => {
+      state.feedback = {
+        display: true,
+        type: AlertType.error,
+        title: "Adding new account failed",
+        message: action.payload.message,
+      };
+      state.loading = false;
+    },
+
     /** Admin Accounts Dialog Reducers */
     setSelectedAccount: (state, action: PayloadAction<IAccount>) => {
       state.selectedAccount = action.payload;
@@ -62,6 +86,10 @@ export const {
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
+  /* POST Request Admin Accounts Manager */
+  requestNewAccount,
+  requestNewAccountEnd,
+  requestNewAccountFail,
   /** Admin Accounts Dialog Reducers */
   setSelectedAccount,
   unsetSelectedAccount,

@@ -12,6 +12,7 @@ export interface IAccount {
   // future values below
   // unused, but there for example on how to add/use aditional features
   phone?: string;
+  _id?: string;
 }
 
 // only used when creating a new account
@@ -32,4 +33,8 @@ export interface IAccountManagerState {
 export interface IAccountsGET {
   users: IAccount[];
   currentUser: string;
+}
+
+export interface IAccountPOST {
+  id: string;
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
+import { requestNewAccount } from "../AdminAccountsPage.slice";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
@@ -43,7 +44,9 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
         {newAccount.name ? newAccount.name : "No name"}{" "}
         <Chip
           label={newAccount.role}
-          color={newAccount.role === "Professor" ? "primary" : undefined}
+          color={
+            newAccount.role === rolesEnum.Professor ? "primary" : undefined
+          }
         />
       </Typography>
     </>
@@ -65,8 +68,8 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
     }
 
     if (!nameError && !passwordError && validEmail) {
-      console.log("everything seems fine for the new account");
-      //dispatch(requestGrading(payload));
+      dispatch(requestNewAccount(newAccount));
+      handleDialogClose();
     }
   };
 
@@ -120,9 +123,7 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
             }}
             error={nameError}
             helperText={
-              !nameError
-                ? "Firstname and lastname"
-                : "Please enter a name"
+              !nameError ? "Firstname and lastname" : "Please enter a name"
             }
           />
         </Grid>
