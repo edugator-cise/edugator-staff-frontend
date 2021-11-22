@@ -36,7 +36,6 @@ const EditorContainer = styled("div")(
 
 const CodeHolder = styled("div")({
   margin: theme.spacing(1),
-  height: "100%",
   maxHeight: 650,
   backgroundColor: "white",
   borderRadius: "4px",
