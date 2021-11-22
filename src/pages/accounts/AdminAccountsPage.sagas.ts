@@ -5,10 +5,14 @@ import {
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
+  requestModifyAccount,
+  requestModifyAccountEnd,
+  requestModifyAccountFail,
   requestNewAccount,
   requestNewAccountEnd,
   requestNewAccountFail,
   setCurrentAccount,
+  setSelectedAccount,
 } from "./AdminAccountsPage.slice";
 import adminAPI from "../../app/common/apiClient";
 import { INewAccount, IAccount, IAccountsGET, IAccountPOST } from "./types";
@@ -50,9 +54,33 @@ function* handleNewAccountRequest(action: PayloadAction<INewAccount>): any {
   }
 }
 
+function* handleModifyAccountRequest(action: PayloadAction<IAccount>): any {
+  /**
+   * Backend validation doesnt like
+   * me sending _id property back to them
+   */
+  const body: IAccount = {
+    name: action.payload.name,
+    role: action.payload.role,
+    username: action.payload.username,
+  };
+
+  let updateRequest = () => adminAPI.put("/v1/user/updateUser", body);
+
+  try {
+    const { data }: AxiosResponse<IAccount> = yield call(updateRequest);
+
+    yield put(requestModifyAccountEnd(data));
+    yield put(setSelectedAccount(data));
+  } catch (e) {
+    yield put(requestModifyAccountFail(e as Error));
+  }
+}
+
 function* accountManagerSaga() {
   yield takeEvery(requestAccounts.type, handleGetAccountsRequest);
   yield takeEvery(requestNewAccount.type, handleNewAccountRequest);
+  yield takeEvery(requestModifyAccount.type, handleModifyAccountRequest);
 }
 
 export default accountManagerSaga;

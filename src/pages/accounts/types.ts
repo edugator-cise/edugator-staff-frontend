@@ -29,7 +29,6 @@ export interface IAccountManagerState {
 }
 
 // interfaces for API calls
-
 export interface IAccountsGET {
   users: IAccount[];
   currentUser: string;

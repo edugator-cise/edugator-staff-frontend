@@ -9,8 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../app/common/hooks";
 import { IAccount, rolesEnum } from "../../types";
+import { requestModifyAccount } from "../../AdminAccountsPage.slice";
 
 enum ActionsEnum {
   noAction = "noAction",
@@ -25,7 +26,7 @@ export function AdminActions() {
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);
 
-  const actionSummary = adminActionInfo(selectedAction, selectedAccount);
+  const actionSummary = AdminActionInfo(selectedAction, selectedAccount);
 
   return (
     <Stack spacing={2}>
@@ -70,6 +71,10 @@ export function AdminActions() {
             <Button
               disabled={!actionSummary.validOperation}
               variant="contained"
+              onClick={() => {
+                actionSummary.onClick();
+                setSelectedAction(ActionsEnum.noAction);
+              }}
             >
               Execute
             </Button>
@@ -95,23 +100,35 @@ interface IActionInfo {
   reason?: string;
 }
 
-const adminActionInfo = (
+const AdminActionInfo = (
   action: ActionsEnum,
   targetAccount?: IAccount
 ): IActionInfo => {
+  const dispatch = useAppDispatch();
+
   const { valid, reason } = isValidOperation(action, targetAccount);
 
   if (action === ActionsEnum.createTA) {
+    const changed_account: IAccount = {
+      ...(targetAccount as IAccount),
+      role: rolesEnum.TA,
+    };
+
     return {
       description: "This will change this account to be a TA account",
-      onClick: () => {},
+      onClick: () => dispatch(requestModifyAccount(changed_account)),
       validOperation: valid,
       reason: reason,
     };
   } else if (action === ActionsEnum.createProfessor) {
+    const changed_account: IAccount = {
+      ...(targetAccount as IAccount),
+      role: rolesEnum.Professor,
+    };
+
     return {
       description: "This will change this account to be a Professor account",
-      onClick: () => {},
+      onClick: () => dispatch(requestModifyAccount(changed_account)),
       validOperation: valid,
       reason: reason,
     };

@@ -60,6 +60,37 @@ export const managerSlice = createSlice({
       state.loading = false;
     },
 
+    /* PUT Request Admin Accounts Manager */
+    requestModifyAccount: (state, action: PayloadAction<IAccount>) => {
+      state.loading = true;
+    },
+    requestModifyAccountEnd: (state, action: PayloadAction<IAccount>) => {
+      const updated = action.payload;
+
+      const index = state.accounts.findIndex((acc) => acc._id === updated._id);
+
+      state.accounts = state.accounts.fill(updated, index, index + 1);
+
+      state.feedback = {
+        display: true,
+        type: AlertType.success,
+        message: "Account updated successfully",
+      };
+      state.loading = false;
+    },
+    requestModifyAccountFail: (
+      state,
+      action: PayloadAction<IRequestMessage>
+    ) => {
+      state.feedback = {
+        display: true,
+        type: AlertType.error,
+        title: "Updating account failed",
+        message: action.payload.message,
+      };
+      state.loading = false;
+    },
+
     /** Admin Accounts Dialog Reducers */
     setSelectedAccount: (state, action: PayloadAction<IAccount>) => {
       state.selectedAccount = action.payload;
@@ -90,6 +121,10 @@ export const {
   requestNewAccount,
   requestNewAccountEnd,
   requestNewAccountFail,
+  /* PUT Request Admin Accounts Manager */
+  requestModifyAccount,
+  requestModifyAccountEnd,
+  requestModifyAccountFail,
   /** Admin Accounts Dialog Reducers */
   setSelectedAccount,
   unsetSelectedAccount,
