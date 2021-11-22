@@ -37,3 +37,8 @@ export interface IAccountsGET {
 export interface IAccountPOST {
   id: string;
 }
+
+export interface IAccountDELETE {
+  id: string;
+  message: string;
+}

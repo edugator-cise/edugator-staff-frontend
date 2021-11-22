@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertType, IFeedback, IRequestMessage } from "../../shared/types";
-import { IAccountManagerState, IAccount, INewAccount } from "./types";
+import {
+  IAccountManagerState,
+  IAccount,
+  INewAccount,
+  IAccountDELETE,
+} from "./types";
 
 const baseManagerState: IAccountManagerState = {
   accounts: [],
@@ -66,7 +71,6 @@ export const managerSlice = createSlice({
     },
     requestModifyAccountEnd: (state, action: PayloadAction<IAccount>) => {
       const updated = action.payload;
-
       const index = state.accounts.findIndex((acc) => acc._id === updated._id);
 
       state.accounts = state.accounts.fill(updated, index, index + 1);
@@ -79,6 +83,34 @@ export const managerSlice = createSlice({
       state.loading = false;
     },
     requestModifyAccountFail: (
+      state,
+      action: PayloadAction<IRequestMessage>
+    ) => {
+      state.feedback = {
+        display: true,
+        type: AlertType.error,
+        title: "Updating account failed",
+        message: action.payload.message,
+      };
+      state.loading = false;
+    },
+
+    /* DELETE Request Admin Accounts Manager */
+    requestDeleteAccount: (state, action: PayloadAction<IAccount>) => {
+      state.loading = true;
+    },
+    requestDeleteAccountEnd: (state, action: PayloadAction<IAccountDELETE>) => {
+      const removed = action.payload.id;
+
+      state.accounts = state.accounts.filter((acc) => acc._id !== removed);
+      state.feedback = {
+        display: true,
+        type: AlertType.success,
+        message: action.payload.message,
+      };
+      state.loading = false;
+    },
+    requestDeleteAccountFail: (
       state,
       action: PayloadAction<IRequestMessage>
     ) => {
@@ -125,6 +157,10 @@ export const {
   requestModifyAccount,
   requestModifyAccountEnd,
   requestModifyAccountFail,
+  /* DELETE Request Admin Accounts Manager */
+  requestDeleteAccount,
+  requestDeleteAccountEnd,
+  requestDeleteAccountFail,
   /** Admin Accounts Dialog Reducers */
   setSelectedAccount,
   unsetSelectedAccount,

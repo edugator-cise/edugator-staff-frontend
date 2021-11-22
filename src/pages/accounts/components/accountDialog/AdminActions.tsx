@@ -11,7 +11,10 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../../app/common/hooks";
 import { IAccount, rolesEnum } from "../../types";
-import { requestModifyAccount } from "../../AdminAccountsPage.slice";
+import {
+  requestDeleteAccount,
+  requestModifyAccount,
+} from "../../AdminAccountsPage.slice";
 
 enum ActionsEnum {
   noAction = "noAction",
@@ -106,7 +109,7 @@ const AdminActionInfo = (
 ): IActionInfo => {
   const dispatch = useAppDispatch();
 
-  const { valid, reason } = isValidOperation(action, targetAccount);
+  const { valid, reason } = IsValidOperation(action, targetAccount);
 
   if (action === ActionsEnum.createTA) {
     const changed_account: IAccount = {
@@ -142,7 +145,7 @@ const AdminActionInfo = (
           This will delete this account from the database.
         </>
       ),
-      onClick: () => {},
+      onClick: () => dispatch(requestDeleteAccount(targetAccount as IAccount)),
       validOperation: valid,
       reason: reason,
     };
@@ -156,13 +159,15 @@ const AdminActionInfo = (
   }
 };
 
-const isValidOperation = (
+const IsValidOperation = (
   action: ActionsEnum,
   targetAccount?: IAccount
 ): {
   valid: boolean;
   reason?: string;
 } => {
+  const { currentAccount } = useAppSelector((state) => state.accountManager);
+
   if (targetAccount === undefined) {
     return {
       valid: false,
@@ -193,6 +198,15 @@ const isValidOperation = (
       return {
         valid: false,
         reason: "This account is already a Professor account",
+      };
+    }
+  }
+
+  if (action === ActionsEnum.deleteAccount) {
+    if (targetAccount.username === currentAccount?.username) {
+      return {
+        valid: false,
+        reason: "You can't delete your own account",
       };
     }
   }

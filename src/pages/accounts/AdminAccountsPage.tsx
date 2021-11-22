@@ -2,6 +2,7 @@ import React from "react";
 import { Fade, Stack, duration, Container } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import { useHistory } from "react-router-dom";
 import {
   requestAccounts,
   unsetSelectedAccount,
@@ -13,8 +14,11 @@ import {
   DashboardProgress,
   AccountSnackbar,
 } from "./components";
+import { Routes } from "../../shared/Routes.constants";
+import { rolesEnum } from "./types";
 
 export function AdminAccountsPage() {
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.accountManager);
 
@@ -44,6 +48,12 @@ export function AdminAccountsPage() {
       setDisplayTable(false);
     }
   }, [loading]);
+
+  React.useEffect(() => {
+    if (dashboardState.currentAccount?.role === rolesEnum.TA) {
+      history.push(Routes.Modules);
+    }
+  }, [dashboardState.currentAccount, history]);
 
   const accountsHeaderButtons = [
     {

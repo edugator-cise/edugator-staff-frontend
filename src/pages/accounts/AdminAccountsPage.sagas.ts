@@ -1,21 +1,32 @@
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   requestAccounts,
   requestAccountsEnd,
   requestAccountsFail,
-  requestModifyAccount,
-  requestModifyAccountEnd,
-  requestModifyAccountFail,
   requestNewAccount,
   requestNewAccountEnd,
   requestNewAccountFail,
+  requestDeleteAccount,
+  requestDeleteAccountEnd,
+  requestDeleteAccountFail,
+  requestModifyAccount,
+  requestModifyAccountEnd,
+  requestModifyAccountFail,
   setCurrentAccount,
   setSelectedAccount,
+  unsetSelectedAccount,
 } from "./AdminAccountsPage.slice";
 import adminAPI from "../../app/common/apiClient";
-import { INewAccount, IAccount, IAccountsGET, IAccountPOST } from "./types";
+import {
+  INewAccount,
+  IAccount,
+  IAccountsGET,
+  IAccountPOST,
+  IAccountDELETE,
+} from "./types";
+import { IRequestMessage } from "../../shared/types";
 
 function* handleGetAccountsRequest(): any {
   let accountsRequest = () => adminAPI.get("/v1/user/getUsers");
@@ -29,8 +40,9 @@ function* handleGetAccountsRequest(): any {
 
     yield put(requestAccountsEnd(users));
     yield put(setCurrentAccount(currentAccount as IAccount));
-  } catch (e) {
-    yield put(requestAccountsFail(e as Error));
+  } catch (e: any) {
+    const feedback: IRequestMessage = e.response.data;
+    yield put(requestAccountsFail(feedback));
   }
 }
 
@@ -49,8 +61,9 @@ function* handleNewAccountRequest(action: PayloadAction<INewAccount>): any {
     };
 
     yield put(requestNewAccountEnd(newAccount));
-  } catch (e) {
-    yield put(requestNewAccountFail(e as Error));
+  } catch (e: any) {
+    const feedback: IRequestMessage = e.response.data;
+    yield put(requestNewAccountFail(feedback));
   }
 }
 
@@ -72,8 +85,35 @@ function* handleModifyAccountRequest(action: PayloadAction<IAccount>): any {
 
     yield put(requestModifyAccountEnd(data));
     yield put(setSelectedAccount(data));
-  } catch (e) {
-    yield put(requestModifyAccountFail(e as Error));
+  } catch (e: any) {
+    const feedback: IRequestMessage = e.response.data;
+    yield put(requestModifyAccountFail(feedback));
+  }
+}
+
+function* handleDeleteAccountRequest(action: PayloadAction<IAccount>): any {
+  // backend wants username in the body
+  // below is how to set the body in axios.delete
+  const config: AxiosRequestConfig = {
+    data: {
+      username: action.payload.username,
+    },
+  };
+  let deleteRequest = () => adminAPI.delete("/v1/user/deleteUser", config);
+
+  try {
+    const { data }: AxiosResponse<IRequestMessage> = yield call(deleteRequest);
+
+    const payload: IAccountDELETE = {
+      id: action.payload._id as string,
+      message: data.message as string,
+    };
+
+    yield put(requestDeleteAccountEnd(payload));
+    yield put(unsetSelectedAccount());
+  } catch (e: any) {
+    const feedback: IRequestMessage = e.response.data;
+    yield put(requestDeleteAccountFail(feedback));
   }
 }
 
@@ -81,6 +121,7 @@ function* accountManagerSaga() {
   yield takeEvery(requestAccounts.type, handleGetAccountsRequest);
   yield takeEvery(requestNewAccount.type, handleNewAccountRequest);
   yield takeEvery(requestModifyAccount.type, handleModifyAccountRequest);
+  yield takeEvery(requestDeleteAccount.type, handleDeleteAccountRequest);
 }
 
 export default accountManagerSaga;
