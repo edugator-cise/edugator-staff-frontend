@@ -34,12 +34,11 @@ function App() {
             <PrivateRoute exact path={Routes.Accounts}>
               <AdminAccountsPage />
             </PrivateRoute>
-            <Route path={Routes.AdminCodeWithProblem}>
+            <PrivateRoute exact path={Routes.AdminCodeWithProblem}>
               <CodeEditorPage />
-            </Route>
+            </PrivateRoute>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
-              {/* <TestSplitPane /> */}
             </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
