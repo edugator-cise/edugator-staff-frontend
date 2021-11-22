@@ -41,7 +41,8 @@ function* handleGetAccountsRequest(): any {
     yield put(requestAccountsEnd(users));
     yield put(setCurrentAccount(currentAccount as IAccount));
   } catch (e: any) {
-    const feedback: IRequestMessage = e.response.data;
+    const data: IRequestMessage = e.response.data;
+    const feedback: IRequestMessage = data.message ? data : e;
     yield put(requestAccountsFail(feedback));
   }
 }
@@ -62,7 +63,8 @@ function* handleNewAccountRequest(action: PayloadAction<INewAccount>): any {
 
     yield put(requestNewAccountEnd(newAccount));
   } catch (e: any) {
-    const feedback: IRequestMessage = e.response.data;
+    const data: IRequestMessage = e.response.data;
+    const feedback: IRequestMessage = data.message ? data : e;
     yield put(requestNewAccountFail(feedback));
   }
 }
@@ -86,7 +88,8 @@ function* handleModifyAccountRequest(action: PayloadAction<IAccount>): any {
     yield put(requestModifyAccountEnd(data));
     yield put(setSelectedAccount(data));
   } catch (e: any) {
-    const feedback: IRequestMessage = e.response.data;
+    const data: IRequestMessage = e.response.data;
+    const feedback: IRequestMessage = data.message ? data : e;
     yield put(requestModifyAccountFail(feedback));
   }
 }
@@ -112,7 +115,8 @@ function* handleDeleteAccountRequest(action: PayloadAction<IAccount>): any {
     yield put(requestDeleteAccountEnd(payload));
     yield put(unsetSelectedAccount());
   } catch (e: any) {
-    const feedback: IRequestMessage = e.response.data;
+    const data: IRequestMessage = e.response.data;
+    const feedback: IRequestMessage = data.message ? data : e;
     yield put(requestDeleteAccountFail(feedback));
   }
 }

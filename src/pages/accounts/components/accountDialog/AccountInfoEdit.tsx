@@ -1,17 +1,28 @@
 import React from "react";
 import { Grid, Typography, TextField, MenuItem } from "@mui/material";
 import { useAppSelector } from "../../../../app/common/hooks";
-import { IAccount, rolesEnum } from "../../types";
+import { rolesEnum } from "../../types";
 
-export function AccountEditForm() {
+function isBlank(str: string) {
+  return !str || /^\s*$/.test(str);
+}
+
+interface EditFormProps {
+  nameError: boolean;
+  validEmail: boolean;
+  setNameError: (error: boolean) => void;
+  handleEdit: (property: string, newValue: string) => void;
+  emailInputRef: React.RefObject<HTMLInputElement>;
+}
+
+export function AccountEditForm(props: EditFormProps) {
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
 
-  const [edited, setEdited] = React.useState<IAccount>({
-    role: selectedAccount?.role ?? rolesEnum.TA,
-    username: selectedAccount?.username ?? "",
-    name: selectedAccount?.name ?? "",
-    phone: selectedAccount?.phone,
-  });
+  const { nameError, validEmail, setNameError, handleEdit, emailInputRef } =
+    props;
+
+  // email textfiel ref & validation
+  const [touchedEmail, setTouchedEmail] = React.useState<boolean>(false);
 
   return (
     <Grid container>
@@ -25,10 +36,15 @@ export function AccountEditForm() {
           required
           fullWidth
           margin="normal"
-          value={edited.name}
-          helperText="Firstname and lastname"
-          onChange={(event) =>
-            setEdited({ ...edited, name: event.target.value })
+          defaultValue={selectedAccount?.name}
+          onChange={(event) => {
+            const input = event.target.value;
+            setNameError(isBlank(input));
+            handleEdit("name", input);
+          }}
+          error={nameError}
+          helperText={
+            !nameError ? "Firstname and lastname" : "Please enter a name"
           }
         />
       </Grid>
@@ -40,10 +56,17 @@ export function AccountEditForm() {
           required
           fullWidth
           margin="normal"
-          value={edited.username}
-          helperText="Used as the username"
-          onChange={(event) =>
-            setEdited({ ...edited, username: event.target.value })
+          defaultValue={selectedAccount?.username}
+          onChange={(event) => {
+            setTouchedEmail(true);
+            handleEdit("username", event.target.value);
+          }}
+          inputRef={emailInputRef}
+          error={!validEmail && touchedEmail}
+          helperText={
+            !validEmail && touchedEmail
+              ? "Please enter a valid email"
+              : "Used to access this account"
           }
         />
       </Grid>
@@ -52,13 +75,12 @@ export function AccountEditForm() {
         <Grid item xs={6}>
           <TextField
             type="tel"
-            label="Phone number (optional)"
+            label="Phone number (disabled)"
             margin="normal"
-            value={edited.phone}
+            defaultValue={selectedAccount?.phone}
             helperText="Contact information for this account"
-            onChange={(event) =>
-              setEdited({ ...edited, phone: event.target.value })
-            }
+            onChange={(event) => handleEdit("phone", event.target.value)}
+            disabled
           />
         </Grid>
 
@@ -69,11 +91,9 @@ export function AccountEditForm() {
             required
             fullWidth
             margin="normal"
-            value={edited.role}
+            defaultValue={selectedAccount?.role}
             helperText="Permissions"
-            onChange={(event) =>
-              setEdited({ ...edited, role: event.target.value as rolesEnum })
-            }
+            onChange={(event) => handleEdit("role", event.target.value)}
           >
             <MenuItem value={rolesEnum.TA}>{rolesEnum.TA}</MenuItem>
             <MenuItem value={rolesEnum.Professor}>
