@@ -10,9 +10,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "../../../../app/common/hooks";
+import { requestModifyAccount } from "../../AdminAccountsPage.slice";
 import { AccountEditForm, AccountInfo, AdminActions } from "../";
 import Dialog from "../../../../shared/GenericDialog";
-import { requestModifyAccount } from "../../AdminAccountsPage.slice";
 import { IAccount, rolesEnum } from "../../types";
 
 const TitleButton = styled(Button)(({ theme }) => ({
@@ -32,7 +32,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
 
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
 
-  // for edit mode dialog
+  // https://www.letmegooglethat.com/?q=js+%3F%3F+operator
   const unedited: IAccount = {
     role: selectedAccount?.role ?? rolesEnum.TA,
     username: selectedAccount?.username ?? "",
@@ -40,6 +40,7 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
     ...selectedAccount,
   };
 
+  // for edit mode dialog
   const [edited, setEdited] = React.useState<IAccount>(unedited);
 
   // username & name validation
@@ -58,7 +59,6 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
 
   const handleEdit = (property: string, newValue: string) => {
     if (property === "username") {
-      // backend doesnt want this changed for now
       setEdited({ ...edited, username: newValue });
     } else if (property === "name") {
       setEdited({ ...edited, name: newValue });

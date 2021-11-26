@@ -117,7 +117,7 @@ export const managerSlice = createSlice({
       state.feedback = {
         display: true,
         type: AlertType.error,
-        title: "Updating account failed",
+        title: "Deleting account failed",
         message: action.payload.message,
       };
       state.loading = false;
@@ -141,6 +141,9 @@ export const managerSlice = createSlice({
       state.feedback.display = false;
     },
     /** Other Reducers*/
+    resetState: () => {
+      return getBaseManagerState();
+    },
   },
 });
 
@@ -168,6 +171,7 @@ export const {
   /** Ohter */
   setAlert,
   closeAlert,
+  resetState,
 } = managerSlice.actions;
 
 export default managerSlice.reducer;
