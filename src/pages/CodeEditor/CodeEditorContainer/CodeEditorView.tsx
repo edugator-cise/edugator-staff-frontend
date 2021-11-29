@@ -31,6 +31,7 @@ const EditorContainer = styled("div")(
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 `
 );
 
@@ -196,7 +197,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             <CircularProgress color="inherit" />
           </Backdrop>
           <Editor
-            height="40vh"
+            className="editor"
+            height="100%"
             defaultLanguage="cpp"
             defaultValue={code}
             onChange={(value) => {
