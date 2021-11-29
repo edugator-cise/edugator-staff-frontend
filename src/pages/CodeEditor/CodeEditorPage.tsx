@@ -298,19 +298,17 @@ export const CodeEditorPage = () => {
                   />
                 </Allotment.Pane>
                 <Allotment.Pane minSize={350}>
-                  <div
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      overflow: "scroll",
-                    }}
-                  >
-                    <CodeEditorView
-                      code={currentProblem.code.body}
-                      templatePackage={currentProblem.templatePackage}
-                    />
-                    <InputOutputView />
-                  </div>
+                  <Allotment vertical snap={true}>
+                    <Allotment.Pane minSize={400}>
+                      <CodeEditorView
+                        code={currentProblem.code.body}
+                        templatePackage={currentProblem.templatePackage}
+                      />
+                      </Allotment.Pane>
+                    <Allotment.Pane minSize={330}>
+                      <InputOutputView />
+                    </Allotment.Pane>
+                  </Allotment>
                 </Allotment.Pane>
               </Allotment>
             )}

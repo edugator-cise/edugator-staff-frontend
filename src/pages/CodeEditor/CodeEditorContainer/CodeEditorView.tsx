@@ -29,22 +29,22 @@ const EditorContainer = styled("div")(
   border: solid 1px ${colors.borderGray};
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   height: 100%;
 `
 );
 
 const CodeHolder = styled("div")({
   margin: theme.spacing(1),
-  height: "100%",
-  maxHeight: 650,
+  height: "calc(100% - 15px)",
   backgroundColor: "white",
   borderRadius: "4px",
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
+  alignItems: "flex-start",
   justifyContent: "flex-start",
+  overflow: 'hidden'
 });
 
 interface CodeEditorProps {
@@ -54,10 +54,6 @@ interface CodeEditorProps {
 
 export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const dispatch = useDispatch();
-  // const theme = useTheme();
-  // const matches = useMediaQuery(theme.breakpoints.up("lg"));
-  // const md = useMediaQuery(theme.breakpoints.up("md"));
-  // const xl = useMediaQuery(theme.breakpoints.up("xl"));
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
   const isSubmissionRunning = useSelector(
@@ -133,6 +129,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   window.addEventListener("resize", () => {
     if (editorRef.current) {
       editorRef.current.layout();
+      console.log('resized window');
+      
     }
   });
 
@@ -197,8 +195,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             <CircularProgress color="inherit" />
           </Backdrop>
           <Editor
-            className="editor"
-            height="100%"
+            height='99%'
             defaultLanguage="cpp"
             defaultValue={code}
             onChange={(value) => {

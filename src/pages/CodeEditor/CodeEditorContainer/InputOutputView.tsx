@@ -22,7 +22,7 @@ const TabBar = styled("div")(
 
 const CodeHolder = styled("div")(
   ({ theme }) => `
-  max-height: 80%;
+  height: calc(100% - 82px);
   background-color: white;
   margin: ${theme.spacing(1)};
   border-radius: 4px;
@@ -64,7 +64,7 @@ export const InputOutputView = () => {
   return (
     <Grow in appear timeout={500}>
       <CodeHolder>
-        <TabBar>
+        <TabBar sx={{borderTopLeftRadius: '4px', borderTopRightRadius: '4px'}}>
           <Tabs
             value={activeTab}
             onChange={handleChange}
