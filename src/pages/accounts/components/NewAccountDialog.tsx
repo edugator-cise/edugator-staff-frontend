@@ -4,7 +4,7 @@ import { requestNewAccount } from "../AdminAccountsPage.slice";
 import { useAppDispatch } from "../../../app/common/hooks";
 import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
-import { isBlank } from "../../modules/components/ModuleDialog";
+import { isBlank } from "../../../shared/utils";
 
 interface NewAccountDialogProps {
   open: boolean;
