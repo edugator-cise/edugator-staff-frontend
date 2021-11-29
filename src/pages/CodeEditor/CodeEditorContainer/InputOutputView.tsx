@@ -88,7 +88,15 @@ export const InputOutputView = () => {
           </Tabs>
         </TabBar>
         <Box
-          sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
+          sx={{
+            height: "100%",
+            width: "100%",
+            pt: 2,
+            pr: 2,
+            pl: 2,
+            pb: 1.5,
+            overflowY: "auto",
+          }}
         >
           {activeTab === 0 ? (
             <FormControl
