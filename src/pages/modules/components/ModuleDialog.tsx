@@ -10,6 +10,7 @@ import {
 } from "../ModulesPage.slice";
 import { IModuleBase } from "../../../shared/types";
 import Dialog from "../../../shared/GenericDialog";
+import { isBlank } from "../../../shared/utils";
 
 const NumberField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   width: "22%",
@@ -22,9 +23,7 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-function isBlank(str: string) {
-  return !str || /^\s*$/.test(str);
-}
+
 
 function isInvalidNum(num: number) {
   return isNaN(num) || num < 0 || num > 1000000;

@@ -1,19 +1,36 @@
 import React from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
+import { requestNewAccount } from "../AdminAccountsPage.slice";
+import { useAppDispatch } from "../../../app/common/hooks";
 import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
+import { isBlank } from "../../../shared/utils";
 
 interface NewAccountDialogProps {
   open: boolean;
   handleClose: () => void;
 }
 
+const emptyAccount: INewAccount = {
+  role: rolesEnum.TA,
+  username: "",
+  password: "",
+  name: "",
+};
+
 export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
-  const [newAccount, setNewAccount] = React.useState<INewAccount>({
-    role: rolesEnum.TA,
-    username: "",
-    password: "",
-  });
+  const dispatch = useAppDispatch();
+
+  const [newAccount, setNewAccount] = React.useState<INewAccount>(emptyAccount);
+
+  // email textfiel ref & validation
+  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const validEmail = emailInputRef.current?.validity.valid;
+  const [touchedEmail, setTouchedEmail] = React.useState<boolean>(false);
+
+  // username & name validation
+  const [nameError, setNameError] = React.useState<boolean>(false);
+  const [passwordError, setPasswordError] = React.useState<boolean>(false);
 
   const DialogTitle = (
     <>
@@ -24,21 +41,52 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
         {newAccount.name ? newAccount.name : "No name"}{" "}
         <Chip
           label={newAccount.role}
-          color={newAccount.role === "Professor" ? "primary" : undefined}
+          color={
+            newAccount.role === rolesEnum.Professor ? "primary" : undefined
+          }
         />
       </Typography>
     </>
   );
 
+  const handleNewAccount = () => {
+    const { name, password, username } = newAccount;
+
+    if (isBlank(name)) {
+      setNameError(true);
+    }
+
+    if (isBlank(password)) {
+      setPasswordError(true);
+    }
+
+    if (isBlank(username)) {
+      setTouchedEmail(true);
+    }
+
+    if (!isBlank(name) && !isBlank(password) && validEmail) {
+      dispatch(requestNewAccount(newAccount));
+      handleDialogClose();
+    }
+  };
+
+  const handleDialogClose = () => {
+    setTouchedEmail(false);
+    setNameError(false);
+    setPasswordError(false);
+    setNewAccount(emptyAccount);
+    handleClose();
+  };
+
   const FooterButtons = [
     {
       label: "Cancel",
-      onClick: () => handleClose(),
+      onClick: () => handleDialogClose(),
       color: "error",
     },
     {
       label: "Add New Account",
-      onClick: () => {},
+      onClick: () => handleNewAccount(),
       variant: "contained",
     },
   ];
@@ -49,7 +97,7 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
       maxWidth="sm"
       fullWidth
       title={DialogTitle}
-      handleClose={handleClose}
+      handleClose={handleDialogClose}
       footerContent={FooterButtons}
     >
       <Grid container>
@@ -65,9 +113,14 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
             fullWidth
             margin="dense"
             value={newAccount.name}
-            helperText="Firstname and lastname"
-            onChange={(event) =>
-              setNewAccount({ ...newAccount, name: event.target.value })
+            onChange={(event) => {
+              const input = event.target.value;
+              setNameError(isBlank(input));
+              setNewAccount({ ...newAccount, name: input });
+            }}
+            error={nameError}
+            helperText={
+              !nameError ? "Firstname and lastname" : "Please enter a name"
             }
           />
         </Grid>
@@ -80,9 +133,16 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
             fullWidth
             margin="dense"
             value={newAccount.username}
-            helperText="Used as the username"
-            onChange={(event) =>
-              setNewAccount({ ...newAccount, username: event.target.value })
+            onChange={(event) => {
+              setTouchedEmail(true);
+              setNewAccount({ ...newAccount, username: event.target.value });
+            }}
+            inputRef={emailInputRef}
+            error={!validEmail && touchedEmail}
+            helperText={
+              !validEmail && touchedEmail
+                ? "Please enter a valid email"
+                : "Used as the username"
             }
           />
         </Grid>
@@ -95,9 +155,16 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
             fullWidth
             margin="dense"
             value={newAccount.password}
-            helperText="Used as the username"
-            onChange={(event) =>
-              setNewAccount({ ...newAccount, password: event.target.value })
+            onChange={(event) => {
+              const pass = event.target.value;
+              setPasswordError(isBlank(pass));
+              setNewAccount({ ...newAccount, password: pass });
+            }}
+            error={passwordError}
+            helperText={
+              !passwordError
+                ? "Used to access this account"
+                : "Please enter a password"
             }
           />
         </Grid>
@@ -106,13 +173,14 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
           <Grid item xs={6}>
             <TextField
               type="tel"
-              label="Phone number (optional)"
+              label="Phone number (disabled)"
               margin="dense"
               value={newAccount.phone}
-              helperText="Contact information for this account"
               onChange={(event) =>
                 setNewAccount({ ...newAccount, phone: event.target.value })
               }
+              helperText="Contact information for this account"
+              disabled
             />
           </Grid>
 
