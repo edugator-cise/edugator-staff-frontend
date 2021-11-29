@@ -22,14 +22,14 @@ const TabBar = styled("div")(
 
 const CodeHolder = styled("div")(
   ({ theme }) => `
-  max-height: 80%;
+  height: calc(100% - 82px);
   background-color: white;
   margin: ${theme.spacing(1)};
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 60px;
 `
 );
@@ -64,7 +64,9 @@ export const InputOutputView = () => {
   return (
     <Grow in appear timeout={500}>
       <CodeHolder>
-        <TabBar>
+        <TabBar
+          sx={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
+        >
           <Tabs
             value={activeTab}
             onChange={handleChange}
@@ -86,10 +88,21 @@ export const InputOutputView = () => {
           </Tabs>
         </TabBar>
         <Box
-          sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
+          sx={{
+            height: "100%",
+            width: "100%",
+            pt: 2,
+            pr: 2,
+            pl: 2,
+            pb: 1.5,
+            overflowY: "auto",
+          }}
         >
           {activeTab === 0 ? (
-            <FormControl sx={{ width: "calc(100% - 20px)" }} variant="outlined">
+            <FormControl
+              sx={{ width: "calc(100% - 20px)", height: "100%" }}
+              variant="outlined"
+            >
               <OutlinedInput
                 id="outlined-stdin"
                 multiline

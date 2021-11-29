@@ -18,5 +18,25 @@
   }
 }
 
-.split {
+#compile-container::-webkit-scrollbar,
+#outlined-stdin::-webkit-scrollbar,
+#submit-container::-webkit-scrollbar,
+#problem-description::-webkit-scrollbar {
+  width: 6px;
+}
+
+#compile-container::-webkit-scrollbar-thumb,
+#outlined-stdin::-webkit-scrollbar-thumb,
+#submit-container::-webkit-scrollbar-thumb,
+#problem-description::-webkit-scrollbar-thumb {
+  background: rgb(206, 206, 206);
+  border-radius: 10px;
+  box-shadow: -2px -2px 7px rgb(255, 255, 255);
+}
+
+#compile-container::-webkit-scrollbar-track,
+#outlined-stdin::-webkit-scrollbar-track,
+#submit-container::-webkit-scrollbar-track,
+#problem-description::-webkit-scrollbar-track {
+  background-color: transparent;
 }
