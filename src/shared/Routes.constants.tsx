@@ -11,4 +11,5 @@ export enum Routes {
   AdminCode = "/admin/code",
   Code = "/code",
   Landing = "/",
+  PrivacyNotice = "/privacy_notice",
 }

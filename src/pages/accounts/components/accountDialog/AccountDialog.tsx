@@ -9,9 +9,11 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { AccountEditForm, AccountInfo, AdminActions } from ".";
-import Dialog from "../../../shared/GenericDialog";
+import { useAppSelector, useAppDispatch } from "../../../../app/common/hooks";
+import { requestModifyAccount } from "../../AdminAccountsPage.slice";
+import { AccountEditForm, AccountInfo, AdminActions } from "../";
+import Dialog from "../../../../shared/GenericDialog";
+import { IAccount, rolesEnum } from "../../types";
 
 const TitleButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -24,9 +26,55 @@ interface AccountDialogProps {
 }
 
 export function AccountDialog({ open, handleClose }: AccountDialogProps) {
+  const dispatch = useAppDispatch();
+
   const [editMode, setEditMode] = React.useState<boolean>(false);
 
   const { selectedAccount } = useAppSelector((state) => state.accountManager);
+
+  // https://www.letmegooglethat.com/?q=js+%3F%3F+operator
+  const unedited: IAccount = {
+    role: selectedAccount?.role ?? rolesEnum.TA,
+    username: selectedAccount?.username ?? "",
+    name: selectedAccount?.name ?? "",
+    ...selectedAccount,
+  };
+
+  // for edit mode dialog
+  const [edited, setEdited] = React.useState<IAccount>(unedited);
+
+  // username & name validation
+  const [nameError, setNameError] = React.useState<boolean>(false);
+
+  // email textfiel ref & validation
+  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const validEmail = emailInputRef.current?.validity.valid;
+
+  // to keep dialog updated
+  React.useEffect(() => {
+    if (selectedAccount) {
+      setEdited(selectedAccount as IAccount);
+    }
+  }, [selectedAccount, editMode]);
+
+  const handleEdit = (property: string, newValue: string) => {
+    if (property === "username") {
+      setEdited({ ...edited, username: newValue });
+    } else if (property === "name") {
+      setEdited({ ...edited, name: newValue });
+    } else if (property === "role") {
+      setEdited({ ...edited, role: newValue as rolesEnum });
+    } else if (property === "phone") {
+      setEdited({ ...edited, phone: newValue });
+    }
+  };
+
+  const handleEditSubmit = (edited: IAccount) => {
+    if (!nameError && validEmail) {
+      dispatch(requestModifyAccount(edited));
+      setEditMode(false);
+    }
+  };
 
   const handleDialogClose = () => {
     setEditMode(false);
@@ -45,8 +93,9 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
   const EditFooterButtons = [
     {
       label: "Save",
-      onClick: () => {},
+      onClick: () => handleEditSubmit(edited),
       variant: "contained",
+      disabled: edited === selectedAccount,
     },
   ];
 
@@ -58,12 +107,10 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
         </Typography>
 
         <Typography variant="h5" component="div" fontWeight="bold">
-          {selectedAccount?.name ?? "undefined"}{" "}
+          {edited.name}{" "}
           <Chip
-            label={selectedAccount?.role}
-            color={
-              selectedAccount?.role === "Professor" ? "primary" : undefined
-            }
+            label={edited.role}
+            color={edited.role === "Professor" ? "primary" : undefined}
           />
         </Typography>
       </Grid>
@@ -110,7 +157,13 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
             <AdminActions />
           </Stack>
         ) : (
-          <AccountEditForm />
+          <AccountEditForm
+            handleEdit={handleEdit}
+            emailInputRef={emailInputRef}
+            nameError={nameError}
+            setNameError={setNameError}
+            validEmail={Boolean(validEmail)}
+          />
         )}
       </>
     </Dialog>

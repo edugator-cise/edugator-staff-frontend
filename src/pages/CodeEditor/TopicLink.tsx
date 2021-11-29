@@ -11,8 +11,8 @@ interface TopicProps {
 
 function TopicLink(props: TopicProps) {
   const IconHolder = styled("div")({
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     backgroundColor: props.active ? "#111827" : "transparent",
     display: "flex",
     alignItems: "center",

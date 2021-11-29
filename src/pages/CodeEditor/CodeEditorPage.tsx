@@ -5,6 +5,7 @@ import {
   requestProblem,
   setRunCodeError,
 } from "./CodeEditorSlice";
+import { Link } from "react-router-dom";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -55,8 +56,8 @@ interface TopicProps {
 }
 
 const TopicsSidebar = styled("div")({
-  width: 80,
-  minWidth: 80,
+  width: 70,
+  minWidth: 70,
   height: "100vh",
   backgroundColor: "#1F2937",
   display: "flex",
@@ -104,32 +105,32 @@ export const CodeEditorPage = () => {
     {
       name: "Lists, Stacks, and Queues",
       link: "",
-      icon: <Stack weight="fill" size={28} />,
+      icon: <Stack weight="fill" size={24} />,
     },
     {
       name: "Trees",
       link: "",
-      icon: <TreeStructure weight="fill" size={28} />,
+      icon: <TreeStructure weight="fill" size={24} />,
     },
     {
       name: "Heaps",
       link: "",
-      icon: <ArrowsDownUp weight="fill" size={28} />,
+      icon: <ArrowsDownUp weight="fill" size={24} />,
     },
     {
       name: "Graphs",
       link: "",
-      icon: <ShareNetwork weight="fill" size={28} />,
+      icon: <ShareNetwork weight="fill" size={24} />,
     },
     {
       name: "Sets, Maps, and Hash Tables",
       link: "",
-      icon: <Table weight="fill" size={28} />,
+      icon: <Table weight="fill" size={24} />,
     },
     {
       name: "Algorithms",
       link: "",
-      icon: <MathOperations weight="fill" size={28} />,
+      icon: <MathOperations weight="fill" size={24} />,
     },
   ];
   useEffect(() => {
@@ -191,21 +192,25 @@ export const CodeEditorPage = () => {
             sx={{
               height: 64,
               width: "100%",
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: theme.palette.secondary.dark,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               marginBottom: 1,
             }}
           >
-            <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
+            <Link to={"/"}>
+              <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
+            </Link>
           </Box>
-          <TopicLink
-            name="Home"
-            active={false}
-            icon={<House weight="fill" size={28} />}
-            link=""
-          />
+          <Link to={"/"}>
+            <TopicLink
+              name="Home"
+              active={false}
+              icon={<House weight="fill" size={24} />}
+              link=""
+            />
+          </Link>
           <div
             onClick={() => {
               setIsHidden(!isHidden);
@@ -214,7 +219,7 @@ export const CodeEditorPage = () => {
             <TopicLink
               name="View All"
               active={true}
-              icon={<ListBullets weight="fill" size={28} />}
+              icon={<ListBullets weight="fill" size={24} />}
               link=""
             />
           </div>
@@ -226,17 +231,20 @@ export const CodeEditorPage = () => {
               borderBottom: "1px solid #939aa6",
             }}
           />
-          {topics.map((topic, i) => {
-            return (
-              <TopicLink
-                key={i}
-                name={topic.name}
-                icon={topic.icon}
-                link={topic.link}
-                active={false}
-              />
-            );
-          })}
+          <div style={{ display: "none" }}>
+            {topics.map((topic, i) => {
+              //Include this for adding remaining topics to sidebar
+              return (
+                <TopicLink
+                  key={i}
+                  name={topic.name}
+                  icon={topic.icon}
+                  link={topic.link}
+                  active={false}
+                />
+              );
+            })}
+          </div>
         </TopicsSidebar>
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
@@ -293,19 +301,17 @@ export const CodeEditorPage = () => {
                   />
                 </Allotment.Pane>
                 <Allotment.Pane minSize={350}>
-                  <div
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      overflow: "scroll",
-                    }}
-                  >
-                    <CodeEditorView
-                      code={currentProblem.code.body}
-                      templatePackage={currentProblem.templatePackage}
-                    />
-                    <InputOutputView />
-                  </div>
+                  <Allotment vertical snap={true}>
+                    <Allotment.Pane minSize={400}>
+                      <CodeEditorView
+                        code={currentProblem.code.body}
+                        templatePackage={currentProblem.templatePackage}
+                      />
+                    </Allotment.Pane>
+                    <Allotment.Pane minSize={330}>
+                      <InputOutputView />
+                    </Allotment.Pane>
+                  </Allotment>
                 </Allotment.Pane>
               </Allotment>
             )}

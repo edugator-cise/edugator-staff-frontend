@@ -24,7 +24,7 @@ import ModulesIcon from "@mui/icons-material/AccountTree";
 import ProjectsIcon from "@mui/icons-material/BorderColor";
 import LearnIcon from "@mui/icons-material/Book";
 import ScheduleIcon from "@mui/icons-material/CalendarToday";
-import LightModeLogo from "../assets/LightModeLogo.svg";
+import DefaultLogo from "../assets/DefaultLogo.svg";
 import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
@@ -164,7 +164,7 @@ function VerticalNavigation(props: Props) {
         <Link to={"/"}>
           <Avatar
             alt="Example Alt"
-            src={props.light ? LightModeLogo : DarkModeLogo}
+            src={props.light ? DefaultLogo : DarkModeLogo}
           />
         </Link>
       )}
@@ -285,9 +285,24 @@ function VerticalNavigation(props: Props) {
                         {menu.subitems.map((subitem, i) => {
                           return (
                             <List key={i} component="div" disablePadding>
-                              <ListItemButton sx={{ pl: 6 }}>
-                                <ListItemText secondary={subitem.title} />
-                              </ListItemButton>
+                              <Link
+                                to={{
+                                  pathname: adminPathRegex.test(
+                                    location.pathname
+                                  )
+                                    ? Routes.AdminCode
+                                    : Routes.Code,
+                                  state: { moduleName: subitem.title },
+                                }}
+                                style={{
+                                  textDecoration: "none",
+                                  color: "inherit",
+                                }}
+                              >
+                                <ListItemButton sx={{ pl: 6 }}>
+                                  <ListItemText secondary={subitem.title} />
+                                </ListItemButton>
+                              </Link>
                             </List>
                           );
                         })}

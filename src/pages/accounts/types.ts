@@ -6,12 +6,13 @@ export enum rolesEnum {
 }
 
 export interface IAccount {
-  name?: string;
+  name: string;
   role: rolesEnum;
   username: string;
   // future values below
   // unused, but there for example on how to add/use aditional features
   phone?: string;
+  _id?: string;
 }
 
 // only used when creating a new account
@@ -25,4 +26,19 @@ export interface IAccountManagerState {
   accounts: IAccount[];
   currentAccount?: IAccount;
   selectedAccount?: IAccount;
+}
+
+// interfaces for API calls
+export interface IAccountsGET {
+  users: IAccount[];
+  currentUser: string;
+}
+
+export interface IAccountPOST {
+  id: string;
+}
+
+export interface IAccountDELETE {
+  id: string;
+  message: string;
 }

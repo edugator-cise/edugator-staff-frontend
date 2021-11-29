@@ -9,8 +9,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { IAccount, rolesEnum } from "../types";
+import { useAppDispatch, useAppSelector } from "../../../../app/common/hooks";
+import { IAccount, rolesEnum } from "../../types";
+import {
+  requestDeleteAccount,
+  requestModifyAccount,
+} from "../../AdminAccountsPage.slice";
 
 enum ActionsEnum {
   noAction = "noAction",
@@ -25,7 +29,7 @@ export function AdminActions() {
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);
 
-  const actionSummary = adminActionInfo(selectedAction, selectedAccount);
+  const actionSummary = AdminActionInfo(selectedAction, selectedAccount);
 
   return (
     <Stack spacing={2}>
@@ -70,6 +74,10 @@ export function AdminActions() {
             <Button
               disabled={!actionSummary.validOperation}
               variant="contained"
+              onClick={() => {
+                actionSummary.onClick();
+                setSelectedAction(ActionsEnum.noAction);
+              }}
             >
               Execute
             </Button>
@@ -95,23 +103,35 @@ interface IActionInfo {
   reason?: string;
 }
 
-const adminActionInfo = (
+const AdminActionInfo = (
   action: ActionsEnum,
   targetAccount?: IAccount
 ): IActionInfo => {
-  const { valid, reason } = isValidOperation(action, targetAccount);
+  const dispatch = useAppDispatch();
+
+  const { valid, reason } = IsValidOperation(action, targetAccount);
 
   if (action === ActionsEnum.createTA) {
+    const changed_account: IAccount = {
+      ...(targetAccount as IAccount),
+      role: rolesEnum.TA,
+    };
+
     return {
       description: "This will change this account to be a TA account",
-      onClick: () => {},
+      onClick: () => dispatch(requestModifyAccount(changed_account)),
       validOperation: valid,
       reason: reason,
     };
   } else if (action === ActionsEnum.createProfessor) {
+    const changed_account: IAccount = {
+      ...(targetAccount as IAccount),
+      role: rolesEnum.Professor,
+    };
+
     return {
       description: "This will change this account to be a Professor account",
-      onClick: () => {},
+      onClick: () => dispatch(requestModifyAccount(changed_account)),
       validOperation: valid,
       reason: reason,
     };
@@ -125,7 +145,7 @@ const adminActionInfo = (
           This will delete this account from the database.
         </>
       ),
-      onClick: () => {},
+      onClick: () => dispatch(requestDeleteAccount(targetAccount as IAccount)),
       validOperation: valid,
       reason: reason,
     };
@@ -139,13 +159,15 @@ const adminActionInfo = (
   }
 };
 
-const isValidOperation = (
+const IsValidOperation = (
   action: ActionsEnum,
   targetAccount?: IAccount
 ): {
   valid: boolean;
   reason?: string;
 } => {
+  const { currentAccount } = useAppSelector((state) => state.accountManager);
+
   if (targetAccount === undefined) {
     return {
       valid: false,
@@ -176,6 +198,15 @@ const isValidOperation = (
       return {
         valid: false,
         reason: "This account is already a Professor account",
+      };
+    }
+  }
+
+  if (action === ActionsEnum.deleteAccount) {
+    if (targetAccount.username === currentAccount?.username) {
+      return {
+        valid: false,
+        reason: "You can't delete your own account",
       };
     }
   }
