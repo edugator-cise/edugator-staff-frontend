@@ -31,7 +31,7 @@ const OutputPaper = styled("div")(
   border-radius: 4px;
   margin-right: ${theme.spacing(1)};
   margin-left: ${theme.spacing(1)};
-` 
+`
 );
 
 interface Props {
@@ -50,7 +50,15 @@ export const CompileOutput = ({
         <Typography variant="h5" color={theme.palette.success.main}>
           Compilation Successful
         </Typography>
-        <Paper sx={{ backgroundColor: colors.lightGray, height: "60%", p: 2 }}>
+        <Paper
+          sx={{
+            backgroundColor: colors.lightGray,
+            height: "60%",
+            p: 2,
+            whiteSpace: "pre-wrap",
+            overflowY: "auto",
+          }}
+        >
           {compileBody}
         </Paper>
       </CompileOutputContainer>
@@ -67,6 +75,7 @@ export const CompileOutput = ({
             color: colors.redText,
             p: 2,
             whiteSpace: "pre-wrap",
+            overflowY: "auto",
           }}
         >
           {compileBody}

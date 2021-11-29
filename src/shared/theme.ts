@@ -99,12 +99,11 @@ let theme = createTheme({
       main: blue[500],
       light: blue[100],
       dark: "#142F73",
-
     },
     secondary: {
       main: "#3A4F58",
       light: "#fff",
-      dark: "#3966ad"
+      dark: "#3966ad",
     },
   },
   breakpoints: {

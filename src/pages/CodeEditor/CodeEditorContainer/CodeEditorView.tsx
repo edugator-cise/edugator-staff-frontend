@@ -44,7 +44,7 @@ const CodeHolder = styled("div")({
   flexDirection: "column",
   alignItems: "flex-start",
   justifyContent: "flex-start",
-  overflow: 'hidden'
+  overflow: "hidden",
 });
 
 interface CodeEditorProps {
@@ -129,8 +129,6 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   window.addEventListener("resize", () => {
     if (editorRef.current) {
       editorRef.current.layout();
-      console.log('resized window');
-      
     }
   });
 
@@ -195,7 +193,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             <CircularProgress color="inherit" />
           </Backdrop>
           <Editor
-            height='99%'
+            height="99%"
             defaultLanguage="cpp"
             defaultValue={code}
             onChange={(value) => {

@@ -26,7 +26,7 @@ const OutputPaper = styled("div")(
   border-radius: 4px;
   margin-right: ${theme.spacing(1)};
   margin-left: ${theme.spacing(1)};
-` 
+`
 );
 
 const CompileOutputContainer = styled("div")(

@@ -231,18 +231,19 @@ export const CodeEditorPage = () => {
               borderBottom: "1px solid #939aa6",
             }}
           />
-          <div style={{display: 'none'}}>
-          {topics.map((topic, i) => { //Include this for adding remaining topics to sidebar
-            return (
-              <TopicLink
-                key={i}
-                name={topic.name}
-                icon={topic.icon}
-                link={topic.link}
-                active={false}
-              />
-            );
-          })} 
+          <div style={{ display: "none" }}>
+            {topics.map((topic, i) => {
+              //Include this for adding remaining topics to sidebar
+              return (
+                <TopicLink
+                  key={i}
+                  name={topic.name}
+                  icon={topic.icon}
+                  link={topic.link}
+                  active={false}
+                />
+              );
+            })}
           </div>
         </TopicsSidebar>
         <Box sx={{ height: "100%", width: "100%" }}>
@@ -306,7 +307,7 @@ export const CodeEditorPage = () => {
                         code={currentProblem.code.body}
                         templatePackage={currentProblem.templatePackage}
                       />
-                      </Allotment.Pane>
+                    </Allotment.Pane>
                     <Allotment.Pane minSize={330}>
                       <InputOutputView />
                     </Allotment.Pane>

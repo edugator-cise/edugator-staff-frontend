@@ -64,7 +64,9 @@ export const InputOutputView = () => {
   return (
     <Grow in appear timeout={500}>
       <CodeHolder>
-        <TabBar sx={{borderTopLeftRadius: '4px', borderTopRightRadius: '4px'}}>
+        <TabBar
+          sx={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
+        >
           <Tabs
             value={activeTab}
             onChange={handleChange}
@@ -89,7 +91,10 @@ export const InputOutputView = () => {
           sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
         >
           {activeTab === 0 ? (
-            <FormControl sx={{ width: "calc(100% - 20px)", height: '100%' }} variant="outlined">
+            <FormControl
+              sx={{ width: "calc(100% - 20px)", height: "100%" }}
+              variant="outlined"
+            >
               <OutlinedInput
                 id="outlined-stdin"
                 multiline
@@ -110,7 +115,6 @@ export const InputOutputView = () => {
                 compileBody={compileOutput.compilerBody}
                 compileMessage={compileOutput.compilerMessage}
               />
-             {/*  <div style={{backgroundColor: 'gold', width: '100%', height: '100%'}} /> */}
             </>
           ) : (
             <SubmitOutput results={submissionOutput} />
