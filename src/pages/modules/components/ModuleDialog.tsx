@@ -22,7 +22,7 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-function isBlank(str: string) {
+export function isBlank(str: string) {
   return !str || /^\s*$/.test(str);
 }
 

@@ -1,11 +1,8 @@
 import React from "react";
 import { Grid, Typography, TextField, MenuItem } from "@mui/material";
+import { isBlank } from "../../../modules/components/ModuleDialog";
 import { useAppSelector } from "../../../../app/common/hooks";
 import { rolesEnum } from "../../types";
-
-function isBlank(str: string) {
-  return !str || /^\s*$/.test(str);
-}
 
 interface EditFormProps {
   nameError: boolean;
