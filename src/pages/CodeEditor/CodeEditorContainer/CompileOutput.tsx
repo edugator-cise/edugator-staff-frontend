@@ -74,6 +74,7 @@ export const CompileOutput = ({
             color: colors.redText,
             p: 2,
             whiteSpace: "pre-wrap",
+            overflowY: "auto",
           }}
         >
           {compileBody}

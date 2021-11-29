@@ -12,6 +12,7 @@ import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
+import PrivacyNotice from "./pages/PrivacyNotice/PrivacyNoticePage";
 
 function App() {
   return (
@@ -42,6 +43,9 @@ function App() {
             </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
+            </Route>
+            <Route exact path={Routes.PrivacyNotice}>
+              <PrivacyNotice />
             </Route>
             <Route component={NotFoundPage} />
           </Switch>
