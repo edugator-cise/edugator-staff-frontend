@@ -29,7 +29,7 @@ const CodeHolder = styled("div")(
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 60px;
 `
 );
@@ -89,7 +89,7 @@ export const InputOutputView = () => {
           sx={{ height: "100%", width: "100%", pt: 2, pr: 2, pl: 2, pb: 1.5 }}
         >
           {activeTab === 0 ? (
-            <FormControl sx={{ width: "calc(100% - 20px)" }} variant="outlined">
+            <FormControl sx={{ width: "calc(100% - 20px)", height: '100%' }} variant="outlined">
               <OutlinedInput
                 id="outlined-stdin"
                 multiline
@@ -110,6 +110,7 @@ export const InputOutputView = () => {
                 compileBody={compileOutput.compilerBody}
                 compileMessage={compileOutput.compilerMessage}
               />
+             {/*  <div style={{backgroundColor: 'gold', width: '100%', height: '100%'}} /> */}
             </>
           ) : (
             <SubmitOutput results={submissionOutput} />

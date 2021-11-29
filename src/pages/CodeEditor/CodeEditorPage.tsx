@@ -204,12 +204,12 @@ export const CodeEditorPage = () => {
             </Link>
           </Box>
           <Link to={"/"}>
-          <TopicLink
-            name="Home"
-            active={false}
-            icon={<House weight="fill" size={24} />}
-            link=""
-          />
+            <TopicLink
+              name="Home"
+              active={false}
+              icon={<House weight="fill" size={24} />}
+              link=""
+            />
           </Link>
           <div
             onClick={() => {
@@ -231,7 +231,8 @@ export const CodeEditorPage = () => {
               borderBottom: "1px solid #939aa6",
             }}
           />
-          {/* {topics.map((topic, i) => { //Include this for adding remaining topics to sidebar
+          <div style={{display: 'none'}}>
+          {topics.map((topic, i) => { //Include this for adding remaining topics to sidebar
             return (
               <TopicLink
                 key={i}
@@ -241,7 +242,8 @@ export const CodeEditorPage = () => {
                 active={false}
               />
             );
-          })} */}
+          })} 
+          </div>
         </TopicsSidebar>
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
