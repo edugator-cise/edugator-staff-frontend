@@ -70,14 +70,11 @@ function* handleNewAccountRequest(action: PayloadAction<INewAccount>): any {
 }
 
 function* handleModifyAccountRequest(action: PayloadAction<IAccount>): any {
-  /**
-   * Backend validation doesnt like
-   * me sending _id property back to them
-   */
   const body: IAccount = {
     name: action.payload.name,
     role: action.payload.role,
     username: action.payload.username,
+    _id: action.payload._id,
   };
 
   let updateRequest = () => adminAPI.put("/v1/user/updateUser", body);
