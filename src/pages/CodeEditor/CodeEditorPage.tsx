@@ -229,7 +229,7 @@ export const CodeEditorPage = () => {
               borderBottom: "1px solid #939aa6",
             }}
           />
-          {topics.map((topic, i) => {
+          {/* {topics.map((topic, i) => { //Include this for adding remaining topics to sidebar
             return (
               <TopicLink
                 key={i}
@@ -239,7 +239,7 @@ export const CodeEditorPage = () => {
                 active={false}
               />
             );
-          })}
+          })} */}
         </TopicsSidebar>
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
