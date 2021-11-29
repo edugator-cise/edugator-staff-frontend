@@ -24,6 +24,7 @@ export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
     <Grow in appear timeout={500}>
       <ProblemDescriptionPaper
+        id="problem-description"
         sx={{
           "& pre": {
             whiteSpace: "pre-wrap",
