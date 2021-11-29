@@ -67,7 +67,7 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
       setTouchedEmail(true);
     }
 
-    if (!nameError && !passwordError && validEmail) {
+    if (!isBlank(name) && !isBlank(password) && validEmail) {
       dispatch(requestNewAccount(newAccount));
       handleDialogClose();
     }
