@@ -192,7 +192,7 @@ export const CodeEditorPage = () => {
             sx={{
               height: 64,
               width: "100%",
-              backgroundColor: theme.palette.primary.main,
+              backgroundColor: theme.palette.secondary.dark,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
