@@ -203,12 +203,14 @@ export const CodeEditorPage = () => {
               <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
             </Link>
           </Box>
+          <Link to={"/"}>
           <TopicLink
             name="Home"
             active={false}
             icon={<House weight="fill" size={24} />}
             link=""
           />
+          </Link>
           <div
             onClick={() => {
               setIsHidden(!isHidden);
