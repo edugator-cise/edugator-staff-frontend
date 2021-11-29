@@ -56,7 +56,6 @@ export const CompileOutput = ({
             height: "60%",
             p: 2,
             whiteSpace: "pre-wrap",
-            overflowY: "auto",
           }}
         >
           {compileBody}

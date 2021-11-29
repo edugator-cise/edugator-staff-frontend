@@ -46,6 +46,8 @@ export const MetadataForm = (props: Props) => {
     const errors: Errors = {};
     if (values.title === "") {
       errors.title = "Required";
+    } else if (values.title.trim() === "") {
+      errors.title = "Title must contain non-whitespace characters";
     }
 
     if (dateError.message) {

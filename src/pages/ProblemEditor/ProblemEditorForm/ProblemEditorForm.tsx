@@ -27,6 +27,8 @@ export const ProblemEditorForm = (props: Props) => {
     const errors: any = {};
     if (!values.problemStatement) {
       errors.problemStatement = "Required";
+    } else if (values.problemStatement.trim() === "") {
+      errors.problemStatement = "Must contain non-whitespace characters";
     }
 
     if (!values.templatePackage) {
