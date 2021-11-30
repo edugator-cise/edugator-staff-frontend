@@ -41,7 +41,6 @@ export const Sidenav = (props: SidenavProps) => {
 
   const handleClick = (item: string) => {
     const newData = { ...menu, [item]: !menu[item] };
-    console.log(newData);
     setMenu(newData);
   };
   return (
