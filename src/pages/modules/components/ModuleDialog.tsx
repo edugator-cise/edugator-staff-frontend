@@ -23,8 +23,6 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-
-
 function isInvalidNum(num: number) {
   return isNaN(num) || num < 0 || num > 1000000;
 }

@@ -6,19 +6,19 @@ import {
   requestLogin,
   receiveLoginFailure,
   receiveLoginSuccess,
-  IRequestLoginAction,
 } from "./LoginPage.slice";
 import apiClient from "../../app/common/apiClient";
+import { IRequestLoginAction, ILoginSuccess } from "./types";
+import { AxiosResponse } from "axios";
 
 function* handleRequestLogin(action: PayloadAction<IRequestLoginAction>): any {
   try {
-    const url = `${baseAPIURL}v1/user/login`;
-    const { data } = yield call(async () => {
+    const url = `${baseAPIURL}v1/auth/login`;
+    const { data }: AxiosResponse<ILoginSuccess> = yield call(async () => {
       return apiClient.post(url, action.payload);
     });
-    const { token } = data;
-    LocalStorage.setToken(token);
-    yield put(receiveLoginSuccess(token));
+
+    yield put(receiveLoginSuccess(data));
   } catch (e) {
     LocalStorage.checkUnauthorized(e);
     yield put(
