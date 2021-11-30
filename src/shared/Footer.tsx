@@ -21,12 +21,13 @@ function Footer() {
         color={theme.palette.primary.light}
         style={{ marginRight: "8px" }}
       >
-        © Copyright 2021 Edugator @ University of Florida Research Foundation, Inc. All Commercial Rights Reserved.
+        © Copyright 2021 Edugator @ University of Florida Research Foundation,
+        Inc. All Commercial Rights Reserved.
       </Typography>
 
       <Link to={Routes.PrivacyNotice} style={{ textDecoration: "none" }}>
         <Typography variant="body1" color={theme.palette.primary.light}>
-        Privacy Terms | FERPA | Terms of use | Team
+          Privacy Terms | FERPA | Terms of use | Team
         </Typography>
       </Link>
     </FooterHolder>
