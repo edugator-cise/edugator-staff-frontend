@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
-import { requestLogin, resetErrorMessage } from "./LoginPage.slice";
-import { IRequestLoginAction } from "./LoginPage.slice";
 import { Field, Form, Formik } from "formik";
+import { RootState } from "../../app/common/store";
+import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "../../shared/FormTextField";
+import { requestLogin, resetErrorMessage } from "./LoginPage.slice";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { Routes } from "../../shared/Routes.constants";
-import { Redirect } from "react-router";
 import { LocalStorage } from "../../app/common/LocalStorage";
+import { Routes } from "../../shared/Routes.constants";
+import { IRequestLoginAction } from "./types";
+import { Redirect } from "react-router";
 import {
   Alert,
   Button,

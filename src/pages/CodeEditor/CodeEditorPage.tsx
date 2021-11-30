@@ -67,7 +67,7 @@ const TopicsSidebar = styled("div")({
 });
 
 export const CodeEditorPage = () => {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
   const params = useParams<ProblemEditorURL>();
   const locationState = useLocation<ProblemLocationState>();
   const location = locationState.state;
@@ -218,7 +218,7 @@ export const CodeEditorPage = () => {
           >
             <TopicLink
               name="View All"
-              active={true}
+              active={!isHidden}
               icon={<ListBullets weight="fill" size={24} />}
               link=""
             />
@@ -301,7 +301,7 @@ export const CodeEditorPage = () => {
                   />
                 </Allotment.Pane>
                 <Allotment.Pane minSize={350}>
-                  <Allotment vertical snap={true}>
+                  <Allotment vertical snap={false}>
                     <Allotment.Pane minSize={400}>
                       <CodeEditorView
                         code={currentProblem.code.body}

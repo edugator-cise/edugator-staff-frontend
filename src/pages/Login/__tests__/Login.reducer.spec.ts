@@ -1,9 +1,11 @@
 import store from "../../../app/common/store";
+import { rolesEnum } from "../../accounts/types";
 import {
   receiveLoginFailure,
   receiveLoginSuccess,
   requestLogin,
 } from "../LoginPage.slice";
+import { IAuthState, ILoginSuccess } from "../types";
 
 describe("Auth Reducer", () => {
   jest.mock("../../../app/common/apiClient");
@@ -24,13 +26,18 @@ describe("Auth Reducer", () => {
   it("should handle receive login success", () => {
     const baseLoginState = store.getState().login;
 
-    const token = "token";
-    store.dispatch(receiveLoginSuccess(token));
+    const data: ILoginSuccess = {
+      token: "token",
+      role: rolesEnum.TA,
+    };
+    store.dispatch(receiveLoginSuccess(data));
 
-    const expected = {
+    const expected: IAuthState = {
       ...baseLoginState,
       errorMessage: "",
       isLoading: false,
+      loggedIn: true,
+      role: rolesEnum.TA,
     };
     expect(store.getState().login).toEqual(expected);
   });

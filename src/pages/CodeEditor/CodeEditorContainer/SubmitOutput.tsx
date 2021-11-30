@@ -33,8 +33,6 @@ const CompileOutputContainer = styled("div")(
   ({ theme }) => `
   text-align: left;
   height: 100%;
-  overflow-y: scroll;
-  max-height: calc(100% - 70px);
 `
 );
 

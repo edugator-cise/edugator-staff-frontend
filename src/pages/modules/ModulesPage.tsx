@@ -10,13 +10,18 @@ import {
 } from "./components";
 import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
+import { Routes } from "../../shared/Routes.constants";
 import { IAdminModule, NullModule } from "./types";
 import { IProblemBase } from "../../shared/types";
+import { rolesEnum } from "../accounts/types";
+import { useHistory } from "react-router-dom";
 
 const EmptyProblem: IProblemBase = { title: "" };
 
 export function ModulesPage() {
+  const history = useHistory();
   const dispatch = useAppDispatch();
+  const loginState = useAppSelector((state) => state.login);
   const modulesState = useAppSelector((state) => state.modules);
 
   // Module to delete - hooks
@@ -41,6 +46,19 @@ export function ModulesPage() {
     setToGrade(problem);
   };
 
+  const ProfessorHeaderButtons = [
+    {
+      label: "Manage Accounts",
+      onClick: () => history.push(Routes.Accounts),
+      variant: "outlined",
+    },
+    {
+      label: "Add Module",
+      onClick: () => dispatch(openCreateDialog()),
+      variant: "contained",
+    },
+  ];
+
   const moduleHeaderButtons = [
     {
       label: "Add Module",
@@ -49,12 +67,17 @@ export function ModulesPage() {
     },
   ];
 
+  const HeaderButtons =
+    loginState.role === rolesEnum.Professor && loginState.loggedIn
+      ? ProfessorHeaderButtons
+      : moduleHeaderButtons;
+
   React.useEffect(() => {
     dispatch(requestModules());
   }, [dispatch]);
 
   return (
-    <LayoutContainer pageTitle={"Modules"} actionButtons={moduleHeaderButtons}>
+    <LayoutContainer pageTitle={"Modules"} actionButtons={HeaderButtons}>
       <>
         <ModuleDialog />
 

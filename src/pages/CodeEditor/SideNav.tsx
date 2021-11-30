@@ -76,7 +76,7 @@ export const Sidenav = (props: SidenavProps) => {
           <CustomListItemButton
             key={value.name + "_" + indexVal}
             onClick={() => {
-              handleClick(value.name);
+              handleClick(value.name + "_" + indexVal);
             }}
           >
             <ListItemText
@@ -91,7 +91,11 @@ export const Sidenav = (props: SidenavProps) => {
               <ExpandMore />
             )}
           </CustomListItemButton>
-          <Collapse in={!!menu[value.name]} timeout="auto" unmountOnExit>
+          <Collapse
+            in={!!menu[value.name + "_" + indexVal]}
+            timeout="auto"
+            unmountOnExit
+          >
             <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
               {value.problems.map(
                 (problemItem: IProblemItem, index: number) => (

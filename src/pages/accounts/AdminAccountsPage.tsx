@@ -1,7 +1,8 @@
 import React from "react";
-import { Fade, Stack, duration, Container } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
+import { Fade, Stack, duration, Container } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import { useHistory } from "react-router-dom";
 import {
   requestAccounts,
   unsetSelectedAccount,
@@ -13,8 +14,10 @@ import {
   DashboardProgress,
   AccountSnackbar,
 } from "./components";
+import { Routes } from "../../shared/Routes.constants";
 
 export function AdminAccountsPage() {
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const dashboardState = useAppSelector((state) => state.accountManager);
 
@@ -46,6 +49,11 @@ export function AdminAccountsPage() {
   }, [loading]);
 
   const accountsHeaderButtons = [
+    {
+      label: "Manage Course Content",
+      onClick: () => history.push(Routes.Modules),
+      variant: "outlined",
+    },
     {
       label: "Add Admin User",
       onClick: () => setNewUserDialog(true),
