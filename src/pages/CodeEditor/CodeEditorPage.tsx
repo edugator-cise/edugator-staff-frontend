@@ -302,13 +302,13 @@ export const CodeEditorPage = () => {
                 </Allotment.Pane>
                 <Allotment.Pane minSize={350}>
                   <Allotment vertical snap={false}>
-                    <Allotment.Pane minSize={400}>
+                    <Allotment.Pane minSize={100}>
                       <CodeEditorView
                         code={currentProblem.code.body}
                         templatePackage={currentProblem.templatePackage}
                       />
                     </Allotment.Pane>
-                    <Allotment.Pane minSize={330}>
+                    <Allotment.Pane minSize={100}>
                       <InputOutputView />
                     </Allotment.Pane>
                   </Allotment>
