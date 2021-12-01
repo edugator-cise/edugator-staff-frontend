@@ -59,7 +59,14 @@ int main() {}
 
 Open as a **new tab** to find more markdown syntax [here](https://www.markdownguide.org/basic-syntax/) (not all supported)
 
-# GFM https://github.com/remarkjs/remark-gfm
+Example image
+
+![alt text. Albert the Gator](https://m.media-amazon.com/images/I/51K51FOpwQL._SY355_.jpg)
+
+***
+
+# GFM 
+https://github.com/remarkjs/remark-gfm
 
 ## Autolink literals
 
@@ -85,12 +92,6 @@ A note[^1]
 
 * [ ] to do
 * [x] done
-
-Example image
-
-![alt text. Albert the Gator](https://m.media-amazon.com/images/I/51K51FOpwQL._SY355_.jpg)
-
-***
 
 `;
 
