@@ -1,9 +1,9 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import Editor from "@monaco-editor/react";
 import { FormikProps } from "formik";
 import { isBlank } from "../../../shared/utils";
+import { Markdown } from "../../../shared/Markdown";
 
 interface Props {
   form: FormikProps<any>;
@@ -59,6 +59,33 @@ int main() {}
 
 Open as a **new tab** to find more markdown syntax [here](https://www.markdownguide.org/basic-syntax/) (not all supported)
 
+# GFM https://github.com/remarkjs/remark-gfm
+
+## Autolink literals
+
+www.example.com, https://example.com, and contact@example.com.
+
+## Footnote
+
+A note[^1]
+
+[^1]: Big note.
+
+## Strikethrough
+
+~one~ or ~~two~~ tildes.
+
+## Table
+
+| a | b  |  c |  d  |
+| - | :- | -: | :-: |
+| alpaca | bat  | cat | dog |
+
+## Tasklist
+
+* [ ] to do
+* [x] done
+
 Example image
 
 ![alt text. Albert the Gator](https://m.media-amazon.com/images/I/51K51FOpwQL._SY355_.jpg)
@@ -103,7 +130,7 @@ export function MarkdownEditor({ form }: Props): React.ReactElement {
       <Stack width="50%" spacing={1} overflow="auto">
         <Typography component="h3">Problem Description Preview</Typography>
         <Divider />
-        <ReactMarkdown>{markdownText}</ReactMarkdown>
+        <Markdown markdownString={markdownText} />
       </Stack>
     </Stack>
   );
