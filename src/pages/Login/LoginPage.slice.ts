@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocalStorage } from "../../app/common/LocalStorage";
-
-export interface IAuthState {
-  isLoading: boolean;
-  errorMessage: string;
-}
+import { rolesEnum } from "../accounts/types";
+import { IAuthState, IRequestLoginAction, ILoginSuccess } from "./types";
 
 const initialAuthState: IAuthState = {
   isLoading: false,
   errorMessage: "",
+  loggedIn: false,
+  role: rolesEnum.TA,
 };
 
 /**
@@ -17,13 +16,6 @@ const initialAuthState: IAuthState = {
 export function getInitialAuthState(): IAuthState {
   return { ...initialAuthState };
 }
-
-export interface IRequestLoginAction {
-  username: string;
-  password: string;
-}
-
-//const requestLogin = createAction('requestLogin', withPayloadType<IRequestLoginAction>() );
 
 export const loginSlice = createSlice({
   name: "login",
@@ -36,23 +28,27 @@ export const loginSlice = createSlice({
         errorMessage: "",
       };
     },
-    receiveLoginSuccess(state, action) {
+    receiveLoginSuccess(state, action: PayloadAction<ILoginSuccess>) {
+      LocalStorage.setToken(action.payload.token);
       return {
         ...state,
         isLoading: false,
         errorMessage: "",
+        loggedIn: true,
+        role: action.payload.role,
       };
     },
     receiveLoginFailure(state, action) {
       return {
         ...state,
         isLoading: false,
+        loggedIn: true,
         errorMessage: action.payload,
       };
     },
     requestLogout(state) {
       LocalStorage.removeToken();
-      return { ...state, isLoading: false, authorizationToken: "" };
+      return { ...state, isLoading: false, loggedIn: false };
     },
     resetErrorMessage(state) {
       return {

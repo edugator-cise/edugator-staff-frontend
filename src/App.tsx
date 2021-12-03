@@ -12,6 +12,7 @@ import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
+import PrivacyNotice from "./pages/PrivacyNotice/PrivacyNoticePage";
 
 function App() {
   return (
@@ -34,15 +35,17 @@ function App() {
             <PrivateRoute exact path={Routes.Accounts}>
               <AdminAccountsPage />
             </PrivateRoute>
-            <Route path={Routes.AdminCodeWithProblem}>
+            <PrivateRoute exact path={Routes.AdminCodeWithProblem}>
               <CodeEditorPage />
-            </Route>
+            </PrivateRoute>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
-              {/* <TestSplitPane /> */}
             </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
+            </Route>
+            <Route exact path={Routes.PrivacyNotice}>
+              <PrivacyNotice />
             </Route>
             <Route component={NotFoundPage} />
           </Switch>

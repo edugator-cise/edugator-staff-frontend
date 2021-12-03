@@ -12,18 +12,20 @@ import { styled } from "@mui/material/styles";
 import { IResultSubmission } from "../types";
 const OutputPaper = styled("div")(
   ({ theme }) => `
-  height: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   box-shadow: none;
-  padding: ${theme.spacing(1)} ${theme.spacing(2)};
   line-height: 20px;
   font-weight: 400;
   border-radius: 0;
   overflow: auto;
-  background-color: #f7f9fa;
+  background-color: #f7f9fa; 
+  border-radius: 4px;
+  margin-right: ${theme.spacing(1)};
+  margin-left: ${theme.spacing(1)};
 `
 );
 
@@ -31,7 +33,6 @@ const CompileOutputContainer = styled("div")(
   ({ theme }) => `
   text-align: left;
   height: 100%;
-  overflow-y: auto;
 `
 );
 
@@ -41,7 +42,7 @@ interface Props {
 export const SubmitOutput = ({ results }: Props) => {
   if (results) {
     return (
-      <CompileOutputContainer>
+      <CompileOutputContainer id="submit-container">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: "100%" }} aria-label="results table">
             <TableHead>
