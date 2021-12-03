@@ -123,7 +123,24 @@ export const CodeEditorForm = ({ formRef }: Props) => {
         setFieldValue,
       }) => (
         <Form>
-          <Stack overflow="auto" spacing={5}>
+          <Stack overflow="none" spacing={5}>
+            <Box>
+              <FormControl>
+                <InputLabel>Codebox file extension</InputLabel>
+                <Select
+                  name="fileExtension"
+                  value={values.fileExtension}
+                  label="fileExtension"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  sx={{ minWidth: "10rem" }}
+                  variant="filled"
+                >
+                  <MenuItem value=".h">.h</MenuItem>
+                  <MenuItem value=".cpp">.cpp</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             <Box>
               <InputLabel>Header</InputLabel>
               <FormHelperText>
@@ -184,23 +201,6 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                   }}
                 />
               </Paper>
-            </Box>
-            <Box>
-              <FormControl>
-                <InputLabel>Codebox file extension</InputLabel>
-                <Select
-                  name="fileExtension"
-                  value={values.fileExtension}
-                  label="fileExtension"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  sx={{ minWidth: "10rem" }}
-                  variant="filled"
-                >
-                  <MenuItem value=".h">.h</MenuItem>
-                  <MenuItem value=".cpp">.cpp</MenuItem>
-                </Select>
-              </FormControl>
             </Box>
           </Stack>
         </Form>
