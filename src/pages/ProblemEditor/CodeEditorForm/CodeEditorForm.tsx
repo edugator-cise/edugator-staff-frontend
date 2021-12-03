@@ -13,6 +13,7 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../app/common/hooks";
+import { isBlank } from "../../../shared/utils";
 import {
   CodeEditorFields,
   updateCodeEditor,
@@ -37,8 +38,35 @@ interface Errors {
   footer?: string;
 }
 
+const defaultHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
+#include <iostream>
+#include <vector>
+using namespace std;
+`;
+
+const defaultBody = `int addTwoNums(int x, int y) {
+	// Your code here
+}
+`;
+
+const defaultFooter = `// The main does not have to be in the footer.
+// The main should remain in the footer if you don't want students to be able to see it nor change it.
+int main()
+{
+    int x = 0, y = 0;
+    cin >> x >> y;
+    int result = addTwoNums(x, y);
+    // You should print out whatever the expected output should be. 
+    // Be careful about whitespace. Ex: only put endl if you add an endline in your expected output.
+    cout << result;
+    return 0;
+}
+`;
+
 export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
+
+  const [touched, setTouched] = React.useState(false);
 
   const initialValues = useAppSelector((state) => {
     const formattedFields: CodeEditorFields =
@@ -51,6 +79,17 @@ export const CodeEditorForm = ({ formRef }: Props) => {
     };
     return flattenedFields;
   });
+
+  if (
+    !touched &&
+    isBlank(initialValues.header) &&
+    isBlank(initialValues.body) &&
+    isBlank(initialValues.footer)
+  ) {
+    initialValues.header = defaultHeader;
+    initialValues.body = defaultBody;
+    initialValues.footer = defaultFooter;
+  }
 
   const validation = (values: FlattenedCodeFields) => {
     const errors: Errors = {};
@@ -84,7 +123,24 @@ export const CodeEditorForm = ({ formRef }: Props) => {
         setFieldValue,
       }) => (
         <Form>
-          <Stack overflow="auto" spacing={5}>
+          <Stack overflow="none" spacing={5}>
+            <Box>
+              <FormControl>
+                <InputLabel>Codebox file extension</InputLabel>
+                <Select
+                  name="fileExtension"
+                  value={values.fileExtension}
+                  label="fileExtension"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  sx={{ minWidth: "10rem" }}
+                  variant="filled"
+                >
+                  <MenuItem value=".h">.h</MenuItem>
+                  <MenuItem value=".cpp">.cpp</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             <Box>
               <InputLabel>Header</InputLabel>
               <FormHelperText>
@@ -99,7 +155,10 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                   language="cpp"
                   height="250px"
                   value={values.header}
-                  onChange={(value) => setFieldValue("header", value)}
+                  onChange={(value) => {
+                    setFieldValue("header", value);
+                    setTouched(true);
+                  }}
                 />
               </Paper>
             </Box>
@@ -115,7 +174,10 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                   language="cpp"
                   height="250px"
                   value={values.body}
-                  onChange={(value) => setFieldValue("body", value)}
+                  onChange={(value) => {
+                    setFieldValue("body", value);
+                    setTouched(true);
+                  }}
                 />
               </Paper>
             </Box>
@@ -133,26 +195,12 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                   language="cpp"
                   height="250px"
                   value={values.footer}
-                  onChange={(value) => setFieldValue("footer", value)}
+                  onChange={(value) => {
+                    setFieldValue("footer", value);
+                    setTouched(true);
+                  }}
                 />
               </Paper>
-            </Box>
-            <Box>
-              <FormControl>
-                <InputLabel>Codebox file extension</InputLabel>
-                <Select
-                  name="fileExtension"
-                  value={values.fileExtension}
-                  label="fileExtension"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  sx={{ minWidth: "10rem" }}
-                  variant="filled"
-                >
-                  <MenuItem value=".h">.h</MenuItem>
-                  <MenuItem value=".cpp">.cpp</MenuItem>
-                </Select>
-              </FormControl>
             </Box>
           </Stack>
         </Form>

@@ -63,6 +63,12 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const problemId = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?._id
   );
+  const fileType = useSelector(
+    (state: RootState) => state.codeEditor.currentProblem?.fileExtension
+  );
+  const navStructure = useSelector(
+    (state: RootState) => state.codeEditor.navStructure
+  );
   const { timeLimit, memoryLimit, buildCommand } = useSelector(
     (state: RootState) => {
       return {
@@ -82,11 +88,35 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
   };
+
+  const generateFileName = () => {
+    let currentModuleNumber = -1;
+    let currentProblemNumber = -1;
+    let foundProblem = false;
+    for (let i = 0; i < navStructure.length; i++) {
+      for (let j = 0; j < navStructure[i].problems.length; j++) {
+        if (navStructure[i].problems[j]._id === problemId) {
+          foundProblem = true;
+          currentModuleNumber = i;
+          currentProblemNumber = j;
+          break;
+        }
+      }
+      if (foundProblem) {
+        break;
+      }
+    }
+    if (!foundProblem) {
+      return "edugator-code.cpp";
+    }
+    return `cop3530_${currentModuleNumber + 1}_${
+      currentProblemNumber + 1
+    }.${fileType}`;
+  };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
     const blobURL = URL.createObjectURL(blob);
-    const filename = "edugator-code.cpp";
-
+    const filename = generateFileName();
     // Create a new link
     const anchor = document.createElement("a");
     anchor.href = blobURL;
