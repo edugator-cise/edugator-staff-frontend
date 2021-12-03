@@ -264,6 +264,7 @@ export const CodeEditorPage = () => {
                   marginTop: 5,
                   marginRight: "auto",
                   marginLeft: "auto",
+                  zIndex: 300,
                 }}
                 onClose={() => {
                   dispatch(
