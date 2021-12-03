@@ -14,14 +14,15 @@ interface Props {
   formRef: any;
 }
 
-//interface MarkdownFieldProps extends FieldProps {}
-
 export const ProblemEditorForm = (props: Props) => {
   const dispatch = useDispatch();
 
   const initialValues = useAppSelector(
     (state) => state.problemEditorContainer.problem
   );
+
+  const templatePackageHelperText =
+    "This should be a link to a downloadable file with starter/template code.";
 
   const validate = (values: ProblemFields) => {
     const errors: any = {};
@@ -103,7 +104,10 @@ export const ProblemEditorForm = (props: Props) => {
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.templatePackage && Boolean(errors.templatePackage)}
-              helperText={touched.templatePackage && errors.templatePackage}
+              helperText={
+                (touched.templatePackage && errors.templatePackage) ||
+                templatePackageHelperText
+              }
               required
             />
           </Stack>
