@@ -1,8 +1,8 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import Editor from "@monaco-editor/react";
 import { FormikProps } from "formik";
+import { Markdown } from "../../../shared/Markdown";
 
 interface Props {
   form: FormikProps<any>;
@@ -36,9 +36,7 @@ export function MarkdownEditor({ form }: Props): React.ReactElement {
       <Stack width="50%" spacing={1} overflow="auto">
         <Typography component="h3">Preview</Typography>
         <Divider />
-        <ReactMarkdown>
-          {markdownText || "# Your problem statement here"}
-        </ReactMarkdown>
+        <Markdown markdownString={markdownText} />
       </Stack>
     </Stack>
   );
