@@ -111,7 +111,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     }
     return `cop3530_${currentModuleNumber + 1}_${
       currentProblemNumber + 1
-    }.${fileType}`;
+    }${fileType}`;
   };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
