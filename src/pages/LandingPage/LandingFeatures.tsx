@@ -11,7 +11,6 @@ import FeatureCard from "./FeatureCard";
 const Holder = styled("div")({
   height: 700,
   width: "100%",
-  backgroundColor: "red",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
