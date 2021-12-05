@@ -148,6 +148,23 @@ function transformPayload(payload: ICodeSubmission) {
   return body;
 }
 
+function evaluateCompilerBody(resultData: IJudge0Response) {
+  if (resultData.status.id === 3 && resultData.stdout) {
+    return Buffer.from(resultData.stdout || "", "base64").toString();
+  } else if (resultData.status.id === 6) {
+    return Buffer.from(resultData.compile_output || "", "base64").toString();
+  } else if (resultData.status.id === 5) {
+    return Buffer.from(resultData.message || "", "base64").toString();
+  } else if (resultData.status.id >= 7 && resultData.status.id <= 12) {
+    let message = Buffer.from(resultData.stderr || "", "base64").toString();
+    message += "\n";
+    message += Buffer.from(resultData.message || "", "base64").toString();
+    return message;
+  } else {
+    return "";
+  }
+}
+
 function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
   try {
     const { data }: { data: IToken } = yield call(async () => {
@@ -189,10 +206,7 @@ function* runCodeRequest(action: PayloadAction<ICodeSubmission>) {
           resultData.status.id === 3
             ? "Accepted"
             : resultData.status.description,
-        compilerBody:
-          resultData.status.id === 3 && resultData.stdout
-            ? Buffer.from(resultData.stdout || "", "base64").toString()
-            : Buffer.from(resultData.compile_output || "", "base64").toString(),
+        compilerBody: evaluateCompilerBody(resultData),
       })
     );
   } catch (e) {

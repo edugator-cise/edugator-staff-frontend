@@ -50,6 +50,7 @@ export const SubmitOutput = ({ results }: Props) => {
                 <TableCell align="left">Input</TableCell>
                 <TableCell align="left">Output</TableCell>
                 <TableCell align="left">Expected</TableCell>
+                <TableCell align="left">Hint</TableCell>
                 <TableCell align="center">Result</TableCell>
               </TableRow>
             </TableHead>
@@ -69,6 +70,9 @@ export const SubmitOutput = ({ results }: Props) => {
                   </TableCell>
                   <TableCell style={{ whiteSpace: "pre-wrap" }} align="left">
                     {row.expectedOutput}
+                  </TableCell>
+                  <TableCell style={{ whiteSpace: "pre-wrap" }} align="left">
+                    {row.hint}
                   </TableCell>
                   <TableCell style={{ whiteSpace: "pre-wrap" }} align="center">
                     {row.result ? (
