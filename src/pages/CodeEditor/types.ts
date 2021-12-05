@@ -53,6 +53,7 @@ export interface IResultSubmission {
   stdin: string;
   output: string;
   expectedOutput: string;
+  hint: string;
   result: boolean;
 }
 
