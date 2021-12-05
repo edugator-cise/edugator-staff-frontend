@@ -220,6 +220,7 @@ describe("CodeEditor Reducer", () => {
         output: "sample",
         expectedOutput: "sample",
         result: true,
+        hint: "sample",
       },
     ];
     store.dispatch(setResultSubmission(resultSubmission));
