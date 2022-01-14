@@ -1,6 +1,17 @@
 # edugator-staff-frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+An interactive coding and learning portal for students in STEM.
+
+Need info? Check the Docs | Create an Issue | Ask us on Discord
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+- [Installation](#installation)
+- [Available Sripts](#available-scripts)
+- [Features](#features)
+- [Contributing](#contributing)
 
 ## Available Scripts
 
@@ -44,8 +55,6 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-
 
 ## Legal Information
 
