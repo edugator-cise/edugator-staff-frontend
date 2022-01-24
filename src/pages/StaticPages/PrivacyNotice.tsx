@@ -66,6 +66,7 @@ function PrivacyNotice() {
 
   return (
     <>
+    <div id="top"/>
     <VerticalNavigation
         light={true}
         modules={modules}
