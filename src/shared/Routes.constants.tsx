@@ -12,5 +12,7 @@ export enum Routes {
   Code = "/code",
   Landing = "/",
   PrivacyNotice = "/privacy_notice",
-  PrivacyNoticeDocument = "/privacy_notice_document"
+  PrivacyNoticeDocument = "/privacy_notice_document",
+  FERPA = "/ferpa",
+  TermsOfUse = "/termsofuse",
 }

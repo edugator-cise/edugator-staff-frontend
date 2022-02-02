@@ -34,7 +34,17 @@ function Footer() {
 
       <Link to={Routes.PrivacyNotice} style={{ textDecoration: "none" }}>
         <Typography variant={md ? "body2" : "body1"} color={theme.palette.primary.light}>
-          Privacy Terms | FERPA | Terms of use | Team
+          Privacy Terms⠀|⠀
+        </Typography>
+      </Link>
+      <Link to={Routes.FERPA} style={{ textDecoration: "none" }}>
+        <Typography variant={md ? "body2" : "body1"} color={theme.palette.primary.light}>
+          FERPA⠀|⠀
+        </Typography>
+      </Link>
+      <Link to={Routes.TermsOfUse} style={{ textDecoration: "none" }}>
+        <Typography variant={md ? "body2" : "body1"} color={theme.palette.primary.light}>
+          Terms of use⠀|⠀Team
         </Typography>
       </Link>
     </FooterHolder>
