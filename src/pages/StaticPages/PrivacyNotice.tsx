@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
-import { useParams, useLocation } from "react-router-dom";
-import { adminPathRegex, colors } from "../../shared/constants";
+import { useLocation } from "react-router-dom";
+import { adminPathRegex } from "../../shared/constants";
 import { styled } from '@mui/styles'
 import theme from "../../shared/theme";
 import { Typography } from '@mui/material';
@@ -93,7 +93,7 @@ function PrivacyNotice() {
                 <b>INTRODUCTION</b>
                 <br/>
                 <br/>
-                Thank you for choosing to be part of our community at Edugator ("<b>Company</b>", "<b>we</b>", "<b>us</b>", "<b>our</b>"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice, or our practices with regards to your personal information, please contact us at <a href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</a>
+                Thank you for choosing to be part of our community at Edugator ("<b>Company</b>", "<b>we</b>", "<b>us</b>", "<b>our</b>"). We are committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice, or our practices with regards to your personal information, please contact us at <Link href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</Link>
                 <br/>
                 <br/>
                 When you visit our website https://cise-dev.herokuapp.com (the "<b>Website</b>"), and more generally, use any of our services (the "<b>Services</b>", which include the Website), we appreciate that you are trusting us with your personal information. We take your privacy very seriously. In this privacy notice, we seek to explain to you in the clearest way possible what information we collect, how we use it and what rights you have in relation to it. We hope you take some time to read through it carefully, as it is important. If there are any terms in this privacy notice that you do not agree with, please discontinue use of our Services immediately.
@@ -228,7 +228,7 @@ function PrivacyNotice() {
                     <b>In Short: </b><i>We do not knowingly collect data from or market to children under 18 years of age.</i>
                     <br/>
                     <br/>
-                    We do not knowingly solicit data from or market to children under 18 years of age. By using the Website, you represent that you are at least 18 or that you are the parent or guardian of such a minor and consent to such minor dependent’s use of the Website. If you become aware of any data we may have collected from children under age 18, please contact us at <a href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</a>.
+                    We do not knowingly solicit data from or market to children under 18 years of age. By using the Website, you represent that you are at least 18 or that you are the parent or guardian of such a minor and consent to such minor dependent’s use of the Website. If you become aware of any data we may have collected from children under age 18, please contact us at <Link href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</Link>.
                     <br/>
                     <br/>
                 </Typography>
@@ -241,10 +241,10 @@ function PrivacyNotice() {
                     <b>In Short: </b><i>You may review, change, or terminate your account at any time.</i>
                     <br/>
                     <br/>
-                    If you are a resident in the European Economic Area and you believe we are unlawfully processing your personal information, you also have the right to complain to your local data protection supervisory authority. You can find their contact details here: <a href="http://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm">http://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm</a>.
+                    If you are a resident in the European Economic Area and you believe we are unlawfully processing your personal information, you also have the right to complain to your local data protection supervisory authority. You can find their contact details here: <Link href="http://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm">http://ec.europa.eu/justice/data-protection/bodies/authorities/index_en.htm</Link>.
                     <br/>
                     <br/>
-                    If you are a resident in Switzerland, the contact details for the data protection authorities are available here: <a href="https://www.edoeb.admin.ch/edoeb/en/home.html">https://www.edoeb.admin.ch/edoeb/en/home.html</a>.
+                    If you are a resident in Switzerland, the contact details for the data protection authorities are available here: <Link href="https://www.edoeb.admin.ch/edoeb/en/home.html">https://www.edoeb.admin.ch/edoeb/en/home.html</Link>.
                     <br/>
                     <br/>
                 </Typography>
@@ -290,7 +290,7 @@ function PrivacyNotice() {
                     <b>11. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</b>
                     <br/>
                     <br/>
-                    If you have questions or comments about this notice, you may email us at <a href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</a>.
+                    If you have questions or comments about this notice, you may email us at <Link href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</Link>.
                     <br/>
                     <br/>
                 </Typography>
