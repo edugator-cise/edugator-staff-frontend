@@ -41,11 +41,6 @@ const TextHolder = styled('div')({
       },
 })
 
-const Link = styled('a')({
-    color: 'black',
-    textDecoration: 'none'
-})
-
 function Ferpa() {
     const modules = useSelector((state: RootState) => {
         const sortedModules = state.codeEditor.navStructure;
