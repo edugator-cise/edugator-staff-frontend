@@ -35,11 +35,13 @@
     "remark-gfm": "^3.0.0",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
-    "typescript": "~4.1.5"
+    "typescript": "^4.1.6"
   },
   "scripts": {
     "start": "react-scripts start",
+    "serve": "tsc src/index.tsx -w & pm2 start dist/index.js --watch",
     "build": "react-scripts build",
+    "deploy-cise": "react-scripts build && cp -a build/. ../../www/edugator.cise.ufl.edu/",
     "test": "react-scripts test --passWithNoTests --watchAll=false",
     "test-modules": "react-scripts test ModulesPage.slice.spec.ts --watchAll=false",
     "eject": "react-scripts eject",
