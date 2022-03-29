@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EditorState } from "draft-js";
 import { EditorContent } from "./EditorContent";
+import "./EditorCreationStyles.css";
 
 //React state hook
 export const TextStack = () => {
@@ -65,9 +66,11 @@ export const TextStack = () => {
       <div className="form-field">
         <label htmlFor="editor">Editor(s)</label>
         {editorList.map((editor, index) => (
-          <div key={index} className="services">
+          <div key={index}>
             <div className="first-division">
+            <div className="EditorBox">
               <EditorContent id={editor.id} content={editor.content} setContent={setEditorContent} />
+            </div>
               {editorList.length - 1 === index && editorList.length < 4 && (
                 <button
                   type="button"

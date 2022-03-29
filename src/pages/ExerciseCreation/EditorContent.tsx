@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import {stateToHTML} from 'draft-js-export-html';
@@ -27,7 +27,7 @@ export const EditorContent = (props: {content: EditorState, id: number, setConte
           }
           //Display toolbar on top
           toolbar={{
-            inline: { inDropdown: true },
+            inline: { inDropdown: false },
             list: { inDropdown: true },
             textAlign: { inDropdown: true },
             link: { inDropdown: true },

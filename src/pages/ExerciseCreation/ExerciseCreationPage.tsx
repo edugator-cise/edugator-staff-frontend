@@ -1,8 +1,9 @@
 import { TextStack } from "./TextStack";
+import "./EditorStyles.css";
 
 export const ExerciseCreationPage = () => {
     return (
-        <div >
+        <div>
             <TextStack></TextStack>
         </div>
     )
