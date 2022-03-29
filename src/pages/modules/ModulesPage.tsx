@@ -57,12 +57,22 @@ export function ModulesPage() {
       onClick: () => dispatch(openCreateDialog()),
       variant: "contained",
     },
+    {
+      label: "Add Exercise",
+      onClick: () => history.push(Routes.ExerciseCreator),
+      variant: "contained",
+    },
   ];
 
   const moduleHeaderButtons = [
     {
       label: "Add Module",
       onClick: () => dispatch(openCreateDialog()),
+      variant: "contained",
+    },
+    {
+      label: "Add Exercise",
+      onClick: () => history.push(Routes.ExerciseCreator),
       variant: "contained",
     },
   ];
