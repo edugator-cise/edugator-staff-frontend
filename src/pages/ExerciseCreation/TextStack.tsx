@@ -66,8 +66,8 @@ export const TextStack = () => {
       <div className="form-field">
         <label htmlFor="editor">Editor(s)</label>
         {editorList.map((editor, index) => (
-          <div key={index}>
-            <div className="first-division">
+          <div key={editor.id} className="services">
+          <div className="first-division">
             <div className="EditorBox">
               <EditorContent id={editor.id} content={editor.content} setContent={setEditorContent} />
             </div>
@@ -95,6 +95,13 @@ export const TextStack = () => {
           </div>
         ))}
       </div>
+      {/* <div className="output">
+        <h2>Output</h2>
+        {editorList &&
+          editorList.map((editor, index) => (
+            <ul key={index}>{editor.service && <li>{editor.content}</li>}</ul>
+          ))}
+      </div> */}
     </form>
   );
 }
