@@ -3,7 +3,7 @@ import { EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import {stateToHTML} from 'draft-js-export-html';
 
-export const EditorContent = (props: {content: EditorState, id: number, setContent: Function}) => {
+export const TextEditorContent = (props: {content: EditorState, id: number, setContent: Function}) => {
     const [editorState, setEditorState] = useState(props.content)
     const [html, setHtml] = useState("")
   
