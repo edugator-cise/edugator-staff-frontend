@@ -6,6 +6,22 @@ import MultipleChoiceOption from "./components/MultipleChoiceOption";
 import styled from "@emotion/styled";
 import {stateToHTML} from 'draft-js-export-html';
 
+// https://www.npmjs.com/package/draft-js-export-html
+const options = {
+  blockRenderers: {
+    atomic: (block) => {
+      let data = block.getData()
+      console.log("Data", data);
+      return '<mc>' + 
+                '<question>' + data.get('question') + '</question>' + 
+                // '<answer>' + data.get('question') + '</answer>' +
+                // '<answer>' + data.get('question') + '</answer>' +
+                // '<answer>' + data.get('question') + '</answer>' +
+                // '<answer>' + data.get('question') + '</answer>' +
+              '</mc>';
+    },
+  },
+};
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -50,7 +66,7 @@ class TextEditorContent extends Component{
   //Updates editorstate (text box content) when changed
   onEditorStateChange = (editorState) => {
     // console.log(editorState)
-    let html = stateToHTML(editorState.getCurrentContent());
+    let html = stateToHTML(editorState.getCurrentContent(), options);
     this.onTrigger();
     this.setState({
       editorState,

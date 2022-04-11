@@ -18,6 +18,7 @@ function MultipleChoiceOption(props) {
     setAnswer3("");
     setAnswer4("");
   };
+
   const renderModal = () => {
     return (
       <div className="rdw-mc-modal">
@@ -110,9 +111,6 @@ function MultipleChoiceOption(props) {
     <div className="rdw-mc-wrapper">
       <div
         className="rdw-option-wrapper"
-        onBlur={() => {
-          setExpanded(false);
-        }}
         onClick={() => {
           setExpanded(!expanded);
         }}

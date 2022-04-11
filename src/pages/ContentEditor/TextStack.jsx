@@ -35,7 +35,7 @@ export const TextStack = () => {
 
   const HTMLCallback = (html) => {
     setHTML(html);
-    console.log("###########################", html)
+    console.log(html);
   }
 
   /*Some key notes:
