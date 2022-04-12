@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { EditorState, Modifier } from "draft-js";
+import "./MCOStyles.css"
 
 function MultipleChoiceOption(props) {
   const [expanded, setExpanded] = useState(false);
@@ -96,7 +97,7 @@ function MultipleChoiceOption(props) {
           <button
             className="rdw-mc-modal-btn"
             onClick={() => {
-              props.insertMC(question, answer1, answer2, answer3, answer4);
+              props.insertMC(question, "A) " + answer1, "B) " + answer2, "C) " + answer3, "D) " + answer4);
               resetValues();
             }}
           >

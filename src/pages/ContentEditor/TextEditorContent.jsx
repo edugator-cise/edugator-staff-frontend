@@ -10,14 +10,19 @@ import {stateToHTML} from 'draft-js-export-html';
 const options = {
   blockRenderers: {
     atomic: (block) => {
-      let data = block.getData()
+      // const editorState = state;
+      // const contentState = editorState.getCurrentContent();
+      // const entityKey = block.getEntityAt(0);
+      // const entity = contentState.getEntity(entityKey);
+      // let data = entity.data;
+      let data = block.getData();
       console.log("Data", data);
       return '<mc>' + 
                 '<question>' + data.get('question') + '</question>' + 
-                // '<answer>' + data.get('question') + '</answer>' +
-                // '<answer>' + data.get('question') + '</answer>' +
-                // '<answer>' + data.get('question') + '</answer>' +
-                // '<answer>' + data.get('question') + '</answer>' +
+                '<answer>' + data.get('question') + '</answer>' +
+                '<answer>' + data.get('question') + '</answer>' +
+                '<answer>' + data.get('question') + '</answer>' +
+                '<answer>' + data.get('question') + '</answer>' +
               '</mc>';
     },
   },
@@ -83,7 +88,7 @@ class TextEditorContent extends Component{
     const data = props.contentState;
     //get metadata passed in via insertBlock() function passed to MultipleChoiceOption
     const values = data.getEntity(props.block.getEntityAt(0)).getData();
-    console.log(values);
+    // console.log(values);
 
     return (
       <QuestionHolder>
@@ -155,14 +160,21 @@ class TextEditorContent extends Component{
 
   //util function for editor to render blocks based on passed content type
   blockRenderer = (contentBlock) => {
+    const { editorState } = this.state;
     const type = contentBlock.getType();
-    console.log(contentBlock.getData());
-    console.log(contentBlock.getType());
     if (type === "atomic") {
-      return {
-        component: this.MultipleChoiceDisplayBlock,
-        editable: false,
-      };
+      const contentState = editorState.getCurrentContent();
+      const entityKey = contentBlock.getEntityAt(0);
+      const entity = contentState.getEntity(entityKey);
+      console.log(entity.type);
+      // console.log(entity.data);
+      if (entity && entity.type === "MULTIPLE_CHOICE") {
+        console.log(entity.data);
+        return {
+          component: this.MultipleChoiceDisplayBlock,
+          editable: false,
+        };
+      } else return undefined;
     }
   };
 
@@ -176,7 +188,7 @@ class TextEditorContent extends Component{
     const contentState = editorState.getCurrentContent();
 
     const contentStateWithEntity = contentState.createEntity(
-      "TEST",
+      "MULTIPLE_CHOICE",
       "MUTABLE",
       {
         question: question,
