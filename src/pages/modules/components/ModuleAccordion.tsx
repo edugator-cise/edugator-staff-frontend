@@ -7,13 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
+import { ExpandMore, Add, Edit, AssignmentTurnedIn, AddCircle } from "@mui/icons-material";
 import { useAppSelector } from "../../../app/common/hooks";
 import { Routes } from "../../../shared/Routes.constants";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
+import { TemplateGenerator } from "./TemplateGeneration";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",
@@ -115,6 +116,16 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                         </Title>
 
                         <ButtonContainer>
+                          <ProblemAction
+                            startIcon={<AddCircle />}
+                            size="small"
+                            variant="outlined"
+                            onClick={() => {
+                              TemplateGenerator(module, problem);
+                            }}
+                          >
+                            Template
+                          </ProblemAction>
                           <ProblemAction
                             startIcon={<AssignmentTurnedIn />}
                             size="small"
