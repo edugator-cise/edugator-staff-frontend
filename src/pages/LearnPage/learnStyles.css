@@ -1,0 +1,21 @@
+.inter {
+  font-family: "Inter";
+  margin-bottom: -5px;
+}
+
+.lesson-title {
+  font-family: 'DM Serif Display';
+  font-size: 3rem;
+}
+
+.lesson-subtitle {
+  font-family: 'DM Serif Display';
+  font-weight: 500;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.lesson-subtitle span {
+  font-family: 'Inter';
+  font-size: 1rem;
+}
