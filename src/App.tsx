@@ -16,6 +16,7 @@ import PrivacyNotice from './pages/StaticPages/PrivacyNotice'
 import TermsOfUse from './pages/StaticPages/TermsOfUse'
 import Ferpa from './pages/StaticPages/Ferpa'
 import PrivacyNoticeDocument from "./pages/PrivacyNotice/PrivacyNoticePage";
+import LearnPage from "./pages/LearnPage/LearnPage";
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
             </PrivateRoute>
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
+            </Route>
+            <Route path={Routes.Learn}>
+              <LearnPage />
             </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
