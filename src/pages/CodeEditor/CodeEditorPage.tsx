@@ -5,7 +5,6 @@ import {
   requestProblem,
   setRunCodeError,
 } from "./CodeEditorSlice";
-import { Link } from "react-router-dom";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
@@ -16,7 +15,6 @@ import {
   Box,
   Alert,
   Grow,
-  Avatar,
 } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
@@ -24,22 +22,9 @@ import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
-import {
-  Stack,
-  TreeStructure,
-  ArrowsDownUp,
-  ShareNetwork,
-  Table,
-  MathOperations,
-  House,
-  ListBullets,
-} from "phosphor-react";
-import { styled } from "@mui/material/styles";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import theme from "../../shared/theme";
-import TopicLink from "./TopicLink";
-import LightModeLogo from "../../assets/LightModeLogo.svg";
+import TopicSidebar from '../../shared/TopicSidebar'
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -49,25 +34,8 @@ interface ProblemLocationState {
   moduleName?: string;
 }
 
-interface TopicProps {
-  name: string;
-  icon: any;
-  link: string;
-}
-
-const TopicsSidebar = styled("div")({
-  width: 70,
-  minWidth: 70,
-  height: "100vh",
-  backgroundColor: "#1F2937",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "flex-start",
-});
-
 export const CodeEditorPage = () => {
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState<boolean>(true);
   const params = useParams<ProblemEditorURL>();
   const locationState = useLocation<ProblemLocationState>();
   const location = locationState.state;
@@ -101,38 +69,6 @@ export const CodeEditorPage = () => {
     //eslint-disable-next-line
   }, [dispatch]);
 
-  const topics: TopicProps[] = [
-    {
-      name: "Lists, Stacks, and Queues",
-      link: "",
-      icon: <Stack weight="fill" size={24} />,
-    },
-    {
-      name: "Trees",
-      link: "",
-      icon: <TreeStructure weight="fill" size={24} />,
-    },
-    {
-      name: "Heaps",
-      link: "",
-      icon: <ArrowsDownUp weight="fill" size={24} />,
-    },
-    {
-      name: "Graphs",
-      link: "",
-      icon: <ShareNetwork weight="fill" size={24} />,
-    },
-    {
-      name: "Sets, Maps, and Hash Tables",
-      link: "",
-      icon: <Table weight="fill" size={24} />,
-    },
-    {
-      name: "Algorithms",
-      link: "",
-      icon: <MathOperations weight="fill" size={24} />,
-    },
-  ];
   useEffect(() => {
     if (params && params["problemId"]) {
       dispatch(
@@ -187,65 +123,8 @@ export const CodeEditorPage = () => {
         flexDirection="row"
         sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
       >
-        <TopicsSidebar>
-          <Box
-            sx={{
-              height: 64,
-              width: "100%",
-              backgroundColor: theme.palette.secondary.dark,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 1,
-            }}
-          >
-            <Link to={"/"}>
-              <Avatar src={LightModeLogo} sx={{ height: 40, width: 40 }} />
-            </Link>
-          </Box>
-          <Link to={"/"}>
-            <TopicLink
-              name="Home"
-              active={false}
-              icon={<House weight="fill" size={24} />}
-              link=""
-            />
-          </Link>
-          <div
-            onClick={() => {
-              setIsHidden(!isHidden);
-            }}
-          >
-            <TopicLink
-              name="View All"
-              active={!isHidden}
-              icon={<ListBullets weight="fill" size={24} />}
-              link=""
-            />
-          </div>
-          <Box
-            sx={{
-              height: "1px",
-              width: "60%",
-              margin: "10px",
-              borderBottom: "1px solid #939aa6",
-            }}
-          />
-          <div style={{ display: "none" }}>
-            {topics.map((topic, i) => {
-              //Include this for adding remaining topics to sidebar
-              return (
-                <TopicLink
-                  key={i}
-                  name={topic.name}
-                  icon={topic.icon}
-                  link={topic.link}
-                  active={false}
-                />
-              );
-            })}
-          </div>
-        </TopicsSidebar>
+        <TopicSidebar hidden={isHidden} setHidden={setIsHidden}/>
+          
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
             light={true}
