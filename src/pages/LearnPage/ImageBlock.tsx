@@ -12,7 +12,7 @@ function ImageBlock(props : ImageBlockProps) {
   return (
       <>
         <img style={{alignSelf: 'center'}} src={props.src} />
-        <p style={{color: 'grey', alignSelf: 'center'}}>{props.caption}</p>
+        <p style={{color: 'grey', alignSelf: 'center', fontFamily: 'Inter'}}>{props.caption}</p>
       </>
   )
 }

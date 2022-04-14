@@ -65,11 +65,11 @@ function LearnPage() {
         console.log(node);
         
         if (node.tagName === 'H2') {
-            return <h2 style={{marginBottom: 0}}>{children}</h2>;
+            return <h2 style={{marginBottom: 0, fontWeight: 200, fontFamily: 'DM Serif Display'}}>{children}</h2>;
         } else if (node.tagName === 'H3') {
-            return <h3 style={{marginBottom: 0}}>{children}</h3>;
+            return <h3 style={{marginBottom: 0, fontWeight: 200, fontFamily: 'DM Serif Display'}}><i>{children}</i></h3>;
         } else if (node.tagName === 'P') {
-            return <p style={{lineHeight: 1.5}}>{children}</p>;
+            return <p style={{lineHeight: 1.5, color: '#242424'}}>{children}</p>;
         }
     }
 

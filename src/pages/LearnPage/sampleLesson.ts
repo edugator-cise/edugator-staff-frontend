@@ -68,19 +68,19 @@ export const sampleLesson = [
             answers: [
                 {
                     id: 0,
-                    text: 'Option 1'
+                    text: 'Stacks have push() and pop() methods'
                 },
                 {
                     id: 1,
-                    text: 'Option 2'
+                    text: 'Stacks are First In First Out (FIFO)'
                 },
                 {
                     id: 2,
-                    text: 'Option 3'
+                    text: 'A real life example is people in line for a buffet or any other line'
                 },
                 {
                     id: 3,
-                    text: 'Option 4'
+                    text: 'A random wrong answer'
                 },
             ]
         }
@@ -93,15 +93,15 @@ export const sampleLesson = [
             answers: [
                 {
                     id: 0,
-                    text: 'Option 1'
+                    text: 'Most queue operations are O(n) complexity'
                 },
                 {
                     id: 1,
-                    text: 'Option 2'
+                    text: 'Queues are non-linear data structures'
                 },
                 {
                     id: 2,
-                    text: 'Option 3'
+                    text: 'Queues are First In First Out (FIFO)'
                 },
             ]
         }
