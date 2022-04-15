@@ -39,7 +39,14 @@ class RegistrationForm extends Component {
   };
 
   handleSubmit = (event) => {
-    alert(JSON.stringify(this.state, null, 2));
+    let pageJsonData = []
+    pageJsonData.push(JSON.stringify(this.state, null, 2));
+    this.props.jsonData.forEach(content => {
+      pageJsonData.push(JSON.stringify(content, null, 2));
+    });
+    let exportData = pageJsonData.join(",\n");
+    console.log(exportData);
+    alert(exportData);
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
   };
 

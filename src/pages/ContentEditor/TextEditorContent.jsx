@@ -15,26 +15,10 @@ const options = {
       // const entityKey = block.getEntityAt(0);
       // const entity = contentState.getEntity(entityKey);
       // let data = entity.data;
-      let data = block.getData();
-      console.log("Data", data);
+      // let data = block.getData();
+      // console.log("Data", data);
       return (
-        "<mc>" +
-        "<question>" +
-        data.get("question") +
-        "</question>" +
-        "<answer>" +
-        data.get("question") +
-        "</answer>" +
-        "<answer>" +
-        data.get("question") +
-        "</answer>" +
-        "<answer>" +
-        data.get("question") +
-        "</answer>" +
-        "<answer>" +
-        data.get("question") +
-        "</answer>" +
-        "</mc>"
+        "<atomic_entity />"
       );
     },
   },
@@ -92,8 +76,40 @@ class TextEditorContent extends Component {
   };
 
   onTrigger = () => {
-    this.props.giveHTML(this.state.html);
+    let atomicEntities = this.getEntities(this.state.editorState)
+    let html = this.state.html
+    
+    console.log("Callback Data", atomicEntities, html);
+    this.props.callbackData(atomicEntities, html)
   };
+ 
+  getEntities = (editorState, entityType = null) => {
+    const content = editorState.getCurrentContent();
+    const entities = [];
+    content.getBlocksAsArray().forEach((block) => {
+        let selectedEntity = null;
+        block.findEntityRanges(
+            (character) => {
+                if (character.getEntity() !== null) {
+                  const entity = content.getEntity(character.getEntity());  
+                    if (!entityType || (entityType && entity.getType() === entityType)) {
+                        selectedEntity = {
+                            entityKey: character.getEntity(),
+                            blockKey: block.getKey(),
+                            data: content.getEntity(character.getEntity()).getData(),
+                            type: content.getEntity(character.getEntity()).getType(),
+                        };
+                        return true;
+                    }
+                }
+                return false;
+            },
+            (start, end) => {
+                entities.push({...selectedEntity, start, end});
+            });
+    });
+    return entities;
+};
 
   //displayed component when multiple choice is added
   MultipleChoiceDisplayBlock = (props) => {

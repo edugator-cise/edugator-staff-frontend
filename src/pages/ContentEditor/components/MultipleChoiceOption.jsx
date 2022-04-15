@@ -156,7 +156,8 @@ function MultipleChoiceOption(props) {
                 "A) " + answer1,
                 "B) " + answer2,
                 "C) " + answer3,
-                "D) " + answer4
+                "D) " + answer4,
+                correct
               );
               resetValues();
             }}
