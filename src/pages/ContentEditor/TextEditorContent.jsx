@@ -193,15 +193,11 @@ class TextEditorContent extends Component {
     const { editorState } = this.state;
     console.log("consoleBlock: ", contentBlock);
     const type = contentBlock.getType();
-    //console.log(props);
     if (type === "atomic") {
       const contentState = editorState.getCurrentContent();
       const entityKey = contentBlock.getEntityAt(0);
       const entity = contentState.getEntity(entityKey);
-      console.log(entity.type);
-      // console.log(entity.data);
       if (entity && entity.type === "MULTIPLE_CHOICE") {
-        console.log(entity.data);
         return {
           component: this.MultipleChoiceDisplayBlock,
           editable: false,

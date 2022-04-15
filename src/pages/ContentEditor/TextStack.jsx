@@ -31,7 +31,7 @@ export const TextStack = () => {
     rawData.forEach(data => {
       let content;
       let dataType = data.type
-      console.log("#################", dataType, data)
+      // console.log("#################", dataType, data)
       switch(dataType) {
         case "TEXT":
           content = new contentBlock("text", new text_content(data.html));
@@ -52,7 +52,7 @@ export const TextStack = () => {
     });
 
     setExportData(convertedData);
-    console.log(convertedData)
+    console.log("Content Data Seperated:", convertedData)
   }
 
   return (
