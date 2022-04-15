@@ -26,10 +26,18 @@ class RegistrationForm extends Component {
   constructor(props) {
     super(props);
 
+    //https://www.codegrepper.com/code-examples/javascript/how+to+get+current+date+in+react+js
+    //Current method for pulling current date
+    const current = new Date();
+    const date = `${
+      current.getMonth() + 1
+    }/${current.getDate()}/${current.getFullYear()}`;
+
     this.state = {
       title: "",
       author: "",
-      visibility: "react",
+      visibility: "public",
+      date: date,
     };
   }
   handleInput = (event) => {
@@ -39,7 +47,10 @@ class RegistrationForm extends Component {
   };
 
   handleSubmit = (event) => {
-    alert(JSON.stringify(this.state, null, 2));
+    const lessonOutput = [];
+    lessonOutput.push(JSON.stringify(this.state, null, 2));
+    console.log(lessonOutput[0]);
+    //alert(JSON.stringify(this.state, null, 2));
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
   };
 
