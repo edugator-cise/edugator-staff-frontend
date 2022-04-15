@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import RegistrationForm from "./components/form";
 import CustomizedDialogs from "./components/dialog";
 import TextEditorContent from "./TextEditorContent";
