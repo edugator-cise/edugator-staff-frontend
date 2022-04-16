@@ -4,20 +4,20 @@ import "./MCOStyles.css";
 function MultipleChoiceOption(props) {
   const [expanded, setExpanded] = useState(false);
   const [question, setQuestion] = useState("");
+  const [correct, setCorrect] = useState("");
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnswer2] = useState("");
   const [answer3, setAnswer3] = useState("");
   const [answer4, setAnswer4] = useState("");
-  const [correct, setCorrect] = useState("");
 
   //function to reset states once the question has been added to editor
   const resetValues = () => {
     setQuestion("");
+    setCorrect("");
     setAnswer1("");
     setAnswer2("");
     setAnswer3("");
     setAnswer4("");
-    setCorrect("");
   };
 
   const renderModal = () => {
@@ -145,19 +145,19 @@ function MultipleChoiceOption(props) {
               console.log(
                 "Print MC Data:",
                 question,
+                correct,
                 answer1,
                 answer2,
                 answer3,
                 answer4,
-                correct
               );
               props.insertMC(
                 question,
+                correct,
                 "A) " + answer1,
                 "B) " + answer2,
                 "C) " + answer3,
                 "D) " + answer4,
-                correct
               );
               resetValues();
             }}
@@ -176,6 +176,9 @@ function MultipleChoiceOption(props) {
         onClick={() => {
           setExpanded(!expanded);
         }}
+        // onBlur={() => {
+        //   setExpanded(false);
+        // }}
       >
         Multiple Choice Question
         {expanded && renderModal()}

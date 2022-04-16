@@ -5,6 +5,8 @@ import { useLocation, useParams } from "react-router-dom";
 import "./TextEditorStyles.css";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useEffect } from "react";
+import { Routes } from "../../shared/Routes.constants";
+import { useHistory } from "react-router-dom";
 
 interface ContentEditorURL {
     contentId?: string;
@@ -19,6 +21,7 @@ interface ContentLocationState {
 }
 
 export const ContentEditorPage = () => {
+    const history = useHistory();
 
     const { moduleId, contentId } = useParams<
     ContentEditorURL & ContentCreatorURL
@@ -35,7 +38,7 @@ export const ContentEditorPage = () => {
     const actions = {
         back: {
           label: "Back to Modules",
-          onClick: () => console.log("Back clicked"),//dispatch(openWarningModal(WarningTypes.Quit)),
+          onClick: () => history.push(Routes.Modules),//dispatch(openWarningModal(WarningTypes.Quit)),
           variant: "contained",
           color: "primary",
         },

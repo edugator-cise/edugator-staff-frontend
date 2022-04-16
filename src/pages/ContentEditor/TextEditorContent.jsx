@@ -51,7 +51,6 @@ class TextEditorContent extends Component {
   onEditorStateChange = (editorState) => {
     // console.log(editorState)
     let html = draftToHtml(convertToRaw(editorState.getCurrentContent()), {}, false, this.customEntityTransform);
-    console.log("HTM", html)
     this.onTrigger();
     this.setState({
       editorState,
@@ -113,14 +112,14 @@ class TextEditorContent extends Component {
 
     return (
       <QuestionHolder>
-        <Typography
+        {/* <Typography
           variant="overline"
           sx={{ fontWeight: 600, fontSize: "0.9em" }}
           fontSize="subtitle2"
           color={"#3b82f6"}
         >
           Question 1
-        </Typography>
+        </Typography> */}
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
           {values.question}
         </Typography>
@@ -131,7 +130,7 @@ class TextEditorContent extends Component {
           sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
         >
           <Grid item xs={6}>
-            <AnswerHolder>
+            <AnswerHolder style={ values.correct === '1' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -142,7 +141,7 @@ class TextEditorContent extends Component {
             </AnswerHolder>
           </Grid>
           <Grid item xs={6}>
-            <AnswerHolder>
+            <AnswerHolder style={ values.correct === '2' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -153,7 +152,7 @@ class TextEditorContent extends Component {
             </AnswerHolder>
           </Grid>
           <Grid item xs={6}>
-            <AnswerHolder>
+            <AnswerHolder style={ values.correct === '3' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -164,7 +163,7 @@ class TextEditorContent extends Component {
             </AnswerHolder>
           </Grid>
           <Grid item xs={6}>
-            <AnswerHolder>
+            <AnswerHolder style={ values.correct === '4' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
               <Typography
                 variant="body2"
                 sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -203,7 +202,7 @@ class TextEditorContent extends Component {
   // https://codesandbox.io/s/3ozykkmy6?file=/index.js:400-416
 
   //will generate mc block as unique entity with given values as metadata
-  insertBlock = (question, answer1, answer2, answer3, answer4) => {
+  insertBlock = (question, correct, answer1, answer2, answer3, answer4) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();
@@ -213,6 +212,7 @@ class TextEditorContent extends Component {
       "MUTABLE",
       {
         question: question,
+        correct: correct,
         answer1: answer1,
         answer2: answer2,
         answer3: answer3,
@@ -250,11 +250,13 @@ class TextEditorContent extends Component {
           onEditorStateChange={this.onEditorStateChange}
           //Display toolbar on top
           toolbar={{
-            inline: { inDropdown: true },
+          // options removed: ['embedded', 'emoji', 'remove', 'history']
+            options: ['blockType', 'fontSize', 'fontFamily', 'inline', 'colorPicker', 'list', 'textAlign', 'link', 'image'],
+            inline: { inDropdown: false },
             list: { inDropdown: true },
             textAlign: { inDropdown: true },
             link: { inDropdown: true },
-            history: { inDropdown: true },
+            history: { inDropdown: true }
           }}
           //ONLY pass blockRendered to customBlockRenderFunc
           //passing to "blockRendererFn" overwrites existing block rendering (like IMAGE, HYPERLINK)
