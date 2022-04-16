@@ -4,25 +4,8 @@ import { EditorState, EditorBlock, AtomicBlockUtils } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import MultipleChoiceOption from "./components/MultipleChoiceOption";
 import styled from "@emotion/styled";
-import { stateToHTML } from "draft-js-export-html";
-
-// https://www.npmjs.com/package/draft-js-export-html
-const options = {
-  blockRenderers: {
-    atomic: (block) => {
-      // const editorState = state;
-      // const contentState = editorState.getCurrentContent();
-      // const entityKey = block.getEntityAt(0);
-      // const entity = contentState.getEntity(entityKey);
-      // let data = entity.data;
-      // let data = block.getData();
-      // console.log("Data", data);
-      return (
-        "<atomic_entity />"
-      );
-    },
-  },
-};
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -67,13 +50,23 @@ class TextEditorContent extends Component {
   //Updates editorstate (text box content) when changed
   onEditorStateChange = (editorState) => {
     // console.log(editorState)
-    let html = stateToHTML(editorState.getCurrentContent(), options);
+    let html = draftToHtml(convertToRaw(editorState.getCurrentContent()), {}, false, this.customEntityTransform);
+    console.log("HTM", html)
     this.onTrigger();
     this.setState({
       editorState,
       html,
     });
   };
+
+  //https://www.npmjs.com/package/draftjs-to-html
+  //https://github.com/jpuri/draftjs-to-html/issues/18
+  customEntityTransform = (entity, text) => {
+    if (entity.type === "IMAGE" || entity.type === "MULTIPLE_CHOICE")
+      return (
+        "<atomic_entity />"
+      );
+  }
 
   onTrigger = () => {
     let atomicEntities = this.getEntities(this.state.editorState)
