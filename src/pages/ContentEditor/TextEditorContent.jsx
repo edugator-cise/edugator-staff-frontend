@@ -3,40 +3,10 @@ import { Box, Grid, Typography } from "@mui/material";
 import { EditorState, EditorBlock, AtomicBlockUtils } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import MultipleChoiceOption from "./components/MultipleChoiceOption";
-import styled from "@emotion/styled";
+import MultipleSelectOption from "./components/MultipleSelectOption";
 import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-
-const QuestionHolder = styled("div")({
-  width: "70%",
-  marginTop: 20,
-  height: "auto",
-  borderRadius: 4,
-  display: "flex",
-  flexDirection: "column",
-  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-  alignSelf: "center",
-  padding: 20,
-});
-
-const AnswerHolder = styled("div")({
-  width: "100%",
-  height: "auto",
-  paddingTop: 10,
-  paddingBottom: 10,
-  backgroundColor: "#dbeafe",
-  borderRadius: 4,
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  cursor: "pointer",
-  duration: 150,
-  transition: "background-color .2s ease-out, color .2s ease-out",
-  ":hover": {
-    backgroundColor: "#3b82f6",
-    color: "white",
-  },
-});
+import { MultipleChoiceDisplayBlock, MultipleSelectDisplayBlock } from './components/displayBlockComponents'
 
 class TextEditorContent extends Component {
   //Constructor creates new text box object upon program start
@@ -61,7 +31,7 @@ class TextEditorContent extends Component {
   //https://www.npmjs.com/package/draftjs-to-html
   //https://github.com/jpuri/draftjs-to-html/issues/18
   customEntityTransform = (entity, text) => {
-    if (entity.type === "IMAGE" || entity.type === "MULTIPLE_CHOICE")
+    if (entity.type === "IMAGE" || entity.type === "MULTIPLE_CHOICE" || entity.type === "MULTIPLE_SELECT")
       return (
         "<atomic_entity />"
       );
@@ -103,81 +73,6 @@ class TextEditorContent extends Component {
     return entities;
 };
 
-  //displayed component when multiple choice is added
-  MultipleChoiceDisplayBlock = (props) => {
-    const data = props.contentState;
-    //get metadata passed in via insertBlock() function passed to MultipleChoiceOption
-    const values = data.getEntity(props.block.getEntityAt(0)).getData();
-    // console.log(values);
-
-    return (
-      <QuestionHolder>
-        {/* <Typography
-          variant="overline"
-          sx={{ fontWeight: 600, fontSize: "0.9em" }}
-          fontSize="subtitle2"
-          color={"#3b82f6"}
-        >
-          Question 1
-        </Typography> */}
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          {values.question}
-        </Typography>
-        <Grid
-          container
-          rowSpacing={2}
-          columnSpacing={2}
-          sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
-        >
-          <Grid item xs={6}>
-            <AnswerHolder style={ values.correct === '1' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                key={values.answer1}
-              >
-                {values.answer1}
-              </Typography>
-            </AnswerHolder>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerHolder style={ values.correct === '2' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                key={values.answer2}
-              >
-                {values.answer2}
-              </Typography>
-            </AnswerHolder>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerHolder style={ values.correct === '3' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                key={values.answer3}
-              >
-                {values.answer3}
-              </Typography>
-            </AnswerHolder>
-          </Grid>
-          <Grid item xs={6}>
-            <AnswerHolder style={ values.correct === '4' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                key={values.answer4}
-              >
-                {values.answer4}
-              </Typography>
-            </AnswerHolder>
-          </Grid>
-        </Grid>
-      </QuestionHolder>
-    );
-  };
-
   //util function for editor to render blocks based on passed content type
   //Seems you ONLY put if conditions for custom types, i.e. MULTIPLE_CHOICE
   //Attempting to render existing components (like IMAGE) or having an else statement messes up rendering of all components
@@ -191,7 +86,12 @@ class TextEditorContent extends Component {
       const entity = contentState.getEntity(entityKey);
       if (entity && entity.type === "MULTIPLE_CHOICE") {
         return {
-          component: this.MultipleChoiceDisplayBlock,
+          component: MultipleChoiceDisplayBlock,
+          editable: false,
+        };
+      } else if (entity && entity.type === "MULTIPLE_SELECT") {
+        return {
+          component: MultipleSelectDisplayBlock,
           editable: false,
         };
       }
@@ -202,13 +102,45 @@ class TextEditorContent extends Component {
   // https://codesandbox.io/s/3ozykkmy6?file=/index.js:400-416
 
   //will generate mc block as unique entity with given values as metadata
-  insertBlock = (question, correct, answer1, answer2, answer3, answer4) => {
+  insertMCBlock = (question, correct, answer1, answer2, answer3, answer4) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();
 
     const contentStateWithEntity = contentState.createEntity(
       "MULTIPLE_CHOICE",
+      "MUTABLE",
+      {
+        question: question,
+        correct: correct,
+        answer1: answer1,
+        answer2: answer2,
+        answer3: answer3,
+        answer4: answer4,
+      }
+    );
+
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+
+    this.setState({
+      editorState: AtomicBlockUtils.insertAtomicBlock(
+        newEditorState,
+        entityKey,
+        " "
+      ),
+    });
+  };
+  //will generate ms block as unique entity with given values as metadata
+  insertMSBlock = (question, correct, answer1, answer2, answer3, answer4) => {
+    const { editorState } = this.state;
+
+    const contentState = editorState.getCurrentContent();
+
+    const contentStateWithEntity = contentState.createEntity(
+      "MULTIPLE_SELECT",
       "MUTABLE",
       {
         question: question,
@@ -251,8 +183,8 @@ class TextEditorContent extends Component {
           //Display toolbar on top
           toolbar={{
           // options removed: ['embedded', 'emoji', 'remove', 'history']
-            options: ['blockType', 'fontSize', 'fontFamily', 'inline', 'colorPicker', 'list', 'textAlign', 'link', 'image'],
-            inline: { inDropdown: false },
+            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'colorPicker', 'list', 'textAlign', 'link', 'image'],
+            inline: { inDropdown: true },
             list: { inDropdown: true },
             textAlign: { inDropdown: true },
             link: { inDropdown: true },
@@ -262,7 +194,8 @@ class TextEditorContent extends Component {
           //passing to "blockRendererFn" overwrites existing block rendering (like IMAGE, HYPERLINK)
           customBlockRenderFunc={this.blockRenderer}
           toolbarCustomButtons={[
-            <MultipleChoiceOption insertMC={this.insertBlock} />,
+            <MultipleChoiceOption insertMC={this.insertMCBlock} />,
+            <MultipleSelectOption insertMC={this.insertMSBlock} />,
           ]}
         />
       </div>

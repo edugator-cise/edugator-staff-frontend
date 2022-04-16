@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./MCOStyles.css";
 
-function MultipleChoiceOption(props) {
+function MultipleSelectOption(props) {
   const [expanded, setExpanded] = useState(false);
   const [question, setQuestion] = useState("");
-  const [correct, setCorrect] = useState("");
+  const [correct1, setCorrect1] = useState("");
+  const [correct2, setCorrect2] = useState("");
+  const [correct3, setCorrect3] = useState("");
+  const [correct4, setCorrect4] = useState("");
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnswer2] = useState("");
   const [answer3, setAnswer3] = useState("");
@@ -13,7 +16,10 @@ function MultipleChoiceOption(props) {
   //function to reset states once the question has been added to editor
   const resetValues = () => {
     setQuestion("");
-    setCorrect("");
+    setCorrect1(false);
+    setCorrect2(false);
+    setCorrect3(false);
+    setCorrect4(false);
     setAnswer1("");
     setAnswer2("");
     setAnswer3("");
@@ -53,13 +59,12 @@ function MultipleChoiceOption(props) {
           className="rdw-mc-text-input"
         ></input>
         <input
-          type="radio"
-          name="correctAnswer"
-          htmlFor="correct"
-          value="1"
+          type="checkBox"
+          name="correct1"
+          htmlFor="correct1"
           onClick={(e) => {
             e.stopPropagation();
-            setCorrect(e.target.value);
+            setCorrect1(!correct1);
           }}
         ></input>
 
@@ -78,13 +83,12 @@ function MultipleChoiceOption(props) {
           className="rdw-mc-text-input"
         ></input>
         <input
-          type="radio"
-          name="correctAnswer"
-          htmlFor="correct"
-          value="2"
+          type="checkBox"
+          name="correct2"
+          htmlFor="correct2"
           onClick={(e) => {
             e.stopPropagation();
-            setCorrect(e.target.value);
+            setCorrect2(!correct2);
           }}
         ></input>
 
@@ -103,13 +107,12 @@ function MultipleChoiceOption(props) {
           className="rdw-mc-text-input"
         ></input>
         <input
-          type="radio"
-          name="correctAnswer"
-          htmlFor="correct"
-          value="3"
+          type="checkBox"
+          name="correct3"
+          htmlFor="correct3"
           onClick={(e) => {
             e.stopPropagation();
-            setCorrect(e.target.value);
+            setCorrect3(!correct3);
           }}
         ></input>
 
@@ -128,13 +131,12 @@ function MultipleChoiceOption(props) {
           className="rdw-mc-text-input"
         ></input>
         <input
-          type="radio"
-          name="correctAnswer"
-          htmlFor="correct"
-          value="4"
+          type="checkBox"
+          name="correct4"
+          htmlFor="correct4"
           onClick={(e) => {
             e.stopPropagation();
-            setCorrect(e.target.value);
+            setCorrect4(!correct4);
           }}
         ></input>
 
@@ -142,6 +144,12 @@ function MultipleChoiceOption(props) {
           <button
             className="rdw-mc-modal-btn"
             onClick={() => {
+              let selections = [correct1, correct2, correct3, correct4];
+              let correct = [];
+              selections.forEach((choice, i) => {
+                if (choice === true)
+                  correct.push(i+1);
+              });
               console.log(
                 "Print MC Data:",
                 question,
@@ -181,11 +189,11 @@ function MultipleChoiceOption(props) {
         //   setExpanded(false);
         // }}
       >
-        Multiple Choice Question
+        Multiple Select Question
         {expanded && renderModal()}
       </div>
     </div>
   );
 }
 
-export default MultipleChoiceOption;
+export default MultipleSelectOption;

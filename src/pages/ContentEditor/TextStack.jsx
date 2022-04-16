@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RegistrationForm from "./components/form";
 import CustomizedDialogs from "./components/dialog";
 import TextEditorContent from "./TextEditorContent";
-import { text_content, image_content, mc_content, contentBlock } from "./components/export_structures"
+import { text_content, image_content, mc_content, ms_content, contentBlock } from "./components/exportStructures"
 import { type } from "os";
 
 //React state hook
@@ -36,8 +36,13 @@ export const TextStack = () => {
         case "TEXT":
           content = new contentBlock("text", new text_content(data.html));
           break
+
         case "MULTIPLE_CHOICE":
           content = new contentBlock("MC", new mc_content(data.data.question, data.data.correct, [data.data.answer1, data.data.answer2, data.data.answer3, data.data.answer4]));
+          break;
+
+        case "MULTIPLE_SELECT":
+          content = new contentBlock("MS", new ms_content(data.data.question, data.data.correct, [data.data.answer1, data.data.answer2, data.data.answer3, data.data.answer4]));
           break;
 
         case "IMAGE":

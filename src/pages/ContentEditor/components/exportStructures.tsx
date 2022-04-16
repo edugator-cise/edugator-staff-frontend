@@ -45,6 +45,19 @@ export class mc_content implements content {
     }
 }
 
+export class ms_content implements content {
+    question: string;
+    correctAnswer: number[];
+    answers: answerChoice[];
+
+    constructor(question: string, correctAnswer: number[], answers: string[]) {
+        this.question = question;
+        this.correctAnswer = correctAnswer;
+        this.answers = [];
+        answers.forEach((answer, i) => this.answers.push(new answerChoice(i, answer)))
+    }
+}
+
 export class contentBlock {
     type: string;
     content: content;

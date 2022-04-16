@@ -48,9 +48,9 @@ class RegistrationForm extends Component {
 
   handleSubmit = (event) => {
     let pageJsonData = [];
-    pageJsonData.push(JSON.stringify(this.state, null, 2));
+    pageJsonData.push(JSON.stringify(this.state, undefined, 2));
     this.props.jsonData.forEach((content) => {
-      pageJsonData.push(JSON.stringify(content, null, 2));
+      pageJsonData.push(JSON.stringify(content, undefined, 2));
     });
     let exportData = pageJsonData.join(",\n");
     console.log(exportData);
