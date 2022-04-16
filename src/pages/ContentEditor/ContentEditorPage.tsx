@@ -1,10 +1,11 @@
 // import React, { useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { TextStack } from "./TextStack";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import "./TextEditorStyles.css";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { useEffect } from "react";
+import { Routes } from "../../shared/Routes.constants";
 
 interface ContentEditorURL {
     contentId?: string;
@@ -30,12 +31,14 @@ export const ContentEditorPage = () => {
         console.log(moduleId, contentId, moduleName);
     })
 
-    // const dispatch = useDispatch();
+    //Simple redirect fix with useHistory https://stackoverflow.com/questions/51393153/react-routing-redirect-onclick
+    //Would recommend looking for more detailed fix in future
+    const history= useHistory();
 
     const actions = {
         back: {
           label: "Back to Modules",
-          onClick: () => console.log("Back clicked"),//dispatch(openWarningModal(WarningTypes.Quit)),
+          onClick: () => history.push(Routes.Modules), //dispatch(openWarningModal(WarningTypes.Quit)),,//dispatch(openWarningModal(WarningTypes.Quit)),
           variant: "contained",
           color: "primary",
         },
