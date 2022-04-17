@@ -1,9 +1,8 @@
 import apiClient from "../../../app/common/apiClient";
-import { IProblem, IProblemBase, ITestCase } from "../../../shared/types";
+import { IProblem, IProblemBase} from "../../../shared/types";
 import { IAdminModule } from "../types";
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-import fs from 'fs';
 
 const generateTemplateName = (module: IAdminModule, problem: IProblemBase) => {
 let fileType = '.zip'; 
