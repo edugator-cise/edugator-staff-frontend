@@ -94,12 +94,13 @@ function MultipleChoiceQuestion(props : MultipleChoiceProps) {
         
         <Grid container rowSpacing={2} columnSpacing={2} sx={{marginTop: 1, alignSelf: 'center', justifySelf: 'center'}}>
                 {props.answers.map((ans, i) => {
+                    
                     return (
                         <Grid sx={{minHeight: '100'}} item xs={props.answers.length % 2 === 0 ? 6 : 12}>
                             <AnswerHolder onClick={() => {
                                 //set styling for question holder based on answer
                                 setAnswered(true)
-                                if (i === props.correctAnswer) {
+                                if (i + 1 === props.correctAnswer) {
                                     setCorrect(true)
                                 } else if (correct !== true) {
                                     setCorrect(false)
@@ -112,7 +113,7 @@ function MultipleChoiceQuestion(props : MultipleChoiceProps) {
                                     currentClickState[i] = true;
                                     setQuestionsClicked(currentClickState)
                                 }
-                            }} clicked={questionsClicked[i]} correct={correct} isAnswerCorrect={i === props.correctAnswer} key={i}>
+                            }} clicked={questionsClicked[i]} correct={correct} isAnswerCorrect={i + 1 === props.correctAnswer} key={i}>
                                 <Typography variant='body2' sx={{fontWeight: 500, marginLeft: 2, marginRight: 2}} key={ans.id}>{ans.text}</Typography>
                             </AnswerHolder>
                         </Grid>

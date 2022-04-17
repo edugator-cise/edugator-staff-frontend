@@ -16,6 +16,7 @@ import VerticalNavigation from "../../shared/VerticalNavigation";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
 import { sampleLesson } from './sampleLesson';
+import { sampleLessonExport } from './sampleLessonExport';
 import { html } from './sampleLessonHTML';
 import { Interweave, Node, Markup } from 'interweave';
 import './learnStyles.css'
@@ -70,6 +71,8 @@ function LearnPage() {
             return <h3 style={{marginBottom: 0, fontWeight: 200, fontFamily: 'DM Serif Display'}}><i>{children}</i></h3>;
         } else if (node.tagName === 'P') {
             return <p style={{lineHeight: 1.5, color: '#242424'}}>{children}</p>;
+        } else if (node.tagName === 'PRE') {
+            return <code style={{padding: 10, borderRadius: 8, backgroundColor: '#242424', color: 'white', alignSelf: 'center'}}>{children}</code>
         }
     }
 
@@ -107,25 +110,27 @@ function LearnPage() {
                 }}>
                     <LessonHolder>
                         <LessonHeader>
-                            <div className='lesson-title'>{sampleLesson[0].title}</div>
+                            <div className='lesson-title'>{sampleLessonExport[0].title}</div>
                             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column', height: 'auto', justifyContent: 'flex-end'}}>
 
-                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Author: </span>{sampleLesson[0].author}</div>
-                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Last Updated: </span>{sampleLesson[0].date}</div>
+                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Author: </span>{sampleLessonExport[0].author}</div>
+                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Last Updated: </span>{sampleLessonExport[0].date}</div>
                             </div>
                         </LessonHeader>
-                        {sampleLesson.slice(1).map((block : any, i) => {
-                            if (block.contentType === "text") {
+                        {sampleLessonExport.slice(1).map((block : any, i) => {
+                            if (block.type === "text") {
                                 console.log(JSON.parse(JSON.stringify(block.content)));
                                 
                                 return (
-                                    <Markup transform={transform} className='inter' content={JSON.parse(JSON.stringify(block.content))} />
+                                    <div style={{width: '100%'}}>
+                                        <Markup transform={transform} className='inter' content={JSON.parse(JSON.stringify(block.content.html))} />
+                                    </div>
                                 )
-                            } else if (block.contentType === "image") {
+                            } else if (block.type === "image") {
                                 return (
-                                    <ImageBlock src={block.content.sourcePath} caption={block.content.caption} />
+                                    <ImageBlock src={block.content.sourcePath} caption={block.content.caption} height={block.content.height} width={block.content.width} alignment={block.content.alignment} />
                                 )  
-                            } else if (block.contentType === 'MC') {
+                            } else if (block.type === 'MC') {
                                 questionCount++;
                                 return (
                                     <MultipleChoiceQuestion number={questionCount - 1} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
