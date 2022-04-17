@@ -5,14 +5,14 @@ import JSZip from 'jszip';
 import FileSaver from 'file-saver';
 
 const generateTemplateName = (module: IAdminModule, problem: IProblemBase) => {
-let fileType = '.zip'; 
-let prblms = module.problems;
-for (let i = 0; i < prblms.length; i++) {
-    if (prblms[i]._id === problem._id) {
-        return module.number.toString() + '-' + (i+1).toString() + fileType;
+    let fileType = '.zip'; 
+    let prblms = module.problems;
+    for (let i = 0; i < prblms.length; i++) {
+        if (prblms[i]._id === problem._id) {
+            return module.number.toString() + '-' + (i+1).toString() + fileType;
+        }
     }
-}
-return "edugator-template.zip";
+    return "edugator-template.zip";
 };
 
 function generateSrcFile(problem: IProblem): string {
@@ -37,26 +37,26 @@ function parseFunctionName(problem: IProblem): string {
 }
   
 function generateTestFile(problem: IProblem): string {
-const funcName = parseFunctionName(problem);
-let testFile = `#include \"../src/src.h\"\n#define CATCH_CONFIG_MAIN\n#include \"catch.hpp"\n`;
-for(let i=0; i<problem.testCases.length; i++){
-    let output = '';
-    let prefix = '';
-    switch (problem.testCases[i].visibility) {
-    case 2:
-        output = problem.testCases[i].expectedOutput;
-        break;
-    case 1:
-        output = '?';
-        prefix = '// '
-        break;
-    default:
-        continue;
+    const funcName = parseFunctionName(problem);
+    let testFile = `#include \"../src/src.h\"\n#define CATCH_CONFIG_MAIN\n#include \"catch.hpp"\n`;
+    for(let i=0; i<problem.testCases.length; i++){
+        let output = '';
+        let prefix = '';
+        switch (problem.testCases[i].visibility) {
+        case 2:
+            output = problem.testCases[i].expectedOutput;
+            break;
+        case 1:
+            output = '?';
+            prefix = '// '
+            break;
+        default:
+            continue;
+        }
+        let inputSequence = problem.testCases[i].input.trim().replace(/ /g, ', ');
+        testFile += `\n${prefix}TEST_CASE("Function: ${funcName} ${i}", "[visibility: ${problem.testCases[i].visibility}]") {\n${prefix}\tREQUIRE(${funcName}(${inputSequence}) == ${output});\n${prefix}}\n`;
     }
-    let inputSequence = problem.testCases[i].input.trim().replace(/ /g, ', ');
-    testFile += `\n${prefix}TEST_CASE("Function: ${funcName} ${i}", "[visibility: ${problem.testCases[i].visibility}]") {\n${prefix}\tREQUIRE(${funcName}(${inputSequence}) == ${output});\n${prefix}}\n`;
-}
-return testFile;
+    return testFile;
 }
 
 function generateMakefile(): string {
