@@ -69,25 +69,59 @@ function generateCatchFile(): string {
     return catchFile;
 }
 
+function generateREADMEFile(): string {
+    const file = `PREREQUISITES:
+	g++ installed on system
+	mingw32 or gnu make installed on system
+		https://sourceforge.net/projects/mingw/files/MinGW/Extension/make/mingw32-make-3.80-3/
+		-or-
+		https://www.opensourceforu.com/2012/06/gnu-make-in-detail-for-beginners/, https://stackoverflow.com/a/32127632
+	Open template folder in VSCode
+	Implement function found in src.h
+
+ADDING A NEW TEST CASE:
+	Copy and paste an existing, uncommented test case to the end of test.cpp
+	Update the "Function: " field of the new test case (increment the value following the function name)
+	Update the I/O of the new test case (Within the REQUIRE clause)
+
+RUNNING UNIT TESTS
+	Open a new terminal
+	Inside terminal, input: "mingw32-make" or "make" (compile code)
+		Former if installed mingw32 or latter if installed gnu make
+	Inside terminal, input "cd build" (cd into build directory)
+	Inside terminal, input: test (run the executable)
+
+	Note: To clean build directory (remove executables and object files):
+		Inside terminal, input "cd .." (cd into root directory)
+		Inside terminal, input "make clean" or "mingw32-make clean"
+			Former if installed mingw32 or latter if installed gnu make
+
+	Note: should repeat this process everytime src.h or test.cpp is updated
+`;
+    return file;
+}
+
 export function TemplateGenerator(module: IAdminModule, problem: IProblemBase) {
     apiClient.get<IProblem>(`v1/admin/problem/${problem._id}`).then(response => {
         const { data } = response;
 
         const name = generateTemplateName(module, problem);
         const src = generateSrcFile(data);
-        const tst = generateTestFile(data);
-        const mak = generateMakefile();
-        const cac = generateCatchFile();
+        const test = generateTestFile(data);
+        const make = generateMakefile();
+        const ctch = generateCatchFile();
+        const readme = generateREADMEFile();
         let zip: JSZip = new JSZip();
 
-        zip.file("makefile", mak);
+        zip.file("makefile", make);
+        zip.file("README.txt", readme);
         const buildF = zip.folder("build");
         const srcF = zip.folder("src");
         const testF = zip.folder("test")
         if (srcF !== null && testF !== null) {
             srcF.file("src.h", src);
-            testF.file("test.cpp", tst);
-            testF.file("catch.hpp", cac);
+            testF.file("test.cpp", test);
+            testF.file("catch.hpp", ctch);
         }
 
         zip.generateAsync({type:"blob"}).then(function(content) {
