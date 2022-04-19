@@ -17,7 +17,6 @@ const generateTemplateName = (module: IAdminModule, problem: IProblemBase) => {
 
 function generateIOFiles(problem: IProblem, testFolder: JSZip): void {
     for(let i = 0; i < problem.testCases.length; i++){
-        console.log(problem.testCases[i]);
         testFolder.file("input" + (i + 1) + ".txt", problem.testCases[i].input);
         testFolder.file("output" + (i + 1) + ".txt", problem.testCases[i].expectedOutput);
     }
@@ -227,7 +226,6 @@ function generateUnixScript(): string {
 export function IOTemplateGenerator(module: IAdminModule, problem: IProblemBase) {
     apiClient.get<IProblem>(`v1/admin/problem/${problem._id}`).then(response => {
         const { data } = response;
-        console.log(data);
         const readme = generateReadme();
         const name = generateTemplateName(module, problem);
         const tst = generateTesterFile();
@@ -247,7 +245,6 @@ export function IOTemplateGenerator(module: IAdminModule, problem: IProblemBase)
         
         if(testerSrc !== null && testFolder !== null)
         {
-            console.log("testFolder is not null");
             generateIOFiles(data, testFolder);
             testerSrc.file("Tester.cpp", tst);
         }
