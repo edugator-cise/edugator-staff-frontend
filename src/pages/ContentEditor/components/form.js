@@ -61,7 +61,7 @@ class RegistrationForm extends Component {
           />
         </div>
         <div>
-          <label className="label-style">Visibility</label>
+          <label className="label-style">Visibility:</label>
           <select
             className="input-style"
             name="visibility"
