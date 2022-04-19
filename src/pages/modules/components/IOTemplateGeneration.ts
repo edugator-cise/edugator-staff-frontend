@@ -23,6 +23,11 @@ function generateIOFiles(problem: IProblem, testFolder: JSZip): void {
     }
 }
 
+function generateReadme(): string
+{
+    const readme = `# Setting Up the Template\n## Description\nWhen installed, this will provide you a portable environment for you to test your code with command-line feedback provided proper test cases. This will **NOT** affect your installation of MinGW.\n## Instructions\nRegardless of your system, your code should be placed in the \`src\` folder. Do **NOT** make changes to any of the content within the \`srcForTemplate\` folder as this will cause issues with the template.\n\n### Windows\nOpen a Command Prompt and navigate to the directory with the template files and run \`windows_setup.bat\` within your command prompt. You will be prompted with a window that tells you to extract, click the extract button and let that installation finish. After all the steps have finished, you should be able to run the command \`make run_windows\` in the **SAME** command prompt window. That should compile the code and from there you should be able to test your code using the command \`tester.out\`.\n\nIf you close the command prompt instance, go to the \`MinGW/\` folder in the template directory, and double click the batch file named \`open_distro_window.bat\` and type \`cd ..\` to go back a directory and follow the same compilation/running process of \`make run_windows\` followed by \`tester.out\`.\n\n### MacOS Systems\nIn a terminal window, navigate to the directory with the template files and run \`macOS_setup.sh\` within your terminal. After that, you should be able to continue by running \`make run_macos\` in that directory followed by \`./tester.out\`\n\n### Unix Systems\n\nIn a terminal window, navigate to the directory with the template files and run \`unix_setup.sh\` within your terminal. After that, you should be able to continue by running \`make run_linux\` in that directory followed by \`./tester.out\``
+    return readme;
+}
 function generateMakefile(): string {
     let makefile = `run_linux:
 	g++ -o studentCode.out src/*
@@ -223,6 +228,7 @@ export function IOTemplateGenerator(module: IAdminModule, problem: IProblemBase)
     apiClient.get<IProblem>(`v1/admin/problem/${problem._id}`).then(response => {
         const { data } = response;
         console.log(data);
+        const readme = generateReadme();
         const name = generateTemplateName(module, problem);
         const tst = generateTesterFile();
         const mak = generateMakefile();
@@ -236,6 +242,7 @@ export function IOTemplateGenerator(module: IAdminModule, problem: IProblemBase)
         zip.file("makefile", mak);
         zip.file("windows_setup.bat", windowsSetup);
         zip.file("unix_setup.sh", unixSetup);
+        zip.file("README.md", readme);
 
         
         if(testerSrc !== null && testFolder !== null)
