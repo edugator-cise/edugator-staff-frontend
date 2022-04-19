@@ -13,6 +13,10 @@ import { colors } from "../../../shared/constants";
 // import { useTheme } from "@mui/material/styles";
 import theme from "../../../shared/theme";
 // import useMediaQuery from "@mui/material/useMediaQuery";
+import strip from "strip-markdown";
+import {remark} from 'remark';
+import MarkdownToPDF from "../../../shared/MarkdownToPDF";
+
 
 const ColumnContainer = styled("div")(
   ({ theme }) => `
@@ -50,9 +54,11 @@ const CodeHolder = styled("div")({
 interface CodeEditorProps {
   code: string;
   templatePackage: string;
+  problemTitle: string;
+  problemStatement: string;
 }
 
-export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
+export const CodeEditorView = ({ code, templatePackage, problemStatement, problemTitle }: CodeEditorProps) => {
   const dispatch = useDispatch();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
@@ -113,8 +119,63 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
       currentProblemNumber + 1
     }${fileType}`;
   };
-  const handleDownload = () => {
-    const blob = new Blob([currentCode]);
+  var wrap40 = (rawStr: string)=>{
+    var regex = new RegExp("/(\\S*\\s*){30}/g");
+    return rawStr.replace(regex,"$1\n");
+  };
+  var separateByMarkdownHeader = (problemStat:string) => {
+    var regexMatch = problemStat.match(/^#+ [^#]*(?:#(?!#)[^#]*)*/gm)
+    return regexMatch ? regexMatch : []
+  };
+  const getExamplesFromMarkdown = (text:string) => {
+    var probStat = "";
+    var separatedByHeader = separateByMarkdownHeader(problemStatement);
+    var examples = ""
+
+    if(!text.startsWith('#') && text.includes("#")){
+      probStat = text.substring(0, text.indexOf("#") - 1);
+    } else if (separatedByHeader.length > 0) {
+      separatedByHeader.forEach((section) => {
+        if(section.indexOf("Problem Statement") > 0)
+          probStat = section.toString()
+      })
+    }
+
+    //pull examples
+    return probStat + "\n" + examples
+  };
+  const parseProblemMarkdownDescr = async () => {
+    //TODO: simpleMarkdown
+    //var title = wrap40(await remark().use(strip).process(problemTitle).then((file) => {return String(file);}));
+    //var problem = wrap40(await remark().use(strip).process(problemStatement).then((file) => {return String(file);}));    //var examples = new Array(10, string);
+    ////TODO
+    //return "/*\n"+title+"\n"+problem+"\n";
+    var title = wrap40(await remark().use(strip).process(problemTitle).then((file) => {return String(file);}));
+    var includedInformation = getExamplesFromMarkdown(problemStatement);
+    return "/*\n"+title+"\n"+includedInformation+"\n*/";
+  };
+  const downloadPDFInstructions = async() => {
+    const mdToPdf = MarkdownToPDF();
+    let p = new Promise<Array<string>>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(mdToPdf().getParts(problemStatement));
+      }, 3 * 100);
+    });
+    p.then((result) => {
+      mdToPdf().getGraphics(result)
+      .then((result) => { mdToPdf().buildDoc(problemTitle ,result) })
+      .then((result) => { mdToPdf().saveAsPDF(problemTitle.replace("\s", "") + ".pdf") })
+    });
+    p.catch(() => {
+      console.log('error loading file')
+    })
+  };
+  const handleDownload = async() => {
+    //download instructions
+    await downloadPDFInstructions();
+    var formattedContent = await parseProblemMarkdownDescr();
+
+    const blob = new Blob([String(formattedContent), currentCode]);
     const blobURL = URL.createObjectURL(blob);
     const filename = generateFileName();
     // Create a new link

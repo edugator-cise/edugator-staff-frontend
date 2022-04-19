@@ -307,6 +307,8 @@ export const CodeEditorPage = () => {
                       <CodeEditorView
                         code={currentProblem.code.body}
                         templatePackage={currentProblem.templatePackage}
+                        problemTitle={currentProblem.title}
+                        problemStatement={currentProblem.statement}
                       />
                     </Allotment.Pane>
                     <Allotment.Pane minSize={100}>
