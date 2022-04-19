@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./MCOStyles.css";
+import "./ExerciseStyles.css";
 
 function MultipleSelectOption(props) {
   const [expanded, setExpanded] = useState(false);
@@ -28,8 +28,9 @@ function MultipleSelectOption(props) {
 
   const renderModal = () => {
     return (
-      <div className="rdw-mc-modal">
-        <label className="rdw-mc-text-label" htmlFor="question">
+      <div className="rdw-exercise-modal">
+        <label className="rdw-exercise-text-instruction">Check the checkboxes to mark the correct selection</label>
+        <label className="rdw-exercise-text-label" htmlFor="question">
           Question
         </label>
         <input
@@ -38,111 +39,119 @@ function MultipleSelectOption(props) {
             e.stopPropagation();
           }}
           value={question}
-          className="rdw-mc-text-input"
+          className="rdw-exercise-text-input"
           onChange={(e) => {
             setQuestion(e.target.value);
           }}
         ></input>
 
-        <label className="rdw-mc-text-label" htmlFor="answer1">
+        <label className="rdw-exercise-text-label" htmlFor="answer1">
           Answer 1
         </label>
-        <input
-          type="text"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          value={answer1}
-          onChange={(e) => {
-            setAnswer1(e.target.value);
-          }}
-          className="rdw-mc-text-input"
-        ></input>
-        <input
-          type="checkBox"
-          name="correct1"
-          htmlFor="correct1"
-          onClick={(e) => {
-            e.stopPropagation();
-            setCorrect1(!correct1);
-          }}
-        ></input>
+        <div className="rdw-exercise-modal-flexbox">
+          <input
+            type="text"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            value={answer1}
+            onChange={(e) => {
+              setAnswer1(e.target.value);
+            }}
+            className="rdw-exercise-text-input"
+          ></input>
+          <input
+            type="checkBox"
+            name="correct1"
+            htmlFor="correct1"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCorrect1(!correct1);
+            }}
+          ></input>
+        </div>
 
-        <label className="rdw-mc-text-label" htmlFor="answer2">
+        <label className="rdw-exercise-text-label" htmlFor="answer2">
           Answer 2
         </label>
-        <input
-          type="text"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          value={answer2}
-          onChange={(e) => {
-            setAnswer2(e.target.value);
-          }}
-          className="rdw-mc-text-input"
-        ></input>
-        <input
-          type="checkBox"
-          name="correct2"
-          htmlFor="correct2"
-          onClick={(e) => {
-            e.stopPropagation();
-            setCorrect2(!correct2);
-          }}
-        ></input>
+        <div className="rdw-exercise-modal-flexbox">
+          <input
+            type="text"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            value={answer2}
+            onChange={(e) => {
+              setAnswer2(e.target.value);
+            }}
+            className="rdw-exercise-text-input"
+          ></input>
+          <input
+            type="checkBox"
+            name="correct2"
+            htmlFor="correct2"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCorrect2(!correct2);
+            }}
+          ></input>
+        </div>
 
-        <label className="rdw-mc-text-label" htmlFor="answer3">
+        <label className="rdw-exercise-text-label" htmlFor="answer3">
           Answer 3
         </label>
-        <input
-          type="text"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          value={answer3}
-          onChange={(e) => {
-            setAnswer3(e.target.value);
-          }}
-          className="rdw-mc-text-input"
-        ></input>
-        <input
-          type="checkBox"
-          name="correct3"
-          htmlFor="correct3"
-          onClick={(e) => {
-            e.stopPropagation();
-            setCorrect3(!correct3);
-          }}
-        ></input>
+        <div className="rdw-exercise-modal-flexbox">
+          <input
+            type="text"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            value={answer3}
+            onChange={(e) => {
+              setAnswer3(e.target.value);
+            }}
+            className="rdw-exercise-text-input"
+          ></input>
+          <input
+            type="checkBox"
+            name="correct3"
+            htmlFor="correct3"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCorrect3(!correct3);
+            }}
+          ></input>
+        </div>
 
-        <label className="rdw-mc-text-label" htmlFor="answer4">
+        <label className="rdw-exercise-text-label" htmlFor="answer4">
           Answer 4
         </label>
-        <input
-          type="text"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          value={answer4}
-          onChange={(e) => {
-            setAnswer4(e.target.value);
-          }}
-          className="rdw-mc-text-input"
-        ></input>
-        <input
-          type="checkBox"
-          name="correct4"
-          htmlFor="correct4"
-          onClick={(e) => {
-            e.stopPropagation();
-            setCorrect4(!correct4);
-          }}
-        ></input>
+        <div className="rdw-exercise-modal-flexbox">
+          <input
+            type="text"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            value={answer4}
+            onChange={(e) => {
+              setAnswer4(e.target.value);
+            }}
+            className="rdw-exercise-text-input"
+          ></input>
+          <input
+            type="checkBox"
+            name="correct4"
+            htmlFor="correct4"
+            onClick={(e) => {
+              e.stopPropagation();
+              setCorrect4(!correct4);
+            }}
+          ></input>
+        </div>
 
-        <span className="rdw-mc-modal-btn-section">
+        <span className="rdw-exercise-modal-btn-section">
           <button
-            className="rdw-mc-modal-btn"
+            className="rdw-exercise-modal-btn"
             onClick={() => {
               let selections = [correct1, correct2, correct3, correct4];
               let correct = [];
@@ -178,7 +187,7 @@ function MultipleSelectOption(props) {
   };
 
   return (
-    <div className="rdw-mc-wrapper">
+    <div className="rdw-exercise-wrapper">
       <div
         className="rdw-option-wrapper"
         onClick={() => {

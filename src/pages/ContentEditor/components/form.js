@@ -1,26 +1,5 @@
 import { Component } from "react";
-
-/*
-const RegistrationForm = (html) => {
-  const paperStyle = { padding: "0 15px 40px 15px", width: 250 };
-  const btnStyle = { marginTop: 10 };
-  const inputStyle = {
-    borderStyle: "solid",
-    marginBottom: 10,
-    fontSize: 15,
-    paddingLeft: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    width: 240,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "lightgrey",
-    padding: 4,
-  };
-  const labelStyle = { display: "block", marginBottom: 1 };
-};
-
-*/
+import "./FormStyles.css"
 
 class RegistrationForm extends Component {
   constructor(props) {
@@ -60,10 +39,11 @@ class RegistrationForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="paper-style">
         <div>
-          <label>Content Title</label>
+          <label className="label-style">Content Title:</label>
           <input
+            className="input-style"
             type="text"
             name="title"
             value={this.state.title}
@@ -71,8 +51,9 @@ class RegistrationForm extends Component {
           />
         </div>
         <div>
-          <label>Author</label>
+          <label className="label-style">Author:</label>
           <input
+            className="input-style"
             type="text"
             name="author"
             value={this.state.author}
@@ -80,8 +61,9 @@ class RegistrationForm extends Component {
           />
         </div>
         <div>
-          <label>Visibility</label>
+          <label className="label-style">Visibility</label>
           <select
+            className="input-style"
             name="visibility"
             value={this.state.visibility}
             onChange={this.handleInput}
@@ -90,7 +72,7 @@ class RegistrationForm extends Component {
             <option value="private">Private (Staff Only)</option>
           </select>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="btn-style">Submit</button>
       </form>
     );
   }

@@ -31,7 +31,6 @@ export const TextStack = () => {
     rawData.forEach(data => {
       let content;
       let dataType = data.type
-      // console.log("#################", dataType, data)
       switch(dataType) {
         case "TEXT":
           content = new contentBlock("text", new text_content(data.html));
@@ -63,7 +62,6 @@ export const TextStack = () => {
   return (
     <form className="App" autoComplete="off">
       <div className="form-field">
-        <label htmlFor="service">Form Content</label>
         <TextEditorContent callbackData={entityCallback} />
       </div>
       <div className="Popup">

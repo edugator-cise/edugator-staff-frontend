@@ -1,5 +1,5 @@
 .rdw-option-wrapper {
-    border: 1px solid #F1F1F1;
+    border: 1px solid #CCCCCC;
     padding: 5px;
     min-width: 25px;
     height: 20px;
@@ -29,7 +29,7 @@
     height: 30px;
     background: white;
     cursor: pointer;
-    border: 1px solid #F1F1F1;
+    border: 1px solid #CCCCCC;
     border-radius: 2px;
     margin: 0 3px;
     text-transform: capitalize;
@@ -807,7 +807,7 @@
   .rdw-editor-toolbar {
     padding: 6px 5px 0;
     border-radius: 2px;
-    border: 1px solid #F1F1F1;
+    border: 1px solid #BBBBBB;
     display: flex;
     justify-content: flex-start;
     background: white;

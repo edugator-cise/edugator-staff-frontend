@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
+import "./ExerciseStyles.css"
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -40,7 +41,7 @@ export function MultipleChoiceDisplayBlock(props) {
   // console.log(values);
 
   return (
-    <QuestionHolder>
+    <QuestionHolder className="exercise-content-wrapper">
       <Typography
         variant="overline"
         sx={{ fontWeight: 600, fontSize: "0.9em" }}
