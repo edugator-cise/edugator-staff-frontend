@@ -1,8 +1,8 @@
 import { Component } from "react";
 import "./FormStyles.css"
 
-class RegistrationForm extends Component {
-  constructor(props) {
+class RegistrationForm extends Component<any, any> {
+  constructor(props: any) {
     super(props);
 
     //https://www.codegrepper.com/code-examples/javascript/how+to+get+current+date+in+react+js
@@ -19,16 +19,16 @@ class RegistrationForm extends Component {
       date: date,
     };
   }
-  handleInput = (event) => {
+  handleInput = (event: any) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = (event: any) => {
     let pageJsonData = [];
     pageJsonData.push(JSON.stringify(this.state, undefined, 2));
-    this.props.jsonData.forEach((content) => {
+    this.props.jsonData.forEach((content: any) => {
       pageJsonData.push(JSON.stringify(content, undefined, 2));
     });
     let exportData = pageJsonData.join(",\n");

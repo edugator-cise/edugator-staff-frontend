@@ -3,16 +3,15 @@ import RegistrationForm from "./components/form";
 import CustomizedDialogs from "./components/dialog";
 import TextEditorContent from "./TextEditorContent";
 import { text_content, image_content, mc_content, ms_content, contentBlock } from "./components/exportStructures"
-import { type } from "os";
 
 //React state hook
 export const TextStack = () => {
   //Declaration of serviceList array and setList setter
-  const [atomicEntities, setAtomicEntities] = useState();
+  const [atomicEntities, setAtomicEntities] = useState([]);
   const [html, setHTML] = useState("");
-  const [exportData, setExportData] = useState();
+  const [exportData, setExportData] = useState([]);
 
-  const entityCallback = (atomicEntities, html) => {
+  const entityCallback = (atomicEntities: any, html: string) => {
     setAtomicEntities(atomicEntities)
     setHTML(html);
     updateExportData();
@@ -22,13 +21,13 @@ export const TextStack = () => {
     let splitHtml = html.split("<atomic_entity />");
     let rawData = [{html: splitHtml[0], type: 'TEXT'}];
     if (atomicEntities !== undefined)
-      atomicEntities.forEach((entity , i) => {
+      atomicEntities.forEach((entity: any, i: number) => {
         rawData.push(entity);
         rawData.push({html: splitHtml[i+1], type: 'TEXT'});
       })
 
-    let convertedData = [];
-    rawData.forEach(data => {
+    let convertedData: any = [];
+    rawData.forEach((data: any) => {
       let content;
       let dataType = data.type
       switch(dataType) {

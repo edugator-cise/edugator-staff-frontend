@@ -1,6 +1,5 @@
-import React, { Component, useState } from "react";
-import { Box, Grid, Typography } from "@mui/material";
-import { EditorState, EditorBlock, AtomicBlockUtils } from "draft-js";
+import  { Component } from "react";
+import { EditorState, AtomicBlockUtils } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import MultipleChoiceOption from "./components/MultipleChoiceOption";
 import MultipleSelectOption from "./components/MultipleSelectOption";
@@ -8,9 +7,9 @@ import { convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { MultipleChoiceDisplayBlock, MultipleSelectDisplayBlock } from './components/displayBlockComponents'
 
-class TextEditorContent extends Component {
+class TextEditorContent extends Component<any, any> {
   //Constructor creates new text box object upon program start
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
@@ -18,7 +17,7 @@ class TextEditorContent extends Component {
     };
   }
   //Updates editorstate (text box content) when changed
-  onEditorStateChange = (editorState) => {
+  onEditorStateChange = (editorState: EditorState) => {
     // console.log(editorState)
     let html = draftToHtml(convertToRaw(editorState.getCurrentContent()), {}, false, this.customEntityTransform);
     this.onTrigger();
@@ -30,7 +29,7 @@ class TextEditorContent extends Component {
 
   //https://www.npmjs.com/package/draftjs-to-html
   //https://github.com/jpuri/draftjs-to-html/issues/18
-  customEntityTransform = (entity, text) => {
+  customEntityTransform = (entity: any, text: string) => {
     if (entity.type === "IMAGE" || entity.type === "MULTIPLE_CHOICE" || entity.type === "MULTIPLE_SELECT")
       return (
         "<atomic_entity />"
@@ -45,13 +44,13 @@ class TextEditorContent extends Component {
     this.props.callbackData(atomicEntities, html)
   };
  
-  getEntities = (editorState, entityType = null) => {
+  getEntities = (editorState: any, entityType = null) => {
     const content = editorState.getCurrentContent();
-    const entities = [];
-    content.getBlocksAsArray().forEach((block) => {
-        let selectedEntity = null;
+    const entities: any[] = [];
+    content.getBlocksAsArray().forEach((block: any) => {
+        let selectedEntity: any = null;
         block.findEntityRanges(
-            (character) => {
+            (character: any) => {
                 if (character.getEntity() !== null) {
                   const entity = content.getEntity(character.getEntity());  
                     if (!entityType || (entityType && entity.getType() === entityType)) {
@@ -66,7 +65,7 @@ class TextEditorContent extends Component {
                 }
                 return false;
             },
-            (start, end) => {
+            (start: any, end: any) => {
                 entities.push({...selectedEntity, start, end});
             });
     });
@@ -76,7 +75,7 @@ class TextEditorContent extends Component {
   //util function for editor to render blocks based on passed content type
   //Seems you ONLY put if conditions for custom types, i.e. MULTIPLE_CHOICE
   //Attempting to render existing components (like IMAGE) or having an else statement messes up rendering of all components
-  blockRenderer = (contentBlock) => {
+  blockRenderer = (contentBlock: any) => {
     const { editorState } = this.state;
     console.log("consoleBlock: ", contentBlock);
     const type = contentBlock.getType();
@@ -102,7 +101,7 @@ class TextEditorContent extends Component {
   // https://codesandbox.io/s/3ozykkmy6?file=/index.js:400-416
 
   //will generate mc block as unique entity with given values as metadata
-  insertMCBlock = (question, correct, answer1, answer2, answer3, answer4) => {
+  insertMCBlock = (question: string, correct: number, answer1: string, answer2: string, answer3: string, answer4: string) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();
@@ -134,7 +133,7 @@ class TextEditorContent extends Component {
     });
   };
   //will generate ms block as unique entity with given values as metadata
-  insertMSBlock = (question, correct, answer1, answer2, answer3, answer4) => {
+  insertMSBlock = (question: string, correct: number[], answer1: string, answer2: string, answer3: string, answer4: string) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();

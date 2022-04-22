@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./ExerciseStyles.css";
 
-function MultipleChoiceOption(props) {
+function MultipleSelectOption(props: any) {
   const [expanded, setExpanded] = useState(false);
   const [question, setQuestion] = useState("");
-  const [correct, setCorrect] = useState("");
+  const [correct1, setCorrect1] = useState(false);
+  const [correct2, setCorrect2] = useState(false);
+  const [correct3, setCorrect3] = useState(false);
+  const [correct4, setCorrect4] = useState(false);
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnswer2] = useState("");
   const [answer3, setAnswer3] = useState("");
@@ -13,7 +16,10 @@ function MultipleChoiceOption(props) {
   //function to reset states once the question has been added to editor
   const resetValues = () => {
     setQuestion("");
-    setCorrect("");
+    setCorrect1(false);
+    setCorrect2(false);
+    setCorrect3(false);
+    setCorrect4(false);
     setAnswer1("");
     setAnswer2("");
     setAnswer3("");
@@ -23,7 +29,7 @@ function MultipleChoiceOption(props) {
   const renderModal = () => {
     return (
       <div className="rdw-exercise-modal">
-        <label className="rdw-exercise-text-instruction">Check a radio box to mark the correct answer</label>
+        <label className="rdw-exercise-text-instruction">Check the checkboxes to mark the correct selection</label>
         <label className="rdw-exercise-text-label" htmlFor="question">
           Question
         </label>
@@ -55,13 +61,11 @@ function MultipleChoiceOption(props) {
             className="rdw-exercise-text-input"
           ></input>
           <input
-            type="radio"
-            name="correctAnswer"
-            htmlFor="correct"
-            value="1"
+            type="checkBox"
+            name="correct1"
             onClick={(e) => {
               e.stopPropagation();
-              setCorrect(e.target.value);
+              setCorrect1(!correct1);
             }}
           ></input>
         </div>
@@ -82,13 +86,11 @@ function MultipleChoiceOption(props) {
             className="rdw-exercise-text-input"
           ></input>
           <input
-            type="radio"
-            name="correctAnswer"
-            htmlFor="correct"
-            value="2"
+            type="checkBox"
+            name="correct2"
             onClick={(e) => {
               e.stopPropagation();
-              setCorrect(e.target.value);
+              setCorrect2(!correct2);
             }}
           ></input>
         </div>
@@ -109,13 +111,11 @@ function MultipleChoiceOption(props) {
             className="rdw-exercise-text-input"
           ></input>
           <input
-            type="radio"
-            name="correctAnswer"
-            htmlFor="correct"
-            value="3"
+            type="checkBox"
+            name="correct3"
             onClick={(e) => {
               e.stopPropagation();
-              setCorrect(e.target.value);
+              setCorrect3(!correct3);
             }}
           ></input>
         </div>
@@ -136,13 +136,11 @@ function MultipleChoiceOption(props) {
             className="rdw-exercise-text-input"
           ></input>
           <input
-            type="radio"
-            name="correctAnswer"
-            htmlFor="correct"
-            value="4"
+            type="checkBox"
+            name="correct4"
             onClick={(e) => {
               e.stopPropagation();
-              setCorrect(e.target.value);
+              setCorrect4(!correct4);
             }}
           ></input>
         </div>
@@ -151,6 +149,12 @@ function MultipleChoiceOption(props) {
           <button
             className="rdw-exercise-modal-btn"
             onClick={() => {
+              let selections = [correct1, correct2, correct3, correct4];
+              let correct: number[] = [];
+              selections.forEach((choice, i) => {
+                if (choice === true)
+                  correct.push(i+1);
+              });
               console.log(
                 "Print MC Data:",
                 question,
@@ -190,11 +194,11 @@ function MultipleChoiceOption(props) {
         //   setExpanded(false);
         // }}
       >
-        Multiple Choice Question
+        Multiple Select Question
         {expanded && renderModal()}
       </div>
     </div>
   );
 }
 
-export default MultipleChoiceOption;
+export default MultipleSelectOption;
