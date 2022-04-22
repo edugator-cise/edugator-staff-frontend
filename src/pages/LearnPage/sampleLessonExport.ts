@@ -52,9 +52,32 @@ export const sampleLessonExport = [
         }
       },
       {
-        "type": "text",
-        "content": {
-          "html": "\n<p></p>\n"
-        }
-    }
+          "type": "MS",
+          "content": {
+              "question": "This is a multiple select problem! Pick all answers.",
+              "correctAnswers": [1, 2, 4],
+              "answers": [
+                  {
+                      "id": 0,
+                      "text": "This is a correct answer"
+                  },
+                  {
+                      "id": 1,
+                      "text": "This is a correct answer"
+                  },
+                  {
+                      "id": 2,
+                      "text": "This is an incorrect answer"
+                  },
+                  {
+                      "id": 3,
+                      "text": "This is a correct answer"
+                  },
+                  {
+                      "id": 4,
+                      "text": "This is an incorrect answer"
+                  },
+              ]
+          }
+      }
 ]
