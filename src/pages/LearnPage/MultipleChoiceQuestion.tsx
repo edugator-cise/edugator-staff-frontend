@@ -69,7 +69,9 @@ interface MultipleChoiceProps {
     question: string,
     correctAnswer: number,
     answers: {id: number, text: string}[],
-    number: number
+    number: number,
+    image: boolean,
+    sourcePath?: string
 }
 
 
@@ -90,6 +92,11 @@ function MultipleChoiceQuestion(props : MultipleChoiceProps) {
   return (
     <QuestionHolder answered={answered} correct={correct}>
         <Typography variant='overline' sx={{fontWeight: 600, fontSize: '0.9em'}} fontSize='subtitle2' color={theme.palette.primary.main}>Question {props.number}</Typography>
+        {props.image === true && 
+            <div style={{backgroundColor: '#f0f0f0', borderRadius: 4, padding: 10, marginTop: 10, marginBottom: 10, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <img src={props.sourcePath} style={{width: 300}}/>
+            </div>
+        }
         <Typography variant='h6' sx={{fontWeight: 200, fontFamily: 'DM Serif Display'}}>{props.question}</Typography>
         
         <Grid container rowSpacing={2} columnSpacing={2} sx={{marginTop: 1, alignSelf: 'center', justifySelf: 'center'}}>
