@@ -22,6 +22,7 @@ import { Interweave, Node, Markup } from 'interweave';
 import './learnStyles.css'
 import MultipleChoiceQuestion from './MultipleChoiceQuestion';
 import ImageBlock from './ImageBlock';
+import MultipleSelectQuestion from './MultipleSelectQuestion';
 
 function LearnPage() {
     const [isHidden, setIsHidden] = useState<boolean>(true);
@@ -110,14 +111,14 @@ function LearnPage() {
                 }}>
                     <LessonHolder>
                         <LessonHeader>
-                            <div className='lesson-title'>{sampleLessonExport[0].title}</div>
+                            <div className='lesson-title'>{sampleLesson[0].title}</div>
                             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column', height: 'auto', justifyContent: 'flex-end'}}>
 
-                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Author: </span>{sampleLessonExport[0].author}</div>
-                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Last Updated: </span>{sampleLessonExport[0].date}</div>
+                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Author: </span>{sampleLesson[0].author}</div>
+                                <div className='lesson-subtitle' style={{color: theme.palette.primary.dark}}><span style={{color: theme.palette.primary.main}}>Last Updated: </span>{sampleLesson[0].date}</div>
                             </div>
                         </LessonHeader>
-                        {sampleLessonExport.slice(1).map((block : any, i) => {
+                        {sampleLesson.slice(1).map((block : any, i) => {
                             if (block.type === "text") {
                                 console.log(JSON.parse(JSON.stringify(block.content)));
                                 
@@ -133,9 +134,13 @@ function LearnPage() {
                             } else if (block.type === 'MC') {
                                 questionCount++;
                                 return (
-                                    <MultipleChoiceQuestion number={questionCount - 1} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
+                                    <MultipleChoiceQuestion number={questionCount - 1} image={block.content.image} sourcePath={block.content.sourcePath} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
                                 )
-                                
+                            } else if (block.type === 'MS') {
+                                questionCount++;
+                                return (
+                                    <MultipleSelectQuestion number={questionCount - 1} answers={block.content.answers} correctAnswers={block.content.correctAnswers} question={block.content.question} />
+                                )
                             }
                         })}
                     </LessonHolder>
