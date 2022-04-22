@@ -123,23 +123,23 @@ function LearnPage() {
                                 console.log(JSON.parse(JSON.stringify(block.content)));
                                 
                                 return (
-                                    <div style={{width: '100%'}}>
+                                    <div key={i} style={{width: '100%'}}>
                                         <Markup transform={transform} className='inter' content={JSON.parse(JSON.stringify(block.content.html))} />
                                     </div>
                                 )
                             } else if (block.type === "image") {
                                 return (
-                                    <ImageBlock src={block.content.sourcePath} caption={block.content.caption} height={block.content.height} width={block.content.width} alignment={block.content.alignment} />
+                                    <ImageBlock key={i} src={block.content.sourcePath} caption={block.content.caption} height={block.content.height} width={block.content.width} alignment={block.content.alignment} />
                                 )  
                             } else if (block.type === 'MC') {
                                 questionCount++;
                                 return (
-                                    <MultipleChoiceQuestion number={questionCount - 1} image={block.content.image} sourcePath={block.content.sourcePath} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
+                                    <MultipleChoiceQuestion key={i} number={questionCount - 1} image={block.content.image} sourcePath={block.content.sourcePath} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
                                 )
                             } else if (block.type === 'MS') {
                                 questionCount++;
                                 return (
-                                    <MultipleSelectQuestion number={questionCount - 1} answers={block.content.answers} correctAnswers={block.content.correctAnswers} question={block.content.question} />
+                                    <MultipleSelectQuestion key={i} number={questionCount - 1} answers={block.content.answers} correctAnswer={block.content.correctAnswer} question={block.content.question} />
                                 )
                             }
                         })}

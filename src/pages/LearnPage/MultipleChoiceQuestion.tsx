@@ -103,7 +103,7 @@ function MultipleChoiceQuestion(props : MultipleChoiceProps) {
                 {props.answers.map((ans, i) => {
                     
                     return (
-                        <Grid sx={{minHeight: '100'}} item xs={props.answers.length % 2 === 0 ? 6 : 12}>
+                        <Grid key={i} sx={{minHeight: '100'}} item xs={props.answers.length % 2 === 0 ? 6 : 12}>
                             <AnswerHolder onClick={() => {
                                 //set styling for question holder based on answer
                                 setAnswered(true)

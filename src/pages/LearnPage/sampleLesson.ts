@@ -132,7 +132,7 @@ export const sampleLesson = [
         "type": "MS",
         "content": {
             "question": "This is a multiple select problem! Pick all answers.",
-            "correctAnswers": [1, 2, 4],
+            "correctAnswer": [1, 2, 4],
             "answers": [
                 {
                     "id": 0,

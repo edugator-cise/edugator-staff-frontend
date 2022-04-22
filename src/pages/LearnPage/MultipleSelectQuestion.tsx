@@ -54,27 +54,27 @@ const AnswerFeedback = styled.div((props : any) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 4,
-    border: props.answered ? props.correct ? '2px solid #22B16E' : '2px solid #f76f7a' : 'none',
+    border: props.checked ? props.correct ? '2px solid #22B16E' : '2px solid #f76f7a' : 'none',
     backgroundColor: props.correct ? '#e4fcf1' : '#ffedef',
-    paddingTop: props.answered ? 10 : 0,
-    paddingBottom: props.answered ? 10 : 0,
-    marginTop: props.answered ? 20 : 0,
-    marginLeft: props.answered ? 10 : 0,
+    paddingTop: props.checked ? 10 : 0,
+    paddingBottom: props.checked ? 10 : 0,
+    marginTop: props.checked ? 20 : 0,
+    marginLeft: props.checked ? 10 : 0,
     color: 'white',
     transition: 'max-height 0.5s ease-in-out, background-color .2s ease-out, border .2s ease-out',
-    maxHeight: props.answered ? 500 : 0,
+    maxHeight: props.checked ? 500 : 0,
     overflowY: 'hidden',
 }))
 
 const CheckButton = styled.div((props : any) => ({
     width: '98%',
     justifySelf: 'center',
-    display: 'flex',
+    display: props.checked ? 'none' : 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: props.checked ? 'lightgrey' : theme.palette.primary.dark,
     paddingTop: 5,
     paddingBottom: 5,
     marginTop: 15,
@@ -86,7 +86,7 @@ const CheckButton = styled.div((props : any) => ({
 
 interface MultipleSelectProps {
     question: string,
-    correctAnswers: Array<number>,
+    correctAnswer: Array<number>,
     answers: {id: number, text: string}[],
     number: number
 }
@@ -98,9 +98,7 @@ function MultipleSelectQuestion(props : MultipleSelectProps) {
     const [checked, setChecked] = useState(false) // fire when "Check answer" is clicked
 
     const answerText = (id : number, clicked : boolean) => {
-        console.log(id);
-        console.log(clicked);
-        if (props.correctAnswers.includes(id + 1)) {
+        if (props.correctAnswer.includes(id + 1)) {
             if (clicked) {
                 return 'CORRECT'
             } else {
@@ -113,6 +111,24 @@ function MultipleSelectQuestion(props : MultipleSelectProps) {
                 return ''
             }
         }
+    }
+
+    const checkCorrect = () => {
+        for (let i = 0; i < questionsClicked.length; i++) {
+            if (questionsClicked[i] === true) {
+                if (props.correctAnswer.includes(i + 1)) {
+                    //do nothing
+                } else {
+                    return false;
+                }
+            } else {
+                if (props.correctAnswer.includes(i + 1)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+        
     }
 
     //set initial state of all questions clicked to false on mount
@@ -133,28 +149,34 @@ function MultipleSelectQuestion(props : MultipleSelectProps) {
                 {props.answers.map((ans, i) => {
                     
                     return (
-                        <Grid key={i} sx={{
+                        <Grid key={props.number * i} sx={{
                             minHeight: '100',
                         }} item xs={props.answers.length % 2 === 0 ? 6 : 12}>
                             <AnswerHolder className="answerHolder" onClick={() => {
+                                if (checked) return;
                                 //set the answer state to clicked
                                 let currentClickState = []
                                 for (let status of questionsClicked) currentClickState.push(status);
                                 currentClickState[i] = !currentClickState[i];
                                 setQuestionsClicked(currentClickState)
-                            }} clicked={questionsClicked[i]} checked={checked} correct={correct} isAnswerCorrect={props.correctAnswers.includes(i + 1)} key={i}>
-                                <Typography variant='body2' sx={{fontWeight: 500, marginLeft: 2, marginRight: 2}} key={i}>{ans.text}</Typography>
-                                <Typography sx={{fontSize: '0.7em', fontWeight: 700, letterSpacing: 0.5, marginLeft: 2, marginRight: 2}} key={i}>{checked && answerText(ans.id, questionsClicked[i])}</Typography>
+                            }} clicked={questionsClicked[i]} checked={checked} correct={correct} isAnswerCorrect={props.correctAnswer.includes(i + 1)}>
+                                <Typography variant='body2' sx={{fontWeight: 500, marginLeft: 2, marginRight: 2}}>{ans.text}</Typography>
+                                <Typography sx={{fontSize: '0.7em', fontWeight: 700, letterSpacing: 0.5, marginLeft: 2, marginRight: 2}}>{checked && answerText(ans.id, questionsClicked[i])}</Typography>
                             </AnswerHolder>
                         </Grid>
                     )
                 })}
             </Grid>
-            <CheckButton onClick={() => {setChecked(true)}}><Typography variant='overline' sx={{fontWeight: 600, fontSize: '0.8em'}} fontSize='subtitle2' color={"white"}>CHECK ANSWER</Typography></CheckButton>
+            <CheckButton checked={checked} onClick={() => {
+                //check if all answers are correct
+                let isCorrect = checkCorrect()
+                setCorrect(isCorrect)
+                setChecked(true)
+            }}><Typography variant='overline' sx={{fontWeight: 600, fontSize: '0.8em'}} fontSize='subtitle2' color={"white"}>CHECK ANSWER</Typography></CheckButton>
             
-            <AnswerFeedback checked={checked}>
+            <AnswerFeedback checked={checked} correct={correct}>
                 {correct ? <CheckCircle weight="duotone" size={24} style={{marginLeft: 15}} color={"#22B16E"} /> : <XCircle weight="duotone" size={24} style={{marginLeft: 15}}  color={'#f76f7a'}/>}
-                <Typography variant='body2' sx={{fontWeight: 500, marginLeft: 1, marginRight: 2}} color={correct ? "#22B16E" : '#f76f7a'}>{correct ? 'Correct! Nice job!' : 'Oops! Please try again.'}</Typography>
+                <Typography variant='body2' sx={{fontWeight: 500, marginLeft: 1, marginRight: 2}} color={correct ? "#22B16E" : '#f76f7a'}>{correct ? 'Correct! Nice job!' : 'That\'s incorrect. Review your answer.'}</Typography>
             </AnswerFeedback>
     </QuestionHolder>
   )
