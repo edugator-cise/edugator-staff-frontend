@@ -42,7 +42,17 @@ const Title = styled(Typography)(({ theme }) => ({
 
 const NewProblemButton = styled(Button)(({ theme }) => ({
   marginLeft: "auto",
-  marginRight: theme.spacing(1),
+  marginRight: "none",
+  color: "black",
+  backgroundColor: theme.palette.primary.light,
+  "&:hover": {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
+const NewContentButton = styled(Button)(({ theme }) => ({
+  marginLeft: 10,
+  marginRight: "none",
   color: "black",
   backgroundColor: theme.palette.primary.light,
   "&:hover": {
@@ -101,6 +111,20 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   >
                     Add Problem
                   </NewProblemButton>
+
+                  <NewContentButton
+                    startIcon={<Add />}
+                    variant="outlined"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      history.push(
+                        Routes.ContentCreatorBaseWithoutId + module._id,
+                        { moduleName: module.name }
+                      );
+                    }}
+                  >
+                    Add Content
+                  </NewContentButton>
                 </ModuleTitle>
 
                 {module.problems.length > 0 ? (
