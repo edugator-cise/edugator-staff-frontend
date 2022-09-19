@@ -21,7 +21,7 @@ function Footer() {
         color={theme.palette.primary.light}
         style={{ marginRight: "8px" }}
       >
-        © Copyright 2021 Edugator @ University of Florida Research Foundation,
+        © Copyright 2022 Edugator @ University of Florida Research Foundation,
         Inc. All Commercial Rights Reserved.
       </Typography>
 
