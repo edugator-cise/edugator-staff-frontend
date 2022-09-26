@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install packages
-        run: npm install
+        run: npm install --legacy-peer-deps
       - name: Prettier Check
         run: npm run lint
       - name: Unit tests
