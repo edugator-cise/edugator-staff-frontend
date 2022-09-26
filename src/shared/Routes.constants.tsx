@@ -13,6 +13,11 @@ export enum Routes {
   AdminCodeWithProblem = "/admin/code/:problemId?",
   AdminCode = "/admin/code",
   Code = "/code",
+  Learn = "/learn",
+  LearnWithLesson = "/learn:lessonId?",
   Landing = "/",
   PrivacyNotice = "/privacy_notice",
+  PrivacyNoticeDocument = "/privacy_notice_document",
+  FERPA = "/ferpa",
+  TermsOfUse = "/termsofuse",
 }

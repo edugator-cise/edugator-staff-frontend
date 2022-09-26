@@ -1,4 +1,4 @@
-function PrivacyNotice() {
+function PrivacyNoticeDocument() {
   return (
     <>
       <div
@@ -5017,4 +5017,4 @@ function PrivacyNotice() {
   );
 }
 
-export default PrivacyNotice;
+export default PrivacyNoticeDocument;

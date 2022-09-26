@@ -13,7 +13,11 @@ import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
-import PrivacyNotice from "./pages/PrivacyNotice/PrivacyNoticePage";
+import PrivacyNotice from './pages/StaticPages/PrivacyNotice'
+import TermsOfUse from './pages/StaticPages/TermsOfUse'
+import Ferpa from './pages/StaticPages/Ferpa'
+import PrivacyNoticeDocument from "./pages/PrivacyNotice/PrivacyNoticePage";
+import LearnPage from "./pages/LearnPage/LearnPage";
 
 function App() {
   return (
@@ -45,11 +49,23 @@ function App() {
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
             </Route>
+            <Route path={Routes.Learn}>
+              <LearnPage />
+            </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>
             <Route exact path={Routes.PrivacyNotice}>
               <PrivacyNotice />
+            </Route>
+            <Route exact path={Routes.PrivacyNoticeDocument}>
+              <PrivacyNoticeDocument />
+            </Route>
+            <Route exact path={Routes.TermsOfUse}>
+              <TermsOfUse />
+            </Route>
+            <Route exact path={Routes.FERPA}>
+              <Ferpa />
             </Route>
             <Route component={NotFoundPage} />
           </Switch>
