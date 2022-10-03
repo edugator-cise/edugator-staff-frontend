@@ -8,11 +8,15 @@ import { Routes } from "./shared/Routes.constants";
 import { PrivateRoute } from "./shared/PrivateRoute";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
+import { ContentEditorPage } from "./pages/ContentEditor/ContentEditorPage";
 import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
-import PrivacyNotice from "./pages/PrivacyNotice/PrivacyNoticePage";
+import PrivacyNotice from "./pages/StaticPages/PrivacyNotice";
+import TermsOfUse from "./pages/StaticPages/TermsOfUse";
+import Ferpa from "./pages/StaticPages/Ferpa";
+import LearnPage from "./pages/LearnPage/LearnPage";
 
 function App() {
   return (
@@ -29,6 +33,9 @@ function App() {
             <PrivateRoute exact path={Routes.ProblemCreator}>
               <ProblemEditorPage />
             </PrivateRoute>
+            <PrivateRoute exact path={Routes.ContentCreator}>
+              <ContentEditorPage />
+            </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
             </PrivateRoute>
@@ -41,11 +48,20 @@ function App() {
             <Route path={Routes.CodeWithProblem}>
               <CodeEditorPage />
             </Route>
+            <Route path={Routes.Learn}>
+              <LearnPage />
+            </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>
             <Route exact path={Routes.PrivacyNotice}>
               <PrivacyNotice />
+            </Route>
+            <Route exact path={Routes.TermsOfUse}>
+              <TermsOfUse />
+            </Route>
+            <Route exact path={Routes.FERPA}>
+              <Ferpa />
             </Route>
             <Route component={NotFoundPage} />
           </Switch>
