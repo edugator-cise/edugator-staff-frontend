@@ -80,7 +80,10 @@ let theme = createTheme({
     button: {
       textTransform: "none",
     },
-    h1: {},
+    h1: {
+      fontWeight: 200,
+      color: 'red'
+    },
     h2: {
       fontWeight: 600,
       lineHeight: 1.3,
