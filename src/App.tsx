@@ -16,7 +16,6 @@ import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 import PrivacyNotice from "./pages/StaticPages/PrivacyNotice";
 import TermsOfUse from "./pages/StaticPages/TermsOfUse";
 import Ferpa from "./pages/StaticPages/Ferpa";
-import PrivacyNoticeDocument from "./pages/PrivacyNotice/PrivacyNoticePage";
 import LearnPage from "./pages/LearnPage/LearnPage";
 
 function App() {
