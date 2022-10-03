@@ -1,65 +1,59 @@
-// import React, { useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
 import { TextStack } from "./TextStack";
 import { useLocation, useParams, useHistory } from "react-router-dom";
-import "./TextEditorStyles.css";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { useEffect } from "react";
 import { Routes } from "../../shared/Routes.constants";
 
 interface ContentEditorURL {
-    contentId?: string;
+  contentId?: string;
 }
 
 interface ContentCreatorURL {
-    moduleId?: string;
+  moduleId?: string;
 }
 
 interface ContentLocationState {
-    moduleName?: string;
+  moduleName?: string;
 }
 
 export const ContentEditorPage = () => {
-
-    const { moduleId, contentId } = useParams<
+  const { moduleId, contentId } = useParams<
     ContentEditorURL & ContentCreatorURL
-    >();
+  >();
 
-    const { moduleName } = useLocation<ContentLocationState>().state;
+  const { moduleName } = useLocation<ContentLocationState>().state;
 
-    useEffect( () => {
-        console.log(moduleId, contentId, moduleName);
-    })
+  useEffect(() => {
+    console.log(moduleId, contentId, moduleName);
+  });
 
-    //Simple redirect fix with useHistory https://stackoverflow.com/questions/51393153/react-routing-redirect-onclick
-    //Would recommend looking for more detailed fix in future
-    const history= useHistory();
+  //Simple redirect fix with useHistory https://stackoverflow.com/questions/51393153/react-routing-redirect-onclick
+  //Would recommend looking for more detailed fix in future
+  const history = useHistory();
 
-    const actions = {
-        back: {
-          label: "Back to Modules",
-          onClick: () => history.push(Routes.Modules),//dispatch(openWarningModal(WarningTypes.Quit)),
-          variant: "contained",
-          color: "primary",
-        },
-        delete: {
-          label: "Delete Problem",
-          onClick: () => console.log("Delete clicked"),//dispatch(openWarningModal(WarningTypes.Delete)),
-          variant: "contained",
-          color: "error",
-        },
-      };
+  const actions = {
+    back: {
+      label: "Back to Modules",
+      onClick: () => history.push(Routes.Modules), //dispatch(openWarningModal(WarningTypes.Quit)),
+      variant: "contained",
+      color: "primary",
+    },
+    delete: {
+      label: "Delete Problem",
+      onClick: () => console.log("Delete clicked"), //dispatch(openWarningModal(WarningTypes.Delete)),
+      variant: "contained",
+      color: "error",
+    },
+  };
 
-    return (
-        <LayoutContainer
-            pageTitle={`${moduleName ? moduleName + " - " : ""}${
-                "New Content"
-            }`}
-            actionButtons={
-                contentId ? [actions.back, actions.delete] : [actions.back]
-            }
-        >            
-            <TextStack />
-        </LayoutContainer>
-    )
-}
+  return (
+    <LayoutContainer
+      pageTitle={`${moduleName ? moduleName + " - " : ""}${"New Content"}`}
+      actionButtons={
+        contentId ? [actions.back, actions.delete] : [actions.back]
+      }
+    >
+      <TextStack />
+    </LayoutContainer>
+  );
+};

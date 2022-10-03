@@ -52,7 +52,7 @@ const NewProblemButton = styled(Button)(({ theme }) => ({
 
 const NewContentButton = styled(Button)(({ theme }) => ({
   marginLeft: 10,
-  marginRight: "none",
+  marginRight: 10,
   color: "black",
   backgroundColor: theme.palette.primary.light,
   "&:hover": {

@@ -1,11 +1,15 @@
-import  { Component } from "react";
+import { Component } from "react";
 import { EditorState, AtomicBlockUtils } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import MultipleChoiceOption from "./components/MultipleChoiceOption";
 import MultipleSelectOption from "./components/MultipleSelectOption";
-import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import { MultipleChoiceDisplayBlock, MultipleSelectDisplayBlock } from './components/displayBlockComponents'
+import { convertToRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import {
+  MultipleChoiceDisplayBlock,
+  MultipleSelectDisplayBlock,
+} from "./components/displayBlockComponents";
 
 class TextEditorContent extends Component<any, any> {
   //Constructor creates new text box object upon program start
@@ -19,7 +23,12 @@ class TextEditorContent extends Component<any, any> {
   //Updates editorstate (text box content) when changed
   onEditorStateChange = (editorState: EditorState) => {
     // console.log(editorState)
-    let html = draftToHtml(convertToRaw(editorState.getCurrentContent()), {}, false, this.customEntityTransform);
+    let html = draftToHtml(
+      convertToRaw(editorState.getCurrentContent()),
+      {},
+      false,
+      this.customEntityTransform
+    );
     this.onTrigger();
     this.setState({
       editorState,
@@ -30,47 +39,53 @@ class TextEditorContent extends Component<any, any> {
   //https://www.npmjs.com/package/draftjs-to-html
   //https://github.com/jpuri/draftjs-to-html/issues/18
   customEntityTransform = (entity: any, text: string) => {
-    if (entity.type === "IMAGE" || entity.type === "MULTIPLE_CHOICE" || entity.type === "MULTIPLE_SELECT")
-      return (
-        "<atomic_entity />"
-      );
-  }
+    if (
+      entity.type === "IMAGE" ||
+      entity.type === "MULTIPLE_CHOICE" ||
+      entity.type === "MULTIPLE_SELECT"
+    )
+      return "<atomic_entity />";
+  };
 
   onTrigger = () => {
-    let atomicEntities = this.getEntities(this.state.editorState)
-    let html = this.state.html
-    
+    let atomicEntities = this.getEntities(this.state.editorState);
+    let html = this.state.html;
+
     console.log("Callback Data", atomicEntities, html);
-    this.props.callbackData(atomicEntities, html)
+    this.props.callbackData(atomicEntities, html);
   };
- 
+
   getEntities = (editorState: any, entityType = null) => {
     const content = editorState.getCurrentContent();
     const entities: any[] = [];
     content.getBlocksAsArray().forEach((block: any) => {
-        let selectedEntity: any = null;
-        block.findEntityRanges(
-            (character: any) => {
-                if (character.getEntity() !== null) {
-                  const entity = content.getEntity(character.getEntity());  
-                    if (!entityType || (entityType && entity.getType() === entityType)) {
-                        selectedEntity = {
-                            entityKey: character.getEntity(),
-                            blockKey: block.getKey(),
-                            data: content.getEntity(character.getEntity()).getData(),
-                            type: content.getEntity(character.getEntity()).getType(),
-                        };
-                        return true;
-                    }
-                }
-                return false;
-            },
-            (start: any, end: any) => {
-                entities.push({...selectedEntity, start, end});
-            });
+      let selectedEntity: any = null;
+      block.findEntityRanges(
+        (character: any) => {
+          if (character.getEntity() !== null) {
+            const entity = content.getEntity(character.getEntity());
+            if (
+              !entityType ||
+              (entityType && entity.getType() === entityType)
+            ) {
+              selectedEntity = {
+                entityKey: character.getEntity(),
+                blockKey: block.getKey(),
+                data: content.getEntity(character.getEntity()).getData(),
+                type: content.getEntity(character.getEntity()).getType(),
+              };
+              return true;
+            }
+          }
+          return false;
+        },
+        (start: any, end: any) => {
+          entities.push({ ...selectedEntity, start, end });
+        }
+      );
     });
     return entities;
-};
+  };
 
   //util function for editor to render blocks based on passed content type
   //Seems you ONLY put if conditions for custom types, i.e. MULTIPLE_CHOICE
@@ -101,7 +116,14 @@ class TextEditorContent extends Component<any, any> {
   // https://codesandbox.io/s/3ozykkmy6?file=/index.js:400-416
 
   //will generate mc block as unique entity with given values as metadata
-  insertMCBlock = (question: string, correct: number, answer1: string, answer2: string, answer3: string, answer4: string) => {
+  insertMCBlock = (
+    question: string,
+    correct: number,
+    answer1: string,
+    answer2: string,
+    answer3: string,
+    answer4: string
+  ) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();
@@ -133,7 +155,14 @@ class TextEditorContent extends Component<any, any> {
     });
   };
   //will generate ms block as unique entity with given values as metadata
-  insertMSBlock = (question: string, correct: number[], answer1: string, answer2: string, answer3: string, answer4: string) => {
+  insertMSBlock = (
+    question: string,
+    correct: number[],
+    answer1: string,
+    answer2: string,
+    answer3: string,
+    answer4: string
+  ) => {
     const { editorState } = this.state;
 
     const contentState = editorState.getCurrentContent();
@@ -181,13 +210,23 @@ class TextEditorContent extends Component<any, any> {
           onEditorStateChange={this.onEditorStateChange}
           //Display toolbar on top
           toolbar={{
-          // options removed: ['embedded', 'emoji', 'remove', 'history']
-            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'colorPicker', 'list', 'textAlign', 'link', 'image'],
+            // options removed: ['embedded', 'emoji', 'remove', 'history']
+            options: [
+              "inline",
+              "blockType",
+              "fontSize",
+              "fontFamily",
+              "colorPicker",
+              "list",
+              "textAlign",
+              "link",
+              "image",
+            ],
             inline: { inDropdown: true },
             list: { inDropdown: true },
             textAlign: { inDropdown: true },
             link: { inDropdown: true },
-            history: { inDropdown: true }
+            history: { inDropdown: true },
           }}
           //ONLY pass blockRendered to customBlockRenderFunc
           //passing to "blockRendererFn" overwrites existing block rendering (like IMAGE, HYPERLINK)

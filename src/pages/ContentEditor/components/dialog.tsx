@@ -5,14 +5,17 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import MuiDialogContent from "@material-ui/core/DialogContent";
 // import MuiDialogActions from "@material-ui/core/DialogActions";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
+
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Typography,
+  IconButton,
+} from "@mui/material";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -34,10 +37,10 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
   onClose: () => void;
 }
 
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+const MuiDialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <DialogTitle className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton
@@ -48,15 +51,15 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
           <CloseIcon />
         </IconButton>
       ) : null}
-    </MuiDialogTitle>
+    </DialogTitle>
   );
 });
 
-const DialogContent = withStyles((theme: Theme) => ({
+const MuiDialogContent = withStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(2),
   },
-}))(MuiDialogContent);
+}))(DialogContent);
 
 // const DialogActions = withStyles((theme: Theme) => ({
 //   root: {
@@ -65,7 +68,13 @@ const DialogContent = withStyles((theme: Theme) => ({
 //   },
 // }))(MuiDialogActions);
 
-export default function CustomizedDialogs({ children, title }: {children: any, title: any}) {
+export default function CustomizedDialogs({
+  children,
+  title,
+}: {
+  children: any;
+  title: any;
+}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -81,10 +90,10 @@ export default function CustomizedDialogs({ children, title }: {children: any, t
         Publish
       </Button>
       <Dialog aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
           {title}
-        </DialogTitle>
-        <DialogContent dividers>{children}</DialogContent>
+        </MuiDialogTitle>
+        <MuiDialogContent dividers>{children}</MuiDialogContent>
       </Dialog>
     </div>
   );
