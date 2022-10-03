@@ -17,7 +17,6 @@ export enum Routes {
   LearnWithLesson = "/learn:lessonId?",
   Landing = "/",
   PrivacyNotice = "/privacy_notice",
-  PrivacyNoticeDocument = "/privacy_notice_document",
   FERPA = "/ferpa",
   TermsOfUse = "/termsofuse",
 }

@@ -58,9 +58,6 @@ function App() {
             <Route exact path={Routes.PrivacyNotice}>
               <PrivacyNotice />
             </Route>
-            <Route exact path={Routes.PrivacyNoticeDocument}>
-              <PrivacyNoticeDocument />
-            </Route>
             <Route exact path={Routes.TermsOfUse}>
               <TermsOfUse />
             </Route>
