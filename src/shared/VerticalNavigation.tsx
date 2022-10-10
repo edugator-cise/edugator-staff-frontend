@@ -152,7 +152,7 @@ function VerticalNavigation(props: Props) {
       style={{
         paddingLeft: md ? 100 : 30,
         paddingRight: md ? 100 : 30,
-        height: 64,
+        height: 72,
         backgroundColor: props.codingPage
           ? "white"
           : props.light
@@ -164,7 +164,13 @@ function VerticalNavigation(props: Props) {
         <Link to={"/"}>
           <Avatar
             alt="Example Alt"
-            src={props.light ? DefaultLogo : DarkModeLogo}
+            style={{
+              backgroundSize: "cover",
+              width: 50,
+              height: 46,
+              padding: 5,
+            }}
+            src={props.light ? DarkModeLogo : DefaultLogo}
           />
         </Link>
       )}
