@@ -50,7 +50,13 @@ function Footer() {
       </Typography>
 
       <LinkHolder>
-        <Link to={Routes.PrivacyNotice} style={{ textDecoration: "none" }}>
+        <Link
+          to={Routes.PrivacyNotice}
+          style={{ textDecoration: "none" }}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
           <Typography
             variant={md ? "body2" : "body1"}
             color={theme.palette.primary.light}
@@ -58,7 +64,13 @@ function Footer() {
             Privacy Terms
           </Typography>
         </Link>
-        <Link to={Routes.TermsOfUse} style={{ textDecoration: "none" }}>
+        <Link
+          to={Routes.TermsOfUse}
+          style={{ textDecoration: "none" }}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
           <Typography
             variant={md ? "body2" : "body1"}
             color={theme.palette.primary.light}
@@ -66,7 +78,13 @@ function Footer() {
             Terms of use
           </Typography>
         </Link>
-        <Link to={Routes.FERPA} style={{ textDecoration: "none" }}>
+        <Link
+          to={Routes.FERPA}
+          style={{ textDecoration: "none" }}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
           <Typography
             variant={md ? "body2" : "body1"}
             color={theme.palette.primary.light}
