@@ -107,7 +107,7 @@ function TopicSidebar(props: SidebarProps) {
       >
         <TopicLink
           name="View All"
-          active={props.hidden}
+          active={!props.hidden}
           icon={<ListBullets weight="fill" size={24} />}
           link=""
         />
