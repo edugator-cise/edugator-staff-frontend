@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";
 import CrocodileOnAScooter from "../../../assets/crocodileonascooter.json";
-import { styled } from "@mui/material/styles";
 
 export const EmptyState = () => {
   return (
