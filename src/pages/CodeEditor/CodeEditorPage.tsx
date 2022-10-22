@@ -9,13 +9,7 @@ import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "./CodeEditorSlice";
-import {
-  Grid,
-  CircularProgress,
-  Box,
-  Alert,
-  Grow,
-} from "@mui/material";
+import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
@@ -24,7 +18,7 @@ import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import TopicSidebar from '../../shared/TopicSidebar'
+import TopicSidebar from "../../shared/TopicSidebar";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -35,7 +29,7 @@ interface ProblemLocationState {
 }
 
 export const CodeEditorPage = () => {
-  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [isHidden, setIsHidden] = useState<boolean>(false);
   const params = useParams<ProblemEditorURL>();
   const locationState = useLocation<ProblemLocationState>();
   const location = locationState.state;
@@ -123,8 +117,8 @@ export const CodeEditorPage = () => {
         flexDirection="row"
         sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
       >
-        <TopicSidebar hidden={isHidden} setHidden={setIsHidden}/>
-          
+        <TopicSidebar hidden={isHidden} setHidden={setIsHidden} />
+
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
             light={true}
