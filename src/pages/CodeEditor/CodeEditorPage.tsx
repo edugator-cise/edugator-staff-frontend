@@ -19,12 +19,30 @@ import { useParams, useLocation } from "react-router-dom";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 
-export const CodeEditorPage = ({
-  errorMessage,
-  currentProblem,
-  isLoadingProblem,
-}: any) => {
+export const CodeEditorPage = () => {
   const dispatch = useDispatch();
+
+  const currentProblem = useSelector(
+    (state: RootState) => state.codeEditor.currentProblem
+  );
+  const errorMessage = useSelector(
+    (state: RootState) => state.codeEditor.runCodeError
+  );
+  const isLoadingProblem = useSelector(
+    (state: RootState) => state.codeEditor.isLoadingProblem
+  );
+
+  useEffect(() => {
+    console.log(currentProblem);
+  }, [currentProblem]);
+
+  useEffect(() => {
+    console.log(errorMessage);
+  }, [errorMessage]);
+
+  useEffect(() => {
+    console.log(isLoadingProblem);
+  }, [isLoadingProblem]);
 
   return (
     <>

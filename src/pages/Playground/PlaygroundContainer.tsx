@@ -55,16 +55,6 @@ const PlaygroundContainer = () => {
     (state: RootState) => state.codeEditor.navStructure
   );
 
-  const currentProblem = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.codeEditor.runCodeError
-  );
-  const isLoadingProblem = useSelector(
-    (state: RootState) => state.codeEditor.isLoadingProblem
-  );
-
   useEffect(() => {
     dispatch(
       requestModulesAndProblems({
@@ -162,11 +152,7 @@ const PlaygroundContainer = () => {
           >
             <Sidenav exercisesOpen={exercisesOpen} lessonsOpen={lessonsOpen} />
             {contentType === "problem" ? (
-              <CodeEditorPage
-                errorMessage={errorMessage}
-                currentProblem={currentProblem}
-                isLoadingProblem={isLoadingProblem}
-              />
+              <CodeEditorPage />
             ) : contentType === "lesson" ? (
               <div>This is a lesson</div>
             ) : (

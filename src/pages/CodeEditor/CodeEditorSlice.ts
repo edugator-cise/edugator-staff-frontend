@@ -112,6 +112,7 @@ export const codeEditorSlice = createSlice({
       };
     },
     requestRunCode: (state, action: PayloadAction<ICodeSubmission>) => {
+      console.log("requestRunCode");
       state.runningSubmission = true;
     },
     submitCode: (state, action: PayloadAction<ICodeSubmission>) => {

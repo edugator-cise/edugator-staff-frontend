@@ -253,7 +253,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                 " and problem id: ",
                 problemId
               );
-              dispatch(
+              /* dispatch(
                 requestRunCode({
                   code: currentCode,
                   stdin,
@@ -262,7 +262,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   memoryLimit: memoryLimit as number,
                   buildCommand: buildCommand as string,
                 })
-              );
+              ); */
             }}
           >
             Run Code
