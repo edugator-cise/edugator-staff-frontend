@@ -32,8 +32,8 @@ import {
   IToken,
   ICodeSubmission,
   IJudge0Response,
-  IModuleWithProblems,
   ModuleProblemRequest,
+  IModuleWithProblemsAndLessons,
 } from "./types";
 import { IProblem } from "../../shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
@@ -77,7 +77,9 @@ function filterForProblem(
   }
   return undefined;
 }
-function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
+function createNavStructure(
+  moduleProblemStructure: IModuleWithProblemsAndLessons[]
+) {
   const moduleItems: INavigationItem[] = [];
   moduleProblemStructure.forEach((element) => {
     const payload = {
@@ -86,6 +88,10 @@ function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
       number: element.number,
       problems: element.problems.map((el) => ({
         problemName: el.title,
+        _id: el._id,
+      })),
+      lessons: element.lessons.map((el) => ({
+        lessonName: el.title,
         _id: el._id,
       })),
     };
@@ -97,12 +103,16 @@ function* handleRequestModulesAndProblems(
   action: PayloadAction<ModuleProblemRequest>
 ) {
   try {
-    const { data }: { data: IModuleWithProblems[] } = yield call(async () => {
-      if (action.payload.isAdmin) {
-        return apiClient.get("v1/module/WithProblems");
+    const { data }: { data: IModuleWithProblemsAndLessons[] } = yield call(
+      async () => {
+        if (action.payload.isAdmin) {
+          return apiClient.get("v1/module/WithProblems");
+        }
+        return apiClient.get("v1/module/WithNonHiddenProblems");
       }
-      return apiClient.get("v1/module/WithNonHiddenProblems");
-    });
+    );
+    //log lessonData
+    console.log(data);
     yield put(setNavStructure(createNavStructure(data)));
     yield put(setIsLoading(false));
   } catch (e) {

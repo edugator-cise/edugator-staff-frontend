@@ -8,15 +8,16 @@ export enum Routes {
   ContentCreator = "/admin/content/create/:moduleId",
   ContentCreatorBaseWithoutId = "/admin/content/create/", //To be used only when pushing to a route.
   ProblemCreatorBaseWithoutId = "/admin/problem/create/", //To be used only when pushing to a route.
-  CodeWithProblem = "/code/:problemId?",
+  CodeWithProblem = "/playground/code/:problemId?",
   Accounts = "/admin/accounts",
   AdminCodeWithProblem = "/admin/code/:problemId?",
   AdminCode = "/admin/code",
-  Code = "/code",
-  Learn = "/learn",
-  LearnWithLesson = "/learn:lessonId?",
+  Code = "/playground/code",
+  Learn = "/playground/learn",
+  LearnWithLesson = "/playground/learn/:lessonId?",
   Landing = "/",
   PrivacyNotice = "/privacy_notice",
   FERPA = "/ferpa",
   TermsOfUse = "/termsofuse",
+  Playground = "/playground",
 }

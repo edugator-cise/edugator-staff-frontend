@@ -211,6 +211,7 @@ function VerticalNavigation(props: Props) {
                   {item.subitems.map((subitem, i) => {
                     return (
                       <Link
+                        key={i}
                         to={{
                           pathname: adminPathRegex.test(location.pathname)
                             ? Routes.AdminCode

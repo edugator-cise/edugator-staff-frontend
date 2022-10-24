@@ -73,7 +73,7 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
       }
     >
       {navStructure.map((value: INavigationItem, indexVal: number) => (
-        <>
+        <React.Fragment key={value.name + "_" + indexVal}>
           <CustomListItemButton
             key={value.name + "_" + indexVal}
             onClick={() => {
@@ -142,18 +142,13 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
                           lessonItem.lessonName + "_" + indexVal + "_" + index
                         }
                         onClick={() => {
-                          console.log("visit lesson" + lessonItem.lessonName);
-                          dispatch(
+                          /* dispatch(
                             requestLesson({
                               lessonId: lessonItem._id,
                               isAdmin: adminPathRegex.test(location.pathname),
                             })
-                          );
-                          const baseRoute = adminPathRegex.test(
-                            location.pathname
-                          )
-                            ? Routes.Learn
-                            : Routes.Learn;
+                          ); */
+                          const baseRoute = Routes.Learn;
                           history.replace({
                             pathname: baseRoute + `/${lessonItem._id}`,
                           });
@@ -172,7 +167,7 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
                   )}
             </List>
           </Collapse>
-        </>
+        </React.Fragment>
       ))}
     </List>
   );

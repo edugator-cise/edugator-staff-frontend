@@ -13,6 +13,8 @@ import {
   MathOperations,
   House,
   ListBullets,
+  BookOpen,
+  Code,
 } from "phosphor-react";
 import { Box, Avatar } from "@mui/material";
 
@@ -23,8 +25,10 @@ interface TopicProps {
 }
 
 interface SidebarProps {
-  hidden: boolean;
-  setHidden: (hidden: boolean) => void;
+  exercisesOpen: boolean;
+  lessonsOpen: boolean;
+  setExercisesOpen: (value: boolean) => void;
+  setLessonsOpen: (value: boolean) => void;
 }
 
 const Sidebar = styled("div")({
@@ -71,7 +75,12 @@ const topics: TopicProps[] = [
   },
 ];
 
-function TopicSidebar(props: SidebarProps) {
+function TopicSidebar({
+  exercisesOpen,
+  lessonsOpen,
+  setExercisesOpen,
+  setLessonsOpen,
+}: SidebarProps) {
   return (
     <Sidebar>
       <Box
@@ -102,13 +111,27 @@ function TopicSidebar(props: SidebarProps) {
       </Link>
       <div
         onClick={() => {
-          props.setHidden(!props.hidden);
+          setLessonsOpen(false);
+          setExercisesOpen(!exercisesOpen);
         }}
       >
         <TopicLink
-          name="View All"
-          active={!props.hidden}
-          icon={<ListBullets weight="fill" size={24} />}
+          name="Exercises"
+          active={exercisesOpen}
+          icon={<Code weight="fill" size={24} />}
+          link=""
+        />
+      </div>
+      <div
+        onClick={() => {
+          setExercisesOpen(false);
+          setLessonsOpen(!lessonsOpen);
+        }}
+      >
+        <TopicLink
+          name="Learn"
+          active={lessonsOpen}
+          icon={<BookOpen weight="fill" size={24} />}
           link=""
         />
       </div>

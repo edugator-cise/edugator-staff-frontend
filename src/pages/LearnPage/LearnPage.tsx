@@ -106,7 +106,7 @@ function LearnPage() {
       flexDirection="row"
       sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
     >
-      <TopicSidebar hidden={isHidden} setHidden={setIsHidden} />
+      {/* <TopicSidebar hidden={isHidden} setHidden={setIsHidden} /> */}
 
       <Box sx={{ height: "100%", width: "100%" }}>
         <VerticalNavigation light={true} modules={modules} codingPage={true} />
@@ -118,7 +118,7 @@ function LearnPage() {
             display: "flex",
           }}
         >
-          <Sidenav hidden={isHidden} />
+          {/* <Sidenav hidden={isHidden} /> */}
           <div
             id="lesson-container"
             style={{
