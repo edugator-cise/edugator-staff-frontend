@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
-import { INavigationItem, IProblemItem } from "./types";
+import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
@@ -19,7 +19,8 @@ interface ClickedMenu {
 }
 
 interface SidenavProps {
-  hidden: boolean;
+  exercisesOpen: boolean;
+  lessonsOpen: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -30,7 +31,7 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = (props: SidenavProps) => {
+export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
@@ -53,7 +54,7 @@ export const Sidenav = (props: SidenavProps) => {
         maxWidth: 250,
         bgcolor: "#F9F9F9",
         overflowY: "auto",
-        display: props.hidden ? "none" : "block",
+        display: !exercisesOpen && !lessonsOpen ? "none" : "block",
       }}
       aria-labelledby="nested-exercises-list"
       subheader={
@@ -67,7 +68,7 @@ export const Sidenav = (props: SidenavProps) => {
             bgcolor: "#F9F9F9",
           }}
         >
-          Exercises
+          {exercisesOpen ? "Exercises" : "Lessons"}
         </ListSubheader>
       }
     >
@@ -97,37 +98,78 @@ export const Sidenav = (props: SidenavProps) => {
             unmountOnExit
           >
             <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
-              {value.problems.map(
-                (problemItem: IProblemItem, index: number) => (
-                  <CustomListItemButton
-                    sx={{ pl: 4 }}
-                    key={problemItem.problemName + "_" + indexVal + "_" + index}
-                    onClick={() => {
-                      dispatch(
-                        requestProblem({
-                          problemId: problemItem._id,
-                          isAdmin: adminPathRegex.test(location.pathname),
-                        })
-                      );
-                      const baseRoute = adminPathRegex.test(location.pathname)
-                        ? Routes.AdminCode
-                        : Routes.Code;
-                      history.replace({
-                        pathname: baseRoute + `/${problemItem._id}`,
-                      });
-                    }}
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        sx: { fontSize: "0.8rem" },
-                      }}
-                      primary={`${indexVal + 1}.${index + 1} ${
-                        problemItem.problemName
-                      }`}
-                    />
-                  </CustomListItemButton>
-                )
-              )}
+              {exercisesOpen
+                ? value.problems.map(
+                    (problemItem: IProblemItem, index: number) => (
+                      <CustomListItemButton
+                        sx={{ pl: 4 }}
+                        key={
+                          problemItem.problemName + "_" + indexVal + "_" + index
+                        }
+                        onClick={() => {
+                          dispatch(
+                            requestProblem({
+                              problemId: problemItem._id,
+                              isAdmin: adminPathRegex.test(location.pathname),
+                            })
+                          );
+                          const baseRoute = adminPathRegex.test(
+                            location.pathname
+                          )
+                            ? Routes.AdminCode
+                            : Routes.Code;
+                          history.replace({
+                            pathname: baseRoute + `/${problemItem._id}`,
+                          });
+                        }}
+                      >
+                        <ListItemText
+                          primaryTypographyProps={{
+                            sx: { fontSize: "0.8rem" },
+                          }}
+                          primary={`${indexVal + 1}.${index + 1} ${
+                            problemItem.problemName
+                          }`}
+                        />
+                      </CustomListItemButton>
+                    )
+                  )
+                : value.lessons.map(
+                    (lessonItem: ILessonItem, index: number) => (
+                      <CustomListItemButton
+                        sx={{ pl: 4 }}
+                        key={
+                          lessonItem.lessonName + "_" + indexVal + "_" + index
+                        }
+                        onClick={() => {
+                          console.log("visit lesson" + lessonItem.lessonName);
+                          dispatch(
+                            requestLesson({
+                              lessonId: lessonItem._id,
+                              isAdmin: adminPathRegex.test(location.pathname),
+                            })
+                          );
+                          const baseRoute = adminPathRegex.test(
+                            location.pathname
+                          )
+                            ? Routes.Learn
+                            : Routes.Learn;
+                          history.replace({
+                            pathname: baseRoute + `/${lessonItem._id}`,
+                          });
+                        }}
+                      >
+                        <ListItemText
+                          primaryTypographyProps={{
+                            sx: { fontSize: "0.8rem" },
+                          }}
+                          primary={`${indexVal + 1}.${index + 1} ${
+                            lessonItem.lessonName
+                          }`}
+                        />
+                      </CustomListItemButton>
+                    )
+                  )}
             </List>
           </Collapse>
         </>
