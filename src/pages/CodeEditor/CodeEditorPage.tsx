@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Sidenav } from "./SideNav";
-import {
-  requestFirstProblemFromModule,
-  requestProblem,
-  setRunCodeError,
-} from "./CodeEditorSlice";
-import VerticalNavigation from "../../shared/VerticalNavigation";
+import { useEffect } from "react";
+import { setRunCodeError } from "./CodeEditorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "./CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
-import { adminPathRegex, colors } from "../../shared/constants";
-import { useParams, useLocation } from "react-router-dom";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 
@@ -31,18 +22,6 @@ export const CodeEditorPage = () => {
   const isLoadingProblem = useSelector(
     (state: RootState) => state.codeEditor.isLoadingProblem
   );
-
-  useEffect(() => {
-    console.log(currentProblem);
-  }, [currentProblem]);
-
-  useEffect(() => {
-    console.log(errorMessage);
-  }, [errorMessage]);
-
-  useEffect(() => {
-    console.log(isLoadingProblem);
-  }, [isLoadingProblem]);
 
   return (
     <>

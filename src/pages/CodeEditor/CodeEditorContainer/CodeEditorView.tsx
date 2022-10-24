@@ -239,21 +239,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() => {
-              console.log(
-                "Running submission with stdin: ",
-                stdin,
-                " and code: ",
-                currentCode,
-                " and build command: ",
-                buildCommand,
-                " and time limit: ",
-                timeLimit,
-                " and memory limit: ",
-                memoryLimit,
-                " and problem id: ",
-                problemId
-              );
-              /* dispatch(
+              dispatch(
                 requestRunCode({
                   code: currentCode,
                   stdin,
@@ -262,7 +248,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   memoryLimit: memoryLimit as number,
                   buildCommand: buildCommand as string,
                 })
-              ); */
+              );
             }}
           >
             Run Code

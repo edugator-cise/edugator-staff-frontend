@@ -25,10 +25,8 @@ interface TopicProps {
 }
 
 interface SidebarProps {
-  exercisesOpen: boolean;
-  lessonsOpen: boolean;
-  setExercisesOpen: (value: boolean) => void;
-  setLessonsOpen: (value: boolean) => void;
+  isHidden: boolean;
+  setIsHidden: (isHidden: boolean) => void;
 }
 
 const Sidebar = styled("div")({
@@ -75,12 +73,7 @@ const topics: TopicProps[] = [
   },
 ];
 
-function TopicSidebar({
-  exercisesOpen,
-  lessonsOpen,
-  setExercisesOpen,
-  setLessonsOpen,
-}: SidebarProps) {
+function TopicSidebar({ isHidden, setIsHidden }: SidebarProps) {
   return (
     <Sidebar>
       <Box
@@ -111,27 +104,13 @@ function TopicSidebar({
       </Link>
       <div
         onClick={() => {
-          setLessonsOpen(false);
-          setExercisesOpen(!exercisesOpen);
+          setIsHidden(!isHidden);
         }}
       >
         <TopicLink
           name="Exercises"
-          active={exercisesOpen}
-          icon={<Code weight="fill" size={24} />}
-          link=""
-        />
-      </div>
-      <div
-        onClick={() => {
-          setExercisesOpen(false);
-          setLessonsOpen(!lessonsOpen);
-        }}
-      >
-        <TopicLink
-          name="Learn"
-          active={lessonsOpen}
-          icon={<BookOpen weight="fill" size={24} />}
+          active={!isHidden}
+          icon={<ListBullets weight="fill" size={24} />}
           link=""
         />
       </div>

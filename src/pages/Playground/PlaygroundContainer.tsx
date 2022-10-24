@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Sidenav } from "../CodeEditor/SideNav";
 import {
   requestFirstProblemFromModule,
+  requestLesson,
   requestProblem,
   setRunCodeError,
 } from "../CodeEditor/CodeEditorSlice";
@@ -20,6 +21,7 @@ import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import TopicSidebar from "../../shared/TopicSidebar";
 import { CodeEditorPage } from "../CodeEditor/CodeEditorPage";
+import LearnPage from "../LearnPage/LearnPage";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -31,8 +33,7 @@ interface ProblemLocationState {
 }
 
 const PlaygroundContainer = () => {
-  const [exercisesOpen, setExercisesOpen] = useState<boolean>(false);
-  const [lessonsOpen, setLessonsOpen] = useState<boolean>(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [contentType, setContentType] = useState<"problem" | "lesson" | "">(
     "problem"
   );
@@ -76,12 +77,11 @@ const PlaygroundContainer = () => {
       );
     } else if (params && params["lessonId"]) {
       setContentType("lesson");
-      /* dispatch(
-            requestLesson({
-            lessonId: params["lessonId"],
-            isAdmin: adminPathRegex.test(locationState.pathname),
-            })
-        ); */
+      dispatch(
+        requestLesson({
+          lessonId: params["lessonId"],
+        })
+      );
       console.log("lessonId", params["lessonId"]);
     }
     //disable exhaustive dependencies
@@ -129,12 +129,7 @@ const PlaygroundContainer = () => {
         flexDirection="row"
         sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
       >
-        <TopicSidebar
-          exercisesOpen={exercisesOpen}
-          setExercisesOpen={setExercisesOpen}
-          lessonsOpen={lessonsOpen}
-          setLessonsOpen={setLessonsOpen}
-        />
+        <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} />
 
         <Box sx={{ height: "100%", width: "100%" }}>
           <VerticalNavigation
@@ -150,11 +145,11 @@ const PlaygroundContainer = () => {
               display: "flex",
             }}
           >
-            <Sidenav exercisesOpen={exercisesOpen} lessonsOpen={lessonsOpen} />
+            <Sidenav isHidden={isHidden} />
             {contentType === "problem" ? (
               <CodeEditorPage />
             ) : contentType === "lesson" ? (
-              <div>This is a lesson</div>
+              <LearnPage />
             ) : (
               <EmptyState />
             )}

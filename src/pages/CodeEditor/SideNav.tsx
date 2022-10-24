@@ -7,20 +7,20 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestProblem } from "./CodeEditorSlice";
+import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
+import { BookOpen, Code } from "phosphor-react";
 
 interface ClickedMenu {
   [key: string]: Boolean;
 }
 
 interface SidenavProps {
-  exercisesOpen: boolean;
-  lessonsOpen: boolean;
+  isHidden: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -31,7 +31,7 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
+export const Sidenav = ({ isHidden }: SidenavProps) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
@@ -54,7 +54,7 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
         maxWidth: 250,
         bgcolor: "#F9F9F9",
         overflowY: "auto",
-        display: !exercisesOpen && !lessonsOpen ? "none" : "block",
+        display: isHidden ? "none" : "block",
       }}
       aria-labelledby="nested-exercises-list"
       subheader={
@@ -68,7 +68,7 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
             bgcolor: "#F9F9F9",
           }}
         >
-          {exercisesOpen ? "Exercises" : "Lessons"}
+          Content
         </ListSubheader>
       }
     >
@@ -98,73 +98,73 @@ export const Sidenav = ({ exercisesOpen, lessonsOpen }: SidenavProps) => {
             unmountOnExit
           >
             <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
-              {exercisesOpen
-                ? value.problems.map(
-                    (problemItem: IProblemItem, index: number) => (
-                      <CustomListItemButton
-                        sx={{ pl: 4 }}
-                        key={
-                          problemItem.problemName + "_" + indexVal + "_" + index
-                        }
-                        onClick={() => {
-                          dispatch(
-                            requestProblem({
-                              problemId: problemItem._id,
-                              isAdmin: adminPathRegex.test(location.pathname),
-                            })
-                          );
-                          const baseRoute = adminPathRegex.test(
-                            location.pathname
-                          )
-                            ? Routes.AdminCode
-                            : Routes.Code;
-                          history.replace({
-                            pathname: baseRoute + `/${problemItem._id}`,
-                          });
-                        }}
-                      >
-                        <ListItemText
-                          primaryTypographyProps={{
-                            sx: { fontSize: "0.8rem" },
-                          }}
-                          primary={`${indexVal + 1}.${index + 1} ${
-                            problemItem.problemName
-                          }`}
-                        />
-                      </CustomListItemButton>
-                    )
-                  )
-                : value.lessons.map(
-                    (lessonItem: ILessonItem, index: number) => (
-                      <CustomListItemButton
-                        sx={{ pl: 4 }}
-                        key={
-                          lessonItem.lessonName + "_" + indexVal + "_" + index
-                        }
-                        onClick={() => {
-                          /* dispatch(
-                            requestLesson({
-                              lessonId: lessonItem._id,
-                              isAdmin: adminPathRegex.test(location.pathname),
-                            })
-                          ); */
-                          const baseRoute = Routes.Learn;
-                          history.replace({
-                            pathname: baseRoute + `/${lessonItem._id}`,
-                          });
-                        }}
-                      >
-                        <ListItemText
-                          primaryTypographyProps={{
-                            sx: { fontSize: "0.8rem" },
-                          }}
-                          primary={`${indexVal + 1}.${index + 1} ${
-                            lessonItem.lessonName
-                          }`}
-                        />
-                      </CustomListItemButton>
-                    )
-                  )}
+              {value.problems.map(
+                (problemItem: IProblemItem, index: number) => (
+                  <CustomListItemButton
+                    sx={{ pl: 4 }}
+                    key={problemItem.problemName + "_" + indexVal + "_" + index}
+                    onClick={() => {
+                      dispatch(
+                        requestProblem({
+                          problemId: problemItem._id,
+                          isAdmin: adminPathRegex.test(location.pathname),
+                        })
+                      );
+                      const baseRoute = adminPathRegex.test(location.pathname)
+                        ? Routes.AdminCode
+                        : Routes.Code;
+                      history.replace({
+                        pathname: baseRoute + `/${problemItem._id}`,
+                      });
+                    }}
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        sx: { fontSize: "0.8rem" },
+                      }}
+                      primary={`${indexVal + 1}.${index + 1} ${
+                        problemItem.problemName
+                      }`}
+                    />
+                    <Code
+                      weight="regular"
+                      size={16}
+                      color={colors.navIconGray}
+                    />
+                  </CustomListItemButton>
+                )
+              )}
+              {value.lessons?.map((lessonItem: ILessonItem, index: number) => (
+                <CustomListItemButton
+                  sx={{ pl: 4 }}
+                  key={lessonItem.lessonName + "_" + indexVal + "_" + index}
+                  onClick={() => {
+                    dispatch(
+                      requestLesson({
+                        lessonId: lessonItem._id,
+                      })
+                    );
+                    const baseRoute = Routes.Learn;
+                    history.replace({
+                      pathname: baseRoute + `/${lessonItem._id}`,
+                    });
+                  }}
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      sx: { fontSize: "0.8rem" },
+                    }}
+                    primary={`${indexVal + 1}.${index + 1} ${
+                      lessonItem.lessonName
+                    }`}
+                  />
+                  <BookOpen
+                    weight="regular"
+                    size={16}
+                    color={colors.navIconGray}
+                  />
+                </CustomListItemButton>
+              ))}
             </List>
           </Collapse>
         </React.Fragment>

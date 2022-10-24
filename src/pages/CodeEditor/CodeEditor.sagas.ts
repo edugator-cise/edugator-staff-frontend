@@ -13,6 +13,7 @@ import {
   requestFirstProblemFromModule,
   setNavStructure,
   requestProblem,
+  requestLesson,
   setCurrentProblem,
   setIsLoading,
   setRunningSubmission,
@@ -24,6 +25,9 @@ import {
   setResultSubmission,
   setRunCodeError,
   setStdin,
+  setLessonLoadError,
+  setIsLoadingLesson,
+  setCurrentLesson,
 } from "./CodeEditorSlice";
 import apiClient from "../../app/common/apiClient";
 import {
@@ -35,7 +39,7 @@ import {
   ModuleProblemRequest,
   IModuleWithProblemsAndLessons,
 } from "./types";
-import { IProblem } from "../../shared/types";
+import { ILesson, IProblem } from "../../shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
   return data.status.id >= 3;
 };
@@ -90,7 +94,7 @@ function createNavStructure(
         problemName: el.title,
         _id: el._id,
       })),
-      lessons: element.lessons.map((el) => ({
+      lessons: element.lessons?.map((el) => ({
         lessonName: el.title,
         _id: el._id,
       })),
@@ -111,8 +115,6 @@ function* handleRequestModulesAndProblems(
         return apiClient.get("v1/module/WithNonHiddenProblems");
       }
     );
-    //log lessonData
-    console.log(data);
     yield put(setNavStructure(createNavStructure(data)));
     yield put(setIsLoading(false));
   } catch (e) {
@@ -260,6 +262,23 @@ function* submissionRace(
   });
 }
 
+function* requestLessonSaga(
+  action: PayloadAction<{ lessonId: string; isAdmin: boolean }>
+) {
+  const id: string = action.payload.lessonId;
+  try {
+    const { data }: { data: ILesson } = yield call(async () => {
+      return apiClient.get(`v1/lesson/${id}`);
+    });
+    console.log(data);
+    yield put(setCurrentLesson(data));
+    yield put(setIsLoadingLesson(false));
+  } catch (e) {
+    yield put(setLessonLoadError({ hasError: true, errorMessage: e.message }));
+    yield put(setIsLoadingLesson(false));
+  }
+}
+
 function* requestProblemSaga(
   action: PayloadAction<{ problemId: string; isAdmin: boolean }>
 ) {
@@ -322,6 +341,7 @@ function* codeEditorSaga() {
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
   yield takeEvery(requestProblem.type, requestProblemSaga);
+  yield takeEvery(requestLesson.type, requestLessonSaga);
   yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem);
 }
 

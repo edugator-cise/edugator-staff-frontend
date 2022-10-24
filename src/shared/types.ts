@@ -25,6 +25,13 @@ export interface IProblem extends IProblemBase {
   buildCommand: string;
 }
 
+export interface ILesson {
+  _id: string;
+  title: string;
+  author: string;
+  content: Array<Object>;
+}
+
 export interface INewProblem extends IProblem {
   moduleId: string;
 }
