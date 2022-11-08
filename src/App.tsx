@@ -47,6 +47,9 @@ function App() {
             <PrivateRoute exact path={Routes.ContentCreator}>
               <ContentEditorPage />
             </PrivateRoute>
+            <PrivateRoute exact path={Routes.ContentEditor}>
+              <ContentEditorPage />
+            </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
               <ModulesPage />
             </PrivateRoute>

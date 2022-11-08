@@ -3,8 +3,9 @@ export enum Routes {
   Modules = "/admin/modules",
   ProblemEditor = "/admin/problem/edit/:problemId",
   ProblemEditorBaseWithoutId = "/admin/problem/edit/", //To be used only when pushing to a route.
+  ContentEditorBaseWithoutId = "/admin/content/edit/", //To be used only when pushing to a route.
   ProblemCreator = "/admin/problem/create/:moduleId",
-  ContentEditor = "/admin/problem/edit/:contentId",
+  ContentEditor = "/admin/content/edit/:contentId",
   ContentCreator = "/admin/content/create/:moduleId",
   ContentCreatorBaseWithoutId = "/admin/content/create/", //To be used only when pushing to a route.
   ProblemCreatorBaseWithoutId = "/admin/problem/create/", //To be used only when pushing to a route.

@@ -77,6 +77,7 @@ function LearnPage() {
             marginBottom: 0,
             fontWeight: 200,
             fontFamily: "DM Serif Display",
+            textAlign: "left",
           }}
         >
           {children}
@@ -183,12 +184,7 @@ function LearnPage() {
                 <div
                   className="lesson-subtitle"
                   style={{ color: theme.palette.primary.dark }}
-                >
-                  <span style={{ color: theme.palette.primary.main }}>
-                    Last Updated:{" "}
-                  </span>
-                  {sampleLesson[0].date}
-                </div>
+                ></div>
               </div>
             </LessonHeader>
             {currentLesson.content?.map((block: any, i) => {

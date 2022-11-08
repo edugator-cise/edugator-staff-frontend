@@ -14,6 +14,8 @@ import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
+import { BookOpen, Code } from "phosphor-react";
+import { colors } from "../../../shared/constants";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",
@@ -127,54 +129,128 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                   </NewContentButton>
                 </ModuleTitle>
 
-                {module.problems.length > 0 ? (
+                {module.problems.length > 0 || module.lessons.length > 0 ? (
                   <>
-                    {module.problems.map((problem, i) => (
-                      <ModuleContent key={i}>
-                        <Title>
-                          <b>
-                            Problem {module.number}.{i + 1}:
-                          </b>
-                          {` ${problem.title}`}
-                        </Title>
+                    {module.problems.length > 0 ? (
+                      <>
+                        <ModuleContent
+                          sx={{
+                            backgroundColor: "#f5f5f5",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Code
+                            weight="duotone"
+                            size={18}
+                            //dark grey
+                            color={"#4f4f4f"}
+                            style={{
+                              marginRight: "5px",
+                            }}
+                          />
+                          <Title>
+                            <b>Problems</b>
+                          </Title>
+                        </ModuleContent>
+                        {module.problems.map((problem, i) => (
+                          <ModuleContent key={i}>
+                            <Title>
+                              <b>
+                                Problem {module.number}.{i + 1}:
+                              </b>
+                              {` ${problem.title}`}
+                            </Title>
 
-                        <ButtonContainer>
-                          <ProblemAction
-                            startIcon={<AssignmentTurnedIn />}
-                            size="small"
-                            variant="outlined"
-                            onClick={() => {
-                              let toGrade: IProblemBase = {
-                                _id: problem._id,
-                                title: problem.title,
-                              };
-                              setProblemToGrade(toGrade);
+                            <ButtonContainer>
+                              <ProblemAction
+                                startIcon={<AssignmentTurnedIn />}
+                                size="small"
+                                variant="outlined"
+                                onClick={() => {
+                                  let toGrade: IProblemBase = {
+                                    _id: problem._id,
+                                    title: problem.title,
+                                  };
+                                  setProblemToGrade(toGrade);
+                                }}
+                              >
+                                Grade
+                              </ProblemAction>
+                              <ProblemAction
+                                startIcon={<Edit />}
+                                size="small"
+                                variant="outlined"
+                                onClick={() => {
+                                  history.push(
+                                    Routes.ProblemEditorBaseWithoutId +
+                                      problem._id,
+                                    { moduleName: module.name }
+                                  );
+                                }}
+                              >
+                                Edit
+                              </ProblemAction>
+                            </ButtonContainer>
+                          </ModuleContent>
+                        ))}
+                      </>
+                    ) : null}
+                    {module.lessons.length > 0 ? (
+                      <>
+                        <ModuleContent
+                          sx={{
+                            backgroundColor: "#f5f5f5",
+                            alignItems: "center",
+                          }}
+                        >
+                          <BookOpen
+                            weight="duotone"
+                            size={18}
+                            //dark grey
+                            color={"#4f4f4f"}
+                            style={{
+                              marginRight: "5px",
                             }}
-                          >
-                            Grade
-                          </ProblemAction>
-                          <ProblemAction
-                            startIcon={<Edit />}
-                            size="small"
-                            variant="outlined"
-                            onClick={() => {
-                              history.push(
-                                Routes.ProblemEditorBaseWithoutId + problem._id,
-                                { moduleName: module.name }
-                              );
-                            }}
-                          >
-                            Edit
-                          </ProblemAction>
-                        </ButtonContainer>
-                      </ModuleContent>
-                    ))}
+                          />
+                          <Title>
+                            <b>Lessons</b>
+                          </Title>
+                        </ModuleContent>
+                        {module.lessons.map((lesson, i) => (
+                          <ModuleContent key={i}>
+                            <Title>
+                              <b>
+                                Lesson {module.number}.{i + 1}:
+                              </b>
+                              {` ${lesson.title}`}
+                            </Title>
+
+                            <ButtonContainer>
+                              <ProblemAction
+                                startIcon={<Edit />}
+                                size="small"
+                                variant="outlined"
+                                onClick={() => {
+                                  history.push(
+                                    Routes.ContentEditorBaseWithoutId +
+                                      lesson._id,
+                                    { moduleName: module.name }
+                                  );
+                                }}
+                              >
+                                Edit
+                              </ProblemAction>
+                            </ButtonContainer>
+                          </ModuleContent>
+                        ))}
+                      </>
+                    ) : null}
                   </>
                 ) : (
                   <ModuleContent>
                     <Title>
-                      There are no problems for this module. Click add problem
-                      to begin.
+                      There is no content for this module. Click add
+                      problem/content to begin.
                     </Title>
                   </ModuleContent>
                 )}

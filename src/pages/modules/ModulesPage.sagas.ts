@@ -50,6 +50,7 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
       name: action.payload.name,
       number: action.payload.number,
       problems: [],
+      lessons: [],
       _id: response.data.id,
     };
 

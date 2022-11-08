@@ -268,7 +268,7 @@ function* requestLessonSaga(
   const id: string = action.payload.lessonId;
   try {
     const { data }: { data: ILesson } = yield call(async () => {
-      return apiClient.get(`v1/lesson/${id}`);
+      return apiClient.get(`v1/student/lesson/${id}`);
     });
     console.log(data);
     yield put(setCurrentLesson(data));

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import problemEditorContainerReducer from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
 import codeEditorReducer from "../../pages/CodeEditor/CodeEditorSlice";
+import contentEditorReducer from "../../pages/ContentEditor/contentEditorPageSlice";
 import { loginSlice } from "../../pages/Login/LoginPage.slice";
 import moduleReducer from "../../pages/modules/ModulesPage.slice";
 import gradingReducer from "../../pages/grading/GradingDialog.slice";
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   grading: gradingReducer,
   accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
+  contentEditorPage: contentEditorReducer,
   codeEditor: codeEditorReducer,
   landingPage: landingPageReducer,
 });
