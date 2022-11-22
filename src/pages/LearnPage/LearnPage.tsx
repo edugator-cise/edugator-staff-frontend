@@ -70,7 +70,20 @@ function LearnPage() {
     console.log(node.tagName);
     console.log(node);
 
-    if (node.tagName === "H2") {
+    if (node.tagName === "H1") {
+      return (
+        <h1
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+            textAlign: "left",
+          }}
+        >
+          {children}
+        </h1>
+      );
+    } else if (node.tagName === "H2") {
       return (
         <h2
           style={{
@@ -94,6 +107,42 @@ function LearnPage() {
         >
           <i>{children}</i>
         </h3>
+      );
+    } else if (node.tagName === "H4") {
+      return (
+        <h4
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h4>
+      );
+    } else if (node.tagName === "H5") {
+      return (
+        <h5
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h5>
+      );
+    } else if (node.tagName === "H6") {
+      return (
+        <h5
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h5>
       );
     } else if (node.tagName === "P") {
       return <p style={{ lineHeight: 1.5, color: "#242424" }}>{children}</p>;
@@ -188,6 +237,9 @@ function LearnPage() {
               </div>
             </LessonHeader>
             {currentLesson.content?.map((block: any, i) => {
+              if (!block || !block.type || !block.content) {
+                return null;
+              }
               if (block.type === "text") {
                 console.log(JSON.parse(JSON.stringify(block.content)));
 

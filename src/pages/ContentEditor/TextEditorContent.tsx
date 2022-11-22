@@ -1,5 +1,11 @@
-import { Component, useState } from "react";
-import { EditorState, AtomicBlockUtils } from "draft-js";
+import { Component, useState, useEffect } from "react";
+import {
+  EditorState,
+  AtomicBlockUtils,
+  convertFromHTML,
+  ContentState,
+  convertFromRaw,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./TextEditorStyles.css";
@@ -13,14 +19,39 @@ import {
 } from "./components/displayBlockComponents";
 import { TextBolder } from "phosphor-react";
 import { toolbarIcons } from "./ToolbarIcons";
+import { useAppSelector } from "../../app/common/hooks";
 
 export const TextEditorContent = ({
   callbackData,
 }: {
-  callbackData: (atomicEntities: any, html: string) => void;
+  callbackData: (atomicEntities: any, html: string, rawData: any) => void;
 }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [html, setHTML] = useState("");
+
+  // check if the lesson has a title (we are editing a lesson)
+  const contentId = useAppSelector(
+    (state) => state.contentEditorPage.contentId
+  );
+
+  const editorStoredState = useAppSelector(
+    (state) => state.contentEditorPage.contentEditor
+  );
+
+  useEffect(() => {
+    if (contentId && editorStoredState) {
+      const convertedContent = convertFromRaw({
+        // @ts-ignore
+        blocks: editorStoredState.editableContent.blocks,
+        // @ts-ignore
+        entityMap: editorStoredState.editableContent.entityMap || {},
+      });
+      console.log("convertedContent", convertedContent);
+
+      // convert from raw back to editor state
+      setEditorState(EditorState.createWithContent(convertedContent));
+    }
+  }, [contentId, editorStoredState]);
 
   const customEntityTransform = (entity: any, text: string) => {
     if (
@@ -32,7 +63,6 @@ export const TextEditorContent = ({
   };
 
   const blockRenderer = (contentBlock: any) => {
-    console.log("consoleBlock: ", contentBlock);
     const type = contentBlock.getType();
     if (type === "atomic") {
       const contentState = editorState.getCurrentContent();
@@ -88,14 +118,18 @@ export const TextEditorContent = ({
 
   const onTrigger = () => {
     let atomicEntities = getEntities(editorState);
+    let rawData = convertToRaw(editorState.getCurrentContent());
     //let html = html;
 
-    console.log("Callback Data", atomicEntities, html);
-    callbackData(atomicEntities, html);
+    // console.log("Callback Data", atomicEntities, html);
+    callbackData(atomicEntities, html, rawData);
   };
 
   const onEditorStateChange = (editorState: any) => {
-    // console.log(editorState)
+    console.log(editorState);
+    console.log("RAW STATE");
+    console.log(convertToRaw(editorState.getCurrentContent()));
+
     let html = draftToHtml(
       convertToRaw(editorState.getCurrentContent()),
       {},

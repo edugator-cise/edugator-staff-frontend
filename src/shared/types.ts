@@ -29,6 +29,9 @@ export interface ILesson extends ILessonBase {
   title: string;
   author: string;
   content: Array<Object>;
+  editableContent: Object;
+  blocks: Array<Object>;
+  entityMap: Array<Object>;
 }
 
 export interface INewProblem extends IProblem {

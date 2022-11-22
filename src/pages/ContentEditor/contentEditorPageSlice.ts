@@ -3,6 +3,22 @@ import { ILesson } from "../../shared/types";
 
 export interface ContentEditorFields {
   content: Object[];
+  editableContent: {
+    blocks: Object[];
+    entityMap: Array<Object>;
+  };
+  blocks: Object[];
+  entityMap: Array<Object>;
+}
+
+interface Block {
+  data: Object;
+  type: string;
+  depth: number;
+  entityRanges: Object[];
+  inlineStyleRanges: Object[];
+  text: string;
+  key: string;
 }
 
 export interface MetadataFields {
@@ -38,6 +54,12 @@ const initialState: ProblemEditorContainerState = {
   },
   contentEditor: {
     content: [],
+    editableContent: {
+      blocks: [],
+      entityMap: [],
+    },
+    blocks: [],
+    entityMap: [],
   },
   contentId: undefined,
   moduleId: "",
@@ -66,6 +88,12 @@ export const contentEditorPageSlice = createSlice({
       action: PayloadAction<ContentEditorFields>
     ) => {
       state.contentEditor = action.payload;
+    },
+    updateBlocks: (state, action: PayloadAction<Block[]>) => {
+      state.contentEditor.editableContent.blocks = action.payload;
+    },
+    updateEntityMap: (state, action: PayloadAction<Array<Object>>) => {
+      state.contentEditor.editableContent.entityMap = action.payload;
     },
 
     updateContentId: (state, action: PayloadAction<string | undefined>) => {
@@ -121,6 +149,14 @@ export const contentEditorPageSlice = createSlice({
       };
       state.contentEditor = {
         content: { ...action.payload.content },
+        editableContent: {
+          // @ts-ignore
+          blocks: action.payload.editableContent.blocks,
+          // @ts-ignore
+          entityMap: action.payload.editableContent.entityMap,
+        },
+        blocks: action.payload.blocks,
+        entityMap: action.payload.entityMap,
       };
     },
     requestGetContentFailure: (state, action: PayloadAction<any>) => {

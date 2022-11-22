@@ -16,11 +16,13 @@ export const TextStack = () => {
   const [atomicEntities, setAtomicEntities] = useState([]);
   const [html, setHTML] = useState("");
   const [exportData, setExportData] = useState([]);
+  const [rawData, setRawData] = useState({});
 
-  const entityCallback = (atomicEntities: any, html: string) => {
+  const entityCallback = (atomicEntities: any, html: string, rawData: any) => {
     setAtomicEntities(atomicEntities);
     setHTML(html);
     updateExportData();
+    setRawData(rawData);
   };
 
   const updateExportData = () => {
@@ -94,7 +96,7 @@ export const TextStack = () => {
       </div>
       <div className="Popup">
         <CustomizedDialogs title="Publish Learning Content">
-          <RegistrationForm jsonData={exportData} />
+          <RegistrationForm jsonData={exportData} rawData={rawData} />
         </CustomizedDialogs>
       </div>
     </form>

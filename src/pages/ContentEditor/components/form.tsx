@@ -13,9 +13,16 @@ interface ExportData {
   title: string;
   author: string;
   content: any[];
+  editableContent: any;
 }
 
-export const RegistrationForm = ({ jsonData }: { jsonData: any }) => {
+export const RegistrationForm = ({
+  jsonData,
+  rawData,
+}: {
+  jsonData: any;
+  rawData: any;
+}) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [date, setDate] = useState("");
@@ -55,6 +62,7 @@ export const RegistrationForm = ({ jsonData }: { jsonData: any }) => {
       title: "",
       author: "",
       content: [],
+      editableContent: {},
     };
     let contentArr: any[] = [];
     pageJsonData.title = JSON.stringify(title, undefined, 2);
@@ -65,8 +73,23 @@ export const RegistrationForm = ({ jsonData }: { jsonData: any }) => {
     });
     pageJsonData.content = contentArr;
     // let exportData = pageJsonData.content.join(",\n");
+
+    // create an array from entity map data
+    const entityMap = Object.keys(rawData.entityMap).map(
+      (key) => rawData.entityMap[key]
+    );
+
+    console.log(entityMap);
+
     dispatch(updateMetadata({ title: title, author: author }));
-    dispatch(updateContentEditor({ content: pageJsonData.content }));
+    dispatch(
+      updateContentEditor({
+        content: pageJsonData.content,
+        editableContent: rawData,
+        blocks: rawData.blocks,
+        entityMap: entityMap,
+      })
+    );
 
     if (contentId) {
       dispatch(requestUpdateContent());
@@ -74,7 +97,7 @@ export const RegistrationForm = ({ jsonData }: { jsonData: any }) => {
       dispatch(requestAddContent());
     }
 
-    console.log(pageJsonData);
+    console.log(rawData.entityMap);
   };
 
   return (
