@@ -32,16 +32,21 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
 import { Routes } from "../shared/Routes.constants";
 import { adminPathRegex } from "../shared/constants";
+import useModules from "../hooks/LandingPage/useModules";
 
-interface Props {
+function VerticalNavigation({
+  light,
+  codingPage = false,
+}: {
   light: boolean;
-  modules: string[];
   codingPage?: boolean;
-}
+}) {
+  const modules = useModules();
 
-function VerticalNavigation(props: Props) {
   const location = useLocation();
+
   const md = useMediaQuery(theme.breakpoints.up("md"));
+
   const [openProjects, setOpenProjects] = useState<any>(null);
   const [openModules, setOpenModules] = useState<any>(null);
   const [openLearn, setOpenLearn] = useState<any>(null);
@@ -60,22 +65,33 @@ function VerticalNavigation(props: Props) {
     subitems: { title: string; link: string }[];
   }
 
+  interface subitem {
+    title: string;
+    link: string;
+  }
+
+  const mapModules = (modules: string[]) => {
+    return modules.map((module) => {
+      return {
+        title: module,
+        link: "",
+      };
+    });
+  };
+
   const toggleDrawer = () => {
     setOpen(!open);
     return 0;
   };
 
-  const menus: menu[] = [
+  const menus: (modules: subitem[]) => menu[] = (modules: subitem[]) => [
     {
       title: "Modules",
       id: "modules",
       icon: <ModulesIcon sx={{ color: "primary.main" }} />,
       anchor: anchorModules,
       anchorSet: setAnchorModules,
-      subitems: props.modules.map((value, index) => ({
-        title: `${value}`,
-        link: "",
-      })),
+      subitems: modules,
       menuOpen: openModules,
       setMenuOpen: setOpenModules,
     },
@@ -153,14 +169,14 @@ function VerticalNavigation(props: Props) {
         paddingLeft: md ? 100 : 30,
         paddingRight: md ? 100 : 30,
         height: 64,
-        backgroundColor: props.codingPage
+        backgroundColor: codingPage
           ? "white"
-          : props.light
+          : light
           ? "transparent"
           : "#152c7c",
       }}
     >
-      {!props.codingPage && (
+      {!codingPage && (
         <Link to={"/"}>
           <Avatar
             alt="Example Alt"
@@ -170,7 +186,7 @@ function VerticalNavigation(props: Props) {
               height: 46,
               padding: 5,
             }}
-            src={props.light ? DarkModeLogo : DefaultLogo}
+            src={light ? DarkModeLogo : DefaultLogo}
           />
         </Link>
       )}
@@ -184,12 +200,14 @@ function VerticalNavigation(props: Props) {
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          {menus.map((item, index) => {
+          {menus(
+            modules.status === "loaded" ? mapModules(modules.payload) : []
+          ).map((item, index) => {
             return (
               <div key={index}>
                 <Button
                   sx={{
-                    color: props.light ? "inherit" : "white",
+                    color: light ? "inherit" : "white",
                     marginRight: 4,
                   }}
                   aria-controls={item.id}
@@ -234,7 +252,7 @@ function VerticalNavigation(props: Props) {
             );
           })}
           <Button
-            sx={{ color: props.light ? "inherit" : "#ffffff" }}
+            sx={{ color: light ? "inherit" : "#ffffff" }}
             onClick={() => {}}
           >
             Schedule
@@ -245,7 +263,7 @@ function VerticalNavigation(props: Props) {
         <>
           <IconButton
             edge="start"
-            style={{ color: props.light ? "black" : "white" }}
+            style={{ color: light ? "black" : "white" }}
             aria-label="open drawer"
             sx={{ position: "absolute", right: 20 }}
             onClick={() => {
@@ -275,7 +293,9 @@ function VerticalNavigation(props: Props) {
               <Divider sx={{ mb: 2 }} />
 
               <Box sx={{ mb: 2 }}>
-                {menus.map((menu, index) => {
+                {menus(
+                  modules.status === "loaded" ? mapModules(modules.payload) : []
+                ).map((menu, index) => {
                   return (
                     <div key={index}>
                       <ListItemButton

@@ -7,19 +7,12 @@ import Footer from "../../shared/Footer";
 import { Grid, Box, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestModules } from "./LandingPageSlice";
+import useModules from "../../hooks/LandingPage/useModules";
 
 function LandingPage() {
-  const dispatch = useDispatch();
-  const isLoading = useSelector(
-    (state: RootState) => state.landingPage.isLoading
-  );
-  const modules = useSelector((state: RootState) => state.landingPage.modules);
-  useEffect(() => {
-    dispatch(requestModules());
-  }, [dispatch]);
+  const modules = useModules();
 
-  if (isLoading) {
+  if (modules.status === "loading") {
     return (
       <Grid
         container
@@ -33,15 +26,29 @@ function LandingPage() {
         </Box>
       </Grid>
     );
-  } else {
+  } else if (modules.status === "loaded") {
     return (
       <>
-        <VerticalNavigation light modules={modules} />
+        <VerticalNavigation light />
         <LandingHome />
         <LandingFeatures />
         <LandingTopics />
         <Footer />
       </>
+    );
+  } else {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        direction="column"
+        alignItems="center"
+        sx={{ height: "100vh" }}
+      >
+        <Box>
+          <CircularProgress />
+        </Box>
+      </Grid>
     );
   }
 }

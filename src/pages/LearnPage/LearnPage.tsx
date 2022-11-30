@@ -7,11 +7,7 @@ import {
   requestLesson,
   setLessonLoadError,
 } from "../CodeEditor/CodeEditorSlice";
-import VerticalNavigation from "../../shared/VerticalNavigation";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
-import { adminPathRegex, colors } from "../../shared/constants";
-import { useParams, useLocation } from "react-router-dom";
-import { sampleLesson } from "./sampleLesson";
 import { Node, Markup } from "interweave";
 import "./learnStyles.css";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";

@@ -49,10 +49,6 @@ const Link = styled("a")({
 });
 
 function PrivacyNotice() {
-  const modules = useSelector((state: RootState) => {
-    const sortedModules = state.codeEditor.navStructure;
-    return sortedModules.map((value) => value.name);
-  });
   const dispatch = useDispatch();
   const locationState = useLocation<ProblemLocationState>();
 
@@ -69,7 +65,7 @@ function PrivacyNotice() {
   return (
     <>
       <div id="top" />
-      <VerticalNavigation light={true} modules={modules} codingPage={false} />
+      <VerticalNavigation light={true} codingPage={false} />
       <TitleHolder>
         <div>
           <Typography variant="h2">PRIVACY NOTICE</Typography>

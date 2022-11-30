@@ -22,6 +22,7 @@ import "allotment/dist/style.css";
 import TopicSidebar from "../../shared/TopicSidebar";
 import { CodeEditorPage } from "../CodeEditor/CodeEditorPage";
 import LearnPage from "../LearnPage/LearnPage";
+import useModules from "../../hooks/LandingPage/useModules";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -46,11 +47,6 @@ const PlaygroundContainer = () => {
   const isLoading = useSelector(
     (state: RootState) => state.codeEditor.isLoading
   );
-
-  const modules = useSelector((state: RootState) => {
-    const sortedModules = state.codeEditor.navStructure;
-    return sortedModules.map((value) => value.name);
-  });
 
   const navigation = useSelector(
     (state: RootState) => state.codeEditor.navStructure
@@ -132,11 +128,7 @@ const PlaygroundContainer = () => {
         <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} />
 
         <Box sx={{ height: "100%", width: "100%" }}>
-          <VerticalNavigation
-            light={true}
-            modules={modules}
-            codingPage={true}
-          />
+          <VerticalNavigation light={true} codingPage={true} />
           <Box
             sx={{
               height: "100%",
