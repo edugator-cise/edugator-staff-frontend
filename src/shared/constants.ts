@@ -1,4 +1,4 @@
-export const baseAPIURL = "http://localhost:8080/"; //https://edugator-admin.com/";
+export const baseAPIURL = "https://edugator-admin.com/"; //"http://localhost:8080/";
 export const unauthorizedErrorMessage =
   "You are not authorized to perform this action currently. Please log out and log back in.";
 

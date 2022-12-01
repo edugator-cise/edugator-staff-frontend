@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
   contentEditorPage: contentEditorReducer,
-  codeEditor: codeEditorReducer,
+  // codeEditor: codeEditorReducer,
 });
 
 export default rootReducer;

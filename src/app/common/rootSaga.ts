@@ -11,7 +11,7 @@ import contentSaga from "../../pages/ContentEditor/contentEditorPage.sagas";
 export default function* rootSaga() {
   yield all([
     loginSaga(),
-    codeEditorsaga(),
+    // codeEditorsaga(),
     modulesSaga(),
     gradingSaga(),
     accountManagerSaga(),

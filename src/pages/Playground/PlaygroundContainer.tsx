@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Sidenav } from "../CodeEditor/SideNav";
-import {
-  requestFirstProblemFromModule,
-  requestLesson,
-  requestProblem,
-  setRunCodeError,
-} from "../CodeEditor/CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "../CodeEditor/CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "../CodeEditor/CodeEditorContainer/CodeEditorView";
@@ -22,7 +15,7 @@ import "allotment/dist/style.css";
 import TopicSidebar from "../../shared/TopicSidebar";
 import { CodeEditorPage } from "../CodeEditor/CodeEditorPage";
 import LearnPage from "../LearnPage/LearnPage";
-import useModules from "../../hooks/LandingPage/useModules";
+import { useCodeEditorStore } from "../../stores/CodeEditor/codeEditorStore";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -34,6 +27,15 @@ interface ProblemLocationState {
 }
 
 const PlaygroundContainer = () => {
+  const {
+    isLoading,
+    navStructure,
+    requestModulesAndProblems,
+    requestProblem,
+    requestFirstProblemFromModule,
+    requestLesson,
+  } = useCodeEditorStore();
+
   const [isHidden, setIsHidden] = useState(false);
   const [contentType, setContentType] = useState<"problem" | "lesson" | "">(
     "problem"
@@ -42,42 +44,23 @@ const PlaygroundContainer = () => {
   const params = useParams<ProblemEditorURL>();
   const locationState = useLocation<ProblemLocationState>();
   const location = locationState.state;
-  const dispatch = useDispatch();
-
-  const isLoading = useSelector(
-    (state: RootState) => state.codeEditor.isLoading
-  );
-
-  const navigation = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
-  );
 
   useEffect(() => {
-    dispatch(
-      requestModulesAndProblems({
-        isAdmin: adminPathRegex.test(locationState.pathname),
-      })
-    );
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [dispatch]);
+    requestModulesAndProblems({
+      isAdmin: adminPathRegex.test(locationState.pathname),
+    });
+  }, []);
 
   useEffect(() => {
     if (params && params["problemId"]) {
       setContentType("problem");
-      dispatch(
-        requestProblem({
-          problemId: params["problemId"],
-          isAdmin: adminPathRegex.test(locationState.pathname),
-        })
+      requestProblem(
+        params["problemId"],
+        adminPathRegex.test(locationState.pathname)
       );
     } else if (params && params["lessonId"]) {
       setContentType("lesson");
-      dispatch(
-        requestLesson({
-          lessonId: params["lessonId"],
-        })
-      );
+      requestLesson(params["lessonId"]);
       console.log("lessonId", params["lessonId"]);
     }
     //disable exhaustive dependencies
@@ -88,15 +71,13 @@ const PlaygroundContainer = () => {
     if (
       location &&
       location["moduleName"] !== undefined &&
-      navigation &&
-      navigation.length > 0
+      navStructure &&
+      navStructure.length > 0
     ) {
-      dispatch(
-        requestFirstProblemFromModule({
-          navigation,
-          moduleName: location["moduleName"],
-          isAdmin: adminPathRegex.test(locationState.pathname),
-        })
+      requestFirstProblemFromModule(
+        navStructure,
+        location["moduleName"],
+        adminPathRegex.test(locationState.pathname)
       );
     }
     //disable exhaustive dependencies

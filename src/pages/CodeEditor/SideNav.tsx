@@ -5,15 +5,13 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
-import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
 import { BookOpen, Code } from "phosphor-react";
+import { useCodeEditorStore } from "../../stores/CodeEditor/codeEditorStore";
 
 interface ClickedMenu {
   [key: string]: Boolean;
@@ -33,10 +31,8 @@ const CustomListItemButton = styled(ListItemButton)(
 
 export const Sidenav = ({ isHidden }: SidenavProps) => {
   const location = useLocation();
-  const dispatch = useDispatch();
-  const navStructure = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
-  );
+
+  const { navStructure, requestProblem, requestLesson } = useCodeEditorStore();
   const history = useHistory();
   const [menu, setMenu] = useState<ClickedMenu>({});
 
@@ -104,11 +100,9 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                     sx={{ pl: 4 }}
                     key={problemItem.problemName + "_" + indexVal + "_" + index}
                     onClick={() => {
-                      dispatch(
-                        requestProblem({
-                          problemId: problemItem._id,
-                          isAdmin: adminPathRegex.test(location.pathname),
-                        })
+                      requestProblem(
+                        problemItem._id,
+                        adminPathRegex.test(location.pathname)
                       );
                       const baseRoute = adminPathRegex.test(location.pathname)
                         ? Routes.AdminCode
@@ -139,11 +133,7 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                   sx={{ pl: 4 }}
                   key={lessonItem.lessonName + "_" + indexVal + "_" + index}
                   onClick={() => {
-                    dispatch(
-                      requestLesson({
-                        lessonId: lessonItem._id,
-                      })
-                    );
+                    requestLesson(lessonItem._id);
                     const baseRoute = Routes.Learn;
                     history.replace({
                       pathname: baseRoute + `/${lessonItem._id}`,

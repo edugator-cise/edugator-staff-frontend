@@ -4,14 +4,12 @@ import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { requestRunCode, submitCode } from "../CodeEditorSlice";
-import { RootState } from "../../../app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "../../../shared/constants";
 // import { useTheme } from "@mui/material/styles";
 import theme from "../../../shared/theme";
+import { useCodeEditorStore } from "../../../stores/CodeEditor/codeEditorStore";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -53,31 +51,46 @@ interface CodeEditorProps {
 }
 
 export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
-  const dispatch = useDispatch();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const {
+    requestRunCode,
+    runningSubmission: isSubmissionRunning,
+    stdin,
+    currentProblem,
+    navStructure,
+    submitCode,
+  } = useCodeEditorStore();
+  const {
+    _id: problemId,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+    fileExtension: fileType,
+  } = Object(currentProblem);
   const [currentCode, setCurrentCode] = useState(code);
-  const isSubmissionRunning = useSelector(
-    (state: RootState) => state.codeEditor.runningSubmission
-  );
-  const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
-  const problemId = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?._id
-  );
-  const fileType = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.fileExtension
-  );
-  const navStructure = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
-  );
-  const { timeLimit, memoryLimit, buildCommand } = useSelector(
-    (state: RootState) => {
-      return {
-        timeLimit: state.codeEditor.currentProblem?.timeLimit,
-        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
-        buildCommand: state.codeEditor.currentProblem?.buildCommand,
-      };
-    }
-  );
+
+  // const isSubmissionRunning = useSelector(
+  //   (state: RootState) => state.codeEditor.runningSubmission
+  // );
+  // const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
+  // const problemId = useSelector(
+  //   (state: RootState) => state.codeEditor.currentProblem?._id
+  // );
+  // const fileType = useSelector(
+  //   (state: RootState) => state.codeEditor.currentProblem?.fileExtension
+  // );
+  // const navStructure = useSelector(
+  //   (state: RootState) => state.codeEditor.navStructure
+  // );
+  // const { timeLimit, memoryLimit, buildCommand } = useSelector(
+  //   (state: RootState) => {
+  //     return {
+  //       timeLimit: state.codeEditor.currentProblem?.timeLimit,
+  //       memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
+  //       buildCommand: state.codeEditor.currentProblem?.buildCommand,
+  //     };
+  //   }
+  // );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (editorRef.current) {
@@ -239,16 +252,14 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() => {
-              dispatch(
-                requestRunCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              );
+              requestRunCode({
+                code: currentCode,
+                stdin: stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              });
             }}
           >
             Run Code
@@ -259,16 +270,14 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() =>
-              dispatch(
-                submitCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              )
+              submitCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              })
             }
           >
             Submit

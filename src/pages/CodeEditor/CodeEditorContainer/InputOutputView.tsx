@@ -4,13 +4,11 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import { styled } from "@mui/material/styles";
-import { setActiveTab, setStdin } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
+import { useCodeEditorStore } from "../../../stores/CodeEditor/codeEditorStore";
 const TabBar = styled("div")(
   () => `
   display: flex;
@@ -35,30 +33,25 @@ const CodeHolder = styled("div")(
 );
 
 export const InputOutputView = () => {
-  const dispatch = useDispatch();
+  const {
+    activeTab,
+    setActiveTab,
+    setStdin,
+    stdin,
+    compilerOutput: compileOutput,
+    submissionOutput,
+    isAcceptedOutput,
+  } = useCodeEditorStore();
 
-  const activeTab = useSelector(
-    (state: RootState) => state.codeEditor.activeTab
-  );
-  const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
-  const compileOutput = useSelector(
-    (state: RootState) => state.codeEditor.compilerOutput
-  );
-  const submissionOutput = useSelector(
-    (state: RootState) => state.codeEditor.submissionOutput
-  );
-  const isAcceptedOutput = useSelector(
-    (state: RootState) => state.codeEditor.isAcceptedOutput
-  );
   const handleChange = (event: any, newValue: number) => {
-    dispatch(setActiveTab(newValue));
+    setActiveTab(newValue);
   };
 
   const handleStdinChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     event.preventDefault();
-    dispatch(setStdin(event.target.value));
+    setStdin(event.target.value);
   };
 
   return (

@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
-import {
-  requestLesson,
-  setLessonLoadError,
-} from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { Node, Markup } from "interweave";
 import "./learnStyles.css";
@@ -14,21 +8,17 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ImageBlock from "./ImageBlock";
 import MultipleSelectQuestion from "./MultipleSelectQuestion";
 import { EmptyState } from "../CodeEditor/CodeEditorContainer/EmptyState";
+import { useCodeEditorStore } from "../../stores/CodeEditor/codeEditorStore";
 
 function LearnPage() {
   let questionCount = 1;
 
-  const dispatch = useDispatch();
-
-  const currentLesson = useSelector(
-    (state: RootState) => state.codeEditor.currentLesson
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.codeEditor.lessonLoadingError
-  );
-  const isLoadingLesson = useSelector(
-    (state: RootState) => state.codeEditor.isLoadingLesson
-  );
+  const {
+    currentLesson,
+    isLoadingLesson,
+    lessonLoadingError: errorMessage,
+    setLessonLoadError,
+  } = useCodeEditorStore();
 
   useEffect(() => {
     console.log(currentLesson);
@@ -176,9 +166,7 @@ function LearnPage() {
               zIndex: 300,
             }}
             onClose={() => {
-              dispatch(
-                setLessonLoadError({ hasError: false, errorMessage: "" })
-              );
+              setLessonLoadError({ hasError: false, errorMessage: "" });
             }}
           >
             {errorMessage.errorMessage}

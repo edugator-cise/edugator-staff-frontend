@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import { setRunCodeError } from "./CodeEditorSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
@@ -9,23 +7,15 @@ import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import { useCodeEditorStore } from "../../stores/CodeEditor/codeEditorStore";
 
 export const CodeEditorPage = () => {
-  const dispatch = useDispatch();
-
-  const currentProblem = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.codeEditor.runCodeError
-  );
-  const isLoadingProblem = useSelector(
-    (state: RootState) => state.codeEditor.isLoadingProblem
-  );
+  const { currentProblem, runCodeError, isLoadingProblem, setRunCodeError } =
+    useCodeEditorStore();
 
   return (
     <>
-      {errorMessage.hasError && (
+      {runCodeError.hasError && (
         <Grow in timeout={500}>
           <Alert
             severity="error"
@@ -40,10 +30,10 @@ export const CodeEditorPage = () => {
               zIndex: 300,
             }}
             onClose={() => {
-              dispatch(setRunCodeError({ hasError: false, errorMessage: "" }));
+              setRunCodeError({ hasError: false, errorMessage: "" });
             }}
           >
-            {errorMessage.errorMessage}
+            {runCodeError.errorMessage}
           </Alert>
         </Grow>
       )}

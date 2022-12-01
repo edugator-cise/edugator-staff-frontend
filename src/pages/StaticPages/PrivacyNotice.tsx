@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import VerticalNavigation from "../../shared/VerticalNavigation";
-import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
 import { useLocation } from "react-router-dom";
 import { adminPathRegex } from "../../shared/constants";
 import { styled } from "@mui/styles";
@@ -49,18 +46,7 @@ const Link = styled("a")({
 });
 
 function PrivacyNotice() {
-  const dispatch = useDispatch();
   const locationState = useLocation<ProblemLocationState>();
-
-  useEffect(() => {
-    dispatch(
-      requestModulesAndProblems({
-        isAdmin: adminPathRegex.test(locationState.pathname),
-      })
-    );
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [dispatch]);
 
   return (
     <>
