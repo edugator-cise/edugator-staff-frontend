@@ -43,7 +43,7 @@ import { ILesson, IProblem } from "../../shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
   return data.status.id >= 3;
 };
-
+//
 const poll = async (
   fn: Function,
   payload: any,
@@ -68,6 +68,7 @@ const poll = async (
   return new Promise(executePoll);
 };
 
+//
 function filterForProblem(
   moduleProblemStructure: INavigationItem[],
   moduleName: string
@@ -81,6 +82,8 @@ function filterForProblem(
   }
   return undefined;
 }
+
+//
 function createNavStructure(
   moduleProblemStructure: IModuleWithProblemsAndLessons[]
 ) {
@@ -103,6 +106,8 @@ function createNavStructure(
   });
   return moduleItems;
 }
+
+//
 function* handleRequestModulesAndProblems(
   action: PayloadAction<ModuleProblemRequest>
 ) {
@@ -262,6 +267,7 @@ function* submissionRace(
   });
 }
 
+//
 function* requestLessonSaga(
   action: PayloadAction<{ lessonId: string; isAdmin: boolean }>
 ) {
@@ -279,6 +285,7 @@ function* requestLessonSaga(
   }
 }
 
+//
 function* requestProblemSaga(
   action: PayloadAction<{ problemId: string; isAdmin: boolean }>
 ) {
@@ -300,6 +307,7 @@ function* requestProblemSaga(
   }
 }
 
+//
 function* requestFirstProblem(
   action: PayloadAction<{
     navigation: INavigationItem[];
