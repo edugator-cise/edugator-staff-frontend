@@ -1,6 +1,14 @@
 import { AxiosResponse } from "axios";
 import create from "zustand";
 import apiClient from "../../app/common/apiClient";
+import {
+  getLessonUrl,
+  getModulesAndProblemsUrl,
+  getProblemUrl,
+  runCodeSubmissionUrl,
+  runCodeUrl,
+  submitCodeUrl,
+} from "../../constants/urls";
 import { ILesson, IProblem } from "../../shared/types";
 import {
   filterForProblem,
@@ -9,6 +17,7 @@ import {
   poll,
   judge0Validator,
   evaluateCompilerBody,
+  editorInitialState,
 } from "../../utils/codeEditor/editorUtils";
 import { CodeEditorContainerState } from "../../utils/codeEditor/types";
 import {
@@ -26,30 +35,7 @@ import {
 export const useCodeEditorStore = create<CodeEditorContainerState>(
   (set, get) => ({
     // initial static states
-    isLoading: true,
-    isLoadingLesson: true,
-    currentProblem: undefined,
-    currentLesson: undefined,
-    navStructure: [],
-    codeBody: "",
-    runningSubmission: false,
-    stdin: "",
-    isAcceptedOutput: undefined,
-    compilerOutput: {
-      compilerMessage: "",
-      compilerBody: "",
-    },
-    runCodeError: {
-      hasError: false,
-      errorMessage: "",
-    },
-    lessonLoadingError: {
-      hasError: false,
-      errorMessage: "",
-    },
-    submissionOutput: undefined,
-    activeTab: 0, // stdin tab is active
-    isLoadingProblem: false,
+    ...editorInitialState,
     // dynamic states
     requestProblem: (problemId: string, isAdmin: boolean) => {
       // reset problem state
@@ -67,11 +53,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
       });
       //get problem
       apiClient
-        .get(
-          isAdmin
-            ? `v1/admin/problem/${problemId}`
-            : `v1/student/problem/${problemId}`
-        )
+        .get(getProblemUrl(problemId, isAdmin))
         .then((response: AxiosResponse<IProblem>) => {
           set({
             currentProblem: response.data,
@@ -104,7 +86,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
       const id: string = lessonId;
       // get lesson
       apiClient
-        .get(`v1/student/lesson/${id}`)
+        .get(getLessonUrl(id))
         .then((response: AxiosResponse<any>) => {
           const { data }: { data: ILesson } = response;
           set({ currentLesson: data });
@@ -126,11 +108,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
       const problemId = filterForProblem(navigation, moduleName);
       if (problemId) {
         apiClient
-          .get(
-            isAdmin
-              ? `v1/admin/problem/${problemId}`
-              : `v1/student/problem/${problemId}`
-          )
+          .get(getProblemUrl(problemId, isAdmin))
           .then((response: AxiosResponse<IProblem>) => {
             set({
               currentProblem: response.data,
@@ -175,11 +153,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
     requestModulesAndProblems: (problemRequest: ModuleProblemRequest) => {
       set({ isLoading: true });
       apiClient
-        .get(
-          problemRequest.isAdmin
-            ? "v1/module/WithProblems"
-            : "v1/module/WithNonHiddenProblems"
-        )
+        .get(getModulesAndProblemsUrl(problemRequest.isAdmin))
         .then((response: AxiosResponse<IModuleWithProblemsAndLessons[]>) => {
           set({
             navStructure: createNavStructure(response.data),
@@ -213,7 +187,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
         runId: string;
         base_64: boolean;
       }) => {
-        return apiClient.post("v1/code/run/submission", {
+        return apiClient.post(runCodeSubmissionUrl, {
           base_64,
           runId,
         });
@@ -221,7 +195,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
 
       set({ runningSubmission: true });
       apiClient
-        .post("v1/code/run", transformPayload(submission))
+        .post(runCodeUrl, transformPayload(submission))
         .then(async (response: AxiosResponse<IToken>) => {
           const token = response.data.token;
           if (!token || token === "") {
@@ -236,7 +210,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
           );
           const resultData: IJudge0Response = result.data;
           apiClient
-            .delete("v1/code/run/submission", {
+            .delete(runCodeSubmissionUrl, {
               params: {
                 base64: true,
                 token: token,
@@ -279,7 +253,7 @@ export const useCodeEditorStore = create<CodeEditorContainerState>(
     submitCode: (submission: ICodeSubmission) => {
       set({ runningSubmission: true });
       apiClient
-        .post("v1/code/run/evaluate", transformPayload(submission))
+        .post(submitCodeUrl, transformPayload(submission))
         .then((response: AxiosResponse<IResultSubmission[]>) => {
           set({
             runningSubmission: false,
