@@ -1,6 +1,5 @@
 import store from "../../../app/common/store";
-import { IModuleState } from "../types";
-import { IAdminModule } from "../types";
+import { IModuleState, IAdminModule } from "../types";
 import {
   getBaseModuleState,
   requestModules,
@@ -73,7 +72,7 @@ describe("Modules: Getting Modules", () => {
     adminAPI_mock.get.mockResolvedValueOnce(mockData.modulesFound);
 
     await dispatch(requestModules()); // await does have an effect
-    let expected = mockData.modulesFound.data;
+    const expected = mockData.modulesFound.data;
 
     modulesState = store.getState().modules;
 
@@ -84,7 +83,7 @@ describe("Modules: Getting Modules", () => {
     adminAPI_mock.get.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestModules());
-    let expected_msg = mockData.get_failure.message;
+    const expected_msg = mockData.get_failure.message;
 
     modulesState = store.getState().modules;
 
@@ -98,7 +97,7 @@ describe("Modules: Adding a Module", () => {
     adminAPI_mock.post.mockResolvedValueOnce(mockData.newModule.response);
 
     await dispatch(requestNewModule(mockData.newModule.payload));
-    let expected: IAdminModule = {
+    const expected: IAdminModule = {
       name: mockData.newModule.payload.name,
       number: mockData.newModule.payload.number,
       problems: [],
@@ -114,7 +113,7 @@ describe("Modules: Adding a Module", () => {
     adminAPI_mock.post.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestNewModule(mockData.newModule.payload));
-    let expected_msg = mockData.get_failure.message;
+    const expected_msg = mockData.get_failure.message;
 
     modulesState = store.getState().modules;
 
@@ -136,7 +135,7 @@ describe("Modules: Editing a Module", () => {
     // I expect my changes to have gone through
 
     modulesState = store.getState().modules;
-    let expected = { ...mockData.updatedModule.data, problems: [] };
+    const expected = { ...mockData.updatedModule.data, problems: [] };
 
     expect(modulesState.modules).toEqual([expected]);
     // could check for positive feedback messages as well
@@ -146,7 +145,7 @@ describe("Modules: Editing a Module", () => {
     adminAPI_mock.post.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestNewModule(mockData.newModule.payload));
-    let expected_msg = mockData.get_failure.message;
+    const expected_msg = mockData.get_failure.message;
 
     modulesState = store.getState().modules;
 
@@ -176,7 +175,7 @@ describe("Modules: Deleting a Module", () => {
     adminAPI_mock.delete.mockRejectedValueOnce(mockData.get_failure);
 
     await dispatch(requestDeleteModule(mockData.deletingModule.data._id));
-    let expected_msg = mockData.get_failure.message;
+    const expected_msg = mockData.get_failure.message;
 
     modulesState = store.getState().modules;
 

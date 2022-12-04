@@ -12,6 +12,7 @@
     "@mui/lab": "^5.0.0-alpha.50",
     "@mui/material": "^5.0.1",
     "@mui/styles": "^5.0.1",
+    "@mui/system": "5.0.2",
     "@reduxjs/toolkit": "^1.7.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^7.1.2",
@@ -58,8 +59,8 @@
     "eject": "react-scripts eject",
     "prettier-check": "prettier --check src/**/*.ts{,x}",
     "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
-    "lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} --fix",
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} -c eslintrc.js --quiet",
+    "lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} -c eslintrc.js --fix",
     "pre-pr": "npm run format && npm run lint-fix && npm run test && npm run build"
   },
   "browserslist": {

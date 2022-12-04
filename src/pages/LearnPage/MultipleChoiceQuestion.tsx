@@ -169,8 +169,8 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
 
                   //set the answer state to clicked
                   if (questionsClicked[i] === false && correct !== true) {
-                    let currentClickState = [];
-                    for (let status of questionsClicked)
+                    const currentClickState = [];
+                    for (const status of questionsClicked)
                       currentClickState.push(status);
                     currentClickState[i] = true;
                     setQuestionsClicked(currentClickState);

@@ -29,7 +29,7 @@ import {
 import { IRequestMessage } from "../../shared/types";
 
 function* handleGetAccountsRequest(): any {
-  let accountsRequest = () => adminAPI.get("/v1/user/getUsers");
+  const accountsRequest = () => adminAPI.get("/v1/user/getUsers");
 
   try {
     const { data }: AxiosResponse<IAccountsGET> = yield call(accountsRequest);
@@ -48,7 +48,8 @@ function* handleGetAccountsRequest(): any {
 }
 
 function* handleNewAccountRequest(action: PayloadAction<INewAccount>): any {
-  let accountsRequest = () => adminAPI.post("/v1/user/create", action.payload);
+  const accountsRequest = () =>
+    adminAPI.post("/v1/user/create", action.payload);
 
   try {
     const { data }: AxiosResponse<IAccountPOST> = yield call(accountsRequest);
@@ -77,7 +78,7 @@ function* handleModifyAccountRequest(action: PayloadAction<IAccount>): any {
     _id: action.payload._id,
   };
 
-  let updateRequest = () => adminAPI.put("/v1/user/updateUser", body);
+  const updateRequest = () => adminAPI.put("/v1/user/updateUser", body);
 
   try {
     const { data }: AxiosResponse<IAccount> = yield call(updateRequest);
@@ -99,7 +100,7 @@ function* handleDeleteAccountRequest(action: PayloadAction<IAccount>): any {
       username: action.payload.username,
     },
   };
-  let deleteRequest = () => adminAPI.delete("/v1/user/deleteUser", config);
+  const deleteRequest = () => adminAPI.delete("/v1/user/deleteUser", config);
 
   try {
     const { data }: AxiosResponse<IRequestMessage> = yield call(deleteRequest);

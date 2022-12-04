@@ -2,6 +2,7 @@ import { Typography, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
+//eslint-disable-next-line
 import FeaturesBG from "!file-loader!../../assets/FeaturesBG.svg";
 import Diamond from "../../assets/icons8-diamond-100.png";
 import FlipChart from "../../assets/icons8-flip-chart-100.png";

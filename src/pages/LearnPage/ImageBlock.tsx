@@ -7,7 +7,7 @@ interface ImageBlockProps {
 }
 
 function ImageBlock(props: ImageBlockProps) {
-  let alignment =
+  const alignment =
     props.alignment === "none"
       ? "center"
       : props.alignment === "left"

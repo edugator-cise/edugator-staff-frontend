@@ -82,7 +82,7 @@ let theme = createTheme({
     },
     h1: {
       fontWeight: 200,
-      color: 'red'
+      color: "red",
     },
     h2: {
       fontWeight: 600,

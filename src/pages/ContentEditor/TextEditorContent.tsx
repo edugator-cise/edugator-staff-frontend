@@ -1,10 +1,9 @@
 import { Component } from "react";
-import { EditorState, AtomicBlockUtils } from "draft-js";
+import { EditorState, AtomicBlockUtils, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import MultipleChoiceOption from "./components/MultipleChoiceOption";
 import MultipleSelectOption from "./components/MultipleSelectOption";
-import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import {
   MultipleChoiceDisplayBlock,
@@ -20,10 +19,11 @@ class TextEditorContent extends Component<any, any> {
       html: "",
     };
   }
+
   //Updates editorstate (text box content) when changed
   onEditorStateChange = (editorState: EditorState) => {
     // console.log(editorState)
-    let html = draftToHtml(
+    const html = draftToHtml(
       convertToRaw(editorState.getCurrentContent()),
       {},
       false,
@@ -48,8 +48,8 @@ class TextEditorContent extends Component<any, any> {
   };
 
   onTrigger = () => {
-    let atomicEntities = this.getEntities(this.state.editorState);
-    let html = this.state.html;
+    const atomicEntities = this.getEntities(this.state.editorState);
+    const html = this.state.html;
 
     console.log("Callback Data", atomicEntities, html);
     this.props.callbackData(atomicEntities, html);
@@ -154,6 +154,7 @@ class TextEditorContent extends Component<any, any> {
       ),
     });
   };
+
   //will generate ms block as unique entity with given values as metadata
   insertMSBlock = (
     question: string,

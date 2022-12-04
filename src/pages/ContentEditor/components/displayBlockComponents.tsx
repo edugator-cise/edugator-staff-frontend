@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import "./ExerciseStyles.css"
+import "./ExerciseStyles.css";
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -13,7 +13,7 @@ const QuestionHolder = styled("div")({
   alignSelf: "center",
   padding: 20,
 });
-  
+
 const AnswerHolder = styled("div")({
   width: "100%",
   height: "auto",
@@ -60,7 +60,13 @@ export function MultipleChoiceDisplayBlock(props: any) {
         sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
       >
         <Grid item xs={6}>
-          <AnswerHolder style={ values.correct === '1' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct === "1"
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -71,7 +77,13 @@ export function MultipleChoiceDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-          <AnswerHolder style={ values.correct === '2' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct === "2"
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -82,7 +94,13 @@ export function MultipleChoiceDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-          <AnswerHolder style={ values.correct === '3' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct === "3"
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -93,7 +111,13 @@ export function MultipleChoiceDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-          <AnswerHolder style={ values.correct === '4' ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct === "4"
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -106,7 +130,7 @@ export function MultipleChoiceDisplayBlock(props: any) {
       </Grid>
     </QuestionHolder>
   );
-};
+}
 
 //displayed component when multiple choice is added
 export function MultipleSelectDisplayBlock(props: any) {
@@ -135,7 +159,13 @@ export function MultipleSelectDisplayBlock(props: any) {
         sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
       >
         <Grid item xs={6}>
-          <AnswerHolder style={ values.correct.find((e: number) => e === 1) !== undefined ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct.find((e: number) => e === 1) !== undefined
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -146,7 +176,13 @@ export function MultipleSelectDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-        <AnswerHolder style={ values.correct.find((e: number) => e === 2) !== undefined ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct.find((e: number) => e === 2) !== undefined
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -157,7 +193,13 @@ export function MultipleSelectDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-        <AnswerHolder style={ values.correct.find((e: number) => e === 3) !== undefined ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct.find((e: number) => e === 3) !== undefined
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -168,7 +210,13 @@ export function MultipleSelectDisplayBlock(props: any) {
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
-        <AnswerHolder style={ values.correct.find((e: number) => e === 4) !== undefined ? { backgroundColor: 'LightGreen' } : { backgroundColor: 'IndianRed' }}>
+          <AnswerHolder
+            style={
+              values.correct.find((e: number) => e === 4) !== undefined
+                ? { backgroundColor: "LightGreen" }
+                : { backgroundColor: "IndianRed" }
+            }
+          >
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
@@ -181,4 +229,4 @@ export function MultipleSelectDisplayBlock(props: any) {
       </Grid>
     </QuestionHolder>
   );
-};
+}

@@ -212,8 +212,8 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
                 onClick={() => {
                   if (checked) return;
                   //set the answer state to clicked
-                  let currentClickState = [];
-                  for (let status of questionsClicked)
+                  const currentClickState = [];
+                  for (const status of questionsClicked)
                     currentClickState.push(status);
                   currentClickState[i] = !currentClickState[i];
                   setQuestionsClicked(currentClickState);
@@ -249,7 +249,7 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
         checked={checked}
         onClick={() => {
           //check if all answers are correct
-          let isCorrect = checkCorrect();
+          const isCorrect = checkCorrect();
           setCorrect(isCorrect);
           setChecked(true);
         }}
