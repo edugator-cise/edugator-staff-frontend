@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/static/css/main.58f9a49c.chunk.css",
+    "main.js": "/static/js/main.e53c1f81.chunk.js",
+    "main.js.map": "/static/js/main.e53c1f81.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.62000460.js",
+    "runtime-main.js.map": "/static/js/runtime-main.62000460.js.map",
+    "static/css/2.ea511c98.chunk.css": "/static/css/2.ea511c98.chunk.css",
+    "static/js/2.63f96cca.chunk.js": "/static/js/2.63f96cca.chunk.js",
+    "static/js/2.63f96cca.chunk.js.map": "/static/js/2.63f96cca.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.ea511c98.chunk.css.map": "/static/css/2.ea511c98.chunk.css.map",
+    "static/css/main.58f9a49c.chunk.css.map": "/static/css/main.58f9a49c.chunk.css.map",
+    "static/js/2.63f96cca.chunk.js.LICENSE.txt": "/static/js/2.63f96cca.chunk.js.LICENSE.txt",
+    "static/media/CodingPage.c26aa1dd.png": "/static/media/CodingPage.c26aa1dd.png",
+    "static/media/DarkModeLogo.5b86b0eb.svg": "/static/media/DarkModeLogo.5b86b0eb.svg",
+    "static/media/DefaultLogo.7dd26c48.svg": "/static/media/DefaultLogo.7dd26c48.svg",
+    "static/media/EdugatorNotFound.4198bedd.png": "/static/media/EdugatorNotFound.4198bedd.png",
+    "static/media/FeaturesBG.f07abfcd.svg": "/static/media/FeaturesBG.f07abfcd.svg",
+    "static/media/LightModeLogo.120f1378.svg": "/static/media/LightModeLogo.120f1378.svg",
+    "static/media/developer_activity.66e4439d.svg": "/static/media/developer_activity.66e4439d.svg",
+    "static/media/icons8-alphabetical-sorting.111975e7.gif": "/static/media/icons8-alphabetical-sorting.111975e7.gif",
+    "static/media/icons8-expand-arrow.4cc0aec4.gif": "/static/media/icons8-expand-arrow.4cc0aec4.gif",
+    "static/media/icons8-link.5a5e3537.gif": "/static/media/icons8-link.5a5e3537.gif",
+    "static/media/icons8-menu.ce058d19.gif": "/static/media/icons8-menu.ce058d19.gif",
+    "static/media/icons8-replay.f662b710.gif": "/static/media/icons8-replay.f662b710.gif",
+    "static/media/icons8-thumbnail-view.b6ebca70.gif": "/static/media/icons8-thumbnail-view.b6ebca70.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.62000460.js",
+    "static/css/2.ea511c98.chunk.css",
+    "static/js/2.63f96cca.chunk.js",
+    "static/css/main.58f9a49c.chunk.css",
+    "static/js/main.e53c1f81.chunk.js"
+  ]
+}
