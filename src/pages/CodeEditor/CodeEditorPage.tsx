@@ -59,8 +59,6 @@ export const CodeEditorPage = () => {
         isAdmin: adminPathRegex.test(locationState.pathname),
       })
     );
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [dispatch]);
 
   useEffect(() => {
@@ -72,8 +70,6 @@ export const CodeEditorPage = () => {
         })
       );
     }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [params]);
 
   useEffect(() => {
@@ -91,8 +87,6 @@ export const CodeEditorPage = () => {
         })
       );
     }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [location]);
 
   if (isLoading) {

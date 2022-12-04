@@ -103,7 +103,6 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
         setQuestionsClicked((prev) => [...prev, false]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
