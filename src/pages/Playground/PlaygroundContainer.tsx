@@ -4,20 +4,15 @@ import {
   requestFirstProblemFromModule,
   requestLesson,
   requestProblem,
-  setRunCodeError,
 } from "../CodeEditor/CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
-import { ProblemView } from "../CodeEditor/CodeEditorContainer/ProblemView";
-import { CodeEditorView } from "../CodeEditor/CodeEditorContainer/CodeEditorView";
-import { InputOutputView } from "../CodeEditor/CodeEditorContainer/InputOutputView";
 import { EmptyState } from "../CodeEditor/CodeEditorContainer/EmptyState";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
-import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import TopicSidebar from "../../shared/TopicSidebar";
 import { CodeEditorPage } from "../CodeEditor/CodeEditorPage";
@@ -82,7 +77,6 @@ const PlaygroundContainer = () => {
           lessonId: params["lessonId"],
         })
       );
-      console.log("lessonId", params["lessonId"]);
     }
     //disable exhaustive dependencies
     //eslint-disable-next-line

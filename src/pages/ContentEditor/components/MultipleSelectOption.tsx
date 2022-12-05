@@ -29,7 +29,9 @@ function MultipleSelectOption(props: any) {
   const renderModal = () => {
     return (
       <div className="rdw-exercise-modal">
-        <label className="rdw-exercise-text-instruction">Check the checkboxes to mark the correct selection</label>
+        <label className="rdw-exercise-text-instruction">
+          Check the checkboxes to mark the correct selection
+        </label>
         <label className="rdw-exercise-text-label" htmlFor="question">
           Question
         </label>
@@ -152,8 +154,7 @@ function MultipleSelectOption(props: any) {
               let selections = [correct1, correct2, correct3, correct4];
               let correct: number[] = [];
               selections.forEach((choice, i) => {
-                if (choice === true)
-                  correct.push(i+1);
+                if (choice === true) correct.push(i + 1);
               });
               console.log(
                 "Print MC Data:",
@@ -162,7 +163,7 @@ function MultipleSelectOption(props: any) {
                 answer1,
                 answer2,
                 answer3,
-                answer4,
+                answer4
               );
               props.insertMC(
                 question,
@@ -170,7 +171,7 @@ function MultipleSelectOption(props: any) {
                 "A) " + answer1,
                 "B) " + answer2,
                 "C) " + answer3,
-                "D) " + answer4,
+                "D) " + answer4
               );
               resetValues();
             }}

@@ -29,7 +29,10 @@ export interface ILesson extends ILessonBase {
   title: string;
   author: string;
   content: Array<Object>;
-  editableContent: Object;
+  editableContent: {
+    blocks: Array<Object>;
+    entityMap: Array<Object>;
+  };
   blocks: Array<Object>;
   entityMap: Array<Object>;
 }

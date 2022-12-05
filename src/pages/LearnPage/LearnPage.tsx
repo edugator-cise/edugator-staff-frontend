@@ -3,15 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
-import {
-  requestLesson,
-  setLessonLoadError,
-} from "../CodeEditor/CodeEditorSlice";
-import VerticalNavigation from "../../shared/VerticalNavigation";
+import { setLessonLoadError } from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
-import { adminPathRegex, colors } from "../../shared/constants";
-import { useParams, useLocation } from "react-router-dom";
-import { sampleLesson } from "./sampleLesson";
 import { Node, Markup } from "interweave";
 import "./learnStyles.css";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
@@ -33,10 +26,6 @@ function LearnPage() {
   const isLoadingLesson = useSelector(
     (state: RootState) => state.codeEditor.isLoadingLesson
   );
-
-  useEffect(() => {
-    console.log(currentLesson);
-  }, [currentLesson]);
 
   const LessonHolder = styled("div")({
     width: "80%",
@@ -67,9 +56,6 @@ function LearnPage() {
   });
 
   function transform(node: HTMLElement, children: Node[]): React.ReactNode {
-    console.log(node.tagName);
-    console.log(node);
-
     if (node.tagName === "H1") {
       return (
         <h1
@@ -241,14 +227,14 @@ function LearnPage() {
                 return null;
               }
               if (block.type === "text") {
-                console.log(JSON.parse(JSON.stringify(block.content)));
-
                 return (
                   <div key={i} style={{ width: "100%" }}>
                     <Markup
                       transform={transform}
                       className="inter"
-                      content={JSON.parse(JSON.stringify(block.content.html))}
+                      content={JSON.parse(
+                        JSON.stringify(block.content.html) || ""
+                      )}
                     />
                   </div>
                 );

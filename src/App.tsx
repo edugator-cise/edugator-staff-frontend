@@ -16,7 +16,6 @@ import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 import PrivacyNotice from "./pages/StaticPages/PrivacyNotice";
 import TermsOfUse from "./pages/StaticPages/TermsOfUse";
 import Ferpa from "./pages/StaticPages/Ferpa";
-import LearnPage from "./pages/LearnPage/LearnPage";
 import PlaygroundContainer from "./pages/Playground/PlaygroundContainer";
 
 function App() {
@@ -59,12 +58,6 @@ function App() {
             <PrivateRoute exact path={Routes.AdminCodeWithProblem}>
               <CodeEditorPage />
             </PrivateRoute>
-            {/* <Route path={Routes.CodeWithProblem}>
-              <CodeEditorPage />
-            </Route>
-            <Route path={Routes.Learn}>
-              <LearnPage />
-            </Route> */}
             <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>

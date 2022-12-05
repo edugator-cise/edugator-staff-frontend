@@ -150,9 +150,7 @@ export const contentEditorPageSlice = createSlice({
       state.contentEditor = {
         content: { ...action.payload.content },
         editableContent: {
-          // @ts-ignore
           blocks: action.payload.editableContent.blocks,
-          // @ts-ignore
           entityMap: action.payload.editableContent.entityMap,
         },
         blocks: action.payload.blocks,

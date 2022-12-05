@@ -9,8 +9,6 @@ interface TopicProps {
   active: boolean;
 }
 
-
-
 function TopicLink(props: TopicProps) {
   const IconHolder = styled("div")({
     height: 50,

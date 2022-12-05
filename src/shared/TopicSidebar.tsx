@@ -13,8 +13,6 @@ import {
   MathOperations,
   House,
   ListBullets,
-  BookOpen,
-  Code,
 } from "phosphor-react";
 import { Box, Avatar } from "@mui/material";
 
