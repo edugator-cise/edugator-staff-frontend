@@ -9,41 +9,31 @@ import { useState } from "react";
 import "./ExerciseStyles.css";
 
 export const MultipleChoiceModal = ({
-  showMultipleChoiceModal,
-  setShowMultipleChoiceModal,
-  setQuestion,
-  question,
-  setCorrect,
-  correct,
-  setAnswers,
-  answers,
-  resetValues,
-  insertMC,
+  open,
+  setOpen,
+  insert,
 }: {
-  showMultipleChoiceModal: boolean;
-  setShowMultipleChoiceModal: (showMultipleChoiceModal: boolean) => void;
-  setQuestion: (question: string) => void;
-  setCorrect: (correct: number) => void;
-  setAnswers: (answers: string[]) => void;
-  answers: string[];
-  question: string;
-  correct: number;
-  resetValues: () => void;
-  insertMC: (
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  insert: (
+    e: any,
     question: string,
-    correct: number,
-    answer1: string,
-    answer2: string,
-    answer3: string,
-    answer4: string
+    answers: string[],
+    correct: number
   ) => void;
 }) => {
+  const [question, setQuestion] = useState("");
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [correct, setCorrect] = useState(0);
+
+  const resetValues = () => {
+    setQuestion("");
+    setAnswers(["", "", "", ""]);
+    setCorrect(0);
+  };
+
   return (
-    <Dialog
-      open={showMultipleChoiceModal}
-      aria-labelledby="alert-dialog-title"
-      fullWidth={true}
-    >
+    <Dialog open={open} aria-labelledby="alert-dialog-title" fullWidth={true}>
       <DialogTitle id="alert-dialog-title">
         <div className="modal">
           <div className="modal-content">
@@ -97,24 +87,17 @@ export const MultipleChoiceModal = ({
       <DialogActions>
         <Button
           onClick={() => {
-            setShowMultipleChoiceModal(false);
+            setOpen(false);
           }}
         >
           Close
         </Button>
         <Button
-          onClick={() => {
+          onClick={(e) => {
             console.log("Print MC Data:", question, correct, answers);
-            insertMC(
-              question,
-              correct,
-              "A) " + answers[1],
-              "B) " + answers[2],
-              "C) " + answers[3],
-              "D) " + answers[4]
-            );
+            insert(e, question, answers, correct);
             resetValues();
-            setShowMultipleChoiceModal(false);
+            setOpen(false);
           }}
           variant="contained"
           color="success"
@@ -126,59 +109,4 @@ export const MultipleChoiceModal = ({
   );
 };
 
-function MultipleChoiceOption(props: any) {
-  const [expanded, setExpanded] = useState<boolean>(false);
-  const [question, setQuestion] = useState<string>("");
-  const [correct, setCorrect] = useState<number>(0);
-  const [answers, setAnswers] = useState<string[]>(["", "", "", ""]);
-  const [answer1, setAnswer1] = useState<string>("");
-  const [answer2, setAnswer2] = useState<string>("");
-  const [answer3, setAnswer3] = useState<string>("");
-  const [answer4, setAnswer4] = useState<string>("");
-
-  //function to reset states once the question has been added to editor
-  const resetValues = () => {
-    setQuestion("");
-    setCorrect(0);
-    setAnswers(["", "", "", ""]);
-    /* setAnswer1("");
-    setAnswer2("");
-    setAnswer3("");
-    setAnswer4(""); */
-  };
-
-  const [showMultipleChoiceModal, setShowMultipleChoiceModal] = useState(false);
-
-  return (
-    <div className="rdw-exercise-wrapper">
-      <MultipleChoiceModal
-        showMultipleChoiceModal={showMultipleChoiceModal}
-        setShowMultipleChoiceModal={setShowMultipleChoiceModal}
-        setQuestion={setQuestion}
-        setCorrect={setCorrect}
-        setAnswers={setAnswers}
-        answers={answers}
-        insertMC={props.insertMC}
-        resetValues={resetValues}
-        correct={correct}
-        question={question}
-      />
-
-      <div
-        className="rdw-option-wrapper"
-        onClick={() => {
-          setShowMultipleChoiceModal(true);
-          //setExpanded(!expanded);
-          resetValues();
-        }}
-        // onBlur={() => {
-        //   setExpanded(false);
-        // }}
-      >
-        Multiple Choice Question
-      </div>
-    </div>
-  );
-}
-
-export default MultipleChoiceOption;
+export default MultipleChoiceModal;

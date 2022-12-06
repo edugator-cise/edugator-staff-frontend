@@ -249,7 +249,7 @@ function LearnPage() {
                     alignment={block.content.alignment}
                   />
                 );
-              } else if (block.type === "MC") {
+              } else if (block.type === "multiple_choice") {
                 questionCount++;
                 return (
                   <MultipleChoiceQuestion
@@ -262,7 +262,7 @@ function LearnPage() {
                     question={block.content.question}
                   />
                 );
-              } else if (block.type === "MS") {
+              } else if (block.type === "multiple_select") {
                 questionCount++;
                 return (
                   <MultipleSelectQuestion

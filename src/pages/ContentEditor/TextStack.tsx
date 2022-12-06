@@ -27,11 +27,11 @@ export const TextStack = () => {
 
   const updateExportData = () => {
     let splitHtml = html.split("<atomic_entity />");
-    let rawData = [{ html: splitHtml[0], type: "TEXT" }];
+    let rawData = [{ html: splitHtml[0], type: "text" }];
     if (atomicEntities !== undefined)
       atomicEntities.forEach((entity: any, i: number) => {
         rawData.push(entity);
-        rawData.push({ html: splitHtml[i + 1], type: "TEXT" });
+        rawData.push({ html: splitHtml[i + 1], type: "text" });
       });
 
     let convertedData: any = [];
@@ -39,13 +39,13 @@ export const TextStack = () => {
       let content;
       let dataType = data.type;
       switch (dataType) {
-        case "TEXT":
+        case "text":
           content = new contentBlock("text", new text_content(data.html));
           break;
 
-        case "MULTIPLE_CHOICE":
+        case "multiple_choice":
           content = new contentBlock(
-            "MC",
+            "multiple_choice",
             new mc_content(data.data.question, data.data.correct, [
               data.data.answer1,
               data.data.answer2,
@@ -55,9 +55,9 @@ export const TextStack = () => {
           );
           break;
 
-        case "MULTIPLE_SELECT":
+        case "multiple_select":
           content = new contentBlock(
-            "MS",
+            "multiple_select",
             new ms_content(data.data.question, data.data.correct, [
               data.data.answer1,
               data.data.answer2,
@@ -67,7 +67,7 @@ export const TextStack = () => {
           );
           break;
 
-        case "IMAGE":
+        case "image":
           content = new contentBlock(
             "image",
             new image_content(

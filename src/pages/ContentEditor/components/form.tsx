@@ -73,6 +73,8 @@ export const RegistrationForm = ({
     });
     pageJsonData.content = contentArr;
 
+    console.log(pageJsonData);
+
     // create an array from entity map data
     const entityMap = Object.keys(rawData.entityMap).map(
       (key) => rawData.entityMap[key]

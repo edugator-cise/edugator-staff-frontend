@@ -34,12 +34,15 @@ const AnswerHolder = styled("div")({
 });
 
 //displayed component when multiple choice is added
-export function MultipleChoiceDisplayBlock(props: any) {
-  const data = props.contentState;
-  //get metadata passed in via insertBlock() function passed to MultipleChoiceOption
-  const values = data.getEntity(props.block.getEntityAt(0)).getData();
-  // console.log(values);
-
+export function MultipleChoiceDisplayBlock({
+  question,
+  answers,
+  correct,
+}: {
+  question: string;
+  answers: string[];
+  correct: number;
+}) {
   return (
     <QuestionHolder className="exercise-content-wrapper">
       <Typography
@@ -51,7 +54,7 @@ export function MultipleChoiceDisplayBlock(props: any) {
         Multiple Choice Question
       </Typography>
       <Typography variant="h6" sx={{ fontWeight: 600 }}>
-        {values.question}
+        {question}
       </Typography>
       <Grid
         container
@@ -62,7 +65,7 @@ export function MultipleChoiceDisplayBlock(props: any) {
         <Grid item xs={6}>
           <AnswerHolder
             style={
-              values.correct === "1"
+              correct === 0
                 ? { backgroundColor: "LightGreen" }
                 : { backgroundColor: "IndianRed" }
             }
@@ -70,16 +73,16 @@ export function MultipleChoiceDisplayBlock(props: any) {
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={values.answer1}
+              key={answers[0]}
             >
-              {values.answer1}
+              {answers[0]}
             </Typography>
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
           <AnswerHolder
             style={
-              values.correct === "2"
+              correct === 1
                 ? { backgroundColor: "LightGreen" }
                 : { backgroundColor: "IndianRed" }
             }
@@ -87,16 +90,16 @@ export function MultipleChoiceDisplayBlock(props: any) {
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={values.answer2}
+              key={answers[1]}
             >
-              {values.answer2}
+              {answers[1]}
             </Typography>
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
           <AnswerHolder
             style={
-              values.correct === "3"
+              correct === 2
                 ? { backgroundColor: "LightGreen" }
                 : { backgroundColor: "IndianRed" }
             }
@@ -104,16 +107,16 @@ export function MultipleChoiceDisplayBlock(props: any) {
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={values.answer3}
+              key={answers[2]}
             >
-              {values.answer3}
+              {answers[2]}
             </Typography>
           </AnswerHolder>
         </Grid>
         <Grid item xs={6}>
           <AnswerHolder
             style={
-              values.correct === "4"
+              correct === 3
                 ? { backgroundColor: "LightGreen" }
                 : { backgroundColor: "IndianRed" }
             }
@@ -121,9 +124,9 @@ export function MultipleChoiceDisplayBlock(props: any) {
             <Typography
               variant="body2"
               sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={values.answer4}
+              key={answers[3]}
             >
-              {values.answer4}
+              {answers[3]}
             </Typography>
           </AnswerHolder>
         </Grid>

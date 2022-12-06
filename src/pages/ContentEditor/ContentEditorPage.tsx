@@ -35,7 +35,7 @@ export const ContentEditorPage = () => {
     ContentEditorURL & ContentCreatorURL
   >();
 
-  const { moduleName } = useLocation<ContentLocationState>().state;
+  const { moduleName } = useLocation<ContentLocationState>().state || {};
 
   const lessonTitle = useAppSelector(
     (state) => state.contentEditorPage.metadata.title
@@ -83,7 +83,7 @@ export const ContentEditorPage = () => {
     <>
       <LayoutContainer
         pageTitle={`${moduleName ? moduleName + " - " : ""}${
-          lessonTitle || "New Problem"
+          lessonTitle || "New Lesson"
         }`}
         actionButtons={
           contentId ? [actions.back, actions.delete] : [actions.back]

@@ -21,6 +21,7 @@ function ImageBlock(props: ImageBlockProps) {
           alignSelf: alignment,
           height: props.height,
           width: props.width,
+          maxWidth: "70%",
         }}
         alt={props.caption}
         src={props.src}
