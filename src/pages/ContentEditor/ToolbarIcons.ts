@@ -1,3 +1,5 @@
+// image sources found by inspecting https://iconscout.com/icons/text-bolder
+
 export const toolbarIcons = {
   bold: 'data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="18px" height="18px" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"%3E%3Cpath fill="rgba(0,0,0,0.8)" d="M177.1 114.5A48 48 0 0 0 140 36H64a12 12 0 0 0-12 12v152a12 12 0 0 0 12 12h88a52 52 0 0 0 25.1-97.5ZM76 60h64a24 24 0 0 1 0 48H76Zm76 128H76v-56h76a28 28 0 0 1 0 56Z"%2F%3E%3C%2Fsvg%3E',
   italic:
