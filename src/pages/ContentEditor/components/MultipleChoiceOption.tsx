@@ -23,7 +23,9 @@ function MultipleChoiceOption(props: any) {
   const renderModal = () => {
     return (
       <div className="rdw-exercise-modal">
-        <label className="rdw-exercise-text-instruction">Check a radio box to mark the correct answer</label>
+        <label className="rdw-exercise-text-instruction">
+          Check a radio box to mark the correct answer
+        </label>
         <label className="rdw-exercise-text-label" htmlFor="question">
           Question
         </label>
@@ -154,7 +156,7 @@ function MultipleChoiceOption(props: any) {
                 answer1,
                 answer2,
                 answer3,
-                answer4,
+                answer4
               );
               props.insertMC(
                 question,
@@ -162,7 +164,7 @@ function MultipleChoiceOption(props: any) {
                 "A) " + answer1,
                 "B) " + answer2,
                 "C) " + answer3,
-                "D) " + answer4,
+                "D) " + answer4
               );
               resetValues();
             }}

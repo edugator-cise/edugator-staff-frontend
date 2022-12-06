@@ -1,5 +1,5 @@
 import { Component } from "react";
-import "./FormStyles.css"
+import "./FormStyles.css";
 
 class RegistrationForm extends Component<any, any> {
   constructor(props: any) {
@@ -19,6 +19,7 @@ class RegistrationForm extends Component<any, any> {
       date: date,
     };
   }
+
   handleInput = (event: any) => {
     this.setState({
       [event.target.name]: event.target.value,
@@ -26,12 +27,12 @@ class RegistrationForm extends Component<any, any> {
   };
 
   handleSubmit = (event: any) => {
-    let pageJsonData = [];
+    const pageJsonData = [];
     pageJsonData.push(JSON.stringify(this.state, undefined, 2));
     this.props.jsonData.forEach((content: any) => {
       pageJsonData.push(JSON.stringify(content, undefined, 2));
     });
-    let exportData = pageJsonData.join(",\n");
+    const exportData = pageJsonData.join(",\n");
     console.log(exportData);
     alert(exportData);
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
@@ -72,7 +73,9 @@ class RegistrationForm extends Component<any, any> {
             <option value="private">Private (Staff Only)</option>
           </select>
         </div>
-        <button type="submit" className="btn-style">Submit</button>
+        <button type="submit" className="btn-style">
+          Submit
+        </button>
       </form>
     );
   }

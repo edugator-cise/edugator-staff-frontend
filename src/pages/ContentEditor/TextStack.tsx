@@ -24,18 +24,18 @@ export const TextStack = () => {
   };
 
   const updateExportData = () => {
-    let splitHtml = html.split("<atomic_entity />");
-    let rawData = [{ html: splitHtml[0], type: "TEXT" }];
+    const splitHtml = html.split("<atomic_entity />");
+    const rawData = [{ html: splitHtml[0], type: "TEXT" }];
     if (atomicEntities !== undefined)
       atomicEntities.forEach((entity: any, i: number) => {
         rawData.push(entity);
         rawData.push({ html: splitHtml[i + 1], type: "TEXT" });
       });
 
-    let convertedData: any = [];
+    const convertedData: any = [];
     rawData.forEach((data: any) => {
       let content;
-      let dataType = data.type;
+      const dataType = data.type;
       switch (dataType) {
         case "TEXT":
           content = new contentBlock("text", new text_content(data.html));

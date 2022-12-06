@@ -144,7 +144,7 @@ export function Modules({ setModuleToDelete, setProblemToGrade }: moduleProps) {
                             size="small"
                             variant="outlined"
                             onClick={() => {
-                              let toGrade: IProblemBase = {
+                              const toGrade: IProblemBase = {
                                 _id: problem._id,
                                 title: problem.title,
                               };

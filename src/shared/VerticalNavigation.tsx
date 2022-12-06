@@ -49,7 +49,7 @@ function VerticalNavigation(props: Props) {
   const [anchorModules, setAnchorModules] = useState<any>(null);
   const [anchorLearn, setAnchorLearn] = useState<any>(null);
   const [open, setOpen] = useState<boolean>(false);
-  interface menu {
+  interface Menu {
     title: string;
     id: string;
     icon: any;
@@ -65,7 +65,7 @@ function VerticalNavigation(props: Props) {
     return 0;
   };
 
-  const menus: menu[] = [
+  const menus: Menu[] = [
     {
       title: "Modules",
       id: "modules",

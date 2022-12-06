@@ -23,7 +23,7 @@ import { IAdminModule } from "./types";
 function* handleGetModulesRequest(): any {
   // request
 
-  let modulesRequest = () =>
+  const modulesRequest = () =>
     adminAPI.get<IAdminModule[]>("/v1/module/WithProblems");
 
   try {
@@ -36,17 +36,17 @@ function* handleGetModulesRequest(): any {
 
 function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
   // request & body
-  let body = {
+  const body = {
     name: action.payload.name,
     number: action.payload.number,
   };
-  let moduleAddRequest = () => adminAPI.post<string>("/v1/module", body);
+  const moduleAddRequest = () => adminAPI.post<string>("/v1/module", body);
 
   try {
     // Add response content to sagas
     const response = yield call(moduleAddRequest);
 
-    let new_module: IAdminModule = {
+    const new_module: IAdminModule = {
       name: action.payload.name,
       number: action.payload.number,
       problems: [],
@@ -62,11 +62,11 @@ function* handleAddModulesRequest(action: PayloadAction<IModuleBase>): any {
 
 function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
   // request & body
-  let body = {
+  const body = {
     name: action.payload.name,
     number: action.payload.number,
   };
-  let moduleModifyRequest = () =>
+  const moduleModifyRequest = () =>
     adminAPI.put("/v1/module/" + action.payload._id, body);
 
   try {
@@ -76,7 +76,7 @@ function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
     );
 
     // reminder: doesnt have the IAdminModule.problems property
-    let new_module: IAdminModule = response.data;
+    const new_module: IAdminModule = response.data;
     yield put(requestModifyModuleSuccess(new_module));
     yield put(closeDialog());
   } catch (e) {
@@ -86,8 +86,8 @@ function* handleModifyModulesRequest(action: PayloadAction<IModuleBase>): any {
 
 function* handleDeleteModulesRequest(action: PayloadAction<string>): any {
   // request
-  let moduleID = action.payload;
-  let moduleDeleteRequest = () => adminAPI.delete("/v1/module/" + moduleID);
+  const moduleID = action.payload;
+  const moduleDeleteRequest = () => adminAPI.delete("/v1/module/" + moduleID);
 
   try {
     // Add response content to sagas
@@ -95,7 +95,7 @@ function* handleDeleteModulesRequest(action: PayloadAction<string>): any {
       moduleDeleteRequest
     );
 
-    let payload = {
+    const payload = {
       response: response.data,
       id: moduleID,
     };

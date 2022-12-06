@@ -97,12 +97,14 @@ export const moduleSlice = createSlice({
     },
     requestModifyModuleSuccess: (state, action: PayloadAction<IModuleBase>) => {
       // get modified element from array
-      let modified = action.payload._id;
-      let index = state.modules.findIndex((module) => module._id === modified);
+      const modified = action.payload._id;
+      const index = state.modules.findIndex(
+        (module) => module._id === modified
+      );
 
       // workaround since module from backend
       // doesnt have the "problems" property
-      let new_module = {
+      const new_module = {
         ...action.payload,
         problems: state.modules[index].problems,
       };
@@ -146,8 +148,8 @@ export const moduleSlice = createSlice({
       state,
       action: PayloadAction<{ response: IRequestMessage; id: string }>
     ) => {
-      let removed = action.payload.id;
-      let new_modules = state.modules.filter(
+      const removed = action.payload.id;
+      const new_modules = state.modules.filter(
         (module) => module._id !== removed
       );
 

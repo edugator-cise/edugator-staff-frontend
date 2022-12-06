@@ -1,5 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, AxiosRequestConfig } from "axios";
 import { call, put, takeEvery, take, fork } from "redux-saga/effects";
 import {
   requestGrading,
@@ -8,7 +8,6 @@ import {
   setUploadProgress,
 } from "./GradingDialog.slice";
 import { IGradeRequest, IUploadProgress } from "./types";
-import { AxiosRequestConfig } from "axios";
 import adminAPI from "../../app/common/apiClient";
 import { eventChannel, END, EventChannel } from "redux-saga";
 
@@ -24,7 +23,7 @@ function* handleGradingRequest(action: PayloadAction<IGradeRequest>): any {
     content: action.payload.toGrade,
     filename: action.payload.toGrade.name,
   };
-  let fileData = new FormData();
+  const fileData = new FormData();
   fileData.append("submission_file", file.content, file.filename);
 
   const new_headers: AxiosRequestConfig = {

@@ -15,7 +15,7 @@ import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
 
 interface ClickedMenu {
-  [key: string]: Boolean;
+  [key: string]: boolean;
 }
 
 interface SidenavProps {

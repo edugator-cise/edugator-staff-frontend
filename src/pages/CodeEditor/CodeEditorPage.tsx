@@ -4,11 +4,11 @@ import {
   requestFirstProblemFromModule,
   requestProblem,
   setRunCodeError,
+  requestModulesAndProblems,
 } from "./CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "./CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";
@@ -16,6 +16,7 @@ import { InputOutputView } from "./CodeEditorContainer/InputOutputView";
 import { EmptyState } from "./CodeEditorContainer/EmptyState";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useParams, useLocation } from "react-router-dom";
+//eslint-disable-next-line
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import TopicSidebar from "../../shared/TopicSidebar";
@@ -59,40 +60,34 @@ export const CodeEditorPage = () => {
         isAdmin: adminPathRegex.test(locationState.pathname),
       })
     );
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [dispatch]);
 
   useEffect(() => {
-    if (params && params["problemId"]) {
+    if (params && params.problemId) {
       dispatch(
         requestProblem({
-          problemId: params["problemId"],
+          problemId: params.problemId,
           isAdmin: adminPathRegex.test(locationState.pathname),
         })
       );
     }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [params]);
 
   useEffect(() => {
     if (
       location &&
-      location["moduleName"] !== undefined &&
+      location.moduleName !== undefined &&
       navigation &&
       navigation.length > 0
     ) {
       dispatch(
         requestFirstProblemFromModule({
           navigation,
-          moduleName: location["moduleName"],
+          moduleName: location.moduleName,
           isAdmin: adminPathRegex.test(locationState.pathname),
         })
       );
     }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
   }, [location]);
 
   if (isLoading) {
