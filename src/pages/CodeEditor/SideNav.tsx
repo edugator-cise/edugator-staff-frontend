@@ -52,6 +52,7 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
         width: 250,
         minWidth: 250,
         maxWidth: 250,
+        maxHeight: "calc(100vh - 64px)",
         bgcolor: "#F9F9F9",
         overflowY: "auto",
         display: isHidden ? "none" : "block",
