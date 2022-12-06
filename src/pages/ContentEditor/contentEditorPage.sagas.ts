@@ -77,7 +77,7 @@ function* handleDeleteContentRequest(): any {
   const contentState = state.contentEditorPage;
 
   const deleteContentRequest = () =>
-    apiClient.delete(`/v1/admin/content/${contentState.contentId}`);
+    apiClient.delete(`/v1/admin/lesson/${contentState.contentId}`);
 
   try {
     yield call(deleteContentRequest);
