@@ -20,7 +20,7 @@ import {
   INavigationItem,
   IProblemItem,
   ICompilerOutput,
-  IModuleWithProblems,
+  IModuleWithProblemsAndLessons,
 } from "../types";
 import apiClient from "../../../app/common/apiClient";
 const sampleProblems: IProblem[] = [
@@ -52,10 +52,11 @@ const sampleProblems: IProblem[] = [
   },
 ];
 
-const mockedModulesWithProblems: IModuleWithProblems = {
+const mockedModulesWithProblems: IModuleWithProblemsAndLessons = {
   _id: "samplemod id",
   name: "module 1",
   number: 5,
+  lessons: [],
   problems: [
     {
       _id: "problem 1",
@@ -244,6 +245,7 @@ describe("CodeEditor Reducer", () => {
       _id: "id",
       number: 5.2,
       problems: [problemItem],
+      lessons: [],
     };
     store.dispatch(setNavStructure([navStructure]));
 

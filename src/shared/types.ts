@@ -28,13 +28,13 @@ export interface IProblem extends IProblemBase {
 export interface ILesson extends ILessonBase {
   title: string;
   author: string;
-  content: Array<Object>;
+  content: {}[];
   editableContent: {
-    blocks: Array<Object>;
-    entityMap: Array<Object>;
+    blocks: {}[];
+    entityMap: {}[];
   };
-  blocks: Array<Object>;
-  entityMap: Array<Object>;
+  blocks: {}[];
+  entityMap: {}[];
 }
 
 export interface INewProblem extends IProblem {

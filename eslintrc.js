@@ -43,5 +43,6 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-shadow": "warn",
     "jest/no-identical-title": "warn",
+    "@typescript-eslint/ban-types": "warn",
   },
 };
