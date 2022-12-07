@@ -45,7 +45,7 @@ const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
 };
 
 const poll = async (
-  fn: Function,
+  fn: (value: any) => any,
   payload: any,
   validate: (value: any) => boolean,
   interval: number,
@@ -72,7 +72,7 @@ function filterForProblem(
   moduleProblemStructure: INavigationItem[],
   moduleName: string
 ): string | undefined {
-  let module: INavigationItem[] = moduleProblemStructure.filter(
+  const module: INavigationItem[] = moduleProblemStructure.filter(
     (moduleWithProblem: INavigationItem) =>
       moduleWithProblem.name === moduleName
   );
