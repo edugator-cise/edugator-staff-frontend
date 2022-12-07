@@ -44,5 +44,9 @@ module.exports = {
     "@typescript-eslint/no-shadow": "warn",
     "jest/no-identical-title": "warn",
     "@typescript-eslint/ban-types": "warn",
+    "prefer-const": "warn",
+    "@typescript-eslint/lines-between-class-members": "warn",
+    "@typescript-eslint/dot-notation": "warn",
+    "@typescript-eslint/ban-ts-comment": "warn",
   },
 };
