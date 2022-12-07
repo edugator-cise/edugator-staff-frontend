@@ -79,7 +79,7 @@ export function GradingDialog(props: GradingDialogProps) {
   };
 
   const handleDialogSubmit = () => {
-    let newFeedback: IFeedback = {
+    const newFeedback: IFeedback = {
       display: true,
       type: AlertType.error,
       message: "Something went wrong",
@@ -97,7 +97,7 @@ export function GradingDialog(props: GradingDialogProps) {
       newFeedback.type = AlertType.info;
       newFeedback.message = "Uploading student submissions to the grader";
 
-      let payload: IGradeRequest = {
+      const payload: IGradeRequest = {
         email: email,
         toGrade: fileToGrade,
         problemID: problem._id ?? "",

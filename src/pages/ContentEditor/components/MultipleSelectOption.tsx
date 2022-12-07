@@ -151,8 +151,8 @@ function MultipleSelectOption(props: any) {
           <button
             className="rdw-exercise-modal-btn"
             onClick={() => {
-              let selections = [correct1, correct2, correct3, correct4];
-              let correct: number[] = [];
+              const selections = [correct1, correct2, correct3, correct4];
+              const correct: number[] = [];
               selections.forEach((choice, i) => {
                 if (choice === true) correct.push(i + 1);
               });

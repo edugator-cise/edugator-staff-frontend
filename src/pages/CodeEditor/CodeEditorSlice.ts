@@ -4,9 +4,10 @@ import {
   IResultSubmission,
   ICodeSubmission,
   ModuleProblemRequest,
+  ICompilerOutput,
+  ErrorObject,
 } from "./types";
 import { ILesson, IProblem } from "../../shared/types";
-import { ICompilerOutput, ErrorObject } from "./types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   currentLesson: ILesson | undefined;

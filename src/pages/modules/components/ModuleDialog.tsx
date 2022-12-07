@@ -86,7 +86,7 @@ export function ModuleDialog() {
     if (status === DialogStatus.CREATE) {
       const { name, number } = dialogInput;
 
-      let display = {
+      const display = {
         number: !isInvalidNum(number) ? dialogInput.number : "",
         name: !isBlank(name) ? dialogInput.name : "",
       };

@@ -74,7 +74,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
 
   // error handlers
   const handleFiles = (files: FileList) => {
-    let checkFeedback = checkFiles(files);
+    const checkFeedback = checkFiles(files);
     dispatch(setFeedback(checkFeedback));
 
     if (checkFeedback.type === AlertType.success) {
@@ -88,7 +88,7 @@ export function GradingDropArea(props: GradingDropAreaProps) {
     // reset feedback, set it at the end
     dispatch(setFeedback(noFeedback));
 
-    let newFeedback: IFeedback = {
+    const newFeedback: IFeedback = {
       display: true,
       type: AlertType.error,
     };

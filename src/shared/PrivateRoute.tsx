@@ -1,5 +1,6 @@
 import React from "react";
-import { Route, Redirect, RouteProps } from "react-router-dom";
+import { RouteProps } from "react-router";
+import { Route, Redirect } from "react-router-dom";
 import { LocalStorage } from "../app/common/LocalStorage";
 import { Routes } from "./Routes.constants";
 

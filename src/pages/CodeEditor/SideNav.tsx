@@ -16,7 +16,7 @@ import { Routes } from "../../shared/Routes.constants";
 import { BookOpen, Code } from "phosphor-react";
 
 interface ClickedMenu {
-  [key: string]: Boolean;
+  [key: string]: boolean;
 }
 
 interface SidenavProps {

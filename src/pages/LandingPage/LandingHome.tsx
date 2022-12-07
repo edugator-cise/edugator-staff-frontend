@@ -58,7 +58,8 @@ const ButtonHolder = styled("div")({
 });
 
 function LandingHome() {
-  var ReactRotatingText = require("react-rotating-text");
+  //eslint-disable-next-line
+  const ReactRotatingText = require("react-rotating-text");
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const xl = useMediaQuery(theme.breakpoints.up("xl"));
 
