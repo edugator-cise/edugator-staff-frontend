@@ -48,5 +48,6 @@ module.exports = {
     "@typescript-eslint/lines-between-class-members": "warn",
     "@typescript-eslint/dot-notation": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
+    "import/namespace": "warn",
   },
 };
