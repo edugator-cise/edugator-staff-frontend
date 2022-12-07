@@ -16,20 +16,22 @@ export const TextStack = () => {
   const [atomicEntities, setAtomicEntities] = useState([]);
   const [html, setHTML] = useState("");
   const [exportData, setExportData] = useState([]);
+  const [rawData, setRawData] = useState({});
 
-  const entityCallback = (atomicEntities: any, html: string) => {
+  const entityCallback = (atomicEntities: any, html: string, rawData: any) => {
     setAtomicEntities(atomicEntities);
     setHTML(html);
     updateExportData();
+    setRawData(rawData);
   };
 
   const updateExportData = () => {
-    const splitHtml = html.split("<atomic_entity />");
-    const rawData = [{ html: splitHtml[0], type: "TEXT" }];
+    let splitHtml = html.split("<atomic_entity />");
+    let rawData = [{ html: splitHtml[0], type: "text" }];
     if (atomicEntities !== undefined)
       atomicEntities.forEach((entity: any, i: number) => {
         rawData.push(entity);
-        rawData.push({ html: splitHtml[i + 1], type: "TEXT" });
+        rawData.push({ html: splitHtml[i + 1], type: "text" });
       });
 
     const convertedData: any = [];
@@ -37,13 +39,13 @@ export const TextStack = () => {
       let content;
       const dataType = data.type;
       switch (dataType) {
-        case "TEXT":
+        case "text":
           content = new contentBlock("text", new text_content(data.html));
           break;
 
-        case "MULTIPLE_CHOICE":
+        case "multiple_choice":
           content = new contentBlock(
-            "MC",
+            "multiple_choice",
             new mc_content(data.data.question, data.data.correct, [
               data.data.answer1,
               data.data.answer2,
@@ -53,9 +55,9 @@ export const TextStack = () => {
           );
           break;
 
-        case "MULTIPLE_SELECT":
+        case "multiple_select":
           content = new contentBlock(
-            "MS",
+            "multiple_select",
             new ms_content(data.data.question, data.data.correct, [
               data.data.answer1,
               data.data.answer2,
@@ -65,7 +67,7 @@ export const TextStack = () => {
           );
           break;
 
-        case "IMAGE":
+        case "image":
           content = new contentBlock(
             "image",
             new image_content(
@@ -94,7 +96,7 @@ export const TextStack = () => {
       </div>
       <div className="Popup">
         <CustomizedDialogs title="Publish Learning Content">
-          <RegistrationForm jsonData={exportData} />
+          <RegistrationForm jsonData={exportData} rawData={rawData} />
         </CustomizedDialogs>
       </div>
     </form>

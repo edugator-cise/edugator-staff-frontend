@@ -7,19 +7,20 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestProblem } from "./CodeEditorSlice";
+import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
-import { INavigationItem, IProblemItem } from "./types";
+import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { adminPathRegex, colors } from "../../shared/constants";
 import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
+import { BookOpen, Code } from "phosphor-react";
 
 interface ClickedMenu {
   [key: string]: boolean;
 }
 
 interface SidenavProps {
-  hidden: boolean;
+  isHidden: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -30,7 +31,7 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = (props: SidenavProps) => {
+export const Sidenav = ({ isHidden }: SidenavProps) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
@@ -51,9 +52,10 @@ export const Sidenav = (props: SidenavProps) => {
         width: 250,
         minWidth: 250,
         maxWidth: 250,
+        maxHeight: "calc(100vh - 64px)",
         bgcolor: "#F9F9F9",
         overflowY: "auto",
-        display: props.hidden ? "none" : "block",
+        display: isHidden ? "none" : "block",
       }}
       aria-labelledby="nested-exercises-list"
       subheader={
@@ -67,12 +69,12 @@ export const Sidenav = (props: SidenavProps) => {
             bgcolor: "#F9F9F9",
           }}
         >
-          Exercises
+          Content
         </ListSubheader>
       }
     >
       {navStructure.map((value: INavigationItem, indexVal: number) => (
-        <>
+        <React.Fragment key={value.name + "_" + indexVal}>
           <CustomListItemButton
             key={value.name + "_" + indexVal}
             onClick={() => {
@@ -125,12 +127,48 @@ export const Sidenav = (props: SidenavProps) => {
                         problemItem.problemName
                       }`}
                     />
+                    <Code
+                      weight="regular"
+                      size={16}
+                      color={colors.navIconGray}
+                    />
                   </CustomListItemButton>
                 )
               )}
+              {value.lessons?.map((lessonItem: ILessonItem, index: number) => (
+                <CustomListItemButton
+                  sx={{ pl: 4 }}
+                  key={lessonItem.lessonName + "_" + indexVal + "_" + index}
+                  onClick={() => {
+                    dispatch(
+                      requestLesson({
+                        lessonId: lessonItem._id,
+                      })
+                    );
+                    const baseRoute = Routes.Learn;
+                    history.replace({
+                      pathname: baseRoute + `/${lessonItem._id}`,
+                    });
+                  }}
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      sx: { fontSize: "0.8rem" },
+                    }}
+                    primary={`${indexVal + 1}.${index + 1} ${
+                      lessonItem.lessonName
+                    }`}
+                  />
+                  <BookOpen
+                    weight="regular"
+                    size={16}
+                    color={colors.navIconGray}
+                  />
+                </CustomListItemButton>
+              ))}
             </List>
           </Collapse>
-        </>
+        </React.Fragment>
       ))}
     </List>
   );

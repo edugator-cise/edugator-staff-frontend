@@ -13,6 +13,7 @@ import {
   requestFirstProblemFromModule,
   setNavStructure,
   requestProblem,
+  requestLesson,
   setCurrentProblem,
   setIsLoading,
   setRunningSubmission,
@@ -24,6 +25,9 @@ import {
   setResultSubmission,
   setRunCodeError,
   setStdin,
+  setLessonLoadError,
+  setIsLoadingLesson,
+  setCurrentLesson,
 } from "./CodeEditorSlice";
 import apiClient from "../../app/common/apiClient";
 import {
@@ -32,10 +36,10 @@ import {
   IToken,
   ICodeSubmission,
   IJudge0Response,
-  IModuleWithProblems,
   ModuleProblemRequest,
+  IModuleWithProblemsAndLessons,
 } from "./types";
-import { IProblem } from "../../shared/types";
+import { ILesson, IProblem } from "../../shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
   return data.status.id >= 3;
 };
@@ -77,7 +81,9 @@ function filterForProblem(
   }
   return undefined;
 }
-function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
+function createNavStructure(
+  moduleProblemStructure: IModuleWithProblemsAndLessons[]
+) {
   const moduleItems: INavigationItem[] = [];
   moduleProblemStructure.forEach((element) => {
     const payload = {
@@ -86,6 +92,10 @@ function createNavStructure(moduleProblemStructure: IModuleWithProblems[]) {
       number: element.number,
       problems: element.problems.map((el) => ({
         problemName: el.title,
+        _id: el._id,
+      })),
+      lessons: element.lessons?.map((el) => ({
+        lessonName: el.title,
         _id: el._id,
       })),
     };
@@ -97,12 +107,14 @@ function* handleRequestModulesAndProblems(
   action: PayloadAction<ModuleProblemRequest>
 ) {
   try {
-    const { data }: { data: IModuleWithProblems[] } = yield call(async () => {
-      if (action.payload.isAdmin) {
-        return apiClient.get("v1/module/WithProblems");
+    const { data }: { data: IModuleWithProblemsAndLessons[] } = yield call(
+      async () => {
+        if (action.payload.isAdmin) {
+          return apiClient.get("v1/module/WithProblems");
+        }
+        return apiClient.get("v1/module/WithNonHiddenProblems");
       }
-      return apiClient.get("v1/module/WithNonHiddenProblems");
-    });
+    );
     yield put(setNavStructure(createNavStructure(data)));
     yield put(setIsLoading(false));
   } catch (e) {
@@ -250,6 +262,23 @@ function* submissionRace(
   });
 }
 
+function* requestLessonSaga(
+  action: PayloadAction<{ lessonId: string; isAdmin: boolean }>
+) {
+  const id: string = action.payload.lessonId;
+  try {
+    const { data }: { data: ILesson } = yield call(async () => {
+      return apiClient.get(`v1/student/lesson/${id}`);
+    });
+    console.log(data);
+    yield put(setCurrentLesson(data));
+    yield put(setIsLoadingLesson(false));
+  } catch (e) {
+    yield put(setLessonLoadError({ hasError: true, errorMessage: e.message }));
+    yield put(setIsLoadingLesson(false));
+  }
+}
+
 function* requestProblemSaga(
   action: PayloadAction<{ problemId: string; isAdmin: boolean }>
 ) {
@@ -312,6 +341,7 @@ function* codeEditorSaga() {
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
   yield takeEvery(requestProblem.type, requestProblemSaga);
+  yield takeEvery(requestLesson.type, requestLessonSaga);
   yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem);
 }
 

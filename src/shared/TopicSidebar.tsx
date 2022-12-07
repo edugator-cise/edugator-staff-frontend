@@ -23,8 +23,8 @@ interface TopicProps {
 }
 
 interface SidebarProps {
-  hidden: boolean;
-  setHidden: (hidden: boolean) => void;
+  isHidden: boolean;
+  setIsHidden: (isHidden: boolean) => void;
 }
 
 const Sidebar = styled("div")({
@@ -71,7 +71,7 @@ const topics: TopicProps[] = [
   },
 ];
 
-function TopicSidebar(props: SidebarProps) {
+function TopicSidebar({ isHidden, setIsHidden }: SidebarProps) {
   return (
     <Sidebar>
       <Box
@@ -102,12 +102,12 @@ function TopicSidebar(props: SidebarProps) {
       </Link>
       <div
         onClick={() => {
-          props.setHidden(!props.hidden);
+          setIsHidden(!isHidden);
         }}
       >
         <TopicLink
-          name="View All"
-          active={!props.hidden}
+          name="Exercises"
+          active={!isHidden}
           icon={<ListBullets weight="fill" size={24} />}
           link=""
         />

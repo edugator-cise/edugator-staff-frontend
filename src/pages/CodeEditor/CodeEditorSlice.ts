@@ -7,11 +7,13 @@ import {
   ICompilerOutput,
   ErrorObject,
 } from "./types";
-import { IProblem } from "../../shared/types";
+import { ILesson, IProblem } from "../../shared/types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
+  currentLesson: ILesson | undefined;
   navStructure: INavigationItem[];
   isLoading: boolean;
+  isLoadingLesson: boolean;
   codeBody: string;
   runningSubmission: boolean;
   stdin: string;
@@ -20,12 +22,15 @@ export interface CodeEditorContainerState {
   submissionOutput: IResultSubmission[] | undefined;
   activeTab: number;
   runCodeError: ErrorObject;
+  lessonLoadingError: ErrorObject;
   isLoadingProblem: boolean;
 }
 
 const initialState: CodeEditorContainerState = {
   isLoading: true,
+  isLoadingLesson: true,
   currentProblem: undefined,
+  currentLesson: undefined,
   navStructure: [],
   codeBody: "",
   runningSubmission: false,
@@ -36,6 +41,10 @@ const initialState: CodeEditorContainerState = {
     compilerBody: "",
   },
   runCodeError: {
+    hasError: false,
+    errorMessage: "",
+  },
+  lessonLoadingError: {
     hasError: false,
     errorMessage: "",
   },
@@ -72,6 +81,12 @@ export const codeEditorSlice = createSlice({
         isLoadingProblem: true,
       };
     },
+    requestLesson: (state, action: PayloadAction<{ lessonId: string }>) => {
+      return {
+        ...state,
+        isLoadingLesson: true,
+      };
+    },
     requestFirstProblemFromModule: (
       state,
       action: PayloadAction<{
@@ -94,6 +109,10 @@ export const codeEditorSlice = createSlice({
         state.codeBody = action.payload.code.body;
       }
     },
+    setCurrentLesson: (state, action: PayloadAction<ILesson | undefined>) => {
+      state.currentLesson = action.payload ? { ...action.payload } : undefined;
+      state.isLoadingLesson = false;
+    },
     setNavStructure: (state, action: PayloadAction<INavigationItem[]>) => {
       state.navStructure = action.payload;
     },
@@ -105,6 +124,9 @@ export const codeEditorSlice = createSlice({
     },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
+    },
+    setIsLoadingLesson: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingLesson = action.payload;
     },
     setRunningSubmission: (state, action: PayloadAction<boolean>) => {
       return {
@@ -139,15 +161,20 @@ export const codeEditorSlice = createSlice({
     setRunCodeError: (state, action: PayloadAction<ErrorObject>) => {
       state.runCodeError = { ...action.payload };
     },
+    setLessonLoadError: (state, action: PayloadAction<ErrorObject>) => {
+      state.lessonLoadingError = { ...action.payload };
+    },
   },
 });
 
 export const {
   setCurrentProblem,
+  setCurrentLesson,
   setNavStructure,
   requestModulesAndProblems,
   requestRunCode,
   requestProblem,
+  requestLesson,
   requestFirstProblemFromModule,
   submitCode,
   setStdin,
@@ -158,5 +185,7 @@ export const {
   setIsAcceptedOutput,
   setResultSubmission,
   setRunCodeError,
+  setLessonLoadError,
+  setIsLoadingLesson,
 } = codeEditorSlice.actions;
 export default codeEditorSlice.reducer;

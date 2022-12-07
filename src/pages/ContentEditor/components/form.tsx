@@ -1,84 +1,143 @@
-import { Component } from "react";
+import { useState, useEffect } from "react";
+import {
+  requestAddContent,
+  requestUpdateContent,
+  updateContentEditor,
+  updateMetadata,
+} from "../contentEditorPageSlice";
+import { useAppSelector } from "../../../app/common/hooks";
+import { useDispatch } from "react-redux";
 import "./FormStyles.css";
 
-class RegistrationForm extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
+interface ExportData {
+  title: string;
+  author: string;
+  content: any[];
+  editableContent: any;
+}
 
-    //https://www.codegrepper.com/code-examples/javascript/how+to+get+current+date+in+react+js
-    //Current method for pulling current date
-    const current = new Date();
-    const date = `${
-      current.getMonth() + 1
-    }/${current.getDate()}/${current.getFullYear()}`;
+export const RegistrationForm = ({
+  jsonData,
+  rawData,
+}: {
+  jsonData: any;
+  rawData: any;
+}) => {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [date, setDate] = useState("");
 
-    this.state = {
+  const contentId = useAppSelector(
+    (state) => state.contentEditorPage.contentId
+  );
+
+  const contentTitle = useAppSelector(
+    (state) => state.contentEditorPage.metadata.title
+  );
+
+  const contentAuthor = useAppSelector(
+    (state) => state.contentEditorPage.metadata.author
+  );
+
+  useEffect(() => {
+    if (contentTitle) {
+      setTitle(contentTitle);
+    }
+    if (contentAuthor) {
+      setAuthor(contentAuthor);
+    }
+  }, [contentTitle, contentAuthor]);
+
+  const dispatch = useDispatch();
+  //https://www.codegrepper.com/code-examples/javascript/how+to+get+current+date+in+react+js
+  //Current method for pulling current date
+  const current = new Date();
+  const currentDate = `${
+    current.getMonth() + 1
+  }/${current.getDate()}/${current.getFullYear()}`;
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault(); //Prevents page fresh on submit, disable if needed
+    let pageJsonData: ExportData = {
       title: "",
       author: "",
-      visibility: "public",
-      date: date,
+      content: [],
+      editableContent: {},
     };
-  }
-
-  handleInput = (event: any) => {
-    this.setState({
-      [event.target.name]: event.target.value,
+    let contentArr: any[] = [];
+    pageJsonData.title = JSON.stringify(title, undefined, 2);
+    pageJsonData.author = JSON.stringify(author, undefined, 2);
+    jsonData.forEach((content: any) => {
+      console.log(content);
+      contentArr.push(content);
     });
-  };
+    pageJsonData.content = contentArr;
 
-  handleSubmit = (event: any) => {
-    const pageJsonData = [];
-    pageJsonData.push(JSON.stringify(this.state, undefined, 2));
-    this.props.jsonData.forEach((content: any) => {
-      pageJsonData.push(JSON.stringify(content, undefined, 2));
-    });
-    const exportData = pageJsonData.join(",\n");
-    console.log(exportData);
-    alert(exportData);
-    event.preventDefault(); //Prevents page fresh on submit, disable if needed
-  };
+    console.log(pageJsonData);
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit} className="paper-style">
-        <div>
-          <label className="label-style">Content Title:</label>
-          <input
-            className="input-style"
-            type="text"
-            name="title"
-            value={this.state.title}
-            onChange={this.handleInput}
-          />
-        </div>
-        <div>
-          <label className="label-style">Author:</label>
-          <input
-            className="input-style"
-            type="text"
-            name="author"
-            value={this.state.author}
-            onChange={this.handleInput}
-          />
-        </div>
-        <div>
-          <label className="label-style">Visibility:</label>
-          <select
-            className="input-style"
-            name="visibility"
-            value={this.state.visibility}
-            onChange={this.handleInput}
-          >
-            <option value="public">Public (Visible to Students)</option>
-            <option value="private">Private (Staff Only)</option>
-          </select>
-        </div>
-        <button type="submit" className="btn-style">
-          Submit
-        </button>
-      </form>
+    // create an array from entity map data
+    const entityMap = Object.keys(rawData.entityMap).map(
+      (key) => rawData.entityMap[key]
     );
-  }
-}
+
+    console.log(entityMap);
+
+    dispatch(updateMetadata({ title: title, author: author }));
+    dispatch(
+      updateContentEditor({
+        content: pageJsonData.content,
+        editableContent: rawData,
+        blocks: rawData.blocks,
+        entityMap: entityMap,
+      })
+    );
+
+    if (contentId) {
+      dispatch(requestUpdateContent());
+    } else {
+      dispatch(requestAddContent());
+    }
+
+    console.log(rawData.entityMap);
+  };
+
+  return (
+    <form className="paper-style">
+      <div>
+        <label className="label-style">Content Title:</label>
+        <input
+          className="input-style"
+          type="text"
+          name="title"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <label className="label-style">Author:</label>
+        <input
+          className="input-style"
+          type="text"
+          name="author"
+          value={author}
+          onChange={(e) => {
+            setAuthor(e.target.value);
+          }}
+        />
+      </div>
+      <button
+        type="button"
+        onClick={(e) => {
+          handleSubmit(e);
+        }}
+        className="btn-style"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
 
 export default RegistrationForm;

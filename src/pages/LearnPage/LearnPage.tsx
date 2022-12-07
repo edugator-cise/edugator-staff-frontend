@@ -1,28 +1,31 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { Sidenav } from "../CodeEditor/SideNav";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
-import { Box } from "@mui/material";
-import TopicSidebar from "../../shared/TopicSidebar";
-import VerticalNavigation from "../../shared/VerticalNavigation";
-import { colors } from "../../shared/constants";
-import { sampleLesson } from "./sampleLesson";
+import { setLessonLoadError } from "../CodeEditor/CodeEditorSlice";
+import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { Node, Markup } from "interweave";
 import "./learnStyles.css";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ImageBlock from "./ImageBlock";
 import MultipleSelectQuestion from "./MultipleSelectQuestion";
+import { EmptyState } from "../CodeEditor/CodeEditorContainer/EmptyState";
 
 function LearnPage() {
-  const [isHidden, setIsHidden] = useState<boolean>(true);
   let questionCount = 1;
 
-  const modules = useSelector((state: RootState) => {
-    const sortedModules = state.codeEditor.navStructure;
-    return sortedModules.map((value) => value.name);
-  });
+  const dispatch = useDispatch();
+
+  const currentLesson = useSelector(
+    (state: RootState) => state.codeEditor.currentLesson
+  );
+  const errorMessage = useSelector(
+    (state: RootState) => state.codeEditor.lessonLoadingError
+  );
+  const isLoadingLesson = useSelector(
+    (state: RootState) => state.codeEditor.isLoadingLesson
+  );
 
   const LessonHolder = styled("div")({
     width: "80%",
@@ -53,16 +56,27 @@ function LearnPage() {
   });
 
   function transform(node: HTMLElement, children: Node[]): React.ReactNode {
-    console.log(node.tagName);
-    console.log(node);
-
-    if (node.tagName === "H2") {
+    if (node.tagName === "H1") {
+      return (
+        <h1
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+            textAlign: "left",
+          }}
+        >
+          {children}
+        </h1>
+      );
+    } else if (node.tagName === "H2") {
       return (
         <h2
           style={{
             marginBottom: 0,
             fontWeight: 200,
             fontFamily: "DM Serif Display",
+            textAlign: "left",
           }}
         >
           {children}
@@ -79,6 +93,42 @@ function LearnPage() {
         >
           <i>{children}</i>
         </h3>
+      );
+    } else if (node.tagName === "H4") {
+      return (
+        <h4
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h4>
+      );
+    } else if (node.tagName === "H5") {
+      return (
+        <h5
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h5>
+      );
+    } else if (node.tagName === "H6") {
+      return (
+        <h5
+          style={{
+            marginBottom: 0,
+            fontWeight: 200,
+            fontFamily: "DM Serif Display",
+          }}
+        >
+          <i>{children}</i>
+        </h5>
       );
     } else if (node.tagName === "P") {
       return <p style={{ lineHeight: 1.5, color: "#242424" }}>{children}</p>;
@@ -100,124 +150,136 @@ function LearnPage() {
   }
 
   return (
-    <Box
-      height="100vh"
-      display="flex"
-      flexDirection="row"
-      sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
-    >
-      <TopicSidebar hidden={isHidden} setHidden={setIsHidden} />
-
-      <Box sx={{ height: "100%", width: "100%" }}>
-        <VerticalNavigation light={true} modules={modules} codingPage={true} />
-        <Box
-          sx={{
-            height: "100%",
-            width: "100%",
-            m: 0,
-            display: "flex",
-          }}
-        >
-          <Sidenav hidden={isHidden} />
-          <div
-            id="lesson-container"
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              overflowY: "scroll",
+    <>
+      {errorMessage.hasError && (
+        <Grow in timeout={500}>
+          <Alert
+            severity="error"
+            sx={{
+              position: "absolute",
+              left: "0",
+              right: "0",
+              width: "50%",
+              marginTop: 5,
+              marginRight: "auto",
+              marginLeft: "auto",
+              zIndex: 300,
+            }}
+            onClose={() => {
+              dispatch(
+                setLessonLoadError({ hasError: false, errorMessage: "" })
+              );
             }}
           >
-            <LessonHolder>
-              <LessonHeader>
-                <div className="lesson-title">{sampleLesson[0].title}</div>
+            {errorMessage.errorMessage}
+          </Alert>
+        </Grow>
+      )}
+      {isLoadingLesson ? (
+        <Grid container direction="column" sx={{ height: "100vh" }}>
+          <Box>
+            <CircularProgress />
+          </Box>
+        </Grid>
+      ) : currentLesson === undefined ? (
+        <EmptyState />
+      ) : (
+        <div
+          id="lesson-container"
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            overflowY: "scroll",
+          }}
+        >
+          <LessonHolder>
+            <LessonHeader>
+              <div className="lesson-title">{currentLesson.title}</div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  height: "auto",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    height: "auto",
-                    justifyContent: "flex-end",
-                  }}
+                  className="lesson-subtitle"
+                  style={{ color: theme.palette.primary.dark }}
                 >
-                  <div
-                    className="lesson-subtitle"
-                    style={{ color: theme.palette.primary.dark }}
-                  >
-                    <span style={{ color: theme.palette.primary.main }}>
-                      Author:{" "}
-                    </span>
-                    {sampleLesson[0].author}
-                  </div>
-                  <div
-                    className="lesson-subtitle"
-                    style={{ color: theme.palette.primary.dark }}
-                  >
-                    <span style={{ color: theme.palette.primary.main }}>
-                      Last Updated:{" "}
-                    </span>
-                    {sampleLesson[0].date}
-                  </div>
+                  <span style={{ color: theme.palette.primary.main }}>
+                    Author:{" "}
+                  </span>
+                  {currentLesson.author}
                 </div>
-              </LessonHeader>
-              {sampleLesson.slice(1).map((block: any, i) => {
-                if (block.type === "text") {
-                  console.log(JSON.parse(JSON.stringify(block.content)));
-
-                  return (
-                    <div key={i} style={{ width: "100%" }}>
-                      <Markup
-                        transform={transform}
-                        className="inter"
-                        content={JSON.parse(JSON.stringify(block.content.html))}
-                      />
-                    </div>
-                  );
-                } else if (block.type === "image") {
-                  return (
-                    <ImageBlock
-                      key={i}
-                      src={block.content.sourcePath}
-                      caption={block.content.caption}
-                      height={block.content.height}
-                      width={block.content.width}
-                      alignment={block.content.alignment}
+                <div
+                  className="lesson-subtitle"
+                  style={{ color: theme.palette.primary.dark }}
+                ></div>
+              </div>
+            </LessonHeader>
+            {currentLesson.content?.map((block: any, i) => {
+              if (!block || !block.type || !block.content) {
+                return null;
+              }
+              if (block.type === "text") {
+                return (
+                  <div key={i} style={{ width: "100%" }}>
+                    <Markup
+                      transform={transform}
+                      className="inter"
+                      content={JSON.parse(
+                        JSON.stringify(block.content.html) || ""
+                      )}
                     />
-                  );
-                } else if (block.type === "MC") {
-                  questionCount++;
-                  return (
-                    <MultipleChoiceQuestion
-                      key={i}
-                      number={questionCount - 1}
-                      image={block.content.image}
-                      sourcePath={block.content.sourcePath}
-                      answers={block.content.answers}
-                      correctAnswer={block.content.correctAnswer}
-                      question={block.content.question}
-                    />
-                  );
-                } else if (block.type === "MS") {
-                  questionCount++;
-                  return (
-                    <MultipleSelectQuestion
-                      key={i}
-                      number={questionCount - 1}
-                      answers={block.content.answers}
-                      correctAnswer={block.content.correctAnswer}
-                      question={block.content.question}
-                    />
-                  );
-                }
-                return <></>;
-              })}
-            </LessonHolder>
-          </div>
-        </Box>
-      </Box>
-    </Box>
+                  </div>
+                );
+              } else if (block.type === "image") {
+                return (
+                  <ImageBlock
+                    key={i}
+                    src={block.content.sourcePath}
+                    caption={block.content.caption}
+                    height={block.content.height}
+                    width={block.content.width}
+                    alignment={block.content.alignment}
+                  />
+                );
+              } else if (block.type === "multiple_choice") {
+                questionCount++;
+                return (
+                  <MultipleChoiceQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    image={block.content.image}
+                    sourcePath={block.content.sourcePath}
+                    answers={block.content.answers}
+                    correctAnswer={block.content.correctAnswer}
+                    question={block.content.question}
+                  />
+                );
+              } else if (block.type === "multiple_select") {
+                questionCount++;
+                return (
+                  <MultipleSelectQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    answers={block.content.answers}
+                    correctAnswer={block.content.correctAnswer}
+                    question={block.content.question}
+                  />
+                );
+              }
+              return <></>;
+            })}
+          </LessonHolder>
+        </div>
+      )}
+    </>
   );
 }
 

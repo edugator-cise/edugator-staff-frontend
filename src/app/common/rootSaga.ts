@@ -6,6 +6,7 @@ import gradingSaga from "../../pages/grading/GradingDialog.sagas";
 import accountManagerSaga from "../../pages/accounts/AdminAccountsPage.sagas";
 import problemSaga from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainer.sagas";
 import landingPageSaga from "../../pages/LandingPage/LandingPage.sagas";
+import contentSaga from "../../pages/ContentEditor/contentEditorPage.sagas";
 
 /** Place additional saga functions in the array */
 export default function* rootSaga() {
@@ -17,5 +18,6 @@ export default function* rootSaga() {
     accountManagerSaga(),
     landingPageSaga(),
     problemSaga(),
+    contentSaga(),
   ]);
 }

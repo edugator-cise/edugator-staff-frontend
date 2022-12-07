@@ -238,7 +238,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             color="primary"
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
-            onClick={() =>
+            onClick={() => {
               dispatch(
                 requestRunCode({
                   code: currentCode,
@@ -248,8 +248,8 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                   memoryLimit: memoryLimit as number,
                   buildCommand: buildCommand as string,
                 })
-              )
-            }
+              );
+            }}
           >
             Run Code
           </Button>

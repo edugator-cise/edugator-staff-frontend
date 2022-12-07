@@ -107,6 +107,7 @@ export const moduleSlice = createSlice({
       const new_module = {
         ...action.payload,
         problems: state.modules[index].problems,
+        lessons: state.modules[index].lessons,
       };
 
       // replace old module with new module

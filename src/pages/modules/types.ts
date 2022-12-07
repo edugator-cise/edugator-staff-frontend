@@ -1,15 +1,22 @@
-import { IProblemBase, IModuleBase, IFeedback } from "../../shared/types";
+import {
+  IProblemBase,
+  IModuleBase,
+  IFeedback,
+  ILessonBase,
+} from "../../shared/types";
 
 /** Admin Module Interface */
 
 export interface IAdminModule extends IModuleBase {
   problems: IProblemBase[];
+  lessons: ILessonBase[];
 }
 
 export const NullModule: IAdminModule = {
   name: "",
   number: -1,
   problems: [],
+  lessons: [],
 };
 
 /** Creating a New-Module dialog */

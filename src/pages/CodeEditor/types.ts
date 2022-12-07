@@ -3,8 +3,18 @@ import { IModuleBase } from "../../shared/types";
 export interface ModuleProblemRequest {
   isAdmin: boolean;
 }
+
+export interface ModuleLessonRequest {
+  isAdmin: boolean;
+}
+
 export interface IProblemItem {
   problemName: string;
+  _id: string;
+}
+
+export interface ILessonItem {
+  lessonName: string;
   _id: string;
 }
 
@@ -13,6 +23,7 @@ export interface INavigationItem {
   _id: string;
   number: number;
   problems: IProblemItem[];
+  lessons: ILessonItem[];
 }
 
 export interface IToken {
@@ -44,9 +55,11 @@ export interface IJudge0Response {
 type IModuleBaseWithID = IModuleBase & { _id: string };
 
 type IProblemMetaWithID = { _id: string; title: string };
+type ILessonMetaWithID = { _id: string; title: string };
 
-export interface IModuleWithProblems extends IModuleBaseWithID {
+export interface IModuleWithProblemsAndLessons extends IModuleBaseWithID {
   problems: IProblemMetaWithID[];
+  lessons: ILessonMetaWithID[];
 }
 
 export interface IResultSubmission {

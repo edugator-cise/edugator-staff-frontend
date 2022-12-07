@@ -16,7 +16,7 @@ import { NotFoundPage } from "./pages/NotFound/NotFoundPage";
 import PrivacyNotice from "./pages/StaticPages/PrivacyNotice";
 import TermsOfUse from "./pages/StaticPages/TermsOfUse";
 import Ferpa from "./pages/StaticPages/Ferpa";
-import LearnPage from "./pages/LearnPage/LearnPage";
+import PlaygroundContainer from "./pages/Playground/PlaygroundContainer";
 
 function App() {
   return (
@@ -27,6 +27,16 @@ function App() {
             <Route exact path={Routes.Login}>
               <LoginPage />
             </Route>
+            <Route
+              path={[
+                Routes.CodeWithProblem,
+                Routes.Code,
+                Routes.LearnWithLesson,
+                Routes.Learn,
+              ]}
+            >
+              <PlaygroundContainer />
+            </Route>
             <PrivateRoute exact path={Routes.ProblemEditor}>
               <ProblemEditorPage />
             </PrivateRoute>
@@ -34,6 +44,9 @@ function App() {
               <ProblemEditorPage />
             </PrivateRoute>
             <PrivateRoute exact path={Routes.ContentCreator}>
+              <ContentEditorPage />
+            </PrivateRoute>
+            <PrivateRoute exact path={Routes.ContentEditor}>
               <ContentEditorPage />
             </PrivateRoute>
             <PrivateRoute exact path={Routes.Modules}>
@@ -45,12 +58,6 @@ function App() {
             <PrivateRoute exact path={Routes.AdminCodeWithProblem}>
               <CodeEditorPage />
             </PrivateRoute>
-            <Route path={Routes.CodeWithProblem}>
-              <CodeEditorPage />
-            </Route>
-            <Route path={Routes.Learn}>
-              <LearnPage />
-            </Route>
             <Route exact path={Routes.Landing}>
               <LandingPage />
             </Route>

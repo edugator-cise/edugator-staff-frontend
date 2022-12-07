@@ -25,7 +25,23 @@ export interface IProblem extends IProblemBase {
   buildCommand: string;
 }
 
+export interface ILesson extends ILessonBase {
+  title: string;
+  author: string;
+  content: {}[];
+  editableContent: {
+    blocks: {}[];
+    entityMap: {}[];
+  };
+  blocks: {}[];
+  entityMap: {}[];
+}
+
 export interface INewProblem extends IProblem {
+  moduleId: string;
+}
+
+export interface INewLesson extends ILesson {
   moduleId: string;
 }
 
@@ -34,6 +50,11 @@ export interface IProblemBase {
   _id?: string;
   title: string;
   // add more basic details as necessary
+}
+
+export interface ILessonBase {
+  _id?: string;
+  title: string;
 }
 
 /** Module interfaces */

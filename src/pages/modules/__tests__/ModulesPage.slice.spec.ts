@@ -37,8 +37,8 @@ describe("Modules Reducer Base State", () => {
 const mockData = {
   modulesFound: {
     data: [
-      { name: "Test 1", number: 0, problems: [] },
-      { name: "Test 2", number: 1, problems: [] },
+      { name: "Test 1", number: 0, problems: [], lessons: [] },
+      { name: "Test 2", number: 1, problems: [], lessons: [] },
     ],
   },
   newModule: {
@@ -101,6 +101,7 @@ describe("Modules: Adding a Module", () => {
       name: mockData.newModule.payload.name,
       number: mockData.newModule.payload.number,
       problems: [],
+      lessons: [],
       _id: mockData.newModule.response.data.id,
     };
 
@@ -135,7 +136,11 @@ describe("Modules: Editing a Module", () => {
     // I expect my changes to have gone through
 
     modulesState = store.getState().modules;
-    const expected = { ...mockData.updatedModule.data, problems: [] };
+    let expected = {
+      ...mockData.updatedModule.data,
+      problems: [],
+      lessons: [],
+    };
 
     expect(modulesState.modules).toEqual([expected]);
     // could check for positive feedback messages as well

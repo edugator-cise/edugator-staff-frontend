@@ -1,61 +1,86 @@
-import { Component } from "react";
-import { EditorState, AtomicBlockUtils, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  AtomicBlockUtils,
+  convertFromRaw,
+  convertToRaw,
+} from "draft-js";
+import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
+import "./TextEditorStyles.css";
+import { toolbarIcons } from "./ToolbarIcons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import MultipleChoiceOption from "./components/MultipleChoiceOption";
-import MultipleSelectOption from "./components/MultipleSelectOption";
+import { MultipleChoiceModal } from "./components/MultipleChoiceOption";
+import { useAppSelector } from "../../app/common/hooks";
 import draftToHtml from "draftjs-to-html";
 import {
-  MultipleChoiceDisplayBlock,
-  MultipleSelectDisplayBlock,
-} from "./components/displayBlockComponents";
+  TextHOne,
+  TextHTwo,
+  TextHThree,
+  Code,
+  TextItalic,
+  TextBolder,
+  TextUnderline,
+  Image,
+  ListBullets,
+  ListChecks,
+} from "phosphor-react";
 
-class TextEditorContent extends Component<any, any> {
-  //Constructor creates new text box object upon program start
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      editorState: EditorState.createEmpty(),
-      html: "",
-    };
-  }
+const TextEditorContent = ({
+  callbackData,
+}: {
+  callbackData: (atomicEntities: any, html: string, rawData: any) => void;
+}) => {
+  const [editorState, setEditorState] = useState<EditorState>(
+    EditorState.createEmpty()
+  );
+  const [html, setHTML] = useState("");
+  const [MCModalOpen, setMCModalOpen] = useState(false);
 
-  //Updates editorstate (text box content) when changed
-  onEditorStateChange = (editorState: EditorState) => {
-    // console.log(editorState)
-    const html = draftToHtml(
-      convertToRaw(editorState.getCurrentContent()),
-      {},
-      false,
-      this.customEntityTransform
-    );
-    this.onTrigger();
-    this.setState({
-      editorState,
-      html,
-    });
-  };
+  // check if the lesson has a title (we are editing a lesson)
+  const contentId = useAppSelector(
+    (state) => state.contentEditorPage.contentId
+  );
 
-  //https://www.npmjs.com/package/draftjs-to-html
-  //https://github.com/jpuri/draftjs-to-html/issues/18
-  customEntityTransform = (entity: any, text: string) => {
+  const editorStoredState = useAppSelector(
+    (state) => state.contentEditorPage.contentEditor
+  );
+
+  useEffect(() => {
+    if (contentId && editorStoredState) {
+      const convertedContent = convertFromRaw({
+        // @ts-ignore
+        blocks: editorStoredState.editableContent.blocks,
+        // @ts-ignore
+        entityMap: editorStoredState.editableContent.entityMap || {},
+      });
+      console.log("convertedContent", convertedContent);
+
+      // convert from raw back to editor state
+      setEditorState(EditorState.createWithContent(convertedContent));
+    }
+  }, [contentId, editorStoredState]);
+
+  const customEntityTransform = (entity: any, text: string) => {
     if (
-      entity.type === "IMAGE" ||
-      entity.type === "MULTIPLE_CHOICE" ||
-      entity.type === "MULTIPLE_SELECT"
+      entity.type === "image" ||
+      entity.type === "multiple_choice" ||
+      entity.type === "multiple_select"
     )
       return "<atomic_entity />";
   };
 
-  onTrigger = () => {
-    const atomicEntities = this.getEntities(this.state.editorState);
-    const html = this.state.html;
+  const onTrigger = () => {
+    let atomicEntities = getEntities(editorState);
+    let rawData = convertToRaw(editorState.getCurrentContent());
+    //let html = html;
 
-    console.log("Callback Data", atomicEntities, html);
-    this.props.callbackData(atomicEntities, html);
+    // console.log("Callback Data", atomicEntities, html);
+    callbackData(atomicEntities, html, rawData);
   };
 
-  getEntities = (editorState: any, entityType = null) => {
+  const getEntities = (editorState: any, entityType = null) => {
     const content = editorState.getCurrentContent();
     const entities: any[] = [];
     content.getBlocksAsArray().forEach((block: any) => {
@@ -87,159 +112,170 @@ class TextEditorContent extends Component<any, any> {
     return entities;
   };
 
-  //util function for editor to render blocks based on passed content type
-  //Seems you ONLY put if conditions for custom types, i.e. MULTIPLE_CHOICE
-  //Attempting to render existing components (like IMAGE) or having an else statement messes up rendering of all components
-  blockRenderer = (contentBlock: any) => {
-    const { editorState } = this.state;
-    console.log("consoleBlock: ", contentBlock);
-    const type = contentBlock.getType();
-    if (type === "atomic") {
-      const contentState = editorState.getCurrentContent();
-      const entityKey = contentBlock.getEntityAt(0);
-      const entity = contentState.getEntity(entityKey);
-      if (entity && entity.type === "MULTIPLE_CHOICE") {
-        return {
-          component: MultipleChoiceDisplayBlock,
-          editable: false,
-        };
-      } else if (entity && entity.type === "MULTIPLE_SELECT") {
-        return {
-          component: MultipleSelectDisplayBlock,
-          editable: false,
-        };
-      }
+  const editor = useRef<Editor>(null);
+
+  const focus = () => {
+    editor.current?.focus();
+  };
+
+  const onChange = (editorState: EditorState) => {
+    console.log(editorState);
+    console.log("RAW STATE");
+    console.log(convertToRaw(editorState.getCurrentContent()));
+
+    let html = draftToHtml(
+      convertToRaw(editorState.getCurrentContent()),
+      {},
+      false,
+      customEntityTransform
+    );
+    console.log(html);
+    onTrigger();
+    setEditorState(editorState);
+    setHTML(html);
+  };
+
+  const onAddMultipleChoice = (
+    e: any,
+    question: string,
+    answers: string[],
+    correct: number
+  ) => {
+    e.preventDefault();
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "multiple_choice",
+      "IMMUTABLE",
+      { question, answers, correct }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
+    );
+    setMCModalOpen(false);
+    setTimeout(() => focus(), 0);
+  };
+
+  const onAddImage = (e: any) => {
+    e.preventDefault();
+    const urlValue = window.prompt("Enter a URL");
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "image",
+      "IMMUTABLE",
+      { src: urlValue }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
+    );
+    setTimeout(() => focus(), 0);
+  };
+
+  const handleKeyCommand = (command: string) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      onChange(newState);
+      return "handled";
     }
+    return "not-handled";
   };
 
-  // https://draftjs.org/docs/advanced-topics-custom-block-render-map/
-  // https://codesandbox.io/s/3ozykkmy6?file=/index.js:400-416
-
-  //will generate mc block as unique entity with given values as metadata
-  insertMCBlock = (
-    question: string,
-    correct: number,
-    answer1: string,
-    answer2: string,
-    answer3: string,
-    answer4: string
-  ) => {
-    const { editorState } = this.state;
-
-    const contentState = editorState.getCurrentContent();
-
-    const contentStateWithEntity = contentState.createEntity(
-      "MULTIPLE_CHOICE",
-      "MUTABLE",
-      {
-        question: question,
-        correct: correct,
-        answer1: answer1,
-        answer2: answer2,
-        answer3: answer3,
-        answer4: answer4,
-      }
-    );
-
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithEntity,
-    });
-
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        " "
-      ),
-    });
+  const onUnderlineClick = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleInlineStyle(editorState, "UNDERLINE"));
   };
 
-  //will generate ms block as unique entity with given values as metadata
-  insertMSBlock = (
-    question: string,
-    correct: number[],
-    answer1: string,
-    answer2: string,
-    answer3: string,
-    answer4: string
-  ) => {
-    const { editorState } = this.state;
-
-    const contentState = editorState.getCurrentContent();
-
-    const contentStateWithEntity = contentState.createEntity(
-      "MULTIPLE_SELECT",
-      "MUTABLE",
-      {
-        question: question,
-        correct: correct,
-        answer1: answer1,
-        answer2: answer2,
-        answer3: answer3,
-        answer4: answer4,
-      }
-    );
-
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithEntity,
-    });
-
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        " "
-      ),
-    });
+  const onBoldClick = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleInlineStyle(editorState, "BOLD"));
   };
 
-  //Class object " <EditorContainer />" renders the text box
-  render() {
-    //Tried looking into what the "this" object is for this class, seems vague
-    //Passing editorState is difficult, but might be possible
-    const { editorState } = this.state;
+  const onItalicClick = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleInlineStyle(editorState, "ITALIC"));
+  };
 
-    console.log("return this: ", this);
+  const onH1Click = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleBlockType(editorState, "header-one"));
+  };
 
-    return (
+  const onH2Click = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleBlockType(editorState, "header-two"));
+  };
+
+  const onH3Click = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleBlockType(editorState, "header-three"));
+  };
+
+  const onCodeClick = (e: any) => {
+    e.preventDefault();
+    onChange(RichUtils.toggleBlockType(editorState, "code-block"));
+  };
+
+  return (
+    <div className="contentEditor">
+      <MultipleChoiceModal
+        insert={onAddMultipleChoice}
+        open={MCModalOpen}
+        setOpen={setMCModalOpen}
+      />
+
+      <button onClick={onH1Click}>
+        <TextHOne weight="bold" size={18} />
+      </button>
+      <button onClick={onH2Click}>
+        <TextHTwo weight="bold" size={18} />
+      </button>
+      <button onClick={onH3Click}>
+        <TextHThree weight="bold" size={18} />
+      </button>
+      <button onClick={onCodeClick}>
+        <Code weight="bold" size={18} />
+      </button>
+      <button onClick={onUnderlineClick}>
+        <TextUnderline weight="bold" size={18} />
+      </button>
+      <button onClick={onBoldClick}>
+        <TextBolder weight="bold" size={18} />
+      </button>
+      <button onClick={onItalicClick}>
+        <TextItalic weight="bold" size={18} />
+      </button>
+      <button onClick={onAddImage}>
+        <Image weight="bold" size={18} />
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setMCModalOpen(true);
+        }}
+      >
+        <ListBullets weight="bold" size={18} />
+      </button>
+      <button onClick={() => {}}>
+        <ListChecks weight="bold" size={18} />
+      </button>
       <div className="editor">
         <Editor
-          //Update and show text box content
           editorState={editorState}
-          onEditorStateChange={this.onEditorStateChange}
-          //Display toolbar on top
-          toolbar={{
-            // options removed: ['embedded', 'emoji', 'remove', 'history']
-            options: [
-              "inline",
-              "blockType",
-              "fontSize",
-              "fontFamily",
-              "colorPicker",
-              "list",
-              "textAlign",
-              "link",
-              "image",
-            ],
-            inline: { inDropdown: true },
-            list: { inDropdown: true },
-            textAlign: { inDropdown: true },
-            link: { inDropdown: true },
-            history: { inDropdown: true },
-          }}
-          //ONLY pass blockRendered to customBlockRenderFunc
-          //passing to "blockRendererFn" overwrites existing block rendering (like IMAGE, HYPERLINK)
-          customBlockRenderFunc={this.blockRenderer}
-          toolbarCustomButtons={[
-            <MultipleChoiceOption insertMC={this.insertMCBlock} />,
-            <MultipleSelectOption insertMC={this.insertMSBlock} />,
-          ]}
+          handleKeyCommand={handleKeyCommand}
+          onChange={onChange}
+          blockRendererFn={mediaBlockRenderer}
+          ref={editor}
         />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default TextEditorContent;

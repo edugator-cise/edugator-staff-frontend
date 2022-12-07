@@ -2,7 +2,6 @@ interface content {}
 
 class answerChoice {
   id: number;
-
   text: string;
 
   constructor(id: number, text: string) {
@@ -21,11 +20,8 @@ export class text_content implements content {
 
 export class image_content implements content {
   sourcePath: string;
-
   height: string;
-
   width: string;
-
   alignment: string;
 
   constructor(
@@ -43,9 +39,7 @@ export class image_content implements content {
 
 export class mc_content implements content {
   question: string;
-
   correctAnswer: number;
-
   answers: answerChoice[];
 
   constructor(question: string, correctAnswer: string, answers: string[]) {
@@ -60,9 +54,7 @@ export class mc_content implements content {
 
 export class ms_content implements content {
   question: string;
-
   correctAnswer: number[];
-
   answers: answerChoice[];
 
   constructor(question: string, correctAnswer: number[], answers: string[]) {
@@ -77,7 +69,6 @@ export class ms_content implements content {
 
 export class contentBlock {
   type: string;
-
   content: content;
 
   constructor(type: string, content: content) {

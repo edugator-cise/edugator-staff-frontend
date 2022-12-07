@@ -62,6 +62,8 @@ function TermsOfUse() {
         isAdmin: adminPathRegex.test(locationState.pathname),
       })
     );
+    //disable exhaustive dependencies
+    //eslint-disable-next-line
   }, [dispatch]);
 
   return (
