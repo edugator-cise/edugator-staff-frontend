@@ -13,8 +13,8 @@ import {
   setIsAcceptedOutput,
   setResultSubmission,
   setRunCodeError,
+  resetinputOutputViewState,
 } from "../CodeEditorSlice";
-import { resetinputOutputViewState } from "../CodeEditorSlice";
 import { IProblem } from "../../../shared/types";
 import {
   INavigationItem,

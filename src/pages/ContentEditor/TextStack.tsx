@@ -34,10 +34,10 @@ export const TextStack = () => {
         rawData.push({ html: splitHtml[i + 1], type: "text" });
       });
 
-    let convertedData: any = [];
+    const convertedData: any = [];
     rawData.forEach((data: any) => {
       let content;
-      let dataType = data.type;
+      const dataType = data.type;
       switch (dataType) {
         case "text":
           content = new contentBlock("text", new text_content(data.html));
