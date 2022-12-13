@@ -186,7 +186,7 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
                   sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
                   key={ans.id}
                 >
-                  {ans.text}
+                  {i}
                 </Typography>
               </AnswerHolder>
             </Grid>

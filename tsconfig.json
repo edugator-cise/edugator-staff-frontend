@@ -32,7 +32,7 @@
     "**/*.tsx",
     "pages/**/*",
     "components/**/*"
-  ],
+, "postcss.config.js"  ],
   "exclude": [
     "node_modules"
   ]
