@@ -136,7 +136,7 @@ describe("Modules: Editing a Module", () => {
     // I expect my changes to have gone through
 
     modulesState = store.getState().modules;
-    let expected = {
+    const expected = {
       ...mockData.updatedModule.data,
       problems: [],
       lessons: [],

@@ -4,11 +4,11 @@ import {
   requestFirstProblemFromModule,
   requestLesson,
   requestProblem,
+  requestModulesAndProblems,
 } from "../CodeEditor/CodeEditorSlice";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { EmptyState } from "../CodeEditor/CodeEditorContainer/EmptyState";
 import { adminPathRegex, colors } from "../../shared/constants";
@@ -62,19 +62,19 @@ const PlaygroundContainer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (params && params["problemId"]) {
+    if (params && params.problemId) {
       setContentType("problem");
       dispatch(
         requestProblem({
-          problemId: params["problemId"],
+          problemId: params.problemId,
           isAdmin: adminPathRegex.test(locationState.pathname),
         })
       );
-    } else if (params && params["lessonId"]) {
+    } else if (params && params.lessonId) {
       setContentType("lesson");
       dispatch(
         requestLesson({
-          lessonId: params["lessonId"],
+          lessonId: params.lessonId,
         })
       );
     }
@@ -85,14 +85,14 @@ const PlaygroundContainer = () => {
   useEffect(() => {
     if (
       location &&
-      location["moduleName"] !== undefined &&
+      location.moduleName !== undefined &&
       navigation &&
       navigation.length > 0
     ) {
       dispatch(
         requestFirstProblemFromModule({
           navigation,
-          moduleName: location["moduleName"],
+          moduleName: location.moduleName,
           isAdmin: adminPathRegex.test(locationState.pathname),
         })
       );
