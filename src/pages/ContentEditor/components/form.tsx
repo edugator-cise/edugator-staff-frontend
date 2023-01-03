@@ -58,13 +58,13 @@ export const RegistrationForm = ({
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
-    let pageJsonData: ExportData = {
+    const pageJsonData: ExportData = {
       title: "",
       author: "",
       content: [],
       editableContent: {},
     };
-    let contentArr: any[] = [];
+    const contentArr: any[] = [];
     pageJsonData.title = JSON.stringify(title, undefined, 2);
     pageJsonData.author = JSON.stringify(author, undefined, 2);
     jsonData.forEach((content: any) => {

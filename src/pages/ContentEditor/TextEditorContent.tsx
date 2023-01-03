@@ -72,8 +72,8 @@ const TextEditorContent = ({
   };
 
   const onTrigger = () => {
-    let atomicEntities = getEntities(editorState);
-    let rawData = convertToRaw(editorState.getCurrentContent());
+    const atomicEntities = getEntities(editorState);
+    const rawData = convertToRaw(editorState.getCurrentContent());
     //let html = html;
 
     // console.log("Callback Data", atomicEntities, html);
@@ -123,7 +123,7 @@ const TextEditorContent = ({
     console.log("RAW STATE");
     console.log(convertToRaw(editorState.getCurrentContent()));
 
-    let html = draftToHtml(
+    const html = draftToHtml(
       convertToRaw(editorState.getCurrentContent()),
       {},
       false,

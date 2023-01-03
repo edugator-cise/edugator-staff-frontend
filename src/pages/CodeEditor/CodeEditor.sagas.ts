@@ -7,6 +7,7 @@ import {
   take,
   fork,
 } from "redux-saga/effects";
+import { Buffer } from "buffer";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
   requestModulesAndProblems,

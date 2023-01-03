@@ -26,8 +26,8 @@ export const TextStack = () => {
   };
 
   const updateExportData = () => {
-    let splitHtml = html.split("<atomic_entity />");
-    let rawData = [{ html: splitHtml[0], type: "text" }];
+    const splitHtml = html.split("<atomic_entity />");
+    const rawData = [{ html: splitHtml[0], type: "text" }];
     if (atomicEntities !== undefined)
       atomicEntities.forEach((entity: any, i: number) => {
         rawData.push(entity);
