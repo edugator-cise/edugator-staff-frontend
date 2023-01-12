@@ -29,7 +29,7 @@ import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Link, useLocation } from "react-router-dom";
+// import { Link, useLocation } from "react-router-dom";
 import { Routes } from "../shared/Routes.constants";
 import { adminPathRegex } from "../shared/constants";
 
@@ -40,7 +40,7 @@ interface Props {
 }
 
 function VerticalNavigation(props: Props) {
-  const location = useLocation();
+  // const location = useLocation();
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const [openProjects, setOpenProjects] = useState<any>(null);
   const [openModules, setOpenModules] = useState<any>(null);
@@ -161,7 +161,7 @@ function VerticalNavigation(props: Props) {
       }}
     >
       {!props.codingPage && (
-        <Link to={"/"}>
+        <>
           <Avatar
             alt="Example Alt"
             style={{
@@ -172,7 +172,7 @@ function VerticalNavigation(props: Props) {
             }}
             src={props.light ? DarkModeLogo : DefaultLogo}
           />
-        </Link>
+          </>
       )}
       <Typography variant="h5" component="h1"></Typography>
 
@@ -210,23 +210,25 @@ function VerticalNavigation(props: Props) {
                 >
                   {item.subitems.map((subitem, i) => {
                     return (
-                      <Link
-                        key={i}
-                        to={{
-                          pathname: adminPathRegex.test(location.pathname)
-                            ? Routes.AdminCode
-                            : Routes.Code,
-                          state: { moduleName: subitem.title },
-                        }}
-                        style={{
-                          textDecoration: "none",
-                          color: "inherit",
-                        }}
-                      >
+                      // <Link
+                      //   key={i}
+                      //   to={{
+                      //     pathname: adminPathRegex.test(location.pathname)
+                      //       ? Routes.AdminCode
+                      //       : Routes.Code,
+                      //     state: { moduleName: subitem.title },
+                      //   }}
+                      //   style={{
+                      //     textDecoration: "none",
+                      //     color: "inherit",
+                      //   }}
+                      // >
+                      <>
                         <MenuItem key={i} onClick={() => item.anchorSet(null)}>
                           {subitem.title}
                         </MenuItem>
-                      </Link>
+                      </>
+                      // </Link>
                     );
                   })}
                 </Menu>
@@ -292,7 +294,7 @@ function VerticalNavigation(props: Props) {
                         {menu.subitems.map((subitem, i) => {
                           return (
                             <List key={i} component="div" disablePadding>
-                              <Link
+                              {/* <Link
                                 to={{
                                   pathname: adminPathRegex.test(
                                     location.pathname
@@ -305,11 +307,13 @@ function VerticalNavigation(props: Props) {
                                   textDecoration: "none",
                                   color: "inherit",
                                 }}
-                              >
+                              > */}
+                              {/* <> */}
                                 <ListItemButton sx={{ pl: 6 }}>
                                   <ListItemText secondary={subitem.title} />
                                 </ListItemButton>
-                              </Link>
+                              {/* </> */}
+                              {/* </Link> */}
                             </List>
                           );
                         })}

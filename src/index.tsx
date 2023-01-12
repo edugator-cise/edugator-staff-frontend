@@ -5,10 +5,10 @@ import App from "./App";
 import store from "./app/common/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
-import { createBrowserHistory } from "history";
+import { createBrowserHistory, createHashHistory } from "history";
 import { Router } from "react-router";
 
-const history = createBrowserHistory();
+const history = process.env.REACT_APP_GHPAGES === 'true' ? createHashHistory() : createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>

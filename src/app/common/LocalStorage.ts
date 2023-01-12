@@ -7,7 +7,10 @@ export class LocalStorage {
   /** Returns the current value associated with the token,
    * or null if the token does not exist. */
   static getToken(): string | null {
-    return localStorage.getItem(this.jwtToken);
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(this.jwtToken);
+    }
+    return null;
   }
 
   /**
