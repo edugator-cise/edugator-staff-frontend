@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { setRunCodeError } from "./CodeEditorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/common/store";

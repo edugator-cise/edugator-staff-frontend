@@ -1,11 +1,10 @@
 import { Typography, Fade, Grow, Slide, Button } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import CodingPage from "../../assets/CodingPage.png";
 import theme from "../../shared/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Link } from "react-router-dom";
-import { Routes } from "../../shared/Routes.constants";
+// import { Link } from "react-router-dom";
+// import { Routes } from "../../shared/Routes.constants";
 
 const Holder = styled("div")({
   height: 800,
@@ -98,13 +97,13 @@ function LandingHome() {
               their programming skills.
             </Typography>
             <ButtonHolder>
-              <Link
+              {/* <Link
                 to={{
                   pathname: Routes.Code,
                   state: { moduleName: undefined },
                 }}
                 style={{ color: "inherit", textDecoration: "inherit" }}
-              >
+              > */}
                 <Button
                   variant="contained"
                   color="primary"
@@ -113,7 +112,7 @@ function LandingHome() {
                 >
                   Start Coding
                 </Button>
-              </Link>
+              {/* </Link> */}
               <Button variant="outlined" color="primary" size="large">
                 Learn
               </Button>
@@ -128,7 +127,7 @@ function LandingHome() {
           timeout={{ enter: 1000 }}
         >
           <img
-            src={CodingPage}
+            src={'/CodingPage.png'}
             alt="Edugator Coding Page"
             style={
               md

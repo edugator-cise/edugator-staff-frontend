@@ -3,10 +3,6 @@ import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
 //eslint-disable-next-line
-import FeaturesBG from "../../assets/FeaturesBG.svg";
-import Diamond from "../../assets/icons8-diamond-100.png";
-import FlipChart from "../../assets/icons8-flip-chart-100.png";
-import Glasses from "../../assets/icons8-glasses-100.png";
 import FeatureCard from "./FeatureCard";
 
 const Holder = styled("div")({
@@ -19,7 +15,7 @@ const Holder = styled("div")({
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center center",
   WebkitBackgroundSize: "cover",
-  backgroundImage: `url(${FeaturesBG})`, //obtained from https://bgjar.com/simple-shiny
+  backgroundImage: `url(/FeaturesBG.svg)`, //obtained from https://bgjar.com/simple-shiny
   backgroundSize: "13em",
   paddingTop: 170,
   [theme.breakpoints.up("xl")]: {
@@ -35,19 +31,19 @@ function LandingFeatures() {
   const features = [
     {
       title: "Built for students",
-      img: Glasses,
+      img: "/icons8-glasses-100.png",
       description:
         "Edugator is built to make your life easier. Modules, sample problems, documentation, and more!",
     },
     {
       title: "Designed to be modern",
-      img: Diamond,
+      img: "/icons8-diamond-100.png",
       description:
         "Designed with the latest design trends in mind. Edugator feels modern, minimal, and beautiful.",
     },
     {
       title: "Lessons for everything",
-      img: FlipChart,
+      img: "/icons8-flip-chart-100.png",
       description:
         "We’ve written extensive documentation for what you need to know for COP3530.",
     },

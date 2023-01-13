@@ -2,18 +2,6 @@ import { Typography, Button, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
-import SortingGif from "../../assets/icons8-alphabetical-sorting.gif";
-import SortingStatic from "../../assets/icons8-alphabetical-sorting-100.png";
-import HeapGif from "../../assets/icons8-expand-arrow.gif";
-import HeapStatic from "../../assets/icons8-expand-arrow-100.png";
-import LinkedGif from "../../assets/icons8-link.gif";
-import LinkedStatic from "../../assets/icons8-link-100.png";
-import StackGif from "../../assets/icons8-menu.gif";
-import StackStatic from "../../assets/icons8-menu-100.png";
-import RecursiveGif from "../../assets/icons8-replay.gif";
-import RecursiveStatic from "../../assets/icons8-replay-100.png";
-import MapGif from "../../assets/icons8-thumbnail-view.gif";
-import MapStatic from "../../assets/icons8-thumbnail-view-100.png";
 import TopicCard from "./TopicCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -48,38 +36,38 @@ function LandingTopics() {
     {
       name: "Sorting",
       description: "Sort through arrays and vectors with different conditions",
-      staticImg: SortingStatic,
-      animatedImg: SortingGif,
+      staticImg: '/icons8-alphabetical-sorting-100.png',
+      animatedImg: '/icons8-alphabetical-sorting.gif',
     },
     {
       name: "Linked Lists",
       description: "Connected data sets in node format",
-      staticImg: LinkedStatic,
-      animatedImg: LinkedGif,
+      staticImg: "/icons8-link-100.png",
+      animatedImg: "/icons8-link.gif",
     },
     {
       name: "Stacks and Queues",
       description: "An intro about stacks and queues",
-      staticImg: StackStatic,
-      animatedImg: StackGif,
+      staticImg: "/icons8-menu-100.png",
+      animatedImg: "/icons8-menu.gif",
     },
     {
       name: "Heaps",
       description: "Fundamentals of min and max heap and priority queue",
-      staticImg: HeapStatic,
-      animatedImg: HeapGif,
+      staticImg: "/icons8-expand-arrow-100.png",
+      animatedImg: "/icons8-expand-arrow.gif",
     },
     {
       name: "Sets and Maps",
       description: "Module on understanding the type of sets and maps",
-      staticImg: MapStatic,
-      animatedImg: MapGif,
+      staticImg: "/icons8-thumbnail-view-100.png",
+      animatedImg: "/icons8-thumbnail-view.gif",
     },
     {
       name: "Recursion",
       description: "Everything recursive happens recursively",
-      staticImg: RecursiveStatic,
-      animatedImg: RecursiveGif,
+      staticImg: "/icons8-replay-100.png",
+      animatedImg: "/icons8-replay.gif",
     },
   ];
 

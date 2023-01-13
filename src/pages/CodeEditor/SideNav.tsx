@@ -11,7 +11,7 @@ import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { adminPathRegex, colors } from "../../shared/constants";
-import { useHistory, useLocation } from "react-router";
+// import { useHistory, useLocation } from "react-router";
 import { Routes } from "../../shared/Routes.constants";
 import { BookOpen, Code } from "phosphor-react";
 
@@ -32,12 +32,10 @@ const CustomListItemButton = styled(ListItemButton)(
 );
 
 export const Sidenav = ({ isHidden }: SidenavProps) => {
-  const location = useLocation();
   const dispatch = useDispatch();
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
   );
-  const history = useHistory();
   const [menu, setMenu] = useState<ClickedMenu>({});
 
   const handleClick = (item: string) => {
@@ -108,15 +106,16 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                       dispatch(
                         requestProblem({
                           problemId: problemItem._id,
-                          isAdmin: adminPathRegex.test(location.pathname),
+                          isAdmin: false
+                          // isAdmin: adminPathRegex.test(location.pathname),
                         })
                       );
                       const baseRoute = adminPathRegex.test(location.pathname)
                         ? Routes.AdminCode
                         : Routes.Code;
-                      history.replace({
-                        pathname: baseRoute + `/${problemItem._id}`,
-                      });
+                      // history.replace({
+                      //   pathname: baseRoute + `/${problemItem._id}`,
+                      // });
                     }}
                   >
                     <ListItemText
@@ -146,9 +145,9 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                       })
                     );
                     const baseRoute = Routes.Learn;
-                    history.replace({
-                      pathname: baseRoute + `/${lessonItem._id}`,
-                    });
+                    // history.replace({
+                    //   pathname: baseRoute + `/${lessonItem._id}`,
+                    // });
                   }}
                 >
                   <ListItemText

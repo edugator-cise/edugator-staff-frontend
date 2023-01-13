@@ -5,8 +5,9 @@ import LandingHome from "../src/pages/LandingPage/LandingHome";
 import LandingTopics from "../src/pages/LandingPage/LandingTopics";
 import { IModuleBase } from "../src/shared/types";
 import VerticalNavigation from "../src/shared/VerticalNavigation";
+import '../styles/App.module.css'
 
-function LandingPage({modules}: InferGetStaticPropsType<typeof getStaticProps>) {
+function LandingPage({modules}: InferGetStaticPropsType<typeof getServerSideProps>) {
   return (
     <>
       <VerticalNavigation light modules={modules.map(value => value.name)}></VerticalNavigation>
@@ -17,7 +18,7 @@ function LandingPage({modules}: InferGetStaticPropsType<typeof getStaticProps>) 
   )
 }
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   const { data }: { data: IModuleBase[]} = await apiClient.get("v1/module");
   const sortedModules = data.sort(
     (valueA, valueB) => valueA.number - valueB.number

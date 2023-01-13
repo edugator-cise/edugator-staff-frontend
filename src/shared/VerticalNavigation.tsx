@@ -24,14 +24,12 @@ import ModulesIcon from "@mui/icons-material/AccountTree";
 import ProjectsIcon from "@mui/icons-material/BorderColor";
 import LearnIcon from "@mui/icons-material/Book";
 import ScheduleIcon from "@mui/icons-material/CalendarToday";
-import DefaultLogo from "../assets/DefaultLogo.svg";
-import DarkModeLogo from "../assets/DarkModeLogo.svg";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 // import { Link, useLocation } from "react-router-dom";
-import { Routes } from "../shared/Routes.constants";
-import { adminPathRegex } from "../shared/constants";
+// import { Routes } from "../shared/Routes.constants";
+// import { adminPathRegex } from "../shared/constants";
 
 interface Props {
   light: boolean;
@@ -170,7 +168,7 @@ function VerticalNavigation(props: Props) {
               height: 46,
               padding: 5,
             }}
-            src={props.light ? DarkModeLogo : DefaultLogo}
+            src={props.light ? '/DarkModeLogo.svg' : '/DefaultLogo.svg'}
           />
           </>
       )}
@@ -223,11 +221,9 @@ function VerticalNavigation(props: Props) {
                       //     color: "inherit",
                       //   }}
                       // >
-                      <>
                         <MenuItem key={i} onClick={() => item.anchorSet(null)}>
                           {subitem.title}
                         </MenuItem>
-                      </>
                       // </Link>
                     );
                   })}
