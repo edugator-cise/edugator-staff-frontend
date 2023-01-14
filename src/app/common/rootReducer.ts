@@ -6,7 +6,6 @@ import { loginSlice } from "../../pages/Login/LoginPage.slice";
 import moduleReducer from "../../pages/modules/ModulesPage.slice";
 import gradingReducer from "../../pages/grading/GradingDialog.slice";
 import accountManagerReducer from "../../pages/accounts/AdminAccountsPage.slice";
-import landingPageReducer from "../../pages/LandingPage/LandingPageSlice";
 /* import slices of state here */
 
 /* Place the object keys for state here followed by the reducer taken from that slice
@@ -20,7 +19,6 @@ const rootReducer = combineReducers({
   problemEditorContainer: problemEditorContainerReducer,
   contentEditorPage: contentEditorReducer,
   codeEditor: codeEditorReducer,
-  landingPage: landingPageReducer,
 });
 
 export default rootReducer;

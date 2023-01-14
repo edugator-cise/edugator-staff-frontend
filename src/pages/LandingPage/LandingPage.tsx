@@ -1,23 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import VerticalNavigation from "../../shared/VerticalNavigation";
 import LandingHome from "./LandingHome";
 import LandingFeatures from "./LandingFeatures";
 import LandingTopics from "./LandingTopics";
 import Footer from "../../shared/Footer";
 import { Grid, Box, CircularProgress } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
-import { requestModules } from "./LandingPageSlice";
+import apiClient from "../../app/common/apiClient";
+import { IModuleBase } from "../../shared/types";
 
 function LandingPage() {
-  const dispatch = useDispatch();
-  const isLoading = useSelector(
-    (state: RootState) => state.landingPage.isLoading
-  );
-  const modules = useSelector((state: RootState) => state.landingPage.modules);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [modules, setModules] = useState<string[]>([]);
   useEffect(() => {
-    dispatch(requestModules());
-  }, [dispatch]);
+    const fetchData = async () => {
+      const { data }: { data: IModuleBase[] } = await apiClient.get(
+        "v1/module"
+      );
+      const sortedModules = data.sort(
+        (valuaA, valubeB) => valuaA.number - valubeB.number
+      );
+      return sortedModules.map((value) => value.name);
+    };
+
+    fetchData()
+      .then((values) => {
+        setModules(values);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+      });
+  }, []);
 
   if (isLoading) {
     return (
