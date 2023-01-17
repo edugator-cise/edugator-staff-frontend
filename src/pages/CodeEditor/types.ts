@@ -53,7 +53,6 @@ export interface IJudge0Response {
 }
 
 type IModuleBaseWithID = IModuleBase & { _id: string };
-
 type IProblemMetaWithID = { _id: string; title: string };
 type ILessonMetaWithID = { _id: string; title: string };
 

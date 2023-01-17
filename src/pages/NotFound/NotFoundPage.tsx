@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Card, CardActions, CardMedia, Stack } from "@mui/material";
 import EdugatorNotFound from "../../assets/EdugatorNotFound.png";
 import { useHistory } from "react-router-dom";
