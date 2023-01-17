@@ -5,34 +5,19 @@ import LandingFeatures from "./LandingFeatures";
 import LandingTopics from "./LandingTopics";
 import Footer from "../../shared/Footer";
 import { Grid, Box, CircularProgress } from "@mui/material";
-import apiClient from "../../app/common/apiClient";
 import { IModuleBase } from "../../shared/types";
+import { FetchStatus, useFetch } from "../../hooks/useFetch";
 
 function LandingPage() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [modules, setModules] = useState<string[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data }: { data: IModuleBase[] } = await apiClient.get(
-        "v1/module"
-      );
-      const sortedModules = data.sort(
-        (valuaA, valubeB) => valuaA.number - valubeB.number
-      );
-      return sortedModules.map((value) => value.name);
-    };
+  const { status, data } = useFetch<IModuleBase[]>("v1/module");
+  const modules =
+    data === undefined
+      ? []
+      : data
+          .sort((valueA, valueB) => valueA.number - valueB.number)
+          .map((value) => value.name);
 
-    fetchData()
-      .then((values) => {
-        setModules(values);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        setIsLoading(false);
-      });
-  }, []);
-
-  if (isLoading) {
+  if (status === FetchStatus.loading) {
     return (
       <Grid
         container
