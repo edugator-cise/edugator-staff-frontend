@@ -3,8 +3,8 @@ import React from "react";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
-// import { Link } from "react-router-dom";
-// import { Routes } from "../../shared/Routes.constants";
+import { NextRoutes } from "../../shared/Routes.constants";
+import Link from "next/link";
 
 const Holder = styled("div")({
   height: 800,
@@ -97,13 +97,7 @@ function LandingHome() {
               their programming skills.
             </Typography>
             <ButtonHolder>
-              {/* <Link
-                to={{
-                  pathname: Routes.Code,
-                  state: { moduleName: undefined },
-                }}
-                style={{ color: "inherit", textDecoration: "inherit" }}
-              > */}
+              <Link href={NextRoutes.Code}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -112,7 +106,7 @@ function LandingHome() {
                 >
                   Start Coding
                 </Button>
-              {/* </Link> */}
+              </Link>
               <Button variant="outlined" color="primary" size="large">
                 Learn
               </Button>
@@ -127,7 +121,7 @@ function LandingHome() {
           timeout={{ enter: 1000 }}
         >
           <img
-            src={'/CodingPage.png'}
+            src={"/CodingPage.png"}
             alt="Edugator Coding Page"
             style={
               md

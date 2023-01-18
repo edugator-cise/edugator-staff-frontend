@@ -1,5 +1,5 @@
 import { all } from "redux-saga/effects";
-import codeEditorsaga from "../../pages/CodeEditor/CodeEditor.sagas";
+import codeEditorsaga from "components/CodeEditor/CodeEditor.sagas";
 import loginSaga from "../../pages/Login/LoginPage.sagas";
 import modulesSaga from "../../pages/modules/ModulesPage.sagas";
 import gradingSaga from "../../pages/grading/GradingDialog.sagas";

@@ -7,7 +7,7 @@ import { styled } from "@mui/material/styles";
 import { setActiveTab, setStdin } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../app/common/store";
+import { RootState } from "src/app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";

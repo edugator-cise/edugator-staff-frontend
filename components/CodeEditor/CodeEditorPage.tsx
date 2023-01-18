@@ -1,6 +1,6 @@
 import { setRunCodeError } from "./CodeEditorSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
+import { RootState } from "src/app/common/store";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "./CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "./CodeEditorContainer/CodeEditorView";

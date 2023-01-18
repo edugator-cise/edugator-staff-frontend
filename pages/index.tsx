@@ -5,25 +5,20 @@ import LandingHome from "../src/pages/LandingPage/LandingHome";
 import LandingTopics from "../src/pages/LandingPage/LandingTopics";
 import { IModuleBase } from "../src/shared/types";
 import VerticalNavigation from "../src/shared/VerticalNavigation";
-import { ThemeProvider, StyledEngineProvider } from "@mui/system";
-import theme from "src/shared/theme";
-import "../styles/App.module.css";
 
 function LandingPage({
   modules,
 }: InferGetStaticPropsType<typeof getServerSideProps>) {
   return (
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <VerticalNavigation
-          light
-          modules={modules.map((value) => value.name)}
-        ></VerticalNavigation>
-        <LandingHome />
-        <LandingFeatures />
-        <LandingTopics />
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <>
+      <VerticalNavigation
+        light
+        modules={modules.map((value) => value.name)}
+      ></VerticalNavigation>
+      <LandingHome />
+      <LandingFeatures />
+      <LandingTopics />
+    </>
   );
 }
 

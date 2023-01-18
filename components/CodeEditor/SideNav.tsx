@@ -6,14 +6,15 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
+import { RootState } from "src/app/common/store";
 import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
-import { adminPathRegex, colors } from "../../shared/constants";
+import { adminPathRegex, colors } from "src/shared/constants";
 // import { useHistory, useLocation } from "react-router";
-import { Routes } from "../../shared/Routes.constants";
+import { Routes } from "src/shared/Routes.constants";
 import { BookOpen, Code } from "phosphor-react";
+import Link from "next/link";
 
 interface ClickedMenu {
   [key: string]: boolean;
@@ -99,39 +100,43 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
             <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
               {value.problems.map(
                 (problemItem: IProblemItem, index: number) => (
-                  <CustomListItemButton
-                    sx={{ pl: 4 }}
-                    key={problemItem.problemName + "_" + indexVal + "_" + index}
-                    onClick={() => {
-                      dispatch(
-                        requestProblem({
-                          problemId: problemItem._id,
-                          isAdmin: false
-                          // isAdmin: adminPathRegex.test(location.pathname),
-                        })
-                      );
-                      const baseRoute = adminPathRegex.test(location.pathname)
-                        ? Routes.AdminCode
-                        : Routes.Code;
-                      // history.replace({
-                      //   pathname: baseRoute + `/${problemItem._id}`,
-                      // });
-                    }}
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        sx: { fontSize: "0.8rem" },
+                  <Link href={`/code/${problemItem._id}`} key={problemItem._id}>
+                    <CustomListItemButton
+                      sx={{ pl: 4 }}
+                      key={
+                        problemItem.problemName + "_" + indexVal + "_" + index
+                      }
+                      onClick={() => {
+                        dispatch(
+                          requestProblem({
+                            problemId: problemItem._id,
+                            isAdmin: false,
+                            // isAdmin: adminPathRegex.test(location.pathname),
+                          })
+                        );
+                        const baseRoute = adminPathRegex.test(location.pathname)
+                          ? Routes.AdminCode
+                          : Routes.Code;
+                        // history.replace({
+                        //   pathname: baseRoute + `/${problemItem._id}`,
+                        // });
                       }}
-                      primary={`${indexVal + 1}.${index + 1} ${
-                        problemItem.problemName
-                      }`}
-                    />
-                    <Code
-                      weight="regular"
-                      size={16}
-                      color={colors.navIconGray}
-                    />
-                  </CustomListItemButton>
+                    >
+                      <ListItemText
+                        primaryTypographyProps={{
+                          sx: { fontSize: "0.8rem" },
+                        }}
+                        primary={`${indexVal + 1}.${index + 1} ${
+                          problemItem.problemName
+                        }`}
+                      />
+                      <Code
+                        weight="regular"
+                        size={16}
+                        color={colors.navIconGray}
+                      />
+                    </CustomListItemButton>
+                  </Link>
                 )
               )}
               {value.lessons?.map((lessonItem: ILessonItem, index: number) => (

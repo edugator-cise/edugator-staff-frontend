@@ -30,7 +30,7 @@ import {
   setIsLoadingLesson,
   setCurrentLesson,
 } from "./CodeEditorSlice";
-import apiClient from "../../app/common/apiClient";
+import apiClient from "src/app/common/apiClient";
 import {
   INavigationItem,
   IResultSubmission,
@@ -40,7 +40,7 @@ import {
   ModuleProblemRequest,
   IModuleWithProblemsAndLessons,
 } from "./types";
-import { ILesson, IProblem } from "../../shared/types";
+import { ILesson, IProblem } from "src/shared/types";
 const judge0Validator = ({ data }: { data: IJudge0Response }): boolean => {
   return data.status.id >= 3;
 };

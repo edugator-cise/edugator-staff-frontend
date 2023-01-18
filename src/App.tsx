@@ -9,7 +9,7 @@ import { PrivateRoute } from "./shared/PrivateRoute";
 import { ModulesPage } from "./pages/modules/ModulesPage";
 import { ProblemEditorPage } from "./pages/ProblemEditor/ProblemEditorPage";
 import { ContentEditorPage } from "./pages/ContentEditor/ContentEditorPage";
-import { CodeEditorPage } from "./pages/CodeEditor/CodeEditorPage";
+import { CodeEditorPage } from "components/CodeEditor/CodeEditorPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import { AdminAccountsPage } from "./pages/accounts/AdminAccountsPage";
 import { NotFoundPage } from "./pages/NotFound/NotFoundPage";

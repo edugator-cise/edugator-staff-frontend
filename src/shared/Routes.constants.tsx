@@ -22,3 +22,7 @@ export enum Routes {
   TermsOfUse = "/termsofuse",
   Playground = "/playground",
 }
+
+export enum NextRoutes {
+  Code = "/code",
+}
