@@ -8,6 +8,7 @@ import { ThemeProvider, StyledEngineProvider } from "@mui/system";
 import "styles/App.module.css";
 import "styles/App.css";
 import "styles/index.css";
+import "styles/learnStyles.css";
 import { useEffect } from "react";
 
 type Page<P = {}> = NextPage<P> & {

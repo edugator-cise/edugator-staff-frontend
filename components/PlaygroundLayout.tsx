@@ -34,10 +34,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 
   const router = useRouter();
 
-  // const params = useParams<ProblemEditorURL>();
-  // const locationState = useLocation<ProblemLocationState>();
-  // const location = locationState.state;
-
   const params = router.query;
   const locationState = router.asPath;
   const location = router.pathname;
@@ -64,27 +60,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
       })
     );
   }, [dispatch]);
-  /* 
-  useEffect(() => {
-    if (params && params.problemId) {
-      setContentType("problem");
-      dispatch(
-        requestProblem({
-          problemId: params.problemId,
-          isAdmin: adminPathRegex.test(locationState.pathname),
-        })
-      );
-    } else if (params && params.lessonId) {
-      setContentType("lesson");
-      dispatch(
-        requestLesson({
-          lessonId: params.lessonId,
-        })
-      );
-    }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [params]); */
 
   useEffect(() => {
     if (

@@ -140,35 +140,37 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                 )
               )}
               {value.lessons?.map((lessonItem: ILessonItem, index: number) => (
-                <CustomListItemButton
-                  sx={{ pl: 4 }}
-                  key={lessonItem.lessonName + "_" + indexVal + "_" + index}
-                  onClick={() => {
-                    dispatch(
-                      requestLesson({
-                        lessonId: lessonItem._id,
-                      })
-                    );
-                    const baseRoute = Routes.Learn;
-                    // history.replace({
-                    //   pathname: baseRoute + `/${lessonItem._id}`,
-                    // });
-                  }}
-                >
-                  <ListItemText
-                    primaryTypographyProps={{
-                      sx: { fontSize: "0.8rem" },
+                <Link href={`/learn/${lessonItem._id}`} key={lessonItem._id}>
+                  <CustomListItemButton
+                    sx={{ pl: 4 }}
+                    key={lessonItem.lessonName + "_" + indexVal + "_" + index}
+                    onClick={() => {
+                      dispatch(
+                        requestLesson({
+                          lessonId: lessonItem._id,
+                        })
+                      );
+                      const baseRoute = Routes.Learn;
+                      // history.replace({
+                      //   pathname: baseRoute + `/${lessonItem._id}`,
+                      // });
                     }}
-                    primary={`${indexVal + 1}.${index + 1} ${
-                      lessonItem.lessonName
-                    }`}
-                  />
-                  <BookOpen
-                    weight="regular"
-                    size={16}
-                    color={colors.navIconGray}
-                  />
-                </CustomListItemButton>
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        sx: { fontSize: "0.8rem" },
+                      }}
+                      primary={`${indexVal + 1}.${index + 1} ${
+                        lessonItem.lessonName
+                      }`}
+                    />
+                    <BookOpen
+                      weight="regular"
+                      size={16}
+                      color={colors.navIconGray}
+                    />
+                  </CustomListItemButton>
+                </Link>
               ))}
             </List>
           </Collapse>
