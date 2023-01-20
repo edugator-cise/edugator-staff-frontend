@@ -1,3 +1,4 @@
+import React from 'react';
 import { InferGetStaticPropsType } from "next";
 import apiClient from "../src/app/common/apiClient";
 import LandingFeatures from "../src/pages/LandingPage/LandingFeatures";

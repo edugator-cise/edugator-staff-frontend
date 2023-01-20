@@ -35,8 +35,8 @@ export const LayoutContainer = ({
   children,
   actionButtons = [],
 }: Props) => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+  // const dispatch = useDispatch();
+  // const history = useHistory();
   return (
     <Box minHeight="100vh" display="flex" flexDirection="column">
       <AppBar position="static">
@@ -51,9 +51,9 @@ export const LayoutContainer = ({
               color="secondary"
               variant="contained"
               onClick={() => {
-                dispatch(requestLogout());
-                dispatch(closeAlert());
-                history.push(Routes.Login);
+                // dispatch(requestLogout());
+                // dispatch(closeAlert());
+                // history.push(Routes.Login);
               }}
             >
               Logout
