@@ -13,6 +13,8 @@ import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/Input
 import { EmptyState } from "components/CodeEditor/CodeEditorContainer/EmptyState";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import { useFetchProblem } from "hooks/useFetchProblem";
+import { FetchStatus } from "hooks/types";
 
 export default function CodeEditor() {
   const dispatch = useDispatch();
@@ -20,32 +22,19 @@ export default function CodeEditor() {
   const params = router.query;
   const locationState = router.asPath;
 
-  const currentProblem = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.codeEditor.runCodeError
-  );
-  const isLoadingProblem = useSelector(
-    (state: RootState) => state.codeEditor.isLoadingProblem
-  );
-
-  useEffect(() => {
-    if (params && params.problemId) {
-      dispatch(
-        requestProblem({
-          problemId: params.problemId as string,
-          isAdmin: adminPathRegex.test(locationState),
-        })
-      );
-    }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [params]);
+  const {
+    status,
+    problem: currentProblem,
+    stdin,
+    error,
+  } = useFetchProblem({
+    id: params && params.problemId ? (params.problemId as string) : "",
+    isAdmin: adminPathRegex.test(locationState),
+  });
 
   return (
     <>
-      {errorMessage.hasError && (
+      {error && (
         <Grow in timeout={500}>
           <Alert
             severity="error"
@@ -63,13 +52,20 @@ export default function CodeEditor() {
               dispatch(setRunCodeError({ hasError: false, errorMessage: "" }));
             }}
           >
-            {errorMessage.errorMessage}
+            {error.message}
           </Alert>
         </Grow>
       )}
-      {isLoadingProblem ? (
+      {status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
-          <Box>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <CircularProgress />
           </Box>
         </Grid>
@@ -89,10 +85,12 @@ export default function CodeEditor() {
                 <CodeEditorView
                   code={currentProblem.code.body}
                   templatePackage={currentProblem.templatePackage}
+                  currentProblem={currentProblem}
+                  stdin={stdin}
                 />
               </Allotment.Pane>
               <Allotment.Pane minSize={100}>
-                <InputOutputView />
+                <InputOutputView stdin={stdin} />
               </Allotment.Pane>
             </Allotment>
           </Allotment.Pane>

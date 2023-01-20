@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import TopicLink from "./TopicLink";
 // import { Link } from "react-router-dom";
-import LightModeLogo from "../assets/LightModeLogo.svg";
+import LightModeLogo from "src/assets/LightModeLogo.svg";
 import theme from "./theme";
 import {
   Stack,
@@ -87,7 +87,7 @@ function TopicSidebar({ isHidden, setIsHidden }: SidebarProps) {
       >
         <a href={"/"}>
           <Avatar
-            src={LightModeLogo}
+            src={LightModeLogo.src}
             sx={{ height: 41, width: 45, padding: 10 }}
           />
         </a>

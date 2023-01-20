@@ -34,13 +34,12 @@ const CodeHolder = styled("div")(
 `
 );
 
-export const InputOutputView = () => {
+export const InputOutputView = ({ stdin }: { stdin: string }) => {
   const dispatch = useDispatch();
 
   const activeTab = useSelector(
     (state: RootState) => state.codeEditor.activeTab
   );
-  const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
   const compileOutput = useSelector(
     (state: RootState) => state.codeEditor.compilerOutput
   );
