@@ -13,6 +13,7 @@ import { colors } from "src/shared/constants";
 // import { useTheme } from "@mui/material/styles";
 import theme from "src/shared/theme";
 import { IProblem } from "src/shared/types";
+import { handleDownload, parseFile } from "utils/CodeEditorUtils";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -80,6 +81,7 @@ export const CodeEditorView = ({
     (state: RootState) => state.codeEditor.navStructure
   );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
@@ -90,65 +92,12 @@ export const CodeEditorView = ({
     editorRef.current = editor;
   };
 
-  const generateFileName = () => {
-    let currentModuleNumber = -1;
-    let currentProblemNumber = -1;
-    let foundProblem = false;
-    for (let i = 0; i < navStructure.length; i++) {
-      for (let j = 0; j < navStructure[i].problems.length; j++) {
-        if (navStructure[i].problems[j]._id === problemId) {
-          foundProblem = true;
-          currentModuleNumber = i;
-          currentProblemNumber = j;
-          break;
-        }
-      }
-      if (foundProblem) {
-        break;
-      }
-    }
-    if (!foundProblem) {
-      return "edugator-code.cpp";
-    }
-    return `cop3530_${currentModuleNumber + 1}_${
-      currentProblemNumber + 1
-    }${fileType}`;
-  };
-  const handleDownload = () => {
-    const blob = new Blob([currentCode]);
-    const blobURL = URL.createObjectURL(blob);
-    const filename = generateFileName();
-    // Create a new link
-    const anchor = document.createElement("a");
-    anchor.href = blobURL;
-    anchor.download = filename;
-    // Append to the DOM
-    document.body.appendChild(anchor);
-    // Trigger `click` event
-    anchor.click();
-    // Remove element from DOM
-    document.body.removeChild(anchor);
-  };
-
   const handleReset = () => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
     }
   };
 
-  const parseFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const reader = new FileReader();
-    if (event.target && event.target.files) {
-      reader.readAsText(event.target.files[0]);
-      reader.onload = async (event) => {
-        const text = event.target?.result;
-        if (editorRef.current) {
-          editorRef.current.setValue(text as string);
-        }
-      };
-    }
-  };
   const handleChooseFile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -193,7 +142,7 @@ export const CodeEditorView = ({
               style={{ display: "none" }}
               ref={hiddenFileInput}
               type="file"
-              onChange={(e) => parseFile(e)}
+              onChange={(e) => parseFile(e, editorRef)}
             />
             <Tooltip title="Choose File" placement="top">
               <IconButton onClick={(e) => handleChooseFile(e)}>
@@ -201,7 +150,16 @@ export const CodeEditorView = ({
               </IconButton>
             </Tooltip>
             <Tooltip title="Download Submission" placement="top">
-              <IconButton onClick={handleDownload}>
+              <IconButton
+                onClick={() => {
+                  handleDownload(
+                    currentCode,
+                    navStructure,
+                    problemId,
+                    fileType
+                  );
+                }}
+              >
                 <GetApp />
               </IconButton>
             </Tooltip>
