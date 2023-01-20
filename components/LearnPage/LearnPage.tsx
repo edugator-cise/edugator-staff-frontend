@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/common/store";
+import { RootState } from "src/app/common/store";
 import { styled } from "@mui/styles";
-import theme from "../../shared/theme";
+import theme from "src/shared/theme";
 import { setLessonLoadError } from "../CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { Node, Markup } from "interweave";

@@ -8,10 +8,10 @@ import {
   Button,
 } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { requestLogout } from "../pages/Login/LoginPage.slice";
-import { closeAlert } from "../pages/modules/ModulesPage.slice";
+// import { useDispatch } from "react-redux";
+// import { useHistory } from "react-router";
+// import { requestLogout } from "../pages/Login/LoginPage.slice";
+// import { closeAlert } from "../pages/modules/ModulesPage.slice";
 import { Routes } from "../shared/Routes.constants";
 
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";

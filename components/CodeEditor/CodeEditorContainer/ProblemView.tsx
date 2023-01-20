@@ -1,5 +1,5 @@
 import React from "react";
-import { Markdown } from "../../../shared/Markdown";
+import { Markdown } from "src/shared/Markdown";
 import { Typography, Grow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 

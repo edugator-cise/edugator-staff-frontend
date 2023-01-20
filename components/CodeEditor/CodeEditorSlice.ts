@@ -7,7 +7,7 @@ import {
   ICompilerOutput,
   ErrorObject,
 } from "./types";
-import { ILesson, IProblem } from "../../shared/types";
+import { ILesson, IProblem } from "src/shared/types";
 export interface CodeEditorContainerState {
   currentProblem: IProblem | undefined;
   currentLesson: ILesson | undefined;

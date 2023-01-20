@@ -6,12 +6,12 @@ import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { requestRunCode, submitCode } from "../CodeEditorSlice";
-import { RootState } from "../../../app/common/store";
+import { RootState } from "src/app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { colors } from "../../../shared/constants";
+import { colors } from "src/shared/constants";
 // import { useTheme } from "@mui/material/styles";
-import theme from "../../../shared/theme";
+import theme from "src/shared/theme";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(

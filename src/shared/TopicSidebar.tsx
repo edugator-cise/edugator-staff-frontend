@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import TopicLink from "./TopicLink";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import LightModeLogo from "../assets/LightModeLogo.svg";
 import theme from "./theme";
 import {
@@ -85,21 +85,21 @@ function TopicSidebar({ isHidden, setIsHidden }: SidebarProps) {
           marginBottom: 1,
         }}
       >
-        <Link to={"/"}>
+        <a href={"/"}>
           <Avatar
             src={LightModeLogo}
             sx={{ height: 41, width: 45, padding: 10 }}
           />
-        </Link>
+        </a>
       </Box>
-      <Link to={"/"}>
+      <a href={"/"}>
         <TopicLink
           name="Home"
           active={false}
           icon={<House weight="fill" size={24} />}
           link=""
         />
-      </Link>
+      </a>
       <div
         onClick={() => {
           setIsHidden(!isHidden);
