@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { colors } from "src/shared/constants";
 // import { useTheme } from "@mui/material/styles";
 import theme from "src/shared/theme";
+import { IProblem } from "src/shared/types";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -50,33 +51,33 @@ const CodeHolder = styled("div")({
 interface CodeEditorProps {
   code: string;
   templatePackage: string;
+  currentProblem: IProblem;
+  stdin: string;
 }
 
-export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
+export const CodeEditorView = ({
+  code,
+  templatePackage,
+  currentProblem,
+  stdin,
+}: CodeEditorProps) => {
   const dispatch = useDispatch();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
   const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
   );
-  const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
-  const problemId = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?._id
-  );
-  const fileType = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.fileExtension
-  );
+
+  const {
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+    _id: problemId,
+    fileExtension: fileType,
+  } = currentProblem;
+
   const navStructure = useSelector(
     (state: RootState) => state.codeEditor.navStructure
-  );
-  const { timeLimit, memoryLimit, buildCommand } = useSelector(
-    (state: RootState) => {
-      return {
-        timeLimit: state.codeEditor.currentProblem?.timeLimit,
-        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
-        buildCommand: state.codeEditor.currentProblem?.buildCommand,
-      };
-    }
   );
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
