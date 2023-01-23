@@ -1,13 +1,11 @@
-import React from "react";
 import { Field, Form, Formik } from "formik";
-// import { RootState } from "../../../src/app/common/store";
-// import { useDispatch, useSelector } from "react-redux";
-import { FormTextField } from "../../../src/shared/FormTextField";
-// import { requestLogin, resetErrorMessage } from "../../../src/pages/Login/LoginPage.slice";
-import { LayoutContainer } from "../../../src/shared/LayoutContainer";
-import { LocalStorage } from "../../../src/app/common/LocalStorage";
-import { Routes } from "../../../src/shared/Routes.constants";
-import { IRequestLoginAction } from "../../../src/pages/Login/types";
+import { ReactNode } from "react";
+import { RootState } from "src/app/common/store";
+import { FormTextField } from "src/shared/FormTextField";
+import { LayoutContainer } from "src/shared/LayoutContainer";
+import { LocalStorage } from "src/app/common/LocalStorage";
+import { Routes } from "src/shared/Routes.constants";
+import { ILoginSuccess, IRequestLoginAction } from "src/pages/Login/types";
 import {
   Alert,
   Button,
@@ -18,6 +16,12 @@ import {
   Stack,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { AdminLayout } from "components/AdminLayout";
+import { baseAPIURL } from "src/shared/constants";
+import { AxiosResponse } from "axios";
+import apiClient from "src/app/common/apiClient";
+import { useDispatch, useSelector } from "react-redux";
+import { receiveLoginFailure, resetErrorMessage, receiveLoginSuccess } from "src/pages/Login/LoginPage.slice";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
 const LoginForm = styled(Form)(
@@ -42,8 +46,8 @@ const LoginFormCard = styled(Card)(({ theme }) => ({
 }));
 
 export function LoginPage(): React.ReactElement | Response {
-  // const dispatch = useDispatch();
-  // const authState = useSelector((state: RootState) => state.login);
+  const dispatch = useDispatch();
+  const authState = useSelector((state: RootState) => state.login);
   
   return LocalStorage.getToken() ? (
     new Response("", {
@@ -52,9 +56,9 @@ export function LoginPage(): React.ReactElement | Response {
         Location: Routes.Modules
       }
     })
-  ) : (<LayoutContainer pageTitle="Admin Login">
+  ) : (
   <Stack justifyContent="center" alignItems="center">
-    {/* {authState.isLoading && <CircularProgress />}
+    {authState.isLoading && <CircularProgress />}
     {authState.errorMessage && (
       <Alert
         severity="error"
@@ -64,11 +68,19 @@ export function LoginPage(): React.ReactElement | Response {
       >
         {authState.errorMessage}
       </Alert>
-    )} */}
+    )}
     <Formik
       initialValues={{ username: "", password: "" }}
-      onSubmit={(values: IRequestLoginAction) => {
-        // dispatch(requestLogin(values));
+      onSubmit={async (values: IRequestLoginAction) => {
+        try {
+          const url = `${baseAPIURL}v1/auth/login`;
+          const { data }: AxiosResponse<ILoginSuccess> = await apiClient.post(url, values);
+          dispatch(receiveLoginSuccess(data));
+        } catch (e) {
+          LocalStorage.checkUnauthorized(e);
+          dispatch(receiveLoginFailure("The username or password is incorrect. Please try again."
+          ));
+        }
       }}
     >
       {() => (
@@ -114,8 +126,11 @@ export function LoginPage(): React.ReactElement | Response {
       )}
     </Formik>
   </Stack>
-</LayoutContainer>
 );
 }
 
 export default LoginPage;
+
+LoginPage.getLayout = function getLayout(page: ReactNode) {
+  return <AdminLayout pageTitle="Admin Login">{page}</AdminLayout>
+}

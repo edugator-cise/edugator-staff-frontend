@@ -8,12 +8,11 @@ import {
   Button,
 } from "@mui/material";
 import React from "react";
+import { NextRoutes } from "src/shared/Routes.constants";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
-import { requestLogout } from "../pages/Login/LoginPage.slice";
-import { closeAlert } from "../pages/modules/ModulesPage.slice";
-import { Routes } from "../shared/Routes.constants";
-
+import { LocalStorage } from "src/app/common/LocalStorage";
+import { closeAlert } from "src/pages/modules/ModulesPage.slice";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -26,17 +25,19 @@ export interface ButtonProps {
 
 interface Props {
   pageTitle: string;
-  children: JSX.Element;
+  children: React.ReactNode;
   actionButtons?: ButtonProps[];
 }
 
-export const LayoutContainer = ({
+export const AdminLayout = ({
   pageTitle,
   children,
   actionButtons = [],
 }: Props) => {
-  // const dispatch = useDispatch();
-  // const history = useHistory();
+  const router = useRouter();
+  const pathName = router.pathname;
+
+  const dispatch = useDispatch();
   return (
     <Box minHeight="100vh" display="flex" flexDirection="column">
       <AppBar position="static">
@@ -45,15 +46,15 @@ export const LayoutContainer = ({
             EDUGATOR
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          {history.location.pathname !== Routes.Login.toString() && (
+          { pathName !== NextRoutes.Login && (
             <Button
               size="large"
               color="secondary"
               variant="contained"
               onClick={() => {
-                // dispatch(requestLogout());
-                // dispatch(closeAlert());
-                // history.push(Routes.Login);
+                LocalStorage.removeToken();
+                dispatch(closeAlert());
+                router.push(NextRoutes.Login);
               }}
             >
               Logout

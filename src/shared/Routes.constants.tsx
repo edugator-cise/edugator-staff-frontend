@@ -25,4 +25,5 @@ export enum Routes {
 
 export enum NextRoutes {
   Code = "/code",
+  Login = "/admin/login",
 }
