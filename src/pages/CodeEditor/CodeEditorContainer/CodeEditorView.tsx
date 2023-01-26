@@ -90,15 +90,15 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   };
 
   const generateFileName = () => {
-    let currentModuleNumber = -1;
-    let currentProblemNumber = -1;
+    let currentProblemName = "";
     let foundProblem = false;
     for (let i = 0; i < navStructure.length; i++) {
       for (let j = 0; j < navStructure[i].problems.length; j++) {
         if (navStructure[i].problems[j]._id === problemId) {
           foundProblem = true;
-          currentModuleNumber = i;
-          currentProblemNumber = j;
+          currentProblemName = navStructure[i].problems[j].problemName
+            .replace(" ", "_")
+            .toLowerCase();
           break;
         }
       }
@@ -109,9 +109,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     if (!foundProblem) {
       return "edugator-code.cpp";
     }
-    return `cop3530_${currentModuleNumber + 1}_${
-      currentProblemNumber + 1
-    }${fileType}`;
+    return `cop3530_${currentProblemName}${fileType}`;
   };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
