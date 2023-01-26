@@ -92,11 +92,11 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const generateFileName = () => {
     let currentProblemName = "";
     let foundProblem = false;
-    for (let i = 0; i < navStructure.length; i++) {
-      for (let j = 0; j < navStructure[i].problems.length; j++) {
-        if (navStructure[i].problems[j]._id === problemId) {
+    for (const module of navStructure) {
+      for (const problem of module.problems) {
+        if (problem._id === problemId) {
           foundProblem = true;
-          currentProblemName = navStructure[i].problems[j].problemName
+          currentProblemName = problem.problemName
             .replace(" ", "_")
             .toLowerCase();
           break;
