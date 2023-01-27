@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { adminPathRegex } from "src/shared/constants";
+import { adminPathRegex } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";

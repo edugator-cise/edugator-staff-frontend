@@ -2,13 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import store from "./app/common/store";
+import store from "../lib/store/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { createBrowserHistory, createHashHistory } from "history";
 import { Router } from "react-router";
 
-const history = process.env.REACT_APP_GHPAGES === 'true' ? createHashHistory() : createBrowserHistory();
+const history =
+  process.env.REACT_APP_GHPAGES === "true"
+    ? createHashHistory()
+    : createBrowserHistory();
 
 ReactDOM.render(
   <React.StrictMode>

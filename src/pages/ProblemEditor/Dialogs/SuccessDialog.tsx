@@ -1,8 +1,8 @@
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router";
-import { useAppSelector } from "../../../app/common/hooks";
-import { Routes } from "../../../shared/Routes.constants";
+import { useAppSelector } from "../../../../lib/store/hooks";
+import { Routes } from "constants/navigationRoutes";
 
 interface Props {}
 

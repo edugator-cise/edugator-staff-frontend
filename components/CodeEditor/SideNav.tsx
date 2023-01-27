@@ -7,7 +7,7 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
-import { adminPathRegex, colors } from "src/shared/constants";
+import { adminPathRegex, colors } from "constants/config";
 // import { useHistory, useLocation } from "react-router";
 import { BookOpen, Code } from "phosphor-react";
 import Link from "next/link";

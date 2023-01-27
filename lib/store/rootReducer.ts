@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import problemEditorContainerReducer from "../../pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
+import problemEditorContainerReducer from "../../src/pages/ProblemEditor/ProblemEditorContainer/problemEditorContainerSlice";
 import codeEditorReducer from "components/CodeEditor/CodeEditorSlice";
-import contentEditorReducer from "../../pages/ContentEditor/contentEditorPageSlice";
-import { loginSlice } from "../../pages/Login/LoginPage.slice";
-import moduleReducer from "../../pages/modules/ModulesPage.slice";
-import gradingReducer from "../../pages/grading/GradingDialog.slice";
-import accountManagerReducer from "../../pages/accounts/AdminAccountsPage.slice";
+import contentEditorReducer from "../../src/pages/ContentEditor/contentEditorPageSlice";
+import { loginSlice } from "../../src/pages/Login/LoginPage.slice";
+import moduleReducer from "../../src/pages/modules/ModulesPage.slice";
+import gradingReducer from "../../src/pages/grading/GradingDialog.slice";
+import accountManagerReducer from "../../src/pages/accounts/AdminAccountsPage.slice";
 /* import slices of state here */
 
 /* Place the object keys for state here followed by the reducer taken from that slice

@@ -1,9 +1,9 @@
 import { Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import theme from "./theme";
+import theme from "constants/theme";
 import { Link } from "react-router-dom";
-import { Routes } from "./Routes.constants";
+import { Routes } from "constants/navigationRoutes";
 
 const FooterHolder = styled("div")({
   width: "100%",

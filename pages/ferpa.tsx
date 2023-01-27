@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import VerticalNavigation from "../../shared/VerticalNavigation";
-import { RootState } from "../../app/common/store";
-import { adminPathRegex } from "../../shared/constants";
+import VerticalNavigation from "components/shared/VerticalNavigation";
 import { styled } from "@mui/styles";
-import theme from "../../shared/theme";
+import theme from "constants/theme";
 import { Typography } from "@mui/material";
-import Footer from "../../shared/Footer";
+import Footer from "components/shared/Footer";
 
 interface ProblemLocationState {
   moduleName?: string;

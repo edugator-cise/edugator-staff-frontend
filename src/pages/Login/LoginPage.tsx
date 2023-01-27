@@ -1,11 +1,11 @@
 import { Field, Form, Formik } from "formik";
-import { RootState } from "../../app/common/store";
+import { RootState } from "../../../lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "../../shared/FormTextField";
 import { requestLogin, resetErrorMessage } from "./LoginPage.slice";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { LocalStorage } from "../../app/common/LocalStorage";
-import { Routes } from "../../shared/Routes.constants";
+import { LocalStorage } from "../../../lib/auth/LocalStorage";
+import { Routes } from "constants/navigationRoutes";
 import { IRequestLoginAction } from "./types";
 import { Redirect } from "react-router";
 import {

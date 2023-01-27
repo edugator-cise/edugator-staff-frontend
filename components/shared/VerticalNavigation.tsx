@@ -25,17 +25,14 @@ import ProjectsIcon from "@mui/icons-material/BorderColor";
 import LearnIcon from "@mui/icons-material/Book";
 import ScheduleIcon from "@mui/icons-material/CalendarToday";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import theme from "./theme";
+import theme from "constants/theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { NextRoutes } from "./Routes.constants";
+import { NextRoutes } from "constants/navigationRoutes";
 import useModules from "hooks/useModules";
 import { FetchStatus } from "hooks/types";
-// import { Link, useLocation } from "react-router-dom";
-// import { Routes } from "../shared/Routes.constants";
-// import { adminPathRegex } from "../shared/constants";
 
 interface Props {
   light: boolean;

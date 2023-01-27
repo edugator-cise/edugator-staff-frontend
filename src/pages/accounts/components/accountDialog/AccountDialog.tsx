@@ -9,7 +9,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useAppSelector, useAppDispatch } from "../../../../app/common/hooks";
+import { useAppSelector, useAppDispatch } from "../../../../../lib/store/hooks";
 import { requestModifyAccount } from "../../AdminAccountsPage.slice";
 import { AccountEditForm, AccountInfo, AdminActions } from "../";
 import Dialog from "../../../../shared/GenericDialog";

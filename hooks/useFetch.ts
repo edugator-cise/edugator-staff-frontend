@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 
 export enum FetchStatus {
   loading,

@@ -10,7 +10,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
 import { setSelectedAccount } from "../AdminAccountsPage.slice";
 import { rolesEnum } from "../types";
 

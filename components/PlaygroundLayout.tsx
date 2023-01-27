@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Sidenav } from "components/CodeEditor/SideNav";
-import VerticalNavigation from "src/shared/VerticalNavigation";
+import VerticalNavigation from "components/shared/VerticalNavigation";
 import { Box } from "@mui/material";
-import { colors } from "src/shared/constants";
+import { colors } from "constants/config";
 import "allotment/dist/style.css";
 import TopicSidebar from "src/shared/TopicSidebar";
 import { useRouter } from "next/router";

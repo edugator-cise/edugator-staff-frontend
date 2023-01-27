@@ -1,6 +1,6 @@
 import { apiRoutes } from "constants/apiRoutes";
 import { useEffect, useState } from "react";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 import { FetchStatus, Service } from "./types";
 
 interface Module {

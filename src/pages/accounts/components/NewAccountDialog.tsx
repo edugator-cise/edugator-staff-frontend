@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
 import { requestNewAccount } from "../AdminAccountsPage.slice";
-import { useAppDispatch } from "../../../app/common/hooks";
+import { useAppDispatch } from "../../../../lib/store/hooks";
 import { INewAccount, rolesEnum } from "../types";
 import Dialog from "../../../shared/GenericDialog";
 import { isBlank } from "../../../shared/utils";

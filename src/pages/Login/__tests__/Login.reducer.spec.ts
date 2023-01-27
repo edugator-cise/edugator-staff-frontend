@@ -1,4 +1,4 @@
-import store from "../../../app/common/store";
+import store from "../../../../lib/store/store";
 import { rolesEnum } from "../../accounts/types";
 import {
   receiveLoginFailure,

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 import {
   evaluateCompilerBody,
   judge0Validator,

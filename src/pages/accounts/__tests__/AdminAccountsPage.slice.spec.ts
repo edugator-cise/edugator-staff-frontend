@@ -1,5 +1,5 @@
-import store from "../../../app/common/store";
-import adminAPI from "../../../app/common/apiClient";
+import store from "../../../../lib/store/store";
+import adminAPI from "../../../../lib/api/apiClient";
 import {
   resetState,
   requestAccounts,

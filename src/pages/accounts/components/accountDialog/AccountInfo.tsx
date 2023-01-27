@@ -7,7 +7,7 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppSelector, useAppDispatch } from "../../../../app/common/hooks";
+import { useAppSelector, useAppDispatch } from "../../../../../lib/store/hooks";
 import { AlertType, IFeedback } from "../../../../shared/types";
 import { setAlert } from "../../AdminAccountsPage.slice";
 

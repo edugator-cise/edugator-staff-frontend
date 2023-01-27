@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import TopicLink from "./TopicLink";
 // import { Link } from "react-router-dom";
 import LightModeLogo from "src/assets/LightModeLogo.svg";
-import theme from "./theme";
+import theme from "constants/theme";
 import {
   Stack,
   TreeStructure,

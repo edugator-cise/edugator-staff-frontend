@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import theme from "src/shared/theme";
+import theme from "constants/theme";
 import { CheckCircle, XCircle } from "phosphor-react";
 
 const QuestionHolder = styled.div((props: any) => ({

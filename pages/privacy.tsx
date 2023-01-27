@@ -1,9 +1,8 @@
-import React from "react";
-import VerticalNavigation from "../../shared/VerticalNavigation";
+import VerticalNavigation from "components/shared/VerticalNavigation";
 import { styled } from "@mui/styles";
-import theme from "../../shared/theme";
+import theme from "constants/theme";
 import { Typography } from "@mui/material";
-import Footer from "../../shared/Footer";
+import Footer from "components/shared/Footer";
 
 interface ProblemLocationState {
   moduleName?: string;

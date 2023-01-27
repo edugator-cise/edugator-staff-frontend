@@ -1,7 +1,7 @@
 import { Typography, Button, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import theme from "src/shared/theme";
+import theme from "constants/theme";
 import TopicCard from "./TopicCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 

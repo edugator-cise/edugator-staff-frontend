@@ -3,7 +3,7 @@ import {
   INavigationItem,
 } from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 import { createNavStructure } from "utils/CodeEditorUtils";
 import { FetchStatus } from "./types";
 import { useDispatch } from "react-redux";

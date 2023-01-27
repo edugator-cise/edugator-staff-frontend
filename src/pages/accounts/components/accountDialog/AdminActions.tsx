@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../lib/store/hooks";
 import { IAccount, rolesEnum } from "../../types";
 import {
   requestDeleteAccount,

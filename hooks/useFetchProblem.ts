@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 import { useDispatch, useSelector } from "react-redux";
 import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { FetchStatus } from "./types";

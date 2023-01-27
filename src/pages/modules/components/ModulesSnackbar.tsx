@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Snackbar, Alert } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
 import { closeAlert } from "../ModulesPage.slice";
 
 export function ModulesSnackbar() {

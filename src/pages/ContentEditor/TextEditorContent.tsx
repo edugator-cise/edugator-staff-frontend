@@ -12,7 +12,7 @@ import "./TextEditorStyles.css";
 import { toolbarIcons } from "./ToolbarIcons";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MultipleChoiceModal } from "./components/MultipleChoiceOption";
-import { useAppSelector } from "../../app/common/hooks";
+import { useAppSelector } from "../../../lib/store/hooks";
 import draftToHtml from "draftjs-to-html";
 import {
   TextHOne,

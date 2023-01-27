@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "@mui/styles";
-import theme from "src/shared/theme";
+import theme from "constants/theme";
 import { setLessonLoadError } from "components/CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { Node, Markup } from "interweave";

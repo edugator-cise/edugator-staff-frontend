@@ -1,6 +1,6 @@
 import axios from "axios";
-import { baseAPIURL, unauthorizedErrorMessage } from "../../shared/constants";
-import { LocalStorage } from "./LocalStorage";
+import { baseAPIURL, unauthorizedErrorMessage } from "constants/config";
+import { LocalStorage } from "lib/auth/LocalStorage";
 
 const apiClient = axios.create({
   baseURL: baseAPIURL,

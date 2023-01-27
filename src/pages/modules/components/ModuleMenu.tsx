@@ -2,7 +2,7 @@ import React from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material/";
 import { IAdminModule } from "../types";
-import { useAppDispatch } from "../../../app/common/hooks";
+import { useAppDispatch } from "../../../../lib/store/hooks";
 import { openEditDialog } from "../ModulesPage.slice";
 
 interface MenuProps {

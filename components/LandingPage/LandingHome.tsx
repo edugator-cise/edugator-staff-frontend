@@ -1,9 +1,9 @@
 import { Typography, Fade, Grow, Slide, Button } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import theme from "src/shared/theme";
+import theme from "constants/theme";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { NextRoutes } from "src/shared/Routes.constants";
+import { NextRoutes } from "constants/navigationRoutes";
 import Link from "next/link";
 
 const Holder = styled("div")({
