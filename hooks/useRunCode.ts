@@ -90,7 +90,6 @@ export const useRunCode = () => {
         4
       );
       const resultData: IJudge0Response = result.data;
-      console.log(resultData);
 
       setIsSubmissionRunning(false);
       setIsAcceptedOutput(resultData.status.id === 3);
