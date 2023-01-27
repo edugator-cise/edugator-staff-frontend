@@ -1,7 +1,7 @@
 import { Button, Box } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector } from "../../../../lib/store/hooks";
 import {
   incrementActiveStep,
   decrementActiveStep,

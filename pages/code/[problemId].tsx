@@ -1,9 +1,7 @@
-import React, { useEffect, ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/app/common/store";
-import { requestProblem } from "components/CodeEditor/CodeEditorSlice";
-import { adminPathRegex } from "src/shared/constants";
+import { useDispatch } from "react-redux";
+import { adminPathRegex } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
@@ -15,6 +13,7 @@ import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { useFetchProblem } from "hooks/useFetchProblem";
 import { FetchStatus } from "hooks/types";
+import { useRunCode } from "hooks/useRunCode";
 
 export default function CodeEditor() {
   const dispatch = useDispatch();
@@ -22,15 +21,34 @@ export default function CodeEditor() {
   const params = router.query;
   const locationState = router.asPath;
 
+  const [stdin, setStdin] = useState<string>("");
+
+  const {
+    compilerOutput,
+    isAcceptedOutput,
+    runCode,
+    isSubmissionRunning,
+    submissionOutput,
+    submitCode,
+    activeTab,
+    setActiveTab,
+  } = useRunCode(locationState);
+
   const {
     status,
     problem: currentProblem,
-    stdin,
+    stdin: defaultStdin,
     error,
   } = useFetchProblem({
     id: params && params.problemId ? (params.problemId as string) : "",
     isAdmin: adminPathRegex.test(locationState),
   });
+
+  useEffect(() => {
+    if (defaultStdin) {
+      setStdin(defaultStdin);
+    }
+  }, [defaultStdin]);
 
   return (
     <>
@@ -83,6 +101,9 @@ export default function CodeEditor() {
             <Allotment vertical snap={false}>
               <Allotment.Pane minSize={100}>
                 <CodeEditorView
+                  isSubmissionRunning={isSubmissionRunning}
+                  runCode={runCode}
+                  submitCode={submitCode}
                   code={currentProblem.code.body}
                   templatePackage={currentProblem.templatePackage}
                   currentProblem={currentProblem}
@@ -90,7 +111,15 @@ export default function CodeEditor() {
                 />
               </Allotment.Pane>
               <Allotment.Pane minSize={100}>
-                <InputOutputView stdin={stdin} />
+                <InputOutputView
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  submissionOutput={submissionOutput}
+                  stdin={stdin}
+                  setStdin={setStdin}
+                  compilerOutput={compilerOutput}
+                  isAcceptedOutput={isAcceptedOutput}
+                />
               </Allotment.Pane>
             </Allotment>
           </Allotment.Pane>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocalStorage } from "../../app/common/LocalStorage";
+import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { rolesEnum } from "../accounts/types";
 import { IAuthState, IRequestLoginAction, ILoginSuccess } from "./types";
 

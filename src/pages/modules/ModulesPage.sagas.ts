@@ -16,7 +16,7 @@ import {
   requestDeleteModuleFailure,
   closeDialog,
 } from "./ModulesPage.slice";
-import adminAPI from "../../app/common/apiClient";
+import adminAPI from "../../../lib/api/apiClient";
 import { IModuleBase, IRequestMessage } from "../../shared/types";
 import { IAdminModule } from "./types";
 

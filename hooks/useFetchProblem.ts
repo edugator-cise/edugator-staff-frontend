@@ -1,40 +1,12 @@
-/* 
-function* requestProblemSaga(
-  action: PayloadAction<{ problemId: string; isAdmin: boolean }>
-) {
-  const id: string = action.payload.problemId;
-  try {
-    const { data }: { data: IProblem } = yield call(async () => {
-      if (action.payload.isAdmin) {
-        return apiClient.get(`v1/admin/problem/${id}`);
-      }
-      return apiClient.get(`v1/student/problem/${id}`);
-    });
-    yield put(setCurrentProblem(data));
-    if (data.testCases.length > 0) {
-      yield put(setStdin(data.testCases[0].input));
-    }
-  } catch (e) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
-    yield put(setRunningSubmission(false));
-  }
-} */
-
-// convert above snippet into a custom hook
-
 import { useEffect, useState } from "react";
-import apiClient from "src/app/common/apiClient";
+import apiClient from "lib/api/apiClient";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setStdin,
-  setCurrentProblem,
-  setRunCodeError,
-  setRunningSubmission,
-} from "components/CodeEditor/CodeEditorSlice";
+import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { FetchStatus } from "./types";
 import { IProblem } from "src/shared/types";
+import { apiRoutes } from "constants/apiRoutes";
 
-export const useFetchProblem = <T>({
+export const useFetchProblem = ({
   id,
   isAdmin,
 }: {
@@ -50,7 +22,9 @@ export const useFetchProblem = <T>({
   useEffect(() => {
     const fetchData = async () => {
       const { data }: { data: IProblem } = await apiClient.get(
-        isAdmin ? `v1/admin/problem/${id}` : `v1/student/problem/${id}`
+        isAdmin
+          ? apiRoutes.admin.getProblem(id)
+          : apiRoutes.student.getProblem(id)
       );
       return data;
     };
@@ -64,7 +38,7 @@ export const useFetchProblem = <T>({
       })
       .catch((e) => {
         dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
-        dispatch(setRunningSubmission(false));
+        // dispatch(setRunningSubmission(false)); TODO: handle this, should we move this to global state?
         setStatus(FetchStatus.failed);
         setError(e);
       });

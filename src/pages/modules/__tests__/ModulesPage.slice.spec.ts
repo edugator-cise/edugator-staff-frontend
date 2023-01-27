@@ -1,4 +1,4 @@
-import store from "../../../app/common/store";
+import store from "../../../../lib/store/store";
 import { IModuleState, IAdminModule } from "../types";
 import {
   getBaseModuleState,
@@ -8,7 +8,7 @@ import {
   requestDeleteModule,
   clearState,
 } from "../ModulesPage.slice";
-import adminAPI from "../../../app/common/apiClient";
+import adminAPI from "../../../../lib/api/apiClient";
 
 const dispatch = store.dispatch;
 let modulesState: IModuleState;

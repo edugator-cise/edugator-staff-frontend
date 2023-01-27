@@ -1,7 +1,7 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
 import { closeAlert } from "../AdminAccountsPage.slice";
 
 const ManagerAlert = styled(Alert)({

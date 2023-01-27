@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { ProblemEditorContainer } from "./ProblemEditorContainer/ProblemEditorContainer";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { useAppSelector } from "../../app/common/hooks";
+import { useAppSelector } from "../../../lib/store/hooks";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {

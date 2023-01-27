@@ -8,7 +8,7 @@ import {
 import { Field, FieldProps, Form, Formik } from "formik";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector } from "../../../../lib/store/hooks";
 import {
   MetadataFields,
   updateMetadata,

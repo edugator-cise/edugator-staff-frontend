@@ -1,7 +1,7 @@
 import React from "react";
 import { LayoutContainer } from "../../shared/LayoutContainer";
 import { Fade, Stack, duration, Container } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
 import { useHistory } from "react-router-dom";
 import {
   requestAccounts,
@@ -14,7 +14,7 @@ import {
   DashboardProgress,
   AccountSnackbar,
 } from "./components";
-import { Routes } from "../../shared/Routes.constants";
+import { Routes } from "constants/navigationRoutes";
 
 export function AdminAccountsPage() {
   const history = useHistory();

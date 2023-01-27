@@ -1,7 +1,7 @@
 import React from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { useAppDispatch, useAppSelector } from "../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
 import {
   Modules,
   ModuleDialog,
@@ -10,7 +10,7 @@ import {
 } from "./components";
 import { GradingDialog } from "../grading/components/GradingDialog";
 import { requestModules, openCreateDialog } from "./ModulesPage.slice";
-import { Routes } from "../../shared/Routes.constants";
+import { Routes } from "constants/navigationRoutes";
 import { IAdminModule, NullModule } from "./types";
 import { IProblemBase } from "../../shared/types";
 import { rolesEnum } from "../accounts/types";

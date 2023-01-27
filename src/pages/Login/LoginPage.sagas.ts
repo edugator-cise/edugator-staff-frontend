@@ -1,13 +1,13 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { baseAPIURL } from "../../shared/constants";
-import { LocalStorage } from "../../app/common/LocalStorage";
+import { baseAPIURL } from "constants/config";
+import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import {
   requestLogin,
   receiveLoginFailure,
   receiveLoginSuccess,
 } from "./LoginPage.slice";
-import apiClient from "../../app/common/apiClient";
+import apiClient from "../../../lib/api/apiClient";
 import { IRequestLoginAction, ILoginSuccess } from "./types";
 import { AxiosResponse } from "axios";
 

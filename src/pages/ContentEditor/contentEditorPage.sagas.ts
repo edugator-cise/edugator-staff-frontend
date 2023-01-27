@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { RootState } from "../../app/common/store";
+import { RootState } from "../../../lib/store/store";
 import { INewLesson, ILesson } from "../../shared/types";
 import {
   requestAddContent,
@@ -15,7 +15,7 @@ import {
   requestUpdateContentFailure,
   requestUpdateContentSuccess,
 } from "./contentEditorPageSlice";
-import apiClient from "../../app/common/apiClient";
+import apiClient from "../../../lib/api/apiClient";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 

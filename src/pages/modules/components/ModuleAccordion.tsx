@@ -8,14 +8,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
-import { useAppSelector } from "../../../app/common/hooks";
-import { Routes } from "../../../shared/Routes.constants";
+import { useAppSelector } from "../../../../lib/store/hooks";
+import { Routes } from "constants/navigationRoutes";
 import { IProblemBase } from "../../../shared/types";
 import { IAdminModule } from "../types";
 import { useHistory } from "react-router-dom";
 import { ModuleMenu } from "./";
 import { BookOpen, Code } from "phosphor-react";
-import { colors } from "../../../shared/constants";
+import { colors } from "constants/config";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",

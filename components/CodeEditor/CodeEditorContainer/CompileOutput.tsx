@@ -2,8 +2,8 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import theme from "src/shared/theme";
-import { colors } from "src/shared/constants";
+import theme from "constants/theme";
+import { colors } from "constants/config";
 
 const CompileOutputContainer = styled("div")(
   ({ theme }) => `

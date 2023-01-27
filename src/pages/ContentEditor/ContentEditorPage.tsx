@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { TextStack } from "./TextStack";
 import { useLocation, useParams, useHistory } from "react-router-dom";
 import { LayoutContainer } from "../../shared/LayoutContainer";
-import { Routes } from "../../shared/Routes.constants";
-import { useAppSelector } from "../../app/common/hooks";
+import { Routes } from "constants/navigationRoutes";
+import { useAppSelector } from "../../../lib/store/hooks";
 import { useDispatch } from "react-redux";
 import {
   openWarningModal,

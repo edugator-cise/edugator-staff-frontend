@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Alert, AlertTitle, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppDispatch } from "../../../app/common/hooks";
+import { useAppDispatch } from "../../../../lib/store/hooks";
 import { requestDeleteModule } from "../ModulesPage.slice";
 import Dialog from "../../../shared/GenericDialog";
 import { IAdminModule } from "../types";

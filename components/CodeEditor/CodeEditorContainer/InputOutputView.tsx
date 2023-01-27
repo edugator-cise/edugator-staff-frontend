@@ -4,13 +4,12 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import { styled } from "@mui/material/styles";
-import { setActiveTab, setStdin } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
+import { CompilerOutput } from "hooks/types";
+import { IResultSubmission } from "../types";
 const TabBar = styled("div")(
   () => `
   display: flex;
@@ -34,30 +33,32 @@ const CodeHolder = styled("div")(
 `
 );
 
-export const InputOutputView = ({ stdin }: { stdin: string }) => {
-  const dispatch = useDispatch();
-
-  const activeTab = useSelector(
-    (state: RootState) => state.codeEditor.activeTab
-  );
-  const compileOutput = useSelector(
-    (state: RootState) => state.codeEditor.compilerOutput
-  );
-  const submissionOutput = useSelector(
-    (state: RootState) => state.codeEditor.submissionOutput
-  );
-  const isAcceptedOutput = useSelector(
-    (state: RootState) => state.codeEditor.isAcceptedOutput
-  );
+export const InputOutputView = ({
+  stdin,
+  setStdin,
+  compilerOutput,
+  isAcceptedOutput,
+  submissionOutput,
+  activeTab,
+  setActiveTab,
+}: {
+  stdin: string;
+  setStdin: (stdin: string) => void;
+  compilerOutput: CompilerOutput;
+  isAcceptedOutput: boolean | undefined;
+  submissionOutput: IResultSubmission[] | undefined;
+  activeTab: number;
+  setActiveTab: (activeTab: number) => void;
+}) => {
   const handleChange = (event: any, newValue: number) => {
-    dispatch(setActiveTab(newValue));
+    setActiveTab(newValue);
   };
 
   const handleStdinChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     event.preventDefault();
-    dispatch(setStdin(event.target.value));
+    setStdin(event.target.value);
   };
 
   return (
@@ -118,8 +119,8 @@ export const InputOutputView = ({ stdin }: { stdin: string }) => {
             <>
               <CompileOutput
                 accepted={isAcceptedOutput}
-                compileBody={compileOutput.compilerBody}
-                compileMessage={compileOutput.compilerMessage}
+                compileBody={compilerOutput?.compilerBody}
+                compileMessage={compilerOutput?.compilerMessage}
               />
             </>
           ) : (

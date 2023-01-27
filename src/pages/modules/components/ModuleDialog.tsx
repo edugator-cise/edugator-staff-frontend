@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, Typography, TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DialogStatus, NullModule } from "../types";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
 import {
   requestNewModule,
   requestModifyModule,

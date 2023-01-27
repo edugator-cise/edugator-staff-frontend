@@ -2,7 +2,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 import { Icon, Stack, Button, ButtonProps, Typography } from "@mui/material";
 import { IFeedback, AlertType } from "../../../shared/types";
-import { useAppDispatch } from "../../../app/common/hooks";
+import { useAppDispatch } from "../../../../lib/store/hooks";
 import { setFeedback } from "../GradingDialog.slice";
 
 interface DropAreaButtonProps extends ButtonProps {

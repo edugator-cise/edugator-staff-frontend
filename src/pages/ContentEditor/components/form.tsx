@@ -5,7 +5,7 @@ import {
   updateContentEditor,
   updateMetadata,
 } from "../contentEditorPageSlice";
-import { useAppSelector } from "../../../app/common/hooks";
+import { useAppSelector } from "../../../../lib/store/hooks";
 import { useDispatch } from "react-redux";
 import "./FormStyles.css";
 

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IFeedback, AlertType, IProblemBase } from "../../../shared/types";
-import { useAppDispatch, useAppSelector } from "../../../app/common/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
 import { GradingDropArea } from "./GradingDropArea";
 import Dialog from "../../../shared/GenericDialog";
 import {

@@ -1,12 +1,8 @@
-import React, { useState, useEffect, ReactNode } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/app/common/store";
+import React, { ReactNode } from "react";
+import { useDispatch } from "react-redux";
 import { styled } from "@mui/styles";
-import theme from "src/shared/theme";
-import {
-  requestLesson,
-  setLessonLoadError,
-} from "components/CodeEditor/CodeEditorSlice";
+import theme from "constants/theme";
+import { setLessonLoadError } from "components/CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
@@ -15,6 +11,8 @@ import MultipleSelectQuestion from "components/LearnPage/MultipleSelectQuestion"
 import { EmptyState } from "components/CodeEditor/CodeEditorContainer/EmptyState";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
+import { useFetchLesson } from "hooks/useFetchLesson";
+import { FetchStatus } from "hooks/types";
 
 export default function LearnPage() {
   let questionCount = 1;
@@ -23,27 +21,13 @@ export default function LearnPage() {
   const router = useRouter();
   const params = router.query;
 
-  const currentLesson = useSelector(
-    (state: RootState) => state.codeEditor.currentLesson
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.codeEditor.lessonLoadingError
-  );
-  const isLoadingLesson = useSelector(
-    (state: RootState) => state.codeEditor.isLoadingLesson
-  );
-
-  useEffect(() => {
-    if (params && params.lessonId) {
-      dispatch(
-        requestLesson({
-          lessonId: params.lessonId as string,
-        })
-      );
-    }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [params]);
+  const {
+    status,
+    lesson: currentLesson,
+    error,
+  } = useFetchLesson({
+    id: params && params.lessonId ? (params.lessonId as string) : "",
+  });
 
   const LessonHolder = styled("div")({
     width: "80%",
@@ -169,7 +153,7 @@ export default function LearnPage() {
 
   return (
     <>
-      {errorMessage.hasError && (
+      {error && (
         <Grow in timeout={500}>
           <Alert
             severity="error"
@@ -189,11 +173,11 @@ export default function LearnPage() {
               );
             }}
           >
-            {errorMessage.errorMessage}
+            {error.message}
           </Alert>
         </Grow>
       )}
-      {isLoadingLesson ? (
+      {status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box>
             <CircularProgress />

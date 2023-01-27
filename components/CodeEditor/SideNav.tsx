@@ -5,16 +5,15 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/app/common/store";
-import { requestLesson, requestProblem } from "./CodeEditorSlice";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
-import { adminPathRegex, colors } from "src/shared/constants";
+import { adminPathRegex, colors } from "constants/config";
 // import { useHistory, useLocation } from "react-router";
-import { Routes } from "src/shared/Routes.constants";
 import { BookOpen, Code } from "phosphor-react";
 import Link from "next/link";
+import useNavigation from "hooks/useNavigation";
+import { FetchStatus } from "hooks/types";
+import { useRouter } from "next/router";
 
 interface ClickedMenu {
   [key: string]: boolean;
@@ -33,9 +32,11 @@ const CustomListItemButton = styled(ListItemButton)(
 );
 
 export const Sidenav = ({ isHidden }: SidenavProps) => {
-  const dispatch = useDispatch();
-  const navStructure = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
+  const router = useRouter();
+  const locationState = router.asPath;
+
+  const { navigation, status, error } = useNavigation(
+    adminPathRegex.test(locationState)
   );
   const [menu, setMenu] = useState<ClickedMenu>({});
 
@@ -43,6 +44,7 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
     const newData = { ...menu, [item]: !menu[item] };
     setMenu(newData);
   };
+
   return (
     <List
       component="nav"
@@ -72,110 +74,96 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
         </ListSubheader>
       }
     >
-      {navStructure.map((value: INavigationItem, indexVal: number) => (
-        <React.Fragment key={value.name + "_" + indexVal}>
-          <CustomListItemButton
-            key={value.name + "_" + indexVal}
-            onClick={() => {
-              handleClick(value.name + "_" + indexVal);
-            }}
-          >
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontSize: "0.8rem" },
+      {status === FetchStatus.succeed &&
+        navigation &&
+        navigation.map((value: INavigationItem, indexVal: number) => (
+          <React.Fragment key={value.name + "_" + indexVal}>
+            <CustomListItemButton
+              key={value.name + "_" + indexVal}
+              onClick={() => {
+                handleClick(value.name + "_" + indexVal);
               }}
-              primary={`${indexVal + 1}. ${value.name}`}
-            />
-            {menu[value.name + "_" + indexVal] ? (
-              <ExpandLess />
-            ) : (
-              <ExpandMore />
-            )}
-          </CustomListItemButton>
-          <Collapse
-            in={!!menu[value.name + "_" + indexVal]}
-            timeout="auto"
-            unmountOnExit
-          >
-            <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
-              {value.problems.map(
-                (problemItem: IProblemItem, index: number) => (
-                  <Link href={`/code/${problemItem._id}`} key={problemItem._id}>
-                    <CustomListItemButton
-                      sx={{ pl: 4 }}
-                      key={
-                        problemItem.problemName + "_" + indexVal + "_" + index
-                      }
-                      onClick={() => {
-                        dispatch(
-                          requestProblem({
-                            problemId: problemItem._id,
-                            isAdmin: false,
-                            // isAdmin: adminPathRegex.test(location.pathname),
-                          })
-                        );
-                        const baseRoute = adminPathRegex.test(location.pathname)
-                          ? Routes.AdminCode
-                          : Routes.Code;
-                        // history.replace({
-                        //   pathname: baseRoute + `/${problemItem._id}`,
-                        // });
-                      }}
-                    >
-                      <ListItemText
-                        primaryTypographyProps={{
-                          sx: { fontSize: "0.8rem" },
-                        }}
-                        primary={`${indexVal + 1}.${index + 1} ${
-                          problemItem.problemName
-                        }`}
-                      />
-                      <Code
-                        weight="regular"
-                        size={16}
-                        color={colors.navIconGray}
-                      />
-                    </CustomListItemButton>
-                  </Link>
-                )
+            >
+              <ListItemText
+                primaryTypographyProps={{
+                  sx: { fontSize: "0.8rem" },
+                }}
+                primary={`${indexVal + 1}. ${value.name}`}
+              />
+              {menu[value.name + "_" + indexVal] ? (
+                <ExpandLess />
+              ) : (
+                <ExpandMore />
               )}
-              {value.lessons?.map((lessonItem: ILessonItem, index: number) => (
-                <Link href={`/learn/${lessonItem._id}`} key={lessonItem._id}>
-                  <CustomListItemButton
-                    sx={{ pl: 4 }}
-                    key={lessonItem.lessonName + "_" + indexVal + "_" + index}
-                    onClick={() => {
-                      dispatch(
-                        requestLesson({
-                          lessonId: lessonItem._id,
-                        })
-                      );
-                      const baseRoute = Routes.Learn;
-                      // history.replace({
-                      //   pathname: baseRoute + `/${lessonItem._id}`,
-                      // });
-                    }}
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        sx: { fontSize: "0.8rem" },
-                      }}
-                      primary={`${indexVal + 1}.${index + 1} ${
-                        lessonItem.lessonName
-                      }`}
-                    />
-                    <BookOpen
-                      weight="regular"
-                      size={16}
-                      color={colors.navIconGray}
-                    />
-                  </CustomListItemButton>
-                </Link>
-              ))}
-            </List>
-          </Collapse>
-        </React.Fragment>
-      ))}
+            </CustomListItemButton>
+            <Collapse
+              in={!!menu[value.name + "_" + indexVal]}
+              timeout="auto"
+              unmountOnExit
+            >
+              <List component="div" disablePadding sx={{ bgcolor: "#F9F9F9" }}>
+                {value.problems.map(
+                  (problemItem: IProblemItem, index: number) => (
+                    <Link
+                      href={`/code/${problemItem._id}`}
+                      key={problemItem._id}
+                    >
+                      <CustomListItemButton
+                        sx={{ pl: 4 }}
+                        key={
+                          problemItem.problemName + "_" + indexVal + "_" + index
+                        }
+                      >
+                        <ListItemText
+                          primaryTypographyProps={{
+                            sx: { fontSize: "0.8rem" },
+                          }}
+                          primary={`${indexVal + 1}.${index + 1} ${
+                            problemItem.problemName
+                          }`}
+                        />
+                        <Code
+                          weight="regular"
+                          size={16}
+                          color={colors.navIconGray}
+                        />
+                      </CustomListItemButton>
+                    </Link>
+                  )
+                )}
+                {value.lessons?.map(
+                  (lessonItem: ILessonItem, index: number) => (
+                    <Link
+                      href={`/learn/${lessonItem._id}`}
+                      key={lessonItem._id}
+                    >
+                      <CustomListItemButton
+                        sx={{ pl: 4 }}
+                        key={
+                          lessonItem.lessonName + "_" + indexVal + "_" + index
+                        }
+                      >
+                        <ListItemText
+                          primaryTypographyProps={{
+                            sx: { fontSize: "0.8rem" },
+                          }}
+                          primary={`${indexVal + 1}.${index + 1} ${
+                            lessonItem.lessonName
+                          }`}
+                        />
+                        <BookOpen
+                          weight="regular"
+                          size={16}
+                          color={colors.navIconGray}
+                        />
+                      </CustomListItemButton>
+                    </Link>
+                  )
+                )}
+              </List>
+            </Collapse>
+          </React.Fragment>
+        ))}
     </List>
   );
 };

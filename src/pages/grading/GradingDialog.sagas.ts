@@ -8,7 +8,7 @@ import {
   setUploadProgress,
 } from "./GradingDialog.slice";
 import { IGradeRequest, IUploadProgress } from "./types";
-import adminAPI from "../../app/common/apiClient";
+import adminAPI from "../../../lib/api/apiClient";
 import { eventChannel, END, EventChannel } from "redux-saga";
 
 function* handleGradingRequest(action: PayloadAction<IGradeRequest>): any {

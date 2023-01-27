@@ -9,8 +9,8 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useAppSelector } from "../../../app/common/hooks";
-import { Routes } from "../../../shared/Routes.constants";
+import { useAppSelector } from "../../../../lib/store/hooks";
+import { Routes } from "constants/navigationRoutes";
 import {
   closeWarningModal,
   requestDeleteProblem,

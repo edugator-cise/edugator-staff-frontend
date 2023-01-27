@@ -14,8 +14,8 @@ import problemEditorContainerSlice, {
   requestGetProblem,
   requestUpdateProblem,
 } from "./problemEditorContainerSlice";
-import apiClient from "../../../app/common/apiClient";
-import store from "../../../app/common/store";
+import apiClient from "../../../../lib/api/apiClient";
+import store from "../../../../lib/store/store";
 import { IProblem } from "../../../shared/types";
 
 const dispatch = store.dispatch;

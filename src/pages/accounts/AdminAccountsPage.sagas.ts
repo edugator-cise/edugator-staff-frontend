@@ -18,7 +18,7 @@ import {
   setSelectedAccount,
   unsetSelectedAccount,
 } from "./AdminAccountsPage.slice";
-import adminAPI from "../../app/common/apiClient";
+import adminAPI from "../../../lib/api/apiClient";
 import {
   INewAccount,
   IAccount,

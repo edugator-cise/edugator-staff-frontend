@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { LocalStorage } from "../LocalStorage";
+import { LocalStorage } from "../../../../lib/auth/LocalStorage";
 
 describe("LocalStorage", () => {
   describe("getToken", () => {
