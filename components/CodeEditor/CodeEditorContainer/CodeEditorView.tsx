@@ -4,9 +4,6 @@ import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { requestRunCode, submitCode } from "../CodeEditorSlice";
-import { RootState } from "src/app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "src/shared/constants";
@@ -16,7 +13,6 @@ import { IProblem } from "src/shared/types";
 import { handleDownload, parseFile } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
-import { useRunCode } from "hooks/useRunCode";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -99,7 +95,6 @@ export const CodeEditorView = ({
   runCode,
   submitCode,
 }: CodeEditorProps) => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const locationState = router.asPath;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -242,16 +237,6 @@ export const CodeEditorView = ({
                 memoryLimit: memoryLimit as number,
                 buildCommand: buildCommand as string,
               });
-              /* dispatch(
-                requestRunCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              ); */
             }}
           >
             Run Code

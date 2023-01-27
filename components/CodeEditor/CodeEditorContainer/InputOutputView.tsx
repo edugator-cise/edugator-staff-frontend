@@ -4,14 +4,10 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import { styled } from "@mui/material/styles";
-import { setActiveTab } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
-import { useRunCode } from "hooks/useRunCode";
 import { CompilerOutput } from "hooks/types";
 import { IResultSubmission } from "../types";
 const TabBar = styled("div")(
@@ -54,15 +50,6 @@ export const InputOutputView = ({
   activeTab: number;
   setActiveTab: (activeTab: number) => void;
 }) => {
-  const dispatch = useDispatch();
-
-  /* const compileOutput = useSelector(
-    (state: RootState) => state.codeEditor.compilerOutput
-  );
-  const isAcceptedOutput = useSelector(
-    (state: RootState) => state.codeEditor.isAcceptedOutput
-  ); */
-
   const handleChange = (event: any, newValue: number) => {
     setActiveTab(newValue);
   };

@@ -58,6 +58,7 @@ export const useRunCode = (locationState: string) => {
       compilerBody: "",
     });
     setSubmissionOutput(undefined);
+    setActiveTab(0);
   }, [locationState]);
 
   const dispatch = useDispatch();

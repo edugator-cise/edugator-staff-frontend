@@ -3,10 +3,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { adminPathRegex } from "src/shared/constants";
 import PlaygroundLayout from "components/PlaygroundLayout";
-import {
-  resetInputOutput,
-  setRunCodeError,
-} from "components/CodeEditor/CodeEditorSlice";
+import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
 import { ProblemView } from "components/CodeEditor/CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView";
@@ -36,10 +33,6 @@ export default function CodeEditor() {
     activeTab,
     setActiveTab,
   } = useRunCode(locationState);
-
-  useEffect(() => {
-    dispatch(resetInputOutput());
-  }, [locationState]);
 
   const {
     status,

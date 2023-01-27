@@ -1,5 +1,4 @@
 import { all } from "redux-saga/effects";
-import codeEditorsaga from "components/CodeEditor/CodeEditor.sagas";
 import loginSaga from "../../pages/Login/LoginPage.sagas";
 import modulesSaga from "../../pages/modules/ModulesPage.sagas";
 import gradingSaga from "../../pages/grading/GradingDialog.sagas";
@@ -11,7 +10,6 @@ import contentSaga from "../../pages/ContentEditor/contentEditorPage.sagas";
 export default function* rootSaga() {
   yield all([
     loginSaga(),
-    codeEditorsaga(),
     modulesSaga(),
     gradingSaga(),
     accountManagerSaga(),
