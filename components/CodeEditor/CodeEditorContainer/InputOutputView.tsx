@@ -64,10 +64,6 @@ export const InputOutputView = ({
     (state: RootState) => state.codeEditor.submissionOutput
   );
 
-  React.useEffect(() => {
-    console.log("compilerOutput", compilerOutput);
-  }, [compilerOutput]);
-
   const handleChange = (event: any, newValue: number) => {
     dispatch(setActiveTab(newValue));
   };
