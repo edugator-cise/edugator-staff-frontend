@@ -97,6 +97,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
         if (problem._id === problemId) {
           foundProblem = true;
           currentProblemName = problem.problemName
+            .trim()
             .replace(" ", "_")
             .toLowerCase();
           break;
@@ -107,9 +108,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
       }
     }
     if (!foundProblem) {
-      return "edugator-code.cpp";
+      return "not_found.cpp";
     }
-    return `cop3530_${currentProblemName}${fileType}`;
+    return `${currentProblemName}${fileType}`;
   };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
