@@ -9,8 +9,9 @@ import { FetchStatus } from "./types";
 import { useDispatch } from "react-redux";
 import {
   setRunCodeError,
-  setRunningSubmission,
+  //setRunningSubmission,
 } from "components/CodeEditor/CodeEditorSlice";
+import { apiRoutes } from "constants/apiRoutes";
 
 const useNavigation = (isAdmin: boolean) => {
   const dispatch = useDispatch();
@@ -25,7 +26,9 @@ const useNavigation = (isAdmin: boolean) => {
     const fetchData = async () => {
       const { data }: { data: IModuleWithProblemsAndLessons[] } =
         await apiClient.get(
-          isAdmin ? "v1/module/WithProblems" : "v1/module/WithNonHiddenProblems"
+          isAdmin
+            ? apiRoutes.admin.getNavigation
+            : apiRoutes.student.getNavigation
         );
       return data;
     };
@@ -36,7 +39,7 @@ const useNavigation = (isAdmin: boolean) => {
       })
       .catch((e) => {
         dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
-        dispatch(setRunningSubmission(false));
+        //dispatch(setRunningSubmission(false));
         setStatus(FetchStatus.failed);
         setError(e);
       });

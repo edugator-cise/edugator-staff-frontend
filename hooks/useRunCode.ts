@@ -11,6 +11,7 @@ import { IJudge0Response } from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
 import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { CompilerOutput } from "./types";
+import { apiRoutes } from "constants/apiRoutes";
 
 export interface ResponseGenerator {
   config?: any;
@@ -28,7 +29,7 @@ const getCodeRequest = ({
   runId: string;
   base_64: string;
 }) => {
-  return apiClient.post("v1/code/run/submission", {
+  return apiClient.post(apiRoutes.student.runCodeSubmission, {
     base_64,
     runId,
   });
@@ -81,7 +82,7 @@ export const useRunCode = (locationState: string) => {
     setIsSubmissionRunning(true);
     try {
       const { data }: { data: IToken } = await apiClient.post(
-        "v1/code/run",
+        apiRoutes.student.runCode,
         transformPayload({
           code,
           stdin,
@@ -113,7 +114,7 @@ export const useRunCode = (locationState: string) => {
         compilerBody: evaluateCompilerBody(resultData),
       });
       setActiveTab(1);
-      await apiClient.delete("v1/code/run/submission", {
+      await apiClient.delete(apiRoutes.student.runCodeSubmission, {
         params: {
           base64: true,
           token: data.token,
@@ -148,7 +149,7 @@ export const useRunCode = (locationState: string) => {
     setIsSubmissionRunning(true);
     try {
       const { data }: { data: IResultSubmission[] } = await apiClient.post(
-        "v1/code/run/evaluate",
+        apiRoutes.student.runCodeEvaluation,
         transformPayload({
           code,
           stdin,

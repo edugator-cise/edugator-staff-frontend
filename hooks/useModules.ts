@@ -1,3 +1,4 @@
+import { apiRoutes } from "constants/apiRoutes";
 import { useEffect, useState } from "react";
 import apiClient from "src/app/common/apiClient";
 import { FetchStatus, Service } from "./types";
@@ -27,7 +28,9 @@ const useModules = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data }: { data: Module[] } = await apiClient.get("v1/module/");
+      const { data }: { data: Module[] } = await apiClient.get(
+        apiRoutes.student.getModules
+      );
       return data;
     };
     fetchData()

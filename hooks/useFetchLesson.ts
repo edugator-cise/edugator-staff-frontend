@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import apiClient from "src/app/common/apiClient";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setRunCodeError,
-  setRunningSubmission,
-} from "components/CodeEditor/CodeEditorSlice";
+import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { FetchStatus } from "./types";
 import { ILesson } from "src/shared/types";
+import { apiRoutes } from "constants/apiRoutes";
 
 export const useFetchLesson = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
@@ -17,7 +15,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
   useEffect(() => {
     const fetchData = async () => {
       const { data }: { data: ILesson } = await apiClient.get(
-        `v1/student/lesson/${id}`
+        apiRoutes.student.getLesson(id)
       );
       return data;
     };
@@ -28,7 +26,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
       })
       .catch((e) => {
         dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
-        dispatch(setRunningSubmission(false));
+        // dispatch(setRunningSubmission(false)); TODO: handle this, should we move this to global state?
         setStatus(FetchStatus.failed);
         setError(e);
       });

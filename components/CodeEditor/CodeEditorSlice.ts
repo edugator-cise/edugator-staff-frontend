@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   INavigationItem,
   IResultSubmission,
-  ICodeSubmission,
   ICompilerOutput,
   ErrorObject,
 } from "./types";
@@ -51,17 +50,6 @@ const initialState: CodeEditorContainerState = {
   activeTab: 0, // stdin tab is active
   isLoadingProblem: false,
 };
-
-export const resetinputOutputViewState = () => ({
-  stdin: "",
-  activeTab: 0,
-  isAcceptedOutput: undefined,
-  compilerOutput: {
-    compilerMessage: "",
-    compilerBody: "",
-  },
-  submissionOutput: undefined,
-});
 
 export function getInitialCodeEditorState(): CodeEditorContainerState {
   return { ...initialState };
