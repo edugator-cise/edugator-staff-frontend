@@ -73,6 +73,21 @@ interface CodeEditorProps {
     memoryLimit: number;
     buildCommand: string;
   }) => void;
+  submitCode: ({
+    code,
+    stdin,
+    problemId,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+  }: {
+    code: string;
+    stdin: string;
+    problemId: string;
+    timeLimit: number;
+    memoryLimit: number;
+    buildCommand: string;
+  }) => void;
 }
 
 export const CodeEditorView = ({
@@ -82,6 +97,7 @@ export const CodeEditorView = ({
   stdin,
   isSubmissionRunning,
   runCode,
+  submitCode,
 }: CodeEditorProps) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -246,16 +262,14 @@ export const CodeEditorView = ({
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() =>
-              dispatch(
-                submitCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              )
+              submitCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              })
             }
           >
             Submit

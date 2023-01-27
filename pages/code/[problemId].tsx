@@ -26,8 +26,16 @@ export default function CodeEditor() {
 
   const [stdin, setStdin] = useState<string>("");
 
-  const { compilerOutput, isAcceptedOutput, runCode, isSubmissionRunning } =
-    useRunCode();
+  const {
+    compilerOutput,
+    isAcceptedOutput,
+    runCode,
+    isSubmissionRunning,
+    submissionOutput,
+    submitCode,
+    activeTab,
+    setActiveTab,
+  } = useRunCode(locationState);
 
   useEffect(() => {
     dispatch(resetInputOutput());
@@ -102,6 +110,7 @@ export default function CodeEditor() {
                 <CodeEditorView
                   isSubmissionRunning={isSubmissionRunning}
                   runCode={runCode}
+                  submitCode={submitCode}
                   code={currentProblem.code.body}
                   templatePackage={currentProblem.templatePackage}
                   currentProblem={currentProblem}
@@ -110,6 +119,9 @@ export default function CodeEditor() {
               </Allotment.Pane>
               <Allotment.Pane minSize={100}>
                 <InputOutputView
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  submissionOutput={submissionOutput}
                   stdin={stdin}
                   setStdin={setStdin}
                   compilerOutput={compilerOutput}

@@ -23,3 +23,8 @@ export type Service<T> =
   | ServiceLoading
   | ServiceLoaded<T>
   | ServiceError;
+
+export type CompilerOutput = {
+  compilerMessage: string;
+  compilerBody: string;
+};

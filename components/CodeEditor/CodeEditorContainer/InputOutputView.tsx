@@ -12,6 +12,8 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
 import { useRunCode } from "hooks/useRunCode";
+import { CompilerOutput } from "hooks/types";
+import { IResultSubmission } from "../types";
 const TabBar = styled("div")(
   () => `
   display: flex;
@@ -40,32 +42,29 @@ export const InputOutputView = ({
   setStdin,
   compilerOutput,
   isAcceptedOutput,
+  submissionOutput,
+  activeTab,
+  setActiveTab,
 }: {
   stdin: string;
   setStdin: (stdin: string) => void;
-  compilerOutput: {
-    compilerBody: string;
-    compilerMessage: string;
-  };
-  isAcceptedOutput: boolean;
+  compilerOutput: CompilerOutput;
+  isAcceptedOutput: boolean | undefined;
+  submissionOutput: IResultSubmission[] | undefined;
+  activeTab: number;
+  setActiveTab: (activeTab: number) => void;
 }) => {
   const dispatch = useDispatch();
 
-  const activeTab = useSelector(
-    (state: RootState) => state.codeEditor.activeTab
-  );
   /* const compileOutput = useSelector(
     (state: RootState) => state.codeEditor.compilerOutput
   );
   const isAcceptedOutput = useSelector(
     (state: RootState) => state.codeEditor.isAcceptedOutput
   ); */
-  const submissionOutput = useSelector(
-    (state: RootState) => state.codeEditor.submissionOutput
-  );
 
   const handleChange = (event: any, newValue: number) => {
-    dispatch(setActiveTab(newValue));
+    setActiveTab(newValue);
   };
 
   const handleStdinChange = (
@@ -133,8 +132,8 @@ export const InputOutputView = ({
             <>
               <CompileOutput
                 accepted={isAcceptedOutput}
-                compileBody={compilerOutput.compilerBody}
-                compileMessage={compilerOutput.compilerMessage}
+                compileBody={compilerOutput?.compilerBody}
+                compileMessage={compilerOutput?.compilerMessage}
               />
             </>
           ) : (
