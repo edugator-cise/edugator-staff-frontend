@@ -1,40 +1,38 @@
+import {
+  IModuleWithProblemsAndLessons,
+  INavigationItem,
+} from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
 import apiClient from "src/app/common/apiClient";
-import { useDispatch, useSelector } from "react-redux";
+import { createNavStructure } from "utils/CodeEditorUtils";
+import { FetchStatus } from "./types";
+import { useDispatch } from "react-redux";
 import {
   setRunCodeError,
   setRunningSubmission,
 } from "components/CodeEditor/CodeEditorSlice";
-import { FetchStatus } from "./types";
-import { IProblem } from "src/shared/types";
 
-export const useFetchProblem = ({
-  id,
-  isAdmin,
-}: {
-  id: string;
-  isAdmin: boolean;
-}) => {
+const useNavigation = (isAdmin: boolean) => {
   const dispatch = useDispatch();
+
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
-  const [problem, setProblem] = useState<IProblem | undefined>(undefined);
+  const [navigation, setNavigation] = useState<IModuleWithProblemsAndLessons[]>(
+    []
+  );
   const [error, setError] = useState<Error | undefined>(undefined);
-  const [stdin, setStdin] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data }: { data: IProblem } = await apiClient.get(
-        isAdmin ? `v1/admin/problem/${id}` : `v1/student/problem/${id}`
-      );
+      const { data }: { data: IModuleWithProblemsAndLessons[] } =
+        await apiClient.get(
+          isAdmin ? "v1/module/WithProblems" : "v1/module/WithNonHiddenProblems"
+        );
       return data;
     };
     fetchData()
       .then((values) => {
-        setProblem(values);
+        setNavigation(values);
         setStatus(FetchStatus.succeed);
-        if (values.testCases.length > 0) {
-          setStdin(values.testCases[0].input);
-        }
       })
       .catch((e) => {
         dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
@@ -42,9 +40,9 @@ export const useFetchProblem = ({
         setStatus(FetchStatus.failed);
         setError(e);
       });
-    return () => {
-      setStatus(FetchStatus.loading);
-    };
-  }, [id, isAdmin]);
-  return { status, problem, stdin, error };
+  }, []);
+
+  return { status, navigation: createNavStructure(navigation), error };
 };
+
+export default useNavigation;

@@ -44,6 +44,9 @@ export const CompileOutput = ({
   compileMessage,
   compileBody,
 }: Props) => {
+  console.log("accepted", accepted);
+  console.log("compileMessage", compileMessage);
+  console.log("compileBody", compileBody);
   if (accepted) {
     return (
       <CompileOutputContainer id="compile-container">

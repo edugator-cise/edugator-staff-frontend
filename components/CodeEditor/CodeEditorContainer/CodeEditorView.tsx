@@ -9,11 +9,14 @@ import { requestRunCode, submitCode } from "../CodeEditorSlice";
 import { RootState } from "src/app/common/store";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { colors } from "src/shared/constants";
+import { adminPathRegex, colors } from "src/shared/constants";
 // import { useTheme } from "@mui/material/styles";
 import theme from "src/shared/theme";
 import { IProblem } from "src/shared/types";
 import { handleDownload, parseFile } from "utils/CodeEditorUtils";
+import { useRouter } from "next/router";
+import useNavigation from "hooks/useNavigation";
+import { useRunCode } from "hooks/useRunCode";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -54,6 +57,22 @@ interface CodeEditorProps {
   templatePackage: string;
   currentProblem: IProblem;
   stdin: string;
+  isSubmissionRunning: boolean;
+  runCode: ({
+    code,
+    stdin,
+    problemId,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+  }: {
+    code: string;
+    stdin: string;
+    problemId: string;
+    timeLimit: number;
+    memoryLimit: number;
+    buildCommand: string;
+  }) => void;
 }
 
 export const CodeEditorView = ({
@@ -61,13 +80,17 @@ export const CodeEditorView = ({
   templatePackage,
   currentProblem,
   stdin,
+  isSubmissionRunning,
+  runCode,
 }: CodeEditorProps) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const locationState = router.asPath;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
-  const isSubmissionRunning = useSelector(
+  /* const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
-  );
+  ); */
 
   const {
     timeLimit,
@@ -77,9 +100,11 @@ export const CodeEditorView = ({
     fileExtension: fileType,
   } = currentProblem;
 
-  const navStructure = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
+  // recalling the use navigation hook because navStructure is passed through when downloading a problem
+  const { navigation, status, error } = useNavigation(
+    adminPathRegex.test(locationState)
   );
+
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -152,12 +177,7 @@ export const CodeEditorView = ({
             <Tooltip title="Download Submission" placement="top">
               <IconButton
                 onClick={() => {
-                  handleDownload(
-                    currentCode,
-                    navStructure,
-                    problemId,
-                    fileType
-                  );
+                  handleDownload(currentCode, navigation, problemId, fileType);
                 }}
               >
                 <GetApp />
@@ -198,7 +218,15 @@ export const CodeEditorView = ({
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() => {
-              dispatch(
+              runCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              });
+              /* dispatch(
                 requestRunCode({
                   code: currentCode,
                   stdin,
@@ -207,7 +235,7 @@ export const CodeEditorView = ({
                   memoryLimit: memoryLimit as number,
                   buildCommand: buildCommand as string,
                 })
-              );
+              ); */
             }}
           >
             Run Code

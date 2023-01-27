@@ -7,16 +7,9 @@ import {
   take,
   fork,
 } from "redux-saga/effects";
-import { Buffer } from "buffer";
 import { PayloadAction } from "@reduxjs/toolkit";
 import {
-  requestModulesAndProblems,
-  requestFirstProblemFromModule,
-  setNavStructure,
   requestProblem,
-  requestLesson,
-  setCurrentProblem,
-  setIsLoading,
   setRunningSubmission,
   requestRunCode,
   setCompilerOutput,
@@ -25,26 +18,17 @@ import {
   submitCode,
   setResultSubmission,
   setRunCodeError,
-  setStdin,
-  setLessonLoadError,
-  setIsLoadingLesson,
-  setCurrentLesson,
 } from "./CodeEditorSlice";
 import apiClient from "src/app/common/apiClient";
 import {
-  INavigationItem,
   IResultSubmission,
   IToken,
   ICodeSubmission,
   IJudge0Response,
-  ModuleProblemRequest,
-  IModuleWithProblemsAndLessons,
 } from "./types";
-import { ILesson, IProblem } from "src/shared/types";
+import { ILesson } from "src/shared/types";
 import {
-  createNavStructure,
   evaluateCompilerBody,
-  filterForProblem,
   judge0Validator,
   poll,
   transformPayload,
@@ -57,26 +41,6 @@ export interface ResponseGenerator {
   request?: any;
   status?: number;
   statusText?: string;
-}
-
-function* handleRequestModulesAndProblems(
-  action: PayloadAction<ModuleProblemRequest>
-) {
-  try {
-    const { data }: { data: IModuleWithProblemsAndLessons[] } = yield call(
-      async () => {
-        if (action.payload.isAdmin) {
-          return apiClient.get("v1/module/WithProblems");
-        }
-        return apiClient.get("v1/module/WithNonHiddenProblems");
-      }
-    );
-    yield put(setNavStructure(createNavStructure(data)));
-    yield put(setIsLoading(false));
-  } catch (e: any) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
-    yield put(setRunningSubmission(false));
-  }
 }
 
 function* deleteCodeRequest(token: string) {
@@ -180,87 +144,9 @@ function* submissionRace(
   });
 }
 
-function* requestLessonSaga(
-  action: PayloadAction<{ lessonId: string; isAdmin: boolean }>
-) {
-  const id: string = action.payload.lessonId;
-  try {
-    const { data }: { data: ILesson } = yield call(async () => {
-      return apiClient.get(`v1/student/lesson/${id}`);
-    });
-    console.log(data);
-    yield put(setCurrentLesson(data));
-    yield put(setIsLoadingLesson(false));
-  } catch (e: any) {
-    yield put(setLessonLoadError({ hasError: true, errorMessage: e.message }));
-    yield put(setIsLoadingLesson(false));
-  }
-}
-
-function* requestProblemSaga(
-  action: PayloadAction<{ problemId: string; isAdmin: boolean }>
-) {
-  const id: string = action.payload.problemId;
-  try {
-    const { data }: { data: IProblem } = yield call(async () => {
-      if (action.payload.isAdmin) {
-        return apiClient.get(`v1/admin/problem/${id}`);
-      }
-      return apiClient.get(`v1/student/problem/${id}`);
-    });
-    yield put(setCurrentProblem(data));
-    if (data.testCases.length > 0) {
-      yield put(setStdin(data.testCases[0].input));
-    }
-  } catch (e: any) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
-    yield put(setRunningSubmission(false));
-  }
-}
-
-function* requestFirstProblem(
-  action: PayloadAction<{
-    navigation: INavigationItem[];
-    moduleName: string;
-    isAdmin: boolean;
-  }>
-) {
-  try {
-    const problemId: string | undefined = filterForProblem(
-      action.payload.navigation,
-      action.payload.moduleName
-    );
-    if (problemId) {
-      const { data }: { data: IProblem } = yield call(async () => {
-        if (action.payload.isAdmin) {
-          return apiClient.get(`v1/admin/problem/${problemId}`);
-        }
-        return apiClient.get(`v1/student/problem/${problemId}`);
-      });
-      yield put(setCurrentProblem(data));
-      if (data.testCases.length > 0) {
-        yield put(setStdin(data.testCases[0].input));
-      }
-    } else {
-      yield put(setCurrentProblem(undefined));
-    }
-  } catch (e: any) {
-    yield put(setRunCodeError({ hasError: true, errorMessage: e.message }));
-    yield put(setRunningSubmission(false));
-    yield put(setCurrentProblem(undefined));
-  }
-}
-
 function* codeEditorSaga() {
-  yield takeEvery(
-    requestModulesAndProblems.type,
-    handleRequestModulesAndProblems
-  );
   yield takeEvery(requestRunCode.type, runCodeRequest);
   yield takeEvery(submitCode.type, submissionRace);
-  yield takeEvery(requestProblem.type, requestProblemSaga);
-  yield takeEvery(requestLesson.type, requestLessonSaga);
-  yield takeEvery(requestFirstProblemFromModule.type, requestFirstProblem);
 }
 
 export default codeEditorSaga;

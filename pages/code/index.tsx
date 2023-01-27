@@ -1,37 +1,10 @@
 import PlaygroundLayout from "components/PlaygroundLayout";
-import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { ReactNode } from "react";
 import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";
 import CrocodileOnAScooter from "src/assets/crocodileonascooter.json";
 
-import {
-  requestLesson,
-  requestProblem,
-} from "components/CodeEditor/CodeEditorSlice";
-import { adminPathRegex } from "src/shared/constants";
-
 export default function CodePage() {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const params = router.query;
-  const locationState = router.asPath;
-
-  useEffect(() => {
-    if (params && params.problemId) {
-      // setContentType("problem");
-      dispatch(
-        requestProblem({
-          problemId: params.problemId as string,
-          isAdmin: adminPathRegex.test(locationState),
-        })
-      );
-    }
-    //disable exhaustive dependencies
-    //eslint-disable-next-line
-  }, [params]);
-
   return (
     <Container
       sx={{

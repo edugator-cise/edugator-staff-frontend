@@ -4,13 +4,14 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Grow from "@mui/material/Grow";
 import { styled } from "@mui/material/styles";
-import { setActiveTab, setStdin } from "../CodeEditorSlice";
+import { setActiveTab } from "../CodeEditorSlice";
 import { CompileOutput } from "./CompileOutput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "src/app/common/store";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
+import { useRunCode } from "hooks/useRunCode";
 const TabBar = styled("div")(
   () => `
   display: flex;
@@ -34,21 +35,39 @@ const CodeHolder = styled("div")(
 `
 );
 
-export const InputOutputView = ({ stdin }: { stdin: string }) => {
+export const InputOutputView = ({
+  stdin,
+  setStdin,
+  compilerOutput,
+  isAcceptedOutput,
+}: {
+  stdin: string;
+  setStdin: (stdin: string) => void;
+  compilerOutput: {
+    compilerBody: string;
+    compilerMessage: string;
+  };
+  isAcceptedOutput: boolean;
+}) => {
   const dispatch = useDispatch();
 
   const activeTab = useSelector(
     (state: RootState) => state.codeEditor.activeTab
   );
-  const compileOutput = useSelector(
+  /* const compileOutput = useSelector(
     (state: RootState) => state.codeEditor.compilerOutput
-  );
-  const submissionOutput = useSelector(
-    (state: RootState) => state.codeEditor.submissionOutput
   );
   const isAcceptedOutput = useSelector(
     (state: RootState) => state.codeEditor.isAcceptedOutput
+  ); */
+  const submissionOutput = useSelector(
+    (state: RootState) => state.codeEditor.submissionOutput
   );
+
+  React.useEffect(() => {
+    console.log("compilerOutput", compilerOutput);
+  }, [compilerOutput]);
+
   const handleChange = (event: any, newValue: number) => {
     dispatch(setActiveTab(newValue));
   };
@@ -57,7 +76,7 @@ export const InputOutputView = ({ stdin }: { stdin: string }) => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     event.preventDefault();
-    dispatch(setStdin(event.target.value));
+    setStdin(event.target.value);
   };
 
   return (
@@ -118,8 +137,8 @@ export const InputOutputView = ({ stdin }: { stdin: string }) => {
             <>
               <CompileOutput
                 accepted={isAcceptedOutput}
-                compileBody={compileOutput.compilerBody}
-                compileMessage={compileOutput.compilerMessage}
+                compileBody={compilerOutput.compilerBody}
+                compileMessage={compilerOutput.compilerMessage}
               />
             </>
           ) : (

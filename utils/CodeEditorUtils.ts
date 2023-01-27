@@ -5,6 +5,7 @@ import {
   INavigationItem,
 } from "components/CodeEditor/types";
 import * as monaco from "monaco-editor";
+import { Buffer } from "buffer";
 
 export const generateFileName = (
   navStructure: INavigationItem[],
@@ -164,7 +165,9 @@ export const transformPayload = (payload: ICodeSubmission) => {
 };
 
 export const evaluateCompilerBody = (resultData: IJudge0Response) => {
+  console.log(resultData);
   if (resultData.status.id === 3 && resultData.stdout) {
+    console.log(Buffer.from(resultData.stdout || "", "base64").toString());
     return Buffer.from(resultData.stdout || "", "base64").toString();
   } else if (resultData.status.id === 6) {
     return Buffer.from(resultData.compile_output || "", "base64").toString();
@@ -176,6 +179,7 @@ export const evaluateCompilerBody = (resultData: IJudge0Response) => {
     message += Buffer.from(resultData.message || "", "base64").toString();
     return message;
   } else {
+    console.log("wrong");
     return "";
   }
 };

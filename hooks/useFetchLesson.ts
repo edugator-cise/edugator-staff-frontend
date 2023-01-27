@@ -6,35 +6,25 @@ import {
   setRunningSubmission,
 } from "components/CodeEditor/CodeEditorSlice";
 import { FetchStatus } from "./types";
-import { IProblem } from "src/shared/types";
+import { ILesson } from "src/shared/types";
 
-export const useFetchProblem = ({
-  id,
-  isAdmin,
-}: {
-  id: string;
-  isAdmin: boolean;
-}) => {
+export const useFetchLesson = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
-  const [problem, setProblem] = useState<IProblem | undefined>(undefined);
+  const [lesson, setLesson] = useState<ILesson | undefined>(undefined);
   const [error, setError] = useState<Error | undefined>(undefined);
-  const [stdin, setStdin] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data }: { data: IProblem } = await apiClient.get(
-        isAdmin ? `v1/admin/problem/${id}` : `v1/student/problem/${id}`
+      const { data }: { data: ILesson } = await apiClient.get(
+        `v1/student/lesson/${id}`
       );
       return data;
     };
     fetchData()
       .then((values) => {
-        setProblem(values);
+        setLesson(values);
         setStatus(FetchStatus.succeed);
-        if (values.testCases.length > 0) {
-          setStdin(values.testCases[0].input);
-        }
       })
       .catch((e) => {
         dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
@@ -45,6 +35,6 @@ export const useFetchProblem = ({
     return () => {
       setStatus(FetchStatus.loading);
     };
-  }, [id, isAdmin]);
-  return { status, problem, stdin, error };
+  }, [id]);
+  return { status, lesson, error };
 };

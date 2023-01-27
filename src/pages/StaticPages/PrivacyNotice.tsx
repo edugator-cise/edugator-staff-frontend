@@ -1,10 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
 import VerticalNavigation from "../../shared/VerticalNavigation";
-import { RootState } from "../../app/common/store";
-import { requestModulesAndProblems } from "../CodeEditor/CodeEditorSlice";
-import { useLocation } from "react-router-dom";
-import { adminPathRegex } from "../../shared/constants";
 import { styled } from "@mui/styles";
 import theme from "../../shared/theme";
 import { Typography } from "@mui/material";
@@ -49,25 +44,10 @@ const Link = styled("a")({
 });
 
 function PrivacyNotice() {
-  const modules = useSelector((state: RootState) => {
-    const sortedModules = state.codeEditor.navStructure;
-    return sortedModules.map((value) => value.name);
-  });
-  const dispatch = useDispatch();
-  const locationState = useLocation<ProblemLocationState>();
-
-  useEffect(() => {
-    dispatch(
-      requestModulesAndProblems({
-        isAdmin: adminPathRegex.test(locationState.pathname),
-      })
-    );
-  }, [dispatch]);
-
   return (
     <>
       <div id="top" />
-      <VerticalNavigation light={true} modules={modules} codingPage={false} />
+      <VerticalNavigation light={true} codingPage={false} />
       <TitleHolder>
         <div>
           <Typography variant="h2">PRIVACY NOTICE</Typography>

@@ -16,7 +16,7 @@ import {
   Collapse,
   List,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -28,11 +28,9 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { requestModulesAndProblems } from "components/CodeEditor/CodeEditorSlice";
-import { adminPathRegex } from "./constants";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { NextRoutes, Routes } from "./Routes.constants";
+import { NextRoutes } from "./Routes.constants";
 import useModules from "hooks/useModules";
 import { FetchStatus } from "hooks/types";
 // import { Link, useLocation } from "react-router-dom";
