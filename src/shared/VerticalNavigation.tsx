@@ -16,7 +16,7 @@ import {
   Collapse,
   List,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -27,6 +27,14 @@ import ScheduleIcon from "@mui/icons-material/CalendarToday";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "./theme";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { requestModulesAndProblems } from "components/CodeEditor/CodeEditorSlice";
+import { adminPathRegex } from "./constants";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { NextRoutes, Routes } from "./Routes.constants";
+import useModules from "hooks/useModules";
+import { FetchStatus } from "hooks/types";
 // import { Link, useLocation } from "react-router-dom";
 // import { Routes } from "../shared/Routes.constants";
 // import { adminPathRegex } from "../shared/constants";
@@ -37,8 +45,20 @@ interface Props {
   codingPage?: boolean;
 }
 
-function VerticalNavigation(props: Props) {
+function VerticalNavigation({
+  light,
+  codingPage = false,
+}: {
+  light: boolean;
+  codingPage?: boolean;
+}) {
   // const location = useLocation();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const locationState = router.asPath;
+
+  const { modules, status, error } = useModules();
+
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const [openProjects, setOpenProjects] = useState<any>(null);
   const [openModules, setOpenModules] = useState<any>(null);
@@ -58,22 +78,33 @@ function VerticalNavigation(props: Props) {
     subitems: { title: string; link: string }[];
   }
 
+  const mapModules = (modules: string[]) => {
+    return modules.map((module) => {
+      return {
+        title: module,
+        link: "",
+      };
+    });
+  };
+
+  interface Subitem {
+    title: string;
+    link: string;
+  }
+
   const toggleDrawer = () => {
     setOpen(!open);
     return 0;
   };
 
-  const menus: Menu[] = [
+  const menus: (modules: Subitem[]) => Menu[] = (modules: Subitem[]) => [
     {
       title: "Modules",
       id: "modules",
       icon: <ModulesIcon sx={{ color: "primary.main" }} />,
       anchor: anchorModules,
       anchorSet: setAnchorModules,
-      subitems: props.modules.map((value, index) => ({
-        title: `${value}`,
-        link: "",
-      })),
+      subitems: modules,
       menuOpen: openModules,
       setMenuOpen: setOpenModules,
     },
@@ -151,14 +182,14 @@ function VerticalNavigation(props: Props) {
         paddingLeft: md ? 100 : 30,
         paddingRight: md ? 100 : 30,
         height: 64,
-        backgroundColor: props.codingPage
+        backgroundColor: codingPage
           ? "white"
-          : props.light
+          : light
           ? "transparent"
           : "#152c7c",
       }}
     >
-      {!props.codingPage && (
+      {!codingPage && (
         <>
           <Avatar
             alt="Example Alt"
@@ -168,9 +199,9 @@ function VerticalNavigation(props: Props) {
               height: 46,
               padding: 5,
             }}
-            src={props.light ? '/DarkModeLogo.svg' : '/DefaultLogo.svg'}
+            src={light ? "/DarkModeLogo.svg" : "/DefaultLogo.svg"}
           />
-          </>
+        </>
       )}
       <Typography variant="h5" component="h1"></Typography>
 
@@ -182,12 +213,14 @@ function VerticalNavigation(props: Props) {
           justifyContent="flex-end"
           alignItems="flex-end"
         >
-          {menus.map((item, index) => {
+          {menus(
+            status === FetchStatus.succeed && modules ? mapModules(modules) : []
+          ).map((item, index) => {
             return (
               <div key={index}>
                 <Button
                   sx={{
-                    color: props.light ? "inherit" : "white",
+                    color: light ? "inherit" : "white",
                     marginRight: 4,
                   }}
                   aria-controls={item.id}
@@ -208,23 +241,18 @@ function VerticalNavigation(props: Props) {
                 >
                   {item.subitems.map((subitem, i) => {
                     return (
-                      // <Link
-                      //   key={i}
-                      //   to={{
-                      //     pathname: adminPathRegex.test(location.pathname)
-                      //       ? Routes.AdminCode
-                      //       : Routes.Code,
-                      //     state: { moduleName: subitem.title },
-                      //   }}
-                      //   style={{
-                      //     textDecoration: "none",
-                      //     color: "inherit",
-                      //   }}
-                      // >
+                      <Link
+                        key={i}
+                        href={NextRoutes.Code}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                      >
                         <MenuItem key={i} onClick={() => item.anchorSet(null)}>
                           {subitem.title}
                         </MenuItem>
-                      // </Link>
+                      </Link>
                     );
                   })}
                 </Menu>
@@ -232,7 +260,7 @@ function VerticalNavigation(props: Props) {
             );
           })}
           <Button
-            sx={{ color: props.light ? "inherit" : "#ffffff" }}
+            sx={{ color: light ? "inherit" : "#ffffff" }}
             onClick={() => {}}
           >
             Schedule
@@ -243,7 +271,7 @@ function VerticalNavigation(props: Props) {
         <>
           <IconButton
             edge="start"
-            style={{ color: props.light ? "black" : "white" }}
+            style={{ color: light ? "black" : "white" }}
             aria-label="open drawer"
             sx={{ position: "absolute", right: 20 }}
             onClick={() => {
@@ -273,7 +301,9 @@ function VerticalNavigation(props: Props) {
               <Divider sx={{ mb: 2 }} />
 
               <Box sx={{ mb: 2 }}>
-                {menus.map((menu, index) => {
+                {menus(
+                  status === FetchStatus.succeed ? mapModules(modules) : []
+                ).map((menu, index) => {
                   return (
                     <div key={index}>
                       <ListItemButton
@@ -290,26 +320,17 @@ function VerticalNavigation(props: Props) {
                         {menu.subitems.map((subitem, i) => {
                           return (
                             <List key={i} component="div" disablePadding>
-                              {/* <Link
-                                to={{
-                                  pathname: adminPathRegex.test(
-                                    location.pathname
-                                  )
-                                    ? Routes.AdminCode
-                                    : Routes.Code,
-                                  state: { moduleName: subitem.title },
-                                }}
+                              <Link
+                                href={NextRoutes.Code}
                                 style={{
                                   textDecoration: "none",
                                   color: "inherit",
                                 }}
-                              > */}
-                              {/* <> */}
+                              >
                                 <ListItemButton sx={{ pl: 6 }}>
                                   <ListItemText secondary={subitem.title} />
                                 </ListItemButton>
-                              {/* </> */}
-                              {/* </Link> */}
+                              </Link>
                             </List>
                           );
                         })}

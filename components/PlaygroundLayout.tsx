@@ -44,11 +44,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
     (state: RootState) => state.codeEditor.isLoading
   );
 
-  const modules = useSelector((state: RootState) => {
-    const sortedModules = state.codeEditor.navStructure;
-    return sortedModules.map((value) => value.name);
-  });
-
   const navigation = useSelector(
     (state: RootState) => state.codeEditor.navStructure
   );
@@ -103,11 +98,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
         <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} />
 
         <Box sx={{ height: "100%", width: "100%" }}>
-          <VerticalNavigation
-            light={true}
-            modules={modules}
-            codingPage={true}
-          />
+          <VerticalNavigation light={true} codingPage={true} />
           <Box
             sx={{
               height: "100%",

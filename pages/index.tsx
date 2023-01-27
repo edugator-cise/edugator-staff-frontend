@@ -1,36 +1,15 @@
-import { InferGetStaticPropsType } from "next";
-import apiClient from "../src/app/common/apiClient";
-import LandingFeatures from "../src/pages/LandingPage/LandingFeatures";
-import LandingHome from "../src/pages/LandingPage/LandingHome";
-import LandingTopics from "../src/pages/LandingPage/LandingTopics";
-import { IModuleBase } from "../src/shared/types";
+import LandingFeatures from "components/LandingPage/LandingFeatures";
+import LandingHome from "components/LandingPage/LandingHome";
+import LandingTopics from "components/LandingPage/LandingTopics";
 import VerticalNavigation from "../src/shared/VerticalNavigation";
 
-function LandingPage({
-  modules,
-}: InferGetStaticPropsType<typeof getServerSideProps>) {
+export default function LandingPage() {
   return (
     <>
-      <VerticalNavigation
-        light
-        modules={modules.map((value) => value.name)}
-      ></VerticalNavigation>
+      <VerticalNavigation light></VerticalNavigation>
       <LandingHome />
       <LandingFeatures />
       <LandingTopics />
     </>
   );
 }
-
-export const getServerSideProps = async () => {
-  const { data }: { data: IModuleBase[] } = await apiClient.get("v1/module");
-  const sortedModules = data.sort(
-    (valueA, valueB) => valueA.number - valueB.number
-  );
-  return {
-    props: {
-      modules: sortedModules,
-    },
-  };
-};
-export default LandingPage;

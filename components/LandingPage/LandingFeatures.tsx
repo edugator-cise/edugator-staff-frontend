@@ -1,7 +1,7 @@
 import { Typography, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import theme from "../../shared/theme";
+import theme from "src/shared/theme";
 //eslint-disable-next-line
 import FeatureCard from "./FeatureCard";
 

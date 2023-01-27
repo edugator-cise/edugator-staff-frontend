@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import React from "react";
-import theme from "../../shared/theme";
+import theme from "src/shared/theme";
 
 interface FeatureInfo {
   title: string;

@@ -1,7 +1,7 @@
 import { Typography, Button, Grid } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
-import theme from "../../shared/theme";
+import theme from "src/shared/theme";
 import TopicCard from "./TopicCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
@@ -36,8 +36,8 @@ function LandingTopics() {
     {
       name: "Sorting",
       description: "Sort through arrays and vectors with different conditions",
-      staticImg: '/icons8-alphabetical-sorting-100.png',
-      animatedImg: '/icons8-alphabetical-sorting.gif',
+      staticImg: "/icons8-alphabetical-sorting-100.png",
+      animatedImg: "/icons8-alphabetical-sorting.gif",
     },
     {
       name: "Linked Lists",

@@ -1,7 +1,7 @@
 import { Button, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/styles";
 import React, { useRef, useState } from "react";
-import theme from "../../shared/theme";
+import theme from "src/shared/theme";
 
 interface topicInfo {
   name: string;
