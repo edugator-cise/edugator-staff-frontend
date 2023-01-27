@@ -4,11 +4,17 @@ import { useDispatch } from "react-redux";
 import { adminPathRegex } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
-import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
+import {
+  Grid,
+  CircularProgress,
+  Box,
+  Alert,
+  Grow,
+  Typography,
+} from "@mui/material";
 import { ProblemView } from "components/CodeEditor/CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView";
 import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/InputOutputView";
-import { EmptyState } from "components/CodeEditor/CodeEditorContainer/EmptyState";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { useFetchProblem } from "hooks/useFetchProblem";
@@ -88,7 +94,18 @@ export default function CodeEditor() {
           </Box>
         </Grid>
       ) : currentProblem === undefined ? (
-        <EmptyState />
+        <Grid container direction="column" sx={{ height: "100vh" }}>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4">Problem not found</Typography>
+          </Box>
+        </Grid>
       ) : (
         <Allotment snap={true}>
           <Allotment.Pane minSize={310}>

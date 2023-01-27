@@ -2,7 +2,7 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { ReactNode } from "react";
 import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";
-import CrocodileOnAScooter from "src/assets/crocodileonascooter.json";
+import CrocodileOnAScooter from "public/crocodileonascooter.json";
 
 export default function CodePage() {
   return (

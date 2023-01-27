@@ -2,17 +2,23 @@ import React, { ReactNode } from "react";
 import { useDispatch } from "react-redux";
 import { styled } from "@mui/styles";
 import theme from "constants/theme";
-import { setLessonLoadError } from "components/CodeEditor/CodeEditorSlice";
-import { Grid, CircularProgress, Box, Alert, Grow } from "@mui/material";
+import {
+  Grid,
+  CircularProgress,
+  Box,
+  Alert,
+  Grow,
+  Typography,
+} from "@mui/material";
 import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
 import ImageBlock from "components/LearnPage/ImageBlock";
 import MultipleSelectQuestion from "components/LearnPage/MultipleSelectQuestion";
-import { EmptyState } from "components/CodeEditor/CodeEditorContainer/EmptyState";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
+import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 
 export default function LearnPage() {
   let questionCount = 1;
@@ -168,9 +174,7 @@ export default function LearnPage() {
               zIndex: 300,
             }}
             onClose={() => {
-              dispatch(
-                setLessonLoadError({ hasError: false, errorMessage: "" })
-              );
+              dispatch(setRunCodeError({ hasError: false, errorMessage: "" }));
             }}
           >
             {error.message}
@@ -184,7 +188,18 @@ export default function LearnPage() {
           </Box>
         </Grid>
       ) : currentLesson === undefined ? (
-        <EmptyState />
+        <Grid container direction="column" sx={{ height: "100vh" }}>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4">Lesson not found</Typography>
+          </Box>
+        </Grid>
       ) : (
         <div
           id="lesson-container"
