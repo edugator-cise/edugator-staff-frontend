@@ -32,7 +32,7 @@ export const useFetchProblem = ({
       .then((values) => {
         setProblem(values);
         setStatus(FetchStatus.succeed);
-        if (values.testCases.length > 0) {
+        if (values?.testCases?.length > 0) {
           setStdin(values.testCases[0].input);
         }
       })
