@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material/";
 import { IAdminModule } from "components/Modules/types";
+import { useDispatch } from "react-redux";
 import { openEditDialog } from "components/Modules/ModulesSlice";
-import { useDispatch } from "react-redux"
+
 interface MenuProps {
   module: IAdminModule;
   setModuleToDelete: (module: IAdminModule) => void;
@@ -11,7 +12,8 @@ interface MenuProps {
 
 export function ModuleMenu({ module, setModuleToDelete }: MenuProps) {
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClickAway = (event: any) => {
     if (event) event.stopPropagation();
