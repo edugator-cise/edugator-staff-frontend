@@ -63,6 +63,9 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   const problemId = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?._id
   );
+  const problemTitle = useSelector(
+    (state: RootState) => state.codeEditor.currentProblem?.title
+  );
   const fileType = useSelector(
     (state: RootState) => state.codeEditor.currentProblem?.fileExtension
   );
@@ -109,9 +112,10 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     if (!foundProblem) {
       return "edugator-code.cpp";
     }
-    return `cop3530_${currentModuleNumber + 1}_${
-      currentProblemNumber + 1
-    }${fileType}`;
+    // return `${currentModuleNumber + 1}_${
+    //   currentProblemNumber + 1
+    // }${fileType}`;
+    return `${problemTitle}${fileType}`;
   };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
