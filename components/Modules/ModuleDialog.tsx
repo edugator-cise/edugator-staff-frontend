@@ -2,14 +2,14 @@ import React from "react";
 import { TextField, Typography, TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { DialogStatus, NullModule } from "components/Modules/types";
-import { useDispatch, useSelector } from "react-redux"; 
+import { useDispatch, useSelector } from "react-redux";
 import {
   requestNewModule,
   requestModifyModule,
   closeDialog,
-} from "../ModulesPage.slice";
-import { IModuleBase } from "../../../shared/types";
-import Dialog from "../../../shared/GenericDialog";
+} from "components/Modules/ModulesSlice";
+import { IModuleBase } from "src/shared/types";
+import Dialog from "src/shared/GenericDialog";
 import { isBlank } from "src/shared/utils";
 import { RootState } from "lib/store/store";
 

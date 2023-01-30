@@ -1,7 +1,8 @@
+import * as React from "react";
 import { Snackbar, Alert } from "@mui/material";
-import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { closeAlert } from "../ModulesPage.slice";
+import { closeAlert } from "components/Modules/ModulesSlice";
+import { RootState } from "lib/store/store";
 
 export function ModulesSnackbar() {
   const dispatch = useDispatch();

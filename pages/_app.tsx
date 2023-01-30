@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
 import theme from "constants/theme";
-import { ThemeProvider } from "@mui/system";
+import { ThemeProvider, StyledEngineProvider } from "@mui/system";
 import "styles/App.module.css";
 import "styles/App.css";
 import "styles/index.css";
@@ -31,9 +31,11 @@ const App = ({ Component, pageProps }: Props) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
     <Provider store={store}>
+      <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
+      </StyledEngineProvider>
     </Provider>
   );
 };
