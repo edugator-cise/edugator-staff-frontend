@@ -22,7 +22,6 @@ import { FetchStatus } from "hooks/types";
 export default function LearnPage() {
   let questionCount = 1;
 
-  const dispatch = useDispatch();
   const router = useRouter();
   const params = router.query;
 
