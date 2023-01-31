@@ -1,7 +1,7 @@
 import { apiRoutes } from "constants/apiRoutes";
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
-import { FetchStatus, Service } from "./types";
+import { FetchStatus } from "./types";
 
 interface Module {
   _id: string;

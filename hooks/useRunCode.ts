@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import apiClient from "lib/api/apiClient";
 import {
   evaluateCompilerBody,
@@ -9,7 +8,7 @@ import {
 import { IResultSubmission, IToken } from "components/CodeEditor/types";
 import { IJudge0Response } from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
-import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
+import toast from "react-hot-toast";
 import { CompilerOutput } from "./types";
 import { apiRoutes } from "constants/apiRoutes";
 
@@ -61,8 +60,6 @@ export const useRunCode = (locationState: string) => {
     setSubmissionOutput(undefined);
     setActiveTab(0);
   }, [locationState]);
-
-  const dispatch = useDispatch();
 
   const runCode = async ({
     code,
@@ -122,12 +119,7 @@ export const useRunCode = (locationState: string) => {
       });
     } catch (error: any) {
       setIsSubmissionRunning(false);
-      dispatch(
-        setRunCodeError({
-          hasError: true,
-          errorMessage: error.message || "Something went wrong",
-        })
-      );
+      toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -161,15 +153,9 @@ export const useRunCode = (locationState: string) => {
       );
       setActiveTab(2);
       setIsSubmissionRunning(false);
-      dispatch(setSubmissionOutput(data));
     } catch (error: any) {
       setIsSubmissionRunning(false);
-      dispatch(
-        setRunCodeError({
-          hasError: true,
-          errorMessage: error.message || "Something went wrong",
-        })
-      );
+      toast.error(error.message || "Something went wrong");
     }
   };
   return {

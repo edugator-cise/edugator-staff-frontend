@@ -1,21 +1,12 @@
-import {
-  IModuleWithProblemsAndLessons,
-  INavigationItem,
-} from "components/CodeEditor/types";
+import { IModuleWithProblemsAndLessons } from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import { createNavStructure } from "utils/CodeEditorUtils";
 import { FetchStatus } from "./types";
-import { useDispatch } from "react-redux";
-import {
-  setRunCodeError,
-  //setRunningSubmission,
-} from "components/CodeEditor/CodeEditorSlice";
 import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
 
 const useNavigation = (isAdmin: boolean) => {
-  const dispatch = useDispatch();
-
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
   const [navigation, setNavigation] = useState<IModuleWithProblemsAndLessons[]>(
     []
@@ -38,7 +29,7 @@ const useNavigation = (isAdmin: boolean) => {
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
-        dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
+        toast.error(e.message);
         //dispatch(setRunningSubmission(false));
         setStatus(FetchStatus.failed);
         setError(e);

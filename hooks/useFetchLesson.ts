@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
-import { useDispatch, useSelector } from "react-redux";
-import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import { FetchStatus } from "./types";
 import { ILesson } from "src/shared/types";
 import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
 
 export const useFetchLesson = ({ id }: { id: string }) => {
-  const dispatch = useDispatch();
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
   const [lesson, setLesson] = useState<ILesson | undefined>(undefined);
   const [error, setError] = useState<Error | undefined>(undefined);
@@ -25,7 +23,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
-        dispatch(setRunCodeError({ hasError: true, errorMessage: e.message }));
+        toast.error(e.message);
         // dispatch(setRunningSubmission(false)); TODO: handle this, should we move this to global state?
         setStatus(FetchStatus.failed);
         setError(e);

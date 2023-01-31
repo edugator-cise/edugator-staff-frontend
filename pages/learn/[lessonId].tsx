@@ -18,7 +18,6 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
-import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 
 export default function LearnPage() {
   let questionCount = 1;
@@ -172,9 +171,6 @@ export default function LearnPage() {
               marginRight: "auto",
               marginLeft: "auto",
               zIndex: 300,
-            }}
-            onClose={() => {
-              dispatch(setRunCodeError({ hasError: false, errorMessage: "" }));
             }}
           >
             {error.message}

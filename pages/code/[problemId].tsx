@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { adminPathRegex } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout";
-import { setRunCodeError } from "components/CodeEditor/CodeEditorSlice";
 import {
   Grid,
   CircularProgress,
@@ -82,9 +81,6 @@ export default function CodeEditor() {
               marginRight: "auto",
               marginLeft: "auto",
               zIndex: 300,
-            }}
-            onClose={() => {
-              dispatch(setRunCodeError({ hasError: false, errorMessage: "" }));
             }}
           >
             {error.message}

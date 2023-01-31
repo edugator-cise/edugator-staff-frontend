@@ -10,6 +10,7 @@ import "styles/App.css";
 import "styles/index.css";
 import "styles/learnStyles.css";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -32,9 +33,10 @@ const App = ({ Component, pageProps }: Props) => {
   return (
     <Provider store={store}>
       <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        {getLayout(<Component {...pageProps} />)}
-      </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <Toaster />
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeProvider>
       </StyledEngineProvider>
     </Provider>
   );
