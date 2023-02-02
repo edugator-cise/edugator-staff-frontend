@@ -93,25 +93,25 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
   };
 
   const generateFileName = () => {
-    let currentModuleNumber = -1;
-    let currentProblemNumber = -1;
-    let foundProblem = false;
-    for (let i = 0; i < navStructure.length; i++) {
-      for (let j = 0; j < navStructure[i].problems.length; j++) {
-        if (navStructure[i].problems[j]._id === problemId) {
-          foundProblem = true;
-          currentModuleNumber = i;
-          currentProblemNumber = j;
-          break;
-        }
-      }
-      if (foundProblem) {
-        break;
-      }
-    }
-    if (!foundProblem) {
-      return "edugator-code.cpp";
-    }
+    // let currentModuleNumber = -1;
+    // let currentProblemNumber = -1;
+    // let foundProblem = false;
+    // for (let i = 0; i < navStructure.length; i++) {
+    //   for (let j = 0; j < navStructure[i].problems.length; j++) {
+    //     if (navStructure[i].problems[j]._id === problemId) {
+    //       foundProblem = true;
+    //       currentModuleNumber = i;
+    //       currentProblemNumber = j;
+    //       break;
+    //     }
+    //   }
+    //   if (foundProblem) {
+    //     break;
+    //   }
+    // }
+    // if (!foundProblem) {
+    //   return "edugator-code.cpp";
+    // }
     // return `${currentModuleNumber + 1}_${
     //   currentProblemNumber + 1
     // }${fileType}`;
