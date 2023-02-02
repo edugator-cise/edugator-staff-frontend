@@ -126,6 +126,17 @@ export const MetadataForm = (props: Props) => {
                 <Field component={IntegratedDatePicker} name="dueDate" />
               </LocalizationProvider>
             </Box>
+            <TextField
+              name="fileName"
+              label="File Name"
+              value={values.title}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+              error={touched.title && Boolean(errors.title)}
+              helperText={touched.title && errors.title}
+              sx={{ width: "50%" }}
+            />
           </Stack>
         </Form>
       )}
