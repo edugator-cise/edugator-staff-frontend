@@ -13,9 +13,7 @@ import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 import { WarningDialog } from "../Dialogs/WarningDialog";
 import { useDispatch } from "react-redux";
-import {
-    changeActiveStep
-  } from "./problemEditorContainerSlice";
+import { changeActiveStep } from "./problemEditorContainerSlice";
 
 const steps = [
   "Metadata",
@@ -26,7 +24,6 @@ const steps = [
 ];
 
 export const ProblemEditorContainer = () => {
-    
   const activeStep = useAppSelector(
     (state) => state.problemEditorContainer.activeStep
   );
@@ -79,8 +76,10 @@ export const ProblemEditorContainer = () => {
         {steps.map((label, index) => {
           return (
             <Step key={index}>
-              <StepLabel onClick={handleChange.bind(this, index)}>{label}</StepLabel>
-            </Step> 
+              <StepLabel onClick={handleChange.bind(this, index)}>
+                {label}
+              </StepLabel>
+            </Step>
           );
         })}
       </Stepper>
