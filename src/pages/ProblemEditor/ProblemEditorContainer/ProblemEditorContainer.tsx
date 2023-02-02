@@ -12,6 +12,11 @@ import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 import { WarningDialog } from "../Dialogs/WarningDialog";
+import { useDispatch } from "react-redux";
+import {
+    incrementActiveStep,
+    decrementActiveStep,
+  } from "./problemEditorContainerSlice";
 
 const steps = [
   "Metadata",
@@ -22,6 +27,7 @@ const steps = [
 ];
 
 export const ProblemEditorContainer = () => {
+    
   const activeStep = useAppSelector(
     (state) => state.problemEditorContainer.activeStep
   );
@@ -43,7 +49,30 @@ export const ProblemEditorContainer = () => {
     }
   };
 
+  const currentStepIsValid = useAppSelector((state) => {
+    switch (state.problemEditorContainer.activeStep) {
+      case 0:
+        return state.problemEditorContainer.metadataIsValid;
+      case 1:
+        return state.problemEditorContainer.problemIsValid;
+      case 2:
+        return state.problemEditorContainer.codeIsValid;
+      case 3:
+        return state.problemEditorContainer.serverConfigIsValid;
+      case 4:
+        return state.problemEditorContainer.testEditorIsValid;
+      default:
+        return false;
+    }
+  });
+
+  const dispatch = useDispatch();
+
   const formRef = useRef<FormikValues>();
+
+  const handleNext = () => {
+    if (currentStepIsValid) dispatch(incrementActiveStep());
+  };
 
   return (
     <Box display="flex" flexDirection="column" flexGrow={1} textAlign="left">
@@ -51,8 +80,8 @@ export const ProblemEditorContainer = () => {
         {steps.map((label, index) => {
           return (
             <Step key={index}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
+              <StepLabel onClick={handleNext}>{label}</StepLabel>
+            </Step> 
           );
         })}
       </Stepper>
