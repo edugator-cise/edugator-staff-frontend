@@ -14,8 +14,7 @@ import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 import { WarningDialog } from "../Dialogs/WarningDialog";
 import { useDispatch } from "react-redux";
 import {
-    incrementActiveStep,
-    decrementActiveStep,
+    changeActiveStep
   } from "./problemEditorContainerSlice";
 
 const steps = [
@@ -70,8 +69,8 @@ export const ProblemEditorContainer = () => {
 
   const formRef = useRef<FormikValues>();
 
-  const handleNext = () => {
-    if (currentStepIsValid) dispatch(incrementActiveStep());
+  const handleChange = (index: number) => {
+    if (currentStepIsValid) dispatch(changeActiveStep(index));
   };
 
   return (
@@ -80,7 +79,7 @@ export const ProblemEditorContainer = () => {
         {steps.map((label, index) => {
           return (
             <Step key={index}>
-              <StepLabel onClick={handleNext}>{label}</StepLabel>
+              <StepLabel onClick={handleChange.bind(this, index)}>{label}</StepLabel>
             </Step> 
           );
         })}
