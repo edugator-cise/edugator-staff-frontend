@@ -9,6 +9,7 @@ export interface ITestCase {
 
 export interface IProblem extends IProblemBase {
   hidden: boolean;
+  fileName?: string;
   language: string;
   dueDate: string; //iso format
   statement: string;

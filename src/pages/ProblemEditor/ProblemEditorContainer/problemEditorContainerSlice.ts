@@ -11,6 +11,7 @@ export interface MetadataFields {
   title: string;
   hidden: boolean;
   dueDate: Date;
+  fileName?: string;
 }
 
 export interface CodeEditorFields {

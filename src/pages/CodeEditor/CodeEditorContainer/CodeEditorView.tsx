@@ -50,9 +50,14 @@ const CodeHolder = styled("div")({
 interface CodeEditorProps {
   code: string;
   templatePackage: string;
+  fileName: string;
 }
 
-export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
+export const CodeEditorView = ({
+  code,
+  templatePackage,
+  fileName,
+}: CodeEditorProps) => {
   const dispatch = useDispatch();
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
@@ -89,37 +94,13 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     editorRef.current = editor;
   };
 
-  const generateFileName = () => {
-    let currentProblemName = "";
-    let foundProblem = false;
-    for (const module of navStructure) {
-      for (const problem of module.problems) {
-        if (problem._id === problemId) {
-          foundProblem = true;
-          currentProblemName = problem.problemName
-            .trim()
-            .replace(" ", "_")
-            .toLowerCase();
-          break;
-        }
-      }
-      if (foundProblem) {
-        break;
-      }
-    }
-    if (!foundProblem) {
-      return "not_found.cpp";
-    }
-    return `${currentProblemName}${fileType}`;
-  };
   const handleDownload = () => {
     const blob = new Blob([currentCode]);
     const blobURL = URL.createObjectURL(blob);
-    const filename = generateFileName();
     // Create a new link
     const anchor = document.createElement("a");
     anchor.href = blobURL;
-    anchor.download = filename;
+    anchor.download = fileName;
     // Append to the DOM
     document.body.appendChild(anchor);
     // Trigger `click` event

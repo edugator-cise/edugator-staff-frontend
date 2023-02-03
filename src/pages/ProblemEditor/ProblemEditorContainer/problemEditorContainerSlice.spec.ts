@@ -174,6 +174,7 @@ const mockProblem: IProblem = {
   timeLimit: 10,
   memoryLimit: 5,
   hidden: false,
+  fileName: "mock.cpp",
   dueDate: "2021-11-04",
   language: "C++",
   fileExtension: ".cpp",
@@ -203,6 +204,7 @@ const expectedState: ProblemEditorContainerState = {
     title: mockProblem.title,
     dueDate: new Date(mockProblem.dueDate),
     hidden: mockProblem.hidden,
+    fileName: mockProblem.fileName,
   },
   codeEditor: {
     code: { ...mockProblem.code },

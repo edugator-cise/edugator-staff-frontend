@@ -129,12 +129,12 @@ export const MetadataForm = (props: Props) => {
             <TextField
               name="fileName"
               label="File Name"
-              value={values.title}
+              value={values.fileName}
               onChange={handleChange}
               onBlur={handleBlur}
               required
-              error={touched.title && Boolean(errors.title)}
-              helperText={touched.title && errors.title}
+              error={touched.fileName && Boolean(errors.fileName)}
+              helperText={touched.fileName && errors.fileName}
               sx={{ width: "50%" }}
             />
           </Stack>

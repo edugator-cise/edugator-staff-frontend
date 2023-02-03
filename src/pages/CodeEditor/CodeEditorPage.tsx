@@ -69,6 +69,11 @@ export const CodeEditorPage = () => {
                 <CodeEditorView
                   code={currentProblem.code.body}
                   templatePackage={currentProblem.templatePackage}
+                  fileName={
+                    currentProblem.fileName
+                      ? currentProblem.fileName
+                      : "edugator-code.cpp"
+                  }
                 />
               </Allotment.Pane>
               <Allotment.Pane minSize={100}>
