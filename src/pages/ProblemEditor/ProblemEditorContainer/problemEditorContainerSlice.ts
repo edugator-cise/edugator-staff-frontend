@@ -237,6 +237,7 @@ export const problemEditorContainerSlice = createSlice({
         title: action.payload.title,
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate),
+        fileName: action.payload.fileName,
       };
       state.codeEditor = {
         code: { ...action.payload.code },
