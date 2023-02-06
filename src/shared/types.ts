@@ -16,6 +16,7 @@ export interface IProblem extends IProblemBase {
     header: string;
     body: string;
     footer: string;
+    solution: string;
   };
   fileExtension: string;
   testCases: ITestCase[];

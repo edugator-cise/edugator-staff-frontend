@@ -181,6 +181,7 @@ const mockProblem: IProblem = {
     header: "headerFunction()",
     body: "bodyFunction()",
     footer: "footerFunction()",
+    solution: "solutionFunction()"
   },
   buildCommand: "-flag",
   testCases: [

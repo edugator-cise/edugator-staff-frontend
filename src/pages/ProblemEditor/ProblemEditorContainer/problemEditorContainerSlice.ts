@@ -18,6 +18,7 @@ export interface CodeEditorFields {
     header: string;
     body: string;
     footer: string;
+    solution: string;
   };
   fileExtension: string;
 }
@@ -87,6 +88,7 @@ const initialState: ProblemEditorContainerState = {
       header: "",
       body: "",
       footer: "",
+      solution: "",
     },
     fileExtension: ".cpp",
   },
@@ -161,6 +163,9 @@ export const problemEditorContainerSlice = createSlice({
       if (state.activeStep > 0) {
         state.activeStep -= 1;
       }
+    },
+    changeActiveStep: (state, action: PayloadAction<number>) => {
+      state.activeStep = action.payload;
     },
 
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
@@ -292,6 +297,7 @@ export const {
   validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
+  changeActiveStep,
   updateProblem,
   updateMetadata,
   updateCodeEditor,
