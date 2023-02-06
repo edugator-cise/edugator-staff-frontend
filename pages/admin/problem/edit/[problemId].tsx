@@ -7,18 +7,22 @@ import { useDispatch } from "react-redux";
 import {
   openWarningModal,
   requestGetProblemSuccess,
-  requestGetProblemFailure,
   resetState,
+  updateModuleId,
   updateModuleName,
   WarningTypes,
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
+import { useState } from "react";
+import { FetchStatus } from "hooks/types";
+import toast from "react-hot-toast";
+import { CircularProgress } from "@mui/material";
 
 const ProblemEditPage = () => {
   const router = useRouter();
-  const { problemId , moduleName } = router.query;
-
+  const { problemId , moduleName, moduleId } = router.query;
+  const [status, setStatus] = useState(FetchStatus.loading)
   const dispatch = useDispatch();
   const actions = {
     back: {
@@ -36,29 +40,34 @@ const ProblemEditPage = () => {
   };
 
   useEffect(() => {
-    dispatch(updateModuleName(moduleName as string));
-    return () => {
-      dispatch(resetState());
-    };
-  }, [problemId, moduleName]);
-
-  useEffect(() => {
     const getProblemRequest = () =>
     apiClient.get(apiRoutes.admin.getProblem(problemId as string));
 
     getProblemRequest().then(value => {
-      dispatch(requestGetProblemSuccess(value.data))
+      dispatch(updateModuleId(moduleId as string));
+      dispatch(updateModuleName(moduleName as string));
+      dispatch(requestGetProblemSuccess(value.data));
+      setStatus(FetchStatus.succeed);
     }).catch(e => {
-      dispatch(requestGetProblemFailure(e));
+      toast.error("failed to get problem");
+      setStatus(FetchStatus.failed);
     })
-  }, [problemId]);
+
+    return () => {
+      dispatch(resetState())
+    }
+  }, [problemId, moduleName]);
 
   return (
     <AdminLayout
       pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
       actionButtons={[actions.back, actions.delete]}
     >
-      <ProblemEditorContainer />
+      {status === FetchStatus.loading ? (
+        <CircularProgress />
+      ) : (
+        <ProblemEditorContainer />
+      )}
     </AdminLayout>
   );
 };

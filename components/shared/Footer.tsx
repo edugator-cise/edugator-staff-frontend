@@ -2,7 +2,7 @@ import { Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import { styled } from "@mui/styles";
 import theme from "constants/theme";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Routes } from "constants/navigationRoutes";
 
 const FooterHolder = styled("div")({
@@ -51,7 +51,7 @@ function Footer() {
 
       <LinkHolder>
         <Link
-          to={Routes.PrivacyNotice}
+          href={Routes.PrivacyNotice}
           style={{ textDecoration: "none" }}
           onClick={() => {
             window.scrollTo(0, 0);
@@ -65,7 +65,7 @@ function Footer() {
           </Typography>
         </Link>
         <Link
-          to={Routes.TermsOfUse}
+          href={Routes.TermsOfUse}
           style={{ textDecoration: "none" }}
           onClick={() => {
             window.scrollTo(0, 0);
@@ -79,7 +79,7 @@ function Footer() {
           </Typography>
         </Link>
         <Link
-          to={Routes.FERPA}
+          href={Routes.FERPA}
           style={{ textDecoration: "none" }}
           onClick={() => {
             window.scrollTo(0, 0);

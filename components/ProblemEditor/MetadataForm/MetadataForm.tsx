@@ -39,7 +39,6 @@ export const MetadataForm = (props: Props) => {
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.metadata
   );
-
   const dateError: DateError = {};
 
   const validate = (values: MetadataFields) => {

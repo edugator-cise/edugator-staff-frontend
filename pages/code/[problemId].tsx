@@ -25,6 +25,7 @@ import { useFetchProblem } from "hooks/useFetchProblem";
 import { FetchStatus } from "hooks/types";
 import { useRunCode } from "hooks/useRunCode";
 import dynamic from "next/dynamic";
+import { LocalStorage } from "lib/auth/LocalStorage";
 
 const Allotment = dynamic(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -57,7 +58,7 @@ export default function CodeEditor() {
     error,
   } = useFetchProblem({
     id: params && params.problemId ? (params.problemId as string) : "",
-    isAdmin: adminPathRegex.test(locationState),
+    isAdmin: LocalStorage.getToken() !== null,
   });
 
   useEffect(() => {

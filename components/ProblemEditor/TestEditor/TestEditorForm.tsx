@@ -29,7 +29,7 @@ const requestAddOrEditProblem = async (value: ProblemEditorContainerState, type:
   let problem: IProblem = {
     ...problemState.metadata,
     language,
-    dueDate: problemState.metadata.dueDate.toISOString(),
+    dueDate: problemState.metadata.dueDate,
     templatePackage: problemState.problem.templatePackage,
     statement: problemState.problem.problemStatement,
     ...problemState.codeEditor,

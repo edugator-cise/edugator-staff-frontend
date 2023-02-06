@@ -1,0 +1,77 @@
+
+  .editor {
+    border: 1px solid #f1f1f1;
+    background-color: #ffffff;
+    box-shadow: 0 0 5px #f1f1f1;
+    padding: 0px 20px 0px 20px;
+    margin: 20px 0px 20px 0px;
+  }
+
+  .contentEditor button {
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px 5px 10px;
+    margin: 0px 5px 0px 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #414141;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .contentEditor button:hover {
+    background-color: #e9e9e9;
+    cursor: pointer;
+  }
+
+  .rdw-editor-toolbar {
+    background: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    border-radius: 0;
+  }
+
+  .rdw-dropdown-selectedtext {
+    background-color: #f1f1f1;
+    font-family: 'Inter', sans-serif;
+    color: #414141;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .rdw-dropdown-selectedtext:hover {
+    background-color: #e9e9e9 !important;
+  }
+
+  .rdw-dropdown-wrapper:hover {
+    background-color: #e9e9e9 !important;
+    box-shadow: none !important;
+    border-radius: 4px;
+  }
+
+  .rdw-exercise-wrapper {
+    background-color: #f1f1f1 !important;
+  }
+
+  .rdw-option-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: #414141;
+    background-color: #f1f1f1 !important;
+    transition: background-color 0.2s ease-in-out;
+
+  }
+
+  .rdw-option-wrapper:hover {
+    background-color: #e9e9e9 !important;
+    box-shadow: none !important;
+    border-radius: 4px;
+  }
+
+  .rdw-editor-main {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .toolbar-icon {
+    color: #414141;
+    height: 20px;
+    width: 20px;
+  }

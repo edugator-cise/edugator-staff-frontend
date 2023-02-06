@@ -17,6 +17,8 @@ export const apiRoutes = {
     updateUser: "v1/user/updateUser",
     deleteUser: "v1/user/deleteUser",
     createProblem: "v1/admin/problem",
-    editProblem: (id: string) => `v1/admin/problem/${id}`
+    editProblem: (id: string) => `v1/admin/problem/${id}`,
+    putLesson: (id: string) => `v1/admin/lesson/${id}`,
+    createLesson: "v1/admin/lesson/"
   },
 };

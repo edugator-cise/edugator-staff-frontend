@@ -46,6 +46,11 @@ const ModulesPage = () => {
 
   const ProfessorHeaderButtons = [
     {
+      label: "Go To Code Editor",
+      onClick: () => router.push(Routes.Code),
+      variant: "outlined",
+    },
+    {
       label: "Manage Accounts",
       onClick: () => router.push(Routes.Accounts),
       variant: "outlined",
@@ -58,6 +63,11 @@ const ModulesPage = () => {
   ];
 
   const moduleHeaderButtons = [
+    {
+      label: "Go To Code Editor",
+      onClick: () => router.push(Routes.Code),
+      variant: "outlined",
+    },
     {
       label: "Add Module",
       onClick: () => dispatch(openCreateDialog()),

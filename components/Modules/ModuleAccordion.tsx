@@ -188,7 +188,8 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                                   router.push({
                                     pathname: Routes.ProblemEditorBaseWithoutId + problem._id,
                                     query: {
-                                      moduleName: module.name
+                                      moduleName: module.name,
+                                      moduleId: module._id,
                                     }
                                   }
                                   );
@@ -241,6 +242,7 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                                     pathname: Routes.ContentEditorBaseWithoutId + lesson._id,
                                     query: {
                                       moduleName: module.name,
+                                      moduleId: module._id,
                                     }
                                   }
                                   );

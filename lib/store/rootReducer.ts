@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import problemEditorContainerReducer from "components/ProblemEditor/problemEditorContainerSlice";
-import contentEditorReducer from "../../src/pages/ContentEditor/contentEditorPageSlice";
+import contentEditorReducer from "components/ContentEditor/contentEditorPageSlice";
 import { loginSlice } from "components/Login/LoginSlice"
 import moduleReducer from "components/Modules/ModulesSlice";
 // import gradingReducer from "../../src/pages/grading/GradingDialog.slice";

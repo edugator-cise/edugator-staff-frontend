@@ -136,13 +136,7 @@ export const contentEditorPageSlice = createSlice({
       state.isSubmitting = false;
       state.showFailureModal = true;
     },
-
-    requestGetContent: (state, action: PayloadAction<string>) => {
-      state.fetchingContent = true;
-    },
     requestGetContentSuccess: (state, action: PayloadAction<ILesson>) => {
-      state.fetchingContent = false;
-
       state.metadata = {
         title: action.payload.title,
         author: action.payload.author,
@@ -157,24 +151,11 @@ export const contentEditorPageSlice = createSlice({
         entityMap: action.payload.entityMap,
       };
     },
-    requestGetContentFailure: (state, action: PayloadAction<any>) => {
-      state.fetchingContent = false;
-      alert(action.payload);
-    },
-
-    requestUpdateContent: (state) => {
-      state.isSubmitting = true;
-    },
     requestUpdateContentSuccess: (state) => {
       state.isSubmitting = false;
       state.showSuccessModal = true;
       // TODO some kind of edit confirmation then back to modules
     },
-    requestUpdateContentFailure: (state, action: PayloadAction<any>) => {
-      state.isSubmitting = false;
-      state.showFailureModal = true;
-    },
-
     requestDeleteContent: (state) => {},
     requestDeleteContentSuccess: (state) => {},
     requestDeleteContentFailure: (state, action: PayloadAction<any>) => {
@@ -196,12 +177,8 @@ export const {
   requestAddContent,
   requestAddContentSuccess,
   requestAddContentFailure,
-  requestGetContent,
   requestGetContentSuccess,
-  requestGetContentFailure,
-  requestUpdateContent,
   requestUpdateContentSuccess,
-  requestUpdateContentFailure,
   requestDeleteContent,
   requestDeleteContentSuccess,
   requestDeleteContentFailure,

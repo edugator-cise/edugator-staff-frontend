@@ -7,14 +7,13 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
-import { adminPathRegex, colors } from "constants/config";
-// import { useHistory, useLocation } from "react-router";
+import { colors } from "constants/config";
 import { BookOpen, Code } from "phosphor-react";
 import Link from "next/link";
 import useNavigation from "hooks/useNavigation";
 import { FetchStatus } from "hooks/types";
-import { useRouter } from "next/router";
 import { createNavStructure } from "utils/CodeEditorUtils";
+import { LocalStorage } from "lib/auth/LocalStorage";
 
 interface ClickedMenu {
   [key: string]: boolean;
@@ -33,11 +32,8 @@ const CustomListItemButton = styled(ListItemButton)(
 );
 
 export const Sidenav = ({ isHidden }: SidenavProps) => {
-  const router = useRouter();
-  const locationState = router.asPath;
-
   const { problemAndLessonSet, status } = useNavigation(
-    adminPathRegex.test(locationState)
+    LocalStorage.getToken() !== null
   );
   const navigation = createNavStructure(problemAndLessonSet);
   const [menu, setMenu] = useState<ClickedMenu>({});

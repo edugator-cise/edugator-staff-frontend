@@ -13,6 +13,7 @@ import { IProblem } from "lib/shared/types";
 import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
+import { LocalStorage } from "lib/auth/LocalStorage";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -113,7 +114,7 @@ export const CodeEditorView = ({
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
   const { problemAndLessonSet } = useNavigation(
-    adminPathRegex.test(locationState)
+    LocalStorage.getToken() !== null
   );
   const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
