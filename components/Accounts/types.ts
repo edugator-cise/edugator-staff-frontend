@@ -1,4 +1,4 @@
-import { IFeedback } from "src/shared/types";
+import { IFeedback } from "lib/shared/types";
 
 export enum rolesEnum {
   TA = "TA",

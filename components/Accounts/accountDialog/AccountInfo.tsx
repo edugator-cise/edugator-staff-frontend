@@ -7,10 +7,9 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { AlertType, IFeedback } from "lib/shared/types";
-import { setAlert } from "../AdminAccountsPage.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
+import toast from "react-hot-toast";
 
 const ContactItem = styled(Typography)(({ theme }) => ({
   display: "flex",
@@ -60,13 +59,7 @@ const ContactInfo: React.FC<ContactItemProps> = ({ icon, children }) => {
 
     const capitalized_content = icon.charAt(0).toUpperCase() + icon.slice(1);
 
-    const copyFeedback: IFeedback = {
-      display: true,
-      type: AlertType.success,
-      message: `${capitalized_content} copied to the clipboard!`,
-    };
-
-    dispatch(setAlert(copyFeedback));
+    toast.success(`${capitalized_content} copied to the clipboard`);
   };
 
   return (

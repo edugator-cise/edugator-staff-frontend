@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import toast from "react-hot-toast";
 import { FetchStatus } from "./types";
-import { IProblem } from "src/shared/types";
+import { IProblem } from "lib/shared/types";
 import { apiRoutes } from "constants/apiRoutes";
 
 export const useFetchProblem = ({

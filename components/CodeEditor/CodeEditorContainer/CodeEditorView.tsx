@@ -9,7 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
-import { IProblem } from "src/shared/types";
+import { IProblem } from "lib/shared/types";
 import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";

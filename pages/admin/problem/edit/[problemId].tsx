@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import {
   openWarningModal,
-  requestGetProblem,
   requestGetProblemSuccess,
   requestGetProblemFailure,
   resetState,

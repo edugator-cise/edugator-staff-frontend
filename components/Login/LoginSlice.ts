@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import { rolesEnum } from "components/Accounts/types";
-import { IAuthState, IRequestLoginAction, ILoginSuccess } from "src/pages/Login/types";
+import { IAuthState, IRequestLoginAction, ILoginSuccess } from "./types";
 
 const initialAuthState: IAuthState = {
   isLoading: false,

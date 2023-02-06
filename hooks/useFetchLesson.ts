@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import { FetchStatus } from "./types";
-import { ILesson } from "src/shared/types";
+import { ILesson } from "lib/shared/types";
 import { apiRoutes } from "constants/apiRoutes";
 import toast from "react-hot-toast";
 
