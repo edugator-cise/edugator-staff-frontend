@@ -1,7 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import TopicLink from "./TopicLink";
-// import { Link } from "react-router-dom";
+import TopicLink from "components/shared/TopicLink";
 import LightModeLogo from "public/LightModeLogo.svg";
 import theme from "constants/theme";
 import {

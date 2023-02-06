@@ -7,10 +7,14 @@ import { useDispatch } from "react-redux";
 import {
   openWarningModal,
   requestGetProblem,
+  requestGetProblemSuccess,
+  requestGetProblemFailure,
   resetState,
   updateModuleName,
   WarningTypes,
 } from "components/ProblemEditor/problemEditorContainerSlice";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
 
 const ProblemEditPage = () => {
   const router = useRouter();
@@ -40,7 +44,14 @@ const ProblemEditPage = () => {
   }, [problemId, moduleName]);
 
   useEffect(() => {
-    dispatch(requestGetProblem(problemId as string));
+    const getProblemRequest = () =>
+    apiClient.get(apiRoutes.admin.getProblem(problemId as string));
+
+    getProblemRequest().then(value => {
+      dispatch(requestGetProblemSuccess(value.data))
+    }).catch(e => {
+      dispatch(requestGetProblemFailure(e));
+    })
   }, [problemId]);
 
   return (

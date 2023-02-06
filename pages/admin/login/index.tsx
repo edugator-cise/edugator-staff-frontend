@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 import { baseAPIURL } from "constants/config";
 import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
 const LoginForm = styled(Form)(
@@ -48,13 +48,13 @@ export default function LoginPage(): React.ReactElement{
   const dispatch = useDispatch();
   const authState = useSelector((state: RootState) => state.login);
   const router = useRouter();
-  
+  const [token, setToken] = useState(LocalStorage.getToken());
 
   useEffect(() => {
-    if (LocalStorage.getToken()) {
+    if (token) {
       router.push(Routes.Modules)
     }
-  }, [])
+  }, [token])
 
   return (
     <AdminLayout pageTitle="Admin Login">
@@ -76,8 +76,9 @@ export default function LoginPage(): React.ReactElement{
             try {
               const url = `${baseAPIURL}v1/auth/login`;
               const { data }: { data: ILoginSuccess} = await apiClient.post(url, values);
+              LocalStorage.setToken(data.token)
               dispatch(receiveLoginSuccess(data));
-              router.push(Routes.Modules);
+              setToken(LocalStorage.getToken());
             } catch (e) {
               LocalStorage.checkUnauthorized(e);
               dispatch(receiveLoginFailure("The username or password is incorrect, Please try again"))

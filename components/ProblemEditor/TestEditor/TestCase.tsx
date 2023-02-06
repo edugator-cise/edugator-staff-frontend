@@ -10,9 +10,9 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { TestCaseField, TestCaseVisibility } from "./TestCase.utils";
-import ConfirmDelete from "src/shared/ConfirmDelete";
+import ConfirmDelete from "components/shared/ConfirmDelete";
 import Radio from "@mui/material/Radio";
-import { FormTextField } from "src/shared/FormTextField";
+import { FormTextField } from "components/shared/FormTextField";
 import { Field } from "formik";
 
 interface TestCaseProps {

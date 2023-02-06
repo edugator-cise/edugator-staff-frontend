@@ -1,25 +1,24 @@
-import React from "react";
-import { LayoutContainer } from "../../shared/LayoutContainer";
+import {useEffect, useState} from "react";
+import AdminLayout from "components/AdminLayout";
 import { Fade, Stack, duration, Container } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
-import { useHistory } from "react-router-dom";
+import { useRouter } from "next/router"
 import {
-  requestAccounts,
   unsetSelectedAccount,
-} from "./AdminAccountsPage.slice";
-import {
-  AccountsTable,
-  AccountDialog,
-  NewAccountDialog,
-  DashboardProgress,
-  AccountSnackbar,
-} from "./components";
+} from "components/Accounts/AdminAccountsPage.slice";
+import { AccountsTable } from "components/Accounts/AccountsTable";
+import { AccountDialog } from "components/Accounts/accountDialog/AccountDialog";
+import { NewAccountDialog } from "components/Accounts/accountDialog/NewAccountDialog";
+import { DashboardProgress } from "components/Accounts/DashboardProgress";
 import { Routes } from "constants/navigationRoutes";
+import { useFetchAccount } from "hooks/useFetchAccount";
+import { FetchStatus } from "hooks/types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
 
 export function AdminAccountsPage() {
-  const history = useHistory();
-  const dispatch = useAppDispatch();
-  const dashboardState = useAppSelector((state) => state.accountManager);
+  const history = useRouter();
+  const dispatch = useDispatch();
+  const dashboardState = useSelector((state: RootState) => state.accountManager);
 
   // whether there is a selected account from the table
   const selectingAccount = dashboardState.selectedAccount ? true : false;
@@ -28,25 +27,23 @@ export function AdminAccountsPage() {
   const loading = dashboardState.loading;
 
   // whether we want start transitioning
-  const [displayTable, setDisplayTable] = React.useState<boolean>(false);
+  const [displayTable, setDisplayTable] = useState<boolean>(false);
 
   // whether we want to add a new account (dialog)
-  const [newUserDialog, setNewUserDialog] = React.useState<boolean>(false);
+  const [newUserDialog, setNewUserDialog] = useState<boolean>(false);
 
-  React.useEffect(() => {
-    dispatch(requestAccounts());
-  }, [dispatch]);
+  const { status } = useFetchAccount();
 
   // for a smooth transition
-  React.useEffect(() => {
-    if (!loading) {
+  useEffect(() => {
+    if (status === FetchStatus.succeed) {
       setTimeout(() => {
         setDisplayTable(true);
       }, duration.leavingScreen * 2);
     } else {
       setDisplayTable(false);
     }
-  }, [loading]);
+  }, [status]);
 
   const accountsHeaderButtons = [
     {
@@ -62,13 +59,11 @@ export function AdminAccountsPage() {
   ];
 
   return (
-    <LayoutContainer
+    <AdminLayout
       pageTitle={"Admin Accounts"}
       actionButtons={accountsHeaderButtons}
     >
       <>
-        <AccountSnackbar />
-
         <NewAccountDialog
           open={newUserDialog}
           handleClose={() => setNewUserDialog(false)}
@@ -95,6 +90,8 @@ export function AdminAccountsPage() {
           )}
         </Stack>
       </>
-    </LayoutContainer>
+    </AdminLayout>
   );
 }
+
+export default AdminAccountsPage;

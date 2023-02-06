@@ -1,9 +1,8 @@
 import {
   IProblemBase,
   IModuleBase,
-  IFeedback,
   ILessonBase,
-} from "src/shared/types";
+} from "lib/shared/types";
 
 /** Admin Module Interface */
 
@@ -36,7 +35,5 @@ export interface IDialog {
 /* Redux State - Modules */
 export interface IModuleState {
   modules: IAdminModule[];
-  isLoading: boolean;
-  feedback: IFeedback;
   dialogState: IDialog;
 }

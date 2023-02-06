@@ -12,5 +12,11 @@ export const apiRoutes = {
     getLesson: (id: string) => `v1/admin/lesson/${id}`,
     getProblem: (id: string) => `v1/admin/problem/${id}`,
     getNavigation: "v1/module/WithProblems",
+    getAccounts: "v1/user/getUsers",
+    createAccount: "v1/user/create",
+    updateUser: "v1/user/updateUser",
+    deleteUser: "v1/user/deleteUser",
+    createProblem: "v1/admin/problem",
+    editProblem: (id: string) => `v1/admin/problem/${id}`
   },
 };

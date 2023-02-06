@@ -1,8 +1,9 @@
 import React from "react";
 import { Grid, Typography, TextField, MenuItem } from "@mui/material";
-import { useAppSelector } from "../../../../../lib/store/hooks";
-import { rolesEnum } from "../../types";
-import { isBlank } from "../../../../shared/utils";
+import { useSelector } from "react-redux";
+import { rolesEnum } from "../types";
+import { isBlank } from "utils/CodeEditorUtils";
+import { RootState } from "lib/store/store";
 
 interface EditFormProps {
   nameError: boolean;
@@ -13,7 +14,7 @@ interface EditFormProps {
 }
 
 export function AccountEditForm(props: EditFormProps) {
-  const { selectedAccount } = useAppSelector((state) => state.accountManager);
+  const { selectedAccount } = useSelector((state: RootState) => state.accountManager);
 
   const { nameError, validEmail, setNameError, handleEdit, emailInputRef } =
     props;

@@ -1,10 +1,13 @@
-import React from "react";
+import {useState, useRef } from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
-import { requestNewAccount } from "../AdminAccountsPage.slice";
-import { useAppDispatch } from "../../../../lib/store/hooks";
-import { INewAccount, rolesEnum } from "../types";
-import Dialog from "../../../shared/GenericDialog";
-import { isBlank } from "../../../shared/utils";
+import { requestNewAccount, requestNewAccountEnd } from "../AdminAccountsPage.slice";
+import { useDispatch } from "react-redux";
+import { IAccount, IAccountPOST, INewAccount, rolesEnum } from "../types";
+import Dialog from "components/shared/GenericDialog";
+import { isBlank } from "utils/CodeEditorUtils";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
 
 interface NewAccountDialogProps {
   open: boolean;
@@ -19,18 +22,18 @@ const emptyAccount: INewAccount = {
 };
 
 export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
-  const [newAccount, setNewAccount] = React.useState<INewAccount>(emptyAccount);
+  const [newAccount, setNewAccount] = useState<INewAccount>(emptyAccount);
 
   // email textfiel ref & validation
-  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const validEmail = emailInputRef.current?.validity.valid;
-  const [touchedEmail, setTouchedEmail] = React.useState<boolean>(false);
+  const [touchedEmail, setTouchedEmail] = useState<boolean>(false);
 
   // username & name validation
-  const [nameError, setNameError] = React.useState<boolean>(false);
-  const [passwordError, setPasswordError] = React.useState<boolean>(false);
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
 
   const DialogTitle = (
     <>
@@ -49,6 +52,23 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
     </>
   );
 
+  const createNewAccount = async (account: INewAccount) => {
+    try {
+      const { data }: { data: IAccountPOST } = await apiClient.post(apiRoutes.admin.createAccount, account) 
+      const newAccount: IAccount = {
+        name: account.name,
+        role: account.role,
+        username: account.username,
+        phone: account.phone,
+        _id: data.id,
+      }
+      dispatch(requestNewAccountEnd(newAccount));
+      toast.success("User created successfully")
+    } catch(e) {
+      toast.error("Failed to create account");
+    }
+  }
+
   const handleNewAccount = () => {
     const { name, password, username } = newAccount;
 
@@ -65,7 +85,7 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
     }
 
     if (!isBlank(name) && !isBlank(password) && validEmail) {
-      dispatch(requestNewAccount(newAccount));
+      createNewAccount(newAccount);
       handleDialogClose();
     }
   };

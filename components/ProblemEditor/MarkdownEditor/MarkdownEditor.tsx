@@ -2,8 +2,8 @@ import { Divider, Stack, Typography } from "@mui/material";
 import React from "react";
 import Editor from "@monaco-editor/react";
 import { FormikProps } from "formik";
-import { isBlank } from "src/shared/utils";
-import { Markdown } from "src/shared/Markdown";
+import { isBlank } from "utils/CodeEditorUtils";
+import { Markdown } from "components/shared/Markdown";
 import { defaultMarkdown } from "./MarkdownEditor.constants";
 
 interface Props {

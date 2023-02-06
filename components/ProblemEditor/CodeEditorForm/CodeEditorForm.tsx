@@ -13,7 +13,7 @@ import { Form, Formik } from "formik";
 import { RootState } from "lib/store/store";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isBlank } from "src/shared/utils";
+import { isBlank } from "utils/CodeEditorUtils";
 import {
   CodeEditorFields,
   updateCodeEditor,

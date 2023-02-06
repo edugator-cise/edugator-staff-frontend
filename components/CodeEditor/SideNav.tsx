@@ -14,6 +14,7 @@ import Link from "next/link";
 import useNavigation from "hooks/useNavigation";
 import { FetchStatus } from "hooks/types";
 import { useRouter } from "next/router";
+import { createNavStructure } from "utils/CodeEditorUtils";
 
 interface ClickedMenu {
   [key: string]: boolean;
@@ -35,9 +36,10 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
   const router = useRouter();
   const locationState = router.asPath;
 
-  const { navigation, status, error } = useNavigation(
+  const { problemAndLessonSet, status } = useNavigation(
     adminPathRegex.test(locationState)
   );
+  const navigation = createNavStructure(problemAndLessonSet);
   const [menu, setMenu] = useState<ClickedMenu>({});
 
   const handleClick = (item: string) => {

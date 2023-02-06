@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, useRef, useEffect} from "react";
 import { styled } from "@mui/material/styles";
 import {
   Icon,
@@ -9,11 +9,17 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useAppSelector, useAppDispatch } from "../../../../../lib/store/hooks";
-import { requestModifyAccount } from "../../AdminAccountsPage.slice";
-import { AccountEditForm, AccountInfo, AdminActions } from "../";
-import Dialog from "../../../../shared/GenericDialog";
-import { IAccount, rolesEnum } from "../../types";
+import { requestModifyAccountEnd } from "components/Accounts/AdminAccountsPage.slice";
+import { AccountEditForm } from "./AccountInfoEdit";
+import { AccountInfo } from "./AccountInfo";
+import { AdminActions } from "./AdminActions";
+import Dialog from "components/shared/GenericDialog";
+import { IAccount, rolesEnum } from "../types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
 
 const TitleButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(0.5),
@@ -26,11 +32,11 @@ interface AccountDialogProps {
 }
 
 export function AccountDialog({ open, handleClose }: AccountDialogProps) {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
-  const [editMode, setEditMode] = React.useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
 
-  const { selectedAccount } = useAppSelector((state) => state.accountManager);
+  const { selectedAccount } = useSelector((state: RootState) => state.accountManager);
 
   // https://www.letmegooglethat.com/?q=js+%3F%3F+operator
   const unedited: IAccount = {
@@ -41,17 +47,17 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
   };
 
   // for edit mode dialog
-  const [edited, setEdited] = React.useState<IAccount>(unedited);
+  const [edited, setEdited] = useState<IAccount>(unedited);
 
   // username & name validation
-  const [nameError, setNameError] = React.useState<boolean>(false);
+  const [nameError, setNameError] = useState<boolean>(false);
 
   // email textfiel ref & validation
-  const emailInputRef = React.useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const validEmail = emailInputRef.current?.validity.valid;
 
   // to keep dialog updated
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedAccount) {
       setEdited(selectedAccount as IAccount);
     }
@@ -69,9 +75,25 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
     }
   };
 
+  const handleModifyAccountRequest = async (payload: IAccount) => {
+    const body: IAccount = {
+      name: payload.name,
+      role: payload.role,
+      username: payload.username,
+      _id: payload._id,
+    }
+    try {
+      const { data }: {data: IAccount } = await apiClient.put(apiRoutes.admin.updateUser, body);
+      dispatch(requestModifyAccountEnd(data));
+      toast.success("User is modified");
+    } catch (e) {
+      toast.error("User failed to update");
+    }
+  }
+
   const handleEditSubmit = (edited: IAccount) => {
     if (!nameError && validEmail) {
-      dispatch(requestModifyAccount(edited));
+      handleModifyAccountRequest(edited)
       setEditMode(false);
     }
   };

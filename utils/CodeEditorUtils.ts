@@ -180,3 +180,8 @@ export const evaluateCompilerBody = (resultData: IJudge0Response) => {
     return "";
   }
 };
+
+export function isBlank(str: string) {
+  return !str || /^\s*$/.test(str);
+}
+

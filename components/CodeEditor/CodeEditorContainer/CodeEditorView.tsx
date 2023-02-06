@@ -10,7 +10,7 @@ import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
 import { IProblem } from "src/shared/types";
-import { handleDownload, parseFile } from "utils/CodeEditorUtils";
+import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 // import useMediaQuery from "@mui/material/useMediaQuery";
@@ -112,10 +112,10 @@ export const CodeEditorView = ({
   } = currentProblem;
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
-  const { navigation, status, error } = useNavigation(
+  const { problemAndLessonSet } = useNavigation(
     adminPathRegex.test(locationState)
   );
-
+  const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

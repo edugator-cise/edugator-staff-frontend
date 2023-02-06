@@ -7,9 +7,10 @@ import {
   ButtonBaseProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppSelector, useAppDispatch } from "../../../../../lib/store/hooks";
-import { AlertType, IFeedback } from "../../../../shared/types";
-import { setAlert } from "../../AdminAccountsPage.slice";
+import { AlertType, IFeedback } from "lib/shared/types";
+import { setAlert } from "../AdminAccountsPage.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
 
 const ContactItem = styled(Typography)(({ theme }) => ({
   display: "flex",
@@ -23,7 +24,7 @@ const ContactItem = styled(Typography)(({ theme }) => ({
 }));
 
 export function AccountInfo() {
-  const state = useAppSelector((state) => state.accountManager);
+  const state = useSelector((state: RootState) => state.accountManager);
 
   const account = state.selectedAccount;
 
@@ -48,7 +49,7 @@ interface ContactItemProps extends ButtonBaseProps<"div"> {
 }
 
 const ContactInfo: React.FC<ContactItemProps> = ({ icon, children }) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const onCopy = (e: any) => {
     e.stopPropagation();

@@ -1,4 +1,4 @@
-import { IModuleBase } from "../../shared/types";
+import { IModuleBase } from "src/shared/types";
 
 export interface ModuleProblemRequest {
   isAdmin: boolean;

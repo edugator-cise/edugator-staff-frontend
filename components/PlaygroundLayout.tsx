@@ -4,7 +4,7 @@ import VerticalNavigation from "components/shared/VerticalNavigation";
 import { Box } from "@mui/material";
 import { colors } from "constants/config";
 import "allotment/dist/style.css";
-import TopicSidebar from "src/shared/TopicSidebar";
+import TopicSidebar from "components/shared/TopicSidebar";
 import { useRouter } from "next/router";
 
 interface ProblemEditorURL {

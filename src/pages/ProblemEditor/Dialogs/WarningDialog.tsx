@@ -7,26 +7,31 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { useAppSelector } from "../../../../lib/store/hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
 import {
   closeWarningModal,
   requestDeleteProblem,
+  requestDeleteProblemSuccess,
+  requestDeleteProblemFailure,
   WarningTypes,
 } from "../ProblemEditorContainer/problemEditorContainerSlice";
+import { RootState } from "lib/store/store";
+import apiClient from "lib/api/apiClient";
 
 interface Props {}
 
 export const WarningDialog = (props: Props) => {
-  const history = useHistory();
-  const showModal = useAppSelector(
-    (state) => state.problemEditorContainer.showWarningModal
+  const showModal = useSelector(
+    (state: RootState) => state.problemEditorContainer.showWarningModal
   );
-  const warningType = useAppSelector(
-    (state) => state.problemEditorContainer.warningType
+  const warningType = useSelector(
+    (state: RootState) => state.problemEditorContainer.warningType
   );
+
+  const problemId = useSelector((state: RootState) => state.problemEditorContainer.problemId)
+  const router = useRouter();
   const dispatch = useDispatch();
   return (
     <Dialog
@@ -47,11 +52,16 @@ export const WarningDialog = (props: Props) => {
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => {
+          onClick={async () => {
             if (warningType === WarningTypes.Delete) {
-              dispatch(requestDeleteProblem());
+              try {
+                await apiClient.delete(`/v1/admin/problem/${problemId}`);
+                dispatch(requestDeleteProblemSuccess())
+              } catch (e) {
+                dispatch(requestDeleteProblemFailure(e));
+              }
             }
-            history.push(Routes.Modules);
+            router.push(Routes.Modules);
           }}
           variant="contained"
           color="error"

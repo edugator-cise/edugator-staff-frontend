@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Button,
   Accordion,
@@ -8,14 +7,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
-import { useSelector } from "react-redux";
 import { Routes } from "constants/navigationRoutes";
-import { IProblemBase } from "src/shared/types";
+import { IProblemBase } from "lib/shared/types";
 import { IAdminModule } from "components/Modules/types";
 import { ModuleMenu } from "components/Modules/ModuleMenu";
 import { BookOpen, Code } from "phosphor-react";
-import { RootState } from "lib/store/store";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",
@@ -81,15 +80,14 @@ interface moduleProps {
 
 export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: moduleProps) {
   const router = useRouter();
-  const modulesState = useSelector((state: RootState) => state.modules);
-
+  const modulesState = useSelector((state: RootState) => state.modules.modules);
   return (
     <>
-      {modulesState.modules.length > 0 ? (
+      {modulesState.length > 0 ? (
         <>
-          {modulesState.modules.map((module) => {
+          {modulesState.map((module,index) => {
             return (
-              <Module key={module._id} disableGutters>
+              <Module key={`${module._id}-module-${index}`} disableGutters>
                 <ModuleTitle expandIcon={<ExpandMore />}>
                   <ModuleMenu
                     module={module}

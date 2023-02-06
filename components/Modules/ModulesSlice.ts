@@ -1,16 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IModuleBase, AlertType, IRequestMessage } from "src/shared/types";
+import { IModuleBase, IRequestMessage } from "lib/shared/types";
 import { IModuleState, IAdminModule, DialogStatus } from "components/Modules/types";
-import { AlertMsg } from "components/Modules/config";
 
 const baseModuleState: IModuleState = {
   modules: [],
-  isLoading: false,
-  feedback: {
-    message: "",
-    display: false,
-    type: AlertType.info,
-  },
   dialogState: {
     action: DialogStatus.CLOSED,
     open: false,
@@ -29,71 +22,13 @@ export const moduleSlice = createSlice({
   name: "modules",
   initialState: getBaseModuleState(),
   reducers: {
-    /* GET Request Modules */
-    requestModules: (state) => {
-      return { ...state, isLoading: true };
-    },
-
-    // action.type = "modules/requestModulesSuccess"
-    requestModulesSuccess: (state, action: PayloadAction<IAdminModule[]>) => {
-      return {
-        ...state,
-        modules: action.payload,
-        isLoading: false,
-      };
-    },
-
-    requestModulesFailure: (state, action: PayloadAction<IRequestMessage>) => {
-      return {
-        ...state,
-        feedback: {
-          message: action.payload.message,
-          type: AlertType.error,
-          display: true,
-        },
-        isLoading: false, // needs to retry
-      };
-    },
-
-    /* POST Request Modules */
-
-    requestNewModule: (state, action: PayloadAction<IModuleBase>) => {
-      return { ...state, isLoading: true };
-    },
-
     requestNewModuleSuccess: (state, action: PayloadAction<IAdminModule>) => {
       return {
         ...state,
         modules: [...state.modules, action.payload].sort(
           (a, b) => a.number - b.number
         ),
-        feedback: {
-          message: AlertMsg[action.type],
-          type: AlertType.success,
-          display: true,
-        },
-        isLoading: false,
       };
-    },
-
-    requestNewModuleFailure: (
-      state,
-      action: PayloadAction<IRequestMessage>
-    ) => {
-      return {
-        ...state,
-        feedback: {
-          message: action.payload.message,
-          type: AlertType.error,
-          display: true,
-        },
-        isLoading: false,
-      };
-    },
-
-    /* PUT Request Modules */
-    requestModifyModule: (state, action: PayloadAction<IModuleBase>) => {
-      return { ...state, isLoading: true };
     },
     requestModifyModuleSuccess: (state, action: PayloadAction<IModuleBase>) => {
       // get modified element from array
@@ -113,37 +48,6 @@ export const moduleSlice = createSlice({
       // replace old module with new module
       state.modules = state.modules.fill(new_module, index, index + 1);
       state.modules = state.modules.sort((a, b) => a.number - b.number);
-
-      // TODO
-      // Planning to add a title to the feedback message
-      state.feedback.message = AlertMsg[action.type];
-      state.feedback.type = AlertType.success;
-      state.feedback.display = true;
-
-      state.isLoading = false;
-    },
-    requestModifyModuleFailure: (
-      state,
-      action: PayloadAction<IRequestMessage>
-    ) => {
-      // Very similar to requestAddModuleFailure currently
-
-      // TODO
-      // Add title to feedback and default message
-      // in case message property of response is undefined due to weird error
-      return {
-        ...state,
-        feedback: {
-          message: action.payload.message,
-          type: AlertType.error,
-          display: true,
-        },
-        isLoading: false,
-      };
-    },
-    /* DELETE Request Modules */
-    requestDeleteModule: (state, action: PayloadAction<string | undefined>) => {
-      state.isLoading = true;
     },
     requestDeleteModuleSuccess: (
       state,
@@ -153,30 +57,10 @@ export const moduleSlice = createSlice({
       const new_modules = state.modules.filter(
         (module) => module._id !== removed
       );
-
+      console.log(removed, new_modules);
       return {
         ...state,
         modules: new_modules,
-        feedback: {
-          message: action.payload.response.message,
-          type: AlertType.success,
-          display: true,
-        },
-        isLoading: false,
-      };
-    },
-    requestDeleteModuleFailure: (
-      state,
-      action: PayloadAction<IRequestMessage>
-    ) => {
-      return {
-        ...state,
-        feedback: {
-          message: action.payload.message,
-          type: AlertType.error,
-          display: true,
-        },
-        isLoading: false,
       };
     },
 
@@ -220,48 +104,34 @@ export const moduleSlice = createSlice({
       };
     },
 
+    requestModulesSuccess: (state, action: PayloadAction<IAdminModule[]>) => {
+      return {
+        ...state,
+        modules: action.payload,
+      };
+    },
+
     /* Other reducers */
     closeAlert: (state) => {
-      state.feedback.display = false;
     },
     // good for testing purposes
     clearState: (state) => {
       return {
         ...state,
         modules: [],
-        isLoading: false,
-        feedback: {
-          message: "",
-          display: false,
-          type: AlertType.info,
-        },
       };
     },
   },
 });
 
 export const {
-  /* GET Request Modules */
-  requestModules,
   requestModulesSuccess,
-  requestModulesFailure,
-  /* POST Request Modules */
-  requestNewModule,
   requestNewModuleSuccess,
-  requestNewModuleFailure,
-  /* PUT Request Modules */
-  requestModifyModule,
   requestModifyModuleSuccess,
-  requestModifyModuleFailure,
-  /* DELETE Request Modules */
-  requestDeleteModule,
   requestDeleteModuleSuccess,
-  requestDeleteModuleFailure,
-  /* Dialog Reducers */
   openCreateDialog,
   openEditDialog,
   closeDialog,
-  /* Other Reducers */
   closeAlert,
   clearState,
 } = moduleSlice.actions;

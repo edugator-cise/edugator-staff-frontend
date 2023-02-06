@@ -9,12 +9,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../../lib/store/hooks";
-import { IAccount, rolesEnum } from "../../types";
+import { IAccount, IAccountDELETE, rolesEnum } from "../types";
 import {
-  requestDeleteAccount,
-  requestModifyAccount,
-} from "../../AdminAccountsPage.slice";
+  requestDeleteAccountEnd,
+  requestModifyAccountEnd,
+  unsetSelectedAccount,
+} from "components/Accounts/AdminAccountsPage.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
+import toast from "react-hot-toast";
+import { apiRoutes } from "constants/apiRoutes";
+import apiClient from "lib/api/apiClient";
+import { IRequestMessage } from "lib/shared/types";
 
 enum ActionsEnum {
   noAction = "noAction",
@@ -25,7 +31,7 @@ enum ActionsEnum {
 const base: ActionsEnum = ActionsEnum.noAction;
 
 export function AdminActions() {
-  const { selectedAccount } = useAppSelector((state) => state.accountManager);
+  const { selectedAccount } = useSelector((state: RootState) => state.accountManager);
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);
 
@@ -107,7 +113,45 @@ const AdminActionInfo = (
   action: ActionsEnum,
   targetAccount?: IAccount
 ): IActionInfo => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
+
+  const handleModifyAccountRequest = async (payload: IAccount) => {
+    const body: IAccount = {
+      name: payload.name,
+      role: payload.role,
+      username: payload.username,
+      _id: payload._id,
+    }
+    try {
+      const { data }: {data: IAccount } = await apiClient.put(apiRoutes.admin.updateUser, body);
+      dispatch(requestModifyAccountEnd(data));
+      toast.success("User is modified");
+    } catch (e) {
+      toast.error("User failed to update");
+    }
+  }
+
+  const handleDeleteAccountRequest = async (payload: IAccount) => {
+    // backend wants username in the body
+    // below is how to set the body in axios.delete
+    const config = {
+      data: {
+        username: payload.username,
+      }
+    }
+    try {
+      const { data }: { data: IRequestMessage } = await apiClient.delete(apiRoutes.admin.deleteUser, config);
+      const accountDeleted: IAccountDELETE = {
+        id: payload._id as string,
+        message: data.message as string,
+      }
+      dispatch(requestDeleteAccountEnd(accountDeleted));
+      dispatch(unsetSelectedAccount());
+      toast.success("Account Successfully deleted");
+    } catch (e) {
+      toast.error(`Account Delete unsuccessful`)
+    }
+  }
 
   const { valid, reason } = IsValidOperation(action, targetAccount);
 
@@ -119,7 +163,7 @@ const AdminActionInfo = (
 
     return {
       description: "This will change this account to be a TA account",
-      onClick: () => dispatch(requestModifyAccount(changed_account)),
+      onClick: () => handleModifyAccountRequest(changed_account),
       validOperation: valid,
       reason: reason,
     };
@@ -131,7 +175,7 @@ const AdminActionInfo = (
 
     return {
       description: "This will change this account to be a Professor account",
-      onClick: () => dispatch(requestModifyAccount(changed_account)),
+      onClick: () => handleModifyAccountRequest(changed_account),
       validOperation: valid,
       reason: reason,
     };
@@ -145,7 +189,7 @@ const AdminActionInfo = (
           This will delete this account from the database.
         </>
       ),
-      onClick: () => dispatch(requestDeleteAccount(targetAccount as IAccount)),
+      onClick: () => handleDeleteAccountRequest(targetAccount as IAccount),
       validOperation: valid,
       reason: reason,
     };
@@ -166,7 +210,7 @@ const IsValidOperation = (
   valid: boolean;
   reason?: string;
 } => {
-  const { currentAccount } = useAppSelector((state) => state.accountManager);
+  const { currentAccount } = useSelector((state: RootState) => state.accountManager);
 
   if (targetAccount === undefined) {
     return {

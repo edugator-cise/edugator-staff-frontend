@@ -10,9 +10,10 @@ import {
   TablePagination,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppDispatch, useAppSelector } from "../../../../lib/store/hooks";
-import { setSelectedAccount } from "../AdminAccountsPage.slice";
-import { rolesEnum } from "../types";
+import { setSelectedAccount } from "components/Accounts/AdminAccountsPage.slice";
+import { rolesEnum } from "./types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
 
 const AccountContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: theme.spacing(1),
@@ -29,17 +30,13 @@ const DataCell = styled(TableCell)({
   },
 });
 
-// attempting to get available vertical space
-const windowHeight = window.innerHeight * 0.7;
-// height of table row in pixels
-const rowHeight = 56.8;
 // possible number of rows based on previous numbers
-const rowsPerPage = Math.floor(windowHeight / rowHeight) - 2;
+const rowsPerPage = 10;
 
 export function AccountsTable() {
-  const dispatch = useAppDispatch();
-  const { accounts, selectedAccount, currentAccount } = useAppSelector(
-    (state) => state.accountManager
+  const dispatch = useDispatch();
+  const { accounts, selectedAccount, currentAccount } = useSelector(
+    (state: RootState) => state.accountManager
   );
 
   const [page, setPage] = React.useState(0);

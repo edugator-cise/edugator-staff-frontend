@@ -1,10 +1,13 @@
-import React from "react";
 import { Stack, Alert, AlertTitle, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useAppDispatch } from "../../../../lib/store/hooks";
-import { requestDeleteModule } from "../ModulesPage.slice";
-import Dialog from "../../../shared/GenericDialog";
-import { IAdminModule } from "../types";
+import { requestDeleteModuleSuccess } from "components/Modules/ModulesSlice";
+import Dialog from "components/shared/GenericDialog";
+import { IAdminModule } from "components/Modules/types";
+import { useDispatch } from "react-redux";
+import apiClient from "lib/api/apiClient";
+import { IRequestMessage } from "lib/shared/types";
+import { AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 
 const BulletList = styled("ul")(({ theme }) => ({
   marginTop: theme.spacing(0),
@@ -21,25 +24,36 @@ interface DeleteDialogProps {
 export function DeleteDialog(props: DeleteDialogProps) {
   const { open, handleClose, toDelete } = props;
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
-  const handleDialogSubmit = () => {
-    dispatch(requestDeleteModule(toDelete._id));
-    // TODO:
-    //  dont close before checking
-    //  if action was successful
+  const deleteModule = async () => {
+    try {
+      if (!toDelete._id) {
+        throw "DeleteDialog: module id does not exist in delete"
+      }
+      const response: AxiosResponse<IRequestMessage> = await apiClient.delete("/v1/module/" + toDelete._id);
+      toast.success('Module deleted');
+      const payload = {
+        response: response.data,
+        id: toDelete._id
+      };
+      dispatch(requestDeleteModuleSuccess(payload));
+    } catch (e) {
+      toast.error('Module failed to delete')
+    }
+
     handleClose();
-  };
+  }
 
   const FooterButtons = [
     {
       label: "Cancel",
-      onClick: () => handleClose(),
+      onClick: handleClose,
       variant: "contained",
     },
     {
       label: "Confirm Delete",
-      onClick: () => handleDialogSubmit(),
+      onClick: deleteModule,
       variant: "contained",
       color: "error",
     },

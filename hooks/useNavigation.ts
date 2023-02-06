@@ -1,14 +1,13 @@
 import { IModuleWithProblemsAndLessons } from "components/CodeEditor/types";
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
-import { createNavStructure } from "utils/CodeEditorUtils";
 import { FetchStatus } from "./types";
 import { apiRoutes } from "constants/apiRoutes";
 import toast from "react-hot-toast";
 
 const useNavigation = (isAdmin: boolean) => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
-  const [navigation, setNavigation] = useState<IModuleWithProblemsAndLessons[]>(
+  const [problemAndLessonSet, setProblemAndLessonSet] = useState<IModuleWithProblemsAndLessons[]>(
     []
   );
   const [error, setError] = useState<Error | undefined>(undefined);
@@ -25,7 +24,7 @@ const useNavigation = (isAdmin: boolean) => {
     };
     fetchData()
       .then((values) => {
-        setNavigation(values);
+        setProblemAndLessonSet(values);
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
@@ -36,7 +35,7 @@ const useNavigation = (isAdmin: boolean) => {
       });
   }, []);
 
-  return { status, navigation: createNavStructure(navigation), error };
+  return { status, problemAndLessonSet, error };
 };
 
 export default useNavigation;

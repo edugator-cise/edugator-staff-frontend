@@ -1,39 +1,38 @@
-import React from "react";
+import {useState, useEffect} from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import AdminLayout from "components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { ModuleAccordian } from "components/Modules/ModuleAccordion";
 import { ModuleDialog } from "components/Modules/ModuleDialog";
-// import { DeleteDialog } from "src/pages/modules/components";
-import { ModulesSnackbar } from "components/Modules/ModulesSnackbar";
-// import { GradingDialog } from "../grading/components/GradingDialog";
-import { requestModules, openCreateDialog } from "components/Modules/ModulesSlice";
+import { DeleteDialog } from "components/Modules/DeleteDialog";
+import { openCreateDialog, requestModulesSuccess } from "components/Modules/ModulesSlice";
 import { Routes } from "constants/navigationRoutes";
 import { IAdminModule, NullModule } from "components/Modules/types";
-import { IProblemBase } from "src/shared/types";
 import { rolesEnum } from "components/Accounts/types";
 import { RootState } from "lib/store/store";
 import { useRouter } from "next/router";
-
-// const EmptyProblem: IProblemBase = { title: "" };
+import { FetchStatus } from "hooks/types";
+import apiClient from "lib/api/apiClient";
+import { IModuleWithProblemsAndLessons } from "components/CodeEditor/types";
+import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
 
 const ModulesPage = () => {
   const router = useRouter();
   const dispatch = useDispatch()
   const loginState = useSelector((state: RootState) => state.login);
-  const modulesState = useSelector((state: RootState) => state.modules);
-
   // Module to delete - hooks
 
-  const [confirmDelete, setConfirmDelete] = React.useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
   const onDeleteDialogClose = () => setConfirmDelete(false);
 
-  const [toDelete, setToDelete] = React.useState<IAdminModule>(NullModule);
+  const [toDelete, setToDelete] = useState<IAdminModule>(NullModule);
   const setModuleToDelete = (module: IAdminModule) => {
     setConfirmDelete(true);
     setToDelete(module);
   };
 
+  const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
   // Problem to grade - hooks
 
   // const [grading, setGrading] = React.useState<boolean>(false);
@@ -71,35 +70,46 @@ const ModulesPage = () => {
       ? ProfessorHeaderButtons
       : moduleHeaderButtons;
 
-  React.useEffect(() => {
-    dispatch(requestModules());
-  }, [dispatch]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data }: { data: IModuleWithProblemsAndLessons[] } =
+        await apiClient.get(apiRoutes.admin.getNavigation);
+      return data;
+    };
 
+    fetchData().then((values) => {
+      dispatch(requestModulesSuccess(values));
+      setStatus(FetchStatus.succeed)
+    })
+    .catch((e) => {
+      toast.error(e.message)
+      //dispatch(setRunningSubmission(false));
+      setStatus(FetchStatus.failed);
+    });
+  }, []);
+  
   return (
     <AdminLayout pageTitle={"Modules"} actionButtons={HeaderButtons}>
       <>
         <ModuleDialog />
 
-        {/* <DeleteDialog
+        <DeleteDialog
           open={confirmDelete}
           handleClose={onDeleteDialogClose}
           toDelete={toDelete}
-        /> */}
+        />
         {/* <GradingDialog
           open={grading}
           problem={toGrade}
           handleClose={onGradingDialogClose}
         /> */}
-
-        <ModulesSnackbar />
-
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="center"
         >
-          {modulesState.isLoading ? (
+          {status === FetchStatus.loading ? (
             <CircularProgress />
           ) : (
             <ModuleAccordian
