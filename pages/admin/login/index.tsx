@@ -2,7 +2,7 @@ import { Field, Form, Formik } from "formik";
 import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "components/shared/FormTextField";
-import { receiveLoginSuccess, receiveLoginFailure, resetErrorMessage } from "components/Login/LoginSlice";
+import { receiveLoginSuccess } from "components/Login/LoginSlice";
 import AdminLayout from "components/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
@@ -21,6 +21,7 @@ import { baseAPIURL } from "constants/config";
 import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
 const LoginForm = styled(Form)(
@@ -59,17 +60,6 @@ export default function LoginPage(): React.ReactElement{
   return (
     <AdminLayout pageTitle="Admin Login">
       <Stack justifyContent="center" alignItems="center">
-        {authState.isLoading && <CircularProgress />}
-        {authState.errorMessage && (
-          <Alert
-            severity="error"
-            onClose={() => {
-              dispatch(resetErrorMessage());
-            }}
-          >
-            {authState.errorMessage}
-          </Alert>
-        )}
         <Formik
           initialValues={{ username: "", password: "" }}
           onSubmit={async (values: IRequestLoginAction) => {
@@ -78,10 +68,11 @@ export default function LoginPage(): React.ReactElement{
               const { data }: { data: ILoginSuccess} = await apiClient.post(url, values);
               LocalStorage.setToken(data.token)
               dispatch(receiveLoginSuccess(data));
+              toast.success("Logged in successfully")
               setToken(LocalStorage.getToken());
             } catch (e) {
               LocalStorage.checkUnauthorized(e);
-              dispatch(receiveLoginFailure("The username or password is incorrect, Please try again"))
+              toast.error("The username or password is incorrect, Please try again")
             }
           }}
         >

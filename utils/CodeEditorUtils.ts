@@ -185,3 +185,8 @@ export function isBlank(str: string) {
   return !str || /^\s*$/.test(str);
 }
 
+
+export const deepClone = <T>(value: T): T  => {
+  return JSON.parse(JSON.stringify(value));
+}
+

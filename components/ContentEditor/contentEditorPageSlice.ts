@@ -5,10 +5,10 @@ export interface ContentEditorFields {
   content: Object[];
   editableContent: {
     blocks: Object[];
-    entityMap: Array<Object>;
+    entityMap: Object[];
   };
   blocks: Object[];
-  entityMap: Array<Object>;
+  entityMap: Object[];
 }
 
 interface Block {

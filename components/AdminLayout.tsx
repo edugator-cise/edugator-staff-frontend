@@ -59,7 +59,6 @@ const AdminLayout = ({
             variant="contained"
             onClick={() => {
               LocalStorage.removeToken();
-              dispatch(requestLogout());
               dispatch(closeAlert());
               router.push(Routes.Login);
             }}

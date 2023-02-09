@@ -13,9 +13,9 @@ import { RootState } from "lib/store/store";
 import { useRouter } from "next/router";
 import { FetchStatus } from "hooks/types";
 import apiClient from "lib/api/apiClient";
-import { IModuleWithProblemsAndLessons } from "components/CodeEditor/types";
 import { apiRoutes } from "constants/apiRoutes";
 import toast from "react-hot-toast";
+import { LocalStorage } from "lib/auth/LocalStorage";
 
 const ModulesPage = () => {
   const router = useRouter();
@@ -34,15 +34,6 @@ const ModulesPage = () => {
 
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
   // Problem to grade - hooks
-
-  // const [grading, setGrading] = React.useState<boolean>(false);
-  // const onGradingDialogClose = () => setGrading(false);
-
-  // const [toGrade, setToGrade] = React.useState<IProblemBase>(EmptyProblem);
-  // const setProblemToGrade = (problem: IProblemBase) => {
-  //   setGrading(true);
-  //   setToGrade(problem);
-  // };
 
   const ProfessorHeaderButtons = [
     {
@@ -76,13 +67,13 @@ const ModulesPage = () => {
   ];
 
   const HeaderButtons =
-    loginState.role === rolesEnum.Professor && loginState.loggedIn
+    loginState.role === rolesEnum.Professor && LocalStorage.getToken()
       ? ProfessorHeaderButtons
       : moduleHeaderButtons;
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data }: { data: IModuleWithProblemsAndLessons[] } =
+      const { data }: { data: IAdminModule[] } =
         await apiClient.get(apiRoutes.admin.getNavigation);
       return data;
     };
@@ -108,11 +99,6 @@ const ModulesPage = () => {
           handleClose={onDeleteDialogClose}
           toDelete={toDelete}
         />
-        {/* <GradingDialog
-          open={grading}
-          problem={toGrade}
-          handleClose={onGradingDialogClose}
-        /> */}
         <Grid
           container
           direction="row"

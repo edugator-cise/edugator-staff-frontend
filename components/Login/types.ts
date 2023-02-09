@@ -1,9 +1,6 @@
 import { rolesEnum } from "components/Accounts/types";
 
 export interface IAuthState {
-  isLoading: boolean;
-  errorMessage: string;
-  loggedIn: boolean;
   role: rolesEnum;
 }
 

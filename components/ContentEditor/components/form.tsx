@@ -14,6 +14,7 @@ import { apiRoutes } from "constants/apiRoutes";
 import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
 import toast from "react-hot-toast";
+import { deepClone } from "utils/CodeEditorUtils";
 
 interface ExportData {
   title: string;
@@ -101,32 +102,41 @@ export const RegistrationForm = ({
       title: "",
       author: "",
       content: [],
-      editableContent: {},
+      editableContent: {
+        blocks: [],
+        entityMap: []
+      },
     };
     const contentArr: any[] = [];
-    pageJsonData.title = JSON.stringify(title, undefined, 2);
-    pageJsonData.author = JSON.stringify(author, undefined, 2);
+    pageJsonData.title = JSON.stringify(title);
+    pageJsonData.author = JSON.stringify(author);
     jsonData.forEach((content: any) => {
-      console.log(content);
       contentArr.push(content);
     });
-    pageJsonData.content = contentArr;
+    pageJsonData.content = jsonData;
 
     // create an array from entity map data
-    const entityMap = Object.keys(rawData.entityMap).map(
-      (key) => rawData.entityMap[key]
-    );
-
-    console.log(entityMap);
-
-    dispatch(updateMetadata({ title: title, author: author }));
+    console.log(pageJsonData);
+    console.log({
+      content: pageJsonData.content,
+      editableContent: rawData,
+      blocks: rawData.blocks,
+      entityMap: Object.keys(rawData.entityMap).map(
+        (key) => rawData.entityMap[key]
+      ),
+    })
+    dispatch(updateMetadata(deepClone({ title: pageJsonData.title, author: pageJsonData.author })));
     dispatch(
-      updateContentEditor({
-        content: pageJsonData.content,
-        editableContent: rawData,
-        blocks: rawData.blocks,
-        entityMap: entityMap,
-      })
+      updateContentEditor(deepClone(
+        {
+          content: pageJsonData.content,
+          editableContent: rawData,
+          blocks: rawData.blocks,
+          entityMap: Object.keys(rawData.entityMap).map(
+            (key) => rawData.entityMap[key]
+          ),
+        }
+      ))
     );
 
     if (contentId) {

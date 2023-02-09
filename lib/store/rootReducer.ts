@@ -3,7 +3,6 @@ import problemEditorContainerReducer from "components/ProblemEditor/problemEdito
 import contentEditorReducer from "components/ContentEditor/contentEditorPageSlice";
 import { loginSlice } from "components/Login/LoginSlice"
 import moduleReducer from "components/Modules/ModulesSlice";
-// import gradingReducer from "../../src/pages/grading/GradingDialog.slice";
 import accountManagerReducer from "components/Accounts/AdminAccountsPage.slice";
 /* import slices of state here */
 
@@ -13,7 +12,6 @@ import accountManagerReducer from "components/Accounts/AdminAccountsPage.slice";
 const rootReducer = combineReducers({
   login: loginSlice.reducer,
   modules: moduleReducer,
-  // grading: gradingReducer,
   accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
   contentEditorPage: contentEditorReducer,

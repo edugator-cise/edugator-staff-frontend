@@ -53,9 +53,6 @@ function Footer() {
         <Link
           href={Routes.PrivacyNotice}
           style={{ textDecoration: "none" }}
-          onClick={() => {
-            window.scrollTo(0, 0);
-          }}
         >
           <Typography
             variant={md ? "body2" : "body1"}
@@ -67,9 +64,6 @@ function Footer() {
         <Link
           href={Routes.TermsOfUse}
           style={{ textDecoration: "none" }}
-          onClick={() => {
-            window.scrollTo(0, 0);
-          }}
         >
           <Typography
             variant={md ? "body2" : "body1"}
@@ -81,9 +75,6 @@ function Footer() {
         <Link
           href={Routes.FERPA}
           style={{ textDecoration: "none" }}
-          onClick={() => {
-            window.scrollTo(0, 0);
-          }}
         >
           <Typography
             variant={md ? "body2" : "body1"}
