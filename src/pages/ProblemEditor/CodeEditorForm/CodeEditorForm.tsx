@@ -29,7 +29,7 @@ interface FlattenedCodeFields {
   header: string;
   body: string;
   footer: string;
-  solution: string
+  solution: string;
 }
 
 interface Errors {
