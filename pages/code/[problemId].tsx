@@ -26,8 +26,9 @@ import { FetchStatus } from "hooks/types";
 import { useRunCode } from "hooks/useRunCode";
 import dynamic from "next/dynamic";
 import { LocalStorage } from "lib/auth/LocalStorage";
+import { AllotmentProps } from "allotment";
 
-const Allotment = dynamic(
+const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
   { ssr: false }
 );

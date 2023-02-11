@@ -10,7 +10,7 @@
 .cache
 /dist
 .vscode
-
+/out
 # react-scripts production
 /build
 

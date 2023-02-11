@@ -12,7 +12,6 @@ import { Routes } from "constants/navigationRoutes";
 import { closeAlert } from "./Modules/ModulesSlice";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "lib/auth/LocalStorage";
-import { requestLogout } from "./Login/LoginSlice";
 import { useEffect } from "react";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";

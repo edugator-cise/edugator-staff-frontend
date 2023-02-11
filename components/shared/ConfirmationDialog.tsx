@@ -1,10 +1,6 @@
 //https://javascript.plainenglish.io/creating-a-confirm-dialog-in-react-and-material-ui-3d7aaea1d799
 
-import Button from "@mui/material/Button/Button";
-import Dialog from "@mui/material/Dialog/Dialog";
-import DialogActions from "@mui/material/DialogActions/DialogActions";
-import DialogContent from "@mui/material/DialogContent/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle/DialogTitle";
+import {Button, Dialog, DialogActions, DialogTitle, DialogContent} from "@mui/material";
 import React from "react";
 
 const ConfirmDialog = (props: {

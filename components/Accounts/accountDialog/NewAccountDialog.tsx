@@ -1,6 +1,6 @@
 import {useState, useRef } from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
-import { requestNewAccount, requestNewAccountEnd } from "../AdminAccountsPage.slice";
+import { requestNewAccountEnd } from "../AdminAccountsPage.slice";
 import { useDispatch } from "react-redux";
 import { IAccount, IAccountPOST, INewAccount, rolesEnum } from "../types";
 import Dialog from "components/shared/GenericDialog";
