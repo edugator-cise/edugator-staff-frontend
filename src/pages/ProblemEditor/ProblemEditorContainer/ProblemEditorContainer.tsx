@@ -12,6 +12,8 @@ import { TestEditor } from "../TestEditor/TestEditorForm";
 import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "./ProblemEditorNavigator";
 import { WarningDialog } from "../Dialogs/WarningDialog";
+import { useDispatch } from "react-redux";
+import { changeActiveStep } from "./problemEditorContainerSlice";
 
 const steps = [
   "Metadata",
@@ -43,7 +45,30 @@ export const ProblemEditorContainer = () => {
     }
   };
 
+  const currentStepIsValid = useAppSelector((state) => {
+    switch (state.problemEditorContainer.activeStep) {
+      case 0:
+        return state.problemEditorContainer.metadataIsValid;
+      case 1:
+        return state.problemEditorContainer.problemIsValid;
+      case 2:
+        return state.problemEditorContainer.codeIsValid;
+      case 3:
+        return state.problemEditorContainer.serverConfigIsValid;
+      case 4:
+        return state.problemEditorContainer.testEditorIsValid;
+      default:
+        return false;
+    }
+  });
+
+  const dispatch = useDispatch();
+
   const formRef = useRef<FormikValues>();
+
+  const handleChange = (index: number) => {
+    if (currentStepIsValid) dispatch(changeActiveStep(index));
+  };
 
   return (
     <Box display="flex" flexDirection="column" flexGrow={1} textAlign="left">
@@ -51,7 +76,9 @@ export const ProblemEditorContainer = () => {
         {steps.map((label, index) => {
           return (
             <Step key={index}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel onClick={handleChange.bind(this, index)}>
+                {label}
+              </StepLabel>
             </Step>
           );
         })}
