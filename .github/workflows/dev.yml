@@ -20,4 +20,4 @@ jobs:
       - name: Build Edugator Staff Application
         run: npm install && npm run build && npm run export
       - name: Deploy app dev build to S3 bucket
-        run: aws s3 sync ./build/ s3://development-trunk-edugator --delete
+        run: aws s3 sync ./out/ s3://development-trunk-edugator --delete
