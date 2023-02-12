@@ -13,7 +13,9 @@ const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
 
 // Split string into string[] based on location of the placeholder characters.
 const transformQuestionIntoSegments = (question: string) => {
-    let regExpString = blankAnswerPlaceholderChars.length ? blankAnswerPlaceholderChars[0] : "";
+    if(!blankAnswerPlaceholderChars.length) return [question];
+
+    let regExpString = blankAnswerPlaceholderChars[0];
     blankAnswerPlaceholderChars.forEach((exp, i)=>{
         regExpString += '|'+ blankAnswerPlaceholderChars[i];
     })
