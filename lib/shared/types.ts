@@ -57,6 +57,11 @@ export interface ILessonBase {
   title: string;
 }
 
+export interface BlankAnswer {
+  possibleChoices: string[];
+  shouldHaveExactMatch: boolean;
+}
+
 /** Module interfaces */
 
 export interface IModuleBase {
