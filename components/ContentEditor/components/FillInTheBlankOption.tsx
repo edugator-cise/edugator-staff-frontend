@@ -4,7 +4,7 @@ import {
     DialogActions,
     DialogTitle,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 
@@ -37,10 +37,29 @@ export const FillInTheBlankModal = ({
 }) => {
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
+    const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
 
     const resetValues = () => {
         setQuestionSegments([]);
         setCorrectAnswers([]);
+        setBlankAnswerPlaceholderIndex(0);
+    };
+
+    const modalInput = useRef<HTMLInputElement | null>(null);
+
+    const onInsertBlankClick = () => {
+        if (blankAnswerPlaceholderIndex < blankAnswerPlaceholderChars.length) {
+            if (modalInput.current) {
+                // append the special character for question input view
+                modalInput.current.value = modalInput.current.value + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex];
+                console.log("Question Input View: ", modalInput.current.value);
+                setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
+                setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
+            }
+        }
+        else {
+            // TODO:  user tries to insert more than 4 blanks - Will disable and style the button differently
+        }
     };
 
     return (
@@ -57,11 +76,22 @@ export const FillInTheBlankModal = ({
                                 <input
                                     type="text"
                                     className="modal-input"
+                                    ref={modalInput}
                                     onChange={(e) => {
                                         setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                        // TODO: Need to deal with deleting blanks
                                         console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
                                     }}
                                 />
+                            </div>
+                            <div>
+                                <Button
+                                    onClick={() => {
+                                        onInsertBlankClick();
+                                    }}
+                                >
+                                    Insert Blank
+                                </Button>
                             </div>
                             <div className="modal-answers">
 
@@ -74,14 +104,15 @@ export const FillInTheBlankModal = ({
                 <Button
                     onClick={() => {
                         setOpen(false);
+                        resetValues();
                     }}
                 >
                     Close
                 </Button>
                 <Button
                     onClick={(e) => {
-                        // console.log("Print MC Data:", question, correct, answers);
-                        // insert(e, questionSegments, correctAnswers);
+                        console.log("Print FITB Data:", questionSegments, correctAnswers);
+                        insert(e, questionSegments, correctAnswers);
                         resetValues();
                         setOpen(false);
                     }}
