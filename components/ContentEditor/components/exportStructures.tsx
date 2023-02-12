@@ -11,6 +11,17 @@ class answerChoice {
   }
 }
 
+export class blankAnswer {
+  possibleChoices: string[];
+
+  shouldHaveExactMatch: boolean;
+
+  constructor(possibleChoices: string[], shouldHaveExactMatch: boolean) {
+    this.possibleChoices = possibleChoices;
+    this.shouldHaveExactMatch = shouldHaveExactMatch;
+  }
+}
+
 export class text_content implements content {
   html: string;
 
@@ -72,6 +83,17 @@ export class ms_content implements content {
     answers.forEach((answer, i) =>
       this.answers.push(new answerChoice(i, answer))
     );
+  }
+}
+
+export class fitb_content implements content {
+  questionSegments: string[];
+
+  correctAnswers: blankAnswer[];
+
+  constructor(questionSegments: string[], correctAnswers: blankAnswer[]) {
+    this.questionSegments = questionSegments;
+    this.correctAnswers = correctAnswers;
   }
 }
 

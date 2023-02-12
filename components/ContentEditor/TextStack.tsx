@@ -8,6 +8,7 @@ import {
   mc_content,
   ms_content,
   contentBlock,
+  fitb_content
 } from "./components/exportStructures";
 
 //React state hook
@@ -64,6 +65,16 @@ export const TextStack = () => {
               data.data.answer3,
               data.data.answer4,
             ])
+          );
+          break;
+
+        case "fill_in_the_blank":
+          content = new contentBlock(
+              "fill_in_the_blank",
+              new fitb_content(
+                  data.data.questionSegments,
+                  data.data.correctAnswers
+              )
           );
           break;
 

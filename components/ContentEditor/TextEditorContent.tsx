@@ -28,7 +28,7 @@ import {
 } from "phosphor-react";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
-import { BlankAnswer } from "lib/shared/types";
+import { blankAnswer } from "./components/exportStructures";
 
 const TextEditorContent = ({
   callbackData,
@@ -70,7 +70,8 @@ const TextEditorContent = ({
     if (
       entity.type === "image" ||
       entity.type === "multiple_choice" ||
-      entity.type === "multiple_select"
+      entity.type === "multiple_select" ||
+      entity.type === "fill_in_the_blank"
     )
       return "<atomic_entity />";
   };
@@ -166,7 +167,7 @@ const TextEditorContent = ({
   const onAddFillInTheBlank = (
     e: any,
     questionSegments: string[],
-    correctAnswers: BlankAnswer[],
+    correctAnswers: blankAnswer[],
   ) => {
     e.preventDefault();
     const contentState = editorState.getCurrentContent();

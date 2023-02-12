@@ -6,7 +6,19 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import "./ExerciseStyles.module.css";
-import { BlankAnswer } from "lib/shared/types";
+import { blankAnswer } from "./exportStructures";
+
+// Unicode characters used to denote answer blanks when creating a FITB question.
+const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
+
+// Split string into string[] based on location of the placeholder characters.
+const transformQuestionIntoSegments = (question: string) => {
+    let regExpString = blankAnswerPlaceholderChars.length ? blankAnswerPlaceholderChars[0] : "";
+    blankAnswerPlaceholderChars.forEach((exp, i)=>{
+        regExpString += '|'+ blankAnswerPlaceholderChars[i];
+    })
+    return question.split(new RegExp(regExpString));
+};
 
 export const FillInTheBlankModal = ({
     open,
@@ -18,15 +30,15 @@ export const FillInTheBlankModal = ({
     insert: (
         e: any,
         questionSegments: string[],
-        correctAnswers: BlankAnswer[],
+        correctAnswers: blankAnswer[],
     ) => void;
 }) => {
-    const [questionSegments, setQuestionSegments] = useState("");
-    const [correctAnswers, setCorrectAnswers] = useState<BlankAnswer>();
+    const [questionSegments, setQuestionSegments] = useState<string[]>([]);
+    const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
 
     const resetValues = () => {
-        setQuestionSegments("");
-        setCorrectAnswers((): BlankAnswer => ({ possibleChoices: [], shouldHaveExactMatch: false }));
+        setQuestionSegments([]);
+        setCorrectAnswers([]);
     };
 
     return (
@@ -35,7 +47,7 @@ export const FillInTheBlankModal = ({
                 <div className="modal">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h2>Fill-In-The-Blank</h2>
+                            <h2>Fill-in-the-Blank</h2>
                         </div>
                         <div className="modal-body">
                             <div className="modal-question">
@@ -43,10 +55,14 @@ export const FillInTheBlankModal = ({
                                 <input
                                     type="text"
                                     className="modal-input"
-                                    // onChange={(e) => setQuestion(e.target.value)}
+                                    onChange={(e) => {
+                                        setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                        console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
+                                    }}
                                 />
                             </div>
                             <div className="modal-answers">
+
                             </div>
                         </div>
                     </div>
