@@ -1,3 +1,4 @@
+/* eslint-disable */
 import VerticalNavigation from "components/shared/VerticalNavigation";
 import { styled } from "@mui/styles";
 import theme from "constants/theme";

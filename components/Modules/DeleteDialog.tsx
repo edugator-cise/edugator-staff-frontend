@@ -106,7 +106,7 @@ export function DeleteDialog(props: DeleteDialogProps) {
 
         <Alert severity="error">
           <AlertTitle>Warning</AlertTitle>
-          This an action that can't be undone. Are you sure?
+          This an action that can&apos;t be undone. Are you sure?
         </Alert>
       </Stack>
     </Dialog>

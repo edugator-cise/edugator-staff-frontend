@@ -252,7 +252,7 @@ const TextEditorContent = ({
         <TextItalic weight="bold" size={18} />
       </button>
       <button onClick={onAddImage}>
-        <Image weight="bold" size={18} />
+        <Image weight="bold" size={18} alt="image add"/>
       </button>
       <button
         onClick={(e) => {

@@ -182,7 +182,7 @@ export function ModuleDialog() {
     >
       <>
         <Typography>
-          To add a new module, or to modify a module's name and number, please
+          To add a new module, or to modify a module&apos;s name and number, please
           use the form below.
         </Typography>
 

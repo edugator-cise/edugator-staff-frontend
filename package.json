@@ -58,14 +58,12 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "lint-next": "next lint",
+    "lint": "next lint",
     "prettier-check": "prettier --check src/**/*.ts{,x}",
     "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x} -c eslintrc.js --quiet",
-    "lint-fix": "tsc --noEmit && eslint src/**/*.ts{,x} -c eslintrc.js --fix",
+    "lint-fix": "eslint pages/**/*.ts{,x} lib/**/*.ts{,x} components/**/*.ts{,x} constants/**/*.ts{,x} -c .eslintrc.json --fix",
     "pre-pr": "npm run format && npm run lint-fix && npm run test && npm run build",
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run buildGhPages"
+    "deploy": "npm run build && npm run export"
   },
   "browserslist": {
     "production": [

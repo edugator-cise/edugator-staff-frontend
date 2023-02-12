@@ -52,10 +52,10 @@ export const MultipleChoiceModal = ({
               <label htmlFor="answers">Answers (check correct)</label>
               <div className="modal-answers">
                 {/* Input box and checkbox for each answer */}
-                {Array.from(Array(4).keys()).map((i) => {
+                {Array.from(Array(4).keys()).map((i, index) => {
                   const answerCorrect = correct === i;
                   return (
-                    <div className="modal-answer">
+                    <div className="modal-answer" key={`modal-answer-${index}`}>
                       <div className="modal-answer-input">
                         <Checkbox
                           checked={answerCorrect}

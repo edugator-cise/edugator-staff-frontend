@@ -12,8 +12,9 @@ function Image(props: { alt: string } & any) {
 
 export const Markdown = ({ markdownString }: Props) => (
   <ReactMarkdown
-    children={markdownString}
     components={{ img: Image }}
     remarkPlugins={[remarkGfm]}
-  />
+  >
+    {markdownString}
+  </ReactMarkdown>
 );

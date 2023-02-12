@@ -1,9 +1,6 @@
 import React from "react";
 import {
-  EditorState,
-  RichUtils,
   ContentBlock,
-  AtomicBlockUtils,
   ContentState,
 } from "draft-js";
 import { MultipleChoiceDisplayBlock } from "../components/displayBlockComponents";
@@ -18,7 +15,7 @@ export const mediaBlockRenderer = (block: ContentBlock) => {
   return null;
 };
 
-const Image = ({ src }: { src: string }) => {
+const Image = ({ src, alt }: { src: string, alt: string }) => {
   if (!!src) {
     return (
       <img
@@ -26,6 +23,7 @@ const Image = ({ src }: { src: string }) => {
           maxWidth: "50%",
         }}
         src={src}
+        alt={alt}
       />
     );
   }
@@ -55,7 +53,7 @@ const Media = ({
   let media;
 
   if (type === "image") {
-    media = <Image src={src} />;
+    media = <Image src={src} alt="add image" />;
   } else if (type === "multiple_choice") {
     media = (
       <MultipleChoiceDisplayBlock

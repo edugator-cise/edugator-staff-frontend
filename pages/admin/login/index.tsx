@@ -47,7 +47,6 @@ const LoginFormCard = styled(Card)(({ theme }) => ({
 
 export default function LoginPage(): React.ReactElement{
   const dispatch = useDispatch();
-  const authState = useSelector((state: RootState) => state.login);
   const router = useRouter();
   const [token, setToken] = useState(LocalStorage.getToken());
 
