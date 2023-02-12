@@ -5,22 +5,9 @@ import {
     DialogTitle,
 } from "@mui/material";
 import { useState, useRef } from "react";
+import { MuiChipsInput } from "mui-chips-input";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
-
-// Unicode characters used to denote answer blanks when creating a FITB question.
-const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
-
-// Split string into string[] based on location of the placeholder characters.
-const transformQuestionIntoSegments = (question: string) => {
-    if(!blankAnswerPlaceholderChars.length) return [question];
-
-    let regExpString = blankAnswerPlaceholderChars[0];
-    blankAnswerPlaceholderChars.forEach((exp, i)=>{
-        regExpString += '|'+ blankAnswerPlaceholderChars[i];
-    })
-    return question.split(new RegExp(regExpString));
-};
 
 export const FillInTheBlankModal = ({
     open,
@@ -35,9 +22,28 @@ export const FillInTheBlankModal = ({
         correctAnswers: blankAnswer[],
     ) => void;
 }) => {
+    // Unicode characters used to denote answer blanks when creating a FITB question.
+    const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
+    
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
+    const [chips, setChips] = useState<string[]>([])
+
+    // Split string into string[] based on location of the placeholder characters.
+    const transformQuestionIntoSegments = (question: string) => {
+        if(!blankAnswerPlaceholderChars.length) return [question];
+
+        let regExpString = blankAnswerPlaceholderChars[0];
+        blankAnswerPlaceholderChars.forEach((exp, i)=>{
+            regExpString += '|'+ blankAnswerPlaceholderChars[i];
+        })
+        return question.split(new RegExp(regExpString));
+    };
+
+    const handleChips1Change = (newChips: string[]) => {
+        setChips(newChips)
+    }
 
     const resetValues = () => {
         setQuestionSegments([]);
@@ -94,7 +100,7 @@ export const FillInTheBlankModal = ({
                                 </Button>
                             </div>
                             <div className="modal-answers">
-
+                                <MuiChipsInput value={chips} onChange={handleChips1Change} />
                             </div>
                         </div>
                     </div>
