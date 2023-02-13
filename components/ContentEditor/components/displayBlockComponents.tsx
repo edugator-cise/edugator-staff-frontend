@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import "./ExerciseStyles.module.css";
+import { blankAnswer } from "./exportStructures";
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -32,6 +33,17 @@ const AnswerHolder = styled("div")({
     color: "white",
   },
 });
+
+const BlankAnswerHolder = styled("div")({
+  backgroundColor: "#dbeafe",
+  width: "100px",
+  display: "inline-block",
+  margin: 10,
+  padding: 4
+})
+
+const QuestionSegmentHolder = styled("span")({
+})
 
 //displayed component when multiple choice is added
 export function MultipleChoiceDisplayBlock({
@@ -231,5 +243,51 @@ export function MultipleSelectDisplayBlock(props: any) {
         </Grid>
       </Grid>
     </QuestionHolder>
+  );
+}
+
+function fillInTheBlankComponents(questionSegments: string[], correctAnswers: blankAnswer[]) {
+  let blankAnswerIndex = 0;
+  let fitbComponents: JSX.Element[] = [];
+
+  // Pushes the necessary JSX elements for fill-in-the-blank questionSegments and correctAnswers into an array to be rendered.
+  for (let i = 0; i < questionSegments.length; i++) {
+    if (questionSegments[i] !== "") {
+      fitbComponents.push(
+        <QuestionSegmentHolder>{questionSegments[i]}</QuestionSegmentHolder>
+      );
+    }
+    if (blankAnswerIndex < correctAnswers.length) {
+      fitbComponents.push(<BlankAnswerHolder
+        style={{ backgroundColor: "LightGreen" }}
+      >
+        {correctAnswers[blankAnswerIndex].possibleChoices[0]}
+      </BlankAnswerHolder>);
+      blankAnswerIndex++;
+    }
+  }
+  return fitbComponents;
+}
+
+//displayed component when fill-in-the-blank is added
+export function FillInTheBlankDisplayBlock({
+  questionSegments,
+  correctAnswers,
+}: {
+  questionSegments: string[];
+  correctAnswers: blankAnswer[];
+}) {
+  return (
+    <QuestionHolder className="exercise-content-wrapper">
+      <Typography
+        variant="overline"
+        sx={{ fontWeight: 600, fontSize: "0.9em" }}
+        fontSize="subtitle2"
+        color={"#3b82f6"}
+      >
+        Fill-in-the-Blank Question
+      </Typography>
+      <div>{fillInTheBlankComponents(questionSegments, correctAnswers)}</div>
+    </QuestionHolder >
   );
 }
