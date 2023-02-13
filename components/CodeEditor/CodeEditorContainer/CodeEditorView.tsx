@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload, BugReport  } from "@mui/icons-material";
+import { GetApp, Add, RotateLeft, CloudDownload, BugReport} from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "constants/config";
@@ -144,7 +144,7 @@ export const CodeEditorView = ({
   };
 
   const handleBugBounty = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSc2XYkSKU7lBAhTNZlNdXkcO1ay51B3fc7dlWrF6RdQFobxbw/closedform', '_blank');
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSc2XYkSKU7lBAhTNZlNdXkcO1ay51B3fc7dlWrF6RdQFobxbw/closedform', '_blank', 'noopener');
   }
 
   window.addEventListener("resize", () => {
