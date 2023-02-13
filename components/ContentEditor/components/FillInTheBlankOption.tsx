@@ -24,7 +24,7 @@ export const FillInTheBlankModal = ({
 }) => {
     // Unicode characters used to denote answer blanks when creating a FITB question.
     const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
-    
+
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
@@ -79,25 +79,27 @@ export const FillInTheBlankModal = ({
                         <div className="modal-body">
                             <div className="modal-question">
                                 <label htmlFor="question">Question</label>
-                                <input
-                                    type="text"
-                                    className="modal-input"
-                                    ref={modalInput}
-                                    onChange={(e) => {
-                                        setQuestionSegments(transformQuestionIntoSegments(e.target.value));
-                                        // TODO: Need to deal with deleting blanks
-                                        console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
-                                    }}
-                                />
-                            </div>
-                            <div>
                                 <Button
                                     onClick={() => {
                                         onInsertBlankClick();
                                     }}
+                                    variant="contained"
+                                    color="primary"
                                 >
-                                    Insert Blank
+                                    + Insert Blank
                                 </Button>
+                                <div>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        ref={modalInput}
+                                        onChange={(e) => {
+                                            setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                            // TODO: Need to deal with deleting blanks
+                                            console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
+                                        }}
+                                    />
+                                </div>
                             </div>
                             <div className="modal-answers">
                                 <MuiChipsInput value={chips} onChange={handleChips1Change} />
