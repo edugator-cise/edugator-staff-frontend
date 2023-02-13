@@ -30,7 +30,7 @@ export const FillInTheBlankModal = ({
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
     const [chips, setChips] = useState<string[]>([])
 
-    // Split string into string[] based on location of the placeholder characters.
+    // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
         if(!blankAnswerPlaceholderChars.length) return [question];
 
@@ -102,6 +102,7 @@ export const FillInTheBlankModal = ({
                                 </div>
                             </div>
                             <div className="modal-answers">
+                                <label htmlFor="answers">Answers</label>
                                 <MuiChipsInput value={chips} onChange={handleChips1Change} />
                             </div>
                         </div>
