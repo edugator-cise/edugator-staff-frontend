@@ -5,7 +5,7 @@ import {
     DialogTitle,
 } from "@mui/material";
 import { Info } from "phosphor-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -25,13 +25,15 @@ export const FillInTheBlankModal = ({
         correctAnswers: blankAnswer[],
     ) => void;
 }) => {
+    const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
     // Unicode characters used to denote answer blanks when creating a FITB question.
     const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
 
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
-    const [chips, setChips] = useState<string[]>([])
+
+    useEffect(() => console.log("Current state of correct answers: ", correctAnswers), [correctAnswers]);
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
@@ -44,8 +46,18 @@ export const FillInTheBlankModal = ({
         return question.split(new RegExp(regExpString));
     };
 
-    const handleChips1Change = (newChips: string[]) => {
-        setChips(newChips)
+    const handleAnswerChoicesChange = (updatedChoices: string[], i: number) => {
+        let updatedCorrectAnswers = [...correctAnswers];
+        updatedCorrectAnswers[i].possibleChoices = updatedChoices;
+        setCorrectAnswers(updatedCorrectAnswers);
+    }
+
+    // Add a new blankAnswer object to correctAnswers[]
+    const addNewBlankAnswer = () => {
+        let updatedCorrectAnswers = [...correctAnswers];
+        let newBlankAnswer = new blankAnswer([], false);
+        updatedCorrectAnswers.push(newBlankAnswer);
+        setCorrectAnswers(updatedCorrectAnswers);
     }
 
     const resetValues = () => {
@@ -64,6 +76,7 @@ export const FillInTheBlankModal = ({
                 console.log("Current question input: ", modalInput.current.value);
                 setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
                 setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
+                addNewBlankAnswer();
             }
         }
         else {
@@ -115,11 +128,14 @@ export const FillInTheBlankModal = ({
                             </div>
                             <div className="modal-answers">
                                 <label htmlFor="answers">Answers</label>
-                                <CustomWidthTooltip title="Press Enter to add possible answer choice(s). 
-                                    “Require exact match” toggles case-sensitivity and will not approximate decimals." arrow>
+                                <CustomWidthTooltip title={toolTipMessage} arrow>
                                     <Info size={32} />
                                 </CustomWidthTooltip>
-                                <MuiChipsInput value={chips} onChange={handleChips1Change} />
+                                {correctAnswers.map((correctAnswer, i) => (
+                                    <div key={i}>
+                                        <MuiChipsInput value={correctAnswer.possibleChoices} onChange={(e) => handleAnswerChoicesChange(e, i)} />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
