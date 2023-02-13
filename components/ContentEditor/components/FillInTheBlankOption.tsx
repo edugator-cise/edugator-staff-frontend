@@ -24,13 +24,12 @@ export const FillInTheBlankModal = ({
 }) => {
     // Unicode characters used to denote answer blanks when creating a FITB question.
     const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
-    
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
     const [chips, setChips] = useState<string[]>([])
 
-    // Split string into string[] based on location of the placeholder characters.
+    // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
         if(!blankAnswerPlaceholderChars.length) return [question];
 
@@ -100,6 +99,7 @@ export const FillInTheBlankModal = ({
                                 </Button>
                             </div>
                             <div className="modal-answers">
+                                <label htmlFor="answers">Answers</label>
                                 <MuiChipsInput value={chips} onChange={handleChips1Change} />
                             </div>
                         </div>
