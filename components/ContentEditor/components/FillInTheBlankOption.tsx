@@ -58,7 +58,7 @@ export const FillInTheBlankModal = ({
             if (modalInput.current) {
                 // append the special character for question input view
                 modalInput.current.value = modalInput.current.value + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex];
-                console.log("Question Input View: ", modalInput.current.value);
+                console.log("Current question input: ", modalInput.current.value);
                 setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
                 setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
             }
@@ -85,6 +85,7 @@ export const FillInTheBlankModal = ({
                                     }}
                                     variant="contained"
                                     color="primary"
+                                    disabled={blankAnswerPlaceholderIndex > blankAnswerPlaceholderChars.length - 1}
                                 >
                                     + Insert Blank
                                 </Button>
