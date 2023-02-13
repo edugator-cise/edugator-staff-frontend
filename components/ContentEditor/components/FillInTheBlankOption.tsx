@@ -1,11 +1,12 @@
 import {
-    Button,
+    Button, Checkbox,
     Dialog,
     DialogActions,
-    DialogTitle,
+    DialogTitle, FormControlLabel, FormGroup,
+    InputAdornment
 } from "@mui/material";
 import { Info } from "phosphor-react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -26,6 +27,7 @@ export const FillInTheBlankModal = ({
     ) => void;
 }) => {
     const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
+    const exactMatchText = "Require exact match";
     // Unicode characters used to denote answer blanks when creating a FITB question.
     const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
 
@@ -33,7 +35,8 @@ export const FillInTheBlankModal = ({
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
 
-    useEffect(() => console.log("Current state of correct answers: ", correctAnswers), [correctAnswers]);
+    useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
+    useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
@@ -49,6 +52,12 @@ export const FillInTheBlankModal = ({
     const handleAnswerChoicesChange = (updatedChoices: string[], i: number) => {
         let updatedCorrectAnswers = [...correctAnswers];
         updatedCorrectAnswers[i].possibleChoices = updatedChoices;
+        setCorrectAnswers(updatedCorrectAnswers);
+    }
+
+    const handleExactMatchCheckboxChange = (i: number) => {
+        let updatedCorrectAnswers = [...correctAnswers];
+        updatedCorrectAnswers[i].shouldHaveExactMatch = !updatedCorrectAnswers[i].shouldHaveExactMatch;
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
@@ -121,19 +130,36 @@ export const FillInTheBlankModal = ({
                                         onChange={(e) => {
                                             setQuestionSegments(transformQuestionIntoSegments(e.target.value));
                                             // TODO: Need to deal with deleting blanks
-                                            console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
                                         }}
                                     />
                                 </div>
                             </div>
                             <div className="modal-answers">
                                 <label htmlFor="answers">Answers</label>
-                                <CustomWidthTooltip title={toolTipMessage} arrow>
+                                <CustomWidthTooltip
+                                    title={toolTipMessage}
+                                    color="#849DAE"
+                                    arrow
+                                >
                                     <Info size={32} />
                                 </CustomWidthTooltip>
                                 {correctAnswers.map((correctAnswer, i) => (
                                     <div key={i}>
-                                        <MuiChipsInput value={correctAnswer.possibleChoices} onChange={(e) => handleAnswerChoicesChange(e, i)} />
+                                        {blankAnswerPlaceholderChars[i]}
+                                        <MuiChipsInput
+                                            value={correctAnswer.possibleChoices}
+                                            onChange={(e) => handleAnswerChoicesChange(e, i)}
+                                        />
+                                        <FormGroup row={true}>
+                                            <FormControlLabel control={
+                                                    <Checkbox
+                                                        checked={correctAnswer.shouldHaveExactMatch}
+                                                        onChange={() => handleExactMatchCheckboxChange(i)}
+                                                    />
+                                                }
+                                                label={exactMatchText}
+                                            />
+                                        </FormGroup>
                                     </div>
                                 ))}
                             </div>
