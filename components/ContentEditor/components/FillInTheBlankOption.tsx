@@ -1,5 +1,7 @@
 import {
-    Button, Checkbox,
+    Box,
+    Button,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogTitle, FormControlLabel, FormGroup,
@@ -138,13 +140,12 @@ export const FillInTheBlankModal = ({
                                 <label htmlFor="answers">Answers</label>
                                 <CustomWidthTooltip
                                     title={toolTipMessage}
-                                    color="#849DAE"
                                     arrow
                                 >
                                     <Info size={32} />
                                 </CustomWidthTooltip>
                                 {correctAnswers.map((correctAnswer, i) => (
-                                    <div key={i}>
+                                    <Box key={i} sx={{ display: 'inline' }}>
                                         {blankAnswerPlaceholderChars[i]}
                                         <MuiChipsInput
                                             value={correctAnswer.possibleChoices}
@@ -160,7 +161,7 @@ export const FillInTheBlankModal = ({
                                                 label={exactMatchText}
                                             />
                                         </FormGroup>
-                                    </div>
+                                    </Box>
                                 ))}
                             </div>
                         </div>

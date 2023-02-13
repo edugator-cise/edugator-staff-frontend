@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, TextField, Box } from "@mui/material";
 import styled from "@emotion/styled";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
@@ -246,29 +246,6 @@ export function MultipleSelectDisplayBlock(props: any) {
   );
 }
 
-function fillInTheBlankComponents(questionSegments: string[], correctAnswers: blankAnswer[]) {
-  let blankAnswerIndex = 0;
-  let fitbComponents: JSX.Element[] = [];
-
-  // Pushes the necessary JSX elements for fill-in-the-blank questionSegments and correctAnswers into an array to be rendered.
-  for (let i = 0; i < questionSegments.length; i++) {
-    if (questionSegments[i] !== "") {
-      fitbComponents.push(
-        <QuestionSegmentHolder>{questionSegments[i]}</QuestionSegmentHolder>
-      );
-    }
-    if (blankAnswerIndex < correctAnswers.length) {
-      fitbComponents.push(<BlankAnswerHolder
-        style={{ backgroundColor: "LightGreen" }}
-      >
-        {correctAnswers[blankAnswerIndex].possibleChoices[0]}
-      </BlankAnswerHolder>);
-      blankAnswerIndex++;
-    }
-  }
-  return fitbComponents;
-}
-
 //displayed component when fill-in-the-blank is added
 export function FillInTheBlankDisplayBlock({
   questionSegments,
@@ -287,7 +264,21 @@ export function FillInTheBlankDisplayBlock({
       >
         Fill-in-the-Blank Question
       </Typography>
-      <div>{fillInTheBlankComponents(questionSegments, correctAnswers)}</div>
+
+      <Box sx={{ display: 'inline' }}>
+        {correctAnswers.map((correctAnswer, i) => (
+          <Box key={i} sx={{ display: 'inline' }}>
+            {questionSegments[i]}
+            <TextField
+              hiddenLabel
+              defaultValue={correctAnswer.possibleChoices[0]}
+              variant="filled"
+              size="small"
+            />
+          </Box>
+        ))}
+        <div> {questionSegments[questionSegments.length - 1]}</div>
+      </Box>
     </QuestionHolder >
   );
 }
