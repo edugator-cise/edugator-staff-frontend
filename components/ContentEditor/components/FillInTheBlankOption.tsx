@@ -4,8 +4,11 @@ import {
     DialogActions,
     DialogTitle,
 } from "@mui/material";
+import { Info } from "phosphor-react";
 import { useState, useRef } from "react";
 import { MuiChipsInput } from "mui-chips-input";
+import { styled } from '@mui/material/styles';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 
@@ -68,6 +71,14 @@ export const FillInTheBlankModal = ({
         }
     };
 
+    const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))({
+        [`& .${tooltipClasses.tooltip}`]: {
+          maxWidth: 200,
+        },
+      });
+
     return (
         <Dialog open={open} aria-labelledby="alert-dialog-title" fullWidth={true}>
             <DialogTitle id="alert-dialog-title">
@@ -104,6 +115,10 @@ export const FillInTheBlankModal = ({
                             </div>
                             <div className="modal-answers">
                                 <label htmlFor="answers">Answers</label>
+                                <CustomWidthTooltip title="Press Enter to add possible answer choice(s). 
+                                    “Require exact match” toggles case-sensitivity and will not approximate decimals." arrow>
+                                    <Info size={32} />
+                                </CustomWidthTooltip>
                                 <MuiChipsInput value={chips} onChange={handleChips1Change} />
                             </div>
                         </div>
