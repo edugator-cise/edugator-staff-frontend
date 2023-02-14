@@ -1,4 +1,4 @@
-import { Grid, Typography, TextField, Box } from "@mui/material";
+import { Box, Grid, Typography, TextField, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
@@ -33,17 +33,6 @@ const AnswerHolder = styled("div")({
     color: "white",
   },
 });
-
-const BlankAnswerHolder = styled("div")({
-  backgroundColor: "#dbeafe",
-  width: "100px",
-  display: "inline-block",
-  margin: 10,
-  padding: 4
-})
-
-const QuestionSegmentHolder = styled("span")({
-})
 
 //displayed component when multiple choice is added
 export function MultipleChoiceDisplayBlock({
@@ -254,6 +243,16 @@ export function FillInTheBlankDisplayBlock({
   questionSegments: string[];
   correctAnswers: blankAnswer[];
 }) {
+  const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
+    const possibleChoices = correctAnswer.possibleChoices;
+    return possibleChoices.slice(1, possibleChoices.length).join('\n');
+  };
+
+  const shouldShowAnswerTooltip = (correctAnswer: blankAnswer) => {
+    console.log(correctAnswer, correctAnswer.possibleChoices.length > 1);
+    return correctAnswer.possibleChoices.length > 1;
+  };
+
   return (
     <QuestionHolder className="exercise-content-wrapper">
       <Typography
@@ -269,12 +268,25 @@ export function FillInTheBlankDisplayBlock({
         {correctAnswers.map((correctAnswer, i) => (
           <Box key={i} sx={{ display: 'inline' }}>
             {questionSegments[i]}
-            <TextField
-              hiddenLabel
-              defaultValue={correctAnswer.possibleChoices[0]}
-              variant="filled"
-              size="small"
-            />
+            <Tooltip
+              // TODO: Figure out why the div in title causes tooltip to never hide.
+              hidden={shouldShowAnswerTooltip(correctAnswer)}
+              title={
+                <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                  {getNonFirstAnswerPossibilities(correctAnswer)}
+                </div>
+              }
+              arrow
+            >
+              <TextField
+                hiddenLabel
+                disabled={true}
+                inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                value={correctAnswer.possibleChoices[0]}
+                variant="filled"
+                size="small"
+              />
+            </Tooltip>
           </Box>
         ))}
         <div> {questionSegments[questionSegments.length - 1]}</div>

@@ -4,7 +4,9 @@ import {
     Checkbox,
     Dialog,
     DialogActions,
-    DialogTitle, FormControlLabel, FormGroup,
+    DialogTitle,
+    FormControlLabel,
+    FormGroup,
     InputAdornment
 } from "@mui/material";
 import { Info } from "phosphor-react";
@@ -42,11 +44,11 @@ export const FillInTheBlankModal = ({
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
-        if(!blankAnswerPlaceholderChars.length) return [question];
+        if (!blankAnswerPlaceholderChars.length) return [question];
 
         let regExpString = blankAnswerPlaceholderChars[0];
-        blankAnswerPlaceholderChars.forEach((exp, i)=>{
-            regExpString += '|'+ blankAnswerPlaceholderChars[i];
+        blankAnswerPlaceholderChars.forEach((exp, i) => {
+            regExpString += '|' + blankAnswerPlaceholderChars[i];
         })
         return question.split(new RegExp(regExpString));
     };
@@ -95,14 +97,6 @@ export const FillInTheBlankModal = ({
         }
     };
 
-    const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
-        <Tooltip {...props} classes={{ popper: className }} />
-      ))({
-        [`& .${tooltipClasses.tooltip}`]: {
-          maxWidth: 200,
-        },
-      });
-
     return (
         <Dialog open={open} aria-labelledby="alert-dialog-title" fullWidth={true}>
             <DialogTitle id="alert-dialog-title">
@@ -138,12 +132,12 @@ export const FillInTheBlankModal = ({
                             </div>
                             <div className="modal-answers">
                                 <label htmlFor="answers">Answers</label>
-                                <CustomWidthTooltip
-                                    title={toolTipMessage}
+                                <Tooltip
+                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
                                     arrow
                                 >
                                     <Info size={32} />
-                                </CustomWidthTooltip>
+                                </Tooltip>
                                 {correctAnswers.map((correctAnswer, i) => (
                                     <Box key={i} sx={{ display: 'inline' }}>
                                         {blankAnswerPlaceholderChars[i]}
@@ -151,13 +145,13 @@ export const FillInTheBlankModal = ({
                                             value={correctAnswer.possibleChoices}
                                             onChange={(e) => handleAnswerChoicesChange(e, i)}
                                         />
-                                        <FormGroup row={true}>
+                                        <FormGroup>
                                             <FormControlLabel control={
-                                                    <Checkbox
-                                                        checked={correctAnswer.shouldHaveExactMatch}
-                                                        onChange={() => handleExactMatchCheckboxChange(i)}
-                                                    />
-                                                }
+                                                <Checkbox
+                                                    checked={correctAnswer.shouldHaveExactMatch}
+                                                    onChange={() => handleExactMatchCheckboxChange(i)}
+                                                />
+                                            }
                                                 label={exactMatchText}
                                             />
                                         </FormGroup>
