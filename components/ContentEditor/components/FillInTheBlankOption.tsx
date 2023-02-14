@@ -38,9 +38,13 @@ export const FillInTheBlankModal = ({
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
+    const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
 
     useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
     useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
+    useEffect(() => {
+        updateAddQuestionButton(correctAnswers);
+    }, [correctAnswers]);
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
@@ -57,6 +61,15 @@ export const FillInTheBlankModal = ({
         let updatedCorrectAnswers = [...correctAnswers];
         updatedCorrectAnswers[i].possibleChoices = updatedChoices;
         setCorrectAnswers(updatedCorrectAnswers);
+    }
+
+    const updateAddQuestionButton = (correctAnswers: blankAnswer[]) => {
+        for (let i = 0; i < correctAnswers.length; i++) {
+            if (correctAnswers[i].possibleChoices[0] === undefined) {
+                setIsAddQuestionDisabled(true);
+                break;
+            } else { setIsAddQuestionDisabled(false); }
+        }
     }
 
     const handleExactMatchCheckboxChange = (i: number) => {
@@ -77,6 +90,7 @@ export const FillInTheBlankModal = ({
         setQuestionSegments([]);
         setCorrectAnswers([]);
         setBlankAnswerPlaceholderIndex(0);
+        setIsAddQuestionDisabled(true);
     };
 
     const modalInput = useRef<HTMLInputElement | null>(null);
@@ -185,6 +199,7 @@ export const FillInTheBlankModal = ({
                     }}
                     variant="contained"
                     color="success"
+                    disabled={isAddQuestionDisabled}
                 >
                     Add Question
                 </Button>
