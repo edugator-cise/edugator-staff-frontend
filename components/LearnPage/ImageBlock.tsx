@@ -1,9 +1,9 @@
 interface ImageBlockProps {
   src: string;
-  caption: string;
-  height: string;
-  width: string;
-  alignment: string;
+  caption?: string;
+  height?: string;
+  width?: string;
+  alignment?: string;
 }
 
 function ImageBlock(props: ImageBlockProps) {
@@ -18,16 +18,16 @@ function ImageBlock(props: ImageBlockProps) {
     <>
       <img
         style={{
-          alignSelf: alignment,
-          height: props.height,
-          width: props.width,
+          alignSelf: "center",
+          //height: props.height,
+          //width: props.width,
           maxWidth: "70%",
         }}
-        alt={props.caption}
+        alt={props.caption || "image"}
         src={props.src}
       />
       <p style={{ color: "grey", alignSelf: "center", fontFamily: "Inter" }}>
-        {props.caption}
+        {props.caption || ""}
       </p>
     </>
   );

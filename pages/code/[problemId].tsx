@@ -70,25 +70,6 @@ export default function CodeEditor() {
 
   return (
     <>
-      {error && (
-        <Grow in timeout={500}>
-          <Alert
-            severity="error"
-            sx={{
-              position: "absolute",
-              left: "0",
-              right: "0",
-              width: "50%",
-              marginTop: 5,
-              marginRight: "auto",
-              marginLeft: "auto",
-              zIndex: 300,
-            }}
-          >
-            {error.message}
-          </Alert>
-        </Grow>
-      )}
       {status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box

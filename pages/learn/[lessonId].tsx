@@ -18,6 +18,7 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
+import { LessonBlock } from "lib/shared/types";
 
 export default function LearnPage() {
   let questionCount = 1;
@@ -157,25 +158,6 @@ export default function LearnPage() {
 
   return (
     <>
-      {error && (
-        <Grow in timeout={500}>
-          <Alert
-            severity="error"
-            sx={{
-              position: "absolute",
-              left: "0",
-              right: "0",
-              width: "50%",
-              marginTop: 5,
-              marginRight: "auto",
-              marginLeft: "auto",
-              zIndex: 300,
-            }}
-          >
-            {error.message}
-          </Alert>
-        </Grow>
-      )}
       {status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box>
@@ -234,8 +216,8 @@ export default function LearnPage() {
                 ></div>
               </div>
             </LessonHeader>
-            {currentLesson.content?.map((block: any, i) => {
-              if (!block || !block.type || !block.content) {
+            {currentLesson.content?.map((block: LessonBlock, i) => {
+              if (!block || !block.type || !block.data) {
                 return null;
               }
               if (block.type === "text") {
@@ -245,7 +227,7 @@ export default function LearnPage() {
                       transform={transform}
                       className="inter"
                       content={JSON.parse(
-                        JSON.stringify(block.content.html) || ""
+                        JSON.stringify(block.data.html) || ""
                       )}
                     />
                   </div>
@@ -254,11 +236,11 @@ export default function LearnPage() {
                 return (
                   <ImageBlock
                     key={i}
-                    src={block.content.sourcePath}
-                    caption={block.content.caption}
-                    height={block.content.height}
-                    width={block.content.width}
-                    alignment={block.content.alignment}
+                    src={block.data.src}
+                    // caption={block.content.caption}
+                    // height={block.content.height}
+                    // width={block.content.width}
+                    //alignment={block.data.alignment}
                   />
                 );
               } else if (block.type === "multiple_choice") {
@@ -267,25 +249,25 @@ export default function LearnPage() {
                   <MultipleChoiceQuestion
                     key={i}
                     number={questionCount - 1}
-                    image={block.content.image}
-                    sourcePath={block.content.sourcePath}
-                    answers={block.content.answers}
-                    correctAnswer={block.content.correctAnswer}
-                    question={block.content.question}
+                    image={block.data.image || false}
+                    sourcePath={block.data.src}
+                    answers={block.data.answers}
+                    correctAnswer={block.data.correct}
+                    question={block.data.question}
                   />
                 );
-              } else if (block.type === "multiple_select") {
+              } /* else if (block.type === "multiple_select") {
                 questionCount++;
                 return (
                   <MultipleSelectQuestion
                     key={i}
                     number={questionCount - 1}
-                    answers={block.content.answers}
-                    correctAnswer={block.content.correctAnswer}
-                    question={block.content.question}
+                    answers={block.data.answers}
+                    correctAnswer={block.data.correctAnswer}
+                    question={block.data.question}
                   />
                 );
-              }
+              } */
               return <></>;
             })}
           </LessonHolder>
