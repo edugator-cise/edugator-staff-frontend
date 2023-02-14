@@ -34,6 +34,12 @@ const AnswerHolder = styled("div")({
   },
 });
 
+const BlankAnswerTextField = styled(TextField)({
+  '& .MuiInputBase-root.Mui-disabled': {
+    backgroundColor: 'lightgreen'
+  },
+});
+
 //displayed component when multiple choice is added
 export function MultipleChoiceDisplayBlock({
   question,
@@ -278,9 +284,9 @@ export function FillInTheBlankDisplayBlock({
               }
               arrow
             >
-              <TextField
+              <BlankAnswerTextField
                 hiddenLabel
-                disabled={true}
+                disabled
                 inputProps={{ min: 0, style: { textAlign: 'center' } }}
                 value={correctAnswer.possibleChoices[0]}
                 variant="filled"
