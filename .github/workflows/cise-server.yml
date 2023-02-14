@@ -1,0 +1,23 @@
+# This is a basic workflow to help you get started with Actions
+name: cise-server-deployment
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  pull_request:
+    branches: [main]
+    
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on:
+      labels: edugator-frontend
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build Edugator Staff Application
+        run: npm install && npm run build
+      
+      - name: Deploy app build to cise servers
+        run: cp -a build/ /www/edugator.cise.ufl.edu
