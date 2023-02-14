@@ -39,12 +39,19 @@ export const FillInTheBlankModal = ({
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
     const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
+    const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+
+    const modalInput = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
     useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
     useEffect(() => {
         updateAddQuestionButton(correctAnswers);
     }, [correctAnswers]);
+    useEffect(() => {
+        const input = modalInput.current;
+        if (input) input.setSelectionRange(cursorPosition, cursorPosition); // Sets the cursor position to the value of cursorPosition when input is no longer focused.
+    }, [modalInput, cursorPosition, questionSegments]);
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
@@ -93,8 +100,6 @@ export const FillInTheBlankModal = ({
         setIsAddQuestionDisabled(true);
     };
 
-    const modalInput = useRef<HTMLInputElement | null>(null);
-
     const onInsertBlankClick = () => {
         if (blankAnswerPlaceholderIndex < blankAnswerPlaceholderChars.length) {
             if (modalInput.current) {
@@ -108,6 +113,7 @@ export const FillInTheBlankModal = ({
                     setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
                     setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
                     addNewBlankAnswer();
+                    setCursorPosition(cursorPosition + 1); // Sets the cursorPosition to just after the inserted character.
                 }
             }
         }
@@ -144,6 +150,7 @@ export const FillInTheBlankModal = ({
                                         ref={modalInput}
                                         onChange={(e) => {
                                             setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                            setCursorPosition(e.target.selectionStart);
                                             // TODO: Need to deal with deleting blanks
                                         }}
                                     />
