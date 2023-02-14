@@ -7,13 +7,11 @@ import {
     DialogTitle,
     FormControlLabel,
     FormGroup,
-    InputAdornment
 } from "@mui/material";
 import { Info } from "phosphor-react";
 import React, { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
-import { styled } from '@mui/material/styles';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 
