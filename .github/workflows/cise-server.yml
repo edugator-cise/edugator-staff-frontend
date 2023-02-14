@@ -16,6 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+      
       - name: Build Edugator Staff Application
         run: npm install && npm run build
       
