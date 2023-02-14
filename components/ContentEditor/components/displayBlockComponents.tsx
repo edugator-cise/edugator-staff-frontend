@@ -255,7 +255,6 @@ export function FillInTheBlankDisplayBlock({
   };
 
   const shouldShowAnswerTooltip = (correctAnswer: blankAnswer) => {
-    console.log(correctAnswer, correctAnswer.possibleChoices.length > 1);
     return correctAnswer.possibleChoices.length > 1;
   };
 

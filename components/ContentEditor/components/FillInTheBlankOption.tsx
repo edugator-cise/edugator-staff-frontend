@@ -84,12 +84,17 @@ export const FillInTheBlankModal = ({
     const onInsertBlankClick = () => {
         if (blankAnswerPlaceholderIndex < blankAnswerPlaceholderChars.length) {
             if (modalInput.current) {
-                // append the special character for question input view
-                modalInput.current.value = modalInput.current.value + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex];
-                console.log("Current question input: ", modalInput.current.value);
-                setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
-                setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
-                addNewBlankAnswer();
+                // Insert placeholder characters for question input at cursor position.
+                let cursorPosition = modalInput.current.selectionStart;
+                if ((cursorPosition !== null)) {
+                    let textBeforeCursorPosition = modalInput.current.value.substring(0, cursorPosition);
+                    let textAfterCursorPosition = modalInput.current.value.substring(cursorPosition, modalInput.current.value.length);
+                    modalInput.current.value = textBeforeCursorPosition + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex] + textAfterCursorPosition;
+                    console.log("Current question input: ", modalInput.current.value);
+                    setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
+                    setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
+                    addNewBlankAnswer();
+                }
             }
         }
         else {
