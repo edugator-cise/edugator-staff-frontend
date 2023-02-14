@@ -3,9 +3,6 @@ name: cise-server-deployment
 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  pull_request:
-    branches: [main]
-    
   push:
     branches: [main]
 
@@ -21,7 +18,11 @@ jobs:
           node-version: latest
       
       - name: Build Edugator Staff Application
-        run: npm install && npm run build
+        run: |
+          npm install
+          npm run build
       
       - name: Deploy app build to cise servers
-        run: cp -a build/ /www/edugator.cise.ufl.edu
+        run: |
+          rm -rf /www/edugator.cise.ufl.edu/*
+          cp -a -r build/* /www/edugator.cise.ufl.edu
