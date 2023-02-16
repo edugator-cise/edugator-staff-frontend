@@ -144,7 +144,7 @@ export const CodeEditorView = ({
   };
 
   const handleBugBounty = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank');
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank', 'noopener');
   }
 
   window.addEventListener("resize", () => {
