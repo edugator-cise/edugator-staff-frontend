@@ -3,15 +3,17 @@ import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload , BugReport } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { requestRunCode, submitCode } from "../CodeEditorSlice";
-import { RootState } from "../../../app/common/store";
+import { GetApp, Add, RotateLeft, CloudDownload, BugReport} from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { colors } from "../../../shared/constants";
+import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
-import theme from "../../../shared/theme";
+import theme from "constants/theme";
+import { IProblem } from "lib/shared/types";
+import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
+import { useRouter } from "next/router";
+import useNavigation from "hooks/useNavigation";
+import { LocalStorage } from "lib/auth/LocalStorage";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -50,35 +52,73 @@ const CodeHolder = styled("div")({
 interface CodeEditorProps {
   code: string;
   templatePackage: string;
+  currentProblem: IProblem;
+  stdin: string;
+  isSubmissionRunning: boolean;
+  runCode: ({
+    code,
+    stdin,
+    problemId,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+  }: {
+    code: string;
+    stdin: string;
+    problemId: string;
+    timeLimit: number;
+    memoryLimit: number;
+    buildCommand: string;
+  }) => void;
+  submitCode: ({
+    code,
+    stdin,
+    problemId,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+  }: {
+    code: string;
+    stdin: string;
+    problemId: string;
+    timeLimit: number;
+    memoryLimit: number;
+    buildCommand: string;
+  }) => void;
 }
 
-export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
-  const dispatch = useDispatch();
+export const CodeEditorView = ({
+  code,
+  templatePackage,
+  currentProblem,
+  stdin,
+  isSubmissionRunning,
+  runCode,
+  submitCode,
+}: CodeEditorProps) => {
+  const router = useRouter();
+  const locationState = router.asPath;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
-  const isSubmissionRunning = useSelector(
+  /* const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
+  ); */
+
+  const {
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+    _id: problemId,
+    fileExtension: fileType,
+  } = currentProblem;
+
+  // recalling the use navigation hook because navStructure is passed through when downloading a problem
+  const { problemAndLessonSet } = useNavigation(
+    LocalStorage.getToken() !== null
   );
-  const stdin = useSelector((state: RootState) => state.codeEditor.stdin);
-  const problemId = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?._id
-  );
-  const fileType = useSelector(
-    (state: RootState) => state.codeEditor.currentProblem?.fileExtension
-  );
-  const navStructure = useSelector(
-    (state: RootState) => state.codeEditor.navStructure
-  );
-  const { timeLimit, memoryLimit, buildCommand } = useSelector(
-    (state: RootState) => {
-      return {
-        timeLimit: state.codeEditor.currentProblem?.timeLimit,
-        memoryLimit: state.codeEditor.currentProblem?.memoryLimit,
-        buildCommand: state.codeEditor.currentProblem?.buildCommand,
-      };
-    }
-  );
+  const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
@@ -89,69 +129,12 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
     editorRef.current = editor;
   };
 
-  const generateFileName = () => {
-    let currentModuleNumber = -1;
-    let currentProblemNumber = -1;
-    let foundProblem = false;
-    for (let i = 0; i < navStructure.length; i++) {
-      for (let j = 0; j < navStructure[i].problems.length; j++) {
-        if (navStructure[i].problems[j]._id === problemId) {
-          foundProblem = true;
-          currentModuleNumber = i;
-          currentProblemNumber = j;
-          break;
-        }
-      }
-      if (foundProblem) {
-        break;
-      }
-    }
-    if (!foundProblem) {
-      return "edugator-code.cpp";
-    }
-    return `cop3530_${currentModuleNumber + 1}_${
-      currentProblemNumber + 1
-    }${fileType}`;
-  };
-  const handleDownload = () => {
-    const blob = new Blob([currentCode]);
-    const blobURL = URL.createObjectURL(blob);
-    const filename = generateFileName();
-    // Create a new link
-    const anchor = document.createElement("a");
-    anchor.href = blobURL;
-    anchor.download = filename;
-    // Append to the DOM
-    document.body.appendChild(anchor);
-    // Trigger `click` event
-    anchor.click();
-    // Remove element from DOM
-    document.body.removeChild(anchor);
-  };
-
   const handleReset = () => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
     }
   };
 
-  const handleBugBounty = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSc2XYkSKU7lBAhTNZlNdXkcO1ay51B3fc7dlWrF6RdQFobxbw/closedform', '_blank');
-  }
-
-  const parseFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const reader = new FileReader();
-    if (event.target && event.target.files) {
-      reader.readAsText(event.target.files[0]);
-      reader.onload = async (event) => {
-        const text = event.target?.result;
-        if (editorRef.current) {
-          editorRef.current.setValue(text as string);
-        }
-      };
-    }
-  };
   const handleChooseFile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -159,6 +142,10 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
       hiddenFileInput.current.click();
     }
   };
+
+  const handleBugBounty = () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank', 'noopener');
+  }
 
   window.addEventListener("resize", () => {
     if (editorRef.current) {
@@ -196,7 +183,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               style={{ display: "none" }}
               ref={hiddenFileInput}
               type="file"
-              onChange={(e) => parseFile(e)}
+              onChange={(e) => parseFile(e, editorRef)}
             />
             <Tooltip title="Choose File" placement="top">
               <IconButton onClick={(e) => handleChooseFile(e)}>
@@ -204,7 +191,11 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Download Submission" placement="top">
-              <IconButton onClick={handleDownload}>
+              <IconButton
+                onClick={() => {
+                  handleDownload(currentCode, navigation, problemId, fileType);
+                }}
+              >
                 <GetApp />
               </IconButton>
             </Tooltip>
@@ -213,7 +204,7 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
                 <RotateLeft />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Bug Bounty" placement="top">
+            <Tooltip title="Report a bug" placement="top">
               <IconButton onClick={handleBugBounty}>
                 <BugReport />
               </IconButton>
@@ -248,16 +239,14 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() => {
-              dispatch(
-                requestRunCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              );
+              runCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              });
             }}
           >
             Run Code
@@ -268,16 +257,14 @@ export const CodeEditorView = ({ code, templatePackage }: CodeEditorProps) => {
             disabled={isSubmissionRunning}
             sx={{ mr: 2 }}
             onClick={() =>
-              dispatch(
-                submitCode({
-                  code: currentCode,
-                  stdin,
-                  problemId: problemId as string,
-                  timeLimit: timeLimit as number,
-                  memoryLimit: memoryLimit as number,
-                  buildCommand: buildCommand as string,
-                })
-              )
+              submitCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              })
             }
           >
             Submit
