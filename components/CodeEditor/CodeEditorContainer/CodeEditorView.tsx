@@ -204,7 +204,7 @@ export const CodeEditorView = ({
                 <RotateLeft />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Bug Bounty" placement="top">
+            <Tooltip title="Report a bug" placement="top">
               <IconButton onClick={handleBugBounty}>
                 <BugReport />
               </IconButton>
