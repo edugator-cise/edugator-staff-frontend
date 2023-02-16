@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload, BugReport  } from "@mui/icons-material";
+import { GetApp, Add, RotateLeft, CloudDownload, BugReport} from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "constants/config";
