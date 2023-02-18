@@ -78,7 +78,7 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     dueDate: new Date().toISOString(),
-    fileName: "mock.cpp",
+    fileName: "example.cpp",
   },
   problem: {
     problemStatement: "",
