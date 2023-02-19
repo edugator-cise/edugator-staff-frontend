@@ -4,17 +4,29 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ExpandMore, Add, Edit, AssignmentTurnedIn } from "@mui/icons-material";
+import {
+  ExpandMore,
+  Add,
+  Edit,
+  AssignmentTurnedIn,
+  ArrowUpward,
+  ArrowDownward,
+} from "@mui/icons-material";
 import { Routes } from "constants/navigationRoutes";
 import { IProblemBase } from "lib/shared/types";
 import { IAdminModule } from "components/Modules/types";
 import { ModuleMenu } from "components/Modules/ModuleMenu";
 import { BookOpen, Code } from "phosphor-react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
+import toast from "react-hot-toast";
+import { changeProblemOrderSuccess } from "./ModulesSlice";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",
@@ -73,19 +85,57 @@ const ProblemAction = styled(Button)(({ theme }) => ({
   },
 }));
 
+const ProblemIcon = styled(IconButton)(({ theme }) => ({
+  marginRight: theme.spacing(2),
+  "&:hover": {
+    backgroundColor: theme.palette.primary.light,
+  },
+}));
+
+const moveProblem = async (
+  problemId: string,
+  moduleId: string,
+  direction: string,
+  dispatch: any
+) => {
+  try {
+    const { data }: { data: IProblemBase } = await apiClient.post(
+      apiRoutes.admin.changeProblemOrder,
+      { moduleId, problemId, direction }
+    );
+
+    dispatch(
+      changeProblemOrderSuccess({
+        moduleId: String(moduleId),
+        problemId: String(problemId),
+        direction: direction,
+      })
+    );
+    toast.success("Problem was moved successfully");
+  } catch (e) {
+    toast.error("Error moving problem");
+    console.log(e);
+  }
+};
+
 interface moduleProps {
   setModuleToDelete: (module: IAdminModule) => void;
   setProblemToGrade: (problem: IProblemBase) => void;
 }
 
-export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: moduleProps) {
+export function ModuleAccordian({
+  setModuleToDelete,
+  setProblemToGrade,
+}: moduleProps) {
+  const dispatch = useDispatch();
+
   const router = useRouter();
   const modulesState = useSelector((state: RootState) => state.modules.modules);
   return (
     <>
       {modulesState.length > 0 ? (
         <>
-          {modulesState.map((module,index) => {
+          {modulesState.map((module, index) => {
             return (
               <Module key={`${module._id}-module-${index}`} disableGutters>
                 <ModuleTitle expandIcon={<ExpandMore />}>
@@ -104,12 +154,12 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                     onClick={(event) => {
                       event.stopPropagation();
                       router.push({
-                        pathname: Routes.ProblemCreatorBaseWithoutId + module._id,
+                        pathname:
+                          Routes.ProblemCreatorBaseWithoutId + module._id,
                         query: {
-                          moduleName: module.name
-                        }
-                      }
-                      );
+                          moduleName: module.name,
+                        },
+                      });
                     }}
                   >
                     Add Problem
@@ -121,12 +171,12 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                     onClick={(event) => {
                       event.stopPropagation();
                       router.push({
-                        pathname: Routes.ContentCreatorBaseWithoutId + module._id,
+                        pathname:
+                          Routes.ContentCreatorBaseWithoutId + module._id,
                         query: {
-                          moduleName: module.name
-                        }
-                      }
-                      );
+                          moduleName: module.name,
+                        },
+                      });
                     }}
                   >
                     Add Content
@@ -164,8 +214,31 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                               </b>
                               {` ${problem.title}`}
                             </Title>
-
                             <ButtonContainer>
+                              <ProblemIcon
+                                onClick={() => {
+                                  moveProblem(
+                                    problem._id!,
+                                    module._id!,
+                                    "up",
+                                    dispatch
+                                  );
+                                }}
+                              >
+                                <ArrowUpward />
+                              </ProblemIcon>
+                              <ProblemIcon
+                                onClick={() => {
+                                  moveProblem(
+                                    problem._id!,
+                                    module._id!,
+                                    "down",
+                                    dispatch
+                                  );
+                                }}
+                              >
+                                <ArrowDownward />
+                              </ProblemIcon>
                               <ProblemAction
                                 startIcon={<AssignmentTurnedIn />}
                                 size="small"
@@ -186,13 +259,14 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                                 variant="outlined"
                                 onClick={() => {
                                   router.push({
-                                    pathname: Routes.ProblemEditorBaseWithoutId + problem._id,
+                                    pathname:
+                                      Routes.ProblemEditorBaseWithoutId +
+                                      problem._id,
                                     query: {
                                       moduleName: module.name,
                                       moduleId: module._id,
-                                    }
-                                  }
-                                  );
+                                    },
+                                  });
                                 }}
                               >
                                 Edit
@@ -239,13 +313,14 @@ export function ModuleAccordian({ setModuleToDelete, setProblemToGrade }: module
                                 variant="outlined"
                                 onClick={() => {
                                   router.push({
-                                    pathname: Routes.ContentEditorBaseWithoutId + lesson._id,
+                                    pathname:
+                                      Routes.ContentEditorBaseWithoutId +
+                                      lesson._id,
                                     query: {
                                       moduleName: module.name,
                                       moduleId: module._id,
-                                    }
-                                  }
-                                  );
+                                    },
+                                  });
                                 }}
                               >
                                 Edit

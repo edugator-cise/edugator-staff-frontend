@@ -19,6 +19,7 @@ export const apiRoutes = {
     createProblem: "v1/admin/problem",
     editProblem: (id: string) => `v1/admin/problem/${id}`,
     putLesson: (id: string) => `v1/admin/lesson/${id}`,
-    createLesson: "v1/admin/lesson/"
+    createLesson: "v1/admin/lesson/",
+    changeProblemOrder: "v1/module/changeProblemOrder",
   },
 };
