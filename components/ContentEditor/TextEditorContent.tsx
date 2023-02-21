@@ -8,7 +8,6 @@ import {
   convertToRaw,
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
-import "./TextEditorStyles.module.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { MultipleChoiceModal } from "./components/MultipleChoiceOption";
 import draftToHtml from "draftjs-to-html";

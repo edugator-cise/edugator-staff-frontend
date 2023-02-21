@@ -32,7 +32,8 @@ export const useFetchLesson = ({ id }: { id: string }) => {
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
-        // if error message contains 'Cannot read properties of undefined', ignore
+        // lol idk what else to do here
+        // theres an issue on refresh of a lesson page
         if (e.message.includes("Cannot read properties of undefined")) {
           return;
         }
