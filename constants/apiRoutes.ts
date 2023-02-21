@@ -20,5 +20,6 @@ export const apiRoutes = {
     editProblem: (id: string) => `v1/admin/problem/${id}`,
     putLesson: (id: string) => `v1/admin/lesson/${id}`,
     createLesson: "v1/admin/lesson",
+    deleteLesson: (id: string) => `v1/admin/lesson/${id}`,
   },
 };

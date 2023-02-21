@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 export const useFetchLesson = ({ id }: { id: string }) => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
   const [lesson, setLesson] = useState<LessonDisplay | undefined>(undefined);
+  const [rawLesson, setRawLesson] = useState<ILesson | undefined>(undefined);
   const [error, setError] = useState<Error | undefined>(undefined);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
         if (values) {
           const transformed = transformLesson(values);
           setLesson(transformed);
+          setRawLesson(values);
         }
         setStatus(FetchStatus.succeed);
       })
@@ -49,7 +51,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
       setStatus(FetchStatus.loading);
     };
   }, [id]);
-  return { status, lesson, error };
+  return { status, lesson, error, rawLesson };
 };
 
 export function isEntityOfType<T extends { type: string }>(

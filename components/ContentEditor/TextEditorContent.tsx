@@ -28,11 +28,14 @@ import { RootState } from "lib/store/store";
 import MultipleSelectModal, {
   ModalAnswer,
 } from "./components/MultipleSelectModal";
+import { ILesson } from "lib/shared/types";
 
 const TextEditorContent = ({
   callbackData,
+  rawLesson,
 }: {
   callbackData: (atomicEntities: any, html: string, rawData: any) => void;
+  rawLesson?: ILesson;
 }) => {
   const [editorState, setEditorState] = useState<EditorState>(
     EditorState.createEmpty()
@@ -46,24 +49,19 @@ const TextEditorContent = ({
     (state: RootState) => state.contentEditorPage.contentId
   );
 
-  const editorStoredState = useSelector(
-    (state: RootState) => state.contentEditorPage.contentEditor
-  );
-
   useEffect(() => {
-    if (contentId && editorStoredState) {
+    if (rawLesson) {
       const convertedContent = convertFromRaw({
         // @ts-ignore
-        blocks: editorStoredState.editableContent.blocks,
+        blocks: rawLesson.editableContent.blocks,
         // @ts-ignore
-        entityMap: editorStoredState.editableContent.entityMap || {},
+        entityMap: rawLesson.editableContent.entityMap || {},
       });
-      console.log("convertedContent", convertedContent);
 
       // convert from raw back to editor state
       setEditorState(EditorState.createWithContent(convertedContent));
     }
-  }, [contentId, editorStoredState]);
+  }, [contentId]);
 
   const customEntityTransform = (entity: any, text: string) => {
     if (
@@ -77,9 +75,6 @@ const TextEditorContent = ({
   const onTrigger = () => {
     const atomicEntities = getEntities(editorState);
     const rawData = convertToRaw(editorState.getCurrentContent());
-    //let html = html;
-
-    // console.log("Callback Data", atomicEntities, html);
     callbackData(atomicEntities, html, rawData);
   };
 
@@ -122,17 +117,12 @@ const TextEditorContent = ({
   };
 
   const onChange = (editorState: EditorState) => {
-    console.log(editorState);
-    console.log("RAW STATE");
-    console.log(convertToRaw(editorState.getCurrentContent()));
-
     const html = draftToHtml(
       convertToRaw(editorState.getCurrentContent()),
       {},
       false,
       customEntityTransform
     );
-    console.log(html);
     onTrigger();
     setEditorState(editorState);
     setHTML(html);

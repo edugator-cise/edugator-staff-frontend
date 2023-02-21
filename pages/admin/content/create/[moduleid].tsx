@@ -24,15 +24,13 @@ import { FetchStatus } from "hooks/types";
 import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
 
-const ContentEditorPage = () => {
+const ContentCreatePage = () => {
   const router = useRouter();
-  const { lessonId, moduleName, moduleId } = router.query;
+  const { moduleName, moduleId } = router.query;
 
   const lessonTitle = useSelector(
     (state: RootState) => state.contentEditorPage.metadata.title
   );
-
-  const [status, setStatus] = useState(FetchStatus.loading);
 
   const dispatch = useDispatch();
   const actions = {
@@ -42,47 +40,19 @@ const ContentEditorPage = () => {
       variant: "contained",
       color: "primary",
     },
-    delete: {
-      label: "Delete Lesson",
-      onClick: () => dispatch(openWarningModal(WarningTypes.Delete)),
-      variant: "contained",
-      color: "error",
-    },
   };
 
   useEffect(() => {
-    console.log("useEffect");
     if (moduleId) {
       console.log(moduleId);
       dispatch(updateModuleId(moduleId as string));
     }
-    dispatch(updateContentId(lessonId as string));
     dispatch(updateModuleName(moduleName as string));
 
     return () => {
       dispatch(resetState());
     };
-  }, [moduleId, lessonId, moduleName, dispatch]);
-
-  const handleGetContentRequest = async (payload: string) => {
-    try {
-      const { data }: { data: ILesson } = await apiClient.get(
-        apiRoutes.admin.getLesson(payload)
-      );
-      dispatch(requestGetContentSuccess(data));
-      setStatus(FetchStatus.succeed);
-    } catch (e) {
-      toast.error("Failed to get problem");
-      setStatus(FetchStatus.failed);
-    }
-  };
-  useEffect(() => {
-    if (lessonId) {
-      handleGetContentRequest(lessonId as string);
-    } else {
-      setStatus(FetchStatus.succeed);
-    }
-  }, [lessonId]);
+  }, [moduleId, moduleName, dispatch]);
 
   return (
     <>
@@ -90,11 +60,9 @@ const ContentEditorPage = () => {
         pageTitle={`${moduleName ? moduleName + " - " : ""}${
           lessonTitle || "New Lesson"
         }`}
-        actionButtons={
-          lessonId ? [actions.back, actions.delete] : [actions.back]
-        }
+        actionButtons={[actions.back]}
       >
-        {status === FetchStatus.loading ? <CircularProgress /> : <TextStack />}
+        <TextStack />
       </AdminLayout>
       <SuccessDialog />
       <WarningDialog />
@@ -103,4 +71,4 @@ const ContentEditorPage = () => {
   );
 };
 
-export default ContentEditorPage;
+export default ContentCreatePage;

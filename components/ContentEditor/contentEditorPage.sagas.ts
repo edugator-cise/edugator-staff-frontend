@@ -7,13 +7,16 @@ import {
   requestUpdateContentSuccess,
 } from "./contentEditorPageSlice";
 import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
 
 function* handleDeleteContentRequest(): any {
   const state: RootState = yield select();
   const contentState = state.contentEditorPage;
 
   const deleteContentRequest = () =>
-    apiClient.delete(`/v1/admin/lesson/${contentState.contentId}`);
+    apiClient.delete(
+      apiRoutes.admin.deleteLesson(contentState.contentId as string)
+    );
 
   try {
     yield call(deleteContentRequest);

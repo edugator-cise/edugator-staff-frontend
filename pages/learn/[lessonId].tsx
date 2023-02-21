@@ -236,16 +236,7 @@ export default function LearnPage() {
                   </div>
                 );
               } else if (block.type === "image") {
-                return (
-                  <ImageBlock
-                    key={i}
-                    src={block.data.src}
-                    // caption={block.content.caption}
-                    // height={block.content.height}
-                    // width={block.content.width}
-                    //alignment={block.data.alignment}
-                  />
-                );
+                return <ImageBlock key={i} src={block.data.src} />;
               } else if (block.type === "multiple_choice") {
                 questionCount++;
                 return (
