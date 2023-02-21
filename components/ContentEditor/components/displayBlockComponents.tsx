@@ -1,4 +1,5 @@
-import { Box, Grid, Typography, TextField, Tooltip } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
@@ -35,8 +36,11 @@ const AnswerHolder = styled("div")({
 });
 
 const BlankAnswerTextField = styled(TextField)({
+});
+
+const CorrectAnswerTextField = styled(TextField)({
   '& .MuiInputBase-root.Mui-disabled': {
-    backgroundColor: 'lightgreen'
+    backgroundColor: 'LightGreen'
   },
 });
 
@@ -245,10 +249,30 @@ export function MultipleSelectDisplayBlock(props: any) {
 export function FillInTheBlankDisplayBlock({
   questionSegments,
   correctAnswers,
+  number,
 }: {
   questionSegments: string[];
   correctAnswers: blankAnswer[];
+  number?: number; // Number is an optional prop that only exists for numbering the questions for student view. If it is undefined, we are in admin view.
 }) {
+
+  const [answerInputs, setAnswerInputs] = useState<string[]>([]);   // string array of question attempts/inputs
+  const [results, setResults] = useState<boolean[]>([false]);   // boolean array of answer correctness
+  const [correct, setCorrect] = useState(false);    // Whether all answers are correct
+  const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
+
+
+  useEffect(() => {
+    let defaultResults = [];
+    for (let i = 0; i < correctAnswers.length; i++) {
+      defaultResults.push(false);
+    }
+    setResults(defaultResults);
+    if (number === undefined) {
+      setCorrect(true);
+    }
+  }, []);
+
   const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
     return possibleChoices.slice(1, possibleChoices.length).join('\n');
@@ -258,6 +282,30 @@ export function FillInTheBlankDisplayBlock({
     return correctAnswer.possibleChoices.length > 1;
   };
 
+  const handleCheck = () => {
+    let updatedResults = [...results];
+    for (let i = 0; i < answerInputs.length; i++) {
+      // TODO: whitespace, toCapital, etc
+      if (correctAnswers[i].possibleChoices.includes(answerInputs[i])) {
+        updatedResults[i] = true;
+      } else {
+        updatedResults[i] = false;
+      }
+    }
+    console.log("updated results", updatedResults);
+    setResults(updatedResults);
+    if (updatedResults.every(result => result === true)) {
+      setCorrect(true);
+    }
+  }
+
+  const handleAnswerInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
+    let updatedAnswerInputs = [...answerInputs];
+    updatedAnswerInputs[i] = e.target.value;
+    console.log("updated answer inputs: ", updatedAnswerInputs);
+    setAnswerInputs(updatedAnswerInputs);
+  }
+
   return (
     <QuestionHolder className="exercise-content-wrapper">
       <Typography
@@ -266,36 +314,72 @@ export function FillInTheBlankDisplayBlock({
         fontSize="subtitle2"
         color={"#3b82f6"}
       >
-        Fill-in-the-Blank Question
+        {number ? "Question " + number : "Fill-in-the-Blank Question"}
       </Typography>
-
       <Box sx={{ display: 'inline' }}>
         {correctAnswers.map((correctAnswer, i) => (
           <Box key={i} sx={{ display: 'inline' }}>
-            {questionSegments[i]}
-            <Tooltip
-              // TODO: Figure out why the div in title causes tooltip to never hide.
-              hidden={shouldShowAnswerTooltip(correctAnswer)}
-              title={
-                <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
-                  {getNonFirstAnswerPossibilities(correctAnswer)}
-                </div>
-              }
-              arrow
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline' }}
             >
-              <BlankAnswerTextField
+              {questionSegments[i]}
+            </Typography>
+            {!number || results[i] // If number does not exist, we are in admin view. Otherwise in student view.
+              ? <Tooltip
+                // TODO: Figure out why the div in title causes tooltip to never hide.
+                hidden={shouldShowAnswerTooltip(correctAnswer)}
+                title={
+                  <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                    {/* TODO: Show student's correct answer instead? And then the tooltip would list whatever choices they didn't enter. */}
+                    {getNonFirstAnswerPossibilities(correctAnswer)}
+                  </div>
+                }
+                arrow
+              >
+                <CorrectAnswerTextField
+                  hiddenLabel
+                  style={{ backgroundColor: 'LightGreen' }}
+                  inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                  value={correctAnswer.possibleChoices[0]}
+                  variant="filled"
+                  size="small"
+                  disabled
+                />
+              </Tooltip>
+              : <BlankAnswerTextField
                 hiddenLabel
-                disabled
                 inputProps={{ min: 0, style: { textAlign: 'center' } }}
-                value={correctAnswer.possibleChoices[0]}
+                /* TODO: Show student's most recent answer or correctAnswer.possibleChoices[0]? */
+                value={answerInputs[i]}
                 variant="filled"
                 size="small"
+                helperText={answered ? "Incorrect entry." : ""}
+                error={answered}
+                onChange={(e) => handleAnswerInputChange(e, i)}
               />
-            </Tooltip>
+            }
           </Box>
         ))}
-        <div> {questionSegments[questionSegments.length - 1]}</div>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline' }}
+        >
+          {questionSegments[questionSegments.length - 1]}
+        </Typography>
       </Box>
+      <Button
+        onClick={() => {
+          setAnswered(true);
+          handleCheck();
+        }}
+        variant="contained"
+        color="primary"
+        disabled={correct}
+        style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
+      >
+        CHECK
+      </Button>
     </QuestionHolder >
   );
 }
