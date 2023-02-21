@@ -58,12 +58,7 @@ export const TextStack = () => {
         case "multiple_select":
           content = new contentBlock(
             "multiple_select",
-            new ms_content(data.data.question, data.data.correct, [
-              data.data.answer1,
-              data.data.answer2,
-              data.data.answer3,
-              data.data.answer4,
-            ])
+            new ms_content(data.data.question, data.data.answers)
           );
           break;
 

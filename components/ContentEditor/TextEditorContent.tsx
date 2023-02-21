@@ -9,7 +9,7 @@ import {
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { MultipleChoiceModal } from "./components/MultipleChoiceOption";
+import { MultipleChoiceModal } from "./components/MultipleChoiceModal";
 import draftToHtml from "draftjs-to-html";
 import {
   TextHOne,
@@ -25,6 +25,9 @@ import {
 } from "phosphor-react";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
+import MultipleSelectModal, {
+  ModalAnswer,
+} from "./components/MultipleSelectModal";
 
 const TextEditorContent = ({
   callbackData,
@@ -36,6 +39,7 @@ const TextEditorContent = ({
   );
   const [html, setHTML] = useState("");
   const [MCModalOpen, setMCModalOpen] = useState(false);
+  const [MSModalOpen, setMSModalOpen] = useState(false);
 
   // check if the lesson has a title (we are editing a lesson)
   const contentId = useSelector(
@@ -134,6 +138,29 @@ const TextEditorContent = ({
     setHTML(html);
   };
 
+  const onAddMultipleSelect = (
+    e: any,
+    question: string,
+    answers: ModalAnswer[]
+  ) => {
+    e.preventDefault();
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "multiple_select",
+      "IMMUTABLE",
+      { question, answers }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
+    );
+    setMSModalOpen(false);
+    setTimeout(() => focus(), 0);
+  };
+
   const onAddMultipleChoice = (
     e: any,
     question: string,
@@ -228,6 +255,11 @@ const TextEditorContent = ({
         open={MCModalOpen}
         setOpen={setMCModalOpen}
       />
+      <MultipleSelectModal
+        insert={onAddMultipleSelect}
+        open={MSModalOpen}
+        setOpen={setMSModalOpen}
+      />
 
       <button onClick={onH1Click}>
         <TextHOne weight="bold" size={18} />
@@ -261,7 +293,12 @@ const TextEditorContent = ({
       >
         <ListBullets weight="bold" size={18} />
       </button>
-      <button onClick={() => {}}>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setMSModalOpen(true);
+        }}
+      >
         <ListChecks weight="bold" size={18} />
       </button>
       <div className="editor">
