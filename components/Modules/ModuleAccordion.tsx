@@ -114,7 +114,6 @@ const moveProblem = async (
     toast.success("Problem was moved successfully");
   } catch (e) {
     toast.error("Error moving problem");
-    console.log(e);
   }
 };
 
