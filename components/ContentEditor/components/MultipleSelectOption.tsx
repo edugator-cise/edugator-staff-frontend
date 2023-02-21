@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./ExerciseStyles.module.css";
 
 function MultipleSelectOption(props: any) {
   const [expanded, setExpanded] = useState(false);

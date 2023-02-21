@@ -1,6 +1,5 @@
 import { Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-import "./ExerciseStyles.module.css";
 
 const QuestionHolder = styled("div")({
   width: "70%",
