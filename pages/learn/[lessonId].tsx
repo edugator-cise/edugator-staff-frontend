@@ -18,6 +18,7 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
+import FillInTheBlankQuestion from "components/LearnPage/FillInTheBlankQuestion";
 
 export default function LearnPage() {
   let questionCount = 1;
@@ -283,6 +284,16 @@ export default function LearnPage() {
                     answers={block.content.answers}
                     correctAnswer={block.content.correctAnswer}
                     question={block.content.question}
+                  />
+                );
+              } else if (block.type === "fill_in_the_blank") {
+                questionCount++;
+                return (
+                  <FillInTheBlankQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    questionSegments={block.content.questionSegments}
+                    correctAnswers={block.content.correctAnswers}
                   />
                 );
               }
