@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IModuleBase, IRequestMessage } from "lib/shared/types";
-import { IModuleState, IAdminModule, DialogStatus } from "components/Modules/types";
+import {
+  IModuleState,
+  IAdminModule,
+  DialogStatus,
+} from "components/Modules/types";
 
 const baseModuleState: IModuleState = {
   modules: [],
@@ -63,6 +67,34 @@ export const moduleSlice = createSlice({
         modules: new_modules,
       };
     },
+    changeProblemOrderSuccess: (
+      state,
+      action: PayloadAction<{
+        moduleId: string;
+        problemId: string;
+        direction: string;
+      }>
+    ) => {
+      const { moduleId, problemId } = action.payload;
+
+      const index = state.modules.findIndex(
+        (module) => module._id === moduleId
+      );
+      const problemIndex = state.modules[index].problems.findIndex(
+        (problem) => problem._id === problemId
+      );
+
+      const problem = state.modules[index].problems[problemIndex];
+      state.modules[index].problems = state.modules[index].problems.filter(
+        (problem) => problem._id !== problemId
+      );
+
+      if (action.payload.direction === "up") {
+        state.modules[index].problems.splice(problemIndex - 1, 0, problem);
+      } else {
+        state.modules[index].problems.splice(problemIndex + 1, 0, problem);
+      }
+    },
 
     /* Dialog Reducers  */
     openCreateDialog: (state) => {
@@ -112,8 +144,7 @@ export const moduleSlice = createSlice({
     },
 
     /* Other reducers */
-    closeAlert: (state) => {
-    },
+    closeAlert: (state) => {},
     // good for testing purposes
     clearState: (state) => {
       return {
@@ -129,6 +160,7 @@ export const {
   requestNewModuleSuccess,
   requestModifyModuleSuccess,
   requestDeleteModuleSuccess,
+  changeProblemOrderSuccess,
   openCreateDialog,
   openEditDialog,
   closeDialog,
