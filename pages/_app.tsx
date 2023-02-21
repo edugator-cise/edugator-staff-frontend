@@ -12,6 +12,7 @@ import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
 import "styles/TextEditorCreationStyles.css";
 import "styles/ExerciseStyles.css";
+import "styles/FormStyles.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 

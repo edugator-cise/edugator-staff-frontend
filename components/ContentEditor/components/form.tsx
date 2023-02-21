@@ -6,7 +6,6 @@ import {
   updateMetadata,
 } from "../contentEditorPageSlice";
 import { useDispatch, useSelector } from "react-redux";
-import "./FormStyles.module.css";
 import { RootState } from "lib/store/store";
 import { ILesson, INewLesson } from "lib/shared/types";
 import apiClient from "lib/api/apiClient";
@@ -64,38 +63,44 @@ export const RegistrationForm = ({
     current.getMonth() + 1
   }/${current.getDate()}/${current.getFullYear()}`;
 
-  const contentState = useSelector((state: RootState) => state.contentEditorPage);
+  const contentState = useSelector(
+    (state: RootState) => state.contentEditorPage
+  );
 
   const handleUpdateContentRequest = async () => {
     const updatedContent: ILesson = {
       ...contentState.metadata,
       ...contentState.contentEditor,
-    }
+    };
     try {
-      await apiClient.put(apiRoutes.admin.putLesson(contentState.contentId as string), updatedContent);
-      toast.success("Content created successfully")
+      await apiClient.put(
+        apiRoutes.admin.putLesson(contentState.contentId as string),
+        updatedContent
+      );
+      toast.success("Content created successfully");
       dispatch(requestUpdateContentSuccess());
       router.push(Routes.Modules);
-    } catch(e) {
+    } catch (e) {
       toast.error("Content failed to create");
     }
-  }
+  };
 
   const handleAddContentRequest = async () => {
+    console.log(contentState.moduleId);
     const updatedContent: INewLesson = {
       moduleId: contentState.moduleId,
       ...contentState.metadata,
       ...contentState.contentEditor,
-    }
+    };
     try {
       await apiClient.post(apiRoutes.admin.createLesson, updatedContent);
-      toast.success("Content created successfully")
+      toast.success("Content created successfully");
       dispatch(requestAddContentSuccess());
       router.push(Routes.Modules);
-    } catch(e) {
+    } catch (e) {
       toast.error("Content failed to create");
     }
-  }
+  };
   const handleSubmit = (event: any) => {
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
     const pageJsonData: ExportData = {
@@ -104,11 +109,12 @@ export const RegistrationForm = ({
       content: [],
       editableContent: {
         blocks: [],
-        entityMap: []
+        entityMap: [],
       },
     };
     const contentArr: any[] = [];
     pageJsonData.title = JSON.stringify(title);
+    console.log(title);
     pageJsonData.author = JSON.stringify(author);
     jsonData.forEach((content: any) => {
       contentArr.push(content);
@@ -124,25 +130,29 @@ export const RegistrationForm = ({
       entityMap: Object.keys(rawData.entityMap).map(
         (key) => rawData.entityMap[key]
       ),
-    })
-    dispatch(updateMetadata(deepClone({ title: pageJsonData.title, author: pageJsonData.author })));
+    });
     dispatch(
-      updateContentEditor(deepClone(
-        {
+      updateMetadata(
+        deepClone({ title: pageJsonData.title, author: pageJsonData.author })
+      )
+    );
+    dispatch(
+      updateContentEditor(
+        deepClone({
           content: pageJsonData.content,
           editableContent: rawData,
           blocks: rawData.blocks,
           entityMap: Object.keys(rawData.entityMap).map(
             (key) => rawData.entityMap[key]
           ),
-        }
-      ))
+        })
+      )
     );
 
     if (contentId) {
-      handleUpdateContentRequest() 
+      handleUpdateContentRequest();
     } else {
-      handleAddContentRequest()
+      handleAddContentRequest();
     }
   };
 

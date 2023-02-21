@@ -73,7 +73,7 @@ function MultipleSelectModal({
                   {/* Input box and checkbox for each answer */}
                   {answers.map((answer, i) => {
                     return (
-                      <div className="modal-ms-answer">
+                      <div key={i} className="modal-ms-answer">
                         <div className="modal-answer-input">
                           <Checkbox
                             checked={answer.correct}

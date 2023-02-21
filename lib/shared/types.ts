@@ -1,5 +1,7 @@
 /** Problem Interfaces */
 
+import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
+
 export interface ITestCase {
   input: string;
   expectedOutput: string;
@@ -27,20 +29,26 @@ export interface IProblem extends IProblemBase {
 
 // lesson type fetched directly from db
 export interface ILesson extends ILessonBase {
-  _id: string;
+  _id?: string;
   title: string;
   author: string;
-  content: Array<TextContent | ImageContent | MultipleChoiceContent>;
+  content: Array<
+    TextContent | ImageContent | MultipleChoiceContent | MultipleSelectContent
+  >;
   editableContent: {
     blocks: {}[];
     entityMap: {}[];
   };
   blocks: {}[];
-  entityMap: Array<ImageEntity | MultipleChoiceEntity>;
+  entityMap: Array<ImageEntity | MultipleChoiceEntity | MultipleSelectEntity>;
 }
 
 /** Final display blocks for each content block type */
-export type LessonBlock = TextBlock | ImageBlock | MultipleChoiceBlock;
+export type LessonBlock =
+  | TextBlock
+  | ImageBlock
+  | MultipleChoiceBlock
+  | MultipleSelectBlock;
 
 export type TextBlock = {
   type: "text";
@@ -64,6 +72,14 @@ export type MultipleChoiceBlock = {
     question: string;
     answers: string[];
     correct: number;
+  };
+};
+
+export type MultipleSelectBlock = {
+  type: "multiple_select";
+  data: {
+    question: string;
+    answers: ModalAnswer[];
   };
 };
 
@@ -103,6 +119,14 @@ export type MultipleChoiceContent = {
   };
 };
 
+export type MultipleSelectContent = {
+  type: "multiple_select";
+  content: {
+    question: string;
+    answers: ModalAnswer[];
+  };
+};
+
 /** Content block types in the lesson.entityMap array */
 
 export type ImageEntity = {
@@ -121,6 +145,14 @@ export type MultipleChoiceEntity = {
     question: string;
     answers: string[];
     correct: number;
+  };
+};
+
+export type MultipleSelectEntity = {
+  type: "multiple_select";
+  data: {
+    question: string;
+    answers: ModalAnswer[];
   };
 };
 

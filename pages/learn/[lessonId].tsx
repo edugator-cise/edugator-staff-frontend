@@ -156,6 +156,8 @@ export default function LearnPage() {
     }
   }
 
+  console.log(currentLesson);
+
   return (
     <>
       {status === FetchStatus.loading ? (
@@ -217,6 +219,7 @@ export default function LearnPage() {
               </div>
             </LessonHeader>
             {currentLesson.content?.map((block: LessonBlock, i) => {
+              console.log(block);
               if (!block || !block.type || !block.data) {
                 return null;
               }
@@ -256,18 +259,17 @@ export default function LearnPage() {
                     question={block.data.question}
                   />
                 );
-              } /* else if (block.type === "multiple_select") {
+              } else if (block.type === "multiple_select") {
                 questionCount++;
                 return (
                   <MultipleSelectQuestion
                     key={i}
                     number={questionCount - 1}
                     answers={block.data.answers}
-                    correctAnswer={block.data.correctAnswer}
                     question={block.data.question}
                   />
                 );
-              } */
+              }
               return <></>;
             })}
           </LessonHolder>

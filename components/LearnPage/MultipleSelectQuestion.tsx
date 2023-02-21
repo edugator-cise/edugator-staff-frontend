@@ -3,6 +3,7 @@ import { Grid, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import theme from "constants/theme";
 import { CheckCircle, XCircle } from "phosphor-react";
+import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
 
 const QuestionHolder = styled.div((props: any) => ({
   width: "70%",
@@ -122,18 +123,21 @@ const CheckButton = styled.div((props: any) => ({
 
 interface MultipleSelectProps {
   question: string;
-  correctAnswer: Array<number>;
-  answers: { id: number; text: string }[];
+  answers: ModalAnswer[];
   number: number;
 }
 
-function MultipleSelectQuestion(props: MultipleSelectProps) {
+function MultipleSelectQuestion({
+  question,
+  answers,
+  number,
+}: MultipleSelectProps) {
   const [questionsClicked, setQuestionsClicked] = useState<Array<boolean>>([]);
   const [correct, setCorrect] = useState(false);
   const [checked, setChecked] = useState(false); // fire when "Check answer" is clicked
 
-  const answerText = (id: number, clicked: boolean) => {
-    if (props.correctAnswer.includes(id + 1)) {
+  const answerText = (correct: boolean, clicked: boolean) => {
+    if (correct) {
       if (clicked) {
         return "CORRECT";
       } else {
@@ -151,13 +155,13 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
   const checkCorrect = () => {
     for (let i = 0; i < questionsClicked.length; i++) {
       if (questionsClicked[i] === true) {
-        if (props.correctAnswer.includes(i + 1)) {
+        if (answers[i].correct) {
           //do nothing
         } else {
           return false;
         }
       } else {
-        if (props.correctAnswer.includes(i + 1)) {
+        if (answers[i].correct) {
           return false;
         }
       }
@@ -167,8 +171,8 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
 
   //set initial state of all questions clicked to false on mount
   useEffect(() => {
-    if (props.answers && props.answers.length > 1) {
-      for (let i = 0; i < props.answers.length; i++) {
+    if (answers && answers.length > 1) {
+      for (let i = 0; i < answers.length; i++) {
         setQuestionsClicked((prev) => [...prev, false]);
       }
     }
@@ -182,13 +186,13 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
         fontSize="subtitle2"
         color={theme.palette.primary.main}
       >
-        Question {props.number}
+        Question {number}
       </Typography>
       <Typography
         variant="h6"
         sx={{ fontWeight: 200, fontFamily: "DM Serif Display" }}
       >
-        {props.question}
+        {question}
       </Typography>
 
       <Grid
@@ -197,15 +201,15 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
         columnSpacing={2}
         sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
       >
-        {props.answers.map((ans, i) => {
+        {answers.map((ans, i) => {
           return (
             <Grid
-              key={props.number * i}
+              key={number * i}
               sx={{
                 minHeight: "100",
               }}
               item
-              xs={props.answers.length % 2 === 0 ? 6 : 12}
+              xs={answers.length % 2 === 0 ? 6 : 12}
             >
               <AnswerHolder
                 className="answerHolder"
@@ -221,7 +225,7 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
                 clicked={questionsClicked[i]}
                 checked={checked}
                 correct={correct}
-                isAnswerCorrect={props.correctAnswer.includes(i + 1)}
+                isAnswerCorrect={ans.correct}
               >
                 <Typography
                   variant="body2"
@@ -238,7 +242,7 @@ function MultipleSelectQuestion(props: MultipleSelectProps) {
                     marginRight: 2,
                   }}
                 >
-                  {checked && answerText(ans.id, questionsClicked[i])}
+                  {checked && answerText(ans.correct, questionsClicked[i])}
                 </Typography>
               </AnswerHolder>
             </Grid>

@@ -6,6 +6,7 @@ import {
   ImageEntity,
   LessonDisplay,
   MultipleChoiceEntity,
+  MultipleSelectEntity,
   TextContent,
 } from "lib/shared/types";
 import { apiRoutes } from "constants/apiRoutes";
@@ -65,7 +66,7 @@ const transformLesson = (lesson: ILesson) => {
   // get values from lesson.entityMap
 
   const displayLesson: LessonDisplay = {
-    id: lesson._id,
+    id: lesson._id || "",
     title: lesson.title,
     author: lesson.author,
     content: [],
@@ -87,6 +88,18 @@ const transformLesson = (lesson: ILesson) => {
         });
       }
       entityIterator++;
+    } else if (block.type === "multiple_select") {
+      const entity = lesson.entityMap[entityIterator];
+      if (isEntityOfType<MultipleSelectEntity>(entity, "multiple_select")) {
+        displayLesson.content.push({
+          type: "multiple_select",
+          data: {
+            question: entity.data.question,
+            answers: entity.data.answers,
+          },
+        });
+      }
+      entityIterator++;
     } else if (block.type === "image") {
       const entity = lesson.entityMap[entityIterator];
       if (isEntityOfType<ImageEntity>(entity, "image")) {
@@ -99,9 +112,7 @@ const transformLesson = (lesson: ILesson) => {
         });
       }
       entityIterator++;
-    }
-    // todo: add multiple_select support
-    else if (block.type === "text") {
+    } else if (block.type === "text") {
       displayLesson.content.push({
         type: "text",
         data: {

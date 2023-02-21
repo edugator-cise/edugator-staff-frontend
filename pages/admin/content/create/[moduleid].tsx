@@ -51,7 +51,9 @@ const ContentEditorPage = () => {
   };
 
   useEffect(() => {
+    console.log("useEffect");
     if (moduleId) {
+      console.log(moduleId);
       dispatch(updateModuleId(moduleId as string));
     }
     dispatch(updateContentId(lessonId as string));
