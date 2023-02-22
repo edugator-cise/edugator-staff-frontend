@@ -11,6 +11,8 @@ import {
   updateModuleName,
   WarningTypes,
 } from "components/ProblemEditor/problemEditorContainerSlice";
+import Accordion from 'react-bootstrap/Accordion';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ProblemCreatePage = () => {
   const router = useRouter();
@@ -40,7 +42,27 @@ const ProblemCreatePage = () => {
       pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
       actionButtons={[actions.back]}
     >
-      <ProblemEditorContainer />
+      
+      <Accordion defaultActiveKey="0">
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>General Settings</Accordion.Header>
+        <Accordion.Body>
+        <ProblemEditorContainer />
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="1">
+        <Accordion.Header>C++ Settings</Accordion.Header>
+        <Accordion.Body>
+        <ProblemEditorContainer />
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="2">
+        <Accordion.Header>Python Settings</Accordion.Header>
+        <Accordion.Body>
+        <ProblemEditorContainer />
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
     </AdminLayout>
   );
 };

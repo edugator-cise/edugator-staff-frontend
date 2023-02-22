@@ -125,6 +125,35 @@ export const MetadataForm = (props: Props) => {
                 <Field component={IntegratedDatePicker} name="dueDate" />
               </LocalizationProvider>
             </Box>
+            
+            <Form style={{ display: 'flex' }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="cpp"
+                  onChange={handleChange}
+                  checked={values.cpp}
+                />
+                
+              }
+              sx={{ marginTop: "auto" }}
+              label="C++"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="py"
+                  onChange={handleChange}
+                  checked={values.py}
+                />
+                
+              }
+              sx={{ marginTop: "auto" }}
+              label="Python"
+            />
+            </Form>
+
+
           </Stack>
         </Form>
       )}
