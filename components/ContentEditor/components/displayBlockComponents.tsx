@@ -36,7 +36,7 @@ const AnswerHolder = styled("div")({
   },
 });
 
-const BlankAnswerTextField = styled(TextField)({
+const BlankAnswerTextField = styled(TextField)((props: any) => ({
   "& .MuiFilledInput-root": {
     backgroundColor: theme.palette.primary.light,
   },
@@ -45,13 +45,15 @@ const BlankAnswerTextField = styled(TextField)({
   },
   "& .MuiFilledInput-root.Mui-focused": {
     backgroundColor: theme.palette.primary.light,
-  }
-});
+  },
+  paddingBottom: props.answered ? 0 : 24,
+}));
 
 const CorrectAnswerTextField = styled(TextField)({
   '& .MuiInputBase-root.Mui-disabled': {
     backgroundColor: 'LightGreen'
   },
+  paddingBottom: 24
 });
 
 //displayed component when multiple choice is added
@@ -372,6 +374,7 @@ export function FillInTheBlankDisplayBlock({
               </Tooltip>
               // AnswerInput is incorrect or has not been answered
               : <BlankAnswerTextField
+                answered={answered}
                 hiddenLabel
                 inputProps={{ min: 0, style: { textAlign: 'center' } }}
                 /* TODO: Show student's most recent answer or correctAnswer.possibleChoices[0]? */
@@ -380,7 +383,7 @@ export function FillInTheBlankDisplayBlock({
                 size="small"
                 helperText={answered ? "Incorrect answer." : ""}
                 error={answered}
-                onChange={(e) => handleAnswerInputChange(e, i)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
               />
             }
           </Box>
