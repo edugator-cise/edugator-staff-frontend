@@ -3,6 +3,7 @@ import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material
 import styled from "@emotion/styled";
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
+import theme from "constants/theme";
 
 const QuestionHolder = styled("div")({
   width: "70%",
@@ -36,6 +37,15 @@ const AnswerHolder = styled("div")({
 });
 
 const BlankAnswerTextField = styled(TextField)({
+  "& .MuiFilledInput-root": {
+    backgroundColor: theme.palette.primary.light,
+  },
+  "& .MuiFilledInput-root:hover": { // TODO: Figure out how to stop input from going back to its default color on hover/focus - might leave it
+    backgroundColor: theme.palette.primary.light,
+  },
+  "& .MuiFilledInput-root.Mui-focused": {
+    backgroundColor: theme.palette.primary.light,
+  }
 });
 
 const CorrectAnswerTextField = styled(TextField)({
@@ -257,7 +267,7 @@ export function FillInTheBlankDisplayBlock({
 }) {
 
   const [answerInputs, setAnswerInputs] = useState<string[]>([]);   // string array of question attempts/inputs
-  const [results, setResults] = useState<boolean[]>([false]);   // boolean array of answer correctness
+  const [results, setResults] = useState<boolean[]>([]);   // boolean array of answer correctness
   const [correct, setCorrect] = useState(false);    // Whether all answers are correct
   const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
 
@@ -285,24 +295,38 @@ export function FillInTheBlankDisplayBlock({
   const handleCheck = () => {
     let updatedResults = [...results];
     for (let i = 0; i < answerInputs.length; i++) {
-      // TODO: whitespace, toCapital, etc
-      if (correctAnswers[i].possibleChoices.includes(answerInputs[i])) {
-        updatedResults[i] = true;
-      } else {
-        updatedResults[i] = false;
+
+      if (results[i] === false && answerInputs[i]) {
+
+        let currentAnswerInput = answerInputs[i].trim(); // Remove whitespace
+
+        if (correctAnswers[i].shouldHaveExactMatch) {
+          if (correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer === currentAnswerInput)) {
+            updatedResults[i] = true;
+          }
+        }
+        else if (!isNaN(+currentAnswerInput)) { // If true, currentAnswerInput is a number.
+          if (correctAnswers[i].possibleChoices.some(correctAnswer => parseFloat(correctAnswer) === parseFloat(currentAnswerInput))) {
+            updatedResults[i] = true;
+          }
+        } else if (correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer.toLowerCase() === currentAnswerInput.toLowerCase())) {
+          updatedResults[i] = true;
+        } else {
+          updatedResults[i] = false;
+        }
       }
-    }
-    console.log("updated results", updatedResults);
-    setResults(updatedResults);
-    if (updatedResults.every(result => result === true)) {
-      setCorrect(true);
+
+      setResults(updatedResults);
+      if (updatedResults.every(result => result === true)) {
+        setCorrect(true);
+      }
     }
   }
 
   const handleAnswerInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
     let updatedAnswerInputs = [...answerInputs];
     updatedAnswerInputs[i] = e.target.value;
-    console.log("updated answer inputs: ", updatedAnswerInputs);
+    console.log("Updated answer inputs: ", updatedAnswerInputs);
     setAnswerInputs(updatedAnswerInputs);
   }
 
@@ -339,7 +363,6 @@ export function FillInTheBlankDisplayBlock({
               >
                 <CorrectAnswerTextField
                   hiddenLabel
-                  style={{ backgroundColor: 'LightGreen' }}
                   inputProps={{ min: 0, style: { textAlign: 'center' } }}
                   value={correctAnswer.possibleChoices[0]}
                   variant="filled"
@@ -347,6 +370,7 @@ export function FillInTheBlankDisplayBlock({
                   disabled
                 />
               </Tooltip>
+              // AnswerInput is incorrect or has not been answered
               : <BlankAnswerTextField
                 hiddenLabel
                 inputProps={{ min: 0, style: { textAlign: 'center' } }}
@@ -354,7 +378,7 @@ export function FillInTheBlankDisplayBlock({
                 value={answerInputs[i]}
                 variant="filled"
                 size="small"
-                helperText={answered ? "Incorrect entry." : ""}
+                helperText={answered ? "Incorrect answer." : ""}
                 error={answered}
                 onChange={(e) => handleAnswerInputChange(e, i)}
               />
