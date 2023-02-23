@@ -26,7 +26,7 @@ import { CircularProgress } from "@mui/material";
 
 const ContentCreatePage = () => {
   const router = useRouter();
-  const { moduleName, moduleId } = router.query;
+  const { moduleName, moduleid: moduleId } = router.query;
 
   const lessonTitle = useSelector(
     (state: RootState) => state.contentEditorPage.metadata.title

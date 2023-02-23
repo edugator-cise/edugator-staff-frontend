@@ -28,7 +28,9 @@ import { useFetchLesson } from "hooks/useFetchLesson";
 const ContentEditorPage = () => {
   const router = useRouter();
   const params = router.query;
-  const { moduleName, moduleId, lessonId } = params;
+  const { moduleName, moduleId, lessonid: lessonId } = params;
+
+  console.log(lessonId);
 
   const {
     status,
@@ -36,7 +38,7 @@ const ContentEditorPage = () => {
     rawLesson,
     error,
   } = useFetchLesson({
-    id: params && params.lessonId ? (params.lessonId as string) : "",
+    id: params && lessonId ? (lessonId as string) : "",
   });
 
   const dispatch = useDispatch();
