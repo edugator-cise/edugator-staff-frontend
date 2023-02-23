@@ -62,7 +62,7 @@ const ContentCreatePage = () => {
         }`}
         actionButtons={[actions.back]}
       >
-        <TextStack />
+        <TextStack moduleId={moduleId as string} />
       </AdminLayout>
       <SuccessDialog />
       <WarningDialog />

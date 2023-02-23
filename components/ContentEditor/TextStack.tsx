@@ -12,7 +12,13 @@ import {
 import { ILesson } from "lib/shared/types";
 
 //React state hook
-export const TextStack = ({ rawLesson }: { rawLesson?: ILesson }) => {
+export const TextStack = ({
+  rawLesson,
+  moduleId,
+}: {
+  rawLesson?: ILesson;
+  moduleId: string;
+}) => {
   // if rawlesson is present as a prop, then we are editing a lesson
   //Declaration of serviceList array and setList setter
   const [atomicEntities, setAtomicEntities] = useState([]);
@@ -105,6 +111,7 @@ export const TextStack = ({ rawLesson }: { rawLesson?: ILesson }) => {
             jsonData={exportData}
             rawData={rawData}
             rawLesson={rawLesson}
+            moduleId={moduleId}
           />
         </CustomizedDialogs>
       </div>

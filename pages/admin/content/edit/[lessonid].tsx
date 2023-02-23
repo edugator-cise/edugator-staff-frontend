@@ -79,7 +79,7 @@ const ContentEditorPage = () => {
         {status === FetchStatus.loading ? (
           <CircularProgress />
         ) : (
-          <TextStack rawLesson={rawLesson} />
+          <TextStack rawLesson={rawLesson} moduleId={moduleId as string} />
         )}
       </AdminLayout>
       <SuccessDialog />

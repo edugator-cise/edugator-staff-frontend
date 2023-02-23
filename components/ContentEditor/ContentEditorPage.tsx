@@ -32,7 +32,7 @@ export const ContentEditorPage = () => {
     (state: RootState) => state.contentEditorPage.metadata.title
   );
 
-  const [status, setStatus] = useState(FetchStatus.loading)
+  const [status, setStatus] = useState(FetchStatus.loading);
 
   const dispatch = useDispatch();
   const actions = {
@@ -62,22 +62,23 @@ export const ContentEditorPage = () => {
     };
   }, [moduleId, lessonId, moduleName, dispatch]);
 
-
   const handleGetContentRequest = async (payload: string) => {
     try {
-      const { data }: { data: ILesson } = await apiClient.get(apiRoutes.admin.getLesson(payload))
+      const { data }: { data: ILesson } = await apiClient.get(
+        apiRoutes.admin.getLesson(payload)
+      );
       dispatch(requestGetContentSuccess(data));
-      setStatus(FetchStatus.succeed)
+      setStatus(FetchStatus.succeed);
     } catch (e) {
       toast.error("Failed to get problem");
       setStatus(FetchStatus.failed);
     }
-  }
+  };
   useEffect(() => {
     if (lessonId) {
-      handleGetContentRequest(lessonId as string)
+      handleGetContentRequest(lessonId as string);
     } else {
-      setStatus(FetchStatus.succeed)
+      setStatus(FetchStatus.succeed);
     }
   }, [lessonId]);
 
@@ -92,9 +93,9 @@ export const ContentEditorPage = () => {
         }
       >
         {status === FetchStatus.loading ? (
-          <CircularProgress/>
-        ):(
-          <TextStack />
+          <CircularProgress />
+        ) : (
+          <TextStack moduleId={moduleId as string} />
         )}
       </AdminLayout>
       <SuccessDialog />

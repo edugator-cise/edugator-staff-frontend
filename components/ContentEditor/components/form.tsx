@@ -26,10 +26,12 @@ export const RegistrationForm = ({
   jsonData,
   rawData,
   rawLesson,
+  moduleId,
 }: {
   jsonData: any;
   rawData: any;
   rawLesson?: ILesson;
+  moduleId: string;
 }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -101,7 +103,7 @@ export const RegistrationForm = ({
         entityMap: Object.keys(rawData.entityMap).map(
           (key) => rawData.entityMap[key]
         ),
-        moduleId: contentState.moduleId,
+        moduleId: moduleId,
       };
       console.log("CREATE");
       console.log(postedLesson);
