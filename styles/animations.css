@@ -1,0 +1,48 @@
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      scale: 0.9;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        scale: 1;
+    }
+    to {
+        opacity: 0;
+        scale: 0.9;
+    }
+  }
+  
+  .PopoverContent[data-state='open'] {
+      transform-origin: left top;
+      animation: fadeIn 150ms ease-out;
+    }
+    
+    .PopoverContent[data-state='closed'] {
+        transform-origin: left top;
+    animation: fadeOut 150ms ease-in;
+  }
+
+ /*  .PopoverContent {
+    animation: scaleIn 150mss ease-out;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  } */
+
+  

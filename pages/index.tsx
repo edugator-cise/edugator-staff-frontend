@@ -11,7 +11,7 @@ export default function LandingPage() {
       <LandingHome />
       <LandingFeatures />
       <LandingTopics />
-      <Footer/>
+      <Footer />
     </>
   );
 }

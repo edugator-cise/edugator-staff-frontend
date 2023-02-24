@@ -6,6 +6,7 @@ import { colors } from "constants/config";
 import "allotment/dist/style.css";
 import TopicSidebar from "components/shared/TopicSidebar";
 import { useRouter } from "next/router";
+import SideNavigation from "./SideNav/SideNavigation";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -32,6 +33,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
       flexDirection="row"
       sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
     >
+      <SideNavigation />
       <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} />
 
       <Box sx={{ height: "100%", width: "100%" }}>

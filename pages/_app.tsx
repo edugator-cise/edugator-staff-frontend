@@ -13,6 +13,9 @@ import "styles/TextEditorStyles.css";
 import "styles/TextEditorCreationStyles.css";
 import "styles/ExerciseStyles.css";
 import "styles/FormStyles.css";
+import "styles/globals.css";
+import "styles/fonts.css";
+import "styles/animations.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
