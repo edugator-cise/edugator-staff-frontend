@@ -22,5 +22,6 @@ export const apiRoutes = {
     createLesson: "v1/admin/lesson",
     deleteLesson: (id: string) => `v1/admin/lesson/${id}`,
     deleteProblem: (id: string) => `v1/admin/problem/${id}`,
+    changeProblemOrder: "v1/module/changeProblemOrder",
   },
 };
