@@ -6,7 +6,6 @@ import {
   Checkbox,
 } from "@mui/material";
 import { useState } from "react";
-import "./ExerciseStyles.module.css";
 
 export const MultipleChoiceModal = ({
   open,

@@ -16,6 +16,9 @@ import {
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
 import { useRouter } from "next/router";
+import { apiRoutes } from "constants/apiRoutes";
+import apiClient from "lib/api/apiClient";
+import { toast } from "react-hot-toast";
 
 export const WarningDialog = () => {
   const router = useRouter();
@@ -25,7 +28,21 @@ export const WarningDialog = () => {
   const warningType = useSelector(
     (state: RootState) => state.problemEditorContainer.warningType
   );
+  const problemId = useSelector(
+    (state: RootState) => state.problemEditorContainer.problemId
+  );
   const dispatch = useDispatch();
+
+  const handleDeleteProblemRequest = async () => {
+    try {
+      await apiClient.delete(
+        apiRoutes.admin.deleteProblem(problemId as string)
+      );
+      toast.success("Content successfully deleted");
+    } catch (e) {
+      toast.error("Content failed to delete");
+    }
+  };
   return (
     <Dialog
       open={showModal}
@@ -47,7 +64,7 @@ export const WarningDialog = () => {
         <Button
           onClick={() => {
             if (warningType === WarningTypes.Delete) {
-              dispatch(requestDeleteProblem());
+              handleDeleteProblemRequest();
             }
             router.push(Routes.Modules);
           }}

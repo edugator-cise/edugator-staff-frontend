@@ -6,7 +6,6 @@ import {
   updateMetadata,
 } from "../contentEditorPageSlice";
 import { useDispatch, useSelector } from "react-redux";
-import "./FormStyles.module.css";
 import { RootState } from "lib/store/store";
 import { ILesson, INewLesson } from "lib/shared/types";
 import apiClient from "lib/api/apiClient";
@@ -26,124 +25,110 @@ interface ExportData {
 export const RegistrationForm = ({
   jsonData,
   rawData,
+  rawLesson,
+  moduleId,
 }: {
   jsonData: any;
   rawData: any;
+  rawLesson?: ILesson;
+  moduleId: string;
 }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
 
-  const contentId = useSelector(
-    (state: RootState) => state.contentEditorPage.contentId
-  );
-
-  const contentTitle = useSelector(
-    (state: RootState) => state.contentEditorPage.metadata.title
-  );
-
-  const contentAuthor = useSelector(
-    (state: RootState) => state.contentEditorPage.metadata.author
-  );
+  const contentId = rawLesson?._id || null;
+  console.log(contentId);
+  console.log(rawData);
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (contentTitle) {
-      setTitle(contentTitle);
-    }
-    if (contentAuthor) {
-      setAuthor(contentAuthor);
-    }
-  }, [contentTitle, contentAuthor]);
-
   const dispatch = useDispatch();
-  //https://www.codegrepper.com/code-examples/javascript/how+to+get+current+date+in+react+js
-  //Current method for pulling current date
-  const current = new Date();
-  const currentDate = `${
-    current.getMonth() + 1
-  }/${current.getDate()}/${current.getFullYear()}`;
 
-  const contentState = useSelector((state: RootState) => state.contentEditorPage);
+  const contentState = useSelector(
+    (state: RootState) => state.contentEditorPage
+  );
 
-  const handleUpdateContentRequest = async () => {
-    const updatedContent: ILesson = {
-      ...contentState.metadata,
-      ...contentState.contentEditor,
-    }
+  const handleUpdateContentRequest = async (postedLesson: ILesson) => {
+    console.log("UPDATED");
+    console.log(contentState.contentEditor);
     try {
-      await apiClient.put(apiRoutes.admin.putLesson(contentState.contentId as string), updatedContent);
-      toast.success("Content created successfully")
+      await apiClient.put(
+        apiRoutes.admin.putLesson(contentId as string),
+        postedLesson
+      );
+      toast.success("Content updated successfully");
       dispatch(requestUpdateContentSuccess());
       router.push(Routes.Modules);
-    } catch(e) {
+    } catch (e) {
       toast.error("Content failed to create");
     }
-  }
+  };
 
-  const handleAddContentRequest = async () => {
-    const updatedContent: INewLesson = {
-      moduleId: contentState.moduleId,
-      ...contentState.metadata,
-      ...contentState.contentEditor,
-    }
+  const handleAddContentRequest = async (postedLesson: INewLesson) => {
+    console.log(contentState.moduleId);
     try {
-      await apiClient.post(apiRoutes.admin.createLesson, updatedContent);
-      toast.success("Content created successfully")
+      await apiClient.post(apiRoutes.admin.createLesson, postedLesson);
+      toast.success("Content created successfully");
       dispatch(requestAddContentSuccess());
       router.push(Routes.Modules);
-    } catch(e) {
+    } catch (e) {
+      console.log(e);
       toast.error("Content failed to create");
     }
-  }
+  };
   const handleSubmit = (event: any) => {
     event.preventDefault(); //Prevents page fresh on submit, disable if needed
-    const pageJsonData: ExportData = {
-      title: "",
-      author: "",
-      content: [],
-      editableContent: {
-        blocks: [],
-        entityMap: []
-      },
-    };
-    const contentArr: any[] = [];
-    pageJsonData.title = JSON.stringify(title);
-    pageJsonData.author = JSON.stringify(author);
-    jsonData.forEach((content: any) => {
-      contentArr.push(content);
-    });
-    pageJsonData.content = jsonData;
-
-    // create an array from entity map data
-    console.log(pageJsonData);
-    console.log({
-      content: pageJsonData.content,
-      editableContent: rawData,
-      blocks: rawData.blocks,
-      entityMap: Object.keys(rawData.entityMap).map(
-        (key) => rawData.entityMap[key]
-      ),
-    })
-    dispatch(updateMetadata(deepClone({ title: pageJsonData.title, author: pageJsonData.author })));
-    dispatch(
-      updateContentEditor(deepClone(
-        {
-          content: pageJsonData.content,
-          editableContent: rawData,
-          blocks: rawData.blocks,
-          entityMap: Object.keys(rawData.entityMap).map(
-            (key) => rawData.entityMap[key]
-          ),
-        }
-      ))
-    );
-
     if (contentId) {
-      handleUpdateContentRequest() 
+      const postedLesson: ILesson = {
+        title: title,
+        author: author,
+        content: jsonData.map((content: any) => content),
+        editableContent: rawData, //maybe deepclone
+        blocks: rawData.blocks,
+        entityMap: Object.keys(rawData.entityMap).map(
+          (key) => rawData.entityMap[key]
+        ),
+      };
+      console.log("UPDATE");
+      console.log(postedLesson);
+
+      handleUpdateContentRequest(postedLesson);
     } else {
-      handleAddContentRequest()
+      const postedLesson: INewLesson = {
+        title: title,
+        author: author,
+        content: jsonData.map((content: any) => content),
+        editableContent: rawData, //maybe deepclone
+        blocks: rawData.blocks,
+        entityMap: Object.keys(rawData.entityMap).map(
+          (key) => rawData.entityMap[key]
+        ),
+        moduleId: moduleId,
+      };
+      console.log("CREATE");
+      console.log(postedLesson);
+      handleAddContentRequest(postedLesson);
     }
+
+    /* dispatch(
+      updateMetadata({ title: pageJsonData.title, author: pageJsonData.author })
+    );
+    dispatch(
+      updateContentEditor({
+        content: pageJsonData.content,
+        editableContent: rawData,
+        blocks: rawData.blocks,
+        entityMap: Object.keys(rawData.entityMap).map(
+          (key) => rawData.entityMap[key]
+        ),
+      })
+    ); */
+    /* 
+    if (contentId) {
+      handleUpdateContentRequest(postedLesson);
+    } else {
+      handleAddContentRequest(postedLesson);
+    } */
   };
 
   return (
