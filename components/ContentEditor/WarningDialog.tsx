@@ -29,10 +29,10 @@ export const WarningDialog = () => {
   const warningType = useSelector(
     (state: RootState) => state.contentEditorPage.warningType
   );
-
   const contentId = useSelector(
     (state: RootState) => state.contentEditorPage.contentId
   );
+
   const handleDeleteContentRequest = async () => {
     try {
       await apiClient.delete(apiRoutes.admin.deleteLesson(contentId as string));
