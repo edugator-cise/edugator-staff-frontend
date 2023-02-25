@@ -8,11 +8,31 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    "fill-nav-active-light",
+    "fill-nav-active-dark",
+    "fill-nav-inactive-light",
+    "fill-nav-inactive-dark",
+    "fill-nav-active-light-color",
+    "fill-nav-active-dark-color",
+  ],
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        public: ["Public Sans", "sans-serif"],
+        dm: ["DM Sans", "sans-serif"],
+      },
+      colors: {
+        nav: {
+          "active-light": "#FFFFFF",
+          "active-dark": "#6e737d",
+          "inactive-light": "#B7BCBD",
+          "inactive-dark": "#434A55",
+          "active-light-color": "#ede9fe",
+          "active-dark-color": "#a78bfa",
+        },
       },
       keyframes: {
         slideDownAndFade: {

@@ -27,30 +27,17 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   const locationState = router.asPath;
 
   return (
-    <Box
-      height="100vh"
-      display="flex"
-      flexDirection="row"
-      sx={{ bgcolor: colors.lightGray, overflow: "hidden" }}
-    >
-      <SideNavigation />
-      <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} />
+    <div className="h-screen flex flex-col overflow-hidden bg-stone-100">
+      {/* <VerticalNavigation light={true} codingPage={true} /> */}
+      <div className="w-full h-16 bg-zinc-800"></div>
+      <div className="w-full h-full flex">
+        {/* <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} /> */}
+        <SideNavigation />
 
-      <Box sx={{ height: "100%", width: "100%" }}>
-        <VerticalNavigation light={true} codingPage={true} />
-        <Box
-          sx={{
-            height: "100%",
-            width: "100%",
-            m: 0,
-            display: "flex",
-          }}
-        >
-          <Sidenav isHidden={isHidden} />
-          {children}
-        </Box>
-      </Box>
-    </Box>
+        <Sidenav isHidden={isHidden} />
+        {children}
+      </div>
+    </div>
   );
 };
 
