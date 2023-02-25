@@ -143,7 +143,7 @@ export const CodeEditorView = ({
     }
   };
 
-  const handleBugBounty = () => {
+  const handleReportABug = () => {
     window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank', 'noopener');
   }
 
@@ -205,7 +205,7 @@ export const CodeEditorView = ({
               </IconButton>
             </Tooltip>
             <Tooltip title="Report a bug" placement="top">
-              <IconButton onClick={handleBugBounty}>
+              <IconButton onClick={handleReportABug}>
                 <BugReport />
               </IconButton>
             </Tooltip>
