@@ -7,6 +7,7 @@ import * as Popover from "@radix-ui/react-popover";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Switch from "@radix-ui/react-switch";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 import { icons } from "./navIcons";
 
@@ -14,85 +15,73 @@ const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
 };
 
-const ClassSelect = ({ open }: { open: boolean }) => {
+const NavLink = ({
+  icon,
+  text,
+  open,
+  active,
+  setActiveLink,
+}: {
+  icon: (active: boolean) => React.ReactNode;
+  text: NavLinkText;
+  open: boolean;
+  active: boolean;
+  setActiveLink: (text: NavLinkText) => void;
+}) => {
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <button
-          className={`w-full flex hover:bg-zinc-50/5 transition py-1 px-1 items-center justify-start space-x-4 rounded-lg !outline-none`}
-          aria-label="Select class"
+    <NavLinkTooltip text={text} disabled={open}>
+      <button
+        onClick={() => setActiveLink(text)}
+        className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
+          active
+            ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white font-medium"
+            : "text-nav-inactive-light hover:bg-emerald-500/5"
+        }`}
+      >
+        <div className="w-5 h-5 min-w-[20px]">{icon(active)}</div>
+        <label
+          className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
         >
-          <div className="flex items-end justify-between">
-            <div
-              className={`h-10 w-10 min-w-[2.5rem] rounded-md transition relative ${
-                open ? "" : "border-2 border-zinc-400"
-              }`}
-            >
-              <Image
-                src="/DSALogo.png"
-                layout="fill"
-                objectFit="cover"
-                className={`transition-all ${
-                  open ? "!rounded-md" : "!p-[3px] !rounded-sm"
-                }`}
-              />
-            </div>
-          </div>
-          <section
-            className={`flex h-full w-full item transition-opacity rounded-md flex-col whitespace-nowrap justify-end overflow-hidden text-left leading-none ${
-              open ? "opacity-100" : "opacity-0"
-            }`}
+          {text}
+        </label>
+      </button>
+    </NavLinkTooltip>
+  );
+};
+
+const NavLinkTooltip = ({
+  text,
+  children,
+  disabled,
+}: {
+  text: string;
+  children: React.ReactNode;
+  disabled: boolean;
+}) => {
+  const [open, setOpen] = useState(false);
+
+  // hide tooltip on sidebar collapse
+  useEffect(() => {
+    if (!disabled) setOpen(false);
+  }, [disabled]);
+
+  return (
+    <Tooltip.Provider disableHoverableContent={disabled} delayDuration={150}>
+      <Tooltip.Root open={disabled ? false : open} onOpenChange={setOpen}>
+        <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+        <Tooltip.Portal>
+          <Tooltip.Content
+            side="right"
+            className="TooltipContent data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-[#111825] border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
+            sideOffset={10}
           >
-            <h1 className="font-bold text-white overflow-hidden text-ellipsis">
-              COP3530
-            </h1>
-            <p className="text-zinc-300 text-sm overflow-hidden text-ellipsis">
-              Data Structures and Algorithms
-            </p>
-          </section>
-          <div className="w-4 h-4 mr-1">
-            <CaretDown size={18} className={`text-white`} />
-          </div>
-        </button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content
-          align="start"
-          side={open ? "bottom" : "right"}
-          className="PopoverContent font-dm bg-white p-2 rounded-md shadow-lg z-50 transition-all radix-state-open:opacity-100 opacity-0 origin-radix-popover"
-          sideOffset={open ? 10 : 20}
-        >
-          <div className="flex flex-col space-y-2">
-            <button className="flex items-center space-x-3 bg-zinc-100 p-2 rounded-md max-w-[18rem] w-[18rem]">
-              <div className="h-10 w-10 min-w-[2.5rem] bg-white rounded-md relative border">
-                <Image src="/DSALogo.png" layout="fill" objectFit="contain" />
-              </div>
-              <section className="flex flex-col whitespace-nowrap overflow-hidden text-left leading-none">
-                <h1 className="font-bold text-gray-800 overflow-hidden text-ellipsis">
-                  COP3530
-                </h1>
-                <p className="text-gray-500 text-sm overflow-hidden text-ellipsis">
-                  Data Structures and Algorithms
-                </p>
-              </section>
-            </button>
-            <button className="flex items-center space-x-3 hover:bg-zinc-100 p-2 rounded-md max-w-[18rem] w-[18rem]">
-              <div className="h-10 w-10 min-w-[2.5rem] bg-white rounded-md relative border">
-                <Image src="/prog1logo.png" layout="fill" objectFit="contain" />
-              </div>
-              <section className="flex flex-col whitespace-nowrap overflow-hidden text-left leading-none">
-                <h1 className="font-bold text-gray-800 overflow-hidden text-ellipsis">
-                  COP3501
-                </h1>
-                <p className="text-gray-500 text-sm overflow-hidden text-ellipsis">
-                  Programming 1
-                </p>
-              </section>
-            </button>
-          </div>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
+            {text}
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   );
 };
 
@@ -118,6 +107,10 @@ const navLinks: NavLink[] = [
     icon: icons.monitorCode,
     text: "Problems",
   },
+  {
+    icon: icons.bug,
+    text: "Bug Bounty",
+  },
 ];
 
 const classes = [
@@ -134,7 +127,12 @@ const classes = [
 ];
 
 //type for nav link text
-type NavLinkText = "Dashboard" | "View All" | "Lessons" | "Problems";
+type NavLinkText =
+  | "Dashboard"
+  | "View All"
+  | "Lessons"
+  | "Problems"
+  | "Bug Bounty";
 
 const SideNavigation = () => {
   const [open, setOpen] = useState(false);
@@ -152,8 +150,6 @@ const SideNavigation = () => {
         open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
       }`}
     >
-      {/* Top Group */}
-
       {/* Logo */}
       <div className="flex items-center h-16 w-full bg-gradient-to-tl from-[#111825] via-[#111825] to-emerald-900/40 px-3">
         <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
@@ -182,7 +178,81 @@ const SideNavigation = () => {
       </div>
       {/* Main Sidebar Content */}
       <div className="h-full flex flex-col items-center justify-between py-4 w-full px-4">
+        {/* Top Group */}
         <section className="w-full flex flex-col space-y-4">
+          {/* Class Group */}
+          <div
+            className={`flex flex-col space-y-3 transition-all rounded-md ${
+              open ? "p-2 bg-[#0c121c] ring-2 " : "p-0"
+            }`}
+          >
+            {classes.map((item, index) => (
+              <NavLinkTooltip
+                text={`${item.name}: ${item.course}`}
+                disabled={open}
+                key={index}
+              >
+                <button
+                  onClick={() => {
+                    setActiveClass(index);
+                    setOpen(false);
+                  }}
+                  className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
+                    activeClass === index && !open ? "ring-2 " : ""
+                  } ${activeClass === index && open ? "bg-blue-500/10" : ""} ${
+                    open ? "rounded-sm" : "rounded-md"
+                  }`}
+                >
+                  {/* Class Icon */}
+                  <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
+                    <AspectRatio.Root
+                      ratio={1 / 1}
+                      asChild
+                      className="rounded-sm relative"
+                    >
+                      <Image src={item.icon} layout="fill" objectFit="cover" />
+                    </AspectRatio.Root>
+                  </div>
+                  {/* Class Info */}
+                  <section
+                    className={`flex ml-3 justify-center h-full flex-col whitespace-nowrap overflow-hidden text-left leading-none transition-opacity ${
+                      open ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    <h1
+                      className={`font-bold text-white overflow-hidden text-ellipsis text-sm`}
+                    >
+                      {item.name}
+                    </h1>
+                    <p
+                      className={`text-white/70 text-xs overflow-hidden text-ellipsis`}
+                    >
+                      {item.course}
+                    </p>
+                  </section>
+                </button>
+              </NavLinkTooltip>
+            ))}
+            <NavLinkTooltip disabled={open} text="Add Class">
+              <div
+                className={`w-full rounded-sm relative transition overflow-hidden cursor-pointer px-1 flex items-center group justify-start h-10`}
+              >
+                <div
+                  className={`h-10 w-10 min-w-[2.5rem] rounded-full transition-all items-center justify-center flex ${
+                    open ? "bg-white/5" : "group-hover:bg-white/5"
+                  }`}
+                >
+                  <div className="w-3 h-3 min-w-[.75rem]">
+                    {icons.plusThin(false)}
+                  </div>
+                </div>
+                <p className="text-white/70 text-xs ml-3 whitespace-nowrap group-hover:text-white transition">
+                  Add Class
+                </p>
+              </div>
+            </NavLinkTooltip>
+          </div>
+          <Divider />
           {/* Button Group */}
           <div className="flex flex-col space-y-2">
             {navLinks.map((link, i) => (
@@ -196,193 +266,99 @@ const SideNavigation = () => {
               />
             ))}
           </div>
-          <Divider />
-          {/* Class Group */}
-          <div
-            className={`flex flex-col space-y-3 transition-all rounded-md ${
-              open ? "p-2 bg-[#0c121c] ring-2 " : "p-0"
-            }`}
-          >
-            {classes.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setActiveClass(index);
-                  setOpen(false);
-                }}
-                className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
-                  activeClass === index && !open ? "ring-2 " : ""
-                } ${activeClass === index && open ? "bg-blue-500/10" : ""} ${
-                  open ? "rounded-sm" : "rounded-md"
-                }`}
-              >
-                {/* Class Icon */}
-                <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
-                  <AspectRatio.Root
-                    ratio={1 / 1}
-                    asChild
-                    className="rounded-sm relative"
-                  >
-                    <Image src={item.icon} layout="fill" objectFit="cover" />
-                  </AspectRatio.Root>
-                </div>
-                {/* Class Info */}
-                <section
-                  className={`flex ml-3 justify-center h-full flex-col whitespace-nowrap overflow-hidden text-left leading-none transition-opacity ${
-                    open ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <h1
-                    className={`font-bold text-white overflow-hidden text-ellipsis text-sm`}
-                  >
-                    {item.name}
-                  </h1>
-                  <p
-                    className={`text-white/70 text-xs overflow-hidden text-ellipsis`}
-                  >
-                    {item.course}
-                  </p>
-                </section>
-              </button>
-            ))}
-            <div
-              className={`w-full rounded-sm relative transition overflow-hidden cursor-pointer px-1 flex items-center group justify-start h-10`}
-            >
-              <div
-                className={`h-10 w-10 min-w-[2.5rem] rounded-full transition-all items-center justify-center flex ${
-                  open ? "bg-white/5" : "group-hover:bg-white/5"
-                }`}
-              >
-                <div className="w-3 h-3 min-w-[.75rem]">
-                  {icons.plusThin(false)}
-                </div>
-              </div>
-              <p className="text-white/70 text-xs ml-3 whitespace-nowrap group-hover:text-white transition">
-                Add Class
-              </p>
-            </div>
-          </div>
         </section>
         {/* Bottom Group */}
         <div className="w-full space-y-4">
           <div className="flex flex-col space-y-2">
             {/* Theme Toggle */}
-            <button
-              className={`w-full h-12 rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
-              onClick={() => setDarkMode(!darkMode)}
-            >
-              <div className="flex space-x-4">
-                <div className="w-5 h-5 min-w-[20px] relative">
-                  <div
-                    className={`absolute top-0 left-0 w-full h-full transition-all ${
-                      darkMode
-                        ? "right-5 opacity-0 rotate-90"
-                        : "opacity-100 rotate-0 right-0"
-                    }`}
-                  >
-                    {icons.sun(false)}
-                  </div>
-                  <div
-                    className={`absolute left-0 top-0 w-full h-full transition-all ${
-                      darkMode
-                        ? "opacity-100 rotate-0 right-0"
-                        : "opacity-0 -rotate-90 -right-5"
-                    }`}
-                  >
-                    {icons.moon(false)}
-                  </div>
-                </div>
-                <label
-                  className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                    open ? "opacity-100" : "opacity-0"
-                  }`}
-                  htmlFor="dark-mode"
-                >
-                  Dark Mode
-                </label>
-              </div>
-              <Switch.Root
-                className="w-[42px] h-[25px] rounded-full relative border border-emerald-500/50 data-[state=checked]:bg-emerald-500 outline-none cursor-default"
-                id="dark-mode"
-                checked={darkMode}
-                onCheckedChange={setDarkMode}
+            <NavLinkTooltip text="Dark Mode" disabled={open}>
+              <button
+                className={`w-full h-12 rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
+                onClick={() => setDarkMode(!darkMode)}
               >
-                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-              </Switch.Root>
-            </button>
+                <div className="flex space-x-4">
+                  <div className="w-5 h-5 min-w-[20px] relative">
+                    <div
+                      className={`absolute top-0 left-0 w-full h-full transition-all ${
+                        darkMode
+                          ? "right-5 opacity-0 rotate-90"
+                          : "opacity-100 rotate-0 right-0"
+                      }`}
+                    >
+                      {icons.sun(false)}
+                    </div>
+                    <div
+                      className={`absolute left-0 top-0 w-full h-full transition-all ${
+                        darkMode
+                          ? "opacity-100 rotate-0 right-0"
+                          : "opacity-0 -rotate-90 -right-5"
+                      }`}
+                    >
+                      {icons.moon(false)}
+                    </div>
+                  </div>
+                  <label
+                    className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
+                      open ? "opacity-100" : "opacity-0"
+                    }`}
+                    htmlFor="dark-mode"
+                  >
+                    Dark Mode
+                  </label>
+                </div>
+                <Switch.Root
+                  className="w-[42px] h-[25px] rounded-full relative border border-emerald-500/50 data-[state=checked]:bg-emerald-500 outline-none cursor-default"
+                  id="dark-mode"
+                  checked={darkMode}
+                  onCheckedChange={setDarkMode}
+                >
+                  <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                </Switch.Root>
+              </button>
+            </NavLinkTooltip>
           </div>
           {/* Settings */}
-          <button
-            className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
-          >
-            <div className="w-5 h-5 min-w-[20px]">{icons.cog(false)}</div>
-            <div
-              className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
-                open ? "opacity-100" : "opacity-0"
-              }`}
+          <NavLinkTooltip text="Settings" disabled={open}>
+            <button
+              className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
-              Settings
-            </div>
-          </button>
+              <div className="w-5 h-5 min-w-[20px]">{icons.cog(false)}</div>
+              <div
+                className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
+                  open ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                Settings
+              </div>
+            </button>
+          </NavLinkTooltip>
           {/* Divider */}
           <Divider />
           {/* Collapse/Expand Button */}
-          <button
-            onClick={() => setOpen(!open)}
-            className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
-          >
-            <div
-              className={`w-5 h-5 min-w-[20px] transition-transform ${
-                open ? "rotate-180" : ""
-              }`}
+          <NavLinkTooltip text={"Expand"} disabled={open}>
+            <button
+              onClick={() => setOpen(!open)}
+              className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
-              {icons.expandArrow(false)}
-            </div>
-            <div
-              className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
-                open ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              Collapse
-            </div>
-          </button>
+              <div
+                className={`w-5 h-5 min-w-[20px] transition-transform ${
+                  open ? "rotate-180" : ""
+                }`}
+              >
+                {icons.expandArrow(false)}
+              </div>
+              <div
+                className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
+                  open ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                Collapse
+              </div>
+            </button>
+          </NavLinkTooltip>
         </div>
       </div>
     </nav>
-  );
-};
-
-const NavLink = ({
-  icon,
-  text,
-  open,
-  active,
-  setActiveLink,
-}: {
-  icon: (active: boolean) => React.ReactNode;
-  text: NavLinkText;
-  open: boolean;
-  active: boolean;
-  setActiveLink: (text: NavLinkText) => void;
-}) => {
-  return (
-    <button
-      onClick={() => setActiveLink(text)}
-      className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
-        active
-          ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white font-medium"
-          : "text-nav-inactive-light hover:bg-emerald-500/5"
-      }`}
-    >
-      <div className="w-5 h-5 min-w-[20px]">{icon(active)}</div>
-      <label
-        className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-          open ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {text}
-      </label>
-    </button>
   );
 };
 

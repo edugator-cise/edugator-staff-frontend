@@ -19,6 +19,29 @@
         scale: 0.9;
     }
   }
+
+  @keyframes slideLeftAndFade {
+    from {
+      opacity: 0;
+      transform: translateX(2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideRightAndFade {
+    from {
+      opacity: 0;
+      transform: translateX(-2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+  }
   
   .PopoverContent[data-state='open'] {
       transform-origin: left top;
@@ -27,6 +50,16 @@
     
     .PopoverContent[data-state='closed'] {
         transform-origin: left top;
+    animation: fadeOut 150ms ease-in;
+  }
+
+  .TooltipContent[data-state='open'] {
+    transform-origin: left;
+    animation: fadeIn 150ms ease-out;
+  }
+
+  .TooltipContent[data-state='closed'] {
+    transform-origin: left;
     animation: fadeOut 150ms ease-in;
   }
 
