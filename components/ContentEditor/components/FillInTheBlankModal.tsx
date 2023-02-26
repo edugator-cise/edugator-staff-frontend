@@ -150,28 +150,25 @@ export const FillInTheBlankModal = ({
                             <div className="modal-question">
                                 <label htmlFor="question">Question</label>
                                 <Button
-                                    onClick={() => {
-                                        onInsertBlankClick();
-                                    }}
                                     variant="contained"
                                     color="primary"
                                     disabled={placeholderCharCount > placeholderChars.length - 1}
+                                    onClick={() => {
+                                        onInsertBlankClick();
+                                    }}
                                 >
                                     + Insert Blank
                                 </Button>
-                                <div>
-                                    <input
-                                        id="question-input"
-                                        type="text"
-                                        className="modal-input"
-                                        ref={modalInput}
-                                        value={question}
-                                        onChange={(e) => {
-                                            handleQuestionChange(e.target.value);
-                                            setCursorPosition(e.target.selectionStart);
-                                        }}
-                                    />
-                                </div>
+                                <input
+                                    type="text"
+                                    className="modal-input"
+                                    ref={modalInput}
+                                    value={question}
+                                    onChange={(e) => {
+                                        handleQuestionChange(e.target.value);
+                                        setCursorPosition(e.target.selectionStart);
+                                    }}
+                                />
                             </div>
                             <div className="modal-answers">
                                 <label htmlFor="answers">Answers</label>

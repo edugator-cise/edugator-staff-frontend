@@ -16,7 +16,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%; 
+  width: 100%;
+}
+
+.modal-insert-blank {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
 }
 
 .modal-ms-answers {
