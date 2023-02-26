@@ -90,6 +90,7 @@ export const FillInTheBlankModal = ({
     const handleQuestionChange = (question: string) => {
         setQuestion(questionWithInOrderPlaceholderChars(question));
         setQuestionSegments(transformQuestionIntoSegments(question));
+        updateBlankAnswers(question);
     }
 
     const handleAnswerChoicesChange = (updatedChoices: string[], i: number) => {
@@ -104,11 +105,17 @@ export const FillInTheBlankModal = ({
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
-    // Add a new blankAnswer object to correctAnswers[]
-    const addNewBlankAnswer = () => {
+    // Adds a new blankAnswer object to correctAnswers[] if needed, otherwise deletes unnecessary blankAnswers.
+    const updateBlankAnswers = (question: string) => {
+        let questionSegments = transformQuestionIntoSegments(question);
         let updatedCorrectAnswers = [...correctAnswers];
-        let newBlankAnswer = new blankAnswer([], false);
-        updatedCorrectAnswers.push(newBlankAnswer);
+        if (correctAnswers.length < questionSegments.length - 1) {
+            let newBlankAnswer = new blankAnswer([], false);
+            updatedCorrectAnswers.push(newBlankAnswer);
+        }
+        else if (correctAnswers.length > questionSegments.length - 1) {
+            updatedCorrectAnswers.pop();
+        }
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
@@ -125,7 +132,6 @@ export const FillInTheBlankModal = ({
 
                     handleQuestionChange(modalInput.current.value);
                     setCursorPosition(cursorPosition + 1); // Set cursorPosition to just after the inserted character.
-                    addNewBlankAnswer();
                     setPlaceholderCharCount(placeholderCharCount + 1);
                 }
             }
