@@ -147,8 +147,8 @@ export const FillInTheBlankModal = ({
                             <h2>Fill-in-the-Blank</h2>
                         </div>
                         <div className="modal-body">
-                            <div className="fitb-modal-grid-container">
-                                <div className="fitb-modal-title">
+                            <div className="fitb-modal-question-container">
+                                <div className="fitb-modal-question">
                                     <label htmlFor="question">Question</label>
                                 </div>
                                 <div className="fitb-modal-insert-blank">
@@ -174,8 +174,8 @@ export const FillInTheBlankModal = ({
                                     setCursorPosition(e.target.selectionStart);
                                 }}
                             />
-                            <div className="fitb-modal-grid-container">
-                                <div className="fitb-modal-title">
+                            <div className="fitb-modal-answer-container">
+                                <div className="fitb-modal-answer">
                                     <label htmlFor="answers">Answers</label>
                                 </div>
                                 <div className="fitb-modal-info-tooltip">
@@ -188,19 +188,23 @@ export const FillInTheBlankModal = ({
                                 </div>
                             </div>
                             {correctAnswers.map((correctAnswer, i) => (
-                                <Box className="fitb-modal-answer" key={i}>
-                                    {placeholderChars[i]}
+                                <Box className="fitb-modal-answer-field" key={i}>
+                                    <div className="fitb-modal-answer-placeholder">
+                                        {placeholderChars[i]}
+                                    </div>
                                     <MuiChipsInput
+                                        className="fitb-modal-answer-chips-input"
                                         value={correctAnswer.possibleChoices}
                                         onChange={(e) => handleAnswerChoicesChange(e, i)}
                                     />
                                     <FormGroup>
-                                        <FormControlLabel control={
-                                            <Checkbox
-                                                checked={correctAnswer.shouldHaveExactMatch}
-                                                onChange={() => handleExactMatchCheckboxChange(i)}
-                                            />
-                                        }
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={correctAnswer.shouldHaveExactMatch}
+                                                    onChange={() => handleExactMatchCheckboxChange(i)}
+                                                />
+                                            }
                                             label={exactMatchText}
                                         />
                                     </FormGroup>

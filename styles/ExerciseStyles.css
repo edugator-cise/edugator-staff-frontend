@@ -74,14 +74,15 @@
   justify-content: center;
 }
 
-.fitb-modal-grid-container {
+.fitb-modal-question-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   width: 100%;
 }
 
-.fitb-modal-title {
+.fitb-modal-question {
+  display: grid;
   grid-column-start: 2;
   text-align: center;
 }
@@ -91,12 +92,35 @@
   text-align: right;
 }
 
-.fitb-modal-info-tooltip {
-  grid-column-start: 3;
-  text-align: left;
+.fitb-modal-answer-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 10px;
+  align-items: center;
+  width: 100%;
 }
 
 .fitb-modal-answer {
+  display: grid;
+  grid-column-start: 3;
+  text-align: center;
+}
+
+.fitb-modal-info-tooltip {
+  grid-column-start: 4;
+  text-align: left;
+}
+
+.fitb-modal-answer-field {
   display: inline-flex;
   align-items: center;
+}
+
+.fitb-modal-answer-placeholder {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.fitb-modal-answer-chips-input {
+  margin-inline: 10px;
 }
