@@ -10,14 +10,27 @@ import {
   contentBlock,
   fitb_content
 } from "./components/exportStructures";
+import { ILesson } from "lib/shared/types";
 
 //React state hook
-export const TextStack = () => {
+export const TextStack = ({
+  rawLesson,
+  moduleId,
+}: {
+  rawLesson?: ILesson;
+  moduleId: string;
+}) => {
+  // if rawlesson is present as a prop, then we are editing a lesson
   //Declaration of serviceList array and setList setter
   const [atomicEntities, setAtomicEntities] = useState([]);
   const [html, setHTML] = useState("");
   const [exportData, setExportData] = useState([]);
-  const [rawData, setRawData] = useState({});
+  const [rawData, setRawData] = useState(
+    rawLesson?.editableContent || {
+      blocks: [],
+      entityMap: {},
+    }
+  );
 
   const entityCallback = (atomicEntities: any, html: string, rawData: any) => {
     setAtomicEntities(atomicEntities);
@@ -59,12 +72,7 @@ export const TextStack = () => {
         case "multiple_select":
           content = new contentBlock(
             "multiple_select",
-            new ms_content(data.data.question, data.data.correct, [
-              data.data.answer1,
-              data.data.answer2,
-              data.data.answer3,
-              data.data.answer4,
-            ])
+            new ms_content(data.data.question, data.data.answers)
           );
           break;
 
@@ -103,11 +111,19 @@ export const TextStack = () => {
   return (
     <form className="App" autoComplete="off">
       <div className="form-field">
-        <TextEditorContent callbackData={entityCallback} />
+        <TextEditorContent
+          callbackData={entityCallback}
+          rawLesson={rawLesson}
+        />
       </div>
       <div className="Popup">
         <CustomizedDialogs title="Publish Learning Content">
-          <RegistrationForm jsonData={exportData} rawData={rawData} />
+          <RegistrationForm
+            jsonData={exportData}
+            rawData={rawData}
+            rawLesson={rawLesson}
+            moduleId={moduleId}
+          />
         </CustomizedDialogs>
       </div>
     </form>

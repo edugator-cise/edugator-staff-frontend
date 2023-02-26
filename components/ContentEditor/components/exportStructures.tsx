@@ -1,4 +1,6 @@
-interface content {}
+import { ModalAnswer } from "./MultipleSelectModal";
+
+interface content { }
 
 class answerChoice {
   id: number;
@@ -8,6 +10,15 @@ class answerChoice {
   constructor(id: number, text: string) {
     this.id = id;
     this.text = text;
+  }
+}
+
+class msAnswerChoice extends answerChoice {
+  correct: boolean;
+
+  constructor(id: number, text: string, correct: boolean) {
+    super(id, text);
+    this.correct = correct;
   }
 }
 
@@ -71,17 +82,12 @@ export class mc_content implements content {
 
 export class ms_content implements content {
   question: string;
-
-  correctAnswer: number[];
-
-  answers: answerChoice[];
-
-  constructor(question: string, correctAnswer: number[], answers: string[]) {
+  answers: msAnswerChoice[];
+  constructor(question: string, answers: ModalAnswer[]) {
     this.question = question;
-    this.correctAnswer = correctAnswer;
     this.answers = [];
     answers.forEach((answer, i) =>
-      this.answers.push(new answerChoice(i, answer))
+      this.answers.push(new msAnswerChoice(i, answer.text, answer.correct))
     );
   }
 }

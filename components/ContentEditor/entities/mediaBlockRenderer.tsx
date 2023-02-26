@@ -6,7 +6,8 @@ import {
   AtomicBlockUtils,
   ContentState,
 } from "draft-js";
-import { MultipleChoiceDisplayBlock, FillInTheBlankDisplayBlock } from "../components/displayBlockComponents";
+import { MultipleChoiceDisplayBlock, MultipleSelectDisplayBlock, FillInTheBlankDisplayBlock } from "../components/displayBlockComponents";
+import { ModalAnswer } from "../components/MultipleSelectModal";
 import { blankAnswer } from "../components/exportStructures";
 
 export const mediaBlockRenderer = (block: ContentBlock) => {
@@ -53,13 +54,22 @@ const Media = ({
     correctAnswers
   }: { src: string; question: string; answers: string[]; correct: number, questionSegments: string[], correctAnswers: blankAnswer[] } =
     Object(entity.getData());
+
   const type = entity.getType();
 
   let media;
 
   if (type === "image") {
+    const { src }: { src: string } = Object(entity.getData());
     media = <Image src={src} />;
   } else if (type === "multiple_choice") {
+    const {
+      question,
+      answers,
+      correct,
+    }: { question: string; answers: string[]; correct: number } = Object(
+      entity.getData()
+    );
     media = (
       <MultipleChoiceDisplayBlock
         question={question}
@@ -68,7 +78,11 @@ const Media = ({
       />
     );
   } else if (type === "multiple_select") {
-    media = <></>;
+    const { question, answers }: { question: string; answers: ModalAnswer[] } =
+      Object(entity.getData());
+    media = (
+      <MultipleSelectDisplayBlock question={question} answers={answers} />
+    );
   } else if (type === "fill_in_the_blank") {
     media = (
       <FillInTheBlankDisplayBlock

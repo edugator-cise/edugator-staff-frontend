@@ -1,5 +1,8 @@
 /** Problem Interfaces */
 
+import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
+import { blankAnswer } from "components/ContentEditor/components/exportStructures";
+
 export interface ITestCase {
   input: string;
   expectedOutput: string;
@@ -25,17 +28,162 @@ export interface IProblem extends IProblemBase {
   buildCommand: string;
 }
 
+// lesson type fetched directly from db
 export interface ILesson extends ILessonBase {
+  _id?: string;
   title: string;
   author: string;
-  content: {}[];
+  content: Array<
+    TextContent | ImageContent | MultipleChoiceContent | MultipleSelectContent | FillInTheBlankContent
+  >;
   editableContent: {
     blocks: {}[];
     entityMap: {}[];
   };
   blocks: {}[];
-  entityMap: {}[];
+  entityMap: Array<ImageEntity | MultipleChoiceEntity | MultipleSelectEntity | FillInTheBlankEntity>;
 }
+
+/** Final display blocks for each content block type */
+export type LessonBlock =
+  | TextBlock
+  | ImageBlock
+  | MultipleChoiceBlock
+  | MultipleSelectBlock
+  | FillInTheBlankBlock;
+
+export type TextBlock = {
+  type: "text";
+  data: {
+    html: string;
+  };
+};
+
+export type ImageBlock = {
+  type: "image";
+  data: {
+    src: string;
+  };
+};
+
+export type MultipleChoiceBlock = {
+  type: "multiple_choice";
+  data: {
+    image?: boolean;
+    src?: string;
+    question: string;
+    answers: string[];
+    correct: number;
+  };
+};
+
+export type MultipleSelectBlock = {
+  type: "multiple_select";
+  data: {
+    question: string;
+    answers: ModalAnswer[];
+  };
+};
+
+export type FillInTheBlankBlock = {
+  type: "fill_in_the_blank";
+  data: {
+    questionSegments: string[];
+    correctAnswers: blankAnswer[];
+  };
+};
+
+export type LessonDisplay = {
+  id: string;
+  title: string;
+  author: string;
+  content: LessonBlock[];
+};
+
+/** Content block types in the lesson.content array */
+export type TextContent = {
+  type: "text";
+  content: {
+    html: string;
+  };
+};
+
+export type ImageContent = {
+  type: "image";
+  content: {
+    sourcePath: string;
+    alignment: string;
+  };
+};
+
+export type MultipleChoiceContent = {
+  type: "multiple_choice";
+  content: {
+    image?: boolean;
+    src?: string;
+    question: string;
+    answers: {
+      id: number;
+    }[];
+    correct: number;
+  };
+};
+
+export type MultipleSelectContent = {
+  type: "multiple_select";
+  content: {
+    question: string;
+    answers: ModalAnswer[];
+  };
+};
+
+export type FillInTheBlankContent = {
+  type: "fill_in_the_blank";
+  content: {
+    questionSegments: string[];
+    correctAnswers: blankAnswer[];
+  };
+};
+
+
+/** Content block types in the lesson.entityMap array */
+
+export type ImageEntity = {
+  type: "image";
+  data: {
+    src: string;
+    alignment: string;
+  };
+};
+
+export type MultipleChoiceEntity = {
+  type: "multiple_choice";
+  data: {
+    image?: boolean;
+    src?: string;
+    question: string;
+    answers: string[];
+    correct: number;
+  };
+};
+
+export type MultipleSelectEntity = {
+  type: "multiple_select";
+  data: {
+    question: string;
+    answers: ModalAnswer[];
+  };
+};
+
+export type FillInTheBlankEntity = {
+  type: "fill_in_the_blank";
+  data: {
+    questionSegments: string[];
+    correctAnswers: blankAnswer[];
+  };
+};
+
+/** */
 
 export interface INewProblem extends IProblem {
   moduleId: string;

@@ -18,6 +18,7 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
+import { LessonBlock } from "lib/shared/types";
 import FillInTheBlankQuestion from "components/LearnPage/FillInTheBlankQuestion";
 
 export default function LearnPage() {
@@ -156,27 +157,10 @@ export default function LearnPage() {
     }
   }
 
+  console.log(currentLesson);
+
   return (
     <>
-      {error && (
-        <Grow in timeout={500}>
-          <Alert
-            severity="error"
-            sx={{
-              position: "absolute",
-              left: "0",
-              right: "0",
-              width: "50%",
-              marginTop: 5,
-              marginRight: "auto",
-              marginLeft: "auto",
-              zIndex: 300,
-            }}
-          >
-            {error.message}
-          </Alert>
-        </Grow>
-      )}
       {status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box>
@@ -235,8 +219,9 @@ export default function LearnPage() {
                 ></div>
               </div>
             </LessonHeader>
-            {currentLesson.content?.map((block: any, i) => {
-              if (!block || !block.type || !block.content) {
+            {currentLesson.content?.map((block: LessonBlock, i) => {
+              console.log(block);
+              if (!block || !block.type || !block.data) {
                 return null;
               }
               if (block.type === "text") {
@@ -246,33 +231,24 @@ export default function LearnPage() {
                       transform={transform}
                       className="inter"
                       content={JSON.parse(
-                        JSON.stringify(block.content.html) || ""
+                        JSON.stringify(block.data.html) || ""
                       )}
                     />
                   </div>
                 );
               } else if (block.type === "image") {
-                return (
-                  <ImageBlock
-                    key={i}
-                    src={block.content.sourcePath}
-                    caption={block.content.caption}
-                    height={block.content.height}
-                    width={block.content.width}
-                    alignment={block.content.alignment}
-                  />
-                );
+                return <ImageBlock key={i} src={block.data.src} />;
               } else if (block.type === "multiple_choice") {
                 questionCount++;
                 return (
                   <MultipleChoiceQuestion
                     key={i}
                     number={questionCount - 1}
-                    image={block.content.image}
-                    sourcePath={block.content.sourcePath}
-                    answers={block.content.answers}
-                    correctAnswer={block.content.correctAnswer}
-                    question={block.content.question}
+                    image={block.data.image || false}
+                    sourcePath={block.data.src}
+                    answers={block.data.answers}
+                    correctAnswer={block.data.correct}
+                    question={block.data.question}
                   />
                 );
               } else if (block.type === "multiple_select") {
@@ -281,9 +257,8 @@ export default function LearnPage() {
                   <MultipleSelectQuestion
                     key={i}
                     number={questionCount - 1}
-                    answers={block.content.answers}
-                    correctAnswer={block.content.correctAnswer}
-                    question={block.content.question}
+                    answers={block.data.answers}
+                    question={block.data.question}
                   />
                 );
               } else if (block.type === "fill_in_the_blank") {
@@ -292,8 +267,8 @@ export default function LearnPage() {
                   <FillInTheBlankQuestion
                     key={i}
                     number={questionCount - 1}
-                    questionSegments={block.content.questionSegments}
-                    correctAnswers={block.content.correctAnswers}
+                    questionSegments={block.data.questionSegments}
+                    correctAnswers={block.data.correctAnswers}
                   />
                 );
               }

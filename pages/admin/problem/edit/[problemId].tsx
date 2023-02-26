@@ -1,4 +1,3 @@
-
 import AdminLayout from "components/AdminLayout";
 import { useEffect } from "react";
 import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
@@ -10,6 +9,7 @@ import {
   resetState,
   updateModuleId,
   updateModuleName,
+  updateProblemId,
   WarningTypes,
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import apiClient from "lib/api/apiClient";
@@ -21,9 +21,12 @@ import { CircularProgress } from "@mui/material";
 
 const ProblemEditPage = () => {
   const router = useRouter();
-  const { problemId , moduleName, moduleId } = router.query;
-  const [status, setStatus] = useState(FetchStatus.loading)
+  const { problemId, moduleName, moduleId } = router.query;
+  const [status, setStatus] = useState(FetchStatus.loading);
   const dispatch = useDispatch();
+
+  dispatch(updateProblemId(problemId as string));
+
   const actions = {
     back: {
       label: "Back to Modules",
@@ -41,21 +44,23 @@ const ProblemEditPage = () => {
 
   useEffect(() => {
     const getProblemRequest = () =>
-    apiClient.get(apiRoutes.admin.getProblem(problemId as string));
+      apiClient.get(apiRoutes.admin.getProblem(problemId as string));
 
-    getProblemRequest().then(value => {
-      dispatch(updateModuleId(moduleId as string));
-      dispatch(updateModuleName(moduleName as string));
-      dispatch(requestGetProblemSuccess(value.data));
-      setStatus(FetchStatus.succeed);
-    }).catch(e => {
-      toast.error("failed to get problem");
-      setStatus(FetchStatus.failed);
-    })
+    getProblemRequest()
+      .then((value) => {
+        dispatch(updateModuleId(moduleId as string));
+        dispatch(updateModuleName(moduleName as string));
+        dispatch(requestGetProblemSuccess(value.data));
+        setStatus(FetchStatus.succeed);
+      })
+      .catch((e) => {
+        toast.error("failed to get problem");
+        setStatus(FetchStatus.failed);
+      });
 
     return () => {
-      dispatch(resetState())
-    }
+      dispatch(resetState());
+    };
   }, [problemId, moduleName]);
 
   return (
@@ -73,4 +78,3 @@ const ProblemEditPage = () => {
 };
 
 export default ProblemEditPage;
-

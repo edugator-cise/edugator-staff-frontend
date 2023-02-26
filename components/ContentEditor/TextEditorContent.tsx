@@ -8,10 +8,9 @@ import {
   convertToRaw,
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
-import "./TextEditorStyles.module.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { MultipleChoiceModal } from "./components/MultipleChoiceOption";
 import { FillInTheBlankModal } from "./components/FillInTheBlankOption";
+import { MultipleChoiceModal } from "./components/MultipleChoiceModal";
 import draftToHtml from "draftjs-to-html";
 import {
   TextHOne,
@@ -29,17 +28,24 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
 import { blankAnswer } from "./components/exportStructures";
+import MultipleSelectModal, {
+  ModalAnswer,
+} from "./components/MultipleSelectModal";
+import { ILesson } from "lib/shared/types";
 
 const TextEditorContent = ({
   callbackData,
+  rawLesson,
 }: {
   callbackData: (atomicEntities: any, html: string, rawData: any) => void;
+  rawLesson?: ILesson;
 }) => {
   const [editorState, setEditorState] = useState<EditorState>(
     EditorState.createEmpty()
   );
   const [html, setHTML] = useState("");
   const [MCModalOpen, setMCModalOpen] = useState(false);
+  const [MSModalOpen, setMSModalOpen] = useState(false);
   const [FITBModalOpen, setFITBModalOpen] = useState(false);
 
   // check if the lesson has a title (we are editing a lesson)
@@ -47,24 +53,19 @@ const TextEditorContent = ({
     (state: RootState) => state.contentEditorPage.contentId
   );
 
-  const editorStoredState = useSelector(
-    (state: RootState) => state.contentEditorPage.contentEditor
-  );
-
   useEffect(() => {
-    if (contentId && editorStoredState) {
+    if (rawLesson) {
       const convertedContent = convertFromRaw({
         // @ts-ignore
-        blocks: editorStoredState.editableContent.blocks,
+        blocks: rawLesson.editableContent.blocks,
         // @ts-ignore
-        entityMap: editorStoredState.editableContent.entityMap || {},
+        entityMap: rawLesson.editableContent.entityMap || {},
       });
-      console.log("convertedContent", convertedContent);
 
       // convert from raw back to editor state
       setEditorState(EditorState.createWithContent(convertedContent));
     }
-  }, [contentId, editorStoredState]);
+  }, [contentId]);
 
   const customEntityTransform = (entity: any, text: string) => {
     if (
@@ -79,9 +80,6 @@ const TextEditorContent = ({
   const onTrigger = () => {
     const atomicEntities = getEntities(editorState);
     const rawData = convertToRaw(editorState.getCurrentContent());
-    //let html = html;
-
-    // console.log("Callback Data", atomicEntities, html);
     callbackData(atomicEntities, html, rawData);
   };
 
@@ -124,20 +122,38 @@ const TextEditorContent = ({
   };
 
   const onChange = (editorState: EditorState) => {
-    console.log(editorState);
-    console.log("RAW STATE");
-    console.log(convertToRaw(editorState.getCurrentContent()));
-
     const html = draftToHtml(
       convertToRaw(editorState.getCurrentContent()),
       {},
       false,
       customEntityTransform
     );
-    console.log(html);
     onTrigger();
     setEditorState(editorState);
     setHTML(html);
+  };
+
+  const onAddMultipleSelect = (
+    e: any,
+    question: string,
+    answers: ModalAnswer[]
+  ) => {
+    e.preventDefault();
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "multiple_select",
+      "IMMUTABLE",
+      { question, answers }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
+    );
+    setMSModalOpen(false);
+    setTimeout(() => focus(), 0);
   };
 
   const onAddMultipleChoice = (
@@ -257,6 +273,11 @@ const TextEditorContent = ({
         open={MCModalOpen}
         setOpen={setMCModalOpen}
       />
+      <MultipleSelectModal
+        insert={onAddMultipleSelect}
+        open={MSModalOpen}
+        setOpen={setMSModalOpen}
+      />
       <FillInTheBlankModal
         insert={onAddFillInTheBlank}
         open={FITBModalOpen}
@@ -295,7 +316,12 @@ const TextEditorContent = ({
       >
         <ListBullets weight="bold" size={18} />
       </button>
-      <button onClick={() => { }}>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setMSModalOpen(true);
+        }}
+      >
         <ListChecks weight="bold" size={18} />
       </button>
       <button

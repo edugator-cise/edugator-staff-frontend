@@ -8,17 +8,13 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
-import {
-  closeWarningModal,
-  requestDeleteContent,
-  WarningTypes,
-} from "./contentEditorPageSlice";
+import { closeWarningModal, WarningTypes } from "./contentEditorPageSlice";
 import { RootState } from "lib/store/store";
 import apiClient from "lib/api/apiClient";
 import toast from "react-hot-toast";
-
+import { apiRoutes } from "constants/apiRoutes";
 
 export const WarningDialog = () => {
   const dispatch = useDispatch();
@@ -29,16 +25,18 @@ export const WarningDialog = () => {
   const warningType = useSelector(
     (state: RootState) => state.contentEditorPage.warningType
   );
+  const contentId = useSelector(
+    (state: RootState) => state.contentEditorPage.contentId
+  );
 
-  const contentId = useSelector((state: RootState) => state.contentEditorPage.contentId);
   const handleDeleteContentRequest = async () => {
     try {
-      await apiClient.delete(`v1/admin/lesson${contentId}`);
-      toast.success("Content successfully deleted")
+      await apiClient.delete(apiRoutes.admin.deleteLesson(contentId as string));
+      toast.success("Content successfully deleted");
     } catch (e) {
-      toast.error("Content failed to delete")
+      toast.error("Content failed to delete");
     }
-  }
+  };
   return (
     <Dialog
       open={showModal}
@@ -60,7 +58,7 @@ export const WarningDialog = () => {
         <Button
           onClick={() => {
             if (warningType === WarningTypes.Delete) {
-              handleDeleteContentRequest()
+              handleDeleteContentRequest();
             }
             history.push(Routes.Modules);
           }}
