@@ -113,12 +113,16 @@ export const FillInTheBlankModal = ({
     const updateBlankAnswers = (question: string) => {
         let questionSegments = transformQuestionIntoSegments(question);
         let updatedCorrectAnswers = [...correctAnswers];
-        if (correctAnswers.length < questionSegments.length - 1) {
+        // If a new placeholder/blank was added (via Insert Blank button)
+        if (updatedCorrectAnswers.length < questionSegments.length - 1) {
             let newBlankAnswer = new blankAnswer([], false);
             updatedCorrectAnswers.push(newBlankAnswer);
         }
-        else if (correctAnswers.length > questionSegments.length - 1) {
-            updatedCorrectAnswers.pop();
+        // If one or more placeholder characters were deleted
+        else if (updatedCorrectAnswers.length > questionSegments.length - 1) {
+            while (updatedCorrectAnswers.length > questionSegments.length - 1) {
+                updatedCorrectAnswers.pop();
+            }
         }
         setCorrectAnswers(updatedCorrectAnswers);
     }
