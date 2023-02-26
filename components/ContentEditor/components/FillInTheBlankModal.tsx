@@ -147,57 +147,65 @@ export const FillInTheBlankModal = ({
                             <h2>Fill-in-the-Blank</h2>
                         </div>
                         <div className="modal-body">
-                            <div className="modal-question">
-                                <label htmlFor="question">Question</label>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={placeholderCharCount > placeholderChars.length - 1}
-                                    onClick={() => {
-                                        onInsertBlankClick();
-                                    }}
-                                >
-                                    + Insert Blank
-                                </Button>
-                                <input
-                                    type="text"
-                                    className="modal-input"
-                                    ref={modalInput}
-                                    value={question}
-                                    onChange={(e) => {
-                                        handleQuestionChange(e.target.value);
-                                        setCursorPosition(e.target.selectionStart);
-                                    }}
-                                />
+                            <div className="fitb-modal-grid-container">
+                                <div className="fitb-modal-title">
+                                    <label htmlFor="question">Question</label>
+                                </div>
+                                <div className="fitb-modal-insert-blank">
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={placeholderCharCount > placeholderChars.length - 1}
+                                        onClick={() => {
+                                            onInsertBlankClick();
+                                        }}
+                                    >
+                                        + Insert Blank
+                                    </Button>
+                                </div>
                             </div>
-                            <div className="modal-answers">
-                                <label htmlFor="answers">Answers</label>
-                                <Tooltip
-                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
-                                    arrow
-                                >
-                                    <Info size={32} />
-                                </Tooltip>
-                                {correctAnswers.map((correctAnswer, i) => (
-                                    <Box key={i} sx={{ display: 'inline' }}>
-                                        {placeholderChars[i]}
-                                        <MuiChipsInput
-                                            value={correctAnswer.possibleChoices}
-                                            onChange={(e) => handleAnswerChoicesChange(e, i)}
-                                        />
-                                        <FormGroup>
-                                            <FormControlLabel control={
-                                                <Checkbox
-                                                    checked={correctAnswer.shouldHaveExactMatch}
-                                                    onChange={() => handleExactMatchCheckboxChange(i)}
-                                                />
-                                            }
-                                                label={exactMatchText}
+                            <input
+                                type="text"
+                                className="modal-input"
+                                ref={modalInput}
+                                value={question}
+                                onChange={(e) => {
+                                    handleQuestionChange(e.target.value);
+                                    setCursorPosition(e.target.selectionStart);
+                                }}
+                            />
+                            <div className="fitb-modal-grid-container">
+                                <div className="fitb-modal-title">
+                                    <label htmlFor="answers">Answers</label>
+                                </div>
+                                <div className="fitb-modal-info-tooltip">
+                                    <Tooltip
+                                        title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
+                                        arrow
+                                    >
+                                        <Info size={32} />
+                                    </Tooltip>
+                                </div>
+                            </div>
+                            {correctAnswers.map((correctAnswer, i) => (
+                                <Box key={i} sx={{ display: 'inline' }}>
+                                    {placeholderChars[i]}
+                                    <MuiChipsInput
+                                        value={correctAnswer.possibleChoices}
+                                        onChange={(e) => handleAnswerChoicesChange(e, i)}
+                                    />
+                                    <FormGroup>
+                                        <FormControlLabel control={
+                                            <Checkbox
+                                                checked={correctAnswer.shouldHaveExactMatch}
+                                                onChange={() => handleExactMatchCheckboxChange(i)}
                                             />
-                                        </FormGroup>
-                                    </Box>
-                                ))}
-                            </div>
+                                        }
+                                            label={exactMatchText}
+                                        />
+                                    </FormGroup>
+                                </Box>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -225,7 +233,7 @@ export const FillInTheBlankModal = ({
                     Add Question
                 </Button>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     );
 };
 

@@ -19,11 +19,26 @@
   width: 100%;
 }
 
-.modal-insert-blank {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: right;
+.fitb-modal-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
+  width: 100%;
+}
+
+.fitb-modal-title {
+  grid-column-start: 2;
+  text-align: center;
+}
+
+.fitb-modal-insert-blank {
+  grid-column-start: 3;
+  text-align: right;
+}
+
+.fitb-modal-info-tooltip {
+  grid-column-start: 3;
+  text-align: left;
 }
 
 .modal-ms-answers {
