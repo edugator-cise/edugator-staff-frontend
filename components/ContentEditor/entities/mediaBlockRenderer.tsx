@@ -45,15 +45,6 @@ const Media = ({
   console.log("block", block);
 
   const entity = contentState.getEntity(block.getEntityAt(0));
-  const {
-    src,
-    question,
-    answers,
-    correct,
-    questionSegments,
-    correctAnswers
-  }: { src: string; question: string; answers: string[]; correct: number, questionSegments: string[], correctAnswers: blankAnswer[] } =
-    Object(entity.getData());
 
   const type = entity.getType();
 
@@ -84,6 +75,11 @@ const Media = ({
       <MultipleSelectDisplayBlock question={question} answers={answers} />
     );
   } else if (type === "fill_in_the_blank") {
+    const {
+      questionSegments,
+      correctAnswers
+    }: { src: string; question: string; answers: string[]; correct: number, questionSegments: string[], correctAnswers: blankAnswer[] } =
+      Object(entity.getData());
     media = (
       <FillInTheBlankDisplayBlock
         questionSegments={questionSegments}
