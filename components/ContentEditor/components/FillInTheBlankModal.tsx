@@ -29,8 +29,11 @@ export const FillInTheBlankModal = ({
 }) => {
     const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
     const exactMatchText = "Require exact match";
-    const placeholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] // Unicode characters used to denote answer blanks when creating a FITB question.
-    const placeholderRegExp = new RegExp(placeholderChars.join('|'));   // A regular expression to help deal with placeholder-related logic.
+    // Unicode characters used to denote answer blanks when creating a FITB question.
+    // Note: Simply add more characters to placeholderChars[] array to allow for more blanks to be inserted per question! (i.e. 4 elements = max of 4 "blanks")
+    const placeholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'];
+    // A regular expression to help deal with placeholder-related logic.
+    const placeholderRegExp = new RegExp(placeholderChars.join('|'));
 
     const [question, setQuestion] = useState("");
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
@@ -39,7 +42,7 @@ export const FillInTheBlankModal = ({
     const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
     const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
-    const modalInput = useRef<HTMLInputElement | null>(null);
+    const modalInput = useRef<HTMLTextAreaElement | null>(null);
 
     useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
     useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
@@ -164,9 +167,8 @@ export const FillInTheBlankModal = ({
                                     </Button>
                                 </div>
                             </div>
-                            <input
-                                type="text"
-                                className="modal-input"
+                            <textarea
+                                className="fitb-modal-question-input"
                                 ref={modalInput}
                                 value={question}
                                 onChange={(e) => {
@@ -174,6 +176,7 @@ export const FillInTheBlankModal = ({
                                     setCursorPosition(e.target.selectionStart);
                                 }}
                             />
+
                             <div className="fitb-modal-answer-container">
                                 <div className="fitb-modal-answer">
                                     <label htmlFor="answers">Answers</label>

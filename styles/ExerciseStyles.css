@@ -87,6 +87,17 @@
   text-align: center;
 }
 
+.fitb-modal-question-input {
+  background: #f1f1f1;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
+  color: rgb(39, 39, 39);
+  width: 100%;
+  resize: vertical;
+}
+
 .fitb-modal-insert-blank {
   grid-column-start: 3;
   text-align: right;
