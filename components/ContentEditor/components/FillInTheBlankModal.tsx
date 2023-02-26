@@ -29,12 +29,13 @@ export const FillInTheBlankModal = ({
 }) => {
     const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
     const exactMatchText = "Require exact match";
-    // Unicode characters used to denote answer blanks when creating a FITB question.
-    const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
+    const placeholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ'] // Unicode characters used to denote answer blanks when creating a FITB question.
+    const placeholderRegExp = new RegExp(placeholderChars.join('|'));   // A regular expression to help deal with placeholder-related logic.
 
+    const [question, setQuestion] = useState("");
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
-    const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
+    const [placeholderCharCount, setPlaceholderCharCount] = useState(0);
     const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
     const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
@@ -50,21 +51,28 @@ export const FillInTheBlankModal = ({
         if (input) input.setSelectionRange(cursorPosition, cursorPosition); // Sets the cursor position to the value of cursorPosition when input is no longer focused.
     }, [modalInput, cursorPosition, questionSegments]);
 
-    // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
-    const transformQuestionIntoSegments = (question: string) => {
-        if (!blankAnswerPlaceholderChars.length) return [question];
-
-        let regExpString = blankAnswerPlaceholderChars[0];
-        blankAnswerPlaceholderChars.forEach((exp, i) => {
-            regExpString += '|' + blankAnswerPlaceholderChars[i];
-        })
-        return question.split(new RegExp(regExpString));
+    const resetValues = () => {
+        setQuestion("");
+        setQuestionSegments([]);
+        setCorrectAnswers([]);
+        setPlaceholderCharCount(0);
+        setIsAddQuestionDisabled(true);
     };
 
-    const handleAnswerChoicesChange = (updatedChoices: string[], i: number) => {
-        let updatedCorrectAnswers = [...correctAnswers];
-        updatedCorrectAnswers[i].possibleChoices = updatedChoices;
-        setCorrectAnswers(updatedCorrectAnswers);
+    // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
+    const transformQuestionIntoSegments = (question: string) => {
+        return question.split(placeholderRegExp);
+    };
+
+    // Returns a string built from current question segments wtih all placeholder characters replaced with in-order ones (for consistency).
+    const questionWithInOrderPlaceholderChars = (question: string) => {
+        let questionSegments = transformQuestionIntoSegments(question);
+        let questionSegmentCount = questionSegments.length;
+        let updatedQuestion = "";
+        for (let i = 0; i < questionSegmentCount - 1; i++) {
+            updatedQuestion += questionSegments[i] + placeholderChars[i];
+        }
+        return updatedQuestion + questionSegments[questionSegmentCount - 1];
     }
 
     const updateAddQuestionButton = (correctAnswers: blankAnswer[]) => {
@@ -72,8 +80,22 @@ export const FillInTheBlankModal = ({
             if (correctAnswers[i].possibleChoices[0] === undefined) {
                 setIsAddQuestionDisabled(true);
                 break;
-            } else { setIsAddQuestionDisabled(false); }
+            }
+            else {
+                setIsAddQuestionDisabled(false);
+            }
         }
+    }
+
+    const handleQuestionChange = (question: string) => {
+        setQuestion(questionWithInOrderPlaceholderChars(question));
+        setQuestionSegments(transformQuestionIntoSegments(question));
+    }
+
+    const handleAnswerChoicesChange = (updatedChoices: string[], i: number) => {
+        let updatedCorrectAnswers = [...correctAnswers];
+        updatedCorrectAnswers[i].possibleChoices = updatedChoices;
+        setCorrectAnswers(updatedCorrectAnswers);
     }
 
     const handleExactMatchCheckboxChange = (i: number) => {
@@ -90,32 +112,23 @@ export const FillInTheBlankModal = ({
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
-    const resetValues = () => {
-        setQuestionSegments([]);
-        setCorrectAnswers([]);
-        setBlankAnswerPlaceholderIndex(0);
-        setIsAddQuestionDisabled(true);
-    };
-
     const onInsertBlankClick = () => {
-        if (blankAnswerPlaceholderIndex < blankAnswerPlaceholderChars.length) {
+        if (placeholderCharCount < placeholderChars.length) {
             if (modalInput.current) {
                 // Insert placeholder characters for question input at cursor position.
                 let cursorPosition = modalInput.current.selectionStart;
                 if ((cursorPosition !== null)) {
                     let textBeforeCursorPosition = modalInput.current.value.substring(0, cursorPosition);
                     let textAfterCursorPosition = modalInput.current.value.substring(cursorPosition, modalInput.current.value.length);
-                    modalInput.current.value = textBeforeCursorPosition + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex] + textAfterCursorPosition;
+                    modalInput.current.value = textBeforeCursorPosition + placeholderChars[placeholderCharCount] + textAfterCursorPosition;
                     console.log("Current question input: ", modalInput.current.value);
-                    setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
-                    setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
+
+                    handleQuestionChange(modalInput.current.value);
+                    setCursorPosition(cursorPosition + 1); // Set cursorPosition to just after the inserted character.
                     addNewBlankAnswer();
-                    setCursorPosition(cursorPosition + 1); // Sets the cursorPosition to just after the inserted character.
+                    setPlaceholderCharCount(placeholderCharCount + 1);
                 }
             }
-        }
-        else {
-            // TODO:  user tries to insert more than 4 blanks - Will disable and style the button differently
         }
     };
 
@@ -136,19 +149,20 @@ export const FillInTheBlankModal = ({
                                     }}
                                     variant="contained"
                                     color="primary"
-                                    disabled={blankAnswerPlaceholderIndex > blankAnswerPlaceholderChars.length - 1}
+                                    disabled={placeholderCharCount > placeholderChars.length - 1}
                                 >
                                     + Insert Blank
                                 </Button>
                                 <div>
                                     <input
+                                        id="question-input"
                                         type="text"
                                         className="modal-input"
                                         ref={modalInput}
+                                        value={question}
                                         onChange={(e) => {
-                                            setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                            handleQuestionChange(e.target.value);
                                             setCursorPosition(e.target.selectionStart);
-                                            // TODO: Need to deal with deleting blanks
                                         }}
                                     />
                                 </div>
@@ -163,7 +177,7 @@ export const FillInTheBlankModal = ({
                                 </Tooltip>
                                 {correctAnswers.map((correctAnswer, i) => (
                                     <Box key={i} sx={{ display: 'inline' }}>
-                                        {blankAnswerPlaceholderChars[i]}
+                                        {placeholderChars[i]}
                                         <MuiChipsInput
                                             value={correctAnswer.possibleChoices}
                                             onChange={(e) => handleAnswerChoicesChange(e, i)}
