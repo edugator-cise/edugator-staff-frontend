@@ -95,7 +95,7 @@
 .fitb-modal-answer-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 2px;
   align-items: center;
   width: 100%;
 }
@@ -104,11 +104,6 @@
   display: grid;
   grid-column-start: 3;
   text-align: center;
-}
-
-.fitb-modal-info-tooltip {
-  grid-column-start: 4;
-  text-align: left;
 }
 
 .fitb-modal-answer-field {

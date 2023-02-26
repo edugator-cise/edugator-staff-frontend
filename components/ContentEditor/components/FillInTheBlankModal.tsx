@@ -178,14 +178,12 @@ export const FillInTheBlankModal = ({
                                 <div className="fitb-modal-answer">
                                     <label htmlFor="answers">Answers</label>
                                 </div>
-                                <div className="fitb-modal-info-tooltip">
-                                    <Tooltip
-                                        title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
-                                        arrow
-                                    >
-                                        <Info size={32} />
-                                    </Tooltip>
-                                </div>
+                                <Tooltip
+                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
+                                    arrow
+                                >
+                                    <Info size={22} />
+                                </Tooltip>
                             </div>
                             {correctAnswers.map((correctAnswer, i) => (
                                 <Box className="fitb-modal-answer-field" key={i}>
