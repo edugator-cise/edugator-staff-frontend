@@ -9,7 +9,7 @@ import {
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FillInTheBlankModal } from "./components/FillInTheBlankOption";
+import { FillInTheBlankModal } from "./components/FillInTheBlankModal";
 import { MultipleChoiceModal } from "./components/MultipleChoiceModal";
 import draftToHtml from "draftjs-to-html";
 import {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
-import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 import theme from "constants/theme";
 import { ModalAnswer } from "./MultipleSelectModal";

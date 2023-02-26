@@ -12,7 +12,6 @@ import { Info } from "phosphor-react";
 import React, { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
 import Tooltip from '@mui/material/Tooltip';
-import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 
 export const FillInTheBlankModal = ({
