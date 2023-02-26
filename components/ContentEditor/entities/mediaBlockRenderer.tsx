@@ -78,7 +78,7 @@ const Media = ({
     const {
       questionSegments,
       correctAnswers
-    }: { src: string; question: string; answers: string[]; correct: number, questionSegments: string[], correctAnswers: blankAnswer[] } =
+    }: { questionSegments: string[], correctAnswers: blankAnswer[] } =
       Object(entity.getData());
     media = (
       <FillInTheBlankDisplayBlock
