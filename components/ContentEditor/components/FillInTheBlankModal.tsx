@@ -1,12 +1,17 @@
 import {
+    Box,
     Button,
+    Checkbox,
     Dialog,
     DialogActions,
     DialogTitle,
+    FormControlLabel,
+    FormGroup,
 } from "@mui/material";
 import { Info } from "phosphor-react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
+import Tooltip from '@mui/material/Tooltip';
 import "./ExerciseStyles.module.css";
 import { blankAnswer } from "./exportStructures";
 
@@ -24,16 +29,29 @@ export const FillInTheBlankModal = ({
     ) => void;
 }) => {
     const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
+    const exactMatchText = "Require exact match";
     // Unicode characters used to denote answer blanks when creating a FITB question.
     const blankAnswerPlaceholderChars = ['Ⓐ', 'Ⓑ', 'Ⓒ', 'Ⓓ']
 
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [blankAnswerPlaceholderIndex, setBlankAnswerPlaceholderIndex] = useState(0);
+    const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
+    const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
-    useEffect(() => console.log("Current state of correct answers: ", correctAnswers), [correctAnswers]);
+    const modalInput = useRef<HTMLInputElement | null>(null);
 
-    // Split string into string[] based on location of the placeholder characters.
+    useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
+    useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
+    useEffect(() => {
+        updateAddQuestionButton(correctAnswers);
+    }, [correctAnswers]);
+    useEffect(() => {
+        const input = modalInput.current;
+        if (input) input.setSelectionRange(cursorPosition, cursorPosition); // Sets the cursor position to the value of cursorPosition when input is no longer focused.
+    }, [modalInput, cursorPosition, questionSegments]);
+
+    // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
         if (!blankAnswerPlaceholderChars.length) return [question];
 
@@ -50,6 +68,21 @@ export const FillInTheBlankModal = ({
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
+    const updateAddQuestionButton = (correctAnswers: blankAnswer[]) => {
+        for (let i = 0; i < correctAnswers.length; i++) {
+            if (correctAnswers[i].possibleChoices[0] === undefined) {
+                setIsAddQuestionDisabled(true);
+                break;
+            } else { setIsAddQuestionDisabled(false); }
+        }
+    }
+
+    const handleExactMatchCheckboxChange = (i: number) => {
+        let updatedCorrectAnswers = [...correctAnswers];
+        updatedCorrectAnswers[i].shouldHaveExactMatch = !updatedCorrectAnswers[i].shouldHaveExactMatch;
+        setCorrectAnswers(updatedCorrectAnswers);
+    }
+
     // Add a new blankAnswer object to correctAnswers[]
     const addNewBlankAnswer = () => {
         let updatedCorrectAnswers = [...correctAnswers];
@@ -62,19 +95,24 @@ export const FillInTheBlankModal = ({
         setQuestionSegments([]);
         setCorrectAnswers([]);
         setBlankAnswerPlaceholderIndex(0);
+        setIsAddQuestionDisabled(true);
     };
-
-    const modalInput = useRef<HTMLInputElement | null>(null);
 
     const onInsertBlankClick = () => {
         if (blankAnswerPlaceholderIndex < blankAnswerPlaceholderChars.length) {
             if (modalInput.current) {
-                // append the special character for question input view
-                modalInput.current.value = modalInput.current.value + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex];
-                console.log("Question Input View: ", modalInput.current.value);
-                setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
-                setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
-                addNewBlankAnswer();
+                // Insert placeholder characters for question input at cursor position.
+                let cursorPosition = modalInput.current.selectionStart;
+                if ((cursorPosition !== null)) {
+                    let textBeforeCursorPosition = modalInput.current.value.substring(0, cursorPosition);
+                    let textAfterCursorPosition = modalInput.current.value.substring(cursorPosition, modalInput.current.value.length);
+                    modalInput.current.value = textBeforeCursorPosition + blankAnswerPlaceholderChars[blankAnswerPlaceholderIndex] + textAfterCursorPosition;
+                    console.log("Current question input: ", modalInput.current.value);
+                    setQuestionSegments(transformQuestionIntoSegments(modalInput.current.value));
+                    setBlankAnswerPlaceholderIndex(blankAnswerPlaceholderIndex + 1);
+                    addNewBlankAnswer();
+                    setCursorPosition(cursorPosition + 1); // Sets the cursorPosition to just after the inserted character.
+                }
             }
         }
         else {
@@ -93,42 +131,61 @@ export const FillInTheBlankModal = ({
                         <div className="modal-body">
                             <div className="modal-question">
                                 <label htmlFor="question">Question</label>
-                                <input
-                                    type="text"
-                                    className="modal-input"
-                                    ref={modalInput}
-                                    onChange={(e) => {
-                                        setQuestionSegments(transformQuestionIntoSegments(e.target.value));
-                                        // TODO: Need to deal with deleting blanks
-                                        console.log("Current question segments: ", transformQuestionIntoSegments(e.target.value));
-                                    }}
-                                />
-                            </div>
-                            <div>
                                 <Button
                                     onClick={() => {
                                         onInsertBlankClick();
                                     }}
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={blankAnswerPlaceholderIndex > blankAnswerPlaceholderChars.length - 1}
                                 >
-                                    Insert Blank
+                                    + Insert Blank
                                 </Button>
+                                <div>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        ref={modalInput}
+                                        onChange={(e) => {
+                                            setQuestionSegments(transformQuestionIntoSegments(e.target.value));
+                                            setCursorPosition(e.target.selectionStart);
+                                            // TODO: Need to deal with deleting blanks
+                                        }}
+                                    />
+                                </div>
                             </div>
                             <div className="modal-answers">
-                                <MuiChipsInput value={chips} onChange={handleChips1Change} />
                                 <label htmlFor="answers">Answers</label>
-                                <CustomWidthTooltip title={toolTipMessage} arrow>
+                                <Tooltip
+                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
+                                    arrow
+                                >
                                     <Info size={32} />
-                                </CustomWidthTooltip>
+                                </Tooltip>
                                 {correctAnswers.map((correctAnswer, i) => (
-                                    <div key={i}>
-                                        <MuiChipsInput value={correctAnswer.possibleChoices} onChange={(e) => handleAnswerChoicesChange(e, i)} />
-                                    </div>
+                                    <Box key={i} sx={{ display: 'inline' }}>
+                                        {blankAnswerPlaceholderChars[i]}
+                                        <MuiChipsInput
+                                            value={correctAnswer.possibleChoices}
+                                            onChange={(e) => handleAnswerChoicesChange(e, i)}
+                                        />
+                                        <FormGroup>
+                                            <FormControlLabel control={
+                                                <Checkbox
+                                                    checked={correctAnswer.shouldHaveExactMatch}
+                                                    onChange={() => handleExactMatchCheckboxChange(i)}
+                                                />
+                                            }
+                                                label={exactMatchText}
+                                            />
+                                        </FormGroup>
+                                    </Box>
                                 ))}
-                            </div >
-                        </div >
-                    </div >
-                </div >
-            </DialogTitle >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </DialogTitle>
             <DialogActions>
                 <Button
                     onClick={() => {
@@ -147,11 +204,12 @@ export const FillInTheBlankModal = ({
                     }}
                     variant="contained"
                     color="success"
+                    disabled={isAddQuestionDisabled}
                 >
                     Add Question
                 </Button>
             </DialogActions>
-        </Dialog >
+        </Dialog>
     );
 };
 
