@@ -30,10 +30,18 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="h-screen flex overflow-hidden bg-stone-100">
       {/* <VerticalNavigation light={true} codingPage={true} /> */}
       <SideNavigation />
+      <div className="w-px h-full bg-slate-800"></div>
       <div className="w-full h-full flex flex-col">
         {/* <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} /> */}
         <div className="flex w-full h-full">
-          <div className="w-64 min-w-[16rem] h-full bg-[#192231]"></div>
+          <div className="w-64 min-w-[16rem] h-full bg-[#192231] flex flex-col">
+            {/* Header */}
+            <div className="w-full h-20 flex items-center px-6">
+              <h1 className="text-white font-dm font-medium text-lg">
+                Exercises
+              </h1>
+            </div>
+          </div>
           <Sidenav isHidden={isHidden} />
           {children}
         </div>

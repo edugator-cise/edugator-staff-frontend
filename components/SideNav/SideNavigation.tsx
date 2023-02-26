@@ -11,7 +11,7 @@ import * as Switch from "@radix-ui/react-switch";
 import { icons } from "./navIcons";
 
 const Divider = () => {
-  return <div className="w-full h-px bg-slate-300 dark:bg-slate-600"></div>;
+  return <div className="w-full h-px bg-slate-600"></div>;
 };
 
 const ClassSelect = ({ open }: { open: boolean }) => {
@@ -148,8 +148,8 @@ const SideNavigation = () => {
   console.log(pathname);
   return (
     <nav
-      className={`transition-all font-dm overflow-hidden h-full bg-[#111825] flex flex-col items-center justify-start border-r border-r-slate-700 ${
-        open ? "min-w-[18rem] w-[18rem]" : "w-[4.5rem] min-w-[4.5rem]"
+      className={`transition-all shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-[#111825] flex flex-col items-center justify-start ${
+        open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
       }`}
     >
       {/* Top Group */}
@@ -181,10 +181,28 @@ const SideNavigation = () => {
         </h1>
       </div>
       {/* Main Sidebar Content */}
-      <div className="h-full flex flex-col items-center justify-between py-4 w-full px-3">
+      <div className="h-full flex flex-col items-center justify-between py-4 w-full px-4">
         <section className="w-full flex flex-col space-y-4">
-          {/* Courses */}
-          <div className="flex flex-col space-y-4">
+          {/* Button Group */}
+          <div className="flex flex-col space-y-2">
+            {navLinks.map((link, i) => (
+              <NavLink
+                key={i}
+                open={open}
+                icon={link.icon}
+                text={link.text}
+                active={activeLink === link.text}
+                setActiveLink={setActiveLink}
+              />
+            ))}
+          </div>
+          <Divider />
+          {/* Class Group */}
+          <div
+            className={`flex flex-col space-y-3 transition-all rounded-md ${
+              open ? "p-2 bg-[#0c121c] ring-2 " : "p-0"
+            }`}
+          >
             {classes.map((item, index) => (
               <button
                 key={index}
@@ -192,17 +210,14 @@ const SideNavigation = () => {
                   setActiveClass(index);
                   setOpen(false);
                 }}
-                className={`w-full flex overflow-hidden border-2 transition-all rounded-md ${
-                  open ? "p-2" : "p-1"
-                }
-              ${
-                activeClass === index
-                  ? "bg-slate-500/20 border-slate-500"
-                  : "bg-slate-500/10 border-transparent hover:bg-slate-500/20"
-              }`}
+                className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
+                  activeClass === index && !open ? "ring-2 " : ""
+                } ${activeClass === index && open ? "bg-blue-500/10" : ""} ${
+                  open ? "rounded-sm" : "rounded-md"
+                }`}
               >
                 {/* Class Icon */}
-                <div className="!max-h-[48px] !max-w-[48px] !min-h-[36px] !min-w-[36px] w-full h-full">
+                <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
                   <AspectRatio.Root
                     ratio={1 / 1}
                     asChild
@@ -218,50 +233,34 @@ const SideNavigation = () => {
                   }`}
                 >
                   <h1
-                    className={`font-bold text-white overflow-hidden text-ellipsis`}
+                    className={`font-bold text-white overflow-hidden text-ellipsis text-sm`}
                   >
                     {item.name}
                   </h1>
                   <p
-                    className={`text-white text-sm overflow-hidden text-ellipsis`}
+                    className={`text-white/70 text-xs overflow-hidden text-ellipsis`}
                   >
                     {item.course}
                   </p>
                 </section>
               </button>
             ))}
-            {/* Add New Course Button (Radix) */}
-            <button
-              className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start pr-[14px] group space-x-4 text-nav-inactive-light `}
+            <div
+              className={`w-full rounded-sm relative transition overflow-hidden cursor-pointer px-1 flex items-center group justify-start h-10`}
             >
-              <div className="h-12 w-12 min-w-[3rem] bg-slate-50/5 rounded-full flex items-center justify-center">
-                <div className="w-4 h-4 min-w-[1rem] ">
+              <div
+                className={`h-10 w-10 min-w-[2.5rem] rounded-full transition-all items-center justify-center flex ${
+                  open ? "bg-white/5" : "group-hover:bg-white/5"
+                }`}
+              >
+                <div className="w-3 h-3 min-w-[.75rem]">
                   {icons.plusThin(false)}
                 </div>
               </div>
-              <div
-                className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
-                  open ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                Add new course
-              </div>
-            </button>
-          </div>
-          {/* Divider */}
-          <Divider />
-          {/* Button Group */}
-          <div className="flex flex-col space-y-2">
-            {navLinks.map((link, i) => (
-              <NavLink
-                key={i}
-                open={open}
-                icon={link.icon}
-                text={link.text}
-                active={activeLink === link.text}
-                setActiveLink={setActiveLink}
-              />
-            ))}
+              <p className="text-white/70 text-xs ml-3 whitespace-nowrap group-hover:text-white transition">
+                Add Class
+              </p>
+            </div>
           </div>
         </section>
         {/* Bottom Group */}
@@ -371,7 +370,7 @@ const NavLink = ({
       onClick={() => setActiveLink(text)}
       className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
         active
-          ? "bg-emerald-500/10 border-emerald-500/40 border text-white font-medium"
+          ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white font-medium"
           : "text-nav-inactive-light hover:bg-emerald-500/5"
       }`}
     >
