@@ -90,6 +90,7 @@ export const FillInTheBlankModal = ({
     const handleQuestionChange = (question: string) => {
         setQuestion(questionWithInOrderPlaceholderChars(question));
         setQuestionSegments(transformQuestionIntoSegments(question));
+        setPlaceholderCharCount(transformQuestionIntoSegments(question).length - 1);
         updateBlankAnswers(question);
     }
 
@@ -132,7 +133,6 @@ export const FillInTheBlankModal = ({
 
                     handleQuestionChange(modalInput.current.value);
                     setCursorPosition(cursorPosition + 1); // Set cursorPosition to just after the inserted character.
-                    setPlaceholderCharCount(placeholderCharCount + 1);
                 }
             }
         }
