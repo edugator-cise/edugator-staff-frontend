@@ -46,14 +46,14 @@ const BlankAnswerTextField = styled(TextField)((props: any) => ({
   "& .MuiFilledInput-root.Mui-focused": {
     backgroundColor: theme.palette.primary.light,
   },
-  paddingBottom: props.answered ? 0 : 24,
+  marginBottom: props.answered ? 0 : 24,
 }));
 
 const CorrectAnswerTextField = styled(TextField)({
   '& .MuiInputBase-root.Mui-disabled': {
     backgroundColor: 'LightGreen'
   },
-  paddingBottom: 24
+  marginBottom: 24
 });
 
 //displayed component when multiple choice is added
