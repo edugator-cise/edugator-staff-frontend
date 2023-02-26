@@ -23,6 +23,7 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
         public: ["Public Sans", "sans-serif"],
         dm: ["DM Sans", "sans-serif"],
+        ambit: ["Ambit", "sans-serif"],
       },
       colors: {
         nav: {
@@ -30,8 +31,8 @@ module.exports = {
           "active-dark": "#6e737d",
           "inactive-light": "#B7BCBD",
           "inactive-dark": "#434A55",
-          "active-light-color": "#ede9fe",
-          "active-dark-color": "#a78bfa",
+          "active-light-color": "#d1fae5",
+          "active-dark-color": "#10b981",
         },
       },
       keyframes: {

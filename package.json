@@ -17,6 +17,7 @@
     "@radix-ui/react-dropdown-menu": "^2.0.3",
     "@radix-ui/react-icons": "^1.2.0",
     "@radix-ui/react-popover": "^1.0.4",
+    "@radix-ui/react-switch": "^1.0.1",
     "@reduxjs/toolkit": "^1.7.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^7.1.2",
