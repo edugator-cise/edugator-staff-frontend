@@ -19,28 +19,6 @@
   width: 100%;
 }
 
-.fitb-modal-grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  width: 100%;
-}
-
-.fitb-modal-title {
-  grid-column-start: 2;
-  text-align: center;
-}
-
-.fitb-modal-insert-blank {
-  grid-column-start: 3;
-  text-align: right;
-}
-
-.fitb-modal-info-tooltip {
-  grid-column-start: 3;
-  text-align: left;
-}
-
 .modal-ms-answers {
   width: 100% !important;
 }
@@ -94,4 +72,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.fitb-modal-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  width: 100%;
+}
+
+.fitb-modal-title {
+  grid-column-start: 2;
+  text-align: center;
+}
+
+.fitb-modal-insert-blank {
+  grid-column-start: 3;
+  text-align: right;
+}
+
+.fitb-modal-info-tooltip {
+  grid-column-start: 3;
+  text-align: left;
+}
+
+.fitb-modal-answer {
+  display: inline-flex;
+  align-items: center;
 }

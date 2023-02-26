@@ -188,7 +188,7 @@ export const FillInTheBlankModal = ({
                                 </div>
                             </div>
                             {correctAnswers.map((correctAnswer, i) => (
-                                <Box key={i} sx={{ display: 'inline' }}>
+                                <Box className="fitb-modal-answer" key={i}>
                                     {placeholderChars[i]}
                                     <MuiChipsInput
                                         value={correctAnswer.possibleChoices}
