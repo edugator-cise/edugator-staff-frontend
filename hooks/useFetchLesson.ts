@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import { FetchStatus } from "./types";
 import {
+  FillInTheBlankEntity,
   ILesson,
   ImageEntity,
   LessonDisplay,
@@ -98,6 +99,18 @@ const transformLesson = (lesson: ILesson) => {
           data: {
             question: entity.data.question,
             answers: entity.data.answers,
+          },
+        });
+      }
+      entityIterator++;
+    } else if (block.type === "fill_in_the_blank") {
+      const entity = lesson.entityMap[entityIterator];
+      if (isEntityOfType<FillInTheBlankEntity>(entity, "fill_in_the_blank")) {
+        displayLesson.content.push({
+          type: "fill_in_the_blank",
+          data: {
+            questionSegments: entity.data.questionSegments,
+            correctAnswers: entity.data.correctAnswers,
           },
         });
       }
