@@ -42,6 +42,32 @@
     }
     
   }
+
+  .AccordionContent[data-state='open'] {
+    animation: slideDown 300ms ease-out;
+  }
+  .AccordionContent[data-state='closed'] {
+    animation: slideUp 300ms ease-out;
+  }
+  
+  @keyframes slideDown {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
   
   .PopoverContent[data-state='open'] {
       transform-origin: left top;
@@ -62,6 +88,7 @@
     transform-origin: left;
     animation: fadeOut 150ms ease-in;
   }
+
 
  /*  .PopoverContent {
     animation: scaleIn 150mss ease-out;

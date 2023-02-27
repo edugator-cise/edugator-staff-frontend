@@ -198,7 +198,7 @@ const SideNavigation = () => {
                     setOpen(false);
                   }}
                   className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
-                    activeClass === index && !open ? "ring-2 " : ""
+                    activeClass === index && !open ? "ring-2 ring-blue-500" : ""
                   } ${activeClass === index && open ? "bg-blue-500/10" : ""} ${
                     open ? "rounded-sm" : "rounded-md"
                   }`}
@@ -271,7 +271,7 @@ const SideNavigation = () => {
         <div className="w-full space-y-4">
           <div className="flex flex-col space-y-2">
             {/* Theme Toggle */}
-            <NavLinkTooltip text="Dark Mode" disabled={open}>
+            <NavLinkTooltip text="Toggle Theme" disabled={open}>
               <button
                 className={`w-full h-12 rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
                 onClick={() => setDarkMode(!darkMode)}
