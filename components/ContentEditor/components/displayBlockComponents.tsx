@@ -315,10 +315,10 @@ export function FillInTheBlankDisplayBlock({
             </Typography>
             {!number || results[i] // If number does not exist, we are in admin view. Otherwise in student view.
               ? <Tooltip
-                // TODO: Figure out why the div in title causes tooltip to never hide.
                 hidden={shouldShowAnswerTooltip(correctAnswer)}
-                title={
-                  <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                title={getNonFirstAnswerPossibilities(correctAnswer) === ''
+                  ? ''
+                  : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
                     {/* TODO: Show student's correct answer instead? And then the tooltip would list whatever choices they didn't enter. */}
                     {getNonFirstAnswerPossibilities(correctAnswer)}
                   </div>
