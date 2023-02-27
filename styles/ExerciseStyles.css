@@ -118,7 +118,9 @@
 }
 
 .fitb-modal-answer-field {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 20px;
   align-items: center;
   width: 100%;
   margin-bottom: 5px;
@@ -126,15 +128,6 @@
 
 .fitb-modal-answer-placeholder {
   font-size: 28px;
-}
-
-.fitb-modal-answer-chips-input {
-  margin-left: 20px;
-  width: 50%;
-}
-
-.fitb-modal-answer-exact-match-group {
-  margin-left: 5px;
 }
 
 .fitb-modal-answer-exact-match-label {

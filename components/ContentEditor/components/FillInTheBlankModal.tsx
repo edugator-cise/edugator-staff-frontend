@@ -197,11 +197,10 @@ export const FillInTheBlankModal = ({
                                     {placeholderChars[i]}
                                 </div>
                                 <MuiChipsInput
-                                    className="fitb-modal-answer-chips-input"
                                     value={correctAnswer.possibleChoices}
                                     onChange={(e) => handleAnswerChoicesChange(e, i)}
                                 />
-                                <FormGroup className="fitb-modal-answer-exact-match-group">
+                                <FormGroup>
                                     <FormControlLabel
                                         className="fitb-modal-answer-exact-match-label"
                                         control={
