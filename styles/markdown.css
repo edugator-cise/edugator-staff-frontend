@@ -36,11 +36,11 @@
 }
 
 .markdown pre {
-    @apply bg-emerald-500/10 border border-emerald-300 p-3 rounded-md;
+    @apply bg-emerald-500/10 border border-emerald-300 p-3 rounded-md hover:bg-emerald-500/20 transition-colors;
 }
 
 .markdown pre code {
-    @apply bg-transparent border-none p-0;
+    @apply bg-transparent border-none p-0 hover:bg-transparent;
 }
 
 .markdown blockquote {
