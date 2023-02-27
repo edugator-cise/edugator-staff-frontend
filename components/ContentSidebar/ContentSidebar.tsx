@@ -47,7 +47,7 @@ const ContentSidebar = () => {
   const activeId = lessonId || problemId || "";
 
   return (
-    <ScrollArea.Root className="overflow-hidden w-64 min-w-[16rem] h-full bg-nav-dark flex flex-col">
+    <ScrollArea.Root className="overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col">
       <ScrollArea.Viewport className="w-full h-full">
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6">
@@ -108,75 +108,129 @@ const ContentSidebar = () => {
 
                 const allContent =
                   itemCount === 0 ? [] : [...value.problems, ...value.lessons];
-                console.log(allContent);
-                const firstItem = allContent[0]?._id || "";
-                const lastItem = allContent[allContent.length - 1]?._id || "";
+
+                const isActiveModule = allContent.some(
+                  (item) => item._id === activeId
+                );
 
                 return (
-                  <Accordion.Item value={value.name} key={primaryIndex}>
-                    <Accordion.Trigger className="px-4 group py-3 border-b border-slate-700 w-full flex items-center justify-between">
-                      <p className="font-medium text-left text-sm text-white">{`${
-                        primaryIndex + 1
-                      }. ${value.name}`}</p>
+                  <Accordion.Item
+                    value={value.name}
+                    key={primaryIndex}
+                    className="border-t border-slate-700 last:border-b group"
+                  >
+                    <Accordion.Trigger className="pl-[0.875rem] overflow-hidden relative pr-4 group py-3 w-full flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div className="absolute left-7 top-[50%] group-data-[state=open]:scale-y-100 scale-y-0 transition-transform duration-500 origin-bottom">
+                          {itemCount > 0 ? (
+                            <svg
+                              width="4"
+                              height="80"
+                              viewBox="0 0 4 126"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M2.07101 123.593C2.07101 112.398 2.07101 37.9439 2.07101 2.11621"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                className="stroke-slate-700"
+                              />
+                            </svg>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                        <div
+                          className={`w-4 h-4 border-2 z-10 border-slate-600 group-data-[state=open]:border-white transition-colors duration-500 bg-nav-dark rounded-full ${
+                            isActiveModule ? "!border-emerald-500" : ""
+                          }`}
+                        ></div>
+                        <p className="font-medium text-left text-sm text-white">{`${
+                          primaryIndex + 1
+                        }. ${value.name}`}</p>
+                      </div>
                       <ChevronDownIcon
                         className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
                         aria-hidden
                       />
                     </Accordion.Trigger>
                     <AccordionContent>
-                      <div className="flex flex-col bg-slate-800">
-                        {allContent.map(
-                          (
-                            item: IProblemItem | ILessonItem,
-                            secondaryIndex: number
-                          ) => {
-                            const id = item._id;
-                            //check type of item
-                            const type =
-                              "problemName" in item ? "problem" : "lesson";
-                            const name =
-                              "problemName" in item
-                                ? item.problemName
-                                : item.lessonName;
-                            const urlPath =
-                              type === "problem" ? "code" : "learn";
+                      <div className="flex flex-col">
+                        {itemCount === 0 ? (
+                          <div
+                            className={`relative flex px-8 items-center cursor-pointer justify-center `}
+                          >
+                            <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                              No Content here :&#40;
+                            </p>
+                          </div>
+                        ) : (
+                          allContent.map(
+                            (
+                              item: IProblemItem | ILessonItem,
+                              secondaryIndex: number
+                            ) => {
+                              const id = item._id;
+                              //check type of item
+                              const type =
+                                "problemName" in item ? "problem" : "lesson";
+                              const name =
+                                "problemName" in item
+                                  ? item.problemName
+                                  : item.lessonName;
+                              const urlPath =
+                                type === "problem" ? "code" : "learn";
 
-                            return (
-                              <Link
-                                href={`/${urlPath}/${item._id}`}
-                                key={item._id}
-                              >
-                                <div
-                                  key={`${primaryIndex}-${secondaryIndex}`}
-                                  className={`flex pr-4 pl-8 border-b border-b-slate-700 items-center cursor-pointer justify-start `}
-                                >
-                                  <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative">
+                              return (
+                                <Link href={`/${urlPath}/${id}`} key={id}>
+                                  <div
+                                    key={`${primaryIndex}-${secondaryIndex}`}
+                                    className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start `}
+                                  >
+                                    <div className="absolute left-7 bottom-[40%]">
+                                      <svg
+                                        width="12"
+                                        height="80"
+                                        viewBox="0 0 18 140"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M16.2483 137.717C9.42002 137.717 1.95697 134.62 1.95697 123.426C1.95697 112.231 1.95697 37.7769 1.95697 1.94922"
+                                          stroke-width="3"
+                                          stroke-linecap="round"
+                                          className="stroke-slate-700"
+                                        />
+                                      </svg>
+                                    </div>
                                     <div
-                                      className={`absolute w-[6px] h-[6px] rounded-full top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ${
+                                      className={`absolute w-[6px] h-[6px] rounded-full top-1/2 -translate-y-1/2 right-5 ${
                                         id === activeId
                                           ? "bg-emerald-500"
                                           : "bg-slate-600"
                                       }`}
                                     ></div>
+                                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                                    <p
+                                      style={{
+                                        //clamp lines to 3
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 3,
+                                        WebkitBoxOrient: "vertical",
+                                        overflow: "hidden",
+                                      }}
+                                      className="text-white text-sm py-3 w-full line"
+                                    >
+                                      {`${primaryIndex + 1}.${
+                                        secondaryIndex + 1
+                                      } ${name}`}
+                                    </p>
                                   </div>
-                                  <p
-                                    style={{
-                                      //clamp lines to 3
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 3,
-                                      WebkitBoxOrient: "vertical",
-                                      overflow: "hidden",
-                                    }}
-                                    className="text-white text-sm py-3 w-full line"
-                                  >
-                                    {`${primaryIndex + 1}.${
-                                      secondaryIndex + 1
-                                    } ${name}`}
-                                  </p>
-                                </div>
-                              </Link>
-                            );
-                          }
+                                </Link>
+                              );
+                            }
+                          )
                         )}
                       </div>
                     </AccordionContent>
