@@ -276,11 +276,11 @@ export function FillInTheBlankDisplayBlock({
           updatedResults[i] = false;
         }
       }
+    }
 
-      setResults(updatedResults);
-      if (updatedResults.every(result => result === true)) {
-        setCorrect(true);
-      }
+    setResults(updatedResults);
+    if (updatedResults.every(result => result === true)) {
+      setCorrect(true);
     }
   }
 
