@@ -327,7 +327,7 @@ export function FillInTheBlankDisplayBlock({
               >
                 <CorrectAnswerTextField
                   hiddenLabel //TODO: might want to change the size of correct answer text field
-                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.25rem', padding: '4px 0px', } }}
+                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '4px 0px', } }}
                   sx={{ "& fieldset": { border: 'none', display: 'inline' } }}
                   value={correctAnswer.possibleChoices[0]}
                   variant="outlined"
