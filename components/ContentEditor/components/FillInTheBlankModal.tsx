@@ -201,8 +201,9 @@ export const FillInTheBlankModal = ({
                                     value={correctAnswer.possibleChoices}
                                     onChange={(e) => handleAnswerChoicesChange(e, i)}
                                 />
-                                <FormGroup>
+                                <FormGroup className="fitb-modal-answer-exact-match-group">
                                     <FormControlLabel
+                                        className="fitb-modal-answer-exact-match-label"
                                         control={
                                             <Checkbox
                                                 checked={correctAnswer.shouldHaveExactMatch}

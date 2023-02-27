@@ -121,6 +121,7 @@
   display: inline-flex;
   align-items: center;
   width: 100%;
+  margin-bottom: 5px;
 }
 
 .fitb-modal-answer-placeholder {
@@ -128,6 +129,14 @@
 }
 
 .fitb-modal-answer-chips-input {
-  margin: 5px 20px;
-  width: 60%;
+  margin-left: 20px;
+  width: 50%;
+}
+
+.fitb-modal-answer-exact-match-group {
+  margin-left: 5px;
+}
+
+.fitb-modal-answer-exact-match-label {
+  margin: 0px;
 }
