@@ -47,6 +47,7 @@ const BlankAnswerTextField = styled(TextField)((props: any) => ({
     backgroundColor: theme.palette.primary.light,
   },
   marginBottom: props.answered ? 0 : 24,
+  width: 190
 }));
 
 const CorrectAnswerTextField = styled(TextField)({
@@ -60,7 +61,8 @@ const CorrectAnswerTextField = styled(TextField)({
   "& .MuiInputBase-input.Mui-disabled": {
     WebkitTextFillColor: "#000000",
   },
-  marginBottom: 24
+  marginBottom: 24,
+  width: 190
 });
 
 const QuestionSegments = styled(Typography)({
@@ -338,7 +340,6 @@ export function FillInTheBlankDisplayBlock({
                   value={correctAnswer.possibleChoices[0]}
                   variant="outlined"
                   size="small"
-                  style={{ width: 190 }}
                   disabled
                 />
               </Tooltip>
@@ -351,7 +352,6 @@ export function FillInTheBlankDisplayBlock({
                 value={answerInputs[i]}
                 variant="filled"
                 size="small"
-                style={{ width: 190 }}
                 helperText={answered ? "Incorrect answer." : ""}
                 error={answered}
                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
