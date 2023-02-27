@@ -39,6 +39,7 @@ const AnswerHolder = styled("div")({
 const BlankAnswerTextField = styled(TextField)((props: any) => ({
   "& .MuiFilledInput-root": {
     backgroundColor: theme.palette.primary.light,
+    padding: '0px 12px',
   },
   "& .MuiFilledInput-root:hover": { // TODO: Figure out how to stop input from going back to its default color on hover/focus - might leave it
     backgroundColor: theme.palette.primary.light,
@@ -336,7 +337,7 @@ export function FillInTheBlankDisplayBlock({
               >
                 <CorrectAnswerTextField
                   hiddenLabel //TODO: might want to change the size of correct answer text field
-                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '4px 0px', } }}
+                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '3px 0px', } }}
                   value={correctAnswer.possibleChoices[0]}
                   variant="outlined"
                   size="small"
