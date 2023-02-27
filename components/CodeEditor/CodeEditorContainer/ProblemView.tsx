@@ -1,41 +1,30 @@
 import React from "react";
 import { Markdown } from "components/shared/Markdown";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { Typography, Grow } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 interface Props {
   problemTitle: string;
   problemStatement: string;
 }
 
-const ProblemDescriptionPaper = styled("div")(
-  ({ theme }) => `
-  padding: ${theme.spacing(4)};
-  text-align: left;
-  overflow-y: auto;
-  height: calc(100vh - 145px);
-  background-color: white;
-  margin: ${theme.spacing(1)};
-  border-radius: 4px;
-  min-width: 200px;
-`
-);
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
-    <Grow in appear timeout={500}>
-      <ProblemDescriptionPaper
-        id="problem-description"
-        sx={{
-          "& pre": {
-            whiteSpace: "pre-wrap",
-          },
-        }}
-      >
-        <Typography variant="h4" sx={{ textAlign: "left" }}>
+    <ScrollArea.Root className="bg-slate-50 px-8 h-full">
+      <ScrollArea.Viewport className="w-full h-full">
+        <h1 className="text-4xl font-ambit font-semibold text-slate-900 mb-4 mt-12">
           {problemTitle}
-        </Typography>
+        </h1>
         <Markdown markdownString={problemStatement} />
-      </ProblemDescriptionPaper>
-    </Grow>
+        <div className="h-12"></div>
+        <ScrollArea.Scrollbar
+          className="flex select-none touch-none p-0.5 group bg-neutral-200 transition duration-[160ms] ease-out hover:bg-neutral-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+          orientation="vertical"
+        >
+          <ScrollArea.Thumb className="flex-1 bg-neutral-300 group-hover:bg-netral-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+        </ScrollArea.Scrollbar>
+        <ScrollArea.Corner className="bg-white/20" />
+      </ScrollArea.Viewport>
+    </ScrollArea.Root>
   );
 };

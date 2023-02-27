@@ -62,6 +62,8 @@ export default function CodeEditor() {
     isAdmin: LocalStorage.getToken() !== null,
   });
 
+  console.log("currentProblem: ", currentProblem);
+
   useEffect(() => {
     if (defaultStdin) {
       setStdin(defaultStdin);

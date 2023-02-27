@@ -16,6 +16,7 @@ import "styles/FormStyles.css";
 import "styles/globals.css";
 import "styles/fonts.css";
 import "styles/animations.css";
+import "styles/markdown.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 

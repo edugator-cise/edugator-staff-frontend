@@ -1,0 +1,52 @@
+.markdown {
+    @apply space-y-2
+}
+
+.markdown h1 {
+    @apply text-lg font-bold !mt-4;
+}
+
+.markdown h4 {
+    @apply text-lg font-bold !mt-4;
+}
+
+.markdown h2 {
+    @apply text-lg font-bold !mt-4;
+}
+
+.markdown h3 {
+    @apply text-lg font-bold !mt-4;
+}
+
+
+.markdown ul {
+    @apply list-disc p-3 bg-slate-100 border list-inside rounded-md space-y-3;
+}
+
+.markdown ul ul {
+    @apply bg-slate-200 rounded-sm border-slate-300 mt-2
+}
+
+.markdown li {
+    @apply list-outside ml-4 list-disc;
+}
+
+.markdown code {
+    @apply bg-slate-800/10 cursor-pointer hover:bg-slate-800/20 transition-colors border p-1 rounded-md;
+}
+
+.markdown pre {
+    @apply bg-emerald-500/10 border border-emerald-300 p-3 rounded-md;
+}
+
+.markdown pre code {
+    @apply bg-transparent border-none p-0;
+}
+
+.markdown blockquote {
+    @apply border-l-4 border-slate-800/10 leading-8 italic p-3 rounded-md;
+}
+
+.markdown blockquote > blockquote {
+    @apply border-none p-0;
+}
