@@ -44,7 +44,6 @@ const ContentCreatePage = () => {
 
   useEffect(() => {
     if (moduleId) {
-      console.log(moduleId);
       dispatch(updateModuleId(moduleId as string));
     }
     dispatch(updateModuleName(moduleName as string));

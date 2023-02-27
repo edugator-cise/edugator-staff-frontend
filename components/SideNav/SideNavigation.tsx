@@ -143,7 +143,6 @@ const SideNavigation = () => {
   const router = useRouter();
   const { pathname } = router;
 
-  console.log(pathname);
   return (
     <nav
       className={`transition-all shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-nav-darker 111727 flex flex-col items-center justify-start ${
@@ -160,8 +159,8 @@ const SideNavigation = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M16.8916 3.0121C16.7165 3.18782 16.6403 3.39508 16.6254 3.47932L16.4939 4.21874L0.998906 4.21875C0.50389 4.21875 0.1026 3.81746 0.1026 3.32245C0.1026 2.82743 0.50389 2.42614 0.998906 2.42614L15.1253 2.42613C15.511 1.69889 16.3145 0.91748 17.7135 0.91748C18.6386 0.91748 19.3256 1.27432 19.7865 1.76758C19.9832 1.9781 20.1315 2.20514 20.2413 2.42613L23.2063 2.42614C23.7013 2.42614 24.1026 2.82743 24.1026 3.32245C24.1026 3.81747 23.7013 4.21876 23.2063 4.21875L18.8555 4.21874L18.724 3.47932C18.7027 3.35968 18.6279 3.15332 18.4767 2.99148C18.3502 2.85614 18.1354 2.71009 17.7135 2.71009C17.2878 2.71009 17.0433 2.8598 16.8916 3.0121Z"
               fill="#5BBD53"
             />
@@ -183,7 +182,7 @@ const SideNavigation = () => {
           {/* Class Group */}
           <div
             className={`flex flex-col space-y-3 transition-all rounded-md ${
-              open ? "p-2 bg-[#0c121c] ring-2 " : "p-0"
+              open ? "p-2 bg-[#0c121c] ring-2 ring-[#060b14]" : "p-0"
             }`}
           >
             {classes.map((item, index) => (
@@ -192,7 +191,7 @@ const SideNavigation = () => {
                 disabled={open}
                 key={index}
               >
-                <button
+                <div
                   onClick={() => {
                     setActiveClass(index);
                     setOpen(false);
@@ -230,7 +229,7 @@ const SideNavigation = () => {
                       {item.course}
                     </p>
                   </section>
-                </button>
+                </div>
               </NavLinkTooltip>
             ))}
             <NavLinkTooltip disabled={open} text="Add Class">
@@ -272,7 +271,7 @@ const SideNavigation = () => {
           <div className="flex flex-col space-y-2">
             {/* Theme Toggle */}
             <NavLinkTooltip text="Toggle Theme" disabled={open}>
-              <button
+              <div
                 className={`w-full h-12 rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
                 onClick={() => setDarkMode(!darkMode)}
               >
@@ -314,12 +313,12 @@ const SideNavigation = () => {
                 >
                   <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                 </Switch.Root>
-              </button>
+              </div>
             </NavLinkTooltip>
           </div>
           {/* Settings */}
           <NavLinkTooltip text="Settings" disabled={open}>
-            <button
+            <div
               className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div className="w-5 h-5 min-w-[20px]">{icons.cog(false)}</div>
@@ -330,13 +329,13 @@ const SideNavigation = () => {
               >
                 Settings
               </div>
-            </button>
+            </div>
           </NavLinkTooltip>
           {/* Divider */}
           <Divider />
           {/* Collapse/Expand Button */}
           <NavLinkTooltip text={"Expand"} disabled={open}>
-            <button
+            <div
               onClick={() => setOpen(!open)}
               className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
@@ -354,7 +353,7 @@ const SideNavigation = () => {
               >
                 Collapse
               </div>
-            </button>
+            </div>
           </NavLinkTooltip>
         </div>
       </div>

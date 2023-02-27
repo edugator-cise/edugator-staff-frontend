@@ -19,7 +19,6 @@ function Image(props: { alt: string } & any) {
 }
 
 function Code(props: any) {
-  console.log(props);
   const triggerRef = useRef(null);
   const [copyText, setCopyText] = useState("Click to copy");
 
@@ -65,10 +64,12 @@ function Code(props: any) {
 }
 
 export const Markdown = ({ markdownString }: Props) => (
-  <ReactMarkdown
-    className="text-slate-900 font-dm markdown"
-    children={markdownString}
-    components={{ img: Image, code: Code }}
-    remarkPlugins={[remarkGfm]}
-  />
+  <div className="w-full">
+    <ReactMarkdown
+      className="text-slate-900 font-dm markdown !min-w-0"
+      children={markdownString}
+      components={{ img: Image, code: Code }}
+      remarkPlugins={[remarkGfm]}
+    />
+  </div>
 );

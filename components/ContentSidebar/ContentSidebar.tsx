@@ -1,5 +1,5 @@
 import useNavigation from "hooks/useNavigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { FetchStatus } from "hooks/types";
 import * as Accordion from "@radix-ui/react-accordion";
@@ -45,6 +45,10 @@ const ContentSidebar = () => {
   const { lessonId, problemId } = router.query;
 
   const activeId = lessonId || problemId || "";
+
+  var path = document.querySelector("path");
+  var length = path?.getTotalLength() || 0;
+  console.log("length", length);
 
   return (
     <ScrollArea.Root className="overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col">
@@ -132,8 +136,8 @@ const ContentSidebar = () => {
                             >
                               <path
                                 d="M2.07101 123.593C2.07101 112.398 2.07101 37.9439 2.07101 2.11621"
-                                stroke-width="3"
-                                stroke-linecap="round"
+                                strokeWidth="3"
+                                strokeLinecap="round"
                                 className="stroke-slate-700"
                               />
                             </svg>
@@ -198,9 +202,11 @@ const ContentSidebar = () => {
                                       >
                                         <path
                                           d="M16.2483 137.717C9.42002 137.717 1.95697 134.62 1.95697 123.426C1.95697 112.231 1.95697 37.7769 1.95697 1.94922"
-                                          stroke-width="3"
-                                          stroke-linecap="round"
-                                          className="stroke-slate-700"
+                                          strokeWidth="3"
+                                          strokeLinecap="round"
+                                          strokeDasharray="13"
+                                          strokeDashoffset="13"
+                                          className="stroke-slate-700 path"
                                         />
                                       </svg>
                                     </div>

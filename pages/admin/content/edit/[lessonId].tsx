@@ -30,8 +30,6 @@ const ContentEditorPage = () => {
   const params = router.query;
   const { moduleName, moduleId, lessonId } = params;
 
-  console.log(lessonId);
-
   const {
     status,
     lesson: currentLesson,

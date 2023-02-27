@@ -156,8 +156,6 @@ export default function LearnPage() {
     }
   }
 
-  console.log(currentLesson);
-
   return (
     <>
       {status === FetchStatus.loading ? (
