@@ -338,6 +338,7 @@ export function FillInTheBlankDisplayBlock({
                   value={correctAnswer.possibleChoices[0]}
                   variant="outlined"
                   size="small"
+                  style={{ width: 190 }}
                   disabled
                 />
               </Tooltip>
@@ -350,6 +351,7 @@ export function FillInTheBlankDisplayBlock({
                 value={answerInputs[i]}
                 variant="filled"
                 size="small"
+                style={{ width: 190 }}
                 helperText={answered ? "Incorrect answer." : ""}
                 error={answered}
                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
