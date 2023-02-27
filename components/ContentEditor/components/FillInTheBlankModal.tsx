@@ -186,7 +186,7 @@ export const FillInTheBlankModal = ({
                                     <label htmlFor="answers">Answers</label>
                                 </div>
                                 <Tooltip
-                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>{toolTipMessage}</div>}
+                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center', maxWidth: 150 }}>{toolTipMessage}</div>}
                                     arrow
                                 >
                                     <Info  color='#2196f3' size={22} />

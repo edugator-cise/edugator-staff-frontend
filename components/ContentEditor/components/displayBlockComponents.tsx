@@ -253,7 +253,10 @@ export function FillInTheBlankDisplayBlock({
 
   const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
-    return possibleChoices.slice(1, possibleChoices.length).join('\n');
+    if (possibleChoices.length > 1){
+      return possibleChoices.slice(1, possibleChoices.length).join('\n');
+    }
+    return possibleChoices;
   };
 
   const shouldShowAnswerTooltip = (correctAnswer: blankAnswer) => {
