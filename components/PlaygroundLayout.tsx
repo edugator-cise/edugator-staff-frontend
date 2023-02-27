@@ -36,6 +36,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
         {/* <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} /> */}
         <div className="flex w-full h-full">
           <ContentSidebar />
+          <div className="w-px h-full bg-slate-700"></div>
           {children}
         </div>
       </div>

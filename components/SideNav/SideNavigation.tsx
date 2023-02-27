@@ -74,7 +74,7 @@ const NavLinkTooltip = ({
         <Tooltip.Portal>
           <Tooltip.Content
             side="right"
-            className="TooltipContent data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-nav-darker border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
+            className="TooltipContent z-50 data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-nav-darker border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
             sideOffset={10}
           >
             {text}
