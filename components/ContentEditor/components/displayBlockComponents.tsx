@@ -51,7 +51,10 @@ const BlankAnswerTextField = styled(TextField)((props: any) => ({
 
 const CorrectAnswerTextField = styled(TextField)({
   '& .MuiInputBase-root.Mui-disabled': {
-    backgroundColor: 'LightGreen'
+    backgroundColor: 'LightGreen',
+  },
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#000000",
   },
   marginBottom: 24
 });
@@ -323,10 +326,11 @@ export function FillInTheBlankDisplayBlock({
                 arrow
               >
                 <CorrectAnswerTextField
-                  hiddenLabel
-                  inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                  hiddenLabel //TODO: might want to change the size of correct answer text field
+                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.25rem', padding: '4px 0px', } }}
+                  sx={{ "& fieldset": { border: 'none', display: 'inline' } }}
                   value={correctAnswer.possibleChoices[0]}
-                  variant="filled"
+                  variant="outlined"
                   size="small"
                   disabled
                 />
