@@ -354,18 +354,20 @@ export function FillInTheBlankDisplayBlock({
           {questionSegments[questionSegments.length - 1]}
         </Typography>
       </Box>
-      <Button
-        onClick={() => {
-          setAnswered(true);
-          handleCheck();
-        }}
-        variant="contained"
-        color="primary"
-        disabled={correct}
-        style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
-      >
-        CHECK
-      </Button>
+      <div style={{ textAlign: 'right' }}>
+        <Button
+          onClick={() => {
+            setAnswered(true);
+            handleCheck();
+          }}
+          variant="contained"
+          color="primary"
+          disabled={correct}
+          style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
+        >
+          CHECK
+        </Button>
+      </div>
     </QuestionHolder >
   );
 }
