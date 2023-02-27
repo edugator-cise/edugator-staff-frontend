@@ -33,6 +33,8 @@ module.exports = {
           "inactive-dark": "#434A55",
           "active-light-color": "#d1fae5",
           "active-dark-color": "#10b981",
+          darker: "#111825",
+          dark: "#192231",
         },
       },
       keyframes: {

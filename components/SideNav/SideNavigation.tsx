@@ -74,7 +74,7 @@ const NavLinkTooltip = ({
         <Tooltip.Portal>
           <Tooltip.Content
             side="right"
-            className="TooltipContent data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-[#111825] border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
+            className="TooltipContent data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-nav-darker border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
             sideOffset={10}
           >
             {text}
@@ -146,12 +146,12 @@ const SideNavigation = () => {
   console.log(pathname);
   return (
     <nav
-      className={`transition-all shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-[#111825] flex flex-col items-center justify-start ${
+      className={`transition-all shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-nav-darker 111727 flex flex-col items-center justify-start ${
         open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
       }`}
     >
       {/* Logo */}
-      <div className="flex items-center h-16 w-full bg-gradient-to-tl from-[#111825] via-[#111825] to-emerald-900/40 px-3">
+      <div className="flex items-center h-16 w-full bg-gradient-to-tl from-nav-darker via-nav-darker to-emerald-900/40 px-3">
         <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
           <svg
             className="w-full"
