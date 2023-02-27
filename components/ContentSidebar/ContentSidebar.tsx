@@ -35,6 +35,8 @@ const AccordionContent = ({
 );
 
 const ContentSidebar = () => {
+  const [openModules, setOpenModules] = React.useState<string[]>([]);
+
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
   );
@@ -46,9 +48,11 @@ const ContentSidebar = () => {
 
   const activeId = lessonId || problemId || "";
 
-  var path = document.querySelector("path");
-  var length = path?.getTotalLength() || 0;
-  console.log("length", length);
+  useEffect(() => {
+    var path = document.querySelector("path");
+    var length = path?.getTotalLength() || 0;
+    console.log("length", length);
+  }, []);
 
   return (
     <ScrollArea.Root className="overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col">
@@ -104,7 +108,14 @@ const ContentSidebar = () => {
             <div className="w-full h-12 rounded-md bg-red-500/20 animate-pulse"></div>
           </div>
         ) : (
-          <Accordion.Root className="w-full font-dm" type="multiple">
+          <Accordion.Root
+            onValueChange={(value) => {
+              //value is array of open modules
+              setOpenModules(value);
+            }}
+            className="w-full font-dm"
+            type="multiple"
+          >
             <div className="w-full h-px bg-slate-500"></div>
             {navigation &&
               navigation.map((value: INavigationItem, primaryIndex: number) => {
@@ -125,20 +136,47 @@ const ContentSidebar = () => {
                   >
                     <Accordion.Trigger className="pl-[0.875rem] overflow-hidden relative pr-4 group py-3 w-full flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className="absolute left-7 top-[50%] group-data-[state=open]:scale-y-100 scale-y-0 transition-transform duration-500 origin-bottom">
+                        <div className="absolute left-7 top-[50%] dash group-data-[state=open]:dashreverse group-data-[state=closed]:dashreverse transition-transform duration-500 origin-bottom">
                           {itemCount > 0 ? (
                             <svg
-                              width="4"
-                              height="80"
-                              viewBox="0 0 4 126"
+                              width="12"
+                              height="120"
+                              viewBox="0 0 18 218"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                d="M2.07101 123.593C2.07101 112.398 2.07101 37.9439 2.07101 2.11621"
-                                strokeWidth="3"
-                                strokeLinecap="round"
-                                className="stroke-slate-700"
+                                d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
+                                stroke="#42454F"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                                strokeDasharray={
+                                  openModules.includes(value.name)
+                                    ? "1000"
+                                    : "0"
+                                }
+                                strokeDashoffset={
+                                  openModules.includes(value.name)
+                                    ? "1000"
+                                    : "0"
+                                }
+                                style={
+                                  openModules.includes(value.name)
+                                    ? {
+                                        animationName: "dash",
+                                        animationDuration: "1s",
+                                        animationTimingFunction: "ease-in",
+                                        animationFillMode: "forwards",
+                                        animationDelay: `0`,
+                                        animationDirection: "normal",
+                                      }
+                                    : {}
+                                }
+                                className={`transition-colors duration-300 ${
+                                  openModules.includes(value.name)
+                                    ? "stroke-slate-700"
+                                    : "stroke-nav-dark"
+                                }`}
                               />
                             </svg>
                           ) : (
@@ -195,18 +233,36 @@ const ContentSidebar = () => {
                                     <div className="absolute left-7 bottom-[40%]">
                                       <svg
                                         width="12"
-                                        height="80"
-                                        viewBox="0 0 18 140"
+                                        height="120"
+                                        viewBox="0 0 18 218"
                                         fill="none"
                                         xmlns="http://www.w3.org/2000/svg"
                                       >
                                         <path
-                                          d="M16.2483 137.717C9.42002 137.717 1.95697 134.62 1.95697 123.426C1.95697 112.231 1.95697 37.7769 1.95697 1.94922"
-                                          strokeWidth="3"
-                                          strokeLinecap="round"
-                                          strokeDasharray="13"
-                                          strokeDashoffset="13"
-                                          className="stroke-slate-700 path"
+                                          id="curved-path"
+                                          d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
+                                          stroke="#42454F"
+                                          stroke-width="4"
+                                          stroke-linecap="round"
+                                          strokeDasharray="1000"
+                                          strokeDashoffset="1000"
+                                          style={{
+                                            animationName: "dash",
+                                            animationDuration: "4s",
+                                            animationTimingFunction:
+                                              "cubic-bezier(0.33, 1, 0.68, 1)",
+                                            animationFillMode: "forwards",
+                                            animationDelay: `${
+                                              secondaryIndex * 0.2 - 0.05
+                                            }s`,
+                                            animationDirection: "normal",
+                                            animationIterationCount: "1",
+                                          }}
+                                          className={`transition-all duration-300  path ${
+                                            openModules.includes(value.name)
+                                              ? "stroke-slate-700"
+                                              : "stroke-nav-dark"
+                                          }`}
                                         />
                                       </svg>
                                     </div>

@@ -79,6 +79,36 @@
     animation: fadeOut 150ms ease-in;
   }
 
+  @keyframes dash {
+    from {
+        stroke-dashoffset: 1000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+  .dash {
+    stroke-dasharray: 1000;
+    animation: dash 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards, opacity 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .dashreverse {
+    stroke-dasharray: 1000;
+    animation: dashreverse 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards, opacity 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards;
+    transition: all 0.3s ease-in-out;
+  }
+
+  @keyframes dashreverse {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 1000;
+    }
+}
+
   .TooltipContent[data-state='open'] {
     transform-origin: left;
     animation: fadeIn 150ms ease-out;
