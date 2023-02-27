@@ -10,8 +10,8 @@ interface Props {
 
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
-    <ScrollArea.Root className="bg-slate-50 h-full w-full">
-      <ScrollArea.Viewport className="flex flex-col px-5">
+    <ScrollArea.Root className="bg-slate-50 h-full w-full overflow-hidden">
+      <ScrollArea.Viewport className="flex flex-col px-5 h-full w-full">
         <h1 className="text-4xl font-ambit font-semibold text-slate-900 mb-4 mt-12">
           {problemTitle}
         </h1>
