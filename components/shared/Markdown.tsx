@@ -8,7 +8,14 @@ interface Props {
 }
 
 function Image(props: { alt: string } & any) {
-  return <img alt={props.alt} {...props} style={{ maxWidth: "100%" }} />;
+  return (
+    <img
+      alt={props.alt}
+      {...props}
+      className="border rounded-md"
+      style={{ maxWidth: "100%" }}
+    />
+  );
 }
 
 function Code(props: any) {
