@@ -149,73 +149,71 @@ export const FillInTheBlankModal = ({
         <Dialog open={open} aria-labelledby="alert-dialog-title" fullWidth={true}>
             <DialogTitle id="alert-dialog-title">
                 <div className="modal">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h2>Fill-in-the-Blank</h2>
-                        </div>
-                        <div className="modal-body">
-                            <div className="fitb-modal-question-container">
-                                <div className="fitb-modal-question">
-                                    <label htmlFor="question">Question</label>
-                                </div>
-                                <div className="fitb-modal-insert-blank">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={placeholderCharCount > placeholderChars.length - 1}
-                                        onClick={() => {
-                                            onInsertBlankClick();
-                                        }}
-                                    >
-                                        + Insert Blank
-                                    </Button>
-                                </div>
+                    <div className="modal-header">
+                        <h2>Fill-in-the-Blank</h2>
+                    </div>
+                    <div className="modal-body">
+                        <div className="fitb-modal-question-container">
+                            <div className="fitb-modal-question">
+                                <label htmlFor="question">Question</label>
                             </div>
-                            <textarea
-                                className="fitb-modal-question-input"
-                                ref={modalInput}
-                                value={question}
-                                onChange={(e) => {
-                                    handleQuestionChange(e.target.value);
-                                    setCursorPosition(e.target.selectionStart);
-                                }}
-                            />
-
-                            <div className="fitb-modal-answer-container">
-                                <div className="fitb-modal-answer">
-                                    <label htmlFor="answers">Answers</label>
-                                </div>
-                                <Tooltip
-                                    title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center', maxWidth: 150 }}>{toolTipMessage}</div>}
-                                    arrow
+                            <div className="fitb-modal-insert-blank">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={placeholderCharCount > placeholderChars.length - 1}
+                                    onClick={() => {
+                                        onInsertBlankClick();
+                                    }}
                                 >
-                                    <Info  color='#2196f3' size={22} />
-                                </Tooltip>
+                                    + Insert Blank
+                                </Button>
                             </div>
-                            {correctAnswers.map((correctAnswer, i) => (
-                                <Box className="fitb-modal-answer-field" key={i}>
-                                    <div className="fitb-modal-answer-placeholder">
-                                        {placeholderChars[i]}
-                                    </div>
-                                    <MuiChipsInput
-                                        className="fitb-modal-answer-chips-input"
-                                        value={correctAnswer.possibleChoices}
-                                        onChange={(e) => handleAnswerChoicesChange(e, i)}
-                                    />
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={correctAnswer.shouldHaveExactMatch}
-                                                    onChange={() => handleExactMatchCheckboxChange(i)}
-                                                />
-                                            }
-                                            label={exactMatchText}
-                                        />
-                                    </FormGroup>
-                                </Box>
-                            ))}
                         </div>
+                        <textarea
+                            className="fitb-modal-question-input"
+                            ref={modalInput}
+                            value={question}
+                            onChange={(e) => {
+                                handleQuestionChange(e.target.value);
+                                setCursorPosition(e.target.selectionStart);
+                            }}
+                        />
+
+                        <div className="fitb-modal-answer-container">
+                            <div className="fitb-modal-answer">
+                                <label htmlFor="answers">Answers</label>
+                            </div>
+                            <Tooltip
+                                title={<div style={{ whiteSpace: 'pre-line', textAlign: 'center', maxWidth: 160 }}>{toolTipMessage}</div>}
+                                arrow
+                            >
+                                <Info color='#2196f3' size={22} />
+                            </Tooltip>
+                        </div>
+                        {correctAnswers.map((correctAnswer, i) => (
+                            <Box className="fitb-modal-answer-field" key={i}>
+                                <div className="fitb-modal-answer-placeholder">
+                                    {placeholderChars[i]}
+                                </div>
+                                <MuiChipsInput
+                                    className="fitb-modal-answer-chips-input"
+                                    value={correctAnswer.possibleChoices}
+                                    onChange={(e) => handleAnswerChoicesChange(e, i)}
+                                />
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={correctAnswer.shouldHaveExactMatch}
+                                                onChange={() => handleExactMatchCheckboxChange(i)}
+                                            />
+                                        }
+                                        label={exactMatchText}
+                                    />
+                                </FormGroup>
+                            </Box>
+                        ))}
                     </div>
                 </div>
             </DialogTitle>

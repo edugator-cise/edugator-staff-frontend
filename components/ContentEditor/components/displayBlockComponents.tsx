@@ -246,7 +246,6 @@ export function FillInTheBlankDisplayBlock({
   const [correct, setCorrect] = useState(false);    // Whether all answers are correct
   const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
 
-
   useEffect(() => {
     let defaultResults = [];
     for (let i = 0; i < correctAnswers.length; i++) {
@@ -260,10 +259,7 @@ export function FillInTheBlankDisplayBlock({
 
   const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
-    if (possibleChoices.length > 1) {
-      return possibleChoices.slice(1, possibleChoices.length).join('\n');
-    }
-    return possibleChoices;
+    return possibleChoices.slice(1, possibleChoices.length).join('\n');
   };
 
   const shouldShowAnswerTooltip = (correctAnswer: blankAnswer) => {

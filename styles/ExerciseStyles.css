@@ -78,7 +78,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  width: 100%;
+  width: calc(100% + 20px);
 }
 
 .fitb-modal-question {
@@ -120,15 +120,14 @@
 .fitb-modal-answer-field {
   display: inline-flex;
   align-items: center;
-  width: 100%
+  width: 100%;
 }
 
 .fitb-modal-answer-placeholder {
-  font-weight: bold;
-  font-size: x-large;
+  font-size: 28px;
 }
 
 .fitb-modal-answer-chips-input {
-  margin: 5px 10px;
+  margin: 5px 20px;
   width: 60%;
 }
