@@ -253,7 +253,7 @@ export function FillInTheBlankDisplayBlock({
 
   const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
-    if (possibleChoices.length > 1){
+    if (possibleChoices.length > 1) {
       return possibleChoices.slice(1, possibleChoices.length).join('\n');
     }
     return possibleChoices;
@@ -316,7 +316,7 @@ export function FillInTheBlankDisplayBlock({
           <Box key={i} sx={{ display: 'inline' }}>
             <Typography
               variant="h6"
-              sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline' }}
+              sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline', whiteSpace: 'pre-wrap' }}
             >
               {questionSegments[i]}
             </Typography>
@@ -359,7 +359,7 @@ export function FillInTheBlankDisplayBlock({
         ))}
         <Typography
           variant="h6"
-          sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline' }}
+          sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline', whiteSpace: 'pre-wrap' }}
         >
           {questionSegments[questionSegments.length - 1]}
         </Typography>
