@@ -63,6 +63,13 @@ const CorrectAnswerTextField = styled(TextField)({
   marginBottom: 24
 });
 
+const QuestionSegments = styled(Typography)({
+  fontWeight: 200,
+  fontFamily: "DM Serif Display",
+  display: 'inline',
+  whiteSpace: 'pre-wrap'
+});
+
 //displayed component when multiple choice is added
 export function MultipleChoiceDisplayBlock({
   question,
@@ -314,12 +321,9 @@ export function FillInTheBlankDisplayBlock({
       <Box sx={{ display: 'inline' }}>
         {correctAnswers.map((correctAnswer, i) => (
           <Box key={i} sx={{ display: 'inline' }}>
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline', whiteSpace: 'pre-wrap' }}
-            >
+            <QuestionSegments variant='h6'>
               {questionSegments[i]}
-            </Typography>
+            </QuestionSegments>
             {!number || results[i] // If number does not exist, we are in admin view. Otherwise in student view.
               ? <Tooltip
                 hidden={shouldShowAnswerTooltip(correctAnswer)}
@@ -357,12 +361,9 @@ export function FillInTheBlankDisplayBlock({
             }
           </Box>
         ))}
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: 200, fontFamily: "DM Serif Display", display: 'inline', whiteSpace: 'pre-wrap' }}
-        >
+        <QuestionSegments variant='h6'>
           {questionSegments[questionSegments.length - 1]}
-        </Typography>
+        </QuestionSegments>
       </Box>
       <div style={{ textAlign: 'right' }}>
         <Button
