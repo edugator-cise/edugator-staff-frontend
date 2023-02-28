@@ -149,7 +149,6 @@ export const CodeEditorView = ({
       <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 border-b border-b-slate-300">
         <div className="flex space-x-4 items-center ">
           <p className="text-sm text-slate-800 font-dm font-bold">Solution</p>
-          <div className="h-full w-px bg-slate-400"></div>
           <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 shadow-2xl shadow-emerald-500 bg-slate-100 px-3 py-2">
             <h3 className="text-sm text-slate-800 font-dm">{fileName}</h3>
           </div>
@@ -207,7 +206,7 @@ export const CodeEditorView = ({
           <CircularProgress color="inherit" />
         </Backdrop>
         <Editor
-          className="rounded-md overflow-hidden"
+          className="rounded-md overflow-hidden border"
           height="99%"
           defaultLanguage="cpp"
           defaultValue={code}
@@ -230,7 +229,7 @@ export const CodeEditorView = ({
               buildCommand: buildCommand as string,
             })
           }
-          className="bg-transparent text-slate-800 px-3 text-sm py-2 rounded-md border border-slate-800"
+          className="bg-transparent text-slate-600 px-3 text-sm py-2 rounded-md border border-slate-400"
         >
           Run Code
         </button>
