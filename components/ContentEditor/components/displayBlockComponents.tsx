@@ -38,17 +38,16 @@ const AnswerHolder = styled("div")({
 
 const BlankAnswerTextField = styled(TextField)((props: any) => ({
   "& .MuiFilledInput-root": {
-    backgroundColor: theme.palette.primary.light,
-    padding: '0px 12px',
+    backgroundColor: theme.palette.primary.light
   },
   "& .MuiFilledInput-root:hover": { // TODO: Figure out how to stop input from going back to its default color on hover/focus - might leave it
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.light
   },
   "& .MuiFilledInput-root.Mui-focused": {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.light
   },
-  marginBottom: props.answered ? 0 : 24,
-  width: 190
+  marginBottom: props.answered ? 6 : 10,
+  width: 175
 }));
 
 const CorrectAnswerTextField = styled(TextField)({
@@ -62,8 +61,8 @@ const CorrectAnswerTextField = styled(TextField)({
   "& .MuiInputBase-input.Mui-disabled": {
     WebkitTextFillColor: "#000000",
   },
-  marginBottom: 24,
-  width: 190
+  marginBottom: 10,
+  width: 175
 });
 
 const QuestionSegments = styled(Typography)({
@@ -324,7 +323,6 @@ export function FillInTheBlankDisplayBlock({
                 title={getNonFirstAnswerPossibilities(correctAnswer) === ''
                   ? ''
                   : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
-                    {/* TODO: Show student's correct answer instead? And then the tooltip would list whatever choices they didn't enter. */}
                     {getNonFirstAnswerPossibilities(correctAnswer)}
                   </div>
                 }
@@ -344,11 +342,10 @@ export function FillInTheBlankDisplayBlock({
                 answered={answered}
                 hiddenLabel
                 inputProps={{ min: 0, style: { textAlign: 'center' } }}
-                /* TODO: Show student's most recent answer or correctAnswer.possibleChoices[0]? */
                 value={answerInputs[i]}
                 variant="filled"
                 size="small"
-                helperText={answered ? "Incorrect answer." : ""}
+                helperText={answered && "Incorrect answer."}
                 error={answered}
                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
               />
