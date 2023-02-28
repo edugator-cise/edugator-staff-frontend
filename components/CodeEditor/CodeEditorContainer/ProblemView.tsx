@@ -18,7 +18,7 @@ export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
           {problemTitle}
         </h1>
         <Markdown markdownString={problemStatement} />
-        <div className="h-12"></div>
+        <div className="h-12 w-full min-h-[3rem]"></div>
         <ScrollArea.Scrollbar
           className="flex select-none touch-none p-0.5 group bg-neutral-200 transition duration-[160ms] ease-out hover:bg-neutral-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
           orientation="vertical"
