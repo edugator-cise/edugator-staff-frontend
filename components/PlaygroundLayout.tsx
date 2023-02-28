@@ -8,6 +8,7 @@ import TopicSidebar from "components/shared/TopicSidebar";
 import { useRouter } from "next/router";
 import SideNavigation from "./SideNav/SideNavigation";
 import ContentSidebar from "./ContentSidebar/ContentSidebar";
+import { ArrowRightIcon } from "@radix-ui/react-icons";
 
 interface ProblemEditorURL {
   problemId?: string;
@@ -37,8 +38,25 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex w-full h-full">
           <ContentSidebar />
           <div className="w-px h-full bg-slate-700"></div>
-          {children}
+          <div className="relative w-full h-full">
+            {children}
+            <NextOverlay />
+          </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const NextOverlay = () => {
+  return (
+    <div className="font-dm space-x-4 cursor-pointer max-w-[30rem] absolute flex items-center justify-between rounded-md opacity-50 transition hover:opacity-100 bg-white shadow-lg shadow-black/5 border bottom-10 right-10 z-50 px-4 whitespace-nowrap">
+      <div className="flex flex-col py-3">
+        <h1 className="font-bold">Up Next:</h1>
+        <p className="text-sm">Introduction to C++</p>
+      </div>
+      <div className=" flex items-end h-10">
+        <ArrowRightIcon className="h-4 w-4 stroke-blue-500 stroke-[0.5px]" />
       </div>
     </div>
   );
