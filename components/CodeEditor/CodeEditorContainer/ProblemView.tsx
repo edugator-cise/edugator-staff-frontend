@@ -1,7 +1,6 @@
 import React from "react";
 import { Markdown } from "components/shared/Markdown";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { Typography, Grow } from "@mui/material";
 
 interface Props {
   problemTitle: string;

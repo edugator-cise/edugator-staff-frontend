@@ -10,7 +10,12 @@ import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
 import { IProblem } from "lib/shared/types";
-import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
+import {
+  createNavStructure,
+  generateFileName,
+  handleDownload,
+  parseFile,
+} from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
@@ -36,18 +41,6 @@ const EditorContainer = styled("div")(
   height: 100%;
 `
 );
-
-const CodeHolder = styled("div")({
-  margin: theme.spacing(1),
-  height: "calc(100% - 15px)",
-  backgroundColor: "white",
-  borderRadius: "4px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-  justifyContent: "flex-start",
-  overflow: "hidden",
-});
 
 interface CodeEditorProps {
   code: string;
@@ -119,6 +112,8 @@ export const CodeEditorView = ({
   const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
+  const fileName = generateFileName(navigation, problemId, fileType);
+
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
@@ -150,118 +145,112 @@ export const CodeEditorView = ({
   });
 
   return (
-    <Grow in appear timeout={500}>
-      <CodeHolder>
-        <ColumnContainer>
-          <Box
-            sx={{
-              paddingLeft: 3,
-              fontFamily: `'Inter', sans-serif`,
-              fontWeight: 600,
-            }}
+    <div className="w-full h-full flex flex-col font-dm">
+      <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 border-b border-b-slate-300">
+        <div className="flex space-x-4 items-center ">
+          <p className="text-sm text-slate-800 font-dm font-bold">Solution</p>
+          <div className="h-full w-px bg-slate-400"></div>
+          <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 shadow-2xl shadow-emerald-500 bg-slate-100 px-3 py-2">
+            <h3 className="text-sm text-slate-800 font-dm">{fileName}</h3>
+          </div>
+        </div>
+        <div className="">
+          <a
+            href={templatePackage}
+            style={{ textDecoration: "none" }}
+            target="_blank"
+            rel="noreferrer"
           >
-            Solution
-          </Box>
-          <Box sx={{ paddingRight: 3 }}>
-            <a
-              href={templatePackage}
-              style={{ textDecoration: "none" }}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Tooltip title="Download Template" placement="top">
-                <IconButton>
-                  <CloudDownload />
-                </IconButton>
-              </Tooltip>
-            </a>
-            <input
-              style={{ display: "none" }}
-              ref={hiddenFileInput}
-              type="file"
-              onChange={(e) => parseFile(e, editorRef)}
-            />
-            <Tooltip title="Choose File" placement="top">
-              <IconButton onClick={(e) => handleChooseFile(e)}>
-                <Add />
+            <Tooltip title="Download Template" placement="top">
+              <IconButton>
+                <CloudDownload />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Download Submission" placement="top">
-              <IconButton
-                onClick={() => {
-                  handleDownload(currentCode, navigation, problemId, fileType);
-                }}
-              >
-                <GetApp />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Reset Code" placement="top">
-              <IconButton onClick={handleReset}>
-                <RotateLeft />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </ColumnContainer>
-        <EditorContainer>
-          <Backdrop
-            sx={{
-              color: "#fff",
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-              position: "absolute",
-            }}
-            open={isSubmissionRunning}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-          <Editor
-            height="99%"
-            defaultLanguage="cpp"
-            defaultValue={code}
-            onChange={(value) => {
-              setCurrentCode(value as string);
-            }}
-            onMount={handleEditorMount}
+          </a>
+          <input
+            style={{ display: "none" }}
+            ref={hiddenFileInput}
+            type="file"
+            onChange={(e) => parseFile(e, editorRef)}
           />
-        </EditorContainer>
-        <ColumnContainer style={{ justifyContent: "flex-end" }}>
-          <Button
-            variant="outlined"
-            color="primary"
-            disabled={isSubmissionRunning}
-            sx={{ mr: 2 }}
-            onClick={() => {
-              runCode({
-                code: currentCode,
-                stdin,
-                problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
-              });
-            }}
-          >
-            Run Code
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={isSubmissionRunning}
-            sx={{ mr: 2 }}
-            onClick={() =>
-              submitCode({
-                code: currentCode,
-                stdin,
-                problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
-              })
-            }
-          >
-            Submit
-          </Button>
-        </ColumnContainer>
-      </CodeHolder>
-    </Grow>
+          <Tooltip title="Choose File" placement="top">
+            <IconButton onClick={(e) => handleChooseFile(e)}>
+              <Add />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Download Submission" placement="top">
+            <IconButton
+              onClick={() => {
+                handleDownload(currentCode, navigation, problemId, fileType);
+              }}
+            >
+              <GetApp />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Reset Code" placement="top">
+            <IconButton onClick={handleReset}>
+              <RotateLeft />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </div>
+      <Box sx={{ paddingRight: 3 }}></Box>
+      <div className="w-full h-full flex flex-col py-2 px-3 bg-slate-100">
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            position: "absolute",
+          }}
+          open={isSubmissionRunning}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <Editor
+          className="rounded-md overflow-hidden"
+          height="99%"
+          defaultLanguage="cpp"
+          defaultValue={code}
+          onChange={(value) => {
+            setCurrentCode(value as string);
+          }}
+          onMount={handleEditorMount}
+        />
+      </div>
+      <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100">
+        <button
+          disabled={isSubmissionRunning}
+          onClick={() =>
+            submitCode({
+              code: currentCode,
+              stdin,
+              problemId: problemId as string,
+              timeLimit: timeLimit as number,
+              memoryLimit: memoryLimit as number,
+              buildCommand: buildCommand as string,
+            })
+          }
+          className="bg-transparent text-slate-800 px-3 text-sm py-2 rounded-md border border-slate-800"
+        >
+          Run Code
+        </button>
+        <button
+          disabled={isSubmissionRunning}
+          onClick={() => {
+            runCode({
+              code: currentCode,
+              stdin,
+              problemId: problemId as string,
+              timeLimit: timeLimit as number,
+              memoryLimit: memoryLimit as number,
+              buildCommand: buildCommand as string,
+            });
+          }}
+          className="bg-emerald-500 border-emerald-700 text-white px-3 text-sm py-2 rounded-md"
+        >
+          Submit Code
+        </button>
+      </div>
+    </div>
   );
 };
