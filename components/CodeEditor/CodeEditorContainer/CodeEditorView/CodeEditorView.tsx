@@ -1,13 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
-import theme from "constants/theme";
 import { IProblem } from "lib/shared/types";
 import {
   createNavStructure,
@@ -20,6 +16,7 @@ import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { icons } from "./editorIcons";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { toast } from "react-hot-toast";
 
 interface CodeEditorProps {
   code: string;
@@ -41,7 +38,7 @@ interface CodeEditorProps {
     timeLimit: number;
     memoryLimit: number;
     buildCommand: string;
-  }) => void;
+  }) => Promise<void>;
   submitCode: ({
     code,
     stdin,
@@ -56,7 +53,7 @@ interface CodeEditorProps {
     timeLimit: number;
     memoryLimit: number;
     buildCommand: string;
-  }) => void;
+  }) => Promise<void>;
 }
 
 const ButtonToolTip = ({
@@ -225,16 +222,30 @@ export const CodeEditorView = ({
       <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100">
         <button
           disabled={isSubmissionRunning}
-          onClick={() =>
-            submitCode({
-              code: currentCode,
-              stdin,
-              problemId: problemId as string,
-              timeLimit: timeLimit as number,
-              memoryLimit: memoryLimit as number,
-              buildCommand: buildCommand as string,
-            })
-          }
+          onClick={() => {
+            console.log("run code");
+            toast.promise(
+              runCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              }),
+              {
+                loading: "Running Code...",
+                success: "Code Ran Successfully",
+                error: "Error Running Code",
+              },
+              {
+                position: "top-right",
+                success: {
+                  icon: "👨‍💻",
+                },
+              }
+            );
+          }}
           className="bg-transparent text-slate-600 px-3 text-sm py-2 rounded-md border border-slate-400"
         >
           Run Code
@@ -242,14 +253,21 @@ export const CodeEditorView = ({
         <button
           disabled={isSubmissionRunning}
           onClick={() => {
-            runCode({
-              code: currentCode,
-              stdin,
-              problemId: problemId as string,
-              timeLimit: timeLimit as number,
-              memoryLimit: memoryLimit as number,
-              buildCommand: buildCommand as string,
-            });
+            toast.promise(
+              submitCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              }),
+              {
+                loading: "Submitting Code...",
+                success: "Code Submitted Successfully",
+                error: "Error Submitting Code",
+              }
+            );
           }}
           className="bg-emerald-500 border-emerald-700 text-white px-3 text-sm py-2 rounded-md"
         >

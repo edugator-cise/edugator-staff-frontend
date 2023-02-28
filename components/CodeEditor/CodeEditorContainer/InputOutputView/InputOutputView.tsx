@@ -32,15 +32,11 @@ export const InputOutputView = ({
 
   const tabs = ["stdin", "output", "submission"];
 
-  useEffect(() => {
-    console.log(activeTab);
-  }, [activeTab]);
-
   return (
     <div className="flex flex-col w-full h-full font-dm bg-slate-100">
-      <div className="w-full flex">
+      <div className="w-full flex h-full">
         <Tabs.Root
-          className="flex flex-col w-full rounded-md"
+          className="flex flex-col w-full rounded-md min-h-full"
           defaultValue="stdin"
           value={tabs[activeTab]}
           onValueChange={(value) => {
@@ -55,7 +51,7 @@ export const InputOutputView = ({
               {tabs.map((tab) => (
                 <Tabs.Trigger
                   key={tab}
-                  className="cursor-pointer px-2 py-2 border-b-slate-300 group transition flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:text-slate-700 outline-none"
+                  className="cursor-pointer px-2 pt-2 border-b-slate-300 group transition flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:text-slate-700 outline-none"
                   value={tab}
                 >
                   <div className="w-full h-full rounded-lg py-4 group-data-[state=active]:bg-slate-200 hover:bg-slate-200 transition group-data-[state=active]:border border-slate-300">
@@ -66,7 +62,7 @@ export const InputOutputView = ({
             </Tabs.List>
             <div className="border-l h-full w-full border-b border-slate-300 bg-slate-200"></div>
           </div>
-          <Tabs.Content className="w-full h-full p-2" value="stdin">
+          <Tabs.Content className="w-full h-full px-2 pt-2" value="stdin">
             <div className="w-full h-full">
               <textarea
                 className="w-full h-full p-2 border border-slate-300 rounded-md max-h-[20rem] min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent"

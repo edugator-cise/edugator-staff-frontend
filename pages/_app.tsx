@@ -42,7 +42,7 @@ const App = ({ Component, pageProps }: Props) => {
     <Provider store={store}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
-          <Toaster />
+          <Toaster containerClassName="font-dm" />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>
       </StyledEngineProvider>

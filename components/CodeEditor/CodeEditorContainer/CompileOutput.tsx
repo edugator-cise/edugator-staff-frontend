@@ -4,16 +4,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import theme from "constants/theme";
 import { colors } from "constants/config";
-
-const CompileOutputContainer = styled("div")(
-  ({ theme }) => `
-  text-align: left;
-  overflow-y: scroll;
-  margin-right: ${theme.spacing(1)};
-  margin-left: ${theme.spacing(1)};
-  height: calc(100%);
-`
-);
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 const OutputPaper = styled("div")(
   ({ theme }) => `
@@ -44,44 +35,50 @@ export const CompileOutput = ({
   compileMessage,
   compileBody,
 }: Props) => {
-  if (accepted) {
-    return (
-      <CompileOutputContainer id="compile-container">
-        <Typography variant="h5" color={theme.palette.success.main}>
-          Compilation Successful
-        </Typography>
-        <Paper
-          sx={{
-            backgroundColor: colors.lightGray,
-            height: "60%",
-            p: 2,
-            whiteSpace: "pre-wrap",
-            overflowY: "auto",
-          }}
-        >
-          {compileBody}
-        </Paper>
-      </CompileOutputContainer>
-    );
-  } else if (accepted === false) {
-    return (
-      <CompileOutputContainer id="compile-container">
-        <Typography variant="h5" color={theme.palette.error.main}>
-          {compileMessage}
-        </Typography>
-        <Paper
-          sx={{
-            backgroundColor: colors.lightPink,
-            color: colors.redText,
-            p: 2,
-            whiteSpace: "pre-wrap",
-            overflowY: "auto",
-          }}
-        >
-          {compileBody}
-        </Paper>
-      </CompileOutputContainer>
-    );
-  }
-  return <OutputPaper>Press Run to run code</OutputPaper>;
+  return (
+    <div className="w-full h-full bg-slate-100 p-2 ">
+      <div className="w-full h-full rounded-md bg-slate-50 px-2 flex flex-col py-4 space-y-2">
+        {accepted === true ? (
+          <>
+            <h1 className="text-2xl font-dm text-emerald-600">
+              Compilation Successful
+            </h1>
+
+            <ScrollArea.Root className="bg-slate-100 h-full w-full overflow-hidden border border-slate-300 rounded-sm">
+              <ScrollArea.Viewport className=" py-5 px-5 h-full w-full" asChild>
+                <p className="whitespace-pre-wrap">{compileBody}</p>
+                <ScrollArea.Scrollbar
+                  className="flex select-none touch-none p-0.5 group bg-neutral-200 transition duration-[160ms] ease-out hover:bg-neutral-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+                  orientation="vertical"
+                >
+                  <ScrollArea.Thumb className="flex-1 bg-neutral-300 group-hover:bg-netral-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+                </ScrollArea.Scrollbar>
+                <ScrollArea.Corner className="bg-white/20" />
+              </ScrollArea.Viewport>
+            </ScrollArea.Root>
+          </>
+        ) : accepted === false ? (
+          <>
+            <h1 className="text-2xl font-dm text-red-600">{compileMessage}</h1>
+            <ScrollArea.Root className="bg-red-500/10 h-full w-full overflow-hidden">
+              <ScrollArea.Viewport className=" py-5 px-5 h-full w-full" asChild>
+                <p className="whitespace-pre-wrap text-red-600">
+                  {compileBody}
+                </p>
+                <ScrollArea.Scrollbar
+                  className="flex select-none touch-none p-0.5 group bg-neutral-200 transition duration-[160ms] ease-out hover:bg-neutral-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+                  orientation="vertical"
+                >
+                  <ScrollArea.Thumb className="flex-1 bg-neutral-300 group-hover:bg-netral-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+                </ScrollArea.Scrollbar>
+                <ScrollArea.Corner className="bg-white/20" />
+              </ScrollArea.Viewport>
+            </ScrollArea.Root>
+          </>
+        ) : (
+          <OutputPaper>Press Run to run code</OutputPaper>
+        )}
+      </div>
+    </div>
+  );
 };

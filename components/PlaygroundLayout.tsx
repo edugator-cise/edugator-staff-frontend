@@ -1,23 +1,9 @@
 import React, { useState } from "react";
-import { Sidenav } from "components/CodeEditor/SideNav";
-import VerticalNavigation from "components/shared/VerticalNavigation";
-import { Box } from "@mui/material";
-import { colors } from "constants/config";
 import "allotment/dist/style.css";
-import TopicSidebar from "components/shared/TopicSidebar";
 import { useRouter } from "next/router";
 import SideNavigation from "./SideNav/SideNavigation";
 import ContentSidebar from "./ContentSidebar/ContentSidebar";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
-
-interface ProblemEditorURL {
-  problemId?: string;
-  lessonId?: string;
-}
-
-interface ProblemLocationState {
-  moduleName?: string;
-}
 
 const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   const [isHidden, setIsHidden] = useState(false);
@@ -50,7 +36,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 
 const NextOverlay = () => {
   return (
-    <div className="font-dm space-x-4 cursor-pointer max-w-[30rem] absolute flex items-center justify-between rounded-md opacity-50 transition hover:opacity-100 bg-white shadow-lg shadow-black/5 border bottom-10 right-10 z-50 px-4 whitespace-nowrap">
+    <div className="font-dm space-x-4 cursor-pointer max-w-[30rem] absolute flex items-center justify-between rounded-md opacity-50 transition hover:opacity-100 bg-white shadow-lg shadow-black/5 border bottom-4 right-4 z-50 px-4 whitespace-nowrap">
       <div className="flex flex-col py-3">
         <h1 className="font-bold">Up Next:</h1>
         <p className="text-sm">Introduction to C++</p>

@@ -76,6 +76,7 @@ export const useRunCode = (locationState: string) => {
     memoryLimit: number;
     buildCommand: string;
   }) => {
+    console.log("runCode");
     setIsSubmissionRunning(true);
     try {
       const { data }: { data: IToken } = await apiClient.post(
@@ -89,6 +90,7 @@ export const useRunCode = (locationState: string) => {
           buildCommand,
         })
       );
+
       if (!data.token || data.token === "") {
         throw new Error("Token not present");
       }
