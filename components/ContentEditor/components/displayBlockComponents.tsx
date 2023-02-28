@@ -330,7 +330,7 @@ export function FillInTheBlankDisplayBlock({
               >
                 <CorrectAnswerTextField
                   hiddenLabel //TODO: might want to change the size of correct answer text field
-                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '3px 0px', } }}
+                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '2px 12px' } }}
                   value={correctAnswer.possibleChoices[0]}
                   variant="outlined"
                   size="small"
@@ -341,7 +341,7 @@ export function FillInTheBlankDisplayBlock({
               : <BlankAnswerTextField
                 answered={answered}
                 hiddenLabel
-                inputProps={{ min: 0, style: { textAlign: 'center' } }}
+                inputProps={{ min: 0, style: { textAlign: 'center', padding: '4px 12px' } }}
                 value={answerInputs[i]}
                 variant="filled"
                 size="small"
