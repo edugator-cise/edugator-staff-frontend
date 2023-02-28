@@ -55,7 +55,7 @@ export const InputOutputView = ({
               {tabs.map((tab) => (
                 <Tabs.Trigger
                   key={tab}
-                  className="cursor-pointer px-2 py-2 border-b-slate-300 group border-b transition flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:text-slate-700 outline-none"
+                  className="cursor-pointer px-2 py-2 border-b-slate-300 group transition flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:text-slate-700 outline-none"
                   value={tab}
                 >
                   <div className="w-full h-full rounded-lg py-4 group-data-[state=active]:bg-slate-200 hover:bg-slate-200 transition group-data-[state=active]:border border-slate-300">
