@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
 import { blankAnswer } from "./exportStructures";
-import theme from "constants/theme";
 import { ModalAnswer } from "./MultipleSelectModal";
 
 const QuestionHolder = styled("div")({
@@ -36,20 +35,6 @@ const AnswerHolder = styled("div")({
   },
 });
 
-const BlankAnswerTextField = styled(TextField)((props: any) => ({
-  "& .MuiFilledInput-root": {
-    backgroundColor: theme.palette.primary.light
-  },
-  "& .MuiFilledInput-root:hover": { // TODO: Figure out how to stop input from going back to its default color on hover/focus - might leave it
-    backgroundColor: theme.palette.primary.light
-  },
-  "& .MuiFilledInput-root.Mui-focused": {
-    backgroundColor: theme.palette.primary.light
-  },
-  marginBottom: props.answered ? 6 : 10,
-  width: 175
-}));
-
 const CorrectAnswerTextField = styled(TextField)({
   '& fieldset': {
     border: 'none',
@@ -66,8 +51,7 @@ const CorrectAnswerTextField = styled(TextField)({
 });
 
 const QuestionSegments = styled(Typography)({
-  fontWeight: 200,
-  fontFamily: "DM Serif Display",
+  fontWeight: 600,
   display: 'inline',
   whiteSpace: 'pre-wrap'
 });
@@ -236,71 +220,14 @@ export function MultipleSelectDisplayBlock({
 export function FillInTheBlankDisplayBlock({
   questionSegments,
   correctAnswers,
-  number,
 }: {
   questionSegments: string[];
   correctAnswers: blankAnswer[];
-  number?: number; // Number is an optional prop that only exists for numbering the questions for student view. If it is undefined, we are in admin view.
 }) {
-
-  const [answerInputs, setAnswerInputs] = useState<string[]>([]);   // string array of question attempts/inputs
-  const [results, setResults] = useState<boolean[]>([]);   // boolean array of answer correctness
-  const [correct, setCorrect] = useState(false);    // Whether all answers are correct
-  const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
-
-  useEffect(() => {
-    let defaultResults = [];
-    for (let i = 0; i < correctAnswers.length; i++) {
-      defaultResults.push(false);
-    }
-    setResults(defaultResults);
-    if (number === undefined) {
-      setCorrect(true);
-    }
-  }, []);
-
   const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
     return possibleChoices.slice(1, possibleChoices.length).join('\n');
   };
-
-  const handleCheck = () => {
-    let updatedResults = [...results];
-    for (let i = 0; i < answerInputs.length; i++) {
-
-      if (results[i] === false && answerInputs[i]) {
-
-        let currentAnswerInput = answerInputs[i].trim(); // Remove whitespace
-
-        if (correctAnswers[i].shouldHaveExactMatch) {
-          if (correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer === currentAnswerInput)) {
-            updatedResults[i] = true;
-          }
-        }
-        else if (!isNaN(+currentAnswerInput)) { // If true, currentAnswerInput is a number.
-          if (correctAnswers[i].possibleChoices.some(correctAnswer => parseFloat(correctAnswer) === parseFloat(currentAnswerInput))) {
-            updatedResults[i] = true;
-          }
-        } else if (correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer.toLowerCase() === currentAnswerInput.toLowerCase())) {
-          updatedResults[i] = true;
-        } else {
-          updatedResults[i] = false;
-        }
-      }
-    }
-
-    setResults(updatedResults);
-    if (updatedResults.every(result => result === true)) {
-      setCorrect(true);
-    }
-  }
-
-  const handleAnswerInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, i: number) => {
-    let updatedAnswerInputs = [...answerInputs];
-    updatedAnswerInputs[i] = e.target.value;
-    console.log("Updated answer inputs: ", updatedAnswerInputs);
-    setAnswerInputs(updatedAnswerInputs);
-  }
 
   return (
     <QuestionHolder className="exercise-content-wrapper">
@@ -310,7 +237,7 @@ export function FillInTheBlankDisplayBlock({
         fontSize="subtitle2"
         color={"#3b82f6"}
       >
-        {number ? "Question " + number : "Fill-in-the-Blank Question"}
+        Fill-in-the-Blank Question
       </Typography>
       <Box sx={{ display: 'inline' }}>
         {correctAnswers.map((correctAnswer, i) => (
@@ -318,38 +245,23 @@ export function FillInTheBlankDisplayBlock({
             <QuestionSegments variant='h6'>
               {questionSegments[i]}
             </QuestionSegments>
-            {!number || results[i] // If number does not exist, we are in admin view. Otherwise in student view.
-              ? <Tooltip
-                title={getNonFirstAnswerPossibilities(correctAnswer) === ''
-                  ? ''
-                  : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
-                    {getNonFirstAnswerPossibilities(correctAnswer)}
-                  </div>
-                }
-                arrow
-              >
-                <CorrectAnswerTextField
-                  hiddenLabel //TODO: might want to change the size of correct answer text field
-                  inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "DM Serif Display", fontWeight: 200, fontSize: '1.20rem', padding: '2px 12px' } }}
-                  value={correctAnswer.possibleChoices[0]}
-                  variant="outlined"
-                  size="small"
-                  disabled
-                />
-              </Tooltip>
-              // AnswerInput is incorrect or has not been answered
-              : <BlankAnswerTextField
-                answered={answered}
-                hiddenLabel
-                inputProps={{ min: 0, style: { textAlign: 'center', padding: '4px 12px' } }}
-                value={answerInputs[i]}
-                variant="filled"
+            <Tooltip
+              title={getNonFirstAnswerPossibilities(correctAnswer) === ''
+                ? ''
+                : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                  {getNonFirstAnswerPossibilities(correctAnswer)}
+                </div>
+              }
+              arrow>
+              <CorrectAnswerTextField
+                hiddenLabel //TODO: might want to change the size of correct answer text field
+                inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "Inter", fontWeight: 500, fontSize: '1.0rem', padding: '5px 12px' } }}
+                value={correctAnswer.possibleChoices[0]}
+                variant="outlined"
                 size="small"
-                helperText={answered && "Incorrect answer."}
-                error={answered}
-                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
+                disabled
               />
-            }
+            </Tooltip>
           </Box>
         ))}
         <QuestionSegments variant='h6'>
@@ -359,12 +271,10 @@ export function FillInTheBlankDisplayBlock({
       <div style={{ textAlign: 'right' }}>
         <Button
           onClick={() => {
-            setAnswered(true);
-            handleCheck();
           }}
           variant="contained"
           color="primary"
-          disabled={correct}
+          disabled
           style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
         >
           CHECK
