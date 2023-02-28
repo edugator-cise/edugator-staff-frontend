@@ -174,6 +174,7 @@ export const FillInTheBlankModal = ({
                             className="fitb-modal-question-input"
                             ref={modalInput}
                             value={question}
+                            rows={3}
                             onChange={(e) => {
                                 handleQuestionChange(e.target.value);
                                 setCursorPosition(e.target.selectionStart);
