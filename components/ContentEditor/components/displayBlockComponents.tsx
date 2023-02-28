@@ -265,10 +265,6 @@ export function FillInTheBlankDisplayBlock({
     return possibleChoices.slice(1, possibleChoices.length).join('\n');
   };
 
-  const shouldShowAnswerTooltip = (correctAnswer: blankAnswer) => {
-    return correctAnswer.possibleChoices.length > 1;
-  };
-
   const handleCheck = () => {
     let updatedResults = [...results];
     for (let i = 0; i < answerInputs.length; i++) {
@@ -325,7 +321,6 @@ export function FillInTheBlankDisplayBlock({
             </QuestionSegments>
             {!number || results[i] // If number does not exist, we are in admin view. Otherwise in student view.
               ? <Tooltip
-                hidden={shouldShowAnswerTooltip(correctAnswer)}
                 title={getNonFirstAnswerPossibilities(correctAnswer) === ''
                   ? ''
                   : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
