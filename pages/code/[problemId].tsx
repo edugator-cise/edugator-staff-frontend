@@ -18,8 +18,8 @@ import {
   Typography,
 } from "@mui/material";
 import { ProblemView } from "components/CodeEditor/CodeEditorContainer/ProblemView";
-import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView";
-import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/InputOutputView";
+import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView/CodeEditorView";
+import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/InputOutputView/InputOutputView";
 import "allotment/dist/style.css";
 import { useFetchProblem } from "hooks/useFetchProblem";
 import { FetchStatus } from "hooks/types";
@@ -97,12 +97,12 @@ export default function CodeEditor() {
           </Box>
         </Grid>
       ) : (
-        <Allotment sizes={[310, 350]} snap={true} minSize={300}>
+        <Allotment sizes={[310, 350]} snap={true} minSize={460}>
           <ProblemView
             problemTitle={currentProblem?.title}
             problemStatement={currentProblem?.statement}
           />
-          <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
+          <Allotment sizes={[100, 100]} vertical snap={false} minSize={400}>
             <CodeEditorView
               isSubmissionRunning={isSubmissionRunning}
               runCode={runCode}

@@ -109,13 +109,23 @@
     }
 }
 
-  .TooltipContent[data-state='open'] {
+  .TooltipContent[data-state='open'][data-side='right'] {
     transform-origin: left;
     animation: fadeIn 150ms ease-out;
   }
 
-  .TooltipContent[data-state='closed'] {
+  .TooltipContent[data-state='closed'][data-side='right'] {
     transform-origin: left;
+    animation: fadeOut 150ms ease-in;
+  }
+
+  .TooltipContent[data-state='open'][data-side='bottom'] {
+    transform-origin: top;
+    animation: fadeIn 150ms ease-out;
+  }
+
+  .TooltipContent[data-state='closed'][data-side='bottom'] {
+    transform-origin: top;
     animation: fadeOut 150ms ease-in;
   }
 

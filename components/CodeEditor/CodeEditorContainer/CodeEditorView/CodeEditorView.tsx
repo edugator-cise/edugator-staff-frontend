@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
-import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
@@ -19,28 +18,8 @@ import {
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
-// import useMediaQuery from "@mui/material/useMediaQuery";
-
-const ColumnContainer = styled("div")(
-  ({ theme }) => `
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${theme.spacing(1)};
-  padding-bottom:${theme.spacing(1)};
-  width: 100%;`
-);
-
-const EditorContainer = styled("div")(
-  () => `
-  border: solid 1px ${colors.borderGray};
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 100%;
-`
-);
+import { icons } from "./editorIcons";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 interface CodeEditorProps {
   code: string;
@@ -80,6 +59,30 @@ interface CodeEditorProps {
   }) => void;
 }
 
+const ButtonToolTip = ({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) => (
+  <Tooltip.Provider delayDuration={100}>
+    <Tooltip.Root>
+      <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Content
+          side="bottom"
+          sideOffset={5}
+          align="center"
+          className="TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2"
+        >
+          {label}
+        </Tooltip.Content>
+      </Tooltip.Portal>
+    </Tooltip.Root>
+  </Tooltip.Provider>
+);
+
 export const CodeEditorView = ({
   code,
   templatePackage,
@@ -93,9 +96,6 @@ export const CodeEditorView = ({
   const locationState = router.asPath;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
-  /* const isSubmissionRunning = useSelector(
-    (state: RootState) => state.codeEditor.runningSubmission
-  ); */
 
   const {
     timeLimit,
@@ -153,18 +153,18 @@ export const CodeEditorView = ({
             <h3 className="text-sm text-slate-800 font-dm">{fileName}</h3>
           </div>
         </div>
-        <div className="">
+        <div className="flex space-x-2 py-1 items-center">
           <a
             href={templatePackage}
             style={{ textDecoration: "none" }}
             target="_blank"
             rel="noreferrer"
           >
-            <Tooltip title="Download Template" placement="top">
-              <IconButton>
-                <CloudDownload />
-              </IconButton>
-            </Tooltip>
+            <ButtonToolTip label="Download Template">
+              <button className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group">
+                {icons.downloadTemplate}
+              </button>
+            </ButtonToolTip>
           </a>
           <input
             style={{ display: "none" }}
@@ -172,28 +172,34 @@ export const CodeEditorView = ({
             type="file"
             onChange={(e) => parseFile(e, editorRef)}
           />
-          <Tooltip title="Choose File" placement="top">
-            <IconButton onClick={(e) => handleChooseFile(e)}>
-              <Add />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Download Submission" placement="top">
-            <IconButton
-              onClick={() => {
-                handleDownload(currentCode, navigation, problemId, fileType);
-              }}
+          <ButtonToolTip label="Choose File">
+            <button
+              onClick={(e) => handleChooseFile(e)}
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
             >
-              <GetApp />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Reset Code" placement="top">
-            <IconButton onClick={handleReset}>
-              <RotateLeft />
-            </IconButton>
-          </Tooltip>
+              {icons.chooseFile}
+            </button>
+          </ButtonToolTip>
+          <ButtonToolTip label="Download Submission">
+            <button
+              onClick={(e) =>
+                handleDownload(currentCode, navigation, problemId, fileType)
+              }
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
+            >
+              {icons.downloadSubmission}
+            </button>
+          </ButtonToolTip>
+          <ButtonToolTip label="Reset Code">
+            <button
+              onClick={() => handleReset()}
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
+            >
+              {icons.resetCode}
+            </button>
+          </ButtonToolTip>
         </div>
       </div>
-      <Box sx={{ paddingRight: 3 }}></Box>
       <div className="w-full h-full flex flex-col py-2 px-3 bg-slate-100">
         <Backdrop
           sx={{
