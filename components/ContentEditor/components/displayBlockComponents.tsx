@@ -254,7 +254,7 @@ export function FillInTheBlankDisplayBlock({
               }
               arrow>
               <CorrectAnswerTextField
-                hiddenLabel //TODO: might want to change the size of correct answer text field
+                hiddenLabel
                 inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "Inter", fontWeight: 500, fontSize: '1.0rem', padding: '5px 12px' } }}
                 value={correctAnswer.possibleChoices[0]}
                 variant="outlined"
