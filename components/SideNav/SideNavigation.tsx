@@ -11,6 +11,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { useTheme } from "next-themes";
 
 import { icons } from "./navIcons";
+import { ContentType } from "components/PlaygroundLayout";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -22,17 +23,22 @@ const NavLink = ({
   open,
   active,
   setActiveLink,
+  onClick,
 }: {
   icon: (active: boolean) => React.ReactNode;
   text: NavLinkText;
   open: boolean;
   active: boolean;
   setActiveLink: (text: NavLinkText) => void;
+  onClick?: () => void;
 }) => {
   return (
     <NavLinkTooltip text={text} disabled={open}>
       <button
-        onClick={() => setActiveLink(text)}
+        onClick={() => {
+          setActiveLink(text);
+          onClick && onClick();
+        }}
         className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
           active
             ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white font-medium"
@@ -135,7 +141,17 @@ type NavLinkText =
   | "Problems"
   | "Bug Bounty";
 
-const SideNavigation = () => {
+const SideNavigation = ({
+  exercisesHidden,
+  setExercisesHidden,
+  activeContent,
+  setActiveContent,
+}: {
+  exercisesHidden: boolean;
+  setExercisesHidden: (hidden: boolean) => void;
+  activeContent: ContentType;
+  setActiveContent: (activeContent: ContentType) => void;
+}) => {
   const [open, setOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<NavLinkText>("Dashboard");
   const [activeClass, setActiveClass] = useState(0);
@@ -144,6 +160,16 @@ const SideNavigation = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (activeContent === "problems") {
+      setActiveLink("Problems");
+    } else if (activeContent === "lessons") {
+      setActiveLink("Lessons");
+    } else if (activeContent === "all") {
+      setActiveLink("View All");
+    }
+  }, [activeContent]);
 
   const router = useRouter();
   const { pathname } = router;
@@ -157,7 +183,7 @@ const SideNavigation = () => {
       style={{
         transition: "width 0.2s ease-in, min-width 0.2s ease-out",
       }}
-      className={`shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-nav-darker dark:bg-[#212b3b] 111727 flex flex-col items-center justify-start ${
+      className={`shadow-[0_0_1px_red] font-dm overflow-hidden h-full z-50 bg-nav-darker dark:bg-[#212b3b] 111727 flex flex-col items-center justify-start ${
         open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
       }`}
     >
@@ -266,16 +292,68 @@ const SideNavigation = () => {
           <Divider />
           {/* Button Group */}
           <div className="flex flex-col space-y-2">
-            {navLinks.map((link, i) => (
-              <NavLink
-                key={i}
-                open={open}
-                icon={link.icon}
-                text={link.text}
-                active={activeLink === link.text}
-                setActiveLink={setActiveLink}
-              />
-            ))}
+            {navLinks.map((link, i) => {
+              const toggleExercises = [
+                "View All",
+                "Lessons",
+                "Problems",
+              ].includes(link.text);
+              const isActiveLink = activeLink === link.text;
+
+              // if link is already active and exercises are open, close exercises
+              // if link is already active and exercises are closed, open exercises
+              // if link is in toggleExercises and exercises are open, keep exercises open
+              // if link is in toggleExercises and exercises are closed, open exercises
+
+              //need to refactor this.
+              const clickHandler = () => {
+                if (isActiveLink && exercisesHidden && toggleExercises) {
+                  setExercisesHidden(false);
+                } else if (
+                  isActiveLink &&
+                  !exercisesHidden &&
+                  toggleExercises
+                ) {
+                  setExercisesHidden(true);
+                } else if (
+                  !isActiveLink &&
+                  toggleExercises &&
+                  exercisesHidden
+                ) {
+                  setExercisesHidden(true);
+                } else if (
+                  !isActiveLink &&
+                  toggleExercises &&
+                  !exercisesHidden
+                ) {
+                  setExercisesHidden(false);
+                } else if (toggleExercises && exercisesHidden) {
+                  setExercisesHidden(false);
+                } else if (toggleExercises && !exercisesHidden) {
+                  setExercisesHidden(true);
+                }
+                setActiveLink(link.text);
+                if (link.text === "View All") {
+                  setActiveContent("all");
+                } else if (link.text === "Lessons") {
+                  setActiveContent("lessons");
+                } else if (link.text === "Problems") {
+                  setActiveContent("problems");
+                }
+              };
+
+              return (
+                <NavLink
+                  key={i}
+                  open={open}
+                  icon={link.icon}
+                  text={link.text}
+                  active={activeLink === link.text}
+                  setActiveLink={setActiveLink}
+                  onClick={clickHandler}
+                />
+              );
+            })}
           </div>
         </section>
         {/* Bottom Group */}

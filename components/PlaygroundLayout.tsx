@@ -5,11 +5,11 @@ import SideNavigation from "./SideNav/SideNavigation";
 import ContentSidebar from "./ContentSidebar/ContentSidebar";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 
+export type ContentType = "problems" | "lessons" | "all";
+
 const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
-  const [isHidden, setIsHidden] = useState(false);
-  const [contentType, setContentType] = useState<"problem" | "lesson" | "">(
-    "problem"
-  );
+  const [hidden, setHidden] = useState(false);
+  const [activeContent, setActiveContent] = useState<ContentType>("all");
 
   const router = useRouter();
   const locationState = router.asPath;
@@ -17,14 +17,27 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-screen flex overflow-hidden bg-stone-100">
       {/* <VerticalNavigation light={true} codingPage={true} /> */}
-      <SideNavigation />
-      <div className="w-px h-full bg-slate-700"></div>
+      <SideNavigation
+        exercisesHidden={hidden}
+        setExercisesHidden={setHidden}
+        setActiveContent={setActiveContent}
+        activeContent={activeContent}
+      />
+      <div className="w-px h-full bg-slate-700 z-50"></div>
       <div className="w-full h-full flex flex-col">
         {/* <TopicSidebar isHidden={isHidden} setIsHidden={setIsHidden} /> */}
         <div className="flex w-full h-full">
-          <ContentSidebar />
-          <div className="w-px h-full bg-slate-700"></div>
-          <div className="relative w-full h-full">
+          <ContentSidebar
+            hidden={hidden}
+            setHidden={setHidden}
+            setActiveContent={setActiveContent}
+            activeContent={activeContent}
+          />
+          <div
+            className={`relative w-full h-full transition-all ${
+              hidden ? "ml-0" : "ml-72"
+            }`}
+          >
             {children}
             <NextOverlay />
           </div>

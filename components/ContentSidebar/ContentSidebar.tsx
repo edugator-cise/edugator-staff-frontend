@@ -14,6 +14,8 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";
+import { ContentType } from "components/PlaygroundLayout";
+import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
 
 const AccordionContent = ({
   children,
@@ -34,7 +36,17 @@ const AccordionContent = ({
   </Accordion.Content>
 );
 
-const ContentSidebar = () => {
+const ContentSidebar = ({
+  hidden,
+  setHidden,
+  activeContent,
+  setActiveContent,
+}: {
+  hidden: boolean;
+  setHidden: (hidden: boolean) => void;
+  activeContent: ContentType;
+  setActiveContent: (activeContent: ContentType) => void;
+}) => {
   const [openModules, setOpenModules] = React.useState<string[]>([]);
 
   const { problemAndLessonSet, status } = useNavigation(
@@ -55,16 +67,31 @@ const ContentSidebar = () => {
   }, []);
 
   return (
-    <ScrollArea.Root className="overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col">
+    <ScrollArea.Root
+      className={`overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col !absolute top-0 z-20 border-r border-r-slate-700 transition-all ${
+        hidden ? "-left-[207px]" : "left-[81px]"
+      }`}
+    >
       <ScrollArea.Viewport className="w-full h-full">
         {/* Header */}
-        <div className="w-full h-20 min-h-[5rem] flex items-center px-6">
+        <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
           <h1 className="text-white font-dm font-medium text-lg">Exercises</h1>
+          <div
+            onClick={() => {
+              setHidden(!hidden);
+            }}
+            className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
+          >
+            <DoubleArrowLeftIcon className="text-slate-300" />
+          </div>
         </div>
         <div className="w-full">
           <Tabs.Root
             className="flex flex-col w-full rounded-md"
-            defaultValue="all"
+            value={activeContent}
+            onValueChange={(value) => {
+              setActiveContent(value as ContentType);
+            }}
           >
             <Tabs.List
               className="shrink-0 flex"
@@ -135,7 +162,7 @@ const ContentSidebar = () => {
                     className="border-t border-slate-700 last:border-b group"
                   >
                     <Accordion.Trigger className="pl-[0.875rem] overflow-hidden relative pr-4 group py-3 w-full flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 ">
                         <div className="absolute left-7 top-[50%] dash group-data-[state=open]:dashreverse group-data-[state=closed]:dashreverse transition-transform duration-500 origin-bottom">
                           {itemCount > 0 ? (
                             <svg

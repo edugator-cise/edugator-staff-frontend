@@ -12,7 +12,7 @@ function Image(props: { alt: string } & any) {
     <img
       alt={props.alt}
       {...props}
-      className="border rounded-md"
+      className="border rounded-md dark:border-slate-700"
       style={{ maxWidth: "100%" }}
     />
   );
