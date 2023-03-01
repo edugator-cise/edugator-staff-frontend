@@ -126,7 +126,7 @@ export const MetadataForm = (props: Props) => {
               </LocalizationProvider>
             </Box>
             
-            <Form style={{ display: 'flex' }}>
+            {/* <Form style={{ display: 'flex' }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -151,7 +151,7 @@ export const MetadataForm = (props: Props) => {
               sx={{ marginTop: "auto" }}
               label="Python"
             />
-            </Form>
+            </Form> */}
 
 
           </Stack>

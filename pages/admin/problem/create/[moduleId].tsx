@@ -1,6 +1,5 @@
-
 import AdminLayout from "components/AdminLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -28,6 +27,17 @@ const ProblemCreatePage = () => {
     },
   };
 
+  const [showCppSettings, setShowCppSettings] = useState(false);
+  const [showPythonSettings, setShowPythonSettings] = useState(false);
+
+  function handleCppSettingsCheckboxChange() {
+    setShowCppSettings(!showCppSettings);
+  }
+
+  function handlePythonSettingsCheckboxChange() {
+    setShowPythonSettings(!showPythonSettings);
+  }
+
   useEffect(() => {
     dispatch(updateModuleId(moduleId as string));
     dispatch(updateModuleName(moduleName as string));
@@ -43,29 +53,55 @@ const ProblemCreatePage = () => {
       actionButtons={[actions.back]}
     >
       
+      <div style={{ display: 'flex' }}>
+        <h5>Select programming languages:</h5>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <div>
+          <input
+            type="checkbox"
+            onChange={handleCppSettingsCheckboxChange}
+            checked={showCppSettings}
+          />
+          {' '}
+          C++
+        </div>
+        <div style={{ marginLeft: '16px' }}>
+          <input
+            type="checkbox"
+            onChange={handlePythonSettingsCheckboxChange}
+            checked={showPythonSettings}
+          />
+          {' '}
+           Python
+        </div>
+      </div>
+      <br/>
       <Accordion defaultActiveKey="0">
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>General Settings</Accordion.Header>
-        <Accordion.Body>
-        <ProblemEditorContainer />
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1">
-        <Accordion.Header>C++ Settings</Accordion.Header>
-        <Accordion.Body>
-        <ProblemEditorContainer />
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="2">
-        <Accordion.Header>Python Settings</Accordion.Header>
-        <Accordion.Body>
-        <ProblemEditorContainer />
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>General Settings</Accordion.Header>
+          <Accordion.Body>
+            <ProblemEditorContainer />
+          </Accordion.Body>
+        </Accordion.Item>
+        {showCppSettings && (
+          <Accordion.Item eventKey="1">
+            <Accordion.Header>C++ Settings</Accordion.Header>
+            <Accordion.Body>
+              <ProblemEditorContainer />
+            </Accordion.Body>
+          </Accordion.Item>
+        )}
+        {showPythonSettings && (
+          <Accordion.Item eventKey="2">
+            <Accordion.Header>Python Settings</Accordion.Header>
+            <Accordion.Body>
+              <ProblemEditorContainer />
+            </Accordion.Body>
+          </Accordion.Item>
+        )}
+      </Accordion>
     </AdminLayout>
   );
 };
 
 export default ProblemCreatePage;
-
