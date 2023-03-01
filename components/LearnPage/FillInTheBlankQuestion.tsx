@@ -94,23 +94,23 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
                 let currentAnswerInput = answerInputs[i].trim(); // Removes whitespace
 
                 if (props.correctAnswers[i].shouldHaveExactMatch) {
-                    if (props.correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer === currentAnswerInput)) {
-                        updatedResults[i] = true;
-                    }
+                    updatedResults[i] = props.correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer === currentAnswerInput);
+                    console.log("updatedResults[", i, "]", updatedResults[i]);
                 }
-                else if (!isNaN(+currentAnswerInput)) { // If true, currentAnswerInput is a number.
-                    if (props.correctAnswers[i].possibleChoices.some(correctAnswer => parseFloat(correctAnswer) === parseFloat(currentAnswerInput))) {
-                        updatedResults[i] = true;
-                    }
-                } else if (props.correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer.toLowerCase() === currentAnswerInput.toLowerCase())) {
-                    updatedResults[i] = true;
-                } else {
-                    updatedResults[i] = false;
+                // If true, currentAnswerInput is a number.
+                else if (!isNaN(+currentAnswerInput)) {
+                    updatedResults[i] = props.correctAnswers[i].possibleChoices.some(correctAnswer => parseFloat(correctAnswer) === parseFloat(currentAnswerInput));
+                    console.log("updatedResults[", i, "]", updatedResults[i]);
+                }
+                else {
+                    updatedResults[i] = props.correctAnswers[i].possibleChoices.some(correctAnswer => correctAnswer.toLowerCase() === currentAnswerInput.toLowerCase());
+                    console.log("updatedResults[", i, "]", updatedResults[i]);
                 }
             }
         }
 
         setResults(updatedResults);
+        console.log(updatedResults);
         if (updatedResults.every(result => result === true)) {
             setCorrect(true);
         }
