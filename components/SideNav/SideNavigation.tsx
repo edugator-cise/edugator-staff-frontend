@@ -154,12 +154,15 @@ const SideNavigation = () => {
 
   return (
     <nav
-      className={`transition-all shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-nav-darker 111727 flex flex-col items-center justify-start ${
+      style={{
+        transition: "width 0.2s ease-in, min-width 0.2s ease-out",
+      }}
+      className={`shadow-[0_0_1px_red] font-dm overflow-hidden h-full bg-nav-darker dark:bg-[#212b3b] 111727 flex flex-col items-center justify-start ${
         open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
       }`}
     >
       {/* Logo */}
-      <div className="flex items-center h-16 w-full bg-gradient-to-tl from-nav-darker via-nav-darker to-emerald-900/40 px-3">
+      <div className="flex items-center h-16 w-full bg-gradient-to-tl from-nav-darker dark:from-[#212b3b] dark:via-[#212b3b] dark:to-emerald-700/40 via-nav-darker to-emerald-900/40 px-3">
         <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
           <svg
             className="w-full"
