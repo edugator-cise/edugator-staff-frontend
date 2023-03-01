@@ -34,7 +34,7 @@ const BlankAnswerTextField = styled(TextField)((props: any) => ({
     "& .MuiFilledInput-root": {
         backgroundColor: theme.palette.primary.light
     },
-    "& .MuiFilledInput-root:hover": { // TODO: Figure out how to stop input from going back to its default color on hover/focus - might leave it
+    "& .MuiFilledInput-root:hover": {
         backgroundColor: theme.palette.primary.light
     },
     "& .MuiFilledInput-root.Mui-focused": {
