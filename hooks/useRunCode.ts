@@ -155,6 +155,7 @@ export const useRunCode = (locationState: string) => {
       );
       setActiveTab(2);
       setIsSubmissionRunning(false);
+      setSubmissionOutput(data);
     } catch (error: any) {
       setIsSubmissionRunning(false);
       toast.error(error.message || "Something went wrong");

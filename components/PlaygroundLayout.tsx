@@ -37,12 +37,12 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 const NextOverlay = () => {
   return (
     <div className="font-dm space-x-4 cursor-pointer max-w-[30rem] absolute flex items-center justify-between rounded-md opacity-50 transition hover:opacity-100 bg-white shadow-lg shadow-black/5 border bottom-4 right-4 z-50 px-4 whitespace-nowrap">
-      <div className="flex flex-col py-3">
+      <div className="flex flex-col py-3 text-slate-900">
         <h1 className="font-bold">Up Next:</h1>
         <p className="text-sm">Introduction to C++</p>
       </div>
       <div className=" flex items-end h-10">
-        <ArrowRightIcon className="h-4 w-4 stroke-blue-500 stroke-[0.5px]" />
+        <ArrowRightIcon className="h-4 w-4 stroke-blue-500 text-blue-500 stroke-[0.5px]" />
       </div>
     </div>
   );

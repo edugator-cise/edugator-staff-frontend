@@ -71,18 +71,9 @@ export default function CodeEditor() {
   return (
     <>
       {status === FetchStatus.loading ? (
-        <Grid container direction="column" sx={{ height: "100vh" }}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        </Grid>
+        <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darker">
+          <CircularProgress />
+        </div>
       ) : currentProblem === undefined ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box
@@ -102,25 +93,29 @@ export default function CodeEditor() {
             problemTitle={currentProblem?.title}
             problemStatement={currentProblem?.statement}
           />
-          <Allotment sizes={[100, 100]} vertical snap={false} minSize={400}>
-            <CodeEditorView
-              isSubmissionRunning={isSubmissionRunning}
-              runCode={runCode}
-              submitCode={submitCode}
-              code={currentProblem.code?.body}
-              templatePackage={currentProblem?.templatePackage}
-              currentProblem={currentProblem}
-              stdin={stdin}
-            />
-            <InputOutputView
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              submissionOutput={submissionOutput}
-              stdin={stdin}
-              setStdin={setStdin}
-              compilerOutput={compilerOutput}
-              isAcceptedOutput={isAcceptedOutput}
-            />
+          <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
+            <div className="w-full h-full">
+              <CodeEditorView
+                isSubmissionRunning={isSubmissionRunning}
+                runCode={runCode}
+                submitCode={submitCode}
+                code={currentProblem.code?.body}
+                templatePackage={currentProblem?.templatePackage}
+                currentProblem={currentProblem}
+                stdin={stdin}
+              />
+            </div>
+            <div className="w-full h-full">
+              <InputOutputView
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                submissionOutput={submissionOutput}
+                stdin={stdin}
+                setStdin={setStdin}
+                compilerOutput={compilerOutput}
+                isAcceptedOutput={isAcceptedOutput}
+              />
+            </div>
           </Allotment>
         </Allotment>
       )}

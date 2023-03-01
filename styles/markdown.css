@@ -3,28 +3,31 @@
 }
 
 .markdown h1 {
-    @apply text-lg font-bold !mt-4;
+    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h4 {
-    @apply text-lg font-bold !mt-4;
+    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h2 {
-    @apply text-lg font-bold !mt-4;
+    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h3 {
-    @apply text-lg font-bold !mt-4;
+    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
 }
 
+.markdown p {
+    @apply text-slate-900 dark:text-slate-200;
+}
 
 .markdown ul {
-    @apply list-disc p-3 bg-slate-100 border list-inside rounded-md space-y-3;
+    @apply list-disc p-3 bg-slate-100 text-slate-900 dark:border-none dark:text-slate-100 dark:bg-nav-darkest border list-inside rounded-md space-y-3;
 }
 
 .markdown ul ul {
-    @apply bg-slate-200 rounded-sm border-slate-300 mt-2
+    @apply bg-slate-200 rounded-sm border-slate-300 dark:bg-nav-darker dark:border-none mt-2
 }
 
 .markdown li {
@@ -32,7 +35,7 @@
 }
 
 .markdown code {
-    @apply bg-slate-800/10 cursor-pointer hover:bg-slate-800/20 transition-colors border p-1 rounded-md;
+    @apply bg-slate-800/10 cursor-pointer hover:bg-slate-800/20 dark:border-none dark:bg-slate-200/10 border p-1 rounded-md text-slate-900 dark:text-white;
 }
 
 .markdown pre {
@@ -40,11 +43,11 @@
 }
 
 .markdown pre code {
-    @apply bg-transparent border-none p-0 hover:bg-transparent;
+    @apply bg-transparent border-none p-0 hover:bg-transparent text-slate-900 dark:text-white;
 }
 
 .markdown blockquote {
-    @apply border-l-4 border-slate-800/10 leading-8 italic p-3 rounded-md;
+    @apply border-l-4 border-slate-800/10 dark:border-slate-100/10 leading-8 italic p-3 rounded-md;
 }
 
 .markdown blockquote > blockquote {

@@ -4,7 +4,10 @@ import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
 import theme from "constants/theme";
-import { ThemeProvider, StyledEngineProvider } from "@mui/system";
+import {
+  ThemeProvider as MUIThemeProvider,
+  StyledEngineProvider,
+} from "@mui/system";
 import "styles/App.module.css";
 import "styles/App.css";
 import "styles/index.css";
@@ -19,6 +22,7 @@ import "styles/animations.css";
 import "styles/markdown.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "next-themes";
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -41,10 +45,12 @@ const App = ({ Component, pageProps }: Props) => {
   return (
     <Provider store={store}>
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <Toaster containerClassName="font-dm" />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
+        <MUIThemeProvider theme={theme}>
+          <ThemeProvider enableSystem={true} attribute="class">
+            <Toaster containerClassName="font-dm" />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </MUIThemeProvider>
       </StyledEngineProvider>
     </Provider>
   );

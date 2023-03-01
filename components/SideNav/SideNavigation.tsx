@@ -8,6 +8,7 @@ import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Switch from "@radix-ui/react-switch";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import { useTheme } from "next-themes";
 
 import { icons } from "./navIcons";
 
@@ -138,10 +139,18 @@ const SideNavigation = () => {
   const [open, setOpen] = useState(false);
   const [activeLink, setActiveLink] = useState<NavLinkText>("Dashboard");
   const [activeClass, setActiveClass] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const router = useRouter();
   const { pathname } = router;
+
+  const { systemTheme, theme, setTheme } = useTheme();
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
     <nav
@@ -182,7 +191,7 @@ const SideNavigation = () => {
           {/* Class Group */}
           <div
             className={`flex flex-col space-y-3 transition-all rounded-md ${
-              open ? "p-2 bg-[#0c121c] ring-2 ring-[#060b14]" : "p-0"
+              open ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]" : "p-0"
             }`}
           >
             {classes.map((item, index) => (
@@ -270,56 +279,64 @@ const SideNavigation = () => {
         <div className="w-full space-y-4">
           <div className="flex flex-col space-y-2">
             {/* Theme Toggle */}
-            <NavLinkTooltip text="Toggle Theme" disabled={open}>
-              <div
-                className={`w-full h-12 rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
-                onClick={() => setDarkMode(!darkMode)}
-              >
-                <div className="flex space-x-4">
-                  <div className="w-5 h-5 min-w-[20px] relative">
-                    <div
-                      className={`absolute top-0 left-0 w-full h-full transition-all ${
-                        darkMode
-                          ? "right-5 opacity-0 rotate-90"
-                          : "opacity-100 rotate-0 right-0"
-                      }`}
-                    >
-                      {icons.sun(false)}
-                    </div>
-                    <div
-                      className={`absolute left-0 top-0 w-full h-full transition-all ${
-                        darkMode
-                          ? "opacity-100 rotate-0 right-0"
-                          : "opacity-0 -rotate-90 -right-5"
-                      }`}
-                    >
-                      {icons.moon(false)}
-                    </div>
-                  </div>
-                  <label
-                    className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                      open ? "opacity-100" : "opacity-0"
-                    }`}
-                    htmlFor="dark-mode"
-                  >
-                    Dark Mode
-                  </label>
-                </div>
-                <Switch.Root
-                  className="w-[42px] h-[25px] rounded-full relative border border-emerald-500/50 data-[state=checked]:bg-emerald-500 outline-none cursor-default"
-                  id="dark-mode"
-                  checked={darkMode}
-                  onCheckedChange={setDarkMode}
+            {mounted ? (
+              <NavLinkTooltip text="Toggle Theme" disabled={open}>
+                <div
+                  className={`w-full h-12 cursor-pointer rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
+                  onClick={() => {
+                    setTheme(currentTheme === "dark" ? "light" : "dark");
+                  }}
                 >
-                  <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                </Switch.Root>
-              </div>
-            </NavLinkTooltip>
+                  <div className="flex space-x-4">
+                    <div className="w-5 h-5 min-w-[20px] relative">
+                      <div
+                        className={`absolute top-0 left-0 w-full h-full transition-all ${
+                          currentTheme === "dark"
+                            ? "right-5 opacity-0 rotate-90"
+                            : "opacity-100 rotate-0 right-0"
+                        }`}
+                      >
+                        {icons.sun(false)}
+                      </div>
+                      <div
+                        className={`absolute left-0 top-0 w-full h-full transition-all ${
+                          currentTheme === "dark"
+                            ? "opacity-100 rotate-0 right-0"
+                            : "opacity-0 -rotate-90 -right-5"
+                        }`}
+                      >
+                        {icons.moon(false)}
+                      </div>
+                    </div>
+                    <label
+                      className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
+                        open ? "opacity-100" : "opacity-0"
+                      }`}
+                      htmlFor="dark-mode"
+                    >
+                      Dark Mode
+                    </label>
+                  </div>
+                  <Switch.Root
+                    className="w-[42px] h-[25px] rounded-full relative border border-emerald-500/50 data-[state=checked]:bg-emerald-500 outline-none cursor-default"
+                    id="dark-mode"
+                    checked={currentTheme === "dark"}
+                    onCheckedChange={(checked) => {
+                      setTheme(checked ? "dark" : "light");
+                    }}
+                  >
+                    <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                  </Switch.Root>
+                </div>
+              </NavLinkTooltip>
+            ) : (
+              <></>
+            )}
           </div>
           {/* Settings */}
           <NavLinkTooltip text="Settings" disabled={open}>
             <div
-              className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
+              className={`w-full cursor-pointer h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div className="w-5 h-5 min-w-[20px]">{icons.cog(false)}</div>
               <div
@@ -337,7 +354,7 @@ const SideNavigation = () => {
           <NavLinkTooltip text={"Expand"} disabled={open}>
             <div
               onClick={() => setOpen(!open)}
-              className={`w-full h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
+              className={`w-full cursor-pointer h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div
                 className={`w-5 h-5 min-w-[20px] transition-transform ${

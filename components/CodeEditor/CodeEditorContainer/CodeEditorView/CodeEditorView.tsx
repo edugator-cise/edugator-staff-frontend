@@ -17,6 +17,7 @@ import { LocalStorage } from "lib/auth/LocalStorage";
 import { icons } from "./editorIcons";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { toast } from "react-hot-toast";
+import { useTheme } from "next-themes";
 
 interface CodeEditorProps {
   code: string;
@@ -141,13 +142,21 @@ export const CodeEditorView = ({
     }
   });
 
+  const { theme, systemTheme } = useTheme();
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
+
   return (
     <div className="w-full h-full flex flex-col font-dm">
-      <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 border-b border-b-slate-300">
+      <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 dark:bg-nav-dark border-b dark:border-b-slate-700 border-b-slate-300">
         <div className="flex space-x-4 items-center ">
-          <p className="text-sm text-slate-800 font-dm font-bold">Solution</p>
-          <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 shadow-2xl shadow-emerald-500 bg-slate-100 px-3 py-2">
-            <h3 className="text-sm text-slate-800 font-dm">{fileName}</h3>
+          <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+            Solution
+          </p>
+          <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 dark:border-slate-700 shadow-2xl shadow-emerald-500 bg-slate-100 dark:bg-nav-darkest px-3 py-2">
+            <h3 className="text-sm text-slate-800 dark:text-white font-dm">
+              {fileName}
+            </h3>
           </div>
         </div>
         <div className="flex space-x-2 py-1 items-center">
@@ -158,7 +167,7 @@ export const CodeEditorView = ({
             rel="noreferrer"
           >
             <ButtonToolTip label="Download Template">
-              <button className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group">
+              <button className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group">
                 {icons.downloadTemplate}
               </button>
             </ButtonToolTip>
@@ -172,7 +181,7 @@ export const CodeEditorView = ({
           <ButtonToolTip label="Choose File">
             <button
               onClick={(e) => handleChooseFile(e)}
-              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group"
             >
               {icons.chooseFile}
             </button>
@@ -182,7 +191,7 @@ export const CodeEditorView = ({
               onClick={(e) =>
                 handleDownload(currentCode, navigation, problemId, fileType)
               }
-              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group"
             >
               {icons.downloadSubmission}
             </button>
@@ -190,14 +199,14 @@ export const CodeEditorView = ({
           <ButtonToolTip label="Reset Code">
             <button
               onClick={() => handleReset()}
-              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 flex items-center justify-center group"
+              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group"
             >
               {icons.resetCode}
             </button>
           </ButtonToolTip>
         </div>
       </div>
-      <div className="w-full h-full flex flex-col py-2 px-3 bg-slate-100">
+      <div className="w-full h-full flex flex-col py-2 px-3 bg-slate-100 dark:bg-nav-darkest">
         <Backdrop
           sx={{
             color: "#fff",
@@ -209,7 +218,8 @@ export const CodeEditorView = ({
           <CircularProgress color="inherit" />
         </Backdrop>
         <Editor
-          className="rounded-md overflow-hidden border"
+          theme={currentTheme === "dark" ? "vs-dark" : "light"} //TODO: define custom theme with monaco.editor.defineTheme
+          className="rounded-md overflow-hidden border dark:border-slate-700"
           height="99%"
           defaultLanguage="cpp"
           defaultValue={code}
@@ -219,7 +229,7 @@ export const CodeEditorView = ({
           onMount={handleEditorMount}
         />
       </div>
-      <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100">
+      <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100 dark:bg-nav-darkest">
         <button
           disabled={isSubmissionRunning}
           onClick={() => {
@@ -246,7 +256,7 @@ export const CodeEditorView = ({
               }
             );
           }}
-          className="bg-transparent text-slate-600 px-3 text-sm py-2 rounded-md border border-slate-400"
+          className="bg-transparent text-slate-600 dark:text-slate-300 px-3 text-sm py-2 rounded-md border border-slate-400"
         >
           Run Code
         </button>
@@ -266,6 +276,12 @@ export const CodeEditorView = ({
                 loading: "Submitting Code...",
                 success: "Code Submitted Successfully",
                 error: "Error Submitting Code",
+              },
+              {
+                position: "top-right",
+                success: {
+                  icon: "👨‍💻",
+                },
               }
             );
           }}

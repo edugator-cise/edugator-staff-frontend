@@ -16,6 +16,7 @@ module.exports = {
     "fill-nav-active-light-color",
     "fill-nav-active-dark-color",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -33,6 +34,7 @@ module.exports = {
           "inactive-dark": "#434A55",
           "active-light-color": "#d1fae5",
           "active-dark-color": "#10b981",
+          darkest: "#0c121c",
           darker: "#111825",
           dark: "#192231",
         },
