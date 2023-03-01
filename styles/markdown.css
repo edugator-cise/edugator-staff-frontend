@@ -35,7 +35,7 @@
 }
 
 .markdown code {
-    @apply bg-slate-800/10 cursor-pointer hover:bg-slate-800/20 dark:border-none dark:bg-slate-200/10 border p-1 rounded-md text-slate-900 dark:text-white;
+    @apply bg-slate-800/10 transition-colors cursor-pointer hover:bg-slate-800/20 dark:border-none dark:bg-slate-200/10 border p-1 rounded-md text-slate-900 dark:text-white;
 }
 
 .markdown pre {
