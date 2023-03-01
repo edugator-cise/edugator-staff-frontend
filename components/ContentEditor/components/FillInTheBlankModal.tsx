@@ -79,8 +79,8 @@ export const FillInTheBlankModal = ({
     }
 
     const updateAddQuestionButton = (correctAnswers: blankAnswer[]) => {
-        for (let i = 0; i < correctAnswers.length; i++) {
-            if (correctAnswers[i].possibleChoices[0] === undefined) {
+        for (const correctAnswer of correctAnswers) {
+            if (correctAnswer.possibleChoices[0] === undefined) {
                 setIsAddQuestionDisabled(true);
                 break;
             }

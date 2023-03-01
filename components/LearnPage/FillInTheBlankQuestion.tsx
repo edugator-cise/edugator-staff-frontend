@@ -74,7 +74,7 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
 
     useEffect(() => {
         let defaultResults = [];
-        for (let i = 0; i < props.correctAnswers.length; i++) {
+        for (const correctAnswer of props.correctAnswers) {
             defaultResults.push(false);
         }
         setResults(defaultResults);
