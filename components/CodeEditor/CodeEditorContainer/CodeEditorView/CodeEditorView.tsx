@@ -63,9 +63,11 @@ interface CodeEditorProps {
 const ButtonToolTip = ({
   label,
   children,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) => (
   <Tooltip.Provider delayDuration={100}>
     <Tooltip.Root>
@@ -75,7 +77,9 @@ const ButtonToolTip = ({
           side="bottom"
           sideOffset={5}
           align="center"
-          className="TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2"
+          className={`TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2 ${
+            className ? className : ""
+          }`}
         >
           {label}
         </Tooltip.Content>
@@ -179,7 +183,7 @@ export const CodeEditorView = ({
             rel="noreferrer"
           >
             <ButtonToolTip label="Download Template">
-              <button className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group">
+              <button className="w-8 h-8 p-2 rounded-md hidden sm:flex transition hover:bg-slate-300 dark:hover:bg-nav-darkest items-center justify-center group">
                 {icons.downloadTemplate}
               </button>
             </ButtonToolTip>
@@ -193,7 +197,7 @@ export const CodeEditorView = ({
           <ButtonToolTip label="Choose File">
             <button
               onClick={(e) => handleChooseFile(e)}
-              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group"
+              className="w-8 h-8 p-2 rounded-md hidden sm:flex transition hover:bg-slate-300 dark:hover:bg-nav-darkest items-center justify-center group"
             >
               {icons.chooseFile}
             </button>
@@ -203,7 +207,7 @@ export const CodeEditorView = ({
               onClick={(e) =>
                 handleDownload(currentCode, navigation, problemId, fileType)
               }
-              className="w-8 h-8 p-2 rounded-md transition hover:bg-slate-300 dark:hover:bg-nav-darkest flex items-center justify-center group"
+              className="w-8 h-8 p-2 rounded-md hidden sm:flex transition hover:bg-slate-300 dark:hover:bg-nav-darkest items-center justify-center group"
             >
               {icons.downloadSubmission}
             </button>

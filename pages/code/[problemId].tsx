@@ -119,8 +119,8 @@ export default function CodeEditor() {
     <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest">
       {isMobile ? (
         <div className="w-full h-full flex flex-col overflow-scroll">
-          <div className="flex w-full h-full flex-col">
-            <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+          <div className="flex w-full h-auto flex-col relative">
+            <div className="w-full dark:border-b-slate-700 sticky top-0 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
               <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
                 Problems
                 <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
@@ -133,18 +133,20 @@ export default function CodeEditor() {
               problemStatement={currentProblem?.statement}
             />
           </div>
-          <CodeEditorView
-            handleCodeChange={handleCodeChange}
-            editorRef={editorRef}
-            onMount={handleEditorMount}
-            isSubmissionRunning={isSubmissionRunning}
-            runCode={runCode}
-            submitCode={submitCode}
-            code={currentProblem.code?.body}
-            templatePackage={currentProblem?.templatePackage}
-            currentProblem={currentProblem}
-            stdin={stdin}
-          />
+          <div className="min-h-[30rem] w-full">
+            <CodeEditorView
+              handleCodeChange={handleCodeChange}
+              editorRef={editorRef}
+              onMount={handleEditorMount}
+              isSubmissionRunning={isSubmissionRunning}
+              runCode={runCode}
+              submitCode={submitCode}
+              code={currentProblem.code?.body}
+              templatePackage={currentProblem?.templatePackage}
+              currentProblem={currentProblem}
+              stdin={stdin}
+            />
+          </div>
           <InputOutputView
             activeTab={activeTab}
             setActiveTab={setActiveTab}
@@ -171,11 +173,13 @@ export default function CodeEditor() {
                 </span>
               </p>
             </div>
-            <div className="w-full h-fit dark:bg-nav-darkest bg-slate-100 p-4 overflow-y-scroll">
-              <ProblemView
-                problemTitle={currentProblem?.title}
-                problemStatement={currentProblem?.statement}
-              />
+            <div className="w-full h-auto dark:bg-nav-darkest bg-slate-100 p-4 overflow-y-scroll">
+              <div className="h-auto w-full ">
+                <ProblemView
+                  problemTitle={currentProblem?.title}
+                  problemStatement={currentProblem?.statement}
+                />
+              </div>
             </div>
           </div>
           <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
