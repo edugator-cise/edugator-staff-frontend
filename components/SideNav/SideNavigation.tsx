@@ -10,8 +10,9 @@ import * as Switch from "@radix-ui/react-switch";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useTheme } from "next-themes";
 
-import { icons } from "./navIcons";
+import { EdugatorLogo, icons } from "./navIcons";
 import { ContentType } from "components/PlaygroundLayout";
+import { classes, NavLink, navLinks, NavLinkText } from "./navigationData";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -22,22 +23,19 @@ const NavLink = ({
   text,
   open,
   active,
-  setActiveLink,
   onClick,
 }: {
   icon: (active: boolean) => React.ReactNode;
   text: NavLinkText;
   open: boolean;
   active: boolean;
-  setActiveLink: (text: NavLinkText) => void;
-  onClick?: () => void;
+  onClick: () => void;
 }) => {
   return (
     <NavLinkTooltip text={text} disabled={open}>
       <button
         onClick={() => {
-          setActiveLink(text);
-          onClick && onClick();
+          onClick();
         }}
         className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
           active
@@ -92,82 +90,42 @@ const NavLinkTooltip = ({
   );
 };
 
-type NavLink = {
-  icon: (active: boolean) => React.ReactNode;
-  text: NavLinkText;
-};
-
-const navLinks: NavLink[] = [
-  {
-    icon: icons.dashboard,
-    text: "Dashboard",
-  },
-  {
-    icon: icons.list,
-    text: "View All",
-  },
-  {
-    icon: icons.books,
-    text: "Lessons",
-  },
-  {
-    icon: icons.monitorCode,
-    text: "Problems",
-  },
-  {
-    icon: icons.bug,
-    text: "Bug Bounty",
-  },
-];
-
-const classes = [
-  {
-    name: "COP3530",
-    course: "Data Structures and Algorithms",
-    icon: "/DSALogo.png",
-  },
-  {
-    name: "COP3501",
-    course: "Programming 1",
-    icon: "/prog1logo.jpg",
-  },
-];
-
-//type for nav link text
-type NavLinkText =
-  | "Dashboard"
-  | "View All"
-  | "Lessons"
-  | "Problems"
-  | "Bug Bounty";
-
 const SideNavigation = ({
   exercisesHidden,
   setExercisesHidden,
   activeContent,
   setActiveContent,
+  mainSidebarHidden,
+  setMainSidebarHidden,
 }: {
   exercisesHidden: boolean;
   setExercisesHidden: (hidden: boolean) => void;
   activeContent: ContentType;
   setActiveContent: (activeContent: ContentType) => void;
+  mainSidebarHidden: boolean;
+  setMainSidebarHidden: (hidden: boolean) => void;
 }) => {
-  const [open, setOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState<NavLinkText>("Dashboard");
+  const [activeLink, setActiveLink] = useState<NavLink>(navLinks[1]);
   const [activeClass, setActiveClass] = useState(0);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // used to fix hydration mismatch with theme toggle
     setMounted(true);
   }, []);
 
+  //if navlink has toggleExercises attribute, then it will toggle the exercises sidebar
+  //create array with just these links
+  const toggleExercisesLinks = navLinks.filter((link) => link.toggleExercises);
+
   useEffect(() => {
-    if (activeContent === "problems") {
-      setActiveLink("Problems");
-    } else if (activeContent === "lessons") {
-      setActiveLink("Lessons");
-    } else if (activeContent === "all") {
-      setActiveLink("View All");
+    // whenever activeContent changes (from content sidebar), update active link in main side nav
+    if (toggleExercisesLinks.map((link) => link.id).includes(activeContent)) {
+      setActiveLink(
+        (toggleExercisesLinks.find(
+          (link) => link.id === activeContent
+        ) as NavLink) || navLinks[1]
+      );
     }
   }, [activeContent]);
 
@@ -180,34 +138,17 @@ const SideNavigation = ({
 
   return (
     <nav
-      style={{
-        transition: "width 0.2s ease-in, min-width 0.2s ease-out",
-      }}
-      className={`shadow-[0_0_1px_red] font-dm overflow-hidden h-full z-50 bg-nav-darker dark:bg-[#212b3b] 111727 flex flex-col items-center justify-start ${
-        open ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
-      }`}
+      className={`flex font-dm overflow-hidden h-full bg-nav-darker dark:bg-[#212b3b] flex-col items-center justify-start`}
     >
       {/* Logo */}
       <div className="flex items-center h-16 w-full bg-gradient-to-tl from-nav-darker dark:from-[#212b3b] dark:via-[#212b3b] dark:to-emerald-700/40 via-nav-darker to-emerald-900/40 px-3">
         <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
-          <svg
-            className="w-full"
-            viewBox="0 0 25 5"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M16.8916 3.0121C16.7165 3.18782 16.6403 3.39508 16.6254 3.47932L16.4939 4.21874L0.998906 4.21875C0.50389 4.21875 0.1026 3.81746 0.1026 3.32245C0.1026 2.82743 0.50389 2.42614 0.998906 2.42614L15.1253 2.42613C15.511 1.69889 16.3145 0.91748 17.7135 0.91748C18.6386 0.91748 19.3256 1.27432 19.7865 1.76758C19.9832 1.9781 20.1315 2.20514 20.2413 2.42613L23.2063 2.42614C23.7013 2.42614 24.1026 2.82743 24.1026 3.32245C24.1026 3.81747 23.7013 4.21876 23.2063 4.21875L18.8555 4.21874L18.724 3.47932C18.7027 3.35968 18.6279 3.15332 18.4767 2.99148C18.3502 2.85614 18.1354 2.71009 17.7135 2.71009C17.2878 2.71009 17.0433 2.8598 16.8916 3.0121Z"
-              fill="#5BBD53"
-            />
-          </svg>
+          <EdugatorLogo />
         </div>
 
         <h1
           className={`text-white font-ambit text-xl mt-1 overflow-hidden text-ellipsis transition-opacity ${
-            open ? "opacity-100" : "opacity-0"
+            !mainSidebarHidden ? "opacity-100" : "opacity-0"
           }`}
         >
           Edugator
@@ -220,25 +161,32 @@ const SideNavigation = ({
           {/* Class Group */}
           <div
             className={`flex flex-col space-y-3 transition-all rounded-md ${
-              open ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]" : "p-0"
+              !mainSidebarHidden
+                ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]"
+                : "p-0"
             }`}
           >
+            {/* Class List */}
             {classes.map((item, index) => (
               <NavLinkTooltip
                 text={`${item.name}: ${item.course}`}
-                disabled={open}
+                disabled={!mainSidebarHidden}
                 key={index}
               >
                 <div
                   onClick={() => {
                     setActiveClass(index);
-                    setOpen(false);
+                    setMainSidebarHidden(false);
                   }}
                   className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
-                    activeClass === index && !open ? "ring-2 ring-blue-500" : ""
-                  } ${activeClass === index && open ? "bg-blue-500/10" : ""} ${
-                    open ? "rounded-sm" : "rounded-md"
-                  }`}
+                    activeClass === index && mainSidebarHidden
+                      ? "ring-2 ring-blue-500"
+                      : ""
+                  } ${
+                    activeClass === index && !mainSidebarHidden
+                      ? "bg-blue-500/10"
+                      : ""
+                  } ${!mainSidebarHidden ? "rounded-sm" : "rounded-md"}`}
                 >
                   {/* Class Icon */}
                   <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
@@ -253,7 +201,7 @@ const SideNavigation = ({
                   {/* Class Info */}
                   <section
                     className={`flex ml-3 justify-center h-full flex-col whitespace-nowrap overflow-hidden text-left leading-none transition-opacity ${
-                      open ? "opacity-100" : "opacity-0"
+                      !mainSidebarHidden ? "opacity-100" : "opacity-0"
                     }`}
                   >
                     <h1
@@ -270,13 +218,13 @@ const SideNavigation = ({
                 </div>
               </NavLinkTooltip>
             ))}
-            <NavLinkTooltip disabled={open} text="Add Class">
+            <NavLinkTooltip disabled={!mainSidebarHidden} text="Add Class">
               <div
                 className={`w-full rounded-sm relative transition overflow-hidden cursor-pointer px-1 flex items-center group justify-start h-10`}
               >
                 <div
                   className={`h-10 w-10 min-w-[2.5rem] rounded-full transition-all items-center justify-center flex ${
-                    open ? "bg-white/5" : "group-hover:bg-white/5"
+                    !mainSidebarHidden ? "bg-white/5" : "group-hover:bg-white/5"
                   }`}
                 >
                   <div className="w-3 h-3 min-w-[.75rem]">
@@ -293,63 +241,47 @@ const SideNavigation = ({
           {/* Button Group */}
           <div className="flex flex-col space-y-2">
             {navLinks.map((link, i) => {
-              const toggleExercises = [
-                "View All",
-                "Lessons",
-                "Problems",
-              ].includes(link.text);
-              const isActiveLink = activeLink === link.text;
+              const toggleExercises = toggleExercisesLinks.includes(link);
+              const isActiveLink = activeLink.id === link.id;
 
-              // if link is already active and exercises are open, close exercises
-              // if link is already active and exercises are closed, open exercises
-              // if link is in toggleExercises and exercises are open, keep exercises open
-              // if link is in toggleExercises and exercises are closed, open exercises
-
-              //need to refactor this.
               const clickHandler = () => {
-                if (isActiveLink && exercisesHidden && toggleExercises) {
-                  setExercisesHidden(false);
-                } else if (
-                  isActiveLink &&
-                  !exercisesHidden &&
-                  toggleExercises
-                ) {
-                  setExercisesHidden(true);
-                } else if (
-                  !isActiveLink &&
-                  toggleExercises &&
-                  exercisesHidden
-                ) {
-                  setExercisesHidden(true);
-                } else if (
-                  !isActiveLink &&
-                  toggleExercises &&
-                  !exercisesHidden
-                ) {
-                  setExercisesHidden(false);
-                } else if (toggleExercises && exercisesHidden) {
-                  setExercisesHidden(false);
-                } else if (toggleExercises && !exercisesHidden) {
+                // if link should toggle exercises (view all, lessons, problems)
+                if (toggleExercises) {
+                  // if link is already active, toggle exercises. if not, show exercises
+                  if (isActiveLink) {
+                    setExercisesHidden(!exercisesHidden);
+                  } else {
+                    setExercisesHidden(false);
+                  }
+                } else {
+                  // if link is not in toggleExercises, close exercises
                   setExercisesHidden(true);
                 }
-                setActiveLink(link.text);
-                if (link.text === "View All") {
-                  setActiveContent("all");
-                } else if (link.text === "Lessons") {
-                  setActiveContent("lessons");
-                } else if (link.text === "Problems") {
-                  setActiveContent("problems");
+
+                setActiveLink(link);
+
+                switch (link.text) {
+                  case "View All":
+                    setActiveContent("all");
+                    break;
+                  case "Lessons":
+                    setActiveContent("lessons");
+                    break;
+                  case "Problems":
+                    setActiveContent("problems");
+                    break;
+                  default:
+                    break;
                 }
               };
 
               return (
                 <NavLink
                   key={i}
-                  open={open}
+                  open={!mainSidebarHidden}
                   icon={link.icon}
                   text={link.text}
-                  active={activeLink === link.text}
-                  setActiveLink={setActiveLink}
+                  active={activeLink.id === link.id}
                   onClick={clickHandler}
                 />
               );
@@ -361,7 +293,7 @@ const SideNavigation = ({
           <div className="flex flex-col space-y-2">
             {/* Theme Toggle */}
             {mounted ? (
-              <NavLinkTooltip text="Toggle Theme" disabled={open}>
+              <NavLinkTooltip text="Toggle Theme" disabled={!mainSidebarHidden}>
                 <div
                   className={`w-full h-12 cursor-pointer rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
                   onClick={() => {
@@ -391,7 +323,7 @@ const SideNavigation = ({
                     </div>
                     <label
                       className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                        open ? "opacity-100" : "opacity-0"
+                        !mainSidebarHidden ? "opacity-100" : "opacity-0"
                       }`}
                       htmlFor="dark-mode"
                     >
@@ -415,14 +347,14 @@ const SideNavigation = ({
             )}
           </div>
           {/* Settings */}
-          <NavLinkTooltip text="Settings" disabled={open}>
+          <NavLinkTooltip text="Settings" disabled={!mainSidebarHidden}>
             <div
               className={`w-full cursor-pointer h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div className="w-5 h-5 min-w-[20px]">{icons.cog(false)}</div>
               <div
                 className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
-                  open ? "opacity-100" : "opacity-0"
+                  !mainSidebarHidden ? "opacity-100" : "opacity-0"
                 }`}
               >
                 Settings
@@ -432,21 +364,21 @@ const SideNavigation = ({
           {/* Divider */}
           <Divider />
           {/* Collapse/Expand Button */}
-          <NavLinkTooltip text={"Expand"} disabled={open}>
+          <NavLinkTooltip text={"Expand"} disabled={!mainSidebarHidden}>
             <div
-              onClick={() => setOpen(!open)}
+              onClick={() => setMainSidebarHidden(!mainSidebarHidden)}
               className={`w-full cursor-pointer h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div
                 className={`w-5 h-5 min-w-[20px] transition-transform ${
-                  open ? "rotate-180" : ""
+                  !mainSidebarHidden ? "rotate-180" : ""
                 }`}
               >
                 {icons.expandArrow(false)}
               </div>
               <div
                 className={`text-sm group-hover:text-white transition text-ellipsis whitespace-nowrap ${
-                  open ? "opacity-100" : "opacity-0"
+                  !mainSidebarHidden ? "opacity-100" : "opacity-0"
                 }`}
               >
                 Collapse

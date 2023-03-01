@@ -27,6 +27,8 @@ import { useRunCode } from "hooks/useRunCode";
 import dynamic from "next/dynamic";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { AllotmentProps } from "allotment";
+import useWindowWidth from "hooks/useWindowSize";
+import * as monaco from "monaco-editor";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -40,6 +42,20 @@ export default function CodeEditor() {
   const locationState = router.asPath;
 
   const [stdin, setStdin] = useState<string>("");
+  const [editorCode, setEditorCode] = useState<string>("");
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    if (!windowWidth) return;
+    if (windowWidth < 1168) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, [windowWidth]);
 
   const {
     compilerOutput,
@@ -62,38 +78,88 @@ export default function CodeEditor() {
     isAdmin: LocalStorage.getToken() !== null,
   });
 
-  console.log(currentProblem);
-
   useEffect(() => {
     if (defaultStdin) {
       setStdin(defaultStdin);
     }
-  }, [defaultStdin]);
+    if (currentProblem) {
+      setEditorCode(currentProblem?.code?.body);
+    }
+  }, [currentProblem]);
+
+  const handleCodeChange = (newCode: string) => {
+    setEditorCode(newCode);
+  };
+
+  const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+    // this gets called when mobile state changes.
+    // So, we need to keep a duplicate of the code in the editor and replace it when the mobile state changes
+    editorRef.current = editor;
+    console.log("mmm", editorCode);
+    editorRef.current.setValue(editorCode);
+  };
+
+  if (status === FetchStatus.loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
+        <CircularProgress />
+      </div>
+    );
+  } else if (currentProblem === undefined) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
+        <h1 className="text-2xl font-dm text-slate-900 dark:text-white">
+          Problem not found
+        </h1>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {status === FetchStatus.loading ? (
-        <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darker">
-          <CircularProgress />
+    <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest">
+      {isMobile ? (
+        <div className="w-full h-full flex flex-col overflow-scroll">
+          <div className="flex w-full h-full flex-col">
+            <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+              <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+                Problems
+                <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
+                  &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentProblem?.title}
+                </span>
+              </p>
+            </div>
+            <ProblemView
+              problemTitle={currentProblem?.title}
+              problemStatement={currentProblem?.statement}
+            />
+          </div>
+          <CodeEditorView
+            handleCodeChange={handleCodeChange}
+            editorRef={editorRef}
+            onMount={handleEditorMount}
+            isSubmissionRunning={isSubmissionRunning}
+            runCode={runCode}
+            submitCode={submitCode}
+            code={currentProblem.code?.body}
+            templatePackage={currentProblem?.templatePackage}
+            currentProblem={currentProblem}
+            stdin={stdin}
+          />
+          <InputOutputView
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            submissionOutput={submissionOutput}
+            stdin={stdin}
+            setStdin={setStdin}
+            compilerOutput={compilerOutput}
+            isAcceptedOutput={isAcceptedOutput}
+          />
         </div>
-      ) : currentProblem === undefined ? (
-        <Grid container direction="column" sx={{ height: "100vh" }}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="h4">Problem not found</Typography>
-          </Box>
-        </Grid>
       ) : (
         <Allotment
           sizes={[310, 350]}
           snap={true}
-          minSize={460}
+          minSize={400}
           className="code-editor-allotment"
         >
           <div className="flex w-full h-full flex-col">
@@ -105,22 +171,19 @@ export default function CodeEditor() {
                 </span>
               </p>
             </div>
-            <div className="w-full h-full dark:bg-nav-darkest bg-slate-100 p-4">
+            <div className="w-full h-fit dark:bg-nav-darkest bg-slate-100 p-4 overflow-y-scroll">
               <ProblemView
                 problemTitle={currentProblem?.title}
                 problemStatement={currentProblem?.statement}
               />
             </div>
           </div>
-          <Allotment
-            sizes={[100, 100]}
-            vertical
-            snap={false}
-            minSize={300}
-            className=""
-          >
+          <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
             <div className="w-full h-full">
               <CodeEditorView
+                handleCodeChange={handleCodeChange}
+                editorRef={editorRef}
+                onMount={handleEditorMount}
                 isSubmissionRunning={isSubmissionRunning}
                 runCode={runCode}
                 submitCode={submitCode}
@@ -144,7 +207,7 @@ export default function CodeEditor() {
           </Allotment>
         </Allotment>
       )}
-    </>
+    </div>
   );
 }
 

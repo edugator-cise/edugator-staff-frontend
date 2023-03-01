@@ -8,9 +8,7 @@ import {
   ThemeProvider as MUIThemeProvider,
   StyledEngineProvider,
 } from "@mui/system";
-import "styles/App.module.css";
 import "styles/App.css";
-import "styles/index.css";
 import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
 import "styles/TextEditorCreationStyles.css";
@@ -48,11 +46,7 @@ const App = ({ Component, pageProps }: Props) => {
     <Provider store={store}>
       <StyledEngineProvider injectFirst>
         <MUIThemeProvider theme={theme}>
-          <ThemeProvider
-            disableTransitionOnChange
-            enableSystem={true}
-            attribute="class"
-          >
+          <ThemeProvider enableSystem={true} attribute="class">
             <Toaster containerClassName="font-dm" />
             {getLayout(<Component {...pageProps} />)}
           </ThemeProvider>

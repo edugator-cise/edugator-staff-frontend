@@ -162,7 +162,7 @@ export const SubmitOutput = ({ results }: Props) => {
     );
   }
   return (
-    <div className="font-dm text-slate-900 dark:text-white bg-slate-50 dark:bg-nav-dark w-full h-full flex items-center justify-center text-center rounded-md">
+    <div className="font-dm text-slate-900 dark:text-white bg-slate-50 dark:bg-nav-dark w-full h-full flex items-center justify-center text-center rounded-sm">
       Press Submit to submit code
     </div>
   );

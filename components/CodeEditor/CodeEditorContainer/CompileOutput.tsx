@@ -14,7 +14,7 @@ export const CompileOutput = ({
   return (
     <div className="w-full h-full max-h-full bg-slate-100 dark:bg-nav-darkest ">
       {accepted !== null && accepted !== undefined ? (
-        <div className="w-full rounded-md bg-slate-50 dark:bg-nav-darker flex flex-col p-4 space-y-2">
+        <div className="w-full rounded-sm bg-slate-50 dark:bg-nav-darker flex flex-col p-4 space-y-2">
           <h1
             className={`text-2xl font-dm ${
               accepted ? "text-emerald-600" : "text-red-600"
@@ -40,7 +40,7 @@ export const CompileOutput = ({
           </div>
         </div>
       ) : (
-        <div className="font-dm text-slate-900 dark:text-white bg-slate-50 dark:bg-nav-dark w-full h-full flex items-center justify-center text-center rounded-md">
+        <div className="font-dm text-slate-900 dark:text-white bg-slate-50 dark:bg-nav-dark w-full h-full flex items-center justify-center text-center rounded-sm">
           Press Run to run code
         </div>
       )}

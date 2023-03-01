@@ -21,10 +21,13 @@ import { useTheme } from "next-themes";
 
 interface CodeEditorProps {
   code: string;
+  onMount: (editor: monaco.editor.IStandaloneCodeEditor) => void;
   templatePackage: string;
   currentProblem: IProblem;
   stdin: string;
   isSubmissionRunning: boolean;
+  handleCodeChange: (code: string) => void;
+  editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
   runCode: ({
     code,
     stdin,
@@ -89,9 +92,11 @@ export const CodeEditorView = ({
   isSubmissionRunning,
   runCode,
   submitCode,
+  onMount,
+  handleCodeChange,
 }: CodeEditorProps) => {
   const router = useRouter();
-  const locationState = router.asPath;
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
 
@@ -112,12 +117,6 @@ export const CodeEditorView = ({
 
   const fileName = generateFileName(navigation, problemId, fileType);
 
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.setValue(code);
-    }
-  }, [code]);
-
   function setEditorTheme(monaco: any) {
     monaco.editor.defineTheme("dark-theme", {
       base: "vs-dark",
@@ -135,21 +134,9 @@ export const CodeEditorView = ({
     });
   }
 
-  const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    editorRef.current = editor;
-  };
-
   const handleReset = () => {
     if (editorRef.current) {
       editorRef.current.setValue(code);
-    }
-  };
-
-  const handleChooseFile = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    if (hiddenFileInput.current) {
-      hiddenFileInput.current.click();
     }
   };
 
@@ -158,6 +145,14 @@ export const CodeEditorView = ({
       editorRef.current.layout();
     }
   });
+
+  const handleChooseFile = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.click();
+    }
+  };
 
   const { theme, systemTheme } = useTheme();
 
@@ -243,13 +238,14 @@ export const CodeEditorView = ({
           defaultValue={code}
           onChange={(value) => {
             setCurrentCode(value as string);
+            handleCodeChange(value as string);
           }}
           options={{
             minimap: {
               enabled: false,
             },
           }}
-          onMount={handleEditorMount}
+          onMount={onMount}
         />
       </div>
       <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100 dark:bg-nav-darkest">

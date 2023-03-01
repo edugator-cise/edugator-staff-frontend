@@ -19,6 +19,11 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        mobile: "800px",
+        tablet: "1024px",
+        laptop: "1420px",
+      },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],

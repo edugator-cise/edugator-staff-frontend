@@ -44,7 +44,7 @@ export const InputOutputView = ({
       }}
     >
       <Tabs.List
-        className="flex w-full relative p-2 max-w-md "
+        className="flex w-full relative py-4 px-2 max-w-md "
         aria-label="Select content type"
       >
         {tabs.map((tab) => (
@@ -59,9 +59,9 @@ export const InputOutputView = ({
           </Tabs.Trigger>
         ))}
       </Tabs.List>
-      <Tabs.Content className="w-full flex-1 p-4" value="stdin">
+      <Tabs.Content className="w-full flex-1 px-4" value="stdin">
         <textarea
-          className="w-full font-inter max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-md min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+          className="w-full font-inter max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-sm min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-slate-900 dark:text-white"
           value={stdin}
           onChange={handleStdinChange}
         />

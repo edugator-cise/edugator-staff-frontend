@@ -16,6 +16,10 @@ import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";
 import { ContentType } from "components/PlaygroundLayout";
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
+import LoadingState from "./LoadingState";
+import ErrorState from "./ErrorState";
+import { ItemPath, ModulePath } from "./DropDownTree/paths";
+import { navLinks } from "components/SideNav/navigationData";
 
 const AccordionContent = ({
   children,
@@ -32,7 +36,7 @@ const AccordionContent = ({
     }
     {...props}
   >
-    <div className="">{children}</div>
+    <div>{children}</div>
   </Accordion.Content>
 );
 
@@ -60,17 +64,11 @@ const ContentSidebar = ({
 
   const activeId = lessonId || problemId || "";
 
-  useEffect(() => {
-    var path = document.querySelector("path");
-    var length = path?.getTotalLength() || 0;
-    console.log("length", length);
-  }, []);
+  const toggleExercisesLinks = navLinks.filter((link) => link.toggleExercises);
 
   return (
     <ScrollArea.Root
-      className={`overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex flex-col !absolute top-0 z-20 border-r border-r-slate-700 transition-all ${
-        hidden ? "-left-[207px]" : "left-[81px]"
-      }`}
+      className={`overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
     >
       <ScrollArea.Viewport className="w-full h-full">
         {/* Header */}
@@ -97,43 +95,22 @@ const ContentSidebar = ({
               className="shrink-0 flex"
               aria-label="Select content type"
             >
-              <Tabs.Trigger
-                className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
-                value="all"
-              >
-                View All
-              </Tabs.Trigger>
-              <Tabs.Trigger
-                className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
-                value="lessons"
-              >
-                Lessons
-              </Tabs.Trigger>
-              <Tabs.Trigger
-                className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
-                value="problems"
-              >
-                Problems
-              </Tabs.Trigger>
+              {toggleExercisesLinks.map((link) => (
+                <Tabs.Trigger
+                  className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
+                  value={link.id}
+                >
+                  {link.text}
+                </Tabs.Trigger>
+              ))}
             </Tabs.List>
           </Tabs.Root>
         </div>
 
         {status === FetchStatus.loading ? (
-          <div className="flex flex-col items-center justify-start h-full p-3 space-y-4">
-            <div className="w-full h-12 rounded-md bg-slate-700 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-slate-700/80 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-slate-700/60 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-slate-700/20 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-slate-700/10 animate-pulse"></div>
-          </div>
+          <LoadingState />
         ) : status === FetchStatus.failed ? (
-          <div className="flex flex-col items-center justify-start h-full p-3 space-y-4">
-            <div className="w-full h-12 rounded-md bg-red-500/20 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-red-500/20 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-red-500/20 animate-pulse"></div>
-            <div className="w-full h-12 rounded-md bg-red-500/20 animate-pulse"></div>
-          </div>
+          <ErrorState />
         ) : (
           <Accordion.Root
             onValueChange={(value) => {
@@ -146,13 +123,12 @@ const ContentSidebar = ({
             <div className="w-full h-px bg-slate-500"></div>
             {navigation &&
               navigation.map((value: INavigationItem, primaryIndex: number) => {
-                const itemCount = value.problems.length + value.lessons.length;
-
+                const itemCount = value.problems.length + value.lessons.length; // number of total problems + lessons in a module
+                const isEmpty = itemCount === 0; // if module is empty
                 const allContent =
-                  itemCount === 0 ? [] : [...value.problems, ...value.lessons];
-
+                  itemCount === 0 ? [] : [...value.problems, ...value.lessons]; // all problems and lessons in a module
                 const isActiveModule = allContent.some(
-                  (item) => item._id === activeId
+                  (item) => item._id === activeId // if module contains the current active content
                 );
 
                 return (
@@ -164,48 +140,10 @@ const ContentSidebar = ({
                     <Accordion.Trigger className="pl-[0.875rem] overflow-hidden relative pr-4 group py-3 w-full flex items-center justify-between">
                       <div className="flex items-center space-x-2 ">
                         <div className="absolute left-7 top-[50%] dash group-data-[state=open]:dashreverse group-data-[state=closed]:dashreverse transition-transform duration-500 origin-bottom">
-                          {itemCount > 0 ? (
-                            <svg
-                              width="12"
-                              height="120"
-                              viewBox="0 0 18 218"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
-                                stroke="#42454F"
-                                stroke-width="4"
-                                stroke-linecap="round"
-                                strokeDasharray={
-                                  openModules.includes(value.name)
-                                    ? "1000"
-                                    : "0"
-                                }
-                                strokeDashoffset={
-                                  openModules.includes(value.name)
-                                    ? "1000"
-                                    : "0"
-                                }
-                                style={
-                                  openModules.includes(value.name)
-                                    ? {
-                                        animationName: "dash",
-                                        animationDuration: "1s",
-                                        animationTimingFunction: "ease-in",
-                                        animationFillMode: "forwards",
-                                        animationDelay: `0`,
-                                        animationDirection: "normal",
-                                      }
-                                    : {}
-                                }
-                                className={`transition-colors duration-300 ${
-                                  openModules.includes(value.name)
-                                    ? "stroke-slate-700"
-                                    : "stroke-nav-dark"
-                                }`}
-                              />
-                            </svg>
+                          {!isEmpty ? (
+                            <ModulePath
+                              moduleOpen={openModules.includes(value.name)}
+                            />
                           ) : (
                             <></>
                           )}
@@ -226,7 +164,7 @@ const ContentSidebar = ({
                     </Accordion.Trigger>
                     <AccordionContent>
                       <div className="flex flex-col">
-                        {itemCount === 0 ? (
+                        {isEmpty ? (
                           <div
                             className={`relative flex px-8 items-center cursor-pointer justify-center `}
                           >
@@ -258,40 +196,12 @@ const ContentSidebar = ({
                                     className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start `}
                                   >
                                     <div className="absolute left-7 bottom-[40%]">
-                                      <svg
-                                        width="12"
-                                        height="120"
-                                        viewBox="0 0 18 218"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path
-                                          id="curved-path"
-                                          d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
-                                          stroke="#42454F"
-                                          stroke-width="4"
-                                          stroke-linecap="round"
-                                          strokeDasharray="1000"
-                                          strokeDashoffset="1000"
-                                          style={{
-                                            animationName: "dash",
-                                            animationDuration: "4s",
-                                            animationTimingFunction:
-                                              "cubic-bezier(0.33, 1, 0.68, 1)",
-                                            animationFillMode: "forwards",
-                                            animationDelay: `${
-                                              secondaryIndex * 0.2 - 0.05
-                                            }s`,
-                                            animationDirection: "normal",
-                                            animationIterationCount: "1",
-                                          }}
-                                          className={`transition-all duration-300  path ${
-                                            openModules.includes(value.name)
-                                              ? "stroke-slate-700"
-                                              : "stroke-nav-dark"
-                                          }`}
-                                        />
-                                      </svg>
+                                      <ItemPath
+                                        moduleOpen={openModules.includes(
+                                          value.name
+                                        )}
+                                        index={secondaryIndex}
+                                      />
                                     </div>
                                     <div
                                       className={`absolute w-[6px] h-[6px] rounded-full top-1/2 -translate-y-1/2 right-5 ${
@@ -329,20 +239,20 @@ const ContentSidebar = ({
               })}
           </Accordion.Root>
         )}
-        <ScrollArea.Scrollbar
-          className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-          orientation="vertical"
-        >
-          <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-        </ScrollArea.Scrollbar>
-        <ScrollArea.Scrollbar
-          className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-          orientation="horizontal"
-        >
-          <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-        </ScrollArea.Scrollbar>
-        <ScrollArea.Corner className="bg-white/20" />
       </ScrollArea.Viewport>
+      <ScrollArea.Scrollbar
+        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+        orientation="vertical"
+      >
+        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+      </ScrollArea.Scrollbar>
+      <ScrollArea.Scrollbar
+        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+        orientation="horizontal"
+      >
+        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+      </ScrollArea.Scrollbar>
+      <ScrollArea.Corner className="bg-white/20" />
     </ScrollArea.Root>
   );
 };
