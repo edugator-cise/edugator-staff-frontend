@@ -20,6 +20,7 @@ import "styles/globals.css";
 import "styles/fonts.css";
 import "styles/animations.css";
 import "styles/markdown.css";
+import "styles/allotment.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
@@ -46,7 +47,11 @@ const App = ({ Component, pageProps }: Props) => {
     <Provider store={store}>
       <StyledEngineProvider injectFirst>
         <MUIThemeProvider theme={theme}>
-          <ThemeProvider enableSystem={true} attribute="class">
+          <ThemeProvider
+            disableTransitionOnChange
+            enableSystem={true}
+            attribute="class"
+          >
             <Toaster containerClassName="font-dm" />
             {getLayout(<Component {...pageProps} />)}
           </ThemeProvider>

@@ -118,6 +118,23 @@ export const CodeEditorView = ({
     }
   }, [code]);
 
+  function setEditorTheme(monaco: any) {
+    monaco.editor.defineTheme("dark-theme", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [
+        {
+          token: "comment",
+          foreground: "#5d7988",
+          fontStyle: "italic",
+        },
+      ],
+      colors: {
+        "editor.background": "#192231",
+      },
+    });
+  }
+
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
   };
@@ -148,12 +165,12 @@ export const CodeEditorView = ({
 
   return (
     <div className="w-full h-full flex flex-col font-dm">
-      <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 dark:bg-nav-dark border-b dark:border-b-slate-700 border-b-slate-300">
-        <div className="flex space-x-4 items-center ">
+      <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 dark:bg-nav-darkest border-b dark:border-b-slate-700 border-b-slate-300">
+        <div className="flex space-x-8 items-center ">
           <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
             Solution
           </p>
-          <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 dark:border-slate-700 shadow-2xl shadow-emerald-500 bg-slate-100 dark:bg-nav-darkest px-3 py-2">
+          <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 dark:border-slate-700 shadow-lg shadow-emerald-500/50 bg-slate-100 dark:bg-nav-darkest px-3 py-2">
             <h3 className="text-sm text-slate-800 dark:text-white font-dm">
               {fileName}
             </h3>
@@ -206,7 +223,7 @@ export const CodeEditorView = ({
           </ButtonToolTip>
         </div>
       </div>
-      <div className="w-full h-full flex flex-col py-2 px-3 bg-slate-100 dark:bg-nav-darkest">
+      <div className="w-full h-full flex flex-col p-4 bg-slate-100 dark:bg-nav-darkest">
         <Backdrop
           sx={{
             color: "#fff",
@@ -218,13 +235,19 @@ export const CodeEditorView = ({
           <CircularProgress color="inherit" />
         </Backdrop>
         <Editor
-          theme={currentTheme === "dark" ? "vs-dark" : "light"} //TODO: define custom theme with monaco.editor.defineTheme
-          className="rounded-md overflow-hidden border dark:border-slate-700"
+          theme={currentTheme === "dark" ? "dark-theme" : "light"} //TODO: define custom theme with monaco.editor.defineTheme
+          className="rounded-sm overflow-hidden"
           height="99%"
+          beforeMount={setEditorTheme}
           defaultLanguage="cpp"
           defaultValue={code}
           onChange={(value) => {
             setCurrentCode(value as string);
+          }}
+          options={{
+            minimap: {
+              enabled: false,
+            },
           }}
           onMount={handleEditorMount}
         />

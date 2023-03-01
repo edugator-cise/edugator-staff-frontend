@@ -62,6 +62,8 @@ export default function CodeEditor() {
     isAdmin: LocalStorage.getToken() !== null,
   });
 
+  console.log(currentProblem);
+
   useEffect(() => {
     if (defaultStdin) {
       setStdin(defaultStdin);
@@ -88,12 +90,23 @@ export default function CodeEditor() {
           </Box>
         </Grid>
       ) : (
-        <Allotment sizes={[310, 350]} snap={true} minSize={460}>
+        <Allotment
+          sizes={[310, 350]}
+          snap={true}
+          minSize={460}
+          className="code-editor-allotment"
+        >
           <ProblemView
             problemTitle={currentProblem?.title}
             problemStatement={currentProblem?.statement}
           />
-          <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
+          <Allotment
+            sizes={[100, 100]}
+            vertical
+            snap={false}
+            minSize={300}
+            className=""
+          >
             <div className="w-full h-full">
               <CodeEditorView
                 isSubmissionRunning={isSubmissionRunning}

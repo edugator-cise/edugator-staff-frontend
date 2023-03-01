@@ -16,35 +16,35 @@ interface Props {
 export const SubmitOutput = ({ results }: Props) => {
   if (results) {
     return (
-      <table className="w-full rounded table-auto font-dm bg-white dark:bg-nav-darkest border-collapse">
-        <thead className="sticky top-0 pt-4 border-t bg-slate-200 dark:bg-nav-darker rounded-t-md w-full">
+      <table className="w-full rounded table-auto font-inter bg-white dark:bg-nav-darkest border-collapse">
+        <thead className="sticky top-0 pt-4 border-t font-dm bg-slate-200 dark:bg-nav-darker rounded-t-md w-full">
           <tr>
             <th
-              className="py-3 px-2 border border-slate-100 dark:border-slate-700 text-xs uppercase"
+              className="p-3 border border-slate-100 dark:border-slate-700 text-xs uppercase"
               align="left"
             >
               Input
             </th>
             <th
-              className="py-3 px-2 border border-slate-100 dark:border-slate-700 text-xs uppercase"
+              className="p-3 border border-slate-100 dark:border-slate-700 text-xs uppercase"
               align="left"
             >
               Output
             </th>
             <th
-              className="py-3 px-2 border border-slate-100 dark:border-slate-700 text-xs uppercase"
+              className="p-3 border border-slate-100 dark:border-slate-700 text-xs uppercase"
               align="left"
             >
               Expected
             </th>
             <th
-              className="py-3 px-2 border border-slate-100 dark:border-slate-700 text-xs uppercase"
+              className="p-3 border border-slate-100 dark:border-slate-700 text-xs uppercase"
               align="left"
             >
               Hint
             </th>
             <th
-              className="py-3 px-2 border border-slate-100 dark:border-slate-700 text-xs uppercase"
+              className="p-3 border border-slate-100 dark:border-slate-700 text-xs uppercase"
               align="center"
             >
               Result

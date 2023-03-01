@@ -1,11 +1,9 @@
-import { useEffect } from "react";
 import { CompileOutput } from "../CompileOutput";
 import { SubmitOutput } from "../SubmitOutput";
 import { CompilerOutput } from "hooks/types";
 import { IResultSubmission } from "../../types";
 import * as Tabs from "@radix-ui/react-tabs";
 import { toTitleCase } from "utils/textUtils";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 export const InputOutputView = ({
   stdin,
@@ -63,13 +61,13 @@ export const InputOutputView = ({
       </Tabs.List>
       <Tabs.Content className="w-full flex-1 p-4" value="stdin">
         <textarea
-          className="w-full font-dm max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-md min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+          className="w-full font-inter max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-md min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent"
           value={stdin}
           onChange={handleStdinChange}
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full max-h-full px-4 pb-4 relative"
+        className="w-full h-full max-h-full px-4 pb-4 relative overflow-y-scroll "
         value="output"
       >
         <CompileOutput

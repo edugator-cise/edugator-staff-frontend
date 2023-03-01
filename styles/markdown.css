@@ -1,21 +1,21 @@
 .markdown {
-    @apply space-y-2
+    @apply space-y-4
 }
 
 .markdown h1 {
-    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
+    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h4 {
-    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
+    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h2 {
-    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
+    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h3 {
-    @apply text-lg font-bold !mt-4 text-slate-900 dark:text-slate-100;
+    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown p {
@@ -23,7 +23,7 @@
 }
 
 .markdown ul {
-    @apply list-disc p-3 bg-slate-100 text-slate-900 dark:border-none dark:text-slate-100 dark:bg-nav-darkest border list-inside rounded-md space-y-3;
+    @apply list-disc p-5 bg-slate-100 text-slate-900 dark:border-none dark:text-slate-300 dark:bg-nav-darkest border list-inside rounded-md space-y-3;
 }
 
 .markdown ul ul {
@@ -39,7 +39,19 @@
 }
 
 .markdown pre {
-    @apply bg-emerald-500/10 border border-emerald-300 p-3 rounded-md hover:bg-emerald-500/20 transition-colors;
+    @apply bg-emerald-500/10 border border-emerald-300 p-3 rounded-md transition-colors hover:bg-emerald-500/20 overflow-x-scroll;
+}
+
+.markdown pre::-webkit-scrollbar {
+    @apply h-2 w-2
+}
+
+.markdown pre::-webkit-scrollbar-track {
+    @apply bg-transparent 
+}
+
+.markdown pre::-webkit-scrollbar-thumb {
+    @apply bg-emerald-900/20 dark:bg-emerald-100/20 rounded-md hover:bg-emerald-900/30 dark:hover:bg-emerald-100/30
 }
 
 .markdown pre code {

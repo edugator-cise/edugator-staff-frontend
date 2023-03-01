@@ -66,7 +66,7 @@ function Code(props: any) {
 export const Markdown = ({ markdownString }: Props) => (
   <div className="w-full">
     <ReactMarkdown
-      className="text-slate-900 font-dm markdown !min-w-0"
+      className="text-slate-900 font-inter markdown !min-w-0"
       children={markdownString}
       components={{ img: Image, code: Code }}
       remarkPlugins={[remarkGfm]}
