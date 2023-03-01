@@ -79,7 +79,7 @@ export const InputOutputView = ({
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full p-4 overflow-y-scroll"
+        className="w-full h-full px-4 pb-4 overflow-y-scroll"
         value="submission"
       >
         <SubmitOutput results={submissionOutput} />
