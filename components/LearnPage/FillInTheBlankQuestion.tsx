@@ -74,7 +74,7 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
 
     useEffect(() => {
         let defaultResults = [];
-        for (const correctAnswer of props.correctAnswers) {
+        for (let i = 0; i < props.correctAnswers.length; i++) {
             defaultResults.push(false);
         }
         setResults(defaultResults);
@@ -135,7 +135,7 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
             </Typography>
             <Box sx={{ display: 'inline' }}>
                 {props.correctAnswers.map((correctAnswer, i) => (
-                    <Box key={i} sx={{ display: 'inline' }}>
+                    <Box key={i + " " + correctAnswer.possibleChoices[0]} sx={{ display: 'inline' }}>
                         <QuestionSegments variant='h6'>
                             {props.questionSegments[i]}
                         </QuestionSegments>

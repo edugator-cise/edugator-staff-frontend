@@ -196,7 +196,7 @@ export const FillInTheBlankModal = ({
                         }
 
                         {correctAnswers.map((correctAnswer, i) => (
-                            <Box className="fitb-modal-answer-field" key={i}>
+                            <Box className="fitb-modal-answer-field" key={i + " " + correctAnswer.possibleChoices[0]}>
                                 <div className="fitb-modal-answer-placeholder">
                                     {placeholderChars[i]}
                                 </div>

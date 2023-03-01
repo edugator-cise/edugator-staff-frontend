@@ -241,7 +241,7 @@ export function FillInTheBlankDisplayBlock({
       </Typography>
       <Box sx={{ display: 'inline' }}>
         {correctAnswers.map((correctAnswer, i) => (
-          <Box key={i} sx={{ display: 'inline' }}>
+          <Box key={i + " " + correctAnswer.possibleChoices[0]} sx={{ display: 'inline' }}>
             <QuestionSegments variant='h6'>
               {questionSegments[i]}
             </QuestionSegments>

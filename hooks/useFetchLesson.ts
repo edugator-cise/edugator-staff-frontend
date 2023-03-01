@@ -76,8 +76,7 @@ const transformLesson = (lesson: ILesson) => {
   };
 
   let entityIterator = 0;
-  for (let i = 0; i < lesson.content.length; i++) {
-    const block = lesson.content[i];
+  for (const block of lesson.content) {
     if (block.type === "multiple_choice") {
       const entity = lesson.entityMap[entityIterator];
       if (isEntityOfType<MultipleChoiceEntity>(entity, "multiple_choice")) {
