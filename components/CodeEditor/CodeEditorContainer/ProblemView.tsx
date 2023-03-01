@@ -10,7 +10,7 @@ interface Props {
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
     <div className="bg-slate-50 flex flex-col px-5 rounded-sm w-full dark:bg-nav-darker h-full mb-4 overflow-y-scroll">
-      <h1 className="text-4xl font-ambit font-semibold text-slate-900 dark:text-slate-100 mb-4 mt-12">
+      <h1 className="text-3xl underline decoration-emerald-500 underline-offset-4 font-ambit font-semibold text-slate-900 dark:text-slate-100 mb-4 mt-8">
         {problemTitle}
       </h1>
       <Markdown markdownString={problemStatement} />
