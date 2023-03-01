@@ -21,6 +21,7 @@ import "styles/fonts.css";
 import "styles/animations.css";
 import "styles/markdown.css";
 import "styles/allotment.css";
+import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";

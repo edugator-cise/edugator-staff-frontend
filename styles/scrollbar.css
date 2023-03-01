@@ -1,20 +1,25 @@
-.scrollbar::-webkit-scrollbar {
-    width: 20px;
-    height: 20px;
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #192231 transparent;
   }
 
-  .scrollbar::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: #f7f4ed;
-  }
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar{
+    -webkit-appearance: none;
+    width: 6px;
+}
 
-  .scrollbar::-webkit-scrollbar-thumb {
-    background: #e0cbcb;
-    border-radius: 100vh;
-    border: 3px solid #f6f7ed;
-  }
+*::-webkit-scrollbar-track{
+    margin: 7px 0;
+    border-radius: 10px;
+    background-color: transparent;
+}
 
-  .scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #c0a0b9;
-  }
-
+*::-webkit-scrollbar-thumb{
+    border-radius: 4px;
+    border: 0px solid rgba(255,255,255,0);
+    background-clip: content-box;
+    background-color: #79848f3a;
+}

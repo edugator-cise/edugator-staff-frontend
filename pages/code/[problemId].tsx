@@ -96,10 +96,22 @@ export default function CodeEditor() {
           minSize={460}
           className="code-editor-allotment"
         >
-          <ProblemView
-            problemTitle={currentProblem?.title}
-            problemStatement={currentProblem?.statement}
-          />
+          <div className="flex w-full h-full flex-col">
+            <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+              <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+                Problems
+                <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
+                  &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentProblem?.title}
+                </span>
+              </p>
+            </div>
+            <div className="w-full h-full dark:bg-nav-darkest bg-slate-100 p-4">
+              <ProblemView
+                problemTitle={currentProblem?.title}
+                problemStatement={currentProblem?.statement}
+              />
+            </div>
+          </div>
           <Allotment
             sizes={[100, 100]}
             vertical
