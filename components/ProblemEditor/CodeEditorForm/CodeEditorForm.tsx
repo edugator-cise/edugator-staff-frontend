@@ -29,6 +29,7 @@ interface FlattenedCodeFields {
   header: string;
   body: string;
   footer: string;
+  solution: string;
 }
 
 interface Errors {
@@ -36,6 +37,7 @@ interface Errors {
   header?: string;
   body?: string;
   footer?: string;
+  solution?: string;
 }
 
 const defaultHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
@@ -61,6 +63,10 @@ int main()
     cout << result;
     return 0;
 }
+`;
+
+const defaultSolution = `// The solution to this problem goes here.
+// If you are seeing this, then the solution to the problem hasn't been placed here yet
 `;
 
 export const CodeEditorForm = ({ formRef }: Props) => {
@@ -89,6 +95,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
     initialValues.header = defaultHeader;
     initialValues.body = defaultBody;
     initialValues.footer = defaultFooter;
+    initialValues.solution = defaultSolution;
   }
 
   const validation = (values: FlattenedCodeFields) => {
@@ -107,6 +114,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
             header: values.header,
             body: values.body,
             footer: values.footer,
+            solution: values.solution,
           },
         };
         dispatch(updateCodeEditor(formattedFields));
@@ -197,6 +205,27 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                   value={values.footer}
                   onChange={(value) => {
                     setFieldValue("footer", value);
+                    setTouched(true);
+                  }}
+                />
+              </Paper>
+            </Box>
+            <Box flexGrow={1} display="flex" flexDirection="column">
+              <InputLabel>Solution</InputLabel>
+              <FormHelperText>
+                This is an example solution to the problem for TAs to see.
+              </FormHelperText>
+              <Paper
+                elevation={0}
+                variant="outlined"
+                sx={{ marginTop: 1, paddingTop: 1 }}
+              >
+                <Editor
+                  language="cpp"
+                  height="250px"
+                  value={values.solution}
+                  onChange={(value) => {
+                    setFieldValue("solution", value);
                     setTouched(true);
                   }}
                 />

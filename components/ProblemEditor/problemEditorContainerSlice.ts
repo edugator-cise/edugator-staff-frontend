@@ -18,6 +18,7 @@ export interface CodeEditorFields {
     header: string;
     body: string;
     footer: string;
+    solution: string;
   };
   fileExtension: string;
 }
@@ -87,6 +88,7 @@ const initialState: ProblemEditorContainerState = {
       header: "",
       body: "",
       footer: "",
+      solution: "",
     },
     fileExtension: ".cpp",
   },
@@ -162,7 +164,6 @@ export const problemEditorContainerSlice = createSlice({
         state.activeStep -= 1;
       }
     },
-
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
