@@ -67,7 +67,12 @@ export const ProblemEditorContainer = () => {
   const formRef = useRef<FormikValues>();
 
   const handleChange = (index: number) => {
-    if (currentStepIsValid) dispatch(changeActiveStep(index));
+        if (activeStep === index) { 
+          formRef.current?.submitForm();
+        } else {
+          formRef.current?.submitForm();
+          if (currentStepIsValid) dispatch(changeActiveStep(index));
+        }
   };
 
   return (
