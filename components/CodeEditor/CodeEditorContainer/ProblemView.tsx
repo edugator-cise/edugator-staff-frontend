@@ -6,6 +6,10 @@ import { styled } from "@mui/material/styles";
 interface Props {
   problemTitle: string;
   problemStatement: string;
+  problemAuthor: string;
+  problemDifficulty: string;
+  problemDateCreated: string;
+  problemLastModified: string;
 }
 
 const ProblemDescriptionPaper = styled("div")(
@@ -20,7 +24,17 @@ const ProblemDescriptionPaper = styled("div")(
   min-width: 200px;
 `
 );
-export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
+export const ProblemView = ({
+  problemTitle,
+  problemStatement,
+  problemAuthor,
+  problemDifficulty,
+  problemDateCreated,
+  problemLastModified,
+}: Props) => {
+  const dateCreated = new Date(problemDateCreated).toLocaleDateString();
+  const lastModified = new Date(problemLastModified).toLocaleDateString();
+
   return (
     <Grow in appear timeout={500}>
       <ProblemDescriptionPaper
@@ -35,6 +49,20 @@ export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
           {problemTitle}
         </Typography>
         <Markdown markdownString={problemStatement} />
+        {problemAuthor &&
+        problemDifficulty &&
+        problemDateCreated &&
+        problemLastModified ? (
+          <Typography variant="body2" sx={{ textAlign: "left" }}>
+            <b>Author:</b> {problemAuthor}
+            <br />
+            <b>Difficulty:</b> {problemDifficulty}
+            <br />
+            <b>Date Created:</b> {dateCreated}
+            <br />
+            <b>Last Modified:</b> {lastModified}
+          </Typography>
+        ) : null}
       </ProblemDescriptionPaper>
     </Grow>
   );

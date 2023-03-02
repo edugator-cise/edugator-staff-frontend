@@ -11,6 +11,8 @@ export interface MetadataFields {
   title: string;
   hidden: boolean;
   dueDate: string;
+  author: string;
+  difficulty: string;
 }
 
 export interface CodeEditorFields {
@@ -78,6 +80,8 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     dueDate: new Date().toISOString(),
+    author: "",
+    difficulty: "",
   },
   problem: {
     problemStatement: "",
@@ -237,6 +241,8 @@ export const problemEditorContainerSlice = createSlice({
         title: action.payload.title,
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
+        author: action.payload.author,
+        difficulty: action.payload.difficulty,
       };
       state.codeEditor = {
         code: { ...action.payload.code },

@@ -14,6 +14,8 @@ export interface IProblem extends IProblemBase {
   language: string;
   dueDate: string; //iso format
   statement: string;
+  author: string;
+  difficulty: string;
   code: {
     header: string;
     body: string;
