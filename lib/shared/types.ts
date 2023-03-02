@@ -16,6 +16,8 @@ export interface IProblem extends IProblemBase {
   statement: string;
   author: string;
   difficulty: string;
+  dateCreated: Date;
+  lastModified: Date;
   code: {
     header: string;
     body: string;

@@ -1,9 +1,13 @@
 import {
   Box,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  Select,
   Stack,
   TextField,
+  MenuItem,
 } from "@mui/material";
 import { Field, FieldProps, Form, Formik } from "formik";
 import React from "react";
@@ -95,7 +99,14 @@ export const MetadataForm = (props: Props) => {
       innerRef={props.formRef}
       validate={validate}
     >
-      {({ errors, values, handleChange, handleBlur, touched }) => (
+      {({
+        errors,
+        values,
+        handleChange,
+        handleBlur,
+        touched,
+        setFieldValue,
+      }) => (
         <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <Stack spacing={5}>
             <TextField
@@ -135,7 +146,7 @@ export const MetadataForm = (props: Props) => {
               helperText={touched.author && errors.author}
               sx={{ width: "50%" }}
             />
-             <TextField
+            {/* <TextField
               name="difficulty"
               label="Difficulty"
               value={values.difficulty}
@@ -144,8 +155,30 @@ export const MetadataForm = (props: Props) => {
               error={touched.author && Boolean(errors.difficulty)}
               helperText={touched.difficulty && errors.difficulty}
               sx={{ width: "50%" }}
-            />
+            /> */}
 
+            <FormControl fullWidth sx={{ width: "25%" }}>
+              <InputLabel id="difficulty-label">Difficulty</InputLabel>
+              <Select
+                labelId="difficulty-label"
+                id="difficulty-select"
+                value={values.difficulty}
+                label="Difficulty"
+                onChange={(e) =>
+                  setFieldValue("difficulty", e.target.value, false)
+                }
+              >
+                <MenuItem value="Easy (15-29 minutes)">
+                  Easy (15-29 minutes)
+                </MenuItem>
+                <MenuItem value="Medium (30-44 minutes)">
+                  Medium (30-44 minutes)
+                </MenuItem>
+                <MenuItem value="Hard (44-120 minutes)">
+                  Hard (44-120 minutes)
+                </MenuItem>
+              </Select>
+            </FormControl>
           </Stack>
         </Form>
       )}

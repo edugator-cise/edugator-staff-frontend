@@ -8,8 +8,8 @@ interface Props {
   problemStatement: string;
   problemAuthor: string;
   problemDifficulty: string;
-  problemDateCreated: string;
-  problemLastModified: string;
+  problemDateCreated: Date;
+  problemLastModified: Date;
 }
 
 const ProblemDescriptionPaper = styled("div")(
@@ -32,6 +32,7 @@ export const ProblemView = ({
   problemDateCreated,
   problemLastModified,
 }: Props) => {
+  //check if problemDateCreated is null
   const dateCreated = new Date(problemDateCreated).toLocaleDateString();
   const lastModified = new Date(problemLastModified).toLocaleDateString();
 
@@ -49,16 +50,17 @@ export const ProblemView = ({
           {problemTitle}
         </Typography>
         <Markdown markdownString={problemStatement} />
-        {problemAuthor &&
-        problemDifficulty &&
-        problemDateCreated &&
-        problemLastModified ? (
+        {problemAuthor && problemDifficulty && problemLastModified ? (
           <Typography variant="body2" sx={{ textAlign: "left" }}>
             <b>Author:</b> {problemAuthor}
             <br />
             <b>Difficulty:</b> {problemDifficulty}
-            <br />
-            <b>Date Created:</b> {dateCreated}
+            {dateCreated != "Invalid Date" ? (
+              <>
+                <br />
+                <b>Date Created: </b> {dateCreated}
+              </>
+            ) : null}
             <br />
             <b>Last Modified:</b> {lastModified}
           </Typography>
