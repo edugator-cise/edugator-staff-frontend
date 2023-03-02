@@ -145,7 +145,7 @@ const ContentSidebar = ({
                         aria-hidden
                       />
                     </Accordion.Trigger>
-                    <AccordionContent>
+                    <AccordionContent className="AccordionContent">
                       <div className="flex flex-col">
                         {isEmpty ? (
                           <div
@@ -216,7 +216,6 @@ const ContentSidebar = ({
                         )}
                       </div>
                     </AccordionContent>
-                    <Accordion.Content className="AccordionContent flex flex-col overflow-hidden bg-slate-800"></Accordion.Content>
                   </Accordion.Item>
                 );
               })}
