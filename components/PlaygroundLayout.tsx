@@ -95,6 +95,9 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="h-screen flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
       {/* <VerticalNavigation light={true} codingPage={true} /> */}
       <div
+        style={{
+          left: mobileView ? -80 : 0,
+        }}
         className={`absolute -left-[80px] transition-all sm:left-0 top-0 h-full z-50 ${
           !mainSidebarHidden ? "min-w-[18rem] w-[18rem]" : "w-5 min-w-[5rem]"
         }`}
