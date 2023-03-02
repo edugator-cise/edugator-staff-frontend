@@ -5,6 +5,8 @@ import SideNavigation from "./SideNav/SideNavigation";
 import ContentSidebar from "./ContentSidebar/ContentSidebar";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import useWindowWidth from "hooks/useWindowSize";
+import { EdugatorLogo } from "./SideNav/navIcons";
+import { useDeviceSize } from "hooks/useDeviceSize";
 
 export type ContentType = "problems" | "lessons" | "all";
 
@@ -12,84 +14,65 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   const [contentSidebarHidden, setContentSidebarHidden] = useState(false);
   const [mainSidebarHidden, setMainSidebarHidden] = useState(false);
   const [activeContent, setActiveContent] = useState<ContentType>("all");
-  const [tabletView, setTabletView] = useState(false);
-  const [laptopView, setLaptopView] = useState(false);
-  const [mobileView, setMobileView] = useState(false);
 
   const router = useRouter();
   const locationState = router.asPath;
 
-  const windowWidth = useWindowWidth();
+  const { mobileView, tabletView, laptopView } = useDeviceSize();
 
   useEffect(() => {
-    if (!windowWidth) return;
-    if (windowWidth < 800) {
-      setMobileView(true);
-      setTabletView(false);
-      setLaptopView(false);
-      setContentSidebarHidden(true);
-      setMainSidebarHidden(true);
-      return;
-    } else if (windowWidth < 1024) {
-      setMobileView(false);
-      setTabletView(true);
-      setLaptopView(false);
-      setContentSidebarHidden(true);
-      setMainSidebarHidden(true);
-    } else if (windowWidth < 1420) {
-      setMobileView(false);
-      setTabletView(false);
-      setLaptopView(true);
-      setContentSidebarHidden(true);
-      setMainSidebarHidden(true);
-    } else {
-      setTabletView(false);
-      setMobileView(false);
-      setLaptopView(false);
+    if (!mobileView && !tabletView && !laptopView) {
       setContentSidebarHidden(false);
       setMainSidebarHidden(mainSidebarHidden);
+    } else {
+      setContentSidebarHidden(true);
+      setMainSidebarHidden(true);
     }
-  }, [windowWidth]);
+  }, [mobileView, tabletView, laptopView]);
 
   const mainSidebarWidth = 80;
   const mainSidebarExpandedWidth = 288;
   const contentSidebarWidth = 287;
 
-  let contentMargin = 0;
-  if (contentSidebarHidden && mainSidebarHidden) {
-    contentMargin = mainSidebarWidth;
-  } else if (contentSidebarHidden && !mainSidebarHidden) {
-    contentMargin = mainSidebarExpandedWidth;
-  } else if (!contentSidebarHidden && mainSidebarHidden) {
-    contentMargin = contentSidebarWidth + mainSidebarWidth;
-  } else {
-    contentMargin = contentSidebarWidth + mainSidebarExpandedWidth;
-  }
+  const contentMargin = () => {
+    if (contentSidebarHidden && mainSidebarHidden) {
+      return mainSidebarWidth;
+    } else if (contentSidebarHidden && !mainSidebarHidden) {
+      return mainSidebarExpandedWidth;
+    } else if (!contentSidebarHidden && mainSidebarHidden) {
+      return contentSidebarWidth + mainSidebarWidth;
+    } else {
+      return contentSidebarWidth + mainSidebarExpandedWidth;
+    }
+  };
 
-  let contentSidebarOffset = 0;
-  if (contentSidebarHidden && mainSidebarHidden) {
-    contentSidebarOffset = -contentSidebarWidth + mainSidebarWidth;
-  } else if (contentSidebarHidden && !mainSidebarHidden) {
-    contentSidebarOffset = -contentSidebarWidth + mainSidebarExpandedWidth;
-  } else if (!contentSidebarHidden && mainSidebarHidden) {
-    contentSidebarOffset = mainSidebarWidth;
-  } else {
-    contentSidebarOffset = mainSidebarExpandedWidth;
-  }
+  const contentSidebarOffset = () => {
+    if (contentSidebarHidden && mainSidebarHidden) {
+      return -contentSidebarWidth + mainSidebarWidth;
+    } else if (contentSidebarHidden && !mainSidebarHidden) {
+      return -contentSidebarWidth + mainSidebarExpandedWidth;
+    } else if (!contentSidebarHidden && mainSidebarHidden) {
+      return mainSidebarWidth;
+    } else {
+      return mainSidebarExpandedWidth;
+    }
+  };
 
-  let dividerOffset = 0;
-  if (mainSidebarHidden) {
-    dividerOffset = mainSidebarWidth;
-  } else if (!mainSidebarHidden) {
-    dividerOffset = mainSidebarExpandedWidth;
-  }
+  const dividerOffset = () => {
+    if (mainSidebarHidden) {
+      return mainSidebarWidth;
+    } else if (!mainSidebarHidden) {
+      return mainSidebarExpandedWidth;
+    }
+  };
 
-  let laptopContentMargin = 0;
-  if (mainSidebarHidden) {
-    laptopContentMargin = mainSidebarWidth;
-  } else {
-    laptopContentMargin = mainSidebarExpandedWidth;
-  }
+  const laptopContentMargin = () => {
+    if (mainSidebarHidden) {
+      return mainSidebarWidth;
+    } else {
+      return mainSidebarExpandedWidth;
+    }
+  };
 
   return (
     <div className="h-screen flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
@@ -113,7 +96,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
       <div
         style={{
-          left: mobileView ? -1 : dividerOffset,
+          left: mobileView ? -1 : dividerOffset(),
         }}
         className="w-px h-full absolute transition-all bg-slate-700 z-[100] min-w-[1px]"
       ></div>
@@ -124,7 +107,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
             style={{
               left: mobileView
                 ? -(mainSidebarWidth + contentSidebarWidth)
-                : contentSidebarOffset,
+                : contentSidebarOffset(),
             }}
             className={`mobile:left-auto !absolute top-0 transition-all h-full`}
           >
@@ -137,12 +120,33 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
           <div
             style={{
-              paddingLeft: laptopView ? laptopContentMargin : contentMargin,
+              paddingTop: mobileView ? 96 : 0,
+              paddingLeft: laptopView ? laptopContentMargin() : contentMargin(),
             }}
-            className={`relative w-full h-full transition-all ${
+            className={`relative w-full h-full transition-all flex flex-col ${
               tabletView ? "!pl-[80px]" : ""
             } ${mobileView ? "!pl-0" : ""}`}
           >
+            <div
+              style={{
+                top: mobileView ? 0 : -96,
+                left: mobileView ? 0 : 80,
+              }}
+              className="absolute left-0 transition-all flex flex-col items-center justify-between w-full h-24 min-h-[6rem]"
+            >
+              <div className="w-full h-12 min-h-[3rem] flex items-center bg-nav-darker px-4">
+                <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
+                  <EdugatorLogo />
+                </div>
+                {/* 
+                <h1
+                  className={`text-white font-ambit mt-1 overflow-hidden text-ellipsis transition-opacity`}
+                >
+                  Edugator
+                </h1> */}
+              </div>
+              <div className="w-full h-12 min-h-[3rem] flex items-center bg-nav-dark"></div>
+            </div>
             <SidebarHideOverlay
               hidden={contentSidebarHidden && mainSidebarHidden}
               setHidden={() => {

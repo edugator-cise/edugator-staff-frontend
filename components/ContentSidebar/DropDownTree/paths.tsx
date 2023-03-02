@@ -13,8 +13,8 @@ export const ModulePath = ({ moduleOpen }: { moduleOpen: boolean }) => (
     <path
       d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
       stroke="#42454F"
-      stroke-width="4"
-      stroke-linecap="round"
+      strokeWidth="4"
+      strokeLinecap="round"
       strokeDasharray={moduleOpen ? "1000" : "0"}
       strokeDashoffset={moduleOpen ? "1000" : "0"}
       style={
@@ -54,8 +54,8 @@ export const ItemPath = ({
       id="curved-path"
       d="M1.7619 1.5791V204.575C1.7619 209.416 5.58548 216.34 16.1739 216.34"
       stroke="#42454F"
-      stroke-width="4"
-      stroke-linecap="round"
+      strokeWidth="4"
+      strokeLinecap="round"
       strokeDasharray="1000"
       strokeDashoffset="1000"
       style={{

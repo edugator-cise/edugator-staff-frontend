@@ -33,11 +33,14 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionContent } from "utils/radixTypes";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import AnimateHeight from "react-animate-height";
+import { toTitleCase } from "utils/textUtils";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
   { ssr: false }
 );
+
+type MobilePanel = "problem" | "editor" | "output";
 
 export default function CodeEditor() {
   const dispatch = useDispatch();
@@ -48,10 +51,11 @@ export default function CodeEditor() {
   const [stdin, setStdin] = useState<string>("");
   const [editorCode, setEditorCode] = useState<string>("");
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mobileActivePanel, setMobileActivePanel] =
+    useState<MobilePanel>("editor");
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [mobileActivePanel, setMobileActivePanel] = useState<
-    "problem" | "editor" | "output"
-  >("editor");
+
+  const mobilePanels: Array<MobilePanel> = ["problem", "editor", "output"];
 
   const windowWidth = useWindowWidth();
 
@@ -101,9 +105,11 @@ export default function CodeEditor() {
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     // this gets called when mobile state changes.
     // So, we need to keep a duplicate of the code in the editor and replace it when the mobile state changes
-    editorRef.current = editor;
-    console.log("mmm", editorCode);
-    editorRef.current.setValue(editorCode);
+    if (editorRef.current) {
+      editorRef.current = editor;
+      console.log("mmm", editorCode);
+      editorRef.current.setValue(editorCode);
+    }
   };
 
   if (status === FetchStatus.loading) {
@@ -125,67 +131,69 @@ export default function CodeEditor() {
   return (
     <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest">
       {isMobile ? (
-        <div className="flex flex-col w-full max-h-full h-full">
-          <div
-            className="w-full h-12 min-h-[3rem] bg-red-400"
-            onClick={() => {
-              setMobileActivePanel("problem");
-            }}
-          >
-            Problem
-          </div>
-          <AnimateHeight
-            contentClassName="h-full overflow-y-scroll"
-            height={mobileActivePanel === "problem" ? "100%" : 0}
-            className="w-full dark:bg-nav-darkest bg-slate-100"
-          >
-            <div className="h-full w-full">
-              <ProblemView
-                problemTitle={currentProblem?.title}
-                problemStatement={currentProblem?.statement}
-              />
-            </div>
-          </AnimateHeight>
-          <div
-            className="w-full h-12 min-h-[3rem] bg-red-400"
-            onClick={() => {
-              setMobileActivePanel("editor");
-            }}
-          >
-            Editor
-          </div>
-          <AnimateHeight
-            contentClassName="h-full"
-            height={mobileActivePanel === "editor" ? "100%" : 0}
-            className="w-full dark:bg-nav-darkest bg-slate-100"
-          >
-            <CodeEditorView
-              handleCodeChange={handleCodeChange}
-              editorRef={editorRef}
-              onMount={handleEditorMount}
-              isSubmissionRunning={isSubmissionRunning}
-              runCode={runCode}
-              submitCode={submitCode}
-              code={currentProblem.code?.body}
-              templatePackage={currentProblem?.templatePackage}
-              currentProblem={currentProblem}
-              stdin={stdin}
-            />
-          </AnimateHeight>
-          <div
-            className="w-full h-12 min-h-[3rem] bg-red-400"
-            onClick={() => {
-              setMobileActivePanel("output");
-            }}
-          >
-            Output
-          </div>
-          <AnimateHeight
-            height={mobileActivePanel === "output" ? "100%" : 0}
-            className="w-full dark:bg-nav-darkest bg-slate-100 overflow-y-scroll"
-          >
-            <div className="h-auto w-full"></div>
-          </AnimateHeight>
+        <div className="flex flex-col w-full max-h-full h-full divide-y divide-slate-300 dark:divide-slate-700">
+          {mobilePanels.map((panel) => {
+            return (
+              <React.Fragment key={panel}>
+                <div
+                  key={panel}
+                  className="w-full cursor-pointer h-12 min-h-[3rem] dark:bg-nav-dark flex px-5 items-center justify-between"
+                  onClick={() => {
+                    setMobileActivePanel(panel);
+                  }}
+                >
+                  <p className="dark:text-white text-slate-900">
+                    {toTitleCase(panel)}
+                  </p>
+                  <ChevronDownIcon
+                    className={`transition text-slate-800 dark:text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] duration-300 ${
+                      mobileActivePanel === panel ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+
+                <AnimateHeight
+                  contentClassName="h-full"
+                  height={mobileActivePanel === panel ? "100%" : 0}
+                  className="w-full dark:bg-nav-darkest bg-slate-100"
+                >
+                  {panel === "problem" ? (
+                    <div className="w-full h-full overflow-y-scroll">
+                      <ProblemView
+                        problemTitle={currentProblem?.title}
+                        problemStatement={currentProblem?.statement}
+                      />
+                    </div>
+                  ) : panel === "editor" ? (
+                    <CodeEditorView
+                      handleCodeChange={handleCodeChange}
+                      editorRef={editorRef}
+                      onMount={handleEditorMount}
+                      isSubmissionRunning={isSubmissionRunning}
+                      runCode={runCode}
+                      submitCode={submitCode}
+                      code={currentProblem.code?.body}
+                      templatePackage={currentProblem?.templatePackage}
+                      currentProblem={currentProblem}
+                      stdin={stdin}
+                    />
+                  ) : (
+                    <div className="w-full h-full">
+                      <InputOutputView
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        submissionOutput={submissionOutput}
+                        stdin={stdin}
+                        setStdin={setStdin}
+                        compilerOutput={compilerOutput}
+                        isAcceptedOutput={isAcceptedOutput}
+                      />
+                    </div>
+                  )}
+                </AnimateHeight>
+              </React.Fragment>
+            );
+          })}
         </div>
       ) : (
         <Allotment
