@@ -3,17 +3,29 @@ import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload, BugReport} from "@mui/icons-material";
+import {
+  GetApp,
+  Add,
+  RotateLeft,
+  CloudDownload,
+  BugReport,
+} from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
 import { IProblem } from "lib/shared/types";
-import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
+import {
+  createNavStructure,
+  handleDownload,
+  parseFile,
+} from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -55,6 +67,7 @@ interface CodeEditorProps {
   currentProblem: IProblem;
   stdin: string;
   isSubmissionRunning: boolean;
+  templateZip: string;
   runCode: ({
     code,
     stdin,
@@ -93,6 +106,7 @@ export const CodeEditorView = ({
   currentProblem,
   stdin,
   isSubmissionRunning,
+  templateZip,
   runCode,
   submitCode,
 }: CodeEditorProps) => {
@@ -144,8 +158,12 @@ export const CodeEditorView = ({
   };
 
   const handleReportABug = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank', 'noopener');
-  }
+    window.open(
+      "https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform",
+      "_blank",
+      "noopener"
+    );
+  };
 
   window.addEventListener("resize", () => {
     if (editorRef.current) {
@@ -167,18 +185,29 @@ export const CodeEditorView = ({
             Solution
           </Box>
           <Box sx={{ paddingRight: 3 }}>
-            <a
+            {/* <a
               href={templatePackage}
               style={{ textDecoration: "none" }}
               target="_blank"
               rel="noreferrer"
-            >
-              <Tooltip title="Download Template" placement="top">
-                <IconButton>
-                  <CloudDownload />
-                </IconButton>
-              </Tooltip>
-            </a>
+            > */}
+            <Tooltip title="Download Template" placement="top">
+              <IconButton>
+                <CloudDownload
+                  onClick={(e) => {
+                    // console.log(templateZip);
+                    const zip = new JSZip();
+                    //template zip is base64
+                    zip.loadAsync(templateZip, { base64: true }).then((zip) => {
+                      zip.generateAsync({ type: "blob" }).then((content) => {
+                        saveAs(content, `${currentProblem.title}.zip`);
+                      });
+                    });
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+            {/* </a> */}
             <input
               style={{ display: "none" }}
               ref={hiddenFileInput}

@@ -109,6 +109,7 @@ export default function CodeEditor() {
               submitCode={submitCode}
               code={currentProblem.code?.body}
               templatePackage={currentProblem?.templatePackage}
+              templateZip={currentProblem?.templateZip}
               currentProblem={currentProblem}
               stdin={stdin}
             />

@@ -26,6 +26,7 @@ export interface IProblem extends IProblemBase {
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
+  templateZip: string;
 }
 
 // lesson type fetched directly from db
