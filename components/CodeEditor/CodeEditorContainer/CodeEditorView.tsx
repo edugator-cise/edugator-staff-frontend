@@ -165,6 +165,19 @@ export const CodeEditorView = ({
     );
   };
 
+  const handleDownloadTemplate = () => {
+    if (!templateZip) {
+      return window.open(templatePackage, "_blank", "noopener");
+    }
+
+    const zip = new JSZip();
+    zip.loadAsync(templateZip, { base64: true }).then((zip) => {
+      zip.generateAsync({ type: "blob" }).then((content) => {
+        saveAs(content, `${currentProblem.title}.zip`);
+      });
+    });
+  };
+
   window.addEventListener("resize", () => {
     if (editorRef.current) {
       editorRef.current.layout();
@@ -193,18 +206,7 @@ export const CodeEditorView = ({
             > */}
             <Tooltip title="Download Template" placement="top">
               <IconButton>
-                <CloudDownload
-                  onClick={(e) => {
-                    // console.log(templateZip);
-                    const zip = new JSZip();
-                    //template zip is base64
-                    zip.loadAsync(templateZip, { base64: true }).then((zip) => {
-                      zip.generateAsync({ type: "blob" }).then((content) => {
-                        saveAs(content, `${currentProblem.title}.zip`);
-                      });
-                    });
-                  }}
-                />
+                <CloudDownload onClick={() => handleDownloadTemplate()} />
               </IconButton>
             </Tooltip>
             {/* </a> */}
