@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert } from "@mui/icons-material/";
 import { IAdminModule } from "components/Modules/types";
 import { useDispatch } from "react-redux";
-import { openEditDialog } from "components/Modules/ModulesSlice";
+import { openEditDialog } from "state/ModulesSlice";
 
 interface MenuProps {
   module: IAdminModule;

@@ -10,7 +10,10 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
-import { closeWarningModal, WarningTypes } from "./contentEditorPageSlice";
+import {
+  closeWarningModal,
+  WarningTypes,
+} from "../../state/contentEditorPageSlice";
 import { RootState } from "lib/store/store";
 import apiClient from "lib/api/apiClient";
 import toast from "react-hot-toast";

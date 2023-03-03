@@ -2,7 +2,7 @@ import { Field, Form, Formik } from "formik";
 import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "components/shared/FormTextField";
-import { receiveLoginSuccess } from "components/Login/LoginSlice";
+import { receiveLoginSuccess } from "state/LoginSlice";
 import AdminLayout from "components/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
@@ -45,7 +45,7 @@ const LoginFormCard = styled(Card)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-export default function LoginPage(): React.ReactElement{
+export default function LoginPage(): React.ReactElement {
   const dispatch = useDispatch();
   const authState = useSelector((state: RootState) => state.login);
   const router = useRouter();
@@ -53,9 +53,9 @@ export default function LoginPage(): React.ReactElement{
 
   useEffect(() => {
     if (token) {
-      router.push(Routes.Modules)
+      router.push(Routes.Modules);
     }
-  }, [token])
+  }, [token]);
 
   return (
     <AdminLayout pageTitle="Admin Login">
@@ -65,14 +65,19 @@ export default function LoginPage(): React.ReactElement{
           onSubmit={async (values: IRequestLoginAction) => {
             try {
               const url = `${baseAPIURL}v1/auth/login`;
-              const { data }: { data: ILoginSuccess} = await apiClient.post(url, values);
-              LocalStorage.setToken(data.token)
+              const { data }: { data: ILoginSuccess } = await apiClient.post(
+                url,
+                values
+              );
+              LocalStorage.setToken(data.token);
               dispatch(receiveLoginSuccess(data));
-              toast.success("Logged in successfully")
+              toast.success("Logged in successfully");
               setToken(LocalStorage.getToken());
             } catch (e) {
               LocalStorage.checkUnauthorized(e);
-              toast.error("The username or password is incorrect, Please try again")
+              toast.error(
+                "The username or password is incorrect, Please try again"
+              );
             }
           }}
         >

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { rolesEnum } from "components/Accounts/types";
-import { IAuthState, ILoginSuccess } from "./types";
+import { IAuthState, ILoginSuccess } from "../components/Login/types";
 
 const initialAuthState: IAuthState = {
   role: rolesEnum.TA,
@@ -26,8 +26,6 @@ export const loginSlice = createSlice({
   },
 });
 
-export const {
-  receiveLoginSuccess,
-} = loginSlice.actions;
+export const { receiveLoginSuccess } = loginSlice.actions;
 
 export default loginSlice.reducer;

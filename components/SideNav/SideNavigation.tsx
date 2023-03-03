@@ -13,6 +13,12 @@ import { useTheme } from "next-themes";
 import { EdugatorLogo, icons } from "./navIcons";
 import { ContentType } from "components/PlaygroundLayout";
 import { classes, NavLink, navLinks, NavLinkText } from "./navigationData";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
+import {
+  setMainSidebarHidden,
+  setContentSidebarHidden,
+} from "state/interfaceControls.slice";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -91,23 +97,29 @@ const NavLinkTooltip = ({
 };
 
 const SideNavigation = ({
-  exercisesHidden,
-  setExercisesHidden,
   activeContent,
   setActiveContent,
-  mainSidebarHidden,
-  setMainSidebarHidden,
 }: {
-  exercisesHidden: boolean;
-  setExercisesHidden: (hidden: boolean) => void;
   activeContent: ContentType;
   setActiveContent: (activeContent: ContentType) => void;
-  mainSidebarHidden: boolean;
-  setMainSidebarHidden: (hidden: boolean) => void;
 }) => {
   const [activeLink, setActiveLink] = useState<NavLink>(navLinks[1]);
   const [activeClass, setActiveClass] = useState(0);
   const [mounted, setMounted] = useState(false);
+
+  const { mainSidebarHidden, contentSidebarHidden } = useSelector(
+    (state: RootState) => state.interfaceControls
+  );
+
+  const dispatch = useDispatch();
+
+  const toggleMainSidebar = (hidden: boolean) => {
+    dispatch(setMainSidebarHidden(hidden));
+  };
+
+  const toggleContentSidebar = (hidden: boolean) => {
+    dispatch(setContentSidebarHidden(hidden));
+  };
 
   useEffect(() => {
     // used to fix hydration mismatch with theme toggle
@@ -176,7 +188,7 @@ const SideNavigation = ({
                 <div
                   onClick={() => {
                     setActiveClass(index);
-                    setMainSidebarHidden(false);
+                    toggleMainSidebar(false);
                   }}
                   className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
                     activeClass === index && mainSidebarHidden
@@ -249,13 +261,13 @@ const SideNavigation = ({
                 if (toggleExercises) {
                   // if link is already active, toggle exercises. if not, show exercises
                   if (isActiveLink) {
-                    setExercisesHidden(!exercisesHidden);
+                    toggleContentSidebar(!contentSidebarHidden);
                   } else {
-                    setExercisesHidden(false);
+                    toggleContentSidebar(false);
                   }
                 } else {
                   // if link is not in toggleExercises, close exercises
-                  setExercisesHidden(true);
+                  toggleContentSidebar(true);
                 }
 
                 setActiveLink(link);
@@ -366,7 +378,7 @@ const SideNavigation = ({
           {/* Collapse/Expand Button */}
           <NavLinkTooltip text={"Expand"} disabled={!mainSidebarHidden}>
             <div
-              onClick={() => setMainSidebarHidden(!mainSidebarHidden)}
+              onClick={() => toggleMainSidebar(!mainSidebarHidden)}
               className={`w-full cursor-pointer h-12 rounded-md overflow-hidden flex items-center justify-start px-[14px] group space-x-4 text-nav-inactive-light hover:bg-emerald-500/5`}
             >
               <div

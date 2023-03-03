@@ -1,6 +1,6 @@
-import {useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Grid, Chip, Typography, TextField, MenuItem } from "@mui/material";
-import { requestNewAccountEnd } from "../AdminAccountsPage.slice";
+import { requestNewAccountEnd } from "../../../state/AdminAccountsPage.slice";
 import { useDispatch } from "react-redux";
 import { IAccount, IAccountPOST, INewAccount, rolesEnum } from "../types";
 import Dialog from "components/shared/GenericDialog";
@@ -54,20 +54,23 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
 
   const createNewAccount = async (account: INewAccount) => {
     try {
-      const { data }: { data: IAccountPOST } = await apiClient.post(apiRoutes.admin.createAccount, account) 
+      const { data }: { data: IAccountPOST } = await apiClient.post(
+        apiRoutes.admin.createAccount,
+        account
+      );
       const newAccount: IAccount = {
         name: account.name,
         role: account.role,
         username: account.username,
         phone: account.phone,
         _id: data.id,
-      }
+      };
       dispatch(requestNewAccountEnd(newAccount));
-      toast.success("User created successfully")
-    } catch(e) {
+      toast.success("User created successfully");
+    } catch (e) {
       toast.error("Failed to create account");
     }
-  }
+  };
 
   const handleNewAccount = () => {
     const { name, password, username } = newAccount;

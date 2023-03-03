@@ -7,13 +7,23 @@ import { ArrowRightIcon } from "@radix-ui/react-icons";
 import useWindowWidth from "hooks/useWindowSize";
 import { EdugatorLogo } from "./SideNav/navIcons";
 import { useDeviceSize } from "hooks/useDeviceSize";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setContentSidebarHidden,
+  setMainSidebarHidden,
+} from "state/interfaceControls.slice";
+import { RootState } from "lib/store/store";
 
 export type ContentType = "problems" | "lessons" | "all";
 
 const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
-  const [contentSidebarHidden, setContentSidebarHidden] = useState(false);
-  const [mainSidebarHidden, setMainSidebarHidden] = useState(false);
   const [activeContent, setActiveContent] = useState<ContentType>("all");
+
+  const dispatch = useDispatch();
+
+  const { contentSidebarHidden, mainSidebarHidden } = useSelector(
+    (state: RootState) => state.interfaceControls
+  );
 
   const router = useRouter();
   const locationState = router.asPath;
@@ -22,11 +32,11 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!mobileView && !tabletView && !laptopView) {
-      setContentSidebarHidden(false);
-      setMainSidebarHidden(mainSidebarHidden);
+      dispatch(setContentSidebarHidden(false));
+      dispatch(setMainSidebarHidden(mainSidebarHidden));
     } else {
-      setContentSidebarHidden(true);
-      setMainSidebarHidden(true);
+      dispatch(setContentSidebarHidden(true));
+      dispatch(setMainSidebarHidden(true));
     }
   }, [mobileView, tabletView, laptopView]);
 
@@ -86,10 +96,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
         }`}
       >
         <SideNavigation
-          mainSidebarHidden={mainSidebarHidden}
-          setMainSidebarHidden={setMainSidebarHidden}
-          exercisesHidden={contentSidebarHidden}
-          setExercisesHidden={setContentSidebarHidden}
           setActiveContent={setActiveContent}
           activeContent={activeContent}
         />
@@ -112,8 +118,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
             className={`mobile:left-auto !absolute top-0 transition-all h-full`}
           >
             <ContentSidebar
-              hidden={contentSidebarHidden}
-              setHidden={setContentSidebarHidden}
               setActiveContent={setActiveContent}
               activeContent={activeContent}
             />

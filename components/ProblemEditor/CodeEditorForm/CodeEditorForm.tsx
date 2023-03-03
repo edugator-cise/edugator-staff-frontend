@@ -18,7 +18,7 @@ import {
   CodeEditorFields,
   updateCodeEditor,
   validateCode,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 
 interface Props {
   formRef: any;

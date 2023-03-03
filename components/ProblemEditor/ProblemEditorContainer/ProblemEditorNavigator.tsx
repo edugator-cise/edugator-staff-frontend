@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   incrementActiveStep,
   decrementActiveStep,
-} from "components/ProblemEditor/problemEditorContainerSlice";
-import { RootState } from "lib/store/store"
+} from "state/problemEditorContainerSlice";
+import { RootState } from "lib/store/store";
 interface Props {
   formRef: any;
 }

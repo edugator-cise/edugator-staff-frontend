@@ -1,13 +1,17 @@
 import React from "react";
 import { TextField, Typography, TextFieldProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { DialogStatus, IAdminModule, NullModule } from "components/Modules/types";
+import {
+  DialogStatus,
+  IAdminModule,
+  NullModule,
+} from "components/Modules/types";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeDialog,
   requestNewModuleSuccess,
-  requestModifyModuleSuccess
-} from "components/Modules/ModulesSlice";
+  requestModifyModuleSuccess,
+} from "state/ModulesSlice";
 import { IModuleBase } from "lib/shared/types";
 import Dialog from "components/shared/GenericDialog";
 import { isBlank } from "utils/CodeEditorUtils";
@@ -30,7 +34,6 @@ const NameTextField = styled(TextField)<TextFieldProps>(({ theme }) => ({
 function isInvalidNum(num: number) {
   return isNaN(num) || num < 0 || num > 1000000;
 }
-
 
 export function ModuleDialog() {
   const dispatch = useDispatch();
@@ -57,34 +60,42 @@ export function ModuleDialog() {
       number: payload.number,
       problems: [],
       lessons: [],
-      _id: payload._id
-    }
-  }
+      _id: payload._id,
+    };
+  };
 
-  const addEditModulesRequest = async (payload: IModuleBase, type: 'add' | 'edit') => {
+  const addEditModulesRequest = async (
+    payload: IModuleBase,
+    type: "add" | "edit"
+  ) => {
     const body = {
       name: payload.name,
       number: payload.number,
     };
-  
+
     try {
-      const response: AxiosResponse<IAdminModule> = type === 'add' ? await apiClient.post("/v1/module", body) : await apiClient.put(`/v1/module/${payload._id}`, body);
-      if (type === 'add') {
+      const response: AxiosResponse<IAdminModule> =
+        type === "add"
+          ? await apiClient.post("/v1/module", body)
+          : await apiClient.put(`/v1/module/${payload._id}`, body);
+      if (type === "add") {
         toast.success(`${body.name} Module created successfully`);
-        dispatch(requestNewModuleSuccess(createModule({...response.data, ...body})))
+        dispatch(
+          requestNewModuleSuccess(createModule({ ...response.data, ...body }))
+        );
       } else {
         toast.success(`${body.name} Module updated successfully`);
-        dispatch(requestModifyModuleSuccess(response.data))
+        dispatch(requestModifyModuleSuccess(response.data));
       }
       dispatch(closeDialog());
     } catch (e) {
-      if (type === 'add') {
+      if (type === "add") {
         toast.error(`${body.name} Module failed to create`);
       } else {
         toast.error(`${body.name} Module failed to update`);
       }
     }
-  }
+  };
 
   const handleDialogSubmit = async () => {
     const { name, number } = dialogInput;
@@ -95,9 +106,9 @@ export function ModuleDialog() {
     if (isBlank(name) || isInvalidNum(number)) {
       return;
     } else if (action === DialogStatus.CREATE) {
-      await addEditModulesRequest(dialogInput, 'add');
+      await addEditModulesRequest(dialogInput, "add");
     } else if (action === DialogStatus.EDIT) {
-      await addEditModulesRequest(dialogInput, 'edit');
+      await addEditModulesRequest(dialogInput, "edit");
     }
   };
 

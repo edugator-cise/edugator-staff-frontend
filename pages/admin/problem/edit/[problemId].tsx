@@ -11,7 +11,7 @@ import {
   updateModuleName,
   updateProblemId,
   WarningTypes,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
 import { useState } from "react";

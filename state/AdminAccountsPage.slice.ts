@@ -4,7 +4,7 @@ import {
   IAccountManagerState,
   IAccount,
   IAccountDELETE,
-} from "./types";
+} from "../components/Accounts/types";
 
 const baseManagerState: IAccountManagerState = {
   accounts: [],

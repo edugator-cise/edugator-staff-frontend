@@ -1,20 +1,22 @@
 import { combineReducers } from "redux";
-import problemEditorContainerReducer from "components/ProblemEditor/problemEditorContainerSlice";
-import contentEditorReducer from "components/ContentEditor/contentEditorPageSlice";
-import { loginSlice } from "components/Login/LoginSlice"
-import moduleReducer from "components/Modules/ModulesSlice";
-import accountManagerReducer from "components/Accounts/AdminAccountsPage.slice";
+import problemEditorContainerReducer from "state/problemEditorContainerSlice";
+import contentEditorReducer from "state/contentEditorPageSlice";
+import loginReducer from "state/LoginSlice";
+import moduleReducer from "state/ModulesSlice";
+import accountManagerReducer from "state/AdminAccountsPage.slice";
+import interfaceControlsReducer from "state/interfaceControls.slice";
 /* import slices of state here */
 
 /* Place the object keys for state here followed by the reducer taken from that slice
     e.g. key : keyReducer
 */
 const rootReducer = combineReducers({
-  login: loginSlice.reducer,
+  login: loginReducer,
   modules: moduleReducer,
   accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
   contentEditorPage: contentEditorReducer,
+  interfaceControls: interfaceControlsReducer,
 });
 
 export default rootReducer;

@@ -1,10 +1,8 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import AdminLayout from "components/AdminLayout";
 import { Fade, Stack, duration, Container } from "@mui/material";
-import { useRouter } from "next/router"
-import {
-  unsetSelectedAccount,
-} from "components/Accounts/AdminAccountsPage.slice";
+import { useRouter } from "next/router";
+import { unsetSelectedAccount } from "state/AdminAccountsPage.slice";
 import { AccountsTable } from "components/Accounts/AccountsTable";
 import { AccountDialog } from "components/Accounts/accountDialog/AccountDialog";
 import { NewAccountDialog } from "components/Accounts/accountDialog/NewAccountDialog";
@@ -18,7 +16,9 @@ import { RootState } from "lib/store/store";
 export function AdminAccountsPage() {
   const history = useRouter();
   const dispatch = useDispatch();
-  const dashboardState = useSelector((state: RootState) => state.accountManager);
+  const dashboardState = useSelector(
+    (state: RootState) => state.accountManager
+  );
 
   // whether there is a selected account from the table
   const selectingAccount = dashboardState.selectedAccount ? true : false;

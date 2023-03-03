@@ -165,7 +165,7 @@ export const CodeEditorView = ({
   return (
     <div className="w-full h-full flex flex-col font-dm">
       <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 dark:bg-nav-darkest border-b dark:border-b-slate-700 border-b-slate-300">
-        <div className="flex space-x-8 items-center ">
+        <div className="flex space-x-8 items-center">
           <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
             Solution
           </p>
@@ -252,7 +252,7 @@ export const CodeEditorView = ({
           onMount={onMount}
         />
       </div>
-      <div className="w-full flex justify-end items-center px-3 pb-3 space-x-2 bg-slate-100 dark:bg-nav-darkest">
+      <div className="w-full px-3 pb-3 flex items-center justify-between bg-slate-100 dark:bg-nav-darkest">
         <button
           disabled={isSubmissionRunning}
           onClick={() => {
@@ -279,39 +279,89 @@ export const CodeEditorView = ({
               }
             );
           }}
-          className="bg-transparent text-slate-600 dark:text-slate-300 px-3 text-sm py-2 rounded-md border border-slate-400"
+          className="bg-transparent px-3 text-sm py-2 rounded-md border border-violet-400 flex items-center space-x-2"
         >
-          Run Code
+          <div className="w-4 h-4">
+            <svg
+              className="w-full h-full"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M15 0C15.7101 0 16.2857 0.575633 16.2857 1.28571V3.85714C16.2857 4.56722 15.7101 5.14286 15 5.14286C14.2899 5.14286 13.7143 4.56722 13.7143 3.85714V1.28571C13.7143 0.575633 14.2899 0 15 0ZM21.9091 3.90914C22.4112 3.40704 22.4112 2.59296 21.9091 2.09086C21.407 1.58876 20.593 1.58876 20.0909 2.09086L18.3766 3.80515C17.8745 4.30725 17.8745 5.12133 18.3766 5.62342C18.8787 6.12552 19.6927 6.12552 20.1948 5.62342L21.9091 3.90914ZM16.6408 9.78362C17.3102 9.11414 17.3102 8.02872 16.6408 7.35924C15.9713 6.68978 14.8859 6.68978 14.2164 7.35924L0.502102 21.0735C-0.167367 21.743 -0.167367 22.8285 0.502102 23.4979C1.17157 24.1673 2.25699 24.1673 2.92647 23.4979L16.6408 9.78362ZM20.1429 7.71429C19.4328 7.71429 18.8571 8.28993 18.8571 9C18.8571 9.71007 19.4328 10.2857 20.1429 10.2857H22.7143C23.4243 10.2857 24 9.71007 24 9C24 8.28993 23.4243 7.71429 22.7143 7.71429H20.1429ZM17.5195 11.5194C18.0216 11.0173 18.8355 11.0173 19.3377 11.5194L21.0519 13.2337C21.5541 13.7358 21.5541 14.5499 21.0519 15.052C20.5498 15.5541 19.7359 15.5541 19.2338 15.052L17.5195 13.3377C17.0173 12.8356 17.0173 12.0215 17.5195 11.5194ZM10.7663 2.94801C10.2642 2.44591 9.4501 2.44591 8.94801 2.94801C8.44591 3.4501 8.44591 4.26418 8.94801 4.76628L10.6623 6.48057C11.1644 6.98266 11.9785 6.98266 12.4806 6.48057C12.9827 5.97847 12.9827 5.16439 12.4806 4.66229L10.7663 2.94801Z"
+                className="fill-violet-600 dark:fill-violet-300"
+              />
+            </svg>
+          </div>
+          <p className="text-violet-600 dark:text-violet-300">Ask AI</p>
+          <p className="dark:text-white text-violet-700 bg-violet-200 dark:bg-violet-600 px-2 rounded-full text-xs">
+            beta
+          </p>
         </button>
-        <button
-          disabled={isSubmissionRunning}
-          onClick={() => {
-            toast.promise(
-              submitCode({
-                code: currentCode,
-                stdin,
-                problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
-              }),
-              {
-                loading: "Submitting Code...",
-                success: "Code Submitted Successfully",
-                error: "Error Submitting Code",
-              },
-              {
-                position: "top-right",
-                success: {
-                  icon: "👨‍💻",
+        <div className="flex items-center space-x-2">
+          <button
+            disabled={isSubmissionRunning}
+            onClick={() => {
+              console.log("run code");
+              toast.promise(
+                runCode({
+                  code: currentCode,
+                  stdin,
+                  problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
+                }),
+                {
+                  loading: "Running Code...",
+                  success: "Code Ran Successfully",
+                  error: "Error Running Code",
                 },
-              }
-            );
-          }}
-          className="bg-emerald-500 border-emerald-700 text-white px-3 text-sm py-2 rounded-md"
-        >
-          Submit Code
-        </button>
+                {
+                  position: "top-right",
+                  success: {
+                    icon: "👨‍💻",
+                  },
+                }
+              );
+            }}
+            className="bg-transparent text-slate-600 dark:text-slate-300 px-3 text-sm py-2 rounded-md border border-slate-400"
+          >
+            Run Code
+          </button>
+          <button
+            disabled={isSubmissionRunning}
+            onClick={() => {
+              toast.promise(
+                submitCode({
+                  code: currentCode,
+                  stdin,
+                  problemId: problemId as string,
+                  timeLimit: timeLimit as number,
+                  memoryLimit: memoryLimit as number,
+                  buildCommand: buildCommand as string,
+                }),
+                {
+                  loading: "Submitting Code...",
+                  success: "Code Submitted Successfully",
+                  error: "Error Submitting Code",
+                },
+                {
+                  position: "top-right",
+                  success: {
+                    icon: "👨‍💻",
+                  },
+                }
+              );
+            }}
+            className="bg-emerald-500 border-emerald-700 text-white px-3 text-sm py-2 rounded-md"
+          >
+            Submit Code
+          </button>
+        </div>
       </div>
     </div>
   );

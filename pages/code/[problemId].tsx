@@ -158,11 +158,21 @@ export default function CodeEditor() {
                   className="w-full dark:bg-nav-darkest bg-slate-100"
                 >
                   {panel === "problem" ? (
-                    <div className="w-full h-full overflow-y-scroll">
-                      <ProblemView
-                        problemTitle={currentProblem?.title}
-                        problemStatement={currentProblem?.statement}
-                      />
+                    <div className="w-full h-full">
+                      <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+                        <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+                          Problems
+                          <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
+                            &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentProblem?.title}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="w-full h-full overflow-y-scroll">
+                        <ProblemView
+                          problemTitle={currentProblem?.title}
+                          problemStatement={currentProblem?.statement}
+                        />
+                      </div>
                     </div>
                   ) : panel === "editor" ? (
                     <CodeEditorView

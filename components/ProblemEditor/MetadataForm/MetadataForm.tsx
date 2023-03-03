@@ -12,7 +12,7 @@ import {
   MetadataFields,
   updateMetadata,
   validateMetadata,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker, { DatePickerProps } from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";

@@ -21,15 +21,14 @@ import ErrorState from "./ErrorState";
 import { ItemPath, ModulePath } from "./DropDownTree/paths";
 import { navLinks } from "components/SideNav/navigationData";
 import { AccordionContent } from "utils/radixTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
+import { setContentSidebarHidden } from "state/interfaceControls.slice";
 
 const ContentSidebar = ({
-  hidden,
-  setHidden,
   activeContent,
   setActiveContent,
 }: {
-  hidden: boolean;
-  setHidden: (hidden: boolean) => void;
   activeContent: ContentType;
   setActiveContent: (activeContent: ContentType) => void;
 }) => {
@@ -38,6 +37,16 @@ const ContentSidebar = ({
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
   );
+
+  const { contentSidebarHidden } = useSelector(
+    (state: RootState) => state.interfaceControls
+  );
+
+  const dispatch = useDispatch();
+
+  const toggleContentSidebar = (hidden: boolean) => {
+    dispatch(setContentSidebarHidden(hidden));
+  };
 
   const navigation = createNavStructure(problemAndLessonSet);
 
@@ -58,7 +67,7 @@ const ContentSidebar = ({
           <h1 className="text-white font-dm font-medium text-lg">Exercises</h1>
           <div
             onClick={() => {
-              setHidden(!hidden);
+              toggleContentSidebar(!contentSidebarHidden);
             }}
             className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
           >
