@@ -188,7 +188,7 @@ const SideNavigation = ({
                 <div
                   onClick={() => {
                     setActiveClass(index);
-                    toggleMainSidebar(false);
+                    toggleMainSidebar(!mainSidebarHidden);
                   }}
                   className={`w-full flex p-1 transition-all hover:bg-blue-500/10 items-center relative ${
                     activeClass === index && mainSidebarHidden
