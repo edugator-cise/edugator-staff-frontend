@@ -5,8 +5,6 @@ import { FormikProps } from "formik";
 import { isBlank } from "../../../shared/utils";
 import { Markdown } from "../../../shared/Markdown";
 import { defaultMarkdown } from "./MarkdownEditor.constants";
-// import rehypeRaw from 'rehype-raw';
-// import rehypeSanitize from 'rehype-sanitize';
 
 interface Props {
   form: FormikProps<any>;

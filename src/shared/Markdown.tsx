@@ -1,8 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import remarkGfm  from "remark-gfm";
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize from 'rehype-sanitize';
 
 interface Props {
   markdownString: string;
@@ -17,7 +16,7 @@ export const Markdown = ({ markdownString }: Props) => (
     children={markdownString}
     components={{ img: Image }}
     remarkPlugins={[remarkGfm]}
-    rehypePlugins={[rehypeRaw, rehypeSanitize]}
+    rehypePlugins={[rehypeRaw]}
     
   />
 );
