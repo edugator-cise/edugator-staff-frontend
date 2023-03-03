@@ -154,12 +154,12 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
             <SidebarHideOverlay
               hidden={contentSidebarHidden && mainSidebarHidden}
               setHidden={() => {
-                setContentSidebarHidden(true);
-                setMainSidebarHidden(true);
+                dispatch(setContentSidebarHidden(true));
+                dispatch(setMainSidebarHidden(true));
               }}
             />
             {children}
-            <NextOverlay />
+            {/* <NextOverlay /> */}
           </div>
         </div>
       </div>
@@ -172,12 +172,12 @@ const SidebarHideOverlay = ({
   setHidden,
 }: {
   hidden: boolean;
-  setHidden: (hidden: boolean) => void;
+  setHidden: () => void;
 }) => {
   return (
     <div
       onClick={() => {
-        setHidden(true);
+        setHidden();
       }}
       className={`laptop:opacity-0 laptop:pointer-events-none transition-opacity absolute top-0 left-0 w-full h-full bg-black/50 z-20 ${
         hidden ? "opacity-0 pointer-events-none" : "opacity-100 cursor-pointer"

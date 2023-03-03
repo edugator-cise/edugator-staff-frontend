@@ -34,6 +34,7 @@ import { AccordionContent } from "utils/radixTypes";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import AnimateHeight from "react-animate-height";
 import { toTitleCase } from "utils/textUtils";
+import AIChat from "components/CodeEditor/CodeEditorContainer/AIChat/AIChat";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -129,7 +130,7 @@ export default function CodeEditor() {
   }
 
   return (
-    <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest">
+    <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest relative">
       {isMobile ? (
         <div className="flex flex-col w-full max-h-full h-full divide-y divide-slate-300 dark:divide-slate-700">
           {mobilePanels.map((panel) => {
@@ -206,58 +207,61 @@ export default function CodeEditor() {
           })}
         </div>
       ) : (
-        <Allotment
-          sizes={[310, 350]}
-          snap={true}
-          minSize={400}
-          className="code-editor-allotment"
-        >
-          <div className="flex w-full h-full flex-col">
-            <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
-              <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
-                Problems
-                <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
-                  &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentProblem?.title}
-                </span>
-              </p>
-            </div>
-            <div className="w-full h-auto dark:bg-nav-darkest bg-slate-100 p-4 overflow-y-scroll">
-              <div className="h-auto w-full">
-                <ProblemView
-                  problemTitle={currentProblem?.title}
-                  problemStatement={currentProblem?.statement}
-                />
+        <div className="w-full h-full relative">
+          <AIChat />
+          <Allotment
+            sizes={[310, 350]}
+            snap={true}
+            minSize={400}
+            className="code-editor-allotment"
+          >
+            <div className="flex w-full h-full flex-col">
+              <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+                <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+                  Problems
+                  <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
+                    &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentProblem?.title}
+                  </span>
+                </p>
+              </div>
+              <div className="w-full h-auto dark:bg-nav-darkest bg-slate-100 p-4 overflow-y-scroll">
+                <div className="h-auto w-full">
+                  <ProblemView
+                    problemTitle={currentProblem?.title}
+                    problemStatement={currentProblem?.statement}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
-            <div className="w-full h-full">
-              <CodeEditorView
-                handleCodeChange={handleCodeChange}
-                editorRef={editorRef}
-                onMount={handleEditorMount}
-                isSubmissionRunning={isSubmissionRunning}
-                runCode={runCode}
-                submitCode={submitCode}
-                code={currentProblem.code?.body}
-                templatePackage={currentProblem?.templatePackage}
-                currentProblem={currentProblem}
-                stdin={stdin}
-              />
-            </div>
-            <div className="w-full h-full">
-              <InputOutputView
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                submissionOutput={submissionOutput}
-                stdin={stdin}
-                setStdin={setStdin}
-                compilerOutput={compilerOutput}
-                isAcceptedOutput={isAcceptedOutput}
-              />
-            </div>
+            <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
+              <div className="w-full h-full">
+                <CodeEditorView
+                  handleCodeChange={handleCodeChange}
+                  editorRef={editorRef}
+                  onMount={handleEditorMount}
+                  isSubmissionRunning={isSubmissionRunning}
+                  runCode={runCode}
+                  submitCode={submitCode}
+                  code={currentProblem.code?.body}
+                  templatePackage={currentProblem?.templatePackage}
+                  currentProblem={currentProblem}
+                  stdin={stdin}
+                />
+              </div>
+              <div className="w-full h-full">
+                <InputOutputView
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  submissionOutput={submissionOutput}
+                  stdin={stdin}
+                  setStdin={setStdin}
+                  compilerOutput={compilerOutput}
+                  isAcceptedOutput={isAcceptedOutput}
+                />
+              </div>
+            </Allotment>
           </Allotment>
-        </Allotment>
+        </div>
       )}
     </div>
   );

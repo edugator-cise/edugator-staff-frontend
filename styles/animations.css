@@ -70,12 +70,12 @@
 
   
   .PopoverContent[data-state='open'] {
-      transform-origin: left top;
+      transform-origin: right bottom;
       animation: fadeIn 150ms ease-out;
     }
     
     .PopoverContent[data-state='closed'] {
-        transform-origin: left top;
+        transform-origin: right bottom;
     animation: fadeOut 150ms ease-in;
   }
 
