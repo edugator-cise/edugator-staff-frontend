@@ -28,7 +28,7 @@ const AIChat = () => {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Content
-            className="PopoverContent shadow-2xl shadow-black/10 font-dm rounded-lg overflow-hidden w-96 h-[32rem] relative bg-slate-100 dark:bg-nav-dark border dark:border-slate-700 border-slate-300"
+            className="PopoverContent shadow-2xl z-[120] shadow-black/10 font-dm rounded-lg overflow-hidden w-96 h-[32rem] relative bg-slate-100 dark:bg-nav-dark border dark:border-slate-700 border-slate-300"
             side="top"
             sideOffset={10}
             align="end"
