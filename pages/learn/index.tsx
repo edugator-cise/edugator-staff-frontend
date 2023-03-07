@@ -1,4 +1,4 @@
-import PlaygroundLayout from "components/PlaygroundLayout";
+import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
 import { ReactNode } from "react";
 
 export default function LearnPage() {

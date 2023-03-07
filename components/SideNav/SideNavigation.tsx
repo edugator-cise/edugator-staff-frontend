@@ -11,7 +11,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import { useTheme } from "next-themes";
 
 import { EdugatorLogo, icons } from "./navIcons";
-import { ContentType } from "components/PlaygroundLayout";
+import { ContentType } from "components/PlaygroundLayout/PlaygroundLayout";
 import { classes, NavLink, navLinks, NavLinkText } from "./navigationData";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";

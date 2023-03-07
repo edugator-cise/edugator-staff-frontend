@@ -14,7 +14,7 @@ import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
 import ImageBlock from "components/LearnPage/ImageBlock";
 import MultipleSelectQuestion from "components/LearnPage/MultipleSelectQuestion";
-import PlaygroundLayout from "components/PlaygroundLayout";
+import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
@@ -34,234 +34,90 @@ export default function LearnPage() {
     id: params && params.lessonId ? (params.lessonId as string) : "",
   });
 
-  const LessonHolder = styled("div")({
-    width: "80%",
-    maxWidth: "1400px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    padding: 30,
-    height: "auto",
-    textAlign: "left",
-    backgroundColor: "white",
-    boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
-    marginBottom: 100,
-    [theme.breakpoints.down("lg")]: {
-      width: "100%",
-    },
-  });
-
-  const LessonHeader = styled("div")({
-    width: "100%",
-    height: 100,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    borderBottom: "2px solid lightgrey",
-    paddingBottom: 0,
-  });
-
   function transform(node: HTMLElement, children: Node[]): React.ReactNode {
-    if (node.tagName === "H1") {
-      return (
-        <h1
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-            textAlign: "left",
-          }}
-        >
-          {children}
-        </h1>
-      );
-    } else if (node.tagName === "H2") {
-      return (
-        <h2
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-            textAlign: "left",
-          }}
-        >
-          {children}
-        </h2>
-      );
-    } else if (node.tagName === "H3") {
-      return (
-        <h3
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-          }}
-        >
-          <i>{children}</i>
-        </h3>
-      );
-    } else if (node.tagName === "H4") {
-      return (
-        <h4
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-          }}
-        >
-          <i>{children}</i>
-        </h4>
-      );
-    } else if (node.tagName === "H5") {
-      return (
-        <h5
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-          }}
-        >
-          <i>{children}</i>
-        </h5>
-      );
-    } else if (node.tagName === "H6") {
-      return (
-        <h5
-          style={{
-            marginBottom: 0,
-            fontWeight: 200,
-            fontFamily: "DM Serif Display",
-          }}
-        >
-          <i>{children}</i>
-        </h5>
-      );
-    } else if (node.tagName === "P") {
-      return <p style={{ lineHeight: 1.5, color: "#242424" }}>{children}</p>;
-    } else if (node.tagName === "PRE") {
-      return (
-        <code
-          style={{
-            padding: 10,
-            borderRadius: 8,
-            backgroundColor: "#242424",
-            color: "white",
-            alignSelf: "center",
-          }}
-        >
-          {children}
-        </code>
-      );
-    }
+    return;
   }
 
   return (
     <>
       {status === FetchStatus.loading ? (
-        <Grid container direction="column" sx={{ height: "100vh" }}>
-          <Box>
-            <CircularProgress />
-          </Box>
-        </Grid>
+        <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
+          <CircularProgress />
+        </div>
       ) : currentLesson === undefined ? (
-        <Grid container direction="column" sx={{ height: "100vh" }}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="h4">Lesson not found</Typography>
-          </Box>
-        </Grid>
+        <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
+          <h1 className="text-2xl font-dm text-slate-900 dark:text-white">
+            Lesson not found
+          </h1>
+        </div>
       ) : (
-        <div
-          id="lesson-container"
-          style={{
-            width: "100%",
-            height: "auto",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            overflowY: "scroll",
-          }}
-        >
-          <LessonHolder>
-            <LessonHeader>
-              <div className="lesson-title">{currentLesson.title}</div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  height: "auto",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <div
-                  className="lesson-subtitle"
-                  style={{ color: theme.palette.primary.dark }}
-                >
-                  <span style={{ color: theme.palette.primary.main }}>
-                    Author:{" "}
-                  </span>
-                  {currentLesson.author}
+        /* Page wrapper */
+        <div className="w-full h-full bg-slate-200 dark:bg-nav-darkest relative items-center flex flex-col">
+          {/* Lesson Page Container */}
+          <div className="w-full dark:border-b-slate-700 border-b-slate-300 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-slate-200">
+            <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+              Lessons
+              <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
+                &nbsp;&nbsp;&gt;&nbsp;&nbsp;{currentLesson?.title}
+              </span>
+            </p>
+          </div>
+          <div className="w-full h-full flex justify-center px-0 md:px-10 overflow-scroll bg-slate-100 dark:bg-nav-darkest">
+            {/* Content Page */}
+            <div className="w-full max-w-6xl px-8 bg-white dark:bg-nav-darker markdown">
+              <header className="border-b-2 pb-2 pt-10 border-emerald-500 w-full flex justify-between items-end text-slate-900 dark:text-white">
+                <div className="font-ambit text-4xl ">
+                  {currentLesson.title}
                 </div>
-                <div
-                  className="lesson-subtitle"
-                  style={{ color: theme.palette.primary.dark }}
-                ></div>
-              </div>
-            </LessonHeader>
-            {currentLesson.content?.map((block: LessonBlock, i) => {
-              console.log(block);
-              if (!block || !block.type || !block.data) {
-                return null;
-              }
-              if (block.type === "text") {
-                return (
-                  <div key={i} style={{ width: "100%" }}>
-                    <Markup
-                      transform={transform}
-                      className="inter"
-                      content={JSON.parse(
-                        JSON.stringify(block.data.html) || ""
-                      )}
+                <span className="font-dm">{`Author: ${currentLesson.author}`}</span>
+              </header>
+              {currentLesson.content?.map((block: LessonBlock, i) => {
+                console.log(block);
+                if (!block || !block.type || !block.data) {
+                  return null;
+                }
+                if (block.type === "text") {
+                  return (
+                    <div key={i} style={{ width: "100%" }}>
+                      <Markup
+                        transform={transform}
+                        className="inter"
+                        content={JSON.parse(
+                          JSON.stringify(block.data.html) || ""
+                        )}
+                      />
+                    </div>
+                  );
+                } else if (block.type === "image") {
+                  return <ImageBlock key={i} src={block.data.src} />;
+                } else if (block.type === "multiple_choice") {
+                  questionCount++;
+                  return (
+                    <MultipleChoiceQuestion
+                      key={i}
+                      number={questionCount - 1}
+                      image={block.data.image || false}
+                      sourcePath={block.data.src}
+                      answers={block.data.answers}
+                      correctAnswer={block.data.correct}
+                      question={block.data.question}
                     />
-                  </div>
-                );
-              } else if (block.type === "image") {
-                return <ImageBlock key={i} src={block.data.src} />;
-              } else if (block.type === "multiple_choice") {
-                questionCount++;
-                return (
-                  <MultipleChoiceQuestion
-                    key={i}
-                    number={questionCount - 1}
-                    image={block.data.image || false}
-                    sourcePath={block.data.src}
-                    answers={block.data.answers}
-                    correctAnswer={block.data.correct}
-                    question={block.data.question}
-                  />
-                );
-              } else if (block.type === "multiple_select") {
-                questionCount++;
-                return (
-                  <MultipleSelectQuestion
-                    key={i}
-                    number={questionCount - 1}
-                    answers={block.data.answers}
-                    question={block.data.question}
-                  />
-                );
-              }
-              return <></>;
-            })}
-          </LessonHolder>
+                  );
+                } else if (block.type === "multiple_select") {
+                  questionCount++;
+                  return (
+                    <MultipleSelectQuestion
+                      key={i}
+                      number={questionCount - 1}
+                      answers={block.data.answers}
+                      question={block.data.question}
+                    />
+                  );
+                }
+                return <></>;
+              })}
+            </div>
+          </div>
         </div>
       )}
     </>

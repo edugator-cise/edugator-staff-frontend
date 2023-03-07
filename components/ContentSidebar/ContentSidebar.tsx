@@ -14,7 +14,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";
-import { ContentType } from "components/PlaygroundLayout";
+import { ContentType } from "components/PlaygroundLayout/PlaygroundLayout";
 import { DoubleArrowLeftIcon } from "@radix-ui/react-icons";
 import LoadingState from "./LoadingState";
 import ErrorState from "./ErrorState";

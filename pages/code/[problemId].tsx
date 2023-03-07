@@ -8,7 +8,7 @@ import React, {
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { adminPathRegex } from "constants/config";
-import PlaygroundLayout from "components/PlaygroundLayout";
+import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
 import {
   Grid,
   CircularProgress,
