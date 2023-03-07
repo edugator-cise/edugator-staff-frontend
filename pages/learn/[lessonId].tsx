@@ -62,9 +62,9 @@ export default function LearnPage() {
               </span>
             </p>
           </div>
-          <div className="w-full h-full flex justify-center px-0 md:px-10 overflow-scroll bg-slate-100 dark:bg-nav-darkest">
+          <div className="w-full h-auto flex justify-center px-0 md:px-10 overflow-y-auto bg-slate-100 dark:bg-nav-darkest">
             {/* Content Page */}
-            <div className="w-full max-w-6xl px-8 bg-white dark:bg-nav-darker markdown">
+            <div className="w-full max-w-6xl h-fit pb-20 px-8 bg-white dark:bg-nav-darker markdown">
               <header className="border-b-2 pb-2 pt-10 border-emerald-500 w-full flex justify-between items-end text-slate-900 dark:text-white">
                 <div className="font-ambit text-4xl ">
                   {currentLesson.title}
