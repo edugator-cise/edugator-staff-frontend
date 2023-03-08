@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Field, FieldProps, Form, Formik } from "formik";
 import React from "react";
@@ -126,7 +127,13 @@ export const MetadataForm = (props: Props) => {
               </LocalizationProvider>
             </Box>
             
-            {/* <Form style={{ display: 'flex' }}>
+
+            
+            <Box >
+              
+            <Typography variant="body1" color="textSecondary" sx={{ marginLeft: 1 }}>
+              Select programming languages:
+            </Typography><br/>
             <FormControlLabel
               control={
                 <Checkbox
@@ -134,11 +141,11 @@ export const MetadataForm = (props: Props) => {
                   onChange={handleChange}
                   checked={values.cpp}
                 />
-                
               }
-              sx={{ marginTop: "auto" }}
+              sx={{ marginLeft: 0 }}
               label="C++"
             />
+            
             <FormControlLabel
               control={
                 <Checkbox
@@ -146,12 +153,13 @@ export const MetadataForm = (props: Props) => {
                   onChange={handleChange}
                   checked={values.py}
                 />
-                
               }
-              sx={{ marginTop: "auto" }}
               label="Python"
             />
-            </Form> */}
+            </Box>
+
+
+
 
 
           </Stack>
