@@ -9,7 +9,8 @@ import {
   Alert,
   Grow,
   Typography,
-  IconButton
+  IconButton,
+  Tooltip
 } from "@mui/material";
 import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
@@ -25,10 +26,39 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 class ComponentToPrint extends React.Component {
   render() {
+    const PrintLesson = styled("div")({
+      width: "80%",
+      height: "auto",
+      maxWidth: "1400px",
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "left",
+      alignItems: "flex-start",
+      backgroundColor: "white",
+      boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
+      padding: 30,
+      [theme.breakpoints.down("lg")]: {
+        width: "100%",
+      },
+    });
+
     return (
-      <div style={{ padding: '20px 70px' }}>
-        <LearnPageContent />
-      </div>
+      <div
+        id="lesson-container"
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          overflowY: "scroll",
+          textAlign: "center"
+        }}
+      >
+        <PrintLesson>
+          <LearnPageContent />
+        </PrintLesson>
+      </div >
     );
   }
 }
@@ -48,26 +78,9 @@ function LearnPageContent() {
     id: params && params.lessonId ? (params.lessonId as string) : "",
   });
 
-  const LessonHolder = styled("div")({
-    width: "80%",
-    maxWidth: "1400px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    padding: 30,
-    height: "auto",
-    textAlign: "left",
-    backgroundColor: "white",
-    boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
-    marginBottom: 100,
-    [theme.breakpoints.down("lg")]: {
-      width: "100%",
-    },
-  });
-
   const LessonHeader = styled("div")({
     width: "100%",
-    height: 100,
+    height: 60,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -194,101 +207,89 @@ function LearnPageContent() {
           </Box>
         </Grid>
       ) : (
-        <div
-          id="lesson-container"
-          style={{
-            width: "100%",
-            height: "auto",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            overflowY: "scroll",
-          }}
-        >
-          <LessonHolder>
-            <LessonHeader>
-              <div className="lesson-title">{currentLesson.title}</div>
+        <>
+          <LessonHeader>
+            <div className="lesson-title">{currentLesson.title}</div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "auto",
+                justifyContent: "flex-end",
+              }}
+            >
               <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  height: "auto",
-                  justifyContent: "flex-end",
-                }}
+                className="lesson-subtitle"
+                style={{ color: theme.palette.primary.dark }}
               >
-                <div
-                  className="lesson-subtitle"
-                  style={{ color: theme.palette.primary.dark }}
-                >
-                  <span style={{ color: theme.palette.primary.main }}>
-                    Author:{" "}
-                  </span>
-                  {currentLesson.author}
-                </div>
-                <div
-                  className="lesson-subtitle"
-                  style={{ color: theme.palette.primary.dark }}
-                ></div>
+                <span style={{ color: theme.palette.primary.main }}>
+                  Author:{" "}
+                </span>
+                {currentLesson.author}
               </div>
-            </LessonHeader>
-            {currentLesson.content?.map((block: LessonBlock, i) => {
-              console.log(block);
-              if (!block || !block.type || !block.data) {
-                return null;
-              }
-              if (block.type === "text") {
-                return (
-                  <div key={i} style={{ width: "100%" }}>
-                    <Markup
-                      transform={transform}
-                      className="inter"
-                      content={JSON.parse(
-                        JSON.stringify(block.data.html) || ""
-                      )}
-                    />
-                  </div>
-                );
-              } else if (block.type === "image") {
-                return <ImageBlock key={i} src={block.data.src} />;
-              } else if (block.type === "multiple_choice") {
-                questionCount++;
-                return (
-                  <MultipleChoiceQuestion
-                    key={i}
-                    number={questionCount - 1}
-                    image={block.data.image || false}
-                    sourcePath={block.data.src}
-                    answers={block.data.answers}
-                    correctAnswer={block.data.correct}
-                    question={block.data.question}
+              <div
+                className="lesson-subtitle"
+                style={{ color: theme.palette.primary.dark }}
+              ></div>
+            </div>
+          </LessonHeader>
+          {currentLesson.content?.map((block: LessonBlock, i) => {
+            console.log(block);
+            if (!block || !block.type || !block.data) {
+              return null;
+            }
+            if (block.type === "text") {
+              return (
+                <div key={i} style={{ width: "100%" }}>
+                  <Markup
+                    transform={transform}
+                    className="inter"
+                    content={JSON.parse(
+                      JSON.stringify(block.data.html) || ""
+                    )}
                   />
-                );
-              } else if (block.type === "multiple_select") {
-                questionCount++;
-                return (
-                  <MultipleSelectQuestion
-                    key={i}
-                    number={questionCount - 1}
-                    answers={block.data.answers}
-                    question={block.data.question}
-                  />
-                );
-              } else if (block.type === "fill_in_the_blank") {
-                questionCount++;
-                return (
-                  <FillInTheBlankQuestion
-                    key={i}
-                    number={questionCount - 1}
-                    questionSegments={block.data.questionSegments}
-                    correctAnswers={block.data.correctAnswers}
-                  />
-                );
-              }
-              return <></>;
-            })}
-          </LessonHolder>
-        </div>
+                </div>
+              );
+            } else if (block.type === "image") {
+              return <ImageBlock key={i} src={block.data.src} />;
+            } else if (block.type === "multiple_choice") {
+              questionCount++;
+              return (
+                <MultipleChoiceQuestion
+                  key={i}
+                  number={questionCount - 1}
+                  image={block.data.image || false}
+                  sourcePath={block.data.src}
+                  answers={block.data.answers}
+                  correctAnswer={block.data.correct}
+                  question={block.data.question}
+                />
+              );
+            } else if (block.type === "multiple_select") {
+              questionCount++;
+              return (
+                <MultipleSelectQuestion
+                  key={i}
+                  number={questionCount - 1}
+                  answers={block.data.answers}
+                  question={block.data.question}
+                />
+              );
+            } else if (block.type === "fill_in_the_blank") {
+              questionCount++;
+              return (
+                <FillInTheBlankQuestion
+                  key={i}
+                  number={questionCount - 1}
+                  questionSegments={block.data.questionSegments}
+                  correctAnswers={block.data.correctAnswers}
+                />
+              );
+            }
+            return <></>;
+          })}
+        </>
       )
       }
     </>
@@ -301,18 +302,52 @@ export default function LearnPage() {
     content: () => componentRef.current,
   });
 
+  const PrintLesson = styled("div")({
+    width: "80%",
+    height: "auto",
+    maxWidth: "1400px",
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "left",
+    alignItems: "flex-start",
+    backgroundColor: "white",
+    boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
+    padding: 30,
+    [theme.breakpoints.down("lg")]: {
+      width: "100%",
+    },
+  });
+
   return (
     <>
       <div style={{ display: 'none' }}>
         <ComponentToPrint ref={componentRef} />
       </div>
-
-      <IconButton
-        onClick={() => handlePrint()}
+      <div
+        id="lesson-container"
+        style={{
+          width: "100%",
+          height: "auto",
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          overflowY: "scroll",
+          textAlign: "center"
+        }}
       >
-        <DownloadIcon />
-      </IconButton>
-      <LearnPageContent />
+        <PrintLesson>
+          <div style={{ width: "100%", textAlign: "right" }}>
+            <Tooltip title="Download Lesson" placement="top">
+              <IconButton
+                onClick={() => handlePrint()}
+              >
+                <DownloadIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+          <LearnPageContent />
+        </PrintLesson>
+      </div>
     </>
   );
 }
