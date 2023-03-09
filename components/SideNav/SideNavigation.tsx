@@ -207,7 +207,7 @@ const SideNavigation = ({
                       asChild
                       className="rounded-sm relative"
                     >
-                      <Image src={item.icon} layout="fill" objectFit="cover" />
+                      <Image src={item.icon} layout="fill" objectFit="cover" alt={item.name}/>
                     </AspectRatio.Root>
                   </div>
                   {/* Class Info */}
