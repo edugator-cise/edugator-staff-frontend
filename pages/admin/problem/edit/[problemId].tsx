@@ -21,7 +21,7 @@ import { CircularProgress } from "@mui/material";
 
 const ProblemEditPage = () => {
   const router = useRouter();
-  const { problemId , moduleName, moduleId } = router.query;
+  const { problemId , moduleName, moduleId, } = router.query;
   const [status, setStatus] = useState(FetchStatus.loading)
   const dispatch = useDispatch();
   const actions = {

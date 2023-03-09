@@ -11,6 +11,7 @@ export const apiRoutes = {
   admin: {
     getLesson: (id: string) => `v1/admin/lesson/${id}`,
     getProblem: (id: string) => `v1/admin/problem/${id}`,
+    getSolution: (id: string) => `v1/admin/solution/${id}`,
     getNavigation: "v1/module/WithProblems",
     getAccounts: "v1/user/getUsers",
     createAccount: "v1/user/create",

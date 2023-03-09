@@ -58,6 +58,7 @@ export interface ProblemEditorContainerState {
   problemId: string | undefined;
   moduleId: string;
   moduleName: string | undefined;
+  solutionId: string | undefined;
 
   isSubmitting: boolean;
   fetchingProblem: boolean;
@@ -99,6 +100,7 @@ const initialState: ProblemEditorContainerState = {
   },
   testCases: [],
   problemId: undefined,
+  solutionId: undefined,
   moduleId: "",
   moduleName: "",
   isSubmitting: false,
@@ -189,7 +191,9 @@ export const problemEditorContainerSlice = createSlice({
     updateModuleName: (state, action: PayloadAction<string | undefined>) => {
       state.moduleName = action.payload;
     },
-
+    updateSolutionId: (state, action: PayloadAction<string | undefined>) => {
+      state.solutionId = action.payload;
+    },
     closeFailureModal: (state) => {
       state.showFailureModal = false;
     },
