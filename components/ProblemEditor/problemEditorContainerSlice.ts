@@ -318,6 +318,7 @@ export const {
   updateModuleId,
   updateModuleName,
   updateProblemId,
+  updateSolutionId,
   resetState,
   openWarningModal,
   closeWarningModal,

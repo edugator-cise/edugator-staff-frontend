@@ -9,6 +9,7 @@ import {
   requestGetProblemSuccess,
   resetState,
   updateModuleId,
+  updateSolutionId,
   updateModuleName,
   WarningTypes,
 } from "components/ProblemEditor/problemEditorContainerSlice";
@@ -21,7 +22,7 @@ import { CircularProgress } from "@mui/material";
 
 const ProblemEditPage = () => {
   const router = useRouter();
-  const { problemId , moduleName, moduleId, } = router.query;
+  const { problemId , moduleName, moduleId, solution} = router.query;
   const [status, setStatus] = useState(FetchStatus.loading)
   const dispatch = useDispatch();
   const actions = {
@@ -46,6 +47,7 @@ const ProblemEditPage = () => {
     getProblemRequest().then(value => {
       dispatch(updateModuleId(moduleId as string));
       dispatch(updateModuleName(moduleName as string));
+      dispatch(updateSolutionId(solution as string));
       dispatch(requestGetProblemSuccess(value.data));
       setStatus(FetchStatus.succeed);
     }).catch(e => {
