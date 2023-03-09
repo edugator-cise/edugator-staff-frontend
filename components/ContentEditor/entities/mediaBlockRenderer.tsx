@@ -14,15 +14,23 @@ import { ModalAnswer } from "../components/MultipleSelectModal";
 
 export const mediaBlockRenderer = (block: ContentBlock) => {
   if (block.getType() === "atomic") {
-    return {
-      component: Media,
-      editable: false,
-    };
+    // check if entityRanges is not null
+    if (block?.getEntityAt(0) === null || block?.getEntityAt(0) === undefined) {
+      // if image or unsupported atomic block is pasted in, return an empty div
+      return;
+    } else {
+      // otherwise, if we support the custom media, return the media component
+      return {
+        component: Media,
+        editable: false,
+      };
+    }
   }
   return null;
 };
 
 const Image = ({ src }: { src: string }) => {
+  console.log("hji");
   if (!!src) {
     return (
       <img
@@ -46,9 +54,11 @@ const Media = ({
   console.log("contentState", contentState);
   console.log("block", block);
 
-  const entity = contentState.getEntity(block.getEntityAt(0));
+  const entity = contentState?.getEntity(block?.getEntityAt(0) || " ");
 
   const type = entity.getType();
+  console.log("type", type);
+  console.log("entity", entity);
 
   let media;
 

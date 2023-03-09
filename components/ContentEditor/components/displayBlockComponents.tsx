@@ -37,10 +37,12 @@ const AnswerHolder = styled("div")({
 export function MultipleChoiceDisplayBlock({
   question,
   answers,
-  correct,
 }: {
   question: string;
-  answers: string[];
+  answers: {
+    text: string;
+    correct: boolean;
+  }[];
   correct: number;
 }) {
   return (
@@ -62,74 +64,27 @@ export function MultipleChoiceDisplayBlock({
         columnSpacing={2}
         sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
       >
-        <Grid item xs={6}>
-          <AnswerHolder
-            style={
-              correct === 0
-                ? { backgroundColor: "LightGreen" }
-                : { backgroundColor: "IndianRed" }
-            }
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={answers[0]}
-            >
-              {answers[0]}
-            </Typography>
-          </AnswerHolder>
-        </Grid>
-        <Grid item xs={6}>
-          <AnswerHolder
-            style={
-              correct === 1
-                ? { backgroundColor: "LightGreen" }
-                : { backgroundColor: "IndianRed" }
-            }
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={answers[1]}
-            >
-              {answers[1]}
-            </Typography>
-          </AnswerHolder>
-        </Grid>
-        <Grid item xs={6}>
-          <AnswerHolder
-            style={
-              correct === 2
-                ? { backgroundColor: "LightGreen" }
-                : { backgroundColor: "IndianRed" }
-            }
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={answers[2]}
-            >
-              {answers[2]}
-            </Typography>
-          </AnswerHolder>
-        </Grid>
-        <Grid item xs={6}>
-          <AnswerHolder
-            style={
-              correct === 3
-                ? { backgroundColor: "LightGreen" }
-                : { backgroundColor: "IndianRed" }
-            }
-          >
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-              key={answers[3]}
-            >
-              {answers[3]}
-            </Typography>
-          </AnswerHolder>
-        </Grid>
+        {answers.map((answer, index) => {
+          return (
+            <Grid item xs={6}>
+              <AnswerHolder
+                style={
+                  answer.correct
+                    ? { backgroundColor: "LightGreen" }
+                    : { backgroundColor: "IndianRed" }
+                }
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
+                  key={answer.text}
+                >
+                  {answer.text}
+                </Typography>
+              </AnswerHolder>
+            </Grid>
+          );
+        })}
       </Grid>
     </QuestionHolder>
   );

@@ -3,18 +3,18 @@
 }
 
 .markdown h1 {
+    @apply text-2xl font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
+}
+
+.markdown h2 {
+    @apply text-xl font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
+}
+
+.markdown h3 {
     @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 
 .markdown h4 {
-    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
-}
-
-.markdown h2 {
-    @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
-}
-
-.markdown h3 {
     @apply text-lg font-bold font-dm !mt-4 text-slate-900 dark:text-slate-100;
 }
 

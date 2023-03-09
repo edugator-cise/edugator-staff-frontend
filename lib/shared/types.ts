@@ -40,7 +40,14 @@ export interface ILesson extends ILessonBase {
     entityMap: {}[];
   };
   blocks: {}[];
-  entityMap: Array<ImageEntity | MultipleChoiceEntity | MultipleSelectEntity>;
+  entityMap: Array<
+    | ImageEntity
+    | MultipleChoiceEntity
+    | MultipleSelectEntity
+    | {
+        type: "LINK";
+      }
+  >;
 }
 
 /** Final display blocks for each content block type */
@@ -70,8 +77,11 @@ export type MultipleChoiceBlock = {
     image?: boolean;
     src?: string;
     question: string;
-    answers: string[];
-    correct: number;
+    answers: {
+      id: number;
+      text: string;
+      correct: boolean;
+    }[];
   };
 };
 
@@ -114,8 +124,9 @@ export type MultipleChoiceContent = {
     question: string;
     answers: {
       id: number;
+      text: string;
+      correct: boolean;
     }[];
-    correct: number;
   };
 };
 

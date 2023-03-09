@@ -47,6 +47,7 @@ export const TextStack = ({
         rawData.push({ html: splitHtml[i + 1], type: "text" });
       });
 
+    console.log("here");
     const convertedData: any = [];
     rawData.forEach((data: any) => {
       let content;
@@ -57,14 +58,10 @@ export const TextStack = ({
           break;
 
         case "multiple_choice":
+          console.log("here2", data);
           content = new contentBlock(
             "multiple_choice",
-            new mc_content(data.data.question, data.data.correct, [
-              data.data.answer1,
-              data.data.answer2,
-              data.data.answer3,
-              data.data.answer4,
-            ])
+            new mc_content(data.data.question, data.data.answers)
           );
           break;
 

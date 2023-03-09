@@ -64,9 +64,9 @@ export default function LearnPage() {
           </div>
           <div className="w-full h-auto flex justify-center px-0 md:px-10 overflow-y-auto bg-slate-100 dark:bg-nav-darkest">
             {/* Content Page */}
-            <div className="w-full max-w-6xl h-fit pb-20 px-8 bg-white dark:bg-nav-darker markdown">
+            <div className="w-full max-w-6xl h-fit pb-20 px-8 bg-white dark:bg-nav-darker markdown flex flex-col space-y-4">
               <header className="border-b-2 pb-2 pt-10 border-emerald-500 w-full flex justify-between items-end text-slate-900 dark:text-white">
-                <div className="font-ambit text-4xl ">
+                <div className="font-ambit text-4xl font-semibold">
                   {currentLesson.title}
                 </div>
                 <span className="font-dm">{`Author: ${currentLesson.author}`}</span>
@@ -81,7 +81,7 @@ export default function LearnPage() {
                     <div key={i} style={{ width: "100%" }}>
                       <Markup
                         transform={transform}
-                        className="inter"
+                        className="space-y-4"
                         content={JSON.parse(
                           JSON.stringify(block.data.html) || ""
                         )}
@@ -99,7 +99,6 @@ export default function LearnPage() {
                       image={block.data.image || false}
                       sourcePath={block.data.src}
                       answers={block.data.answers}
-                      correctAnswer={block.data.correct}
                       question={block.data.question}
                     />
                   );
@@ -114,7 +113,7 @@ export default function LearnPage() {
                     />
                   );
                 }
-                return <></>;
+                return <React.Fragment key={i} />;
               })}
             </div>
           </div>
