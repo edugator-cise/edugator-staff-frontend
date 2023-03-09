@@ -89,7 +89,7 @@ const ContentSidebar = ({
               {toggleExercisesLinks.map((link) => (
                 <Tabs.Trigger
                   key={link.id}
-                  className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
+                  className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:text-white border-b-slate-500 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
                   value={link.id}
                 >
                   {link.text}
