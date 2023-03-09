@@ -65,7 +65,7 @@ const ContentSidebar = ({
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
           <h1 className="text-white font-dm font-medium text-lg">Exercises</h1>
-          <div
+          <div role="button"
             onClick={() => {
               toggleContentSidebar(!contentSidebarHidden);
             }}
