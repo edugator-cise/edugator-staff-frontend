@@ -6,7 +6,7 @@ import CrocodileOnAScooter from "public/crocodileonascooter.json";
 
 export default function CodePage() {
   return (
-    <div className="flex items-center justify-center w-full flex-col h-full bg-slate-50 dark:bg-nav-darkest">
+    <div className="flex items-center justify-center w-full flex-col h-full bg-slate-50 dark:bg-nav-darkest" role="contentinfo">
       <Lottie
         animationData={CrocodileOnAScooter}
         style={{
