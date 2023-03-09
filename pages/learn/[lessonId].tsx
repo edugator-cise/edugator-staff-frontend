@@ -26,17 +26,14 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 class ComponentToPrint extends React.Component {
   render() {
-    const PrintLesson = styled("div")({
-      width: "80%",
+    const LessonHolder = styled("div")({
+      width: "100%",
       height: "auto",
-      maxWidth: "1400px",
       display: "flex",
       flexDirection: "column",
       textAlign: "left",
       alignItems: "flex-start",
-      backgroundColor: "white",
-      boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
-      padding: 30,
+      padding: 70,
       [theme.breakpoints.down("lg")]: {
         width: "100%",
       },
@@ -55,9 +52,9 @@ class ComponentToPrint extends React.Component {
           textAlign: "center"
         }}
       >
-        <PrintLesson>
+        <LessonHolder>
           <LearnPageContent />
-        </PrintLesson>
+        </LessonHolder>
       </div >
     );
   }
@@ -302,7 +299,7 @@ export default function LearnPage() {
     content: () => componentRef.current,
   });
 
-  const PrintLesson = styled("div")({
+  const LessonHolder = styled("div")({
     width: "80%",
     height: "auto",
     maxWidth: "1400px",
@@ -313,6 +310,7 @@ export default function LearnPage() {
     backgroundColor: "white",
     boxShadow: "inset 0px 8px 5px -5px hsla(0,0%,0%,.1);",
     padding: 30,
+    marginBottom: 100,
     [theme.breakpoints.down("lg")]: {
       width: "100%",
     },
@@ -335,8 +333,8 @@ export default function LearnPage() {
           textAlign: "center"
         }}
       >
-        <PrintLesson>
-          <div style={{ width: "100%", textAlign: "right" }}>
+        <LessonHolder>
+          <div className="lesson-download">
             <Tooltip title="Download Lesson" placement="top">
               <IconButton
                 onClick={() => handlePrint()}
@@ -346,7 +344,7 @@ export default function LearnPage() {
             </Tooltip>
           </div>
           <LearnPageContent />
-        </PrintLesson>
+        </LessonHolder>
       </div>
     </>
   );
