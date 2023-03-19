@@ -9,6 +9,8 @@ import {
   validateServerConfig,
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
+import { useCheckboxContext } from "components/CheckboxContext";
+
 
 interface Props {
   formRef: any;
@@ -22,6 +24,8 @@ interface ServerConfigErrors {
 
 export const ServerConfigForm = (props: Props) => {
   const dispatch = useDispatch();
+  const { cpp, py } = useCheckboxContext();
+
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.serverConfig
   );
@@ -51,7 +55,8 @@ export const ServerConfigForm = (props: Props) => {
     >
       {({ errors, values, handleChange, handleBlur, touched }) => (
         <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <Accordion defaultExpanded={true}>
+          {cpp && (
+            <Accordion defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -109,8 +114,10 @@ export const ServerConfigForm = (props: Props) => {
               />
             </Stack>
             </AccordionDetails>
-          </Accordion>
-          <Accordion>
+            </Accordion>
+          )}
+          {py && (
+            <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -168,7 +175,8 @@ export const ServerConfigForm = (props: Props) => {
               />
             </Stack>
             </AccordionDetails>
-          </Accordion>
+            </Accordion>
+          )}
         </Form>
       )}
     </Formik>

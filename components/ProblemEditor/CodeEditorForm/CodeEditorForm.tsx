@@ -23,11 +23,7 @@ import {
   CodeEditorFields,
   updateCodeEditor,
   validateCode,
-  MetadataFields,
-  updateMetadata,
-  validateMetadata,
 } from "components/ProblemEditor/problemEditorContainerSlice";
-import { MetadataForm } from "components/ProblemEditor/MetadataForm/MetadataForm";
 import { useCheckboxContext } from "components/CheckboxContext";
 
 
@@ -138,198 +134,196 @@ export const CodeEditorForm = ({ formRef }: Props) => {
         
         <Form>
           {cpp && (
-  <Accordion defaultExpanded={true}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>C++ Settings</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <br/>
-                <Stack overflow="none" spacing={5}>
-                <Box>
-                  <FormControl>
-                    <InputLabel>Codebox file extension</InputLabel>
-                    <Select
-                      name="fileExtension"
-                      value={values.fileExtension}
-                      label="fileExtension"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      sx={{ minWidth: "10rem" }}
-                      variant="filled"
+            <Accordion defaultExpanded={true}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>C++ Settings</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                  <br/>
+                  <Stack overflow="none" spacing={5}>
+                  <Box>
+                    <FormControl>
+                      <InputLabel>Codebox file extension</InputLabel>
+                      <Select
+                        name="fileExtension"
+                        value={values.fileExtension}
+                        label="fileExtension"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        sx={{ minWidth: "10rem" }}
+                        variant="filled"
+                      >
+                        <MenuItem value=".h">.h</MenuItem>
+                        <MenuItem value=".cpp">.cpp</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <InputLabel>Header</InputLabel>
+                    <FormHelperText>
+                      This code precedes the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
                     >
-                      <MenuItem value=".h">.h</MenuItem>
-                      <MenuItem value=".cpp">.cpp</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box>
-                  <InputLabel>Header</InputLabel>
-                  <FormHelperText>
-                    This code precedes the body and is not visible to students.
-                  </FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.header}
-                      onChange={(value) => {
-                        setFieldValue("header", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-                <Box>
-                  <InputLabel>Body</InputLabel>
-                  <FormHelperText>This code is visible to students.</FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.body}
-                      onChange={(value) => {
-                        setFieldValue("body", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-                <Box flexGrow={1} display="flex" flexDirection="column">
-                  <InputLabel>Footer</InputLabel>
-                  <FormHelperText>
-                    This code follows the body and is not visible to students.
-                  </FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.footer}
-                      onChange={(value) => {
-                        setFieldValue("footer", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-              </Stack>
-            </AccordionDetails>
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.header}
+                        onChange={(value) => {
+                          setFieldValue("header", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box>
+                    <InputLabel>Body</InputLabel>
+                    <FormHelperText>This code is visible to students.</FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.body}
+                        onChange={(value) => {
+                          setFieldValue("body", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box flexGrow={1} display="flex" flexDirection="column">
+                    <InputLabel>Footer</InputLabel>
+                    <FormHelperText>
+                      This code follows the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.footer}
+                        onChange={(value) => {
+                          setFieldValue("footer", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                </Stack>
+              </AccordionDetails>
             </Accordion>
-)}
+          )}
 
-{py && (
-  <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>Python Settings</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <br/>
-                <Stack overflow="none" spacing={5}>
-                <Box>
-                  <FormControl>
-                    <InputLabel>Codebox file extension</InputLabel>
-                    <Select
-                      name="fileExtension"
-                      value={values.fileExtension}
-                      label="fileExtension"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      sx={{ minWidth: "10rem" }}
-                      variant="filled"
+          {py && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Python Settings</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+              <br/>
+                  <Stack overflow="none" spacing={5}>
+                  <Box>
+                    <FormControl>
+                      <InputLabel>Codebox file extension</InputLabel>
+                      <Select
+                        name="fileExtension"
+                        value={values.fileExtension}
+                        label="fileExtension"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        sx={{ minWidth: "10rem" }}
+                        variant="filled"
+                      >
+                        <MenuItem value=".py">.py</MenuItem>
+                        
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <InputLabel>Header</InputLabel>
+                    <FormHelperText>
+                      This code precedes the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
                     >
-                      <MenuItem value=".py">.py</MenuItem>
-                      
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box>
-                  <InputLabel>Header</InputLabel>
-                  <FormHelperText>
-                    This code precedes the body and is not visible to students.
-                  </FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.header}
-                      onChange={(value) => {
-                        setFieldValue("header", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-                <Box>
-                  <InputLabel>Body</InputLabel>
-                  <FormHelperText>This code is visible to students.</FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.body}
-                      onChange={(value) => {
-                        setFieldValue("body", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-                <Box flexGrow={1} display="flex" flexDirection="column">
-                  <InputLabel>Footer</InputLabel>
-                  <FormHelperText>
-                    This code follows the body and is not visible to students.
-                  </FormHelperText>
-                  <Paper
-                    elevation={0}
-                    variant="outlined"
-                    sx={{ marginTop: 1, paddingTop: 1 }}
-                  >
-                    <Editor
-                      language="cpp"
-                      height="250px"
-                      value={values.footer}
-                      onChange={(value) => {
-                        setFieldValue("footer", value);
-                        setTouched(true);
-                      }}
-                    />
-                  </Paper>
-                </Box>
-              </Stack>
-            </AccordionDetails>
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.header}
+                        onChange={(value) => {
+                          setFieldValue("header", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box>
+                    <InputLabel>Body</InputLabel>
+                    <FormHelperText>This code is visible to students.</FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.body}
+                        onChange={(value) => {
+                          setFieldValue("body", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box flexGrow={1} display="flex" flexDirection="column">
+                    <InputLabel>Footer</InputLabel>
+                    <FormHelperText>
+                      This code follows the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="cpp"
+                        height="250px"
+                        value={values.footer}
+                        onChange={(value) => {
+                          setFieldValue("footer", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                </Stack>
+              </AccordionDetails>
             </Accordion>
-)}
+          )}
            
 
-
-          
         </Form>
       )}
     </Formik>
