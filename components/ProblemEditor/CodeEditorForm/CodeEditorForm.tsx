@@ -23,7 +23,13 @@ import {
   CodeEditorFields,
   updateCodeEditor,
   validateCode,
+  MetadataFields,
+  updateMetadata,
+  validateMetadata,
 } from "components/ProblemEditor/problemEditorContainerSlice";
+import { MetadataForm } from "components/ProblemEditor/MetadataForm/MetadataForm";
+import { useCheckboxContext } from "components/CheckboxContext";
+
 
 interface Props {
   formRef: any;
@@ -68,8 +74,10 @@ int main()
 }
 `;
 
+
 export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
+  const { cpp, py } = useCheckboxContext();
 
   const [touched, setTouched] = React.useState(false);
 
@@ -129,7 +137,8 @@ export const CodeEditorForm = ({ formRef }: Props) => {
       }) => (
         
         <Form>
-          <Accordion defaultExpanded={true}>
+          {cpp && (
+  <Accordion defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -220,9 +229,11 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                 </Box>
               </Stack>
             </AccordionDetails>
-          </Accordion>
+            </Accordion>
+)}
 
-          <Accordion>
+{py && (
+  <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -313,7 +324,8 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                 </Box>
               </Stack>
             </AccordionDetails>
-          </Accordion>
+            </Accordion>
+)}
            
 
 

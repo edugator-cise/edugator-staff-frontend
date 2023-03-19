@@ -18,6 +18,9 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker, { DatePickerProps } from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { RootState } from "lib/store/store";
+import { useCheckboxContext } from "components/CheckboxContext";
+
+
 
 interface Props {
   formRef: any;
@@ -36,6 +39,7 @@ interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
+  const { cpp, setCpp, py, setPy } = useCheckboxContext();
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.metadata
@@ -135,27 +139,36 @@ export const MetadataForm = (props: Props) => {
               Select programming languages:
             </Typography><br/>
             <FormControlLabel
-              control={
-                <Checkbox
-                  name="cpp"
-                  onChange={handleChange}
-                  checked={values.cpp}
-                />
-              }
-              sx={{ marginLeft: 0 }}
-              label="C++"
-            />
-            
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="py"
-                  onChange={handleChange}
-                  checked={values.py}
-                />
-              }
-              label="Python"
-            />
+  control={
+    <Checkbox
+      name="cpp"
+      onChange={(e) => {
+        handleChange(e);
+        setCpp(e.target.checked);
+      }}
+      checked={values.cpp}
+    />
+  }
+  sx={{ marginLeft: 0 }}
+  label="C++"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      name="py"
+      onChange={(e) => {
+        handleChange(e);
+        setPy(e.target.checked);
+      }}
+      checked={values.py}
+    />
+  }
+  label="Python"
+/>
+
+
+
             </Box>
 
 

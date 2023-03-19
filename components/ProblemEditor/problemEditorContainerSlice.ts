@@ -239,8 +239,8 @@ export const problemEditorContainerSlice = createSlice({
       state.metadata = {
         title: action.payload.title,
         hidden: action.payload.hidden,
-        cpp: action.payload.hidden,
-        py: action.payload.hidden,
+        cpp: action.payload.cpp,
+        py: action.payload.py,
         dueDate: new Date(action.payload.dueDate).toISOString(),
       };
       state.codeEditor = {
