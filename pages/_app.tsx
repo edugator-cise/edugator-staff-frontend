@@ -11,6 +11,8 @@ import "styles/index.css";
 import "styles/learnStyles.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { CheckboxProvider } from "components/CheckboxContext";
+
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -31,14 +33,18 @@ const App = ({ Component, pageProps }: Props) => {
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
-    <Provider store={store}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <Toaster />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </Provider>
+    <CheckboxProvider>
+      <Provider store={store}>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <Toaster />
+            
+            {getLayout(<Component {...pageProps} />)}
+            
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </Provider>
+    </CheckboxProvider>
   );
 };
 export default App;
