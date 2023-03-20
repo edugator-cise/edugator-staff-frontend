@@ -91,6 +91,17 @@ function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
               <br />
             </>
           );
+        } else if (block.type === "fill_in_the_blank") {
+          questionCount++;
+          return (
+            <>
+              <Typography variant="h6">{questionCount - 1}. </Typography>
+              {block.data.correctAnswers.map((correctAnswer) => {
+                return (<Typography variant="subtitle1">{correctAnswer.possibleChoices.join(", ")}</Typography>);
+              })}
+              <br />
+            </>
+          );
         }
       })
       }
