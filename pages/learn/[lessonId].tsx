@@ -20,11 +20,11 @@ import PlaygroundLayout from "components/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
-import { LessonBlock } from "lib/shared/types";
+import { LessonBlock, LessonDisplay } from "lib/shared/types";
 import { useReactToPrint } from "react-to-print";
 import DownloadIcon from '@mui/icons-material/Download';
 
-class ComponentToPrint extends React.Component {
+class ComponentToPrint extends React.Component<{ currentLesson?: LessonDisplay, status?: FetchStatus }, {}> {
   render() {
     const LessonHolder = styled("div")({
       width: "100%",
@@ -53,7 +53,8 @@ class ComponentToPrint extends React.Component {
         }}
       >
         <LessonHolder>
-          <LearnPageContent />
+          <LearnPageContent currentLesson={this.props.currentLesson} status={this.props.status} />
+          <LearnPageAnswers currentLesson={this.props.currentLesson} />
         </LessonHolder>
       </div >
     );
@@ -61,19 +62,43 @@ class ComponentToPrint extends React.Component {
 }
 import FillInTheBlankQuestion from "components/LearnPage/FillInTheBlankQuestion";
 
-function LearnPageContent() {
+function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
   let questionCount = 1;
-
-  const router = useRouter();
-  const params = router.query;
-
-  const {
-    status,
-    lesson: currentLesson,
-    error,
-  } = useFetchLesson({
-    id: params && params.lessonId ? (params.lessonId as string) : "",
-  });
+  return (
+    <>
+      {/* TODO: add in page break */}
+      <div className="page-break" />
+      {props.currentLesson?.content?.map((block: LessonBlock, i) => {
+        if (block.type === "multiple_choice") {
+          questionCount++;
+          return (
+            <>
+              <Typography variant="h6">{questionCount - 1}. </Typography>
+              <Typography variant="subtitle1">{block.data.answers[block.data.correct]} </Typography>
+              <br />
+            </>
+          );
+        } else if (block.type === "multiple_select") {
+          questionCount++;
+          return (
+            <>
+              <Typography variant="h6">{questionCount - 1}. </Typography>
+              {block.data.answers.map((modalAnswer) => {
+                if (modalAnswer.correct) {
+                  return (<Typography variant="subtitle1">{modalAnswer.text}</Typography>);
+                }
+              })}
+              <br />
+            </>
+          );
+        }
+      })
+      }
+    </>
+  );
+}
+function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: FetchStatus }) {
+  let questionCount = 1;
 
   const LessonHeader = styled("div")({
     width: "100%",
@@ -180,17 +205,17 @@ function LearnPageContent() {
     }
   }
 
-  console.log(currentLesson);
+  console.log(props.currentLesson);
 
   return (
     <>
-      {status === FetchStatus.loading ? (
+      {props.status === FetchStatus.loading ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box>
             <CircularProgress />
           </Box>
         </Grid>
-      ) : currentLesson === undefined ? (
+      ) : props.currentLesson === undefined ? (
         <Grid container direction="column" sx={{ height: "100vh" }}>
           <Box
             sx={{
@@ -206,7 +231,7 @@ function LearnPageContent() {
       ) : (
         <>
           <LessonHeader>
-            <div className="lesson-title">{currentLesson.title}</div>
+            <div className="lesson-title">{props.currentLesson.title}</div>
             <div
               style={{
                 display: "flex",
@@ -223,7 +248,7 @@ function LearnPageContent() {
                 <span style={{ color: theme.palette.primary.main }}>
                   Author:{" "}
                 </span>
-                {currentLesson.author}
+                {props.currentLesson.author}
               </div>
               <div
                 className="lesson-subtitle"
@@ -231,7 +256,7 @@ function LearnPageContent() {
               ></div>
             </div>
           </LessonHeader>
-          {currentLesson.content?.map((block: LessonBlock, i) => {
+          {props.currentLesson.content?.map((block: LessonBlock, i) => {
             console.log(block);
             if (!block || !block.type || !block.data) {
               return null;
@@ -294,9 +319,21 @@ function LearnPageContent() {
 }
 
 export default function LearnPage() {
+  const router = useRouter();
+  const params = router.query;
+
+  const {
+    status,
+    lesson: currentLesson,
+    error,
+  } = useFetchLesson({
+    id: params && params.lessonId ? (params.lessonId as string) : "",
+  });
+
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    documentTitle: currentLesson?.title,
   });
 
   const LessonHolder = styled("div")({
@@ -319,7 +356,7 @@ export default function LearnPage() {
   return (
     <>
       <div style={{ display: 'none' }}>
-        <ComponentToPrint ref={componentRef} />
+        <ComponentToPrint ref={componentRef} currentLesson={currentLesson} status={status} />
       </div>
       <div
         id="lesson-container"
@@ -343,7 +380,7 @@ export default function LearnPage() {
               </IconButton>
             </Tooltip>
           </div>
-          <LearnPageContent />
+          <LearnPageContent currentLesson={currentLesson} status={status} />
         </LessonHolder>
       </div>
     </>
