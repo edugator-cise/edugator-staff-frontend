@@ -88,6 +88,7 @@ interface MultipleChoiceProps {
   number: number;
   image: boolean;
   sourcePath?: string;
+  isPdfVersion?: boolean;
 }
 
 function MultipleChoiceQuestion(props: MultipleChoiceProps) {
@@ -192,30 +193,32 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
           );
         })}
       </Grid>
-      <AnswerFeedback correct={correct} answered={answered}>
-        {correct ? (
-          <CheckCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#22B16E"}
-          />
-        ) : (
-          <XCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#f76f7a"}
-          />
-        )}
-        <Typography
-          variant="body2"
-          sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
-          color={correct ? "#22B16E" : "#f76f7a"}
-        >
-          {correct ? "Correct! Nice job!" : "Oops! Please try again."}
-        </Typography>
-      </AnswerFeedback>
+      {!props.isPdfVersion && (
+        <AnswerFeedback correct={correct} answered={answered}>
+          {correct ? (
+            <CheckCircle
+              weight="duotone"
+              size={24}
+              style={{ marginLeft: 15 }}
+              color={"#22B16E"}
+            />
+          ) : (
+            <XCircle
+              weight="duotone"
+              size={24}
+              style={{ marginLeft: 15 }}
+              color={"#f76f7a"}
+            />
+          )}
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
+            color={correct ? "#22B16E" : "#f76f7a"}
+          >
+            {correct ? "Correct! Nice job!" : "Oops! Please try again."}
+          </Typography>
+        </AnswerFeedback>
+      )}
     </QuestionHolder>
   );
 }

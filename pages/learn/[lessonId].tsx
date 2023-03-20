@@ -53,7 +53,7 @@ class ComponentToPrint extends React.Component<{ currentLesson?: LessonDisplay, 
         }}
       >
         <LessonHolder>
-          <LearnPageContent currentLesson={this.props.currentLesson} status={this.props.status} />
+          <LearnPageContent currentLesson={this.props.currentLesson} status={this.props.status} isPdfVersion={true} />
           <LearnPageAnswers currentLesson={this.props.currentLesson} />
         </LessonHolder>
       </div >
@@ -117,7 +117,7 @@ function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
     </>
   );
 }
-function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: FetchStatus }) {
+function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: FetchStatus, isPdfVersion?: boolean }) {
   let questionCount = 1;
 
   const LessonHeader = styled("div")({
@@ -306,6 +306,7 @@ function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: Fetch
                   answers={block.data.answers}
                   correctAnswer={block.data.correct}
                   question={block.data.question}
+                  isPdfVersion={props.isPdfVersion}
                 />
               );
             } else if (block.type === "multiple_select") {
