@@ -63,48 +63,57 @@ class ComponentToPrint extends React.Component<{ currentLesson?: LessonDisplay, 
 import FillInTheBlankQuestion from "components/LearnPage/FillInTheBlankQuestion";
 
 function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
+  const AnswerHolder = styled("div")({
+    width: "100%",
+    height: "auto",
+    textAlign: "left",
+    paddingTop: 70,
+    paddingBottom: 70
+  });
+
   let questionCount = 1;
   return (
     <>
-      {/* TODO: add in page break */}
-      <div className="page-break" />
-      {props.currentLesson?.content?.map((block: LessonBlock, i) => {
-        if (block.type === "multiple_choice") {
-          questionCount++;
-          return (
-            <>
-              <Typography variant="h6">{questionCount - 1}. </Typography>
-              <Typography variant="subtitle1">{block.data.answers[block.data.correct]} </Typography>
-              <br />
-            </>
-          );
-        } else if (block.type === "multiple_select") {
-          questionCount++;
-          return (
-            <>
-              <Typography variant="h6">{questionCount - 1}. </Typography>
-              {block.data.answers.map((modalAnswer) => {
-                if (modalAnswer.correct) {
-                  return (<Typography variant="subtitle1">{modalAnswer.text}</Typography>);
-                }
-              })}
-              <br />
-            </>
-          );
-        } else if (block.type === "fill_in_the_blank") {
-          questionCount++;
-          return (
-            <>
-              <Typography variant="h6">{questionCount - 1}. </Typography>
-              {block.data.correctAnswers.map((correctAnswer) => {
-                return (<Typography variant="subtitle1">{correctAnswer.possibleChoices.join(", ")}</Typography>);
-              })}
-              <br />
-            </>
-          );
+      <div style={{ breakAfter: "page" }}></div>
+      <AnswerHolder>
+        {props.currentLesson?.content?.map((block: LessonBlock, i) => {
+          if (block.type === "multiple_choice") {
+            questionCount++;
+            return (
+              <>
+                <Typography variant="h6">{questionCount - 1}. </Typography>
+                <Typography variant="subtitle1">{block.data.answers[block.data.correct]} </Typography>
+                <br />
+              </>
+            );
+          } else if (block.type === "multiple_select") {
+            questionCount++;
+            return (
+              <>
+                <Typography variant="h6">{questionCount - 1}. </Typography>
+                {block.data.answers.map((modalAnswer) => {
+                  if (modalAnswer.correct) {
+                    return (<Typography variant="subtitle1">{modalAnswer.text}</Typography>);
+                  }
+                })}
+                <br />
+              </>
+            );
+          } else if (block.type === "fill_in_the_blank") {
+            questionCount++;
+            return (
+              <>
+                <Typography variant="h6">{questionCount - 1}. </Typography>
+                {block.data.correctAnswers.map((correctAnswer) => {
+                  return (<Typography variant="subtitle1">{correctAnswer.possibleChoices.join(", ")}</Typography>);
+                })}
+                <br />
+              </>
+            );
+          }
+        })
         }
-      })
-      }
+      </AnswerHolder>
     </>
   );
 }
