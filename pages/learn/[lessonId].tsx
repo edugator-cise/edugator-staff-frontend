@@ -317,6 +317,7 @@ function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: Fetch
                   number={questionCount - 1}
                   answers={block.data.answers}
                   question={block.data.question}
+                  isPdfVersion={props.isPdfVersion}
                 />
               );
             } else if (block.type === "fill_in_the_blank") {

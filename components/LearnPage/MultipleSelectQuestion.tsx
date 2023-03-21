@@ -125,13 +125,10 @@ interface MultipleSelectProps {
   question: string;
   answers: ModalAnswer[];
   number: number;
+  isPdfVersion?: boolean;
 }
 
-function MultipleSelectQuestion({
-  question,
-  answers,
-  number,
-}: MultipleSelectProps) {
+function MultipleSelectQuestion(props : MultipleSelectProps) {
   const [questionsClicked, setQuestionsClicked] = useState<Array<boolean>>([]);
   const [correct, setCorrect] = useState(false);
   const [checked, setChecked] = useState(false); // fire when "Check answer" is clicked
@@ -155,13 +152,13 @@ function MultipleSelectQuestion({
   const checkCorrect = () => {
     for (let i = 0; i < questionsClicked.length; i++) {
       if (questionsClicked[i] === true) {
-        if (answers[i].correct) {
+        if (props.answers[i].correct) {
           //do nothing
         } else {
           return false;
         }
       } else {
-        if (answers[i].correct) {
+        if (props.answers[i].correct) {
           return false;
         }
       }
@@ -171,8 +168,8 @@ function MultipleSelectQuestion({
 
   //set initial state of all questions clicked to false on mount
   useEffect(() => {
-    if (answers && answers.length > 1) {
-      for (let i = 0; i < answers.length; i++) {
+    if (props.answers && props.answers.length > 1) {
+      for (let i = 0; i < props.answers.length; i++) {
         setQuestionsClicked((prev) => [...prev, false]);
       }
     }
@@ -186,13 +183,13 @@ function MultipleSelectQuestion({
         fontSize="subtitle2"
         color={theme.palette.primary.main}
       >
-        Question {number}
+        Question {props.number}
       </Typography>
       <Typography
         variant="h6"
         sx={{ fontWeight: 200, fontFamily: "DM Serif Display" }}
       >
-        {question}
+        {props.question}
       </Typography>
 
       <Grid
@@ -201,15 +198,15 @@ function MultipleSelectQuestion({
         columnSpacing={2}
         sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
       >
-        {answers.map((ans, i) => {
+        {props.answers.map((ans, i) => {
           return (
             <Grid
-              key={number * i}
+              key={props.number * i}
               sx={{
                 minHeight: "100",
               }}
               item
-              xs={answers.length % 2 === 0 ? 6 : 12}
+              xs={props.answers.length % 2 === 0 ? 6 : 12}
             >
               <AnswerHolder
                 className="answerHolder"
@@ -267,7 +264,7 @@ function MultipleSelectQuestion({
           CHECK ANSWER
         </Typography>
       </CheckButton>
-
+      {!props.isPdfVersion && (
       <AnswerFeedback checked={checked} correct={correct}>
         {correct ? (
           <CheckCircle
@@ -294,6 +291,7 @@ function MultipleSelectQuestion({
             : "That's incorrect. Review your answer."}
         </Typography>
       </AnswerFeedback>
+      )}
     </QuestionHolder>
   );
 }
