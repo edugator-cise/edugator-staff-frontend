@@ -11,6 +11,7 @@ export interface MetadataFields {
   title: string;
   hidden: boolean;
   dueDate: string;
+  fileName: string;
 }
 
 export interface CodeEditorFields {
@@ -78,6 +79,7 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     dueDate: new Date().toISOString(),
+    fileName: "example.cpp",
   },
   problem: {
     problemStatement: "",
@@ -237,6 +239,7 @@ export const problemEditorContainerSlice = createSlice({
         title: action.payload.title,
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
+        fileName: action.payload.fileName,
       };
       state.codeEditor = {
         code: { ...action.payload.code },
