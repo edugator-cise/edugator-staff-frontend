@@ -76,6 +76,16 @@ function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
     <>
       <div style={{ breakAfter: "page" }}></div>
       <AnswerHolder>
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: 200,
+            fontFamily: "DM Serif Display"
+          }}
+        >
+          Answers
+        </Typography>
+        <br />
         {props.currentLesson?.content?.map((block: LessonBlock, i) => {
           if (block.type === "multiple_choice") {
             questionCount++;
