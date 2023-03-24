@@ -22,6 +22,7 @@ const QuestionHolder = styled.div((props: any) => ({
       : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
+  pageBreakInside: "avoid"
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
