@@ -22,7 +22,6 @@ const QuestionHolder = styled.div((props: any) => ({
         : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
-  breakInside: "avoid",
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
@@ -49,10 +48,10 @@ const AnswerHolder = styled.div((props: any) => ({
       props.correct && !props.clicked
         ? theme.palette.primary.light
         : props.clicked
-          ? props.isAnswerCorrect
-            ? "#22B16E"
-            : "#f76f7a"
-          : theme.palette.primary.main,
+        ? props.isAnswerCorrect
+          ? "#22B16E"
+          : "#f76f7a"
+        : theme.palette.primary.main,
     color:
       props.correct && !props.clicked ? theme.palette.primary.dark : "white",
   },

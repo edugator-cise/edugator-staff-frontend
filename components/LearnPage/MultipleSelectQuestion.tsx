@@ -22,7 +22,6 @@ const QuestionHolder = styled.div((props: any) => ({
       : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
-  breakInside: "avoid",
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
@@ -36,11 +35,11 @@ const AnswerHolder = styled.div((props: any) => ({
         ? "#22B16E"
         : "#e4fcf1"
       : props.clicked
-        ? "#f76f7a"
-        : theme.palette.primary.light
+      ? "#f76f7a"
+      : theme.palette.primary.light
     : props.clicked
-      ? theme.palette.primary.main
-      : theme.palette.primary.light,
+    ? theme.palette.primary.main
+    : theme.palette.primary.light,
   color: props.clicked ? "white" : theme.palette.primary.dark,
   borderRadius: 4,
   border: props.checked
@@ -64,8 +63,8 @@ const AnswerHolder = styled.div((props: any) => ({
           ? "#22B16E"
           : "#e4fcf1"
         : props.clicked
-          ? "#f76f7a"
-          : theme.palette.primary.light
+        ? "#f76f7a"
+        : theme.palette.primary.light
       : theme.palette.primary.main,
     color: props.checked
       ? props.isAnswerCorrect
@@ -73,8 +72,8 @@ const AnswerHolder = styled.div((props: any) => ({
           ? "white"
           : theme.palette.primary.dark
         : props.clicked
-          ? "white"
-          : theme.palette.primary.dark
+        ? "white"
+        : theme.palette.primary.dark
       : "white",
   },
 }));
@@ -266,32 +265,32 @@ function MultipleSelectQuestion(props : MultipleSelectProps) {
         </Typography>
       </CheckButton>
       {!props.isPdfVersion && (
-        <AnswerFeedback checked={checked} correct={correct}>
-          {correct ? (
-            <CheckCircle
-              weight="duotone"
-              size={24}
-              style={{ marginLeft: 15 }}
-              color={"#22B16E"}
-            />
-          ) : (
-            <XCircle
-              weight="duotone"
-              size={24}
-              style={{ marginLeft: 15 }}
-              color={"#f76f7a"}
-            />
-          )}
-          <Typography
-            variant="body2"
-            sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
-            color={correct ? "#22B16E" : "#f76f7a"}
-          >
-            {correct
-              ? "Correct! Nice job!"
-              : "That's incorrect. Review your answer."}
-          </Typography>
-        </AnswerFeedback>
+      <AnswerFeedback checked={checked} correct={correct}>
+        {correct ? (
+          <CheckCircle
+            weight="duotone"
+            size={24}
+            style={{ marginLeft: 15 }}
+            color={"#22B16E"}
+          />
+        ) : (
+          <XCircle
+            weight="duotone"
+            size={24}
+            style={{ marginLeft: 15 }}
+            color={"#f76f7a"}
+          />
+        )}
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
+          color={correct ? "#22B16E" : "#f76f7a"}
+        >
+          {correct
+            ? "Correct! Nice job!"
+            : "That's incorrect. Review your answer."}
+        </Typography>
+      </AnswerFeedback>
       )}
     </QuestionHolder>
   );

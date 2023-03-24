@@ -28,7 +28,6 @@ const QuestionHolder = styled.div((props: any) => ({
                 : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
     },
     padding: 20,
-    breakInside: "avoid"
 }));
 
 const BlankAnswerTextField = styled(TextField)((props: any) => ({
