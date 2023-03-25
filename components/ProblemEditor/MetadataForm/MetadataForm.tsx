@@ -179,6 +179,39 @@ export const MetadataForm = (props: Props) => {
                 </MenuItem>
               </Select>
             </FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="Is Short"
+                  onChange={handleChange}
+                  checked={values.isShort}
+                />
+              }
+              sx={{ marginTop: "auto" }}
+              label="Is Short"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="Has Template"
+                  onChange={handleChange}
+                  checked={values.hasTemplate}
+                />
+              }
+              sx={{ marginTop: "auto" }}
+              label="Has Template"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="Is Quiz"
+                  onChange={handleChange}
+                  checked={values.isQuiz}
+                />
+              }
+              sx={{ marginTop: "auto" }}
+              label="Is Quiz"
+            />
           </Stack>
         </Form>
       )}
