@@ -13,6 +13,9 @@ export interface MetadataFields {
   dueDate: string;
   author: string;
   difficulty: string;
+  isShort: boolean;
+  hasTemplate: boolean;
+  isQuiz: boolean;
 }
 
 export interface CodeEditorFields {
@@ -82,6 +85,9 @@ const initialState: ProblemEditorContainerState = {
     dueDate: new Date().toISOString(),
     author: "",
     difficulty: "",
+    isShort: false,
+    hasTemplate: false,
+    isQuiz: false,
   },
   problem: {
     problemStatement: "",
@@ -243,6 +249,9 @@ export const problemEditorContainerSlice = createSlice({
         dueDate: new Date(action.payload.dueDate).toISOString(),
         author: action.payload.author,
         difficulty: action.payload.difficulty,
+        isShort: action.payload.isShort,
+        hasTemplate: action.payload.hasTemplate,
+        isQuiz: action.payload.isQuiz,
       };
       state.codeEditor = {
         code: { ...action.payload.code },

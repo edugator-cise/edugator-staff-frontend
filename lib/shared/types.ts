@@ -18,6 +18,9 @@ export interface IProblem extends IProblemBase {
   difficulty: string;
   dateCreated: Date;
   lastModified: Date;
+  isShort: boolean;
+  hasTemplate: boolean;
+  isQuiz: boolean;
   code: {
     header: string;
     body: string;
