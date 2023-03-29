@@ -6,7 +6,7 @@ import { CheckCircle, XCircle } from "phosphor-react";
 
 const QuestionHolder = styled.div((props: any) => ({
   width: "70%",
-  marginTop: 50,
+  margin: "auto",
   height: "auto",
   borderRadius: 4,
   display: "flex",
@@ -22,14 +22,9 @@ const QuestionHolder = styled.div((props: any) => ({
         : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
-  pageBreakInside: "avoid",
-  "@media print": {
-    border: "1px solid",
-    borderColor: "rgba(99, 99, 99, 0.1)"
-  },
   "@page": {
-    marginTop: ".25in",
-    marginBottom: ".25in"
+    marginTop: 50,
+    marginBottom: 80
   },
 }));
 
@@ -57,10 +52,10 @@ const AnswerHolder = styled.div((props: any) => ({
       props.correct && !props.clicked
         ? theme.palette.primary.light
         : props.clicked
-        ? props.isAnswerCorrect
-          ? "#22B16E"
-          : "#f76f7a"
-        : theme.palette.primary.main,
+          ? props.isAnswerCorrect
+            ? "#22B16E"
+            : "#f76f7a"
+          : theme.palette.primary.main,
     color:
       props.correct && !props.clicked ? theme.palette.primary.dark : "white",
   },

@@ -48,7 +48,7 @@ class ComponentToPrint extends React.Component<{ currentLesson?: LessonDisplay, 
           display: "flex",
           alignItems: "flex-start",
           justifyContent: "center",
-          overflowY: "scroll",
+          overflow: "visible",
           textAlign: "center"
         }}
       >
@@ -127,6 +127,7 @@ function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
     </>
   );
 }
+
 function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: FetchStatus, isPdfVersion?: boolean }) {
   let questionCount = 1;
 
@@ -139,6 +140,13 @@ function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: Fetch
     alignItems: "flex-end",
     borderBottom: "2px solid lightgrey",
     paddingBottom: 0,
+  });
+
+  const PrintProtection = styled("div")({
+    border: "5px solid transparent", // Keeps the top box shadow of the question boxes from being cut off in print preview.
+    breakInside: "avoid",
+    width: "100%",
+    marginTop: 50
   });
 
   function transform(node: HTMLElement, children: Node[]): React.ReactNode {
@@ -308,37 +316,43 @@ function LearnPageContent(props: { currentLesson?: LessonDisplay, status?: Fetch
             } else if (block.type === "multiple_choice") {
               questionCount++;
               return (
-                <MultipleChoiceQuestion
-                  key={i}
-                  number={questionCount - 1}
-                  image={block.data.image || false}
-                  sourcePath={block.data.src}
-                  answers={block.data.answers}
-                  correctAnswer={block.data.correct}
-                  question={block.data.question}
-                  isPdfVersion={props.isPdfVersion}
-                />
+                <PrintProtection>
+                  <MultipleChoiceQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    image={block.data.image || false}
+                    sourcePath={block.data.src}
+                    answers={block.data.answers}
+                    correctAnswer={block.data.correct}
+                    question={block.data.question}
+                    isPdfVersion={props.isPdfVersion}
+                  />
+                </PrintProtection>
               );
             } else if (block.type === "multiple_select") {
               questionCount++;
               return (
-                <MultipleSelectQuestion
-                  key={i}
-                  number={questionCount - 1}
-                  answers={block.data.answers}
-                  question={block.data.question}
-                  isPdfVersion={props.isPdfVersion}
-                />
+                <PrintProtection>
+                  <MultipleSelectQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    answers={block.data.answers}
+                    question={block.data.question}
+                    isPdfVersion={props.isPdfVersion}
+                  />
+                </PrintProtection>
               );
             } else if (block.type === "fill_in_the_blank") {
               questionCount++;
               return (
-                <FillInTheBlankQuestion
-                  key={i}
-                  number={questionCount - 1}
-                  questionSegments={block.data.questionSegments}
-                  correctAnswers={block.data.correctAnswers}
-                />
+                <PrintProtection>
+                  <FillInTheBlankQuestion
+                    key={i}
+                    number={questionCount - 1}
+                    questionSegments={block.data.questionSegments}
+                    correctAnswers={block.data.correctAnswers}
+                  />
+                </PrintProtection>
               );
             }
             return <></>;

@@ -12,7 +12,7 @@ interface FillIntheBlankProps {
 
 const QuestionHolder = styled.div((props: any) => ({
     width: "70%",
-    marginTop: 50,
+    margin: "auto",
     height: "auto",
     borderRadius: 4,
     display: "flex",
@@ -28,14 +28,9 @@ const QuestionHolder = styled.div((props: any) => ({
                 : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
     },
     padding: 20,
-    pageBreakInside: "avoid",
-    "@media print": {
-        border: "1px solid",
-        borderColor: "rgba(99, 99, 99, 0.1)"
-      },
-      "@page": {
-        marginTop: ".25in",
-        marginBottom: ".25in"
+    "@page": {
+        marginTop: 50,
+        marginBottom: 50
       },
 }));
 
@@ -133,73 +128,73 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
     }
 
     return (
-        <QuestionHolder className="exercise-content-wrapper">
-            <Typography
-                variant="overline"
-                sx={{ fontWeight: 600, fontSize: "0.9em" }}
-                fontSize="subtitle2"
-                color={"#3b82f6"}
-            >
-                {"Question " + props.number}
-            </Typography>
-            <Box sx={{ display: 'inline' }}>
-                {props.correctAnswers.map((correctAnswer, i) => (
-                    <Box key={i + " " + correctAnswer.possibleChoices[0]} sx={{ display: 'inline' }}>
-                        <QuestionSegments variant='h6'>
-                            {props.questionSegments[i]}
-                        </QuestionSegments>
-                        {results[i]
-                            ? <Tooltip
-                                title={getNonFirstAnswerPossibilities(correctAnswer) === ''
-                                    ? ''
-                                    : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
-                                        {getNonFirstAnswerPossibilities(correctAnswer)}
-                                    </div>
-                                }
-                                arrow>
-                                <CorrectAnswerTextField
-                                    hiddenLabel
-                                    inputProps={{ min: 0, style: { textAlign: 'center', fontWeight: 500, fontSize: '1.0rem', padding: '5px 12px' } }}
-                                    value={correctAnswer.possibleChoices[0]}
-                                    variant="outlined"
-                                    size="small"
-                                    disabled
-                                />
-                            </Tooltip>
-                            // AnswerInput is incorrect or has not been answered
-                            : <BlankAnswerTextField
-                                answered={answered}
-                                hiddenLabel
-                                inputProps={{ min: 0, style: { textAlign: 'center', padding: '4px 12px' } }}
-                                value={answerInputs[i]}
-                                variant="filled"
-                                size="small"
-                                helperText={answered && "Incorrect answer."}
-                                error={answered}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
-                            />
-                        }
-                    </Box>
-                ))}
-                <QuestionSegments variant='h6'>
-                    {props.questionSegments[props.questionSegments.length - 1]}
-                </QuestionSegments>
-            </Box>
-            <div style={{ textAlign: 'right' }}>
-                <Button
-                    onClick={() => {
-                        setAnswered(true);
-                        handleCheck();
-                    }}
-                    variant="contained"
-                    color="primary"
-                    disabled={correct}
-                    style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
+            <QuestionHolder className="exercise-content-wrapper">
+                <Typography
+                    variant="overline"
+                    sx={{ fontWeight: 600, fontSize: "0.9em" }}
+                    fontSize="subtitle2"
+                    color={"#3b82f6"}
                 >
-                    CHECK
-                </Button>
-            </div>
-        </QuestionHolder >
+                    {"Question " + props.number}
+                </Typography>
+                <Box sx={{ display: 'inline' }}>
+                    {props.correctAnswers.map((correctAnswer, i) => (
+                        <Box key={i + " " + correctAnswer.possibleChoices[0]} sx={{ display: 'inline' }}>
+                            <QuestionSegments variant='h6'>
+                                {props.questionSegments[i]}
+                            </QuestionSegments>
+                            {results[i]
+                                ? <Tooltip
+                                    title={getNonFirstAnswerPossibilities(correctAnswer) === ''
+                                        ? ''
+                                        : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                                            {getNonFirstAnswerPossibilities(correctAnswer)}
+                                        </div>
+                                    }
+                                    arrow>
+                                    <CorrectAnswerTextField
+                                        hiddenLabel
+                                        inputProps={{ min: 0, style: { textAlign: 'center', fontWeight: 500, fontSize: '1.0rem', padding: '5px 12px' } }}
+                                        value={correctAnswer.possibleChoices[0]}
+                                        variant="outlined"
+                                        size="small"
+                                        disabled
+                                    />
+                                </Tooltip>
+                                // AnswerInput is incorrect or has not been answered
+                                : <BlankAnswerTextField
+                                    answered={answered}
+                                    hiddenLabel
+                                    inputProps={{ min: 0, style: { textAlign: 'center', padding: '4px 12px' } }}
+                                    value={answerInputs[i]}
+                                    variant="filled"
+                                    size="small"
+                                    helperText={answered && "Incorrect answer."}
+                                    error={answered}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleAnswerInputChange(e, i)}
+                                />
+                            }
+                        </Box>
+                    ))}
+                    <QuestionSegments variant='h6'>
+                        {props.questionSegments[props.questionSegments.length - 1]}
+                    </QuestionSegments>
+                </Box>
+                <div style={{ textAlign: 'right' }}>
+                    <Button
+                        onClick={() => {
+                            setAnswered(true);
+                            handleCheck();
+                        }}
+                        variant="contained"
+                        color="primary"
+                        disabled={correct}
+                        style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
+                    >
+                        CHECK
+                    </Button>
+                </div>
+            </QuestionHolder >
     );
 }
 export default FillIntheBlankQuestion;
