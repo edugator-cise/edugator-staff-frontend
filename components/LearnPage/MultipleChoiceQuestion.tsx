@@ -22,7 +22,15 @@ const QuestionHolder = styled.div((props: any) => ({
         : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
-  pageBreakInside: "avoid"
+  pageBreakInside: "avoid",
+  "@media print": {
+    border: "1px solid",
+    borderColor: "rgba(99, 99, 99, 0.1)"
+  },
+  "@page": {
+    marginTop: ".25in",
+    marginBottom: ".25in"
+  },
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
