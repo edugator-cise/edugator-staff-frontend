@@ -20,12 +20,15 @@ interface Props {
   formRef: any;
 }
 
-const requestAddOrEditProblem = async (value: ProblemEditorContainerState, type: "add" | "edit") => {
+const requestAddOrEditProblem = async (
+  value: ProblemEditorContainerState,
+  type: "add" | "edit"
+) => {
   const problemState = value;
 
   // preparing the payload
   const language = "C++";
-  
+
   let problem: IProblem = {
     ...problemState.metadata,
     language,
@@ -37,17 +40,22 @@ const requestAddOrEditProblem = async (value: ProblemEditorContainerState, type:
     ...problemState.serverConfig,
   };
   if (type == "add") {
-    const newProblem = { moduleId: problemState.moduleId, ...problem}
+    const newProblem = { moduleId: problemState.moduleId, ...problem };
     await apiClient.post(apiRoutes.admin.createProblem, newProblem);
   } else {
-    await apiClient.put(apiRoutes.admin.editProblem(problemState.problemId as string), problem)
+    await apiClient.put(
+      apiRoutes.admin.editProblem(problemState.problemId as string),
+      problem
+    );
   }
-}
+};
 
 //https://formik.org/docs/api/fieldarray
 export const TestEditor = (props: Props) => {
   const dispatch = useDispatch();
-  const problemEditorContainer = useSelector((state : RootState) => state.problemEditorContainer);
+  const problemEditorContainer = useSelector(
+    (state: RootState) => state.problemEditorContainer
+  );
   const testCases = useSelector(
     (state: RootState) => state.problemEditorContainer.testCases
   );

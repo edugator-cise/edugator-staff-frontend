@@ -5,12 +5,14 @@ import {
   incrementActiveStep,
   decrementActiveStep,
 } from "components/ProblemEditor/problemEditorContainerSlice";
-import { RootState } from "lib/store/store"
+import { RootState } from "lib/store/store";
+import { validationResult } from "./ProblemEditorContainer";
 interface Props {
   formRef: any;
+  edit: boolean;
 }
 
-export const ProblemEditorNavigator = ({ formRef }: Props) => {
+export const ProblemEditorNavigator = ({ formRef, edit }: Props) => {
   const dispatch = useDispatch();
   const activeStep = useSelector(
     (state: RootState) => state.problemEditorContainer.activeStep
@@ -39,11 +41,24 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
     }
   });
 
-  const handleBack = () => {
-    if (activeStep === 4) {
-      formRef.current?.validateForm();
-    }
+  const handleBackCreate = () => {
+    // If we're creating a new problem, we do not want to save inputted data
     dispatch(decrementActiveStep());
+  };
+
+  const handleBackEdit = () => {
+    // If we're editing a problem, we want to save inputted data when going back
+    if (activeStep === 4) {
+      formRef.current?.validateForm().then((res: validationResult) => {
+        // If there is an error in the test cases, we do not want to go back
+        if (res?.testCases?.length === 0 || !res?.testCases) {
+          dispatch(decrementActiveStep());
+        }
+      });
+    } else {
+      formRef.current?.submitForm();
+      if (currentStepIsValid) dispatch(decrementActiveStep());
+    }
   };
 
   const handleNext = () => {
@@ -63,7 +78,7 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
       paddingTop={3}
     >
       <Button
-        onClick={handleBack}
+        onClick={edit ? handleBackEdit : handleBackCreate}
         disabled={activeStep === 0 || isSubmitting}
         variant="outlined"
       >

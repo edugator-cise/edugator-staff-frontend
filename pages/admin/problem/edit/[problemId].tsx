@@ -23,6 +23,7 @@ const ProblemEditPage = () => {
   const router = useRouter();
   const { problemId, moduleName, moduleId } = router.query;
   const [status, setStatus] = useState(FetchStatus.loading);
+  const [problemTitle, setProblemTitle] = useState("");
   const dispatch = useDispatch();
 
   dispatch(updateProblemId(problemId as string));
@@ -51,6 +52,7 @@ const ProblemEditPage = () => {
         dispatch(updateModuleId(moduleId as string));
         dispatch(updateModuleName(moduleName as string));
         dispatch(requestGetProblemSuccess(value.data));
+        setProblemTitle(value.data.title);
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
@@ -65,13 +67,13 @@ const ProblemEditPage = () => {
 
   return (
     <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
+      pageTitle={`${moduleName ? moduleName + " - " : ""}${problemTitle}`}
       actionButtons={[actions.back, actions.delete]}
     >
       {status === FetchStatus.loading ? (
         <CircularProgress />
       ) : (
-        <ProblemEditorContainer />
+        <ProblemEditorContainer edit={true} />
       )}
     </AdminLayout>
   );

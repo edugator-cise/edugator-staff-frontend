@@ -8,7 +8,7 @@ import {
   convertToRaw,
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import { MultipleChoiceModal } from "./components/MultipleChoiceModal";
 import draftToHtml from "draftjs-to-html";
 import {

@@ -166,6 +166,10 @@ export const problemEditorContainerSlice = createSlice({
         state.activeStep -= 1;
       }
     },
+    setActiveStep: (state, action: PayloadAction<number>) => {
+      state.activeStep = action.payload;
+    },
+
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
@@ -296,6 +300,7 @@ export const {
   validateCurrentStep,
   incrementActiveStep,
   decrementActiveStep,
+  setActiveStep,
   updateProblem,
   updateMetadata,
   updateCodeEditor,

@@ -1,7 +1,7 @@
 import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
 import React, { useRef } from "react";
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "components/ProblemEditor/ProblemEditorForm/ProblemEditorForm";
@@ -13,6 +13,8 @@ import { ExampleValidator } from "./ExampleValidator";
 import { ProblemEditorNavigator } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorNavigator";
 import { WarningDialog } from "components/ProblemEditor/Dialogs/WarningDialog";
 import { RootState } from "lib/store/store";
+import { setActiveStep } from "components/ProblemEditor/problemEditorContainerSlice";
+import ProblemEditorStepper from "./ProblemEditorStepper";
 
 const steps = [
   "Metadata",
@@ -22,10 +24,18 @@ const steps = [
   "Test Editor",
 ];
 
-export const ProblemEditorContainer = () => {
+export type validationResult = {
+  testCases: {
+    input: boolean;
+  }[];
+};
+
+export const ProblemEditorContainer = ({ edit }: { edit?: boolean }) => {
   const activeStep = useSelector(
     (state: RootState) => state.problemEditorContainer.activeStep
   );
+
+  const formRef = useRef<FormikValues>();
 
   const ActiveForm = () => {
     switch (activeStep) {
@@ -44,19 +54,15 @@ export const ProblemEditorContainer = () => {
     }
   };
 
-  const formRef = useRef<FormikValues>();
-
   return (
     <Box display="flex" flexDirection="column" flexGrow={1} textAlign="left">
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          return (
-            <Step key={index}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
+      <ProblemEditorStepper
+        activeStep={activeStep}
+        formRef={formRef}
+        setActiveStep={setActiveStep}
+        steps={steps}
+        edit={edit ? true : false}
+      />
       <Box
         border="1px solid lightgray"
         borderRadius="10px"
@@ -68,7 +74,7 @@ export const ProblemEditorContainer = () => {
       >
         {/* https://stackoverflow.com/questions/49525057/react-formik-use-submitform-outside-formik */}
         <ActiveForm />
-        <ProblemEditorNavigator formRef={formRef} />
+        <ProblemEditorNavigator edit={edit ? true : false} formRef={formRef} />
         <SuccessDialog />
         <FailureDialog />
         <WarningDialog />
