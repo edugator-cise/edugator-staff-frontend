@@ -67,8 +67,6 @@ function LearnPageAnswers(props: { currentLesson?: LessonDisplay }) {
     width: "100%",
     height: "auto",
     textAlign: "left",
-    paddingTop: 70,
-    paddingBottom: 70
   });
 
   let questionCount = 1;
