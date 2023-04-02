@@ -33,7 +33,7 @@ class ComponentToPrint extends React.Component<{ currentLesson?: LessonDisplay, 
       flexDirection: "column",
       textAlign: "left",
       alignItems: "flex-start",
-      padding: 70,
+      padding: "0px 70px",
       [theme.breakpoints.down("lg")]: {
         width: "100%",
       },
