@@ -1,3 +1,5 @@
+const plugin = require("tailwindcss/plugin");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -43,6 +45,7 @@ module.exports = {
           darker: "#111825",
           dark: "#192231",
         },
+        "ai-purple": "#7C3AED",
       },
       keyframes: {
         slideDownAndFade: {
@@ -69,8 +72,23 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "skew-scroll": {
+          "0%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
+          },
+          "50%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%)",
+          },
+          "100%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
+          },
+        },
       },
       animation: {
+        "skew-scroll": "skew-scroll 30s ease-in-out infinite",
         slideDownAndFade:
           "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideLeftAndFade:
@@ -90,6 +108,17 @@ module.exports = {
     require("@tailwindcss/aspect-ratio"),
     require("tailwindcss-radix")(),
     require("@tailwindcss/typography"),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          "translate-z": (value) => ({
+            "--tw-translate-z": value,
+            transform: ` translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))`,
+          }), // this is actual CSS
+        },
+        { values: theme("translate"), supportsNegativeValues: true }
+      );
+    }),
     // ...
   ],
 };

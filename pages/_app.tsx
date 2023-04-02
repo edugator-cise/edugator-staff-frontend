@@ -44,6 +44,11 @@ const App = ({ Component, pageProps }: Props) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
     <Provider store={store}>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
+      />
+
       <StyledEngineProvider injectFirst>
         <MUIThemeProvider theme={theme}>
           <ThemeProvider enableSystem={true} attribute="class">
