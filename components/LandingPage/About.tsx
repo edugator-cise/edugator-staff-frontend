@@ -64,7 +64,7 @@ const About = () => {
                 {item.description}
               </p>
               <button className=" flex items-center space-x-1 mt-4">
-                <span className="font-dm text-nav-darker font-bold">
+                <span className="font-dm text-nav-darkest font-bold">
                   Learn More
                 </span>
                 <ExpandArrow />
