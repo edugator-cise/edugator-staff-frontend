@@ -50,9 +50,9 @@ const Hero = () => {
         </span>
         <p className="max-w-2xl font-inter text-lg text-center text-white/70 leading-8">
           Edugator is a platform where any student can practice computing
-          concepts with rich immediate feedback. We make it easy to foster
-          engagment and mastery for your course with a platform that is built
-          for learning and teaching.
+          concepts with rich immediate feedback. Foster engagment and mastery
+          for your course with a platform that is built for learning and
+          teaching.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 z-[1]">
           <GradientButton text="Start Coding" href="/" />
