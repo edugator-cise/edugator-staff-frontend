@@ -9,7 +9,7 @@ const CTA = () => {
       <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-y-8">
         <div className="flex w-full flex-col lg:flex-row lg:space-x-2 space-y-16 lg:space-y-0 items-start justify-center">
           <div className="w-full flex flex-col space-y-4">
-            <div className="relative w-20 h-20 flex items-center justify-center">
+            <div className="relative w-20 h-20 flex items-center justify-center drop-shadow-xl">
               <Image src="/images/universityIcon.png" layout="fill" />
             </div>
             <h1 className="text-3xl font-semibold text-nav-darkest font-ambit max-w-sm">
