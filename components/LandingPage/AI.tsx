@@ -51,13 +51,13 @@ const AI = () => {
 
   useEffect(() => {
     if (isInView) {
-      console.log("play");
       messageControls.start("animate");
+      //@ts-ignore
       lottieRef.current!.goToAndPlay(0, true);
       // lottieRef.current!.play();
     } else {
-      console.log("stop");
       messageControls.start("initial");
+      //@ts-ignore
       lottieRef.current!.goToAndStop(0, true);
       // lottieRef.current!.stop();
     }

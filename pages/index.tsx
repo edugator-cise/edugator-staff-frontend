@@ -1,10 +1,10 @@
 import About from "components/LandingPage/About";
 import Hero from "components/LandingPage/Hero";
-import Instructors from "components/LandingPage/Instructors";
+import Instructors from "components/LandingPage/Instructors/Instructors";
 import LandingFeatures from "components/LandingPage/LandingFeatures";
 import LandingHome from "components/LandingPage/LandingHome";
 import LandingTopics from "components/LandingPage/LandingTopics";
-import Students from "components/LandingPage/Students";
+import Students from "components/LandingPage/Students/Students";
 import AI from "components/LandingPage/AI";
 import { EdugatorLogo } from "components/SideNav/navIcons";
 import Link from "next/link";

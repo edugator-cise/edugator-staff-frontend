@@ -28,17 +28,17 @@ const CTA = () => {
           <div className="w-full flex flex-col space-y-4">
             <div className="relative h-20 flex items-center justify-start">
               <div className="w-16 h-16 rounded-full bg-slate-50 p-[2px] ring-slate-400/30 shadow-black/10 shadow-xl z-30">
-                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-50 to-sky-500">
+                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-100 to-sky-600">
                   <Image src="/images/avatars/dustin.png" layout="fill" />
                 </div>
               </div>
               <div className="w-16 h-16 rounded-full bg-slate-50 p-[2px] ring-slate-400/30 shadow-black/10 shadow-xl -translate-x-1/3 z-20">
-                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-50 to-sky-500">
+                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-100 to-sky-600">
                   <Image src="/images/avatars/marc.png" layout="fill" />
                 </div>
               </div>
               <div className="w-16 h-16 rounded-full bg-slate-50 p-[2px] ring-slate-400/30 shadow-black/10 shadow-xl -translate-x-2/3 z-10">
-                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-50 to-sky-500">
+                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-100 to-sky-600">
                   <Image src="/images/avatars/aman.png" layout="fill" />
                 </div>
               </div>
