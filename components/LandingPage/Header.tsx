@@ -24,6 +24,10 @@ const NavLink = ({
 
   return (
     <p
+      style={{
+        WebkitMaskImage:
+          "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.3) 100%)",
+      }}
       onClick={scrollTo}
       className={`text-sm font-dm py-2 px-4 rounded-md transition cursor-pointer ${
         dark
@@ -74,7 +78,7 @@ const Header = () => {
           scrollPosition < ctaY
         ) {
           setHeaderDark(true);
-        } else if (ctaY && scrollPosition > ctaY) {
+        } else if (ctaY && scrollPosition > ctaY - 50) {
           setHeaderDark(false);
         } else {
           setHeaderDark(true);
@@ -87,7 +91,7 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-30 transition-all flex justify-center duration-[0.4s] ease ${
+      className={`sticky top-0 z-50 transition-all flex justify-center duration-[0.4s] ease ${
         isScrolled ? "backdrop-blur-md" : ""
       } ${headerDark ? "bg-nav-darkest/75" : "bg-slate-100/75"}`}
     >
@@ -97,6 +101,17 @@ const Header = () => {
             <EdugatorLogo />
           </div>
           <h1
+            style={
+              headerDark
+                ? {
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.3) 100%)",
+                  }
+                : {
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,1) 50%)",
+                  }
+            }
             className={`text-xl font-semibold transition font-ambit ${
               headerDark ? "text-slate-50" : "text-nav-darkest"
             }`}

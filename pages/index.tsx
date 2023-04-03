@@ -17,7 +17,7 @@ import Header from "components/LandingPage/Header";
 
 export default function LandingPage() {
   return (
-    <div className="w-full min-h-screen flex flex-col relative">
+    <div className="w-full min-h-screen flex flex-col relative bg-nav-darkest">
       <Header />
       <main className="flex flex-col bg-nav-darkest overflow-x-hidden">
         <Hero />
