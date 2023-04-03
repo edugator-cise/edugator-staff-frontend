@@ -40,7 +40,7 @@ const Students = () => {
             </p>
           </div>
         </div>
-        <ul className="lg:grid-cols-3 grid grid-cols-1 gap-4 pt-16 sm:grid-cols-2">
+        <ul className="lg:grid-cols-3 grid grid-cols-1 gap-4 pt-16 sm:grid-cols-2 w-full">
           <MobileFriendlyFeature />
           <OfflineDeliveryFeature />
           <MultiLanguageFeature />
