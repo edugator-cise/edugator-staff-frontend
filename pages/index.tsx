@@ -13,31 +13,13 @@ import { GradientButton } from "components/LandingPage/GradientButton";
 import { HeartFilledIcon } from "@radix-ui/react-icons";
 import ExpandArrow from "components/LandingPage/ExpandArrow";
 import CTA from "components/LandingPage/CTA";
+import Header from "components/LandingPage/Header";
 
 export default function LandingPage() {
   return (
-    <div className="w-full flex flex-col bg-nav-darkest overflow-x-hidden">
-      <header className="w-full h-16 flex items-center justify-center z-10">
-        <div className="max-w-7xl flex w-full justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-2">
-            <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
-              <EdugatorLogo />
-            </div>
-            <h1 className="text-xl font-semibold text-white font-ambit">
-              Edugator
-            </h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/login">
-              <a className="text-sm font-dm text-white">Login</a>
-            </Link>
-            <Link href="/signup">
-              <a className="text-sm font-dm text-white">Sign Up</a>
-            </Link>
-          </div>
-        </div>
-      </header>
-      <main className="flex flex-col bg-nav-darkest">
+    <div className="w-full min-h-screen flex flex-col relative">
+      <Header />
+      <main className="flex flex-col bg-nav-darkest overflow-x-hidden">
         <Hero />
         <About />
         <Students />

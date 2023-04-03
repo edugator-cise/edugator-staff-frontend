@@ -7,18 +7,10 @@ import RotatingText from "./RotatingText";
 import { CornerDivider } from "./Dividers";
 
 const Hero = () => {
-  // define custom motion element for <Image />
-  const MotionImage = m(Image);
   return (
     <div className="pb-36 sm:pb-24 md:pb-0 lg:pb-16 xl:pb-28 pt-12 md:pt-28 relative overflow-hidden md:overflow-visible">
-      {/* <div className="w-10 h-10 absolute left-0 bottom-0">
-        <CornerDivider fill={"#F8FAFC"} />
-      </div> */}
-      {/* <div className="w-10 h-10 absolute right-0 bottom-0 -scale-x-100">
-        <CornerDivider fill={"#F8FAFC"} />
-      </div> */}
       {/* Hero Gradient */}
-      <div className="absolute -top-24 lg:-top-6 left-1/2 w-[901px] h-[901px] opacity-70">
+      <div className="absolute -top-0 lg:-top-0 left-1/2 w-[901px] h-[901px] opacity-70">
         <img
           src="/images/HeroGradient.png"
           alt="section gradient"

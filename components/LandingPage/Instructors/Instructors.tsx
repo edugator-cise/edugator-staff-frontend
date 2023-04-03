@@ -5,7 +5,7 @@ import { AuthoringToolsFeature } from "./Features/AuthoringToolsFeature";
 
 const Instructors = () => {
   return (
-    <section className="pb-24 bg-nav-darkest">
+    <section className="pb-24 bg-nav-darkest" id="instructors">
       <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <div className="w-full flex pt-24 flex-col">
           <div className="flex flex-col justify-center">

@@ -63,6 +63,7 @@ export const InteractiveContentFeature = () => {
               {answers.map((answer, index) => {
                 return (
                   <div
+                    key={index}
                     style={
                       selectedAnswer === index
                         ? {

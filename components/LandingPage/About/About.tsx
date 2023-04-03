@@ -113,6 +113,7 @@ const AboutSection = ({
         {/* Rings */}
         {RING_DURATIONS.map((duration, index) => (
           <Ring
+            key={index}
             color={color}
             duration={duration}
             controls={cursorControls}
@@ -137,7 +138,7 @@ const AboutSection = ({
 
 const About = () => {
   return (
-    <div className="pb-48 pt-12 md:pt-28 bg-slate-50 relative">
+    <div className="pb-48 pt-12 md:pt-28 bg-slate-50 relative" id="about">
       <div className="w-10 h-10 hidden sm:block absolute right-0 bottom-0 -scale-x-100">
         <CornerDivider fill={"#0C121C"} />
       </div>

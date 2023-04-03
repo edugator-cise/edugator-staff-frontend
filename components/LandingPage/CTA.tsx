@@ -5,7 +5,7 @@ import ExpandArrow from "./ExpandArrow";
 
 const CTA = () => {
   return (
-    <div className="pb-48 pt-12 md:pt-48 bg-slate-50">
+    <div className="pb-48 pt-12 md:pt-48 bg-slate-50" id="cta">
       <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-y-8">
         <div className="flex w-full flex-col lg:flex-row lg:space-x-2 space-y-16 lg:space-y-0 items-start justify-center">
           <div className="w-full flex flex-col space-y-4">

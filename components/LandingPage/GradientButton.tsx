@@ -10,7 +10,9 @@ export const GradientButton = ({
   return (
     <Link href={href}>
       <button className="btn-gradient">
-        <p className="text-white font-dm text-sm text-center">{text}</p>
+        <p className="text-white font-dm text-sm text-center whitespace-nowrap">
+          {text}
+        </p>
       </button>
     </Link>
   );

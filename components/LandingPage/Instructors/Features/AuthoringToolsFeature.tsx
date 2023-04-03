@@ -65,6 +65,7 @@ export const AuthoringToolsFeature = () => {
             variants.authoringTools.itemVariants(index);
           return (
             <m.div
+              key={index}
               variants={itemVariants}
               animate={containerControls}
               initial="initial"

@@ -7,7 +7,10 @@ import { IntellisenseFeature } from "./Features/IntellisenseFeature";
 
 const Students = () => {
   return (
-    <section className="pb-24 pt-12 md:pt-28 bg-nav-darkest relative">
+    <section
+      className="pb-24 pt-12 md:pt-28 bg-nav-darkest relative"
+      id="students"
+    >
       <div className="absolute top-0 left-1/2 w-[901px] h-[901px] opacity-40 -scale-x-100 -scale-y-100">
         <img
           src="/images/HeroGradient.png"
