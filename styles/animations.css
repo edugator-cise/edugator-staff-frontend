@@ -200,3 +200,7 @@
 .bouncing-loader > div:nth-child(3) {
   animation-delay: 0.4s;
 }
+
+.ai-message {
+  transition: opacity 1s linear 2s, transform 0.3s ease-in-out 0.3s;
+}

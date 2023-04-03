@@ -1,9 +1,11 @@
 import { Sparkle } from "phosphor-react";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import wandAnimation from "./data/wandAnimation.json";
 import Lottie from "lottie-react";
 import Tilt from "react-parallax-tilt";
 import { CornerDivider } from "./Dividers";
+import useIsInView from "hooks/useIsInView";
+import { useAnimation, motion as m } from "framer-motion";
 
 const messages = [
   {
@@ -26,6 +28,41 @@ const messages = [
 ];
 
 const AI = () => {
+  const lottieRef = useRef(null);
+  const ref = useRef(null);
+
+  const messageControls = useAnimation();
+
+  const messageVariants = (delay: number) => ({
+    initial: {
+      opacity: 0,
+    },
+    animate: {
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+        delay: delay,
+      },
+    },
+  });
+
+  const isInView = useIsInView({ ref: ref, margin: "0px" });
+
+  useEffect(() => {
+    if (isInView) {
+      console.log("play");
+      messageControls.start("animate");
+      lottieRef.current!.goToAndPlay(0, true);
+      // lottieRef.current!.play();
+    } else {
+      console.log("stop");
+      messageControls.start("initial");
+      lottieRef.current!.goToAndStop(0, true);
+      // lottieRef.current!.stop();
+    }
+  }, [isInView]);
+
   return (
     <section className="pb-12 sm:pb-24 relative bg-gradient-to-b from-nav-darkest via-nav-darkest to-[#0a080f]">
       <div className="hidden sm:block w-10 h-10 absolute left-0 bottom-0">
@@ -101,6 +138,7 @@ const AI = () => {
                   "radial-gradient(50% 80% at 70% 10%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%)",
                 transformStyle: "preserve-3d",
               }}
+              ref={ref}
               className="w-72 sm:w-96 relative flex flex-col p-4 justify-start items-center border border-slate-500/20 rounded-md"
             >
               {/* Sparkle Icon */}
@@ -108,7 +146,11 @@ const AI = () => {
                 <Sparkle
                   size={54}
                   weight="fill"
-                  className="text-ai-purple fill-ai-purple drop-shadow-2xl"
+                  className={`text-ai-purple fill-ai-purple drop-shadow-2xl  ${
+                    isInView
+                      ? "scale-100 opacity-100 rotate-6 transition-all ease-in-out delay-1000 duration-500"
+                      : "scale-0 opacity-0 rotate-45"
+                  }`}
                   style={{
                     WebkitMaskImage:
                       "linear-gradient(130deg, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)",
@@ -123,18 +165,22 @@ const AI = () => {
                 }}
                 className="absolute hidden sm:flex -bottom-52 !p-0 -left-64 items-center justify-center -scale-x-100 w-96 h-96 group-hover:translate-z-6 duration-700 ease-in-out"
               >
-                <Lottie animationData={wandAnimation} loop={false} />
+                <Lottie
+                  lottieRef={lottieRef}
+                  animationData={wandAnimation}
+                  loop={false}
+                />
               </div>
               {messages.map((message, index) => {
                 return (
                   <div
                     key={index}
-                    className={`w-full flex mb-4 ${
-                      message.from === "User" ? "justify-end" : "justify-start"
-                    }`}
                     style={{
                       transformStyle: "preserve-3d",
                     }}
+                    className={`w-full flex transition-opacity mb-4 ${
+                      message.from === "User" ? "justify-end" : "justify-start"
+                    } `}
                   >
                     <div
                       style={{
@@ -144,7 +190,7 @@ const AI = () => {
                         message.from === "User"
                           ? "rounded-bl-xl bg-slate-500/20"
                           : "rounded-br-xl bg-gradient-to-br from-violet-500 to-ai-purple"
-                      }`}
+                      } `}
                     >
                       <p className="font-dm text-white text-xs sm:text-sm p-2">
                         {message.message}
