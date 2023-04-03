@@ -17,6 +17,12 @@ module.exports = {
     "fill-nav-inactive-dark",
     "fill-nav-active-light-color",
     "fill-nav-active-dark-color",
+    "group-hover:bg-amber-100",
+    "group-hover:bg-emerald-100",
+    "group-hover:bg-blue-100",
+    "ring-amber-400",
+    "ring-emerald-400",
+    "ring-blue-400",
   ],
   darkMode: "class",
   theme: {

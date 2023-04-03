@@ -65,7 +65,7 @@ const Hero = () => {
           variants={heroImageVariants(0.3, "center")}
           initial="hidden"
           animate="visible"
-          className="absolute hidden md:flex top-[22rem] left-1/2 -translate-x-1/2 w-[80%] z-10 h-full items-end justify-center !origin-top-left"
+          className="absolute hidden pointer-events-none md:flex top-[22rem] left-1/2 -translate-x-1/2 w-[80%] z-10 h-full items-end justify-center !origin-top-left"
         >
           <Image
             quality={100}
@@ -79,7 +79,7 @@ const Hero = () => {
           variants={heroImageVariants(0.7, "left")}
           initial="hidden"
           animate="visible"
-          className="absolute hidden md:flex top-72 left-[15%] -translate-x-1/2 w-[30%] z-20 h-full items-end justify-center !origin-top-left"
+          className="absolute hidden pointer-events-none md:flex top-72 left-[15%] -translate-x-1/2 w-[30%] z-20 h-full items-end justify-center !origin-top-left"
         >
           <Image
             quality={100}
@@ -93,7 +93,7 @@ const Hero = () => {
           variants={heroImageVariants(0.5, "right")}
           initial="hidden"
           animate="visible"
-          className="absolute hidden md:flex top-56 right-[17%] translate-x-1/2 w-[44%] z-20 h-full items-end justify-center !origin-top-left"
+          className="absolute hidden pointer-events-none md:flex top-56 right-[17%] translate-x-1/2 w-[44%] z-20 h-full items-end justify-center !origin-top-left"
         >
           <Image
             quality={100}
@@ -108,7 +108,7 @@ const Hero = () => {
           initial="hidden"
           //template since we want to keep x position constant
           animate="visible"
-          className="absolute hidden md:flex top-[39rem] right-[19%] translate-x-1/2 w-[45%] z-20 h-full items-end justify-center !origin-top-left"
+          className="absolute hidden pointer-events-none md:flex top-[39rem] right-[19%] translate-x-1/2 w-[45%] z-20 h-full items-end justify-center !origin-top-left"
         >
           <Image
             quality={100}

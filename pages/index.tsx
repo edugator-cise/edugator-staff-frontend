@@ -1,4 +1,4 @@
-import About from "components/LandingPage/About";
+import About from "components/LandingPage/About/About";
 import Hero from "components/LandingPage/Hero";
 import Instructors from "components/LandingPage/Instructors/Instructors";
 import LandingFeatures from "components/LandingPage/LandingFeatures";
