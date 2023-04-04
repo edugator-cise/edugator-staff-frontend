@@ -1,10 +1,10 @@
 # This is a basic workflow to help you get started with Actions
-name: s3-deployment
+name: s3-development-deployment
 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [main]
+    branches: [development]
 
 jobs:
   build:
@@ -19,5 +19,5 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Build Edugator Staff Application
         run: npm install && npm run build && npm run export
-      - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./build/ s3://edugator.app --delete
+      - name: Deploy app dev build to S3 bucket
+        run: aws s3 sync ./out/ s3://development-trunk-edugator --delete

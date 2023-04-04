@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.react-rotating-text-cursor {
+  animation: blinking-cursor 1s cubic-bezier(0.68, 0.01, 0.01, 0.99) 0s infinite;
+}
+
+@keyframes blinking-cursor {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+#lesson-container::-webkit-scrollbar,
+#compile-container::-webkit-scrollbar,
+#outlined-stdin::-webkit-scrollbar,
+#submit-container::-webkit-scrollbar,
+#problem-description::-webkit-scrollbar {
+  width: 6px;
+}
+
+#lesson-container::-webkit-scrollbar-thumb,
+#compile-container::-webkit-scrollbar-thumb,
+#outlined-stdin::-webkit-scrollbar-thumb,
+#submit-container::-webkit-scrollbar-thumb,
+#problem-description::-webkit-scrollbar-thumb {
+  background: rgb(206, 206, 206);
+  border-radius: 10px;
+  box-shadow: -2px -2px 7px rgb(255, 255, 255);
+}
+
+#lesson-container::-webkit-scrollbar-track,
+#compile-container::-webkit-scrollbar-track,
+#outlined-stdin::-webkit-scrollbar-track,
+#submit-container::-webkit-scrollbar-track,
+#problem-description::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+  width: '100%'
+}

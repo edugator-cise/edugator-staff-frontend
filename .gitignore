@@ -4,13 +4,13 @@
 /node_modules
 /.pnp
 .pnp.js
-
+.next
 # testing
 /coverage
 .cache
 /dist
 .vscode
-
+/out
 # react-scripts production
 /build
 

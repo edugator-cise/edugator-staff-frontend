@@ -1,0 +1,75 @@
+.modal {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-question {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+}
+
+.modal-ms-answers {
+  width: 100% !important;
+}
+
+.modal-input {
+  background: #f1f1f1;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
+  color: rgb(39, 39, 39);
+  width: 100%;
+}
+
+.modal-body label {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-input:focus {
+  outline: none;
+}
+
+.modal-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.modal-answers input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  min-width: 20px;
+  min-height: 20px;
+  border: 1px solid rgb(33, 128, 43);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.modal-answers input[type="checkbox"]:checked {
+  background: rgb(26, 137, 41);
+}
+
+.modal-answer-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
