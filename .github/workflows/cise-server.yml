@@ -21,8 +21,9 @@ jobs:
         run: |
           npm install
           npm run build
+          npm run export
       
       - name: Deploy app build to cise servers
         run: |
           rm -rf /www/edugator.cise.ufl.edu/*
-          cp -a -r build/* /www/edugator.cise.ufl.edu
+          cp -a -r out/* /www/edugator.cise.ufl.edu
