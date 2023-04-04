@@ -70,9 +70,11 @@ const Media = ({
       question,
       answers,
       correct,
-    }: { question: string; answers: string[]; correct: number } = Object(
-      entity.getData()
-    );
+    }: {
+      question: string;
+      answers: { text: string; correct: boolean }[];
+      correct: number;
+    } = Object(entity.getData());
     media = (
       <MultipleChoiceDisplayBlock
         question={question}
