@@ -17,14 +17,14 @@ const Hero = () => {
           aria-hidden
         />
       </div>
-      <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-y-8 md:pb-96">
+      <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-8 md:pb-96">
         <a
           href="/"
           style={{
             background:
               "radial-gradient(50% 80% at 70% 10%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%), #192233",
           }}
-          className="flex font-dm items-center gap-x-2 text-white text-xs border border-slate-100/10 px-4 py-1 rounded-lg ring-slate-100/50"
+          className="flex font-dm items-center space-x-2 text-white text-xs border border-slate-100/10 px-4 py-1 rounded-lg ring-slate-100/50"
         >
           Introducing Edugator
         </a>
@@ -46,7 +46,7 @@ const Hero = () => {
           for your course with a platform that is built for learning and
           teaching.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 z-[1]">
+        <div className="flex flex-col sm:flex-row items-center justify-center space-x-6 z-[1]">
           <GradientButton text="Start Coding" href="/" />
           <a href="/playground" className="text-sm text-white">
             Learn More

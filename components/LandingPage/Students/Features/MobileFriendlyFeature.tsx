@@ -36,7 +36,7 @@ export const MobileFriendlyFeature = () => {
             background:
               "radial-gradient(50% 80% at 70% 10%, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%), #192233",
           }}
-          className="flex h-[90%] flex-col rounded-t-md border-t border-x border-slate-500/10 p-2 gap-2"
+          className={`flex h-[90%] flex-col rounded-t-md border-t border-x border-slate-500/10 p-2 space-y-2`}
           variants={variants.mobileFriendly.containerVariants}
           layout
           initial="initial"
@@ -53,7 +53,9 @@ export const MobileFriendlyFeature = () => {
           </p>
           <m.div
             layout
-            className="w-full h-full flex gap-2"
+            className={`w-full h-full flex ${
+              isHovered ? "space-y-2" : "space-x-2"
+            }`}
             style={
               isHovered ? { flexDirection: "column" } : { flexDirection: "row" }
             }

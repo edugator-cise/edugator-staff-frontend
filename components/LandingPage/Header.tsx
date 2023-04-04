@@ -95,7 +95,7 @@ const Header = () => {
         isScrolled ? "backdrop-blur-md" : ""
       } ${headerDark ? "bg-nav-darkest/75" : "bg-slate-100/75"}`}
     >
-      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 grid items-center h-16 grid-cols-6 gap-3 lg:h-16 lg:justify-center">
+      <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 grid items-center h-16 grid-cols-6 space-x-3 lg:h-16 lg:justify-center">
         <div className="flex col-span-4 lg:col-span-1 justify-start items-center space-x-2">
           <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
             <EdugatorLogo />
@@ -120,7 +120,7 @@ const Header = () => {
           </h1>
         </div>
         <div
-          className={`justify-center hidden lg:col-span-4 lg:gap-x-8 xl:gap-x-10 lg:flex`}
+          className={`justify-center hidden lg:col-span-4 lg:space-x-8 xl:space-x-10 lg:flex`}
         >
           {navLinks.map((link) => (
             <NavLink

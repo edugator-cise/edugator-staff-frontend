@@ -105,7 +105,7 @@ const AI = () => {
               Introducing Guppy, a helpful GPT-powered chatbot that can answer
               questions about coding concepts and help you solve problems.
             </p>
-            <div className="flex font-dm items-center gap-x-2 text-white text-sm uppercase bg-gradient-to-br from-violet-400 to-ai-purple px-4 py-2 rounded-full">
+            <div className="flex font-dm items-center space-x-2 text-white text-sm uppercase bg-gradient-to-br from-violet-400 to-ai-purple px-4 py-2 rounded-full">
               Coming Soon
             </div>
           </div>

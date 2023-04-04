@@ -74,7 +74,7 @@ export const InteractiveContentFeature = () => {
                           }
                     }
                     onClick={() => setSelectedAnswer(index)}
-                    className={`flex cursor-pointer items-center gap-x-2 transition text-xs px-2 py-1 rounded-sm border  ${
+                    className={`flex cursor-pointer items-center space-x-2 transition text-xs px-2 py-1 rounded-sm border  ${
                       selectedAnswer === index && index === correctIndex
                         ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                         : selectedAnswer === index && index !== correctIndex

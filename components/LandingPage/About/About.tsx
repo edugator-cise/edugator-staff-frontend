@@ -145,7 +145,7 @@ const About = () => {
       <div className="w-10 h-10 hidden sm:block absolute left-0 bottom-0 ">
         <CornerDivider fill={"#0C121C"} />
       </div>
-      <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-y-8">
+      <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center space-y-8">
         <div className="container flex pt-24 pb-4 flex-col">
           <div className="flex flex-col justify-center items-center">
             <span className="uppercase font-ambit text-sm text-blue-500 tracking-widest pb-4">
