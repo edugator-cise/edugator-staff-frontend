@@ -5,18 +5,18 @@
 
 @font-face {
   font-family: "Ambit";
-  src: url("/fonts/Ambit/Ambit-Regular.otf");
+  src: url("../assets/fonts/Ambit-Regular.otf");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Ambit";
-  src: url("/fonts/Ambit/Ambit-Bold.otf");
+  src: url("../assets/fonts/Ambit-Bold.otf");
   font-weight: bold;
 }
 
 @font-face {
   font-family: "Ambit";
-  src: url("/fonts/Ambit/Ambit-Semibold.otf");
+  src: url("../assets/fonts/Ambit-Semibold.otf");
   font-weight: 600;
 }
