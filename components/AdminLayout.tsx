@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { Routes } from "constants/navigationRoutes";
+import { NextRoutes } from "constants/navigationRoutes";
 import { closeAlert } from "./Modules/ModulesSlice";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "lib/auth/LocalStorage";
@@ -39,8 +39,8 @@ const AdminLayout = ({
   const locationState = router.asPath;
   
   useEffect(() => {
-    if (!LocalStorage.getToken() && locationState !== Routes.Login) {
-      router.push(Routes.Login)
+    if (!LocalStorage.getToken() && locationState !== NextRoutes.Login) {
+      router.push(NextRoutes.Login)
     }
   }, [])
   return (
@@ -51,7 +51,7 @@ const AdminLayout = ({
           EDUGATOR
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
-        {locationState !== Routes.Login && (
+        {locationState !== NextRoutes.Login && (
           <Button
             size="large"
             color="secondary"
@@ -59,7 +59,7 @@ const AdminLayout = ({
             onClick={() => {
               LocalStorage.removeToken();
               dispatch(closeAlert());
-              router.push(Routes.Login);
+              router.push(NextRoutes.Login);
             }}
           >
             Logout
