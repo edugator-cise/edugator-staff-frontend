@@ -12,6 +12,7 @@ export interface MetadataFields {
   hidden: boolean;
   cpp: boolean;
   py: boolean;
+  java: boolean;
   dueDate: string;
 }
 
@@ -25,9 +26,15 @@ export interface CodeEditorFields {
 }
 
 export interface ServerConfigFields {
-  timeLimit: number;
-  memoryLimit: number;
-  buildCommand: string;
+  cppTimeLimit: number;
+  cppMemoryLimit: number;
+  cppBuildCommand: string;
+  pyTimeLimit: number;
+  pyMemoryLimit: number;
+  pyBuildCommand: string;
+  javaTimeLimit: number;
+  javaMemoryLimit: number;
+  javaBuildCommand: string;
 }
 
 export enum WarningTypes {
@@ -80,6 +87,7 @@ const initialState: ProblemEditorContainerState = {
     hidden: false,
     cpp: false,
     py: false,
+    java: false,
     dueDate: new Date().toISOString(),
   },
   problem: {
@@ -95,9 +103,15 @@ const initialState: ProblemEditorContainerState = {
     fileExtension: ".cpp",
   },
   serverConfig: {
-    timeLimit: 0,
-    memoryLimit: 0,
-    buildCommand: "",
+    cppTimeLimit: 0,
+    cppMemoryLimit: 0,
+    cppBuildCommand: "",
+    pyTimeLimit: 0,
+    pyMemoryLimit: 0,
+    pyBuildCommand: "",
+    javaTimeLimit: 0,
+    javaMemoryLimit: 0,
+    javaBuildCommand: "",
   },
   testCases: [],
   problemId: undefined,
@@ -241,6 +255,7 @@ export const problemEditorContainerSlice = createSlice({
         hidden: action.payload.hidden,
         cpp: action.payload.cpp,
         py: action.payload.py,
+        java: action.payload.java,
         dueDate: new Date(action.payload.dueDate).toISOString(),
       };
       state.codeEditor = {
@@ -252,9 +267,15 @@ export const problemEditorContainerSlice = createSlice({
         templatePackage: action.payload.templatePackage,
       };
       state.serverConfig = {
-        timeLimit: action.payload.timeLimit,
-        memoryLimit: action.payload.memoryLimit,
-        buildCommand: action.payload.buildCommand,
+        cppTimeLimit: action.payload.cppTimeLimit,
+        cppMemoryLimit: action.payload.cppMemoryLimit,
+        cppBuildCommand: action.payload.cppBuildCommand,
+        pyTimeLimit: action.payload.pyTimeLimit,
+        pyMemoryLimit: action.payload.pyMemoryLimit,
+        pyBuildCommand: action.payload.pyBuildCommand,
+        javaTimeLimit: action.payload.javaTimeLimit,
+        javaMemoryLimit: action.payload.javaMemoryLimit,
+        javaBuildCommand: action.payload.javaBuildCommand,
       };
       state.testCases = action.payload.testCases.map((testCase) => ({
         input: testCase.input,

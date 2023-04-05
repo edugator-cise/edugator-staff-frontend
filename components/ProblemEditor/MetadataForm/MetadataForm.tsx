@@ -39,7 +39,7 @@ interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
-  const { cpp, setCpp, py, setPy } = useCheckboxContext();
+  const { cpp, setCpp, py, setPy, java, setJava } = useCheckboxContext();
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.metadata
@@ -139,42 +139,51 @@ export const MetadataForm = (props: Props) => {
               Select programming languages:
             </Typography><br/>
             <FormControlLabel
-  control={
-    <Checkbox
-      name="cpp"
-      onChange={(e) => {
-        handleChange(e);
-        setCpp(e.target.checked);
-      }}
-      checked={values.cpp}
-    />
-  }
-  sx={{ marginLeft: 0 }}
-  label="C++"
-/>
+              control={
+                <Checkbox
+                  name="cpp"
+                  onChange={(e) => {
+                    handleChange(e);
+                    setCpp(e.target.checked);
+                  }}
+                  checked={values.cpp}
+                />
+              }
+              sx={{ marginLeft: 0 }}
+              label="C++"
+            />
 
-<FormControlLabel
-  control={
-    <Checkbox
-      name="py"
-      onChange={(e) => {
-        handleChange(e);
-        setPy(e.target.checked);
-      }}
-      checked={values.py}
-    />
-  }
-  label="Python"
-/>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="py"
+                  onChange={(e) => {
+                    handleChange(e);
+                    setPy(e.target.checked);
+                  }}
+                  checked={values.py}
+                />
+              }
+              label="Python"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name="java"
+                  onChange={(e) => {
+                    handleChange(e);
+                    setJava(e.target.checked);
+                  }}
+                  checked={values.java}
+                />
+              }
+              label="Java"
+            />
 
 
 
             </Box>
-
-
-
-
-
           </Stack>
         </Form>
       )}

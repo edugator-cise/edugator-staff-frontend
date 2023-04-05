@@ -17,14 +17,20 @@ interface Props {
 }
 
 interface ServerConfigErrors {
-  buildCommand?: string;
-  timeLimit?: string;
-  memoryLimit?: string;
+  cppBuildCommand?: string;
+  cppTimeLimit?: string;
+  cppMemoryLimit?: string;
+  pyBuildCommand?: string;
+  pyTimeLimit?: string;
+  pyMemoryLimit?: string;
+  javaBuildCommand?: string;
+  javaTimeLimit?: string;
+  javaMemoryLimit?: string;
 }
 
 export const ServerConfigForm = (props: Props) => {
   const dispatch = useDispatch();
-  const { cpp, py } = useCheckboxContext();
+  const { cpp, py, java } = useCheckboxContext();
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.serverConfig
@@ -32,11 +38,23 @@ export const ServerConfigForm = (props: Props) => {
 
   const validate = (values: ServerConfigFields) => {
     const errors: ServerConfigErrors = {};
-    if (!values.memoryLimit.toString().match(/^[0-9]+$/)) {
-      errors.memoryLimit = "Must contain digits only";
+    if (!values.cppMemoryLimit.toString().match(/^[0-9]+$/)) {
+      errors.cppMemoryLimit = "Must contain digits only";
     }
-    if (!values.timeLimit.toString().match(/^[0-9]+$/)) {
-      errors.timeLimit = "Must contain digits only";
+    if (!values.cppTimeLimit.toString().match(/^[0-9]+$/)) {
+      errors.cppTimeLimit = "Must contain digits only";
+    }
+    if (!values.pyMemoryLimit.toString().match(/^[0-9]+$/)) {
+      errors.pyMemoryLimit = "Must contain digits only";
+    }
+    if (!values.pyTimeLimit.toString().match(/^[0-9]+$/)) {
+      errors.pyTimeLimit = "Must contain digits only";
+    }
+    if (!values.javaMemoryLimit.toString().match(/^[0-9]+$/)) {
+      errors.javaMemoryLimit = "Must contain digits only";
+    }
+    if (!values.javaTimeLimit.toString().match(/^[0-9]+$/)) {
+      errors.javaTimeLimit = "Must contain digits only";
     }
 
     dispatch(validateServerConfig(Object.entries(errors).length === 0));
@@ -69,7 +87,7 @@ export const ServerConfigForm = (props: Props) => {
             <Stack spacing={5}>
               <TextField
                 id="time-limit"
-                name="timeLimit"
+                name="cppTimeLimit"
                 label="Time limit"
                 inputProps={{
                   inputMode: "numeric",
@@ -80,14 +98,14 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.timeLimit}
-                error={touched.timeLimit && Boolean(errors.timeLimit)}
-                helperText={touched.timeLimit && errors.timeLimit}
+                value={values.cppTimeLimit}
+                error={touched.cppTimeLimit && Boolean(errors.cppTimeLimit)}
+                helperText={touched.cppTimeLimit && errors.cppTimeLimit}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="memory-limit"
-                name="memoryLimit"
+                name="cppMemoryLimit"
                 label="Memory limit"
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
@@ -97,19 +115,19 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.memoryLimit}
-                error={touched.memoryLimit && Boolean(errors.memoryLimit)}
-                helperText={touched.memoryLimit && errors.memoryLimit}
+                value={values.cppMemoryLimit}
+                error={touched.cppMemoryLimit && Boolean(errors.cppMemoryLimit)}
+                helperText={touched.cppMemoryLimit && errors.cppMemoryLimit}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="build-command"
-                name="buildCommand"
+                name="cppBuildCommand"
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.buildCommand}
-                error={touched.buildCommand && Boolean(errors.buildCommand)}
+                value={values.cppBuildCommand}
+                error={touched.cppBuildCommand && Boolean(errors.cppBuildCommand)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
             </Stack>
@@ -130,7 +148,7 @@ export const ServerConfigForm = (props: Props) => {
             <Stack spacing={5}>
               <TextField
                 id="time-limit"
-                name="timeLimit"
+                name="pyTimeLimit"
                 label="Time limit"
                 inputProps={{
                   inputMode: "numeric",
@@ -141,14 +159,14 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.timeLimit}
-                error={touched.timeLimit && Boolean(errors.timeLimit)}
-                helperText={touched.timeLimit && errors.timeLimit}
+                value={values.pyTimeLimit}
+                error={touched.pyTimeLimit && Boolean(errors.pyTimeLimit)}
+                helperText={touched.pyTimeLimit && errors.pyTimeLimit}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="memory-limit"
-                name="memoryLimit"
+                name="pyMemoryLimit"
                 label="Memory limit"
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
@@ -158,19 +176,80 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.memoryLimit}
-                error={touched.memoryLimit && Boolean(errors.memoryLimit)}
-                helperText={touched.memoryLimit && errors.memoryLimit}
+                value={values.pyMemoryLimit}
+                error={touched.pyMemoryLimit && Boolean(errors.pyMemoryLimit)}
+                helperText={touched.pyMemoryLimit && errors.pyMemoryLimit}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="build-command"
-                name="buildCommand"
+                name="pyBuildCommand"
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.buildCommand}
-                error={touched.buildCommand && Boolean(errors.buildCommand)}
+                value={values.pyBuildCommand}
+                error={touched.pyBuildCommand && Boolean(errors.pyBuildCommand)}
+                helperText="Add compiler flags here e.g. '-Wall'"
+              />
+            </Stack>
+            </AccordionDetails>
+            </Accordion>
+          )}
+          {java && (
+            <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Java Settings</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            <br/>
+            <Stack spacing={5}>
+              <TextField
+                id="time-limit"
+                name="javaTimeLimit"
+                label="Time limit"
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                }}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">s</InputAdornment>,
+                }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.javaTimeLimit}
+                error={touched.javaTimeLimit && Boolean(errors.javaTimeLimit)}
+                helperText={touched.javaTimeLimit && errors.javaTimeLimit}
+                sx={{ width: "25%" }}
+              />
+              <TextField
+                id="memory-limit"
+                name="javaMemoryLimit"
+                label="Memory limit"
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">KB</InputAdornment>
+                  ),
+                }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.javaMemoryLimit}
+                error={touched.javaMemoryLimit && Boolean(errors.javaMemoryLimit)}
+                helperText={touched.javaMemoryLimit && errors.javaMemoryLimit}
+                sx={{ width: "25%" }}
+              />
+              <TextField
+                id="build-command"
+                name="javaBuildCommand"
+                label="Build command"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.javaBuildCommand}
+                error={touched.javaBuildCommand && Boolean(errors.javaBuildCommand)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
             </Stack>

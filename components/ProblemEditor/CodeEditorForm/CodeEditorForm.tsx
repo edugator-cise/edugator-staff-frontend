@@ -73,7 +73,7 @@ int main()
 
 export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
-  const { cpp, py } = useCheckboxContext();
+  const { cpp, py, java } = useCheckboxContext();
 
   const [touched, setTouched] = React.useState(false);
 
@@ -268,7 +268,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       sx={{ marginTop: 1, paddingTop: 1 }}
                     >
                       <Editor
-                        language="cpp"
+                        language="python"
                         height="250px"
                         value={values.header}
                         onChange={(value) => {
@@ -287,7 +287,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       sx={{ marginTop: 1, paddingTop: 1 }}
                     >
                       <Editor
-                        language="cpp"
+                        language="python"
                         height="250px"
                         value={values.body}
                         onChange={(value) => {
@@ -308,7 +308,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       sx={{ marginTop: 1, paddingTop: 1 }}
                     >
                       <Editor
-                        language="cpp"
+                        language="python"
                         height="250px"
                         value={values.footer}
                         onChange={(value) => {
@@ -322,7 +322,102 @@ export const CodeEditorForm = ({ formRef }: Props) => {
               </AccordionDetails>
             </Accordion>
           )}
-           
+          
+          {java && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>Java Settings</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+              <br/>
+                  <Stack overflow="none" spacing={5}>
+                  <Box>
+                    <FormControl>
+                      <InputLabel>Codebox file extension</InputLabel>
+                      <Select
+                        name="fileExtension"
+                        value={values.fileExtension}
+                        label="fileExtension"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        sx={{ minWidth: "10rem" }}
+                        variant="filled"
+                      >
+                        <MenuItem value=".java">.java</MenuItem>
+                        
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <InputLabel>Header</InputLabel>
+                    <FormHelperText>
+                      This code precedes the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="java"
+                        height="250px"
+                        value={values.header}
+                        onChange={(value) => {
+                          setFieldValue("header", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box>
+                    <InputLabel>Body</InputLabel>
+                    <FormHelperText>This code is visible to students.</FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="java"
+                        height="250px"
+                        value={values.body}
+                        onChange={(value) => {
+                          setFieldValue("body", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                  <Box flexGrow={1} display="flex" flexDirection="column">
+                    <InputLabel>Footer</InputLabel>
+                    <FormHelperText>
+                      This code follows the body and is not visible to students.
+                    </FormHelperText>
+                    <Paper
+                      elevation={0}
+                      variant="outlined"
+                      sx={{ marginTop: 1, paddingTop: 1 }}
+                    >
+                      <Editor
+                        language="java"
+                        height="250px"
+                        value={values.footer}
+                        onChange={(value) => {
+                          setFieldValue("footer", value);
+                          setTouched(true);
+                        }}
+                      />
+                    </Paper>
+                  </Box>
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
+          )}
+          
 
         </Form>
       )}

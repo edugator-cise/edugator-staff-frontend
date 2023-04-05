@@ -11,6 +11,7 @@ export interface IProblem extends IProblemBase {
   hidden: boolean;
   cpp: boolean;
   py: boolean;
+  java: boolean;
   language: string;
   dueDate: string; //iso format
   statement: string;
@@ -22,9 +23,15 @@ export interface IProblem extends IProblemBase {
   fileExtension: string;
   testCases: ITestCase[];
   templatePackage: string;
-  timeLimit: number;
-  memoryLimit: number;
-  buildCommand: string;
+  cppTimeLimit: number;
+  cppMemoryLimit: number;
+  cppBuildCommand: string;
+  pyTimeLimit: number;
+  pyMemoryLimit: number;
+  pyBuildCommand: string;
+  javaTimeLimit: number;
+  javaMemoryLimit: number;
+  javaBuildCommand: string;
 }
 
 export interface ILesson extends ILessonBase {
