@@ -182,7 +182,7 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Is Short"
+                  name="isShort"
                   onChange={handleChange}
                   checked={values.isShort}
                 />
@@ -193,7 +193,7 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Has Template"
+                  name="hasTemplate"
                   onChange={handleChange}
                   checked={values.hasTemplate}
                 />
@@ -204,7 +204,7 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="Is Quiz"
+                  name="isQuiz"
                   onChange={handleChange}
                   checked={values.isQuiz}
                 />
