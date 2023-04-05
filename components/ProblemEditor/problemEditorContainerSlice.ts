@@ -10,6 +10,7 @@ export interface ProblemFields {
 export interface MetadataFields {
   title: string;
   hidden: boolean;
+  language: string;
   cpp: boolean;
   py: boolean;
   java: boolean;
@@ -84,6 +85,7 @@ const initialState: ProblemEditorContainerState = {
   activeStep: 0,
   metadata: {
     title: "",
+    language: "",
     hidden: false,
     cpp: false,
     py: false,
@@ -253,6 +255,7 @@ export const problemEditorContainerSlice = createSlice({
       state.metadata = {
         title: action.payload.title,
         hidden: action.payload.hidden,
+        language: action.payload.language,
         cpp: action.payload.cpp,
         py: action.payload.py,
         java: action.payload.java,

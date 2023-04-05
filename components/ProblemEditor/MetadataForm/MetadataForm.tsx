@@ -2,6 +2,7 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
+  FormControl,
   Stack,
   TextField,
   Typography,
@@ -29,6 +30,7 @@ interface Props {
 interface Errors {
   title?: string;
   dueDate?: string;
+  language?: string;
 }
 
 interface DateError {
@@ -52,6 +54,10 @@ export const MetadataForm = (props: Props) => {
       errors.title = "Required";
     } else if (values.title.trim() === "") {
       errors.title = "Title must contain non-whitespace characters";
+    }
+
+    if (!cpp && !py && !java) {
+      errors.language = "At least one language must be selected";
     }
 
     if (dateError.message) {
@@ -133,11 +139,14 @@ export const MetadataForm = (props: Props) => {
             
 
             
-            <Box >
+            <Box>
               
             <Typography variant="body1" color="textSecondary" sx={{ marginLeft: 1 }}>
               Select programming languages:
-            </Typography><br/>
+            </Typography>
+            
+            <br/>
+
             <FormControlLabel
               control={
                 <Checkbox
@@ -180,13 +189,16 @@ export const MetadataForm = (props: Props) => {
               }
               label="Java"
             />
-
-
-
+            {errors.language && (
+              <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
+                {errors.language}
+              </Typography>
+            )}{validate}
             </Box>
+            
           </Stack>
         </Form>
       )}
-    </Formik>
+    </Formik >
   );
 };
