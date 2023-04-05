@@ -105,6 +105,9 @@ export default function CodeEditor() {
             problemDifficulty={currentProblem?.difficulty}
             problemDateCreated={currentProblem?.dateCreated}
             problemLastModified={currentProblem?.lastModified}
+            problemIsShort={currentProblem?.isShort}
+            problemHasTemplate={currentProblem?.hasTemplate}
+            problemIsQuiz={currentProblem?.isQuiz}
           />
           <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
             <CodeEditorView

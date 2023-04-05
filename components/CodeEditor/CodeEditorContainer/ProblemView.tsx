@@ -10,6 +10,9 @@ interface Props {
   problemDifficulty: string;
   problemDateCreated: Date;
   problemLastModified: Date;
+  problemIsShort: boolean;
+  problemHasTemplate: boolean;
+  problemIsQuiz: boolean;
 }
 
 const ProblemDescriptionPaper = styled("div")(
@@ -31,6 +34,9 @@ export const ProblemView = ({
   problemDifficulty,
   problemDateCreated,
   problemLastModified,
+  problemIsShort, 
+  problemHasTemplate, 
+  problemIsQuiz,
 }: Props) => {
   //check if problemDateCreated is null
   const dateCreated = new Date(problemDateCreated).toLocaleDateString();
