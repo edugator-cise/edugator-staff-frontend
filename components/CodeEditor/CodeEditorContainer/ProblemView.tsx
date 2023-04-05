@@ -41,6 +41,18 @@ export const ProblemView = ({
   //check if problemDateCreated is null
   const dateCreated = new Date(problemDateCreated).toLocaleDateString();
   const lastModified = new Date(problemLastModified).toLocaleDateString();
+  let isShort:string = 'yes';
+  if (!problemIsShort){
+    isShort = 'no';
+  }
+  let hasTemplate:string = 'yes';
+  if (!problemHasTemplate){
+    hasTemplate = 'no';
+  }
+  let isQuiz:string = 'yes';
+  if (!problemIsQuiz){
+    isQuiz = 'no';
+  }
 
   return (
     <Grow in appear timeout={500}>
@@ -69,6 +81,9 @@ export const ProblemView = ({
             ) : null}
             <br />
             <b>Last Modified:</b> {lastModified}
+            <b>Is Short:</b> {isShort}
+            <b>Has Template:</b> {hasTemplate}
+            <b>Last Modified:</b> {isQuiz}
           </Typography>
         ) : null}
       </ProblemDescriptionPaper>
