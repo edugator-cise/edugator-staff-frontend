@@ -35,7 +35,6 @@ const sampleProblems: IProblem[] = [
       header: "string",
       body: "string",
       footer: "string",
-      solution: "string",
     },
     fileExtension: ".cpp",
     testCases: [
