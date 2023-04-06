@@ -6,22 +6,29 @@ const teamData = [
   {
     name: "Dustin Karp",
     image: "/images/avatars/dustin.png",
-    description: "Senior, University of Florida (UF).",
+    description: "Senior, University of Florida (UF)",
     role: "Designer & Frontend Lead.",
   },
   {
     name: "Marc Diaz",
     image: "/images/avatars/marc.png",
-    description: "UF Alumni.",
+    description: "UF Alumni",
     role: "Co-Founder & Infrastructure Lead.",
   },
   {
     name: "Amanpreet Kapoor",
     image: "/images/avatars/aman.png",
-    description:
-      "Instructional Assistant Professor, UF.",
+    description: "Instructional Assistant Professor, UF",
     role: "Co-Founder & Learning Lead.",
   },
+];
+
+const contributors = [
+  "Matthew Jung",
+  "Daniel Lai",
+  "Benny Cortese",
+  "Blake Rand",
+  "Maeloni Pompilio",
 ];
 
 const Team = () => {
@@ -46,14 +53,23 @@ const Team = () => {
             <div className="w-20 h-20 relative bg-gradient-to-br from-emerald-400 to-green-800 rounded-sm overflow-hidden ring ring-slate-50 drop-shadow-xl">
               <Image src={member.image} layout="fill" />
             </div>
-            <h1 className="text-2xl font-semibold text-nav-darkest font-ambit">
-              {member.name}
+            <h1 className="text-2xl flex flex-col items-start font-semibold text-nav-darkest font-ambit">
+              <span>{member.name}</span>
+              <span className="opacity-60 text-sm">{member.description}</span>
             </h1>
-            <p className="text-nav-darkest text-left font-dm">
-              {member.description}
-              <br/>
+            <p className="text-nav-darkest text-left font-dm !-mt-2">
+              <br />
               {member.role}
             </p>
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8">
+        {contributors.map((member) => (
+          <div key={member}>
+            <h1 className="text-base p-4 flex flex-col items-start font-semibold text-nav-darkest font-ambit">
+              <span>{member}</span>
+            </h1>
           </div>
         ))}
       </div>
