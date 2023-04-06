@@ -128,10 +128,10 @@ const AboutSection = ({
         {title}
       </h3>
       <p className="font-inter text-nav-darker/80 pt-2">{description}</p>
-      <button className=" flex items-center space-x-1 mt-4">
+      {/* <button className=" flex items-center space-x-1 mt-4">
         <span className="font-dm text-nav-darkest font-bold">Learn More</span>
         <ExpandArrow />
-      </button>
+      </button> */}
     </li>
   );
 };

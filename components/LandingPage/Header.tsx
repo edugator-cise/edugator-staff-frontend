@@ -96,7 +96,13 @@ const Header = () => {
       } ${headerDark ? "bg-nav-darkest/75" : "bg-slate-100/75"}`}
     >
       <div className="max-w-7xl w-full px-4 sm:px-6 lg:px-8 grid items-center h-16 grid-cols-6 space-x-3 lg:h-16 lg:justify-center">
-        <div className="flex col-span-4 lg:col-span-1 justify-start items-center space-x-2">
+        <div
+          onClick={() => {
+            // scroll to top
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="cursor-pointer flex col-span-4 lg:col-span-1 justify-start items-center space-x-2 cursor-pointer"
+        >
           <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
             <EdugatorLogo />
           </div>
@@ -132,7 +138,7 @@ const Header = () => {
           ))}
         </div>
         <div className="flex justify-end col-span-2 lg:col-span-1">
-          <GradientButton text="Log In" href="/login" />
+          <GradientButton text="Start Coding" href="/code" />
         </div>
       </div>
     </header>

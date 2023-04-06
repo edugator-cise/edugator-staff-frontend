@@ -64,7 +64,10 @@ const AI = () => {
   }, [isInView]);
 
   return (
-    <section className="pb-12 sm:pb-24 relative bg-gradient-to-b from-nav-darkest via-nav-darkest to-[#0a080f]">
+    <section
+      className="pb-12 sm:pb-24 relative bg-gradient-to-b from-nav-darkest via-nav-darkest to-[#0a080f]"
+      id="ai"
+    >
       <div className="hidden sm:block w-10 h-10 absolute left-0 bottom-0">
         <CornerDivider fill={"#F8FAFC"} />
       </div>

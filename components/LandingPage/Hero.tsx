@@ -5,6 +5,8 @@ import { motion as m } from "framer-motion";
 import { heroImageVariants } from "utils/variants";
 import RotatingText from "./RotatingText";
 import { CornerDivider } from "./Dividers";
+import ExpandArrow, { ExpandArrowLight } from "./ExpandArrow";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -46,11 +48,14 @@ const Hero = () => {
           for your course with a platform that is built for learning and
           teaching.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center space-x-6 z-[1]">
-          <GradientButton text="Start Coding" href="/" />
-          <a href="/playground" className="text-sm text-white">
-            Learn More
-          </a>
+        <div className="flex flex-col sm:flex-row items-center justify-center space-x-8 z-[1]">
+          <GradientButton text="Start Coding" href="/code" />
+          <Link href="/#about">
+            <button className="group flex items-center space-x-1">
+              <span className="font-dm text-white font-bold">Learn More</span>
+              <ExpandArrowLight />
+            </button>
+          </Link>
         </div>
         {/* Problem Statement Hero Image (centered at bottom) */}
         <m.div

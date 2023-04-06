@@ -1,5 +1,6 @@
 import { HeartFilledIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import ExpandArrow from "./ExpandArrow";
 
@@ -13,17 +14,19 @@ const CTA = () => {
               <Image src="/images/universityIcon.png" layout="fill" />
             </div>
             <h1 className="text-3xl font-semibold text-nav-darkest font-ambit max-w-sm">
-              Interested in Edugator for your school?
+              Interested in Edugator for your course?
             </h1>
             <p className="text-nav-darkest">
               Contact us, we'd love to hear from you!
             </p>
-            <button className="group flex items-center space-x-1 mt-4">
-              <span className="font-dm text-nav-darker font-bold">
-                Contact Us
-              </span>
-              <ExpandArrow />
-            </button>
+            <Link href="mailto:csinfraweb@gmail.com">
+              <button className="group flex items-center space-x-1 mt-4">
+                <span className="font-dm text-nav-darker font-bold">
+                  Contact Us
+                </span>
+                <ExpandArrow />
+              </button>
+            </Link>
           </div>
           <div className="w-full flex flex-col space-y-4">
             <div className="relative h-20 flex items-center justify-start">
@@ -56,12 +59,14 @@ const CTA = () => {
               <HeartFilledIcon className="w-4 h-4 text-red-500 mx-1" />
               <p className="text-nav-darkest">at the University of Florida.</p>
             </span>
-            <button className="group flex items-center space-x-1 mt-4">
-              <span className="font-dm text-nav-darker font-bold">
-                Meet Our Team
-              </span>
-              <ExpandArrow />
-            </button>
+            <Link href="/team">
+              <button className="group flex items-center space-x-1 mt-4">
+                <span className="font-dm text-nav-darker font-bold">
+                  Meet Our Team
+                </span>
+                <ExpandArrow />
+              </button>
+            </Link>
           </div>
         </div>
       </div>
