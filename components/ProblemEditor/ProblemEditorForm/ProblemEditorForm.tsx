@@ -11,7 +11,7 @@ import {
 import { RootState } from "lib/store/store";
 
 interface Props {
-  formRef: any;
+  formRef: any; 
 }
 
 export const ProblemEditorForm = (props: Props) => {
@@ -19,6 +19,10 @@ export const ProblemEditorForm = (props: Props) => {
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.problem
+  );
+
+  const problemAttributes = useSelector(
+    (state: RootState) => state.problemEditorContainer.metadata
   );
 
   const templatePackageHelperText =
@@ -96,20 +100,24 @@ export const ProblemEditorForm = (props: Props) => {
               name="problemStatement"
               component={MarkdownField}
             />
-            <TextField
-              id="template-package"
-              name="templatePackage"
-              label="Template package"
-              value={values.templatePackage}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.templatePackage && Boolean(errors.templatePackage)}
-              helperText={
-                (touched.templatePackage && errors.templatePackage) ||
-                templatePackageHelperText
-              }
-              required
-            />
+            {!problemAttributes.hasTemplate ? (
+                <TextField 
+                id="template-package"
+                name="templatePackage"
+                label="Template package"
+                value={values.templatePackage}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.templatePackage && Boolean(errors.templatePackage)}
+                helperText={
+                  (touched.templatePackage && errors.templatePackage) ||
+                  templatePackageHelperText
+                }
+                required
+              />
+            ) : null
+
+            }
           </Stack>
         </Form>
       )}
