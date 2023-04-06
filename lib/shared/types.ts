@@ -7,6 +7,7 @@ export interface ITestCase {
   expectedOutput: string;
   hint: string;
   visibility: number;
+  testCaseCode: string;
 }
 
 export interface IProblem extends IProblemBase {

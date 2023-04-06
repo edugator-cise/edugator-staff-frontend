@@ -256,6 +256,7 @@ export const problemEditorContainerSlice = createSlice({
         expectedOutput: testCase.expectedOutput,
         hint: testCase.hint,
         visibility: testCase.visibility,
+        testCaseCode: testCase.testCaseCode,
       }));
     },
     requestGetProblemFailure: (state, action: PayloadAction<any>) => {

@@ -9,6 +9,7 @@ export interface TestCaseField {
   expectedOutput: string;
   hint: string;
   visibility: TestCaseVisibility;
+  testCaseCode: string;
 }
 
 export function generateDefaultTestCase(): TestCaseField {
@@ -17,5 +18,6 @@ export function generateDefaultTestCase(): TestCaseField {
     expectedOutput: "",
     hint: "",
     visibility: TestCaseVisibility.IO_VISBILE,
+    testCaseCode: "",
   };
 }

@@ -8,12 +8,17 @@ import {
   FormLabel,
   FormControlLabel,
   RadioGroup,
+  Box,
+  InputLabel,
+  FormHelperText,
+  Paper,
 } from "@mui/material";
 import { TestCaseField, TestCaseVisibility } from "./TestCase.utils";
 import ConfirmDelete from "components/shared/ConfirmDelete";
 import Radio from "@mui/material/Radio";
 import { FormTextField } from "components/shared/FormTextField";
 import { Field } from "formik";
+import Editor from "@monaco-editor/react";
 
 interface TestCaseProps {
   index: number;
@@ -37,6 +42,7 @@ export const TestCase = (props: TestCaseProps) => {
   const inputName = `${name}.input`;
   const outputName = `${name}.expectedOutput`;
   const visibilityName = `${name}.visibility`;
+  const testCaseCode = `${name}.testCaseCode`;
   const displayIndex = index + 1;
   return (
     <Card sx={{ minWidth: 275 }} key={index} variant="outlined">
@@ -82,6 +88,30 @@ export const TestCase = (props: TestCaseProps) => {
             validate={validateNotEmpty}
             component={FormTextField}
           />
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <InputLabel>Code</InputLabel>
+            <FormHelperText>
+              This is the code that will be included in the zip file that is
+              generated.
+            </FormHelperText>
+            <Paper
+              elevation={0}
+              variant="outlined"
+              sx={{ marginTop: 1, paddingTop: 1 }}
+            >
+              <Editor
+                language="cpp"
+                height="250px"
+                value={testCase.testCaseCode}
+                onChange={(value) => {
+                  setFieldValue(testCaseCode, value);
+                  console.log("value", value);
+                  // setTouched(true);
+                }}
+              />
+            </Paper>
+          </Box>
+
           {/* https://levelup.gitconnected.com/create-a-controlled-radio-group-in-react-formik-material-ui-and-typescript-7ed314081a0e */}
           <Stack>
             <FormControl component="fieldset">

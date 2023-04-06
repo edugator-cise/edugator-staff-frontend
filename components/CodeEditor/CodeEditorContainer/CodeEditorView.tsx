@@ -166,7 +166,7 @@ export const CodeEditorView = ({
   };
 
   const handleDownloadTemplate = () => {
-    if (!templateZip) {
+    if (templatePackage) {
       return window.open(templatePackage, "_blank", "noopener");
     }
 
