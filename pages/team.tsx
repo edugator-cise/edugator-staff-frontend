@@ -23,12 +23,116 @@ const teamData = [
   },
 ];
 
-const contributors = [
-  "Matthew Jung",
-  "Daniel Lai",
-  "Benny Cortese",
-  "Blake Rand",
-  "Maeloni Pompilio",
+
+const content_contributors = [
+  {
+    name: "Andrew Penton",
+  },
+  {
+    name: "Ayswarya Nandanan",
+  },
+  {
+    name: "Eugene Li",
+  },
+  {
+    name: "Matthew DeGuzman",
+  },
+  {
+    name: "Robert Casanova",
+  }
+];
+
+const platform_contributors = [
+  {
+    name: "Abdullah Yuksel",
+  },
+  {
+    name: "Adrian Salazar",
+  },
+  {
+    name: "Andrew Whigham",
+  },
+  {
+    name: "Benny Cortese",
+  },
+  {
+    name: "Blake Rand",
+  },
+  {
+    name: "Daniel Lai",
+  },
+  {
+    name: "Dominik Andrzejczyn",
+  },
+  {
+    name: "Hamish Pierpont",
+  },
+  {
+    name: "Herman A. Gonzalez",
+  },
+  {
+    name: "Jahdiel Suarez",
+  },
+  {
+    name: "John Dillon",
+  },
+  {
+    name: "Jose A. Cabrera",
+  },
+  {
+    name: "Josh Dargan",
+  },
+  {
+    name: "Kattrina Erillo",
+  },
+  {
+    name: "Maeloni Pompilio",
+  },
+  {
+    name: "Maggie Tieu",
+  },
+  {
+    name: "Matthew Jung",
+  },
+  {
+    name: "Nitin Ramadoss",
+  },
+  {
+    name: "Paul Wei",
+  },
+  {
+    name: "Robert McAdam",
+  },
+  {
+    name: "Tanner Ropp",
+  },
+  {
+    name: "Vida Tonkova",
+  },
+];
+
+const research_contributors = [
+  {
+    name: "Joseph Hardin",
+  },
+  {
+    name: "Kunyao Wang",
+  },
+];
+
+const platform_supporters = [
+  {
+    name: "Computer & Information Science & Engineering Department, UF",
+  },
+  {
+    name: "Engineering Education Department, UF",
+  },
+  {
+    name: "UF Center for Teaching Excellence",
+  },
+  {
+    name: "George A. Smathers Libraries, UF",
+  },
 ];
 
 const Team = () => {
@@ -64,11 +168,53 @@ const Team = () => {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8">
-        {contributors.map((member) => (
-          <div key={member}>
-            <h1 className="text-base p-4 flex flex-col items-start font-semibold text-nav-darkest font-ambit">
-              <span>{member}</span>
+      <br/>
+      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
+        Platform Contributors.
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+        {platform_contributors.map((member) => (
+          <div key={member.name}>
+            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+              <span>{member.name}</span>
+            </h1>
+          </div>
+        ))}
+      </div>
+      <br/>
+      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
+        Research Contributors.
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+        {research_contributors.map((member) => (
+          <div key={member.name}>
+            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+              <span>{member.name}</span>
+            </h1>
+          </div>
+        ))}
+      </div>
+      <br/>
+      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
+        Content Contributors.
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+        {content_contributors.map((member) => (
+          <div key={member.name}>
+            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+              <span>{member.name}</span>
+            </h1>
+          </div>
+        ))}
+      </div>
+      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
+        Supporters.
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-x-8">
+        {platform_supporters.map((member) => (
+          <div key={member.name}>
+            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+              <span>{member.name}</span>
             </h1>
           </div>
         ))}
