@@ -38,7 +38,7 @@ const content_contributors = [
     name: "Matthew DeGuzman",
   },
   {
-    name: "Meaghan",
+    name: "Meaghan Estrada",
   },
   {
     name: "Robert Casanova",
