@@ -104,6 +104,9 @@ const platform_contributors = [
     name: "Paul Wei",
   },
   {
+    name: "Prayuj Tuli",
+  },
+  {
     name: "Robert McAdam",
   },
   {
