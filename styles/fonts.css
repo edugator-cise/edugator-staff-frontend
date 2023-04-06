@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600');
-@import url('https://fonts.googleapis.com/css2?&family=Inter');
-@import url('https://fonts.googleapis.com/css2?&family=Public+Sans');
-@import url('https://fonts.googleapis.com/css2?&family=DM+Sans');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600");
+@import url("https://fonts.googleapis.com/css2?&family=Inter");
+@import url("https://fonts.googleapis.com/css2?&family=Public+Sans");
+@import url("https://fonts.googleapis.com/css2?&family=DM+Sans");
 
 @font-face {
-    font-family: 'Ambit';
-    src: url('../public/fonts/Ambit/Ambit-Regular.otf');
-    font-weight: normal;
+  font-family: "Ambit";
+  src: url("../assets/fonts/Ambit-Regular.otf");
+  font-weight: normal;
 }
 
 @font-face {
-    font-family: 'Ambit';
-    src: url('../public/fonts/Ambit/Ambit-Bold.otf');
-    font-weight: bold;
+  font-family: "Ambit";
+  src: url("../assets/fonts/Ambit-Bold.otf");
+  font-weight: bold;
 }
 
 @font-face {
-    font-family: 'Ambit';
-    src: url('../public/fonts/Ambit/Ambit-Semibold.otf');
-    font-weight: 600;
+  font-family: "Ambit";
+  src: url("../assets/fonts/Ambit-Semibold.otf");
+  font-weight: 600;
 }
