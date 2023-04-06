@@ -6,20 +6,21 @@ const teamData = [
   {
     name: "Dustin Karp",
     image: "/images/avatars/dustin.png",
-    description:
-      "Senior at the University of Florida. Frontend developer and designer.",
+    description: "Senior, University of Florida (UF).",
+    role: "Designer & Frontend Lead.",
   },
   {
     name: "Marc Diaz",
     image: "/images/avatars/marc.png",
-    description:
-      "UF Alumni. Fullstack developer / infrastructure. Currently working at Microsoft.",
+    description: "UF Alumni.",
+    role: "Co-Founder & Infrastructure Lead.",
   },
   {
     name: "Amanpreet Kapoor",
     image: "/images/avatars/aman.png",
     description:
-      "Adjunct Professor at the University of Florida. Data Structures, HCI, Product Direction.",
+      "Instructional Assistant Professor, UF.",
+    role: "Co-Founder & Learning Lead.",
   },
 ];
 
@@ -50,6 +51,8 @@ const Team = () => {
             </h1>
             <p className="text-nav-darkest text-left font-dm">
               {member.description}
+              <br/>
+              {member.role}
             </p>
           </div>
         ))}
