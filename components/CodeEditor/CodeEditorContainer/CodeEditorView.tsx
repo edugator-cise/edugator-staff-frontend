@@ -10,7 +10,11 @@ import { adminPathRegex, colors } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
 import { IProblem } from "lib/shared/types";
-import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
+import {
+  createNavStructure,
+  handleDownload,
+  parseFile,
+} from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
@@ -110,6 +114,8 @@ export const CodeEditorView = ({
     buildCommand,
     _id: problemId,
     fileExtension: fileType,
+    title,
+    fileName,
   } = currentProblem;
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
@@ -193,7 +199,7 @@ export const CodeEditorView = ({
             <Tooltip title="Download Submission" placement="top">
               <IconButton
                 onClick={() => {
-                  handleDownload(currentCode, navigation, problemId, fileType);
+                  handleDownload(currentCode, title, fileType, fileName);
                 }}
               >
                 <GetApp />

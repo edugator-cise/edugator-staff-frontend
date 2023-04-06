@@ -21,6 +21,7 @@ export interface IProblem extends IProblemBase {
   isShort: boolean;
   hasTemplate: boolean;
   isQuiz: boolean;
+  fileName: string;
   code: {
     header: string;
     body: string;
