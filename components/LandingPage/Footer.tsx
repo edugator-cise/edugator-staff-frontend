@@ -37,11 +37,11 @@ const FeaturesLinks = () => [
     href: "/#about",
     id: "about",
   },
-  {
-    name: "AI Features",
-    href: "/#ai",
-    id: "ai",
-  },
+  // {
+  //   name: "AI Features",
+  //   href: "/#ai",
+  //   id: "ai",
+  // },
 ];
 
 const AboutLinks = () => [

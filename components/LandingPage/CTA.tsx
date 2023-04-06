@@ -14,12 +14,12 @@ const CTA = () => {
               <Image src="/images/universityIcon.png" layout="fill" />
             </div>
             <h1 className="text-3xl font-semibold text-nav-darkest font-ambit max-w-sm">
-              Interested in Edugator for your course?
+              Interested in Edugator for your course at UF?
             </h1>
             <p className="text-nav-darkest">
               Contact us, we'd love to hear from you!
             </p>
-            <Link href="mailto:csinfraweb@gmail.com">
+            <Link href="mailto:kapooramanpreet@ufl.edu">
               <button className="group flex items-center space-x-1 mt-4">
                 <span className="font-dm text-nav-darker font-bold">
                   Contact Us

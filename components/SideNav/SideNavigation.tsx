@@ -174,11 +174,11 @@ const SideNavigation = ({
           <div
             className={`flex flex-col space-y-3 transition-all rounded-md ${
               !mainSidebarHidden
-                ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]"
-                : "p-0"
+                // ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]"
+                // : "p-0"
             }`}
           >
-            {/* Class List */}
+            {/* Class List
             {classes.map((item, index) => (
               <NavLinkTooltip
                 text={`${item.name}: ${item.course}`}
@@ -200,7 +200,7 @@ const SideNavigation = ({
                       : ""
                   } ${!mainSidebarHidden ? "rounded-sm" : "rounded-md"}`}
                 >
-                  {/* Class Icon */}
+                  // { Class Icon }
                   <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
                     <AspectRatio.Root
                       ratio={1 / 1}
@@ -210,7 +210,7 @@ const SideNavigation = ({
                       <Image src={item.icon} layout="fill" objectFit="cover" />
                     </AspectRatio.Root>
                   </div>
-                  {/* Class Info */}
+                  // { Class Info }
                   <section
                     className={`flex ml-3 justify-center h-full flex-col whitespace-nowrap overflow-hidden text-left leading-none transition-opacity ${
                       !mainSidebarHidden ? "opacity-100" : "opacity-0"
@@ -229,8 +229,8 @@ const SideNavigation = ({
                   </section>
                 </div>
               </NavLinkTooltip>
-            ))}
-            <NavLinkTooltip disabled={!mainSidebarHidden} text="Add Class">
+            ))} */}
+            {/* <NavLinkTooltip disabled={!mainSidebarHidden} text="Add Class">
               <div
                 className={`w-full rounded-sm relative transition overflow-hidden cursor-pointer px-1 flex items-center group justify-start h-10`}
               >
@@ -247,7 +247,7 @@ const SideNavigation = ({
                   Add Class
                 </p>
               </div>
-            </NavLinkTooltip>
+            </NavLinkTooltip> */}
           </div>
           <Divider />
           {/* Button Group */}
