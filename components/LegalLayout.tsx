@@ -77,7 +77,7 @@ const LegalLayout = ({
 
       {/* Text */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-10 bg-slate-50">{children}</div>
+        <div className="py-10 bg-slate-50 text-nav-darkest">{children}</div>
       </div>
       <Footer />
     </div>
