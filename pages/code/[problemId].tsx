@@ -208,7 +208,7 @@ export default function CodeEditor() {
         </div>
       ) : (
         <div className="w-full h-full relative">
-          <AIChat />
+          {/* <AIChat /> */}
           <Allotment
             sizes={[310, 350]}
             snap={true}

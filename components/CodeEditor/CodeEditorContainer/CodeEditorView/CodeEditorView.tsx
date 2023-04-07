@@ -253,32 +253,9 @@ export const CodeEditorView = ({
         />
       </div>
       <div className="w-full px-3 pb-3 flex items-center justify-between bg-slate-100 dark:bg-nav-darkest">
-        <button
+        {/* <button
           disabled={isSubmissionRunning}
-          onClick={() => {
-            console.log("run code");
-            toast.promise(
-              runCode({
-                code: currentCode,
-                stdin,
-                problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
-              }),
-              {
-                loading: "Running Code...",
-                success: "Code Ran Successfully",
-                error: "Error Running Code",
-              },
-              {
-                position: "top-right",
-                success: {
-                  icon: "👨‍💻",
-                },
-              }
-            );
-          }}
+          onClick={() => {}}
           className="bg-transparent px-3 text-sm py-2 rounded-md border border-violet-400 flex items-center space-x-2"
         >
           <div className="w-4 h-4">
@@ -300,7 +277,7 @@ export const CodeEditorView = ({
           <p className="dark:text-white text-violet-700 bg-violet-200 dark:bg-violet-600 px-2 rounded-full text-xs">
             beta
           </p>
-        </button>
+        </button> */}
         <div className="flex items-center space-x-2">
           <button
             disabled={isSubmissionRunning}
