@@ -11,15 +11,12 @@ export interface MetadataFields {
   title: string;
   hidden: boolean;
   dueDate: string;
-<<<<<<< HEAD
   author: string;
   difficulty: string;
   isShort: boolean;
   hasTemplate: boolean;
   isQuiz: boolean;
-=======
   fileName: string;
->>>>>>> 27b3ade6a1b07c417c826b7eaeb675aec9080486
 }
 
 export interface CodeEditorFields {
@@ -87,15 +84,12 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     dueDate: new Date().toISOString(),
-<<<<<<< HEAD
     author: "",
     difficulty: "",
     isShort: false,
     hasTemplate: false,
     isQuiz: false,
-=======
     fileName: "example.cpp",
->>>>>>> 27b3ade6a1b07c417c826b7eaeb675aec9080486
   },
   problem: {
     problemStatement: "",
@@ -255,15 +249,12 @@ export const problemEditorContainerSlice = createSlice({
         title: action.payload.title,
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
-<<<<<<< HEAD
         author: action.payload.author,
         difficulty: action.payload.difficulty,
         isShort: action.payload.isShort,
         hasTemplate: action.payload.hasTemplate,
         isQuiz: action.payload.isQuiz,
-=======
         fileName: action.payload.fileName,
->>>>>>> 27b3ade6a1b07c417c826b7eaeb675aec9080486
       };
       state.codeEditor = {
         code: { ...action.payload.code },
