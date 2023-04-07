@@ -19,6 +19,7 @@ import {
   setMainSidebarHidden,
   setContentSidebarHidden,
 } from "state/interfaceControls.slice";
+import Link from "next/link";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -154,17 +155,21 @@ const SideNavigation = ({
     >
       {/* Logo */}
       <div className="flex items-center h-16 w-full bg-gradient-to-tl from-nav-darker dark:from-[#212b3b] dark:via-[#212b3b] dark:to-emerald-700/40 via-nav-darker to-emerald-900/40 px-3">
-        <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
-          <EdugatorLogo />
-        </div>
+        <Link href="/">
+          <div className="flex items-center cursor-pointer">
+            <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center mr-2">
+              <EdugatorLogo />
+            </div>
 
-        <h1
-          className={`text-white font-ambit text-xl mt-1 overflow-hidden text-ellipsis transition-opacity ${
-            !mainSidebarHidden ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          Edugator
-        </h1>
+            <h1
+              className={`text-white font-ambit text-xl mt-1 overflow-hidden text-ellipsis transition-opacity ${
+                !mainSidebarHidden ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Edugator
+            </h1>
+          </div>
+        </Link>
       </div>
       {/* Main Sidebar Content */}
       <div className="h-full flex flex-col items-center justify-between py-4 w-full px-4">
