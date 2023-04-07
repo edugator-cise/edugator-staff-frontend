@@ -5,24 +5,23 @@ import React, { ReactNode } from "react";
 const teamData = [
   {
     name: "Dustin Karp",
-    image: "/images/avatars/dustin.png",
+    image: "/images/avatars/medium/dustin.png",
     description: "Senior, University of Florida (UF)",
     role: "Designer & Frontend Lead.",
   },
   {
     name: "Marc Diaz",
-    image: "/images/avatars/marc.png",
+    image: "/images/avatars/medium/marc.png",
     description: "UF Alumni",
     role: "Co-Founder & Infrastructure Lead.",
   },
   {
     name: "Amanpreet Kapoor",
-    image: "/images/avatars/aman.png",
+    image: "/images/avatars/medium/aman.png",
     description: "Instructional Assistant Professor, UF",
     role: "Co-Founder & Learning Lead.",
   },
 ];
-
 
 const content_contributors = [
   {
@@ -42,7 +41,7 @@ const content_contributors = [
   },
   {
     name: "Robert Casanova",
-  }
+  },
 ];
 
 const platform_contributors = [
@@ -174,56 +173,63 @@ const Team = () => {
           </div>
         ))}
       </div>
-      <br/>
-      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
-        Platform Contributors.
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
-        {platform_contributors.map((member) => (
-          <div key={member.name}>
-            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
-              <span>{member.name}</span>
-            </h1>
+      <div className="flex flex-col space-y-8 !mt-16">
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-2xl font-semibold text-nav-darkest font-ambit text-left pl-4">
+            Platform Contributors
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+            {platform_contributors.map((member) => (
+              <div key={member.name}>
+                <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+                  <span>{member.name}</span>
+                </h1>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <br/>
-      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
-        Research Contributors.
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
-        {research_contributors.map((member) => (
-          <div key={member.name}>
-            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
-              <span>{member.name}</span>
-            </h1>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-2xl font-semibold text-nav-darkest font-ambit text-left pl-4">
+            Research Contributors
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+            {research_contributors.map((member) => (
+              <div key={member.name}>
+                <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+                  <span>{member.name}</span>
+                </h1>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <br/>
-      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
-        Content Contributors.
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
-        {content_contributors.map((member) => (
-          <div key={member.name}>
-            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
-              <span>{member.name}</span>
-            </h1>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-2xl font-semibold text-nav-darkest font-ambit text-left pl-4">
+            Content Contributors
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8">
+            {content_contributors.map((member) => (
+              <div key={member.name}>
+                <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+                  <span>{member.name}</span>
+                </h1>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
-        Supporters.
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-x-8">
-        {platform_supporters.map((member) => (
-          <div key={member.name}>
-            <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
-              <span>{member.name}</span>
-            </h1>
+        </div>
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-2xl font-semibold text-nav-darkest font-ambit text-left pl-4">
+            Supporters
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-x-8">
+            {platform_supporters.map((member) => (
+              <div key={member.name}>
+                <h1 className="text-base p-4 flex flex-col items-start text-nav-darkest font-ambit">
+                  <span>{member.name}</span>
+                </h1>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
