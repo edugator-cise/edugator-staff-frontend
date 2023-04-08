@@ -9,7 +9,6 @@ import {
   createNavStructure,
   generateFileName,
   handleDownload,
-  parseFile,
 } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
@@ -28,6 +27,7 @@ interface CodeEditorProps {
   isSubmissionRunning: boolean;
   handleCodeReset: (code: string) => void;
   editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
+  parseFile: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   runCode: ({
     code,
     stdin,
@@ -98,6 +98,7 @@ export const CodeEditorView = ({
   submitCode,
   onMount,
   handleCodeReset,
+  parseFile,
 }: CodeEditorProps) => {
   const router = useRouter();
 
@@ -187,10 +188,12 @@ export const CodeEditorView = ({
             </ButtonToolTip>
           </a>
           <input
-            style={{ display: "none" }}
+            className="fixed right-full bottom-full"
             ref={hiddenFileInput}
             type="file"
-            onChange={(e) => parseFile(e, editorRef)}
+            onChange={(e) => {
+              parseFile(e);
+            }}
           />
           <ButtonToolTip label="Choose File">
             <button

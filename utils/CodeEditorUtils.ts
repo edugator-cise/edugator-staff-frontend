@@ -57,23 +57,6 @@ export const handleDownload = (
   document.body.removeChild(anchor);
 };
 
-export const parseFile = async (
-  event: React.ChangeEvent<HTMLInputElement>,
-  editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>
-) => {
-  event.preventDefault();
-  const reader = new FileReader();
-  if (event.target && event.target.files) {
-    reader.readAsText(event.target.files[0]);
-    reader.onload = async (event) => {
-      const text = event.target?.result;
-      if (editorRef.current) {
-        editorRef.current.setValue(text as string);
-      }
-    };
-  }
-};
-
 export const judge0Validator = ({
   data,
 }: {

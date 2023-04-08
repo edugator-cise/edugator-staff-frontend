@@ -105,16 +105,25 @@ export default function CodeEditor() {
   };
 
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    // this gets called when mobile state changes.
-    // So, we need to keep a duplicate of the code in the editor and replace it when the mobile state changes
-    /* if (editorRef.current) {
-      editorRef.current = editor;
-      console.log("mmm", editorCode);
-      editorRef.current.setValue(editorCode);
-    } */
     editorRef.current = editor;
-    /* console.log("mmm", editorCode); */
-    console.log(editorRef);
+  };
+
+  const parseFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("parseFile Start");
+    event.preventDefault();
+    const reader = new FileReader();
+    if (event.target && event.target.files) {
+      reader.readAsText(event.target.files[0]);
+      reader.onload = async (event) => {
+        const text = event.target?.result;
+        console.log("text", text);
+        editorRef.current?.setValue(text as string);
+      };
+      // Reset the input value after reading the file
+      if (event.target) {
+        (event.target as HTMLInputElement).value = "";
+      }
+    }
   };
 
   if (status === FetchStatus.loading) {
@@ -181,6 +190,7 @@ export default function CodeEditor() {
                     </div>
                   ) : panel === "editor" ? (
                     <CodeEditorView
+                      parseFile={parseFile}
                       handleCodeReset={handleCodeReset}
                       editorRef={editorRef}
                       onMount={handleEditorMount}
@@ -240,6 +250,7 @@ export default function CodeEditor() {
             <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
               <div className="w-full h-full">
                 <CodeEditorView
+                  parseFile={parseFile}
                   handleCodeReset={handleCodeReset}
                   editorRef={editorRef}
                   onMount={handleEditorMount}
