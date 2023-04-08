@@ -86,8 +86,6 @@ const MobileHeader = ({
       : activeItem.lessonName
     : "Select Content";
 
-  console.log(activeItem);
-
   return (
     <div className="flex flex-col items-center justify-start w-full h-12">
       <div className="w-full flex items-center justify-between bg-nav-darker px-2 py-1">
