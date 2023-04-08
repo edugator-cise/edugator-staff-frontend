@@ -43,10 +43,11 @@ const Hero = () => {
           </h1>
         </span>
         <p className="max-w-2xl font-inter text-lg text-center text-white/70 leading-8">
-          Edugator is a platform where any student can practice computing
-          concepts with rich immediate feedback. Foster engagment and mastery
-          for your course with a platform that is built for learning and
-          teaching.
+          Edugator is a platform where any UF student can practice computing
+          concepts with rich immediate feedback. The platform is designed to promote 
+          experiential life-long learning for computing learners.
+           {/* and providing powerful
+          tools for computing instructors that improve learning of computing. */}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center space-x-8 z-[1]">
           <GradientButton text="Start Coding" href="/code" />
