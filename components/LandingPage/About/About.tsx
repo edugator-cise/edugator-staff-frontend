@@ -8,22 +8,28 @@ import { useState } from "react";
 import { useAnimation, motion as m, AnimationControls } from "framer-motion";
 
 const aboutData = [
-  {
-    title: "Build",
-    description:
-      "Build your curriculum and set your students up for success with our interactive instruction portal.",
-    illustration: <BuildIllustration />,
-  },
-  {
+  // {
+  //   title: "Build",
+  //   description:
+  //     "Build your curriculum and set your students up for success with our interactive instruction portal.",
+  //   illustration: <BuildIllustration />,
+  // },
+    {
     title: "Learn",
     description:
       "Learn the fundamentals of computer science with our interactive lessons and practice exercises.",
     illustration: <LearnIllustration />,
   },
   {
+    title: "Code",
+    description:
+      "Code your solution to short programming concepts and receive immediate feedback.",
+    illustration: <BuildIllustration />,
+  },
+  {
     title: "Practice",
     description:
-      "Practice what you've learned with course-specific exercises and leetcode-style problems.",
+      "Practice what you've learned with course-specific exercises and technical interview style problems.",
     illustration: <PracticeIllustration />,
   },
 ];
@@ -155,11 +161,11 @@ const About = () => {
               className="font-ambit text-3xl font-semibold md:text-4xl lg:text-4xl 
                   !max-w-xl text-center pb-6 sm:max-w-xl md:max-w-3xl lg:max-w-4xl text-nav-darkest"
             >
-              We manage your course content, so you can focus on teaching.
+              We manage your course content, so you can focus on learning.
             </h2>
             <p className="font-inter sm:max-w-xl md:max-w-3xl lg:max-w-4xl text-nav-darkest/80 text-center">
-              We provide a platform for instructors to build and manage their
-              course content.
+              We provide a platform for students to learn computing concepts.
+              {/* instructors to build and manage their course content. */}
             </p>
           </div>
         </div>
