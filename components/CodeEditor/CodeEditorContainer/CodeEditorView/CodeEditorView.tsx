@@ -26,7 +26,7 @@ interface CodeEditorProps {
   currentProblem: IProblem;
   stdin: string;
   isSubmissionRunning: boolean;
-  handleCodeChange: (code: string) => void;
+  handleCodeReset: (code: string) => void;
   editorRef: React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
   runCode: ({
     code,
@@ -97,7 +97,7 @@ export const CodeEditorView = ({
   runCode,
   submitCode,
   onMount,
-  handleCodeChange,
+  handleCodeReset,
 }: CodeEditorProps) => {
   const router = useRouter();
 
@@ -139,13 +139,7 @@ export const CodeEditorView = ({
   }
 
   const handleReset = () => {
-    console.log(code);
-    setCurrentCode(code);
-    handleCodeChange(code);
-    if (editorRef.current) {
-      console.log(code);
-      editorRef?.current?.setValue(code);
-    }
+    handleCodeReset(code);
   };
 
   /* window.addEventListener("resize", () => {
@@ -246,7 +240,6 @@ export const CodeEditorView = ({
           defaultValue={code}
           onChange={(value) => {
             setCurrentCode(value as string);
-            handleCodeChange(value as string);
           }}
           options={{
             minimap: {

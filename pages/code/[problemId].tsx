@@ -50,7 +50,7 @@ export default function CodeEditor() {
   const locationState = router.asPath;
 
   const [stdin, setStdin] = useState<string>("");
-  const [editorCode, setEditorCode] = useState<string>("");
+  /* const [editorCode, setEditorCode] = useState<string>(""); */
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileActivePanel, setMobileActivePanel] =
     useState<MobilePanel>("editor");
@@ -94,14 +94,14 @@ export default function CodeEditor() {
     if (defaultStdin) {
       setStdin(defaultStdin);
     }
-    if (currentProblem) {
+    /* if (currentProblem) {
       setEditorCode(currentProblem?.code?.body);
-    }
+    } */
   }, [currentProblem]);
 
-  const handleCodeChange = (newCode: string) => {
-    console.log("code changed", newCode);
-    setEditorCode(newCode);
+  const handleCodeReset = (newCode: string) => {
+    editorRef.current?.setValue(newCode);
+    /* setEditorCode(newCode); */
   };
 
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -113,7 +113,7 @@ export default function CodeEditor() {
       editorRef.current.setValue(editorCode);
     } */
     editorRef.current = editor;
-    console.log("mmm", editorCode);
+    /* console.log("mmm", editorCode); */
     console.log(editorRef);
   };
 
@@ -181,7 +181,7 @@ export default function CodeEditor() {
                     </div>
                   ) : panel === "editor" ? (
                     <CodeEditorView
-                      handleCodeChange={handleCodeChange}
+                      handleCodeReset={handleCodeReset}
                       editorRef={editorRef}
                       onMount={handleEditorMount}
                       isSubmissionRunning={isSubmissionRunning}
@@ -240,7 +240,7 @@ export default function CodeEditor() {
             <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
               <div className="w-full h-full">
                 <CodeEditorView
-                  handleCodeChange={handleCodeChange}
+                  handleCodeReset={handleCodeReset}
                   editorRef={editorRef}
                   onMount={handleEditorMount}
                   isSubmissionRunning={isSubmissionRunning}
