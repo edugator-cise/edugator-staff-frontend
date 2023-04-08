@@ -176,14 +176,13 @@ const SideNavigation = ({
         {/* Top Group */}
         <section className="w-full flex flex-col space-y-4">
           {/* Class Group */}
-          <div
+          {/* <div
             className={`flex flex-col space-y-3 transition-all rounded-md ${
               !mainSidebarHidden
                 ? "p-2 bg-nav-darkest ring-2 ring-[#060b14]"
                 : "p-0"
             }`}
           >
-            {/* Class List */}
             {classes.map((item, index) => (
               <NavLinkTooltip
                 text={`${item.name}: ${item.course}`}
@@ -205,7 +204,6 @@ const SideNavigation = ({
                       : ""
                   } ${!mainSidebarHidden ? "rounded-sm" : "rounded-md"}`}
                 >
-                  {/* Class Icon */}
                   <div className="!max-h-[48px] !max-w-[48px] h-full !min-w-[40px]">
                     <AspectRatio.Root
                       ratio={1 / 1}
@@ -215,7 +213,6 @@ const SideNavigation = ({
                       <Image src={item.icon} layout="fill" objectFit="cover" />
                     </AspectRatio.Root>
                   </div>
-                  {/* Class Info */}
                   <section
                     className={`flex ml-3 justify-center h-full flex-col whitespace-nowrap overflow-hidden text-left leading-none transition-opacity ${
                       !mainSidebarHidden ? "opacity-100" : "opacity-0"
@@ -254,7 +251,7 @@ const SideNavigation = ({
               </div>
             </NavLinkTooltip>
           </div>
-          <Divider />
+          <Divider />*/}
           {/* Button Group */}
           <div className="flex flex-col space-y-2">
             {navLinks.map((link, i) => {

@@ -40,7 +40,12 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     }
   }, []);
   return (
-    <Box minHeight="100vh" display="flex" flexDirection="column">
+    <Box
+      minHeight="100vh"
+      display="flex"
+      flexDirection="column"
+      className="bg-slate-50"
+    >
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" component="h1">
@@ -79,6 +84,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
             sx={{
               flexGrow: 1,
             }}
+            className="text-nav-darkest"
           >
             {pageTitle}
           </Typography>

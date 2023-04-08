@@ -114,7 +114,10 @@ export default function LoginPage(): React.ReactElement {
                     type="submit"
                     variant="contained"
                     size="large"
-                    color="secondary"
+                    color="primary"
+                    sx={{
+                      backgroundColor: "#3f51b5 !important",
+                    }}
                   >
                     Submit
                   </LoginButton>

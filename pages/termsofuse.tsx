@@ -724,7 +724,9 @@ function TermsOfUse() {
         <b>Phone: (352) 530-9138</b>
         <br />
         <br />
-        <Link href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</Link>
+        <Link href="mailto:kapooramanpreet@ufl.edu">
+          kapooramanpreet@ufl.edu
+        </Link>
         <br />
         These terms of use were created using{" "}
         <Link href="https://termly.io/products/terms-and-conditions-generator/">

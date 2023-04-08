@@ -59,7 +59,9 @@ function PrivacyPolicy() {
           privacy. If you have any questions or concerns about this privacy
           notice, or our practices with regards to your personal information,
           please contact us at{" "}
-          <Link href="mailto:csinfraweb@gmail.com">csinfraweb@gmail.com</Link>
+          <Link href="mailto:kapooramanpreet@ufl.edu">
+            kapooramanpreet@ufl.edu
+          </Link>
           <br />
           <br />
           When you visit our website https://cise-dev.herokuapp.com (the "
@@ -297,8 +299,8 @@ function PrivacyPolicy() {
               and consent to such minor dependent’s use of the Website. If you
               become aware of any data we may have collected from children under
               age 18, please contact us at{" "}
-              <Link href="mailto:csinfraweb@gmail.com">
-                csinfraweb@gmail.com
+              <Link href="mailto:kapooramanpreet@ufl.edu">
+                kapooramanpreet@ufl.edu
               </Link>
               .
               <br />
@@ -413,8 +415,8 @@ function PrivacyPolicy() {
               <br />
               If you have questions or comments about this notice, you may email
               us at{" "}
-              <Link href="mailto:csinfraweb@gmail.com">
-                csinfraweb@gmail.com
+              <Link href="mailto:kapooramanpreet@ufl.edu">
+                kapooramanpreet@ufl.edu
               </Link>
               .
               <br />

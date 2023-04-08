@@ -37,11 +37,11 @@ const FeaturesLinks = () => [
     href: "/#about",
     id: "about",
   },
-  {
+  /* {
     name: "AI Features",
     href: "/#ai",
     id: "ai",
-  },
+  }, */
 ];
 
 const AboutLinks = () => [
@@ -51,7 +51,7 @@ const AboutLinks = () => [
   },
   {
     name: "Contact Us",
-    href: "mailto:csinfraweb@gmail.com",
+    href: "mailto:kapooramanpreet@ufl.edu",
   },
 ];
 
