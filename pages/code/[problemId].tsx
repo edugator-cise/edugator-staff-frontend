@@ -145,7 +145,7 @@ export default function CodeEditor() {
   return (
     <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest relative">
       {isMobile ? (
-        <div className="flex flex-col w-full max-h-full h-full divide-y divide-slate-300 dark:divide-slate-700">
+        <div className="flex flex-col w-full h-full max-h-full divide-y divide-slate-300 dark:divide-slate-700">
           {mobilePanels.map((panel) => {
             return (
               <React.Fragment key={panel}>

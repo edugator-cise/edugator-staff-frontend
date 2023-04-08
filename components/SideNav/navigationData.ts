@@ -51,9 +51,9 @@ export const navLinks: NavLink[] = [
     id: "problems",
     toggleExercises: true,
   },
-  {
+  /* {
     icon: icons.bug,
     text: "Bug Bounty",
     id: "bugbounty",
-  },
+  }, */
 ];

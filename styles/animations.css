@@ -129,6 +129,62 @@
   animation: fadeOut 150ms ease-in;
 }
 
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.DialogContent[data-state="open"] {
+  animation: contentShow 150ms ease-out;
+}
+
+.DialogContent[data-state="closed"] {
+  animation: contentHide 150ms ease-in;
+}
+
+.DialogOverlay[data-state="open"] {
+  animation: overlayFadeIn 150ms ease-out;
+}
+
+.DialogOverlay[data-state="closed"] {
+  animation: overlayFadeOut 150ms ease-in;
+}
+
 /*  .PopoverContent {
     animation: scaleIn 150mss ease-out;
   }

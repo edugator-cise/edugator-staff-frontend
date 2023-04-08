@@ -19,6 +19,7 @@ export type ContentType = "problems" | "lessons" | "all";
 
 const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   const [activeContent, setActiveContent] = useState<ContentType>("all");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -31,11 +32,50 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 
   const { mobileView, tabletView, laptopView } = useDeviceSize();
 
+  const [dropdownHeights, setDropdownHeights] = React.useState<
+    Record<number, number>
+  >({});
+
+  useEffect(() => {
+    calculateDropdownHeights(activeContent);
+  }, [activeContent]);
+
+  const calculateDropdownHeights = (activeContent: ContentType) => {
+    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
+    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
+    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
+    const dropdownHeights: Record<number, number> = {};
+    const dropdowns = document.getElementsByClassName("dropdown");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const allHeight = Array.from(
+        document.getElementsByClassName(`${i}-content`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const lessonHeight = Array.from(
+        document.getElementsByClassName(`${i}-lesson`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const problemHeight = Array.from(
+        document.getElementsByClassName(`${i}-problem`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      if (activeContent === "all") {
+        dropdownHeights[i] = allHeight;
+      } else if (activeContent === "lessons") {
+        dropdownHeights[i] = lessonHeight;
+      } else if (activeContent === "problems") {
+        dropdownHeights[i] = problemHeight;
+      }
+    }
+    setDropdownHeights(dropdownHeights);
+  };
+
   useEffect(() => {
     if (!mobileView && !tabletView && !laptopView) {
       dispatch(setContentSidebarHidden(false));
       dispatch(setMainSidebarHidden(mainSidebarHidden));
     } else {
+      setMobileNavOpen(false);
       dispatch(setContentSidebarHidden(true));
       dispatch(setMainSidebarHidden(true));
     }
@@ -122,6 +162,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
             className={`mobile:left-auto !absolute top-0 transition-all h-full`}
           >
             <ContentSidebar
+              dropdownHeights={dropdownHeights}
               setActiveContent={setActiveContent}
               activeContent={activeContent}
             />
@@ -130,7 +171,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Content Holder */}
           <div
             style={{
-              paddingTop: mobileView ? 96 : 0,
+              paddingTop: mobileView ? 56 : 0,
               paddingLeft: laptopView ? laptopContentMargin() : contentMargin(),
             }}
             className={`relative w-full h-full transition-all flex flex-col ${
@@ -145,7 +186,13 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
               }}
               className="absolute left-0 transition-all w-full"
             >
-              <MobileHeader />
+              <MobileHeader
+                mobileNavOpen={mobileNavOpen}
+                setMobileNavOpen={setMobileNavOpen}
+                dropdownHeights={dropdownHeights}
+                setActiveContent={setActiveContent}
+                activeContent={activeContent}
+              />
             </div>
             <SidebarHideOverlay
               hidden={contentSidebarHidden && mainSidebarHidden}

@@ -30,48 +30,13 @@ import AnimateHeight from "react-animate-height";
 const ContentSidebar = ({
   activeContent,
   setActiveContent,
+  dropdownHeights,
 }: {
   activeContent: ContentType;
   setActiveContent: (activeContent: ContentType) => void;
+  dropdownHeights: Record<number, number>;
 }) => {
   const [openModules, setOpenModules] = React.useState<string[]>([]);
-  const [dropdownHeights, setDropdownHeights] = React.useState<
-    Record<number, number>
-  >({});
-
-  useEffect(() => {
-    calculateDropdownHeights(activeContent);
-  }, [activeContent]);
-
-  const calculateDropdownHeights = (activeContent: ContentType) => {
-    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
-    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
-    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
-    const dropdownHeights: Record<number, number> = {};
-    const dropdowns = document.getElementsByClassName("dropdown");
-    for (let i = 0; i < dropdowns.length; i++) {
-      const allHeight = Array.from(
-        document.getElementsByClassName(`${i}-content`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      const lessonHeight = Array.from(
-        document.getElementsByClassName(`${i}-lesson`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      const problemHeight = Array.from(
-        document.getElementsByClassName(`${i}-problem`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      if (activeContent === "all") {
-        dropdownHeights[i] = allHeight;
-      } else if (activeContent === "lessons") {
-        dropdownHeights[i] = lessonHeight;
-      } else if (activeContent === "problems") {
-        dropdownHeights[i] = problemHeight;
-      }
-    }
-    setDropdownHeights(dropdownHeights);
-  };
 
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
@@ -347,7 +312,7 @@ const ContentSidebar = ({
   );
 };
 
-const HiddenSizingItems = ({
+export const HiddenSizingItems = ({
   navigation,
   activeContent,
 }: {
