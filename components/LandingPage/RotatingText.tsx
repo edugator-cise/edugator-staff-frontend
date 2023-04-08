@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TextTransition, { presets } from "react-text-transition";
 
-const TEXTS = ["DataStructures", "Algorithms", "C++", "Trees", "Sets", "Maps", "..."];
+const TEXTS = ["Algorithms", "C++", "Trees", "Sets", "Maps"];
 
 const RotatingText = () => {
   const [index, setIndex] = useState(0);
