@@ -27,9 +27,9 @@ const Instructors = () => {
           <AuthoringToolsFeature />
           <ProblemBanksFeature />
           <ManageTeamsFeature />
-          <CourseAnalyticsFeature />
+          {/* <CourseAnalyticsFeature />
           <SSOSupportFeature />
-          <PlaigarismCheckFeature />
+          <PlaigarismCheckFeature /> */}
         </ul>
       </div>
     </section>
