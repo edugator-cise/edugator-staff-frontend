@@ -6,6 +6,13 @@ import { styled } from "@mui/material/styles";
 interface Props {
   problemTitle: string;
   problemStatement: string;
+  problemAuthor: string;
+  problemDifficulty: string;
+  problemDateCreated: Date;
+  problemLastModified: Date;
+  problemIsShort: boolean;
+  problemHasTemplate: boolean;
+  problemIsQuiz: boolean;
 }
 
 const ProblemDescriptionPaper = styled("div")(
