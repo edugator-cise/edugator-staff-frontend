@@ -100,17 +100,21 @@ export default function CodeEditor() {
   }, [currentProblem]);
 
   const handleCodeChange = (newCode: string) => {
+    console.log("code changed", newCode);
     setEditorCode(newCode);
   };
 
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     // this gets called when mobile state changes.
     // So, we need to keep a duplicate of the code in the editor and replace it when the mobile state changes
-    if (editorRef.current) {
+    /* if (editorRef.current) {
       editorRef.current = editor;
       console.log("mmm", editorCode);
       editorRef.current.setValue(editorCode);
-    }
+    } */
+    editorRef.current = editor;
+    console.log("mmm", editorCode);
+    console.log(editorRef);
   };
 
   if (status === FetchStatus.loading) {

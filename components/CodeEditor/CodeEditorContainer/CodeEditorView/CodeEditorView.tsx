@@ -139,16 +139,20 @@ export const CodeEditorView = ({
   }
 
   const handleReset = () => {
+    console.log(code);
+    setCurrentCode(code);
+    handleCodeChange(code);
     if (editorRef.current) {
-      editorRef.current.setValue(code);
+      console.log(code);
+      editorRef?.current?.setValue(code);
     }
   };
 
-  window.addEventListener("resize", () => {
+  /* window.addEventListener("resize", () => {
     if (editorRef.current) {
       editorRef.current.layout();
     }
-  });
+  }); */
 
   const handleChooseFile = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -252,7 +256,7 @@ export const CodeEditorView = ({
           onMount={onMount}
         />
       </div>
-      <div className="w-full px-3 pb-3 flex items-center justify-between bg-slate-100 dark:bg-nav-darkest">
+      <div className="w-full px-3 pb-3 flex items-center justify-end bg-slate-100 dark:bg-nav-darkest">
         {/* <button
           disabled={isSubmissionRunning}
           onClick={() => {}}
