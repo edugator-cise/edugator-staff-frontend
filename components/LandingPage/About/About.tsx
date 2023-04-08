@@ -24,13 +24,13 @@ const aboutData = [
     title: "Code",
     description:
       "Code your solution to short programming concepts and receive immediate feedback.",
-    illustration: <BuildIllustration />,
+    illustration: <PracticeIllustration />,
   },
   {
     title: "Practice",
     description:
       "Practice what you've learned with course-specific exercises and technical interview style problems.",
-    illustration: <PracticeIllustration />,
+    illustration: <BuildIllustration />,
   },
 ];
 
