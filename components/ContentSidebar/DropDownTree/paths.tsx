@@ -15,8 +15,6 @@ export const ModulePath = ({ moduleOpen }: { moduleOpen: boolean }) => (
       stroke="#42454F"
       strokeWidth="4"
       strokeLinecap="round"
-      strokeDasharray={moduleOpen ? "1000" : "0"}
-      strokeDashoffset={moduleOpen ? "1000" : "0"}
       style={
         moduleOpen
           ? {

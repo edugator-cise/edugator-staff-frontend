@@ -24,6 +24,8 @@ import { AccordionContent } from "utils/radixTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
 import { setContentSidebarHidden } from "state/interfaceControls.slice";
+import { AnimatePresence, motion as m } from "framer-motion";
+import AnimateHeight from "react-animate-height";
 
 const ContentSidebar = ({
   activeContent,
@@ -33,6 +35,43 @@ const ContentSidebar = ({
   setActiveContent: (activeContent: ContentType) => void;
 }) => {
   const [openModules, setOpenModules] = React.useState<string[]>([]);
+  const [dropdownHeights, setDropdownHeights] = React.useState<
+    Record<number, number>
+  >({});
+
+  useEffect(() => {
+    calculateDropdownHeights(activeContent);
+  }, [activeContent]);
+
+  const calculateDropdownHeights = (activeContent: ContentType) => {
+    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
+    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
+    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
+    const dropdownHeights: Record<number, number> = {};
+    const dropdowns = document.getElementsByClassName("dropdown");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const allHeight = Array.from(
+        document.getElementsByClassName(`${i}-content`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const lessonHeight = Array.from(
+        document.getElementsByClassName(`${i}-lesson`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const problemHeight = Array.from(
+        document.getElementsByClassName(`${i}-problem`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      if (activeContent === "all") {
+        dropdownHeights[i] = allHeight;
+      } else if (activeContent === "lessons") {
+        dropdownHeights[i] = lessonHeight;
+      } else if (activeContent === "problems") {
+        dropdownHeights[i] = problemHeight;
+      }
+    }
+    setDropdownHeights(dropdownHeights);
+  };
 
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
@@ -104,131 +143,191 @@ const ContentSidebar = ({
         ) : status === FetchStatus.failed ? (
           <ErrorState />
         ) : (
-          <Accordion.Root
-            onValueChange={(value) => {
-              //value is array of open modules
-              setOpenModules(value);
-            }}
-            className="w-full font-dm"
-            type="multiple"
-          >
-            <div className="w-full h-px bg-slate-500"></div>
-            {navigation &&
-              navigation.map((value: INavigationItem, primaryIndex: number) => {
-                const itemCount = value.problems.length + value.lessons.length; // number of total problems + lessons in a module
-                const isEmpty = itemCount === 0; // if module is empty
-                const allContent =
-                  itemCount === 0 ? [] : [...value.problems, ...value.lessons]; // all problems and lessons in a module
-                const isActiveModule = allContent.some(
-                  (item) => item._id === activeId // if module contains the current active content
-                );
+          <>
+            <Accordion.Root
+              onValueChange={(value) => {
+                //value is array of open modules
+                setOpenModules(value);
+              }}
+              className="w-full font-dm"
+              type="multiple"
+            >
+              <div className="w-full h-px bg-slate-500"></div>
+              {navigation &&
+                navigation.map(
+                  (value: INavigationItem, primaryIndex: number) => {
+                    const filterContent = (
+                      contentList: INavigationItem,
+                      activeContent: "problems" | "lessons" | "all"
+                    ) => {
+                      if (activeContent === "problems") {
+                        return contentList.problems;
+                      } else if (activeContent === "lessons") {
+                        return contentList.lessons;
+                      } else {
+                        return [
+                          ...contentList.problems,
+                          ...contentList.lessons,
+                        ];
+                      }
+                    };
 
-                return (
-                  <Accordion.Item
-                    value={value.name}
-                    key={primaryIndex}
-                    className="border-t border-slate-700 last:border-b group"
-                  >
-                    <Accordion.Trigger className="pl-[0.875rem] overflow-hidden relative pr-4 group py-3 w-full flex items-center justify-between">
-                      <div className="flex items-center space-x-2 ">
-                        <div className="absolute left-7 top-[50%] dash group-data-[state=open]:dashreverse group-data-[state=closed]:dashreverse transition-transform duration-500 origin-bottom">
-                          {!isEmpty ? (
-                            <ModulePath
-                              moduleOpen={openModules.includes(value.name)}
-                            />
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                        <div
-                          className={`w-4 h-4 border-2 z-10 border-slate-600 group-data-[state=open]:border-white transition-colors duration-500 bg-nav-dark rounded-full ${
-                            isActiveModule ? "!border-emerald-500" : ""
-                          }`}
-                        ></div>
-                        <p className="font-medium text-left text-sm text-white">{`${
-                          primaryIndex + 1
-                        }. ${value.name}`}</p>
-                      </div>
-                      <ChevronDownIcon
-                        className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
-                        aria-hidden
-                      />
-                    </Accordion.Trigger>
-                    <AccordionContent className="AccordionContent">
-                      <div className="flex flex-col">
-                        {isEmpty ? (
-                          <div
-                            className={`relative flex px-8 items-center cursor-pointer justify-center `}
-                          >
-                            <p className="text-slate-400 text-sm py-3 w-full line text-center">
-                              No Content here :&#40;
-                            </p>
+                    const filteredContent = filterContent(value, activeContent); // Get content based on activeContent parameter
+                    const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
+                    const isEmpty = itemCount === 0; // if module is empty
+                    const allContent = isEmpty ? [] : filteredContent; // all problems and lessons in a module based on activeContent
+                    const isActiveModule = allContent.some(
+                      (item) => item._id === activeId // if module contains the current active content
+                    );
+
+                    return (
+                      <Accordion.Item
+                        value={value.name}
+                        key={primaryIndex}
+                        className="border-t border-slate-700 last:border-b group dropdown"
+                      >
+                        <Accordion.Trigger
+                          className={`pl-[0.875rem] relative pr-4 group py-3 w-full flex items-center justify-between overflow-hidden`}
+                        >
+                          <div className="flex items-center">
+                            <AnimatePresence>
+                              {!isEmpty ? (
+                                <m.div
+                                  key={`${value.name}-${primaryIndex}`}
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  className="absolute left-7 top-[50%] dash group-data-[state=open]:dashreverse group-data-[state=closed]:dashreverse origin-bottom"
+                                >
+                                  <ModulePath
+                                    moduleOpen={openModules.includes(
+                                      value.name
+                                    )}
+                                  />
+                                </m.div>
+                              ) : (
+                                <></>
+                              )}
+                            </AnimatePresence>
+                            <div
+                              className={`w-4 h-4 mx-2 border-2 z-10 border-slate-600 group-data-[state=open]:border-white transition-colors duration-500 bg-nav-dark rounded-full ${
+                                isActiveModule ? "!border-emerald-500" : ""
+                              }`}
+                            ></div>
+                            <p className="font-medium text-left text-sm text-white">{`${
+                              primaryIndex + 1
+                            }. ${value.name}`}</p>
                           </div>
-                        ) : (
-                          allContent.map(
-                            (
-                              item: IProblemItem | ILessonItem,
-                              secondaryIndex: number
-                            ) => {
-                              const id = item._id;
-                              //check type of item
-                              const type =
-                                "problemName" in item ? "problem" : "lesson";
-                              const name =
-                                "problemName" in item
-                                  ? item.problemName
-                                  : item.lessonName;
-                              const urlPath =
-                                type === "problem" ? "code" : "learn";
-
-                              return (
-                                <Link href={`/${urlPath}/${id}`} key={id}>
-                                  <div
-                                    key={`${primaryIndex}-${secondaryIndex}`}
-                                    className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start `}
-                                  >
-                                    <div className="absolute left-7 bottom-[40%]">
-                                      <ItemPath
-                                        moduleOpen={openModules.includes(
-                                          value.name
-                                        )}
-                                        index={secondaryIndex}
-                                      />
-                                    </div>
-                                    <div
-                                      className={`absolute w-[6px] h-[6px] rounded-full top-1/2 -translate-y-1/2 right-5 ${
-                                        id === activeId
-                                          ? "bg-emerald-500"
-                                          : "bg-slate-600"
-                                      }`}
-                                    ></div>
-                                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                                    <p
-                                      style={{
-                                        //clamp lines to 3
-                                        display: "-webkit-box",
-                                        WebkitLineClamp: 3,
-                                        WebkitBoxOrient: "vertical",
-                                        overflow: "hidden",
-                                      }}
-                                      className="text-white text-sm py-3 w-full line"
-                                    >
-                                      {`${primaryIndex + 1}.${
-                                        secondaryIndex + 1
-                                      } ${name}`}
-                                    </p>
-                                  </div>
-                                </Link>
-                              );
+                          <ChevronDownIcon
+                            className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
+                            aria-hidden
+                          />
+                        </Accordion.Trigger>
+                        <AccordionContent className="AccordionContent">
+                          <AnimateHeight
+                            contentClassName="h-full"
+                            height={
+                              allContent.length == 0
+                                ? 44
+                                : dropdownHeights[primaryIndex]
                             }
-                          )
-                        )}
-                      </div>
-                    </AccordionContent>
-                  </Accordion.Item>
-                );
-              })}
-          </Accordion.Root>
+                            className="flex flex-col"
+                          >
+                            <AnimatePresence exitBeforeEnter>
+                              {isEmpty ? (
+                                <m.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  className={`relative flex px-8 items-center cursor-pointer justify-center `}
+                                >
+                                  <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                                    No Content here :&#40;
+                                  </p>
+                                </m.div>
+                              ) : (
+                                allContent.map(
+                                  (
+                                    item: IProblemItem | ILessonItem,
+                                    secondaryIndex: number
+                                  ) => {
+                                    const id = item._id;
+                                    //check type of item
+                                    const type =
+                                      "problemName" in item
+                                        ? "problem"
+                                        : "lesson";
+                                    const name =
+                                      "problemName" in item
+                                        ? item.problemName
+                                        : item.lessonName;
+                                    const urlPath =
+                                      type === "problem" ? "code" : "learn";
+
+                                    return (
+                                      <Link href={`/${urlPath}/${id}`} key={id}>
+                                        <m.div
+                                          initial={{ opacity: 0, x: 10 }}
+                                          animate={{
+                                            opacity: 1,
+                                            x: 0,
+                                            transition: {
+                                              delay: secondaryIndex * 0.1,
+                                            },
+                                          }}
+                                          exit={{ opacity: 0 }}
+                                          key={`${primaryIndex}-${secondaryIndex}`}
+                                          className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start`}
+                                        >
+                                          <div className="absolute left-7 bottom-[40%]">
+                                            <ItemPath
+                                              moduleOpen={openModules.includes(
+                                                value.name
+                                              )}
+                                              index={secondaryIndex}
+                                            />
+                                          </div>
+                                          <div
+                                            className={`absolute w-[6px] h-[6px] rounded-full top-1/2 -translate-y-1/2 right-5 ${
+                                              id === activeId
+                                                ? "bg-emerald-500"
+                                                : "bg-slate-600"
+                                            }`}
+                                          ></div>
+                                          <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                                          <p
+                                            style={{
+                                              //clamp lines to 3
+                                              display: "-webkit-box",
+                                              WebkitLineClamp: 3,
+                                              WebkitBoxOrient: "vertical",
+                                              overflow: "hidden",
+                                            }}
+                                            className="text-white text-sm py-3 w-full line"
+                                          >
+                                            {`${primaryIndex + 1}.${
+                                              secondaryIndex + 1
+                                            } ${name}`}
+                                          </p>
+                                        </m.div>
+                                      </Link>
+                                    );
+                                  }
+                                )
+                              )}
+                            </AnimatePresence>
+                          </AnimateHeight>
+                        </AccordionContent>
+                      </Accordion.Item>
+                    );
+                  }
+                )}
+            </Accordion.Root>
+            <HiddenSizingItems
+              navigation={navigation}
+              activeContent={activeContent}
+            />
+          </>
         )}
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
@@ -245,6 +344,70 @@ const ContentSidebar = ({
       </ScrollArea.Scrollbar>
       <ScrollArea.Corner className="bg-white/20" />
     </ScrollArea.Root>
+  );
+};
+
+const HiddenSizingItems = ({
+  navigation,
+  activeContent,
+}: {
+  navigation: INavigationItem[];
+  activeContent: "problems" | "lessons" | "all";
+}) => {
+  return (
+    <div className="w-full absolute pointer-events-none -z-10 opacity-0">
+      {/* Sizing Elements to animate height (stay hidden) */}
+      {navigation &&
+        navigation.map((value: INavigationItem, primaryIndex: number) => {
+          const filterContent = (
+            contentList: INavigationItem,
+            activeContent: "problems" | "lessons" | "all"
+          ) => {
+            if (activeContent === "problems") {
+              return contentList.problems;
+            } else if (activeContent === "lessons") {
+              return contentList.lessons;
+            } else {
+              return [...contentList.problems, ...contentList.lessons];
+            }
+          };
+
+          const filteredContent = filterContent(value, activeContent);
+
+          const allContent = [...value.problems, ...value.lessons];
+
+          return allContent.map(
+            (item: IProblemItem | ILessonItem, secondaryIndex: number) => {
+              const id = item._id;
+              const name =
+                "problemName" in item ? item.problemName : item.lessonName;
+              const type = "problemName" in item ? "problem" : "lesson";
+
+              return (
+                <div key={id}>
+                  <div
+                    className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start ${primaryIndex}-${type} ${primaryIndex}-content`}
+                  >
+                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                    <p
+                      style={{
+                        //clamp lines to 3
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                      className="text-white text-sm py-3 w-full line"
+                    >
+                      {`${primaryIndex + 1}.${secondaryIndex + 1} ${name}`}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+          );
+        })}
+    </div>
   );
 };
 
