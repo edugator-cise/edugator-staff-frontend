@@ -59,7 +59,6 @@ const Header = () => {
   const studentsY = useYPosition("students");
 
   useEffect(() => {
-    console.log(aboutY);
     scrollY.onChange(() => {
       const scrollPosition = scrollY.get();
       if (scrollPosition > 100) {
