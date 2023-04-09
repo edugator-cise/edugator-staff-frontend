@@ -1,8 +1,6 @@
-import VerticalNavigation from "components/shared/VerticalNavigation";
 import { styled } from "@mui/styles";
 import theme from "constants/theme";
 import { Typography } from "@mui/material";
-import Footer from "components/shared/Footer";
 import LegalLayout from "components/LegalLayout";
 import { ReactNode } from "react";
 
