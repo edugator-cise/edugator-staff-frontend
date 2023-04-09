@@ -78,10 +78,7 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     hidden: false,
     dueDate: new Date().toISOString(),
-<<<<<<< HEAD:state/problemEditorContainerSlice.ts
-=======
     fileName: "example.cpp",
->>>>>>> main:components/ProblemEditor/problemEditorContainerSlice.ts
   },
   problem: {
     problemStatement: "",
@@ -241,10 +238,7 @@ export const problemEditorContainerSlice = createSlice({
         title: action.payload.title,
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
-<<<<<<< HEAD:state/problemEditorContainerSlice.ts
-=======
         fileName: action.payload.fileName,
->>>>>>> main:components/ProblemEditor/problemEditorContainerSlice.ts
       };
       state.codeEditor = {
         code: { ...action.payload.code },
