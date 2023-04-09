@@ -137,7 +137,7 @@ const Header = () => {
           ))}
         </div>
         <div className="flex justify-end col-span-2 lg:col-span-1">
-          <GradientButton text="Start Coding" href="/code" />
+          <GradientButton text="Beta" href="/code" />
         </div>
       </div>
     </header>
