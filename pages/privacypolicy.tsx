@@ -1,41 +1,7 @@
 import { styled } from "@mui/styles";
-import theme from "constants/theme";
 import { Typography } from "@mui/material";
 import LegalLayout from "components/LegalLayout";
 import { ReactNode } from "react";
-
-interface ProblemLocationState {
-  moduleName?: string;
-}
-
-const TitleHolder = styled("div")({
-  height: 400,
-  width: "100%",
-  backgroundColor: "white",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  background:
-    "linear-gradient(transparent, transparent, transparent, transparent, #f1f1f11a, #f1f1f129, #f1f1f1da), url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)",
-  backgroundImage:
-    "url(https://www.transparenttextures.com/patterns/inspiration-geometry.png)",
-  backgroundSize: "35em",
-  mozWindowShadow: "inset 0 -10px 10px -10px #0000001a",
-  webkitBoxShadow: "inset 0 -10px 10px -10px #0000001a",
-  boxShadow: "inset 0 -10px 10px -10px #0000001a",
-});
-
-const TextHolder = styled("div")({
-  width: "70%",
-  maxWidth: "1400px",
-  padding: 30,
-  textAlign: "left",
-  backgroundColor: "white",
-  [theme.breakpoints.down("md")]: {
-    width: "100%",
-  },
-});
 
 const Link = styled("a")({
   color: "black",

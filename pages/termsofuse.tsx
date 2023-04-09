@@ -2,10 +2,6 @@ import { styled } from "@mui/styles";
 import LegalLayout from "components/LegalLayout";
 import { ReactNode } from "react";
 
-interface ProblemLocationState {
-  moduleName?: string;
-}
-
 const Link = styled("a")({
   color: "black",
   textDecoration: "none",
