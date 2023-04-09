@@ -110,6 +110,8 @@ export const CodeEditorView = ({
     memoryLimit,
     buildCommand,
     _id: problemId,
+    title,
+    fileName,
     fileExtension: fileType,
   } = currentProblem;
 
@@ -119,8 +121,6 @@ export const CodeEditorView = ({
   );
   const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
-
-  const fileName = generateFileName(navigation, problemId, fileType);
 
   function setEditorTheme(monaco: any) {
     monaco.editor.defineTheme("dark-theme", {
@@ -170,7 +170,7 @@ export const CodeEditorView = ({
           </p>
           <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 dark:border-slate-700 shadow-lg shadow-emerald-500/50 bg-slate-100 dark:bg-nav-darkest px-3 py-2">
             <h3 className="text-sm text-slate-800 dark:text-white font-dm">
-              {fileName}
+              {generateFileName(title, fileType)}
             </h3>
           </div>
         </div>
@@ -206,7 +206,7 @@ export const CodeEditorView = ({
           <ButtonToolTip label="Download Submission">
             <button
               onClick={(e) =>
-                handleDownload(currentCode, navigation, problemId, fileType)
+                handleDownload(currentCode, title, fileType, fileName)
               }
               className="w-8 h-8 p-2 rounded-md hidden sm:flex transition hover:bg-slate-300 dark:hover:bg-nav-darkest items-center justify-center group"
             >

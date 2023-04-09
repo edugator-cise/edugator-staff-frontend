@@ -12,7 +12,6 @@ const LegalLayout = ({
   children: React.ReactNode;
   title: string;
 }) => {
-  console.log(title);
   return (
     <div className="min-h-screen flex-col flex overflow-scroll w-full max-w-full bg-slate-50 relative">
       <header className={`z-50 flex justify-center bg-nav-darkest`}>

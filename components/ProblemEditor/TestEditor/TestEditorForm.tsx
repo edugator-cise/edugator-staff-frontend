@@ -28,7 +28,6 @@ const requestAddOrEditProblem = async (
 
   // preparing the payload
   const language = "C++";
-
   let problem: IProblem = {
     ...problemState.metadata,
     language,

@@ -1,22 +1,8 @@
-import React, {
-  ComponentType,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { adminPathRegex } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
-import {
-  Grid,
-  CircularProgress,
-  Box,
-  Alert,
-  Grow,
-  Typography,
-} from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { ProblemView } from "components/CodeEditor/CodeEditorContainer/ProblemView";
 import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView/CodeEditorView";
 import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/InputOutputView/InputOutputView";
@@ -29,12 +15,9 @@ import { LocalStorage } from "lib/auth/LocalStorage";
 import { AllotmentProps } from "allotment";
 import useWindowWidth from "hooks/useWindowSize";
 import * as monaco from "monaco-editor";
-import * as Accordion from "@radix-ui/react-accordion";
-import { AccordionContent } from "utils/radixTypes";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import AnimateHeight from "react-animate-height";
 import { toTitleCase } from "utils/textUtils";
-import AIChat from "components/CodeEditor/CodeEditorContainer/AIChat/AIChat";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),

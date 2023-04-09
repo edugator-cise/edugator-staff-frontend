@@ -14,6 +14,7 @@ export interface IProblem extends IProblemBase {
   language: string;
   dueDate: string; //iso format
   statement: string;
+  fileName: string;
   code: {
     header: string;
     body: string;
