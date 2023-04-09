@@ -11,10 +11,7 @@ export interface MetadataFields {
   title: string;
   hidden: boolean;
   dueDate: string;
-<<<<<<< HEAD:state/problemEditorContainerSlice.ts
-=======
   fileName: string;
->>>>>>> main:components/ProblemEditor/problemEditorContainerSlice.ts
 }
 
 export interface CodeEditorFields {
