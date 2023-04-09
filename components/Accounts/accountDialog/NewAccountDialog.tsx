@@ -54,14 +54,10 @@ export function NewAccountDialog({ open, handleClose }: NewAccountDialogProps) {
 
   const createNewAccount = async (account: INewAccount) => {
     try {
-<<<<<<< HEAD:components/Accounts/accountDialog/NewAccountDialog.tsx
       const { data }: { data: IAccountPOST } = await apiClient.post(
         apiRoutes.admin.createAccount,
         account
       );
-=======
-      const { data }: { data: IAccountPOST } = await apiClient.post(apiRoutes.admin.createAccount, account) 
->>>>>>> main:src/pages/accounts/components/NewAccountDialog.tsx
       const newAccount: IAccount = {
         name: account.name,
         role: account.role,

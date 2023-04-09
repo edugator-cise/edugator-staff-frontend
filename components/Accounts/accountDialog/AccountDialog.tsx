@@ -1,8 +1,4 @@
-<<<<<<< HEAD:components/Accounts/accountDialog/AccountDialog.tsx
 import { useState, useRef, useEffect } from "react";
-=======
-import {useState, useRef, useEffect} from "react";
->>>>>>> main:src/pages/accounts/components/accountDialog/AccountDialog.tsx
 import { styled } from "@mui/material/styles";
 import {
   Icon,
@@ -13,11 +9,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-<<<<<<< HEAD:components/Accounts/accountDialog/AccountDialog.tsx
 import { requestModifyAccountEnd } from "state/AdminAccountsPage.slice";
-=======
-import { requestModifyAccountEnd } from "components/Accounts/AdminAccountsPage.slice";
->>>>>>> main:src/pages/accounts/components/accountDialog/AccountDialog.tsx
 import { AccountEditForm } from "./AccountInfoEdit";
 import { AccountInfo } from "./AccountInfo";
 import { AdminActions } from "./AdminActions";
