@@ -15,6 +15,13 @@ import useNavigation from "hooks/useNavigation";
 import { FetchStatus } from "hooks/types";
 import { createNavStructure } from "utils/CodeEditorUtils";
 import { LocalStorage } from "lib/auth/LocalStorage";
+// import {
+//   ProblemFields,
+//   updateProblem,
+//   validateProblem,
+// } from "components/ProblemEditor/problemEditorContainerSlice";
+// import { useDispatch, useSelector} from "react-redux";
+// import { RootState } from "lib/store/store";
 
 interface ClickedMenu {
   [key: string]: boolean;
@@ -45,6 +52,10 @@ export const Sidenav = ({ isHidden, isShort, isQuiz }: SidenavProps) => {
     const newData = { ...menu, [item]: !menu[item] };
     setMenu(newData);
   };
+
+  // const problemAttributes = useSelector(
+  //   (state: RootState) => state.problemEditorContainer.metadata
+  // );
 
   return (
     <List
@@ -129,6 +140,7 @@ export const Sidenav = ({ isHidden, isShort, isQuiz }: SidenavProps) => {
                           sx={{
                             color:colors.navIconGray,
                             display: isShort ? "none" : "block",
+                            //display: !problemAttributes.isShort ? "none" : "block",
                           }}
                         />
                         <Quiz
@@ -137,6 +149,7 @@ export const Sidenav = ({ isHidden, isShort, isQuiz }: SidenavProps) => {
                           sx={{
                             color:colors.navIconGray,
                             display: isQuiz ? "none" : "block",
+                            //display: !problemAttributes.isQuiz ? "none" : "block",
                           }}
                         />
                         <Code
