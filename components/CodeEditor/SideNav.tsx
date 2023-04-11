@@ -1,4 +1,4 @@
-import { Collapse, ListItemText } from "@mui/material";
+import { Collapse, ListItemText, Tooltip, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
@@ -6,6 +6,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
+import { AccessTime, Quiz} from "@mui/icons-material";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { colors } from "constants/config";
 import { BookOpen, Code } from "phosphor-react";
@@ -21,6 +22,8 @@ interface ClickedMenu {
 
 interface SidenavProps {
   isHidden: boolean;
+  isShort: boolean;
+  isQuiz: boolean;
 }
 
 const CustomListItemButton = styled(ListItemButton)(
@@ -31,7 +34,7 @@ const CustomListItemButton = styled(ListItemButton)(
 `
 );
 
-export const Sidenav = ({ isHidden }: SidenavProps) => {
+export const Sidenav = ({ isHidden, isShort, isQuiz }: SidenavProps) => {
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
   );
@@ -119,6 +122,22 @@ export const Sidenav = ({ isHidden }: SidenavProps) => {
                           primary={`${indexVal + 1}.${index + 1} ${
                             problemItem.problemName
                           }`}
+                        />
+                        <AccessTime
+                          fontSize="small"
+                          //color="disabled"
+                          sx={{
+                            color:colors.navIconGray,
+                            display: isShort ? "none" : "block",
+                          }}
+                        />
+                        <Quiz
+                          fontSize="small"
+                          //color="disabled"
+                          sx={{
+                            color:colors.navIconGray,
+                            display: isQuiz ? "none" : "block",
+                          }}
                         />
                         <Code
                           weight="regular"
