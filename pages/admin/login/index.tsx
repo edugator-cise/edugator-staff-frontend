@@ -3,7 +3,7 @@ import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "components/shared/FormTextField";
 import { receiveLoginSuccess } from "state/LoginSlice";
-import AdminLayout from "components/AdminLayout";
+import AdminLayout from "components/AdminLayout/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
 import { ILoginSuccess, IRequestLoginAction } from "components/Login/types";

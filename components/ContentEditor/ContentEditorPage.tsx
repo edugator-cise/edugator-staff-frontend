@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { TextStack } from "./TextStack";
 import { useRouter } from "next/router";
-import AdminLayout from "components/AdminLayout";
+import AdminLayout from "components/AdminLayout/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openWarningModal,

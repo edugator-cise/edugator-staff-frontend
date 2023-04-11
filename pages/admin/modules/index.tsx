@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CircularProgress, Grid } from "@mui/material";
-import AdminLayout from "components/AdminLayout";
+import AdminLayout from "components/AdminLayout/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { ModuleAccordian } from "components/Modules/ModuleAccordion";
 import { ModuleDialog } from "components/Modules/ModuleDialog";

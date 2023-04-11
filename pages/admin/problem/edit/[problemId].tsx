@@ -1,4 +1,4 @@
-import AdminLayout from "components/AdminLayout";
+import AdminLayout from "components/AdminLayout/AdminLayout";
 import { useEffect } from "react";
 import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
 import { useRouter } from "next/router";

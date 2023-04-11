@@ -9,10 +9,11 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
-import { closeAlert } from "../state/ModulesSlice";
+import { closeAlert } from "../../state/ModulesSlice";
 import { useDispatch } from "react-redux";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { useEffect } from "react";
+import AdminHeader from "./AdminHeader";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -40,34 +41,8 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     }
   }, []);
   return (
-    <Box
-      minHeight="100vh"
-      display="flex"
-      flexDirection="column"
-      className="bg-slate-50"
-    >
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h5" component="h1">
-            EDUGATOR
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          {locationState !== Routes.Login && (
-            <Button
-              size="large"
-              color="secondary"
-              variant="contained"
-              onClick={() => {
-                LocalStorage.removeToken();
-                dispatch(closeAlert());
-                router.push(Routes.Login);
-              }}
-            >
-              Logout
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <AdminHeader />
       <Container
         sx={{
           flexGrow: 1,
@@ -110,7 +85,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
           {children}
         </Box>
       </Container>
-    </Box>
+    </div>
   );
 };
 
