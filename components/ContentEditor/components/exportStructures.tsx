@@ -18,15 +18,6 @@ class msAnswerChoice extends answerChoice {
   correct: boolean;
 
   constructor(id: number, text: string, correct: boolean) {
-    super(id, text, correct);
-    this.correct = correct;
-  }
-}
-
-class msAnswerChoice extends answerChoice {
-  correct: boolean;
-
-  constructor(id: number, text: string, correct: boolean) {
     super(id, text);
     this.correct = correct;
   }

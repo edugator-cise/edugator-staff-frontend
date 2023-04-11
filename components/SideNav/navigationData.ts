@@ -13,9 +13,9 @@ export const classes = [
   },
 ];
 
-export type NavLink = {
+export type NavLinkItem = {
   icon: (active: boolean) => React.ReactNode;
-  text: NavLinkText;
+  text: NavLinkText | AdminNavLinkText;
   id: string;
   toggleExercises?: boolean;
 };
@@ -27,7 +27,9 @@ export type NavLinkText =
   | "Problems"
   | "Bug Bounty";
 
-export const navLinks: NavLink[] = [
+export type AdminNavLinkText = "Course Content" | "Blank";
+
+export const navLinks: NavLinkItem[] = [
   {
     icon: icons.dashboard,
     text: "Dashboard",
@@ -56,4 +58,19 @@ export const navLinks: NavLink[] = [
     text: "Bug Bounty",
     id: "bugbounty",
   }, */
+];
+
+export const adminNavLinks: NavLinkItem[] = [
+  {
+    icon: icons.dashboard,
+    text: "Course Content",
+    id: "dashboard",
+    toggleExercises: true,
+  },
+  {
+    icon: icons.bug,
+    text: "Blank",
+    id: "blank",
+    toggleExercises: false,
+  },
 ];

@@ -14,12 +14,16 @@ import {
 } from "state/interfaceControls.slice";
 import { RootState } from "lib/store/store";
 import MobileHeader from "./MobileHeader/MobileHeader";
+import { useSidebarLayout } from "hooks/useSidebarLayout";
 
 export type ContentType = "problems" | "lessons" | "all";
 
+const MAIN_SIDEBAR_WIDTH = 80;
+const MAIN_SIDEBAR_EXPANDED_WIDTH = 288;
+const CONTENT_SIDEBAR_WIDTH = 287;
+
 const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   const [activeContent, setActiveContent] = useState<ContentType>("all");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -29,8 +33,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
 
   const router = useRouter();
   const locationState = router.asPath;
-
-  const { mobileView, tabletView, laptopView } = useDeviceSize();
 
   const [dropdownHeights, setDropdownHeights] = React.useState<
     Record<number, number>
@@ -70,6 +72,26 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
     setDropdownHeights(dropdownHeights);
   };
 
+  const {
+    contentMargin,
+    contentSidebarOffset,
+    dividerOffset,
+    laptopContentMargin,
+    mobileView,
+    tabletView,
+    laptopView,
+    setMobileNavOpen,
+    mobileNavOpen,
+  } = useSidebarLayout({
+    mainSidebarHidden: mainSidebarHidden,
+    contentSidebarHidden: contentSidebarHidden,
+    setMainSidebarHidden: setMainSidebarHidden,
+    setContentSidebarHidden: setContentSidebarHidden,
+    mainSidebarWidth: MAIN_SIDEBAR_WIDTH,
+    mainSidebarExpandedWidth: MAIN_SIDEBAR_EXPANDED_WIDTH,
+    contentSidebarWidth: CONTENT_SIDEBAR_WIDTH,
+  });
+
   useEffect(() => {
     if (!mobileView && !tabletView && !laptopView) {
       dispatch(setContentSidebarHidden(false));
@@ -80,50 +102,6 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
       dispatch(setMainSidebarHidden(true));
     }
   }, [mobileView, tabletView, laptopView]);
-
-  const mainSidebarWidth = 80;
-  const mainSidebarExpandedWidth = 288;
-  const contentSidebarWidth = 287;
-
-  const contentMargin = () => {
-    if (contentSidebarHidden && mainSidebarHidden) {
-      return mainSidebarWidth;
-    } else if (contentSidebarHidden && !mainSidebarHidden) {
-      return mainSidebarExpandedWidth;
-    } else if (!contentSidebarHidden && mainSidebarHidden) {
-      return contentSidebarWidth + mainSidebarWidth;
-    } else {
-      return contentSidebarWidth + mainSidebarExpandedWidth;
-    }
-  };
-
-  const contentSidebarOffset = () => {
-    if (contentSidebarHidden && mainSidebarHidden) {
-      return -contentSidebarWidth + mainSidebarWidth;
-    } else if (contentSidebarHidden && !mainSidebarHidden) {
-      return -contentSidebarWidth + mainSidebarExpandedWidth;
-    } else if (!contentSidebarHidden && mainSidebarHidden) {
-      return mainSidebarWidth;
-    } else {
-      return mainSidebarExpandedWidth;
-    }
-  };
-
-  const dividerOffset = () => {
-    if (mainSidebarHidden) {
-      return mainSidebarWidth;
-    } else if (!mainSidebarHidden) {
-      return mainSidebarExpandedWidth;
-    }
-  };
-
-  const laptopContentMargin = () => {
-    if (mainSidebarHidden) {
-      return mainSidebarWidth;
-    } else {
-      return mainSidebarExpandedWidth;
-    }
-  };
 
   return (
     <div className="h-screen flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
@@ -156,7 +134,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
           <div
             style={{
               left: mobileView
-                ? -(mainSidebarWidth + contentSidebarWidth)
+                ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
                 : contentSidebarOffset(),
             }}
             className={`mobile:left-auto !absolute top-0 transition-all h-full`}
@@ -210,7 +188,7 @@ const PlaygroundLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const SidebarHideOverlay = ({
+export const SidebarHideOverlay = ({
   hidden,
   setHidden,
 }: {
