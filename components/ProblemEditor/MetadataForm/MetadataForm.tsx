@@ -193,7 +193,7 @@ export const MetadataForm = (props: Props) => {
               <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
                 {errors.language}
               </Typography>
-            )}{validate}
+            )}
             </Box>
             
           </Stack>
