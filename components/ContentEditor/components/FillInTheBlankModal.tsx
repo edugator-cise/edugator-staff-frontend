@@ -39,16 +39,10 @@ export const FillInTheBlankModal = ({
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
     const [placeholderCharCount, setPlaceholderCharCount] = useState(0);
-    const [isAddQuestionDisabled, setIsAddQuestionDisabled] = useState(true);
     const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
     const modalInput = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => console.log("Correct answers: ", correctAnswers), [correctAnswers]);
-    useEffect(() => console.log("Question segments: ", questionSegments), [questionSegments]);
-    useEffect(() => {
-        updateAddQuestionButton(correctAnswers);
-    }, [correctAnswers]);
     useEffect(() => {
         const input = modalInput.current;
         if (input) input.setSelectionRange(cursorPosition, cursorPosition); // Sets the cursor position to the value of cursorPosition when input is no longer focused.
@@ -59,8 +53,19 @@ export const FillInTheBlankModal = ({
         setQuestionSegments([]);
         setCorrectAnswers([]);
         setPlaceholderCharCount(0);
-        setIsAddQuestionDisabled(true);
     };
+
+    const addDisabled = () => {
+        if (question === "" || correctAnswers.length === 0) {
+          return true;
+        }
+        for (const correctAnswer of correctAnswers) {
+          if (correctAnswer.possibleChoices[0] === undefined) {
+            return true;
+          }
+        }
+        return false;
+      };
 
     // Split string into string[] based on location of the placeholder characters (which are used as delimiters).
     const transformQuestionIntoSegments = (question: string) => {
@@ -76,18 +81,6 @@ export const FillInTheBlankModal = ({
             updatedQuestion += questionSegments[i] + placeholderChars[i];
         }
         return updatedQuestion + questionSegments[questionSegmentCount - 1];
-    }
-
-    const updateAddQuestionButton = (correctAnswers: blankAnswer[]) => {
-        for (const correctAnswer of correctAnswers) {
-            if (correctAnswer.possibleChoices[0] === undefined) {
-                setIsAddQuestionDisabled(true);
-                break;
-            }
-            else {
-                setIsAddQuestionDisabled(false);
-            }
-        }
     }
 
     const handleQuestionChange = (question: string) => {
@@ -239,7 +232,7 @@ export const FillInTheBlankModal = ({
                     }}
                     variant="contained"
                     color="success"
-                    disabled={isAddQuestionDisabled}
+                    disabled={addDisabled()}
                 >
                     Add Question
                 </Button>

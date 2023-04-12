@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
 import { blankAnswer } from "components/ContentEditor/components/exportStructures";
@@ -68,17 +68,9 @@ const QuestionSegments = styled(Typography)({
 
 function FillIntheBlankQuestion(props: FillIntheBlankProps) {
     const [answerInputs, setAnswerInputs] = useState<string[]>([]);   // string array of question attempts/inputs
-    const [results, setResults] = useState<boolean[]>([]);   // boolean array of answer correctness
+    const [results, setResults] = useState<boolean[]>(() => { return Array(props.correctAnswers.length).fill(false) }); // boolean array of answer correctness
     const [correct, setCorrect] = useState(false);    // Whether all answers are correct
     const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
-
-    useEffect(() => {
-        let defaultResults = [];
-        for (let i = 0; i < props.correctAnswers.length; i++) {
-            defaultResults.push(false);
-        }
-        setResults(defaultResults);
-    }, []);
 
     const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
         const possibleChoices = correctAnswer.possibleChoices;
