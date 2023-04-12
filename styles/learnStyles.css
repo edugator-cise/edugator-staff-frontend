@@ -20,10 +20,14 @@
   font-size: 1rem;
 }
 
+.lesson-download {
+  width: 100%;
+  text-align: right
+}
 
 .round {
   position: relative;
-  
+
 }
 
 .round label {
@@ -56,11 +60,11 @@
   visibility: hidden;
 }
 
-.round input[type="checkbox"]:checked + label {
+.round input[type="checkbox"]:checked+label {
   background-color: #66bb6a;
   border-color: #66bb6a;
 }
 
-.round input[type="checkbox"]:checked + label:after {
+.round input[type="checkbox"]:checked+label:after {
   opacity: 1;
 }

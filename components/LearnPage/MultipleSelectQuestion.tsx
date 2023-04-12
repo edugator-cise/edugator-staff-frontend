@@ -7,7 +7,7 @@ import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectM
 
 const QuestionHolder = styled.div((props: any) => ({
   width: "70%",
-  marginTop: 50,
+  margin: "auto",
   height: "auto",
   borderRadius: 4,
   display: "flex",
@@ -22,6 +22,10 @@ const QuestionHolder = styled.div((props: any) => ({
       : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
+  "@page": {
+    marginTop: 50,
+    marginBottom: 80
+  },
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
@@ -35,11 +39,11 @@ const AnswerHolder = styled.div((props: any) => ({
         ? "#22B16E"
         : "#e4fcf1"
       : props.clicked
-      ? "#f76f7a"
-      : theme.palette.primary.light
+        ? "#f76f7a"
+        : theme.palette.primary.light
     : props.clicked
-    ? theme.palette.primary.main
-    : theme.palette.primary.light,
+      ? theme.palette.primary.main
+      : theme.palette.primary.light,
   color: props.clicked ? "white" : theme.palette.primary.dark,
   borderRadius: 4,
   border: props.checked
@@ -63,8 +67,8 @@ const AnswerHolder = styled.div((props: any) => ({
           ? "#22B16E"
           : "#e4fcf1"
         : props.clicked
-        ? "#f76f7a"
-        : theme.palette.primary.light
+          ? "#f76f7a"
+          : theme.palette.primary.light
       : theme.palette.primary.main,
     color: props.checked
       ? props.isAnswerCorrect
@@ -72,8 +76,8 @@ const AnswerHolder = styled.div((props: any) => ({
           ? "white"
           : theme.palette.primary.dark
         : props.clicked
-        ? "white"
-        : theme.palette.primary.dark
+          ? "white"
+          : theme.palette.primary.dark
       : "white",
   },
 }));
@@ -125,13 +129,10 @@ interface MultipleSelectProps {
   question: string;
   answers: ModalAnswer[];
   number: number;
+  isPdfVersion?: boolean;
 }
 
-function MultipleSelectQuestion({
-  question,
-  answers,
-  number,
-}: MultipleSelectProps) {
+function MultipleSelectQuestion(props : MultipleSelectProps) {
   const [questionsClicked, setQuestionsClicked] = useState<Array<boolean>>([]);
   const [correct, setCorrect] = useState(false);
   const [checked, setChecked] = useState(false); // fire when "Check answer" is clicked
@@ -155,13 +156,13 @@ function MultipleSelectQuestion({
   const checkCorrect = () => {
     for (let i = 0; i < questionsClicked.length; i++) {
       if (questionsClicked[i] === true) {
-        if (answers[i].correct) {
+        if (props.answers[i].correct) {
           //do nothing
         } else {
           return false;
         }
       } else {
-        if (answers[i].correct) {
+        if (props.answers[i].correct) {
           return false;
         }
       }
@@ -171,130 +172,131 @@ function MultipleSelectQuestion({
 
   //set initial state of all questions clicked to false on mount
   useEffect(() => {
-    if (answers && answers.length > 1) {
-      for (let i = 0; i < answers.length; i++) {
+    if (props.answers && props.answers.length > 1) {
+      for (let i = 0; i < props.answers.length; i++) {
         setQuestionsClicked((prev) => [...prev, false]);
       }
     }
   }, []);
 
   return (
-    <QuestionHolder checked={checked}>
-      <Typography
-        variant="overline"
-        sx={{ fontWeight: 600, fontSize: "0.9em" }}
-        fontSize="subtitle2"
-        color={theme.palette.primary.main}
-      >
-        Question {number}
-      </Typography>
-      <Typography
-        variant="h6"
-        sx={{ fontWeight: 200, fontFamily: "DM Serif Display" }}
-      >
-        {question}
-      </Typography>
-
-      <Grid
-        container
-        rowSpacing={2}
-        columnSpacing={2}
-        sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
-      >
-        {answers.map((ans, i) => {
-          return (
-            <Grid
-              key={number * i}
-              sx={{
-                minHeight: "100",
-              }}
-              item
-              xs={answers.length % 2 === 0 ? 6 : 12}
-            >
-              <AnswerHolder
-                className="answerHolder"
-                onClick={() => {
-                  if (checked) return;
-                  //set the answer state to clicked
-                  const currentClickState = [];
-                  for (const status of questionsClicked)
-                    currentClickState.push(status);
-                  currentClickState[i] = !currentClickState[i];
-                  setQuestionsClicked(currentClickState);
-                }}
-                clicked={questionsClicked[i]}
-                checked={checked}
-                correct={correct}
-                isAnswerCorrect={ans.correct}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                >
-                  {ans.text}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.7em",
-                    fontWeight: 700,
-                    letterSpacing: 0.5,
-                    marginLeft: 2,
-                    marginRight: 2,
-                  }}
-                >
-                  {checked && answerText(ans.correct, questionsClicked[i])}
-                </Typography>
-              </AnswerHolder>
-            </Grid>
-          );
-        })}
-      </Grid>
-      <CheckButton
-        checked={checked}
-        onClick={() => {
-          //check if all answers are correct
-          const isCorrect = checkCorrect();
-          setCorrect(isCorrect);
-          setChecked(true);
-        }}
-      >
+      <QuestionHolder checked={checked}>
         <Typography
           variant="overline"
-          sx={{ fontWeight: 600, fontSize: "0.8em" }}
+          sx={{ fontWeight: 600, fontSize: "0.9em" }}
           fontSize="subtitle2"
-          color={"white"}
+          color={theme.palette.primary.main}
         >
-          CHECK ANSWER
+          Question {props.number}
         </Typography>
-      </CheckButton>
-
-      <AnswerFeedback checked={checked} correct={correct}>
-        {correct ? (
-          <CheckCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#22B16E"}
-          />
-        ) : (
-          <XCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#f76f7a"}
-          />
-        )}
         <Typography
-          variant="body2"
-          sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
-          color={correct ? "#22B16E" : "#f76f7a"}
+          variant="h6"
+          sx={{ fontWeight: 200, fontFamily: "DM Serif Display" }}
         >
-          {correct
-            ? "Correct! Nice job!"
-            : "That's incorrect. Review your answer."}
+          {props.question}
         </Typography>
-      </AnswerFeedback>
-    </QuestionHolder>
+
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={2}
+          sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
+        >
+          {props.answers.map((ans, i) => {
+            return (
+              <Grid
+                key={props.number * i}
+                sx={{
+                  minHeight: "100",
+                }}
+                item
+                xs={props.answers.length % 2 === 0 ? 6 : 12}
+              >
+                <AnswerHolder
+                  className="answerHolder"
+                  onClick={() => {
+                    if (checked) return;
+                    //set the answer state to clicked
+                    const currentClickState = [];
+                    for (const status of questionsClicked)
+                      currentClickState.push(status);
+                    currentClickState[i] = !currentClickState[i];
+                    setQuestionsClicked(currentClickState);
+                  }}
+                  clicked={questionsClicked[i]}
+                  checked={checked}
+                  correct={correct}
+                  isAnswerCorrect={ans.correct}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
+                  >
+                    {ans.text}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "0.7em",
+                      fontWeight: 700,
+                      letterSpacing: 0.5,
+                      marginLeft: 2,
+                      marginRight: 2,
+                    }}
+                  >
+                    {checked && answerText(ans.correct, questionsClicked[i])}
+                  </Typography>
+                </AnswerHolder>
+              </Grid>
+            );
+          })}
+        </Grid>
+        <CheckButton
+          checked={checked}
+          onClick={() => {
+            //check if all answers are correct
+            const isCorrect = checkCorrect();
+            setCorrect(isCorrect);
+            setChecked(true);
+          }}
+        >
+          <Typography
+            variant="overline"
+            sx={{ fontWeight: 600, fontSize: "0.8em" }}
+            fontSize="subtitle2"
+            color={"white"}
+          >
+            CHECK ANSWER
+          </Typography>
+        </CheckButton>
+        {!props.isPdfVersion && (
+          <AnswerFeedback checked={checked} correct={correct}>
+            {correct ? (
+              <CheckCircle
+                weight="duotone"
+                size={24}
+                style={{ marginLeft: 15 }}
+                color={"#22B16E"}
+              />
+            ) : (
+              <XCircle
+                weight="duotone"
+                size={24}
+                style={{ marginLeft: 15 }}
+                color={"#f76f7a"}
+              />
+            )}
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
+              color={correct ? "#22B16E" : "#f76f7a"}
+            >
+              {correct
+                ? "Correct! Nice job!"
+                : "That's incorrect. Review your answer."}
+            </Typography>
+          </AnswerFeedback>
+        )}
+      </QuestionHolder>
   );
 }
 

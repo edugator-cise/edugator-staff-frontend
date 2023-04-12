@@ -6,7 +6,7 @@ import { CheckCircle, XCircle } from "phosphor-react";
 
 const QuestionHolder = styled.div((props: any) => ({
   width: "70%",
-  marginTop: 50,
+  margin: "auto",
   height: "auto",
   borderRadius: 4,
   display: "flex",
@@ -22,6 +22,10 @@ const QuestionHolder = styled.div((props: any) => ({
         : "rgba(99, 99, 99, 0.1) 0px 0px 20px 0px",
   },
   padding: 20,
+  "@page": {
+    marginTop: 50,
+    marginBottom: 80
+  },
 }));
 
 const AnswerHolder = styled.div((props: any) => ({
@@ -48,10 +52,10 @@ const AnswerHolder = styled.div((props: any) => ({
       props.correct && !props.clicked
         ? theme.palette.primary.light
         : props.clicked
-        ? props.isAnswerCorrect
-          ? "#22B16E"
-          : "#f76f7a"
-        : theme.palette.primary.main,
+          ? props.isAnswerCorrect
+            ? "#22B16E"
+            : "#f76f7a"
+          : theme.palette.primary.main,
     color:
       props.correct && !props.clicked ? theme.palette.primary.dark : "white",
   },
@@ -88,6 +92,7 @@ interface MultipleChoiceProps {
   number: number;
   image: boolean;
   sourcePath?: string;
+  isPdfVersion?: boolean;
 }
 
 function MultipleChoiceQuestion(props: MultipleChoiceProps) {
@@ -192,30 +197,32 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
           );
         })}
       </Grid>
-      <AnswerFeedback correct={correct} answered={answered}>
-        {correct ? (
-          <CheckCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#22B16E"}
-          />
-        ) : (
-          <XCircle
-            weight="duotone"
-            size={24}
-            style={{ marginLeft: 15 }}
-            color={"#f76f7a"}
-          />
-        )}
-        <Typography
-          variant="body2"
-          sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
-          color={correct ? "#22B16E" : "#f76f7a"}
-        >
-          {correct ? "Correct! Nice job!" : "Oops! Please try again."}
-        </Typography>
-      </AnswerFeedback>
+      {!props.isPdfVersion && (
+        <AnswerFeedback correct={correct} answered={answered}>
+          {correct ? (
+            <CheckCircle
+              weight="duotone"
+              size={24}
+              style={{ marginLeft: 15 }}
+              color={"#22B16E"}
+            />
+          ) : (
+            <XCircle
+              weight="duotone"
+              size={24}
+              style={{ marginLeft: 15 }}
+              color={"#f76f7a"}
+            />
+          )}
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
+            color={correct ? "#22B16E" : "#f76f7a"}
+          >
+            {correct ? "Correct! Nice job!" : "Oops! Please try again."}
+          </Typography>
+        </AnswerFeedback>
+      )}
     </QuestionHolder>
   );
 }
