@@ -19,9 +19,15 @@ export interface MetadataFields {
 
 export interface CodeEditorFields {
   code: {
-    header: string;
-    body: string;
-    footer: string;
+    cppHeader: string;
+    cppBody: string;
+    cppFooter: string;
+    pyHeader: string;
+    pyBody: string;
+    pyFooter: string;
+    javaHeader: string;
+    javaBody: string;
+    javaFooter: string;
   };
   fileExtension: string;
 }
@@ -98,9 +104,15 @@ const initialState: ProblemEditorContainerState = {
   },
   codeEditor: {
     code: {
-      header: "",
-      body: "",
-      footer: "",
+      cppHeader: "",
+      cppBody: "",
+      cppFooter: "",
+      pyHeader: "",
+      pyBody: "",
+      pyFooter: "",
+      javaHeader: "",
+      javaBody: "",
+      javaFooter: "",
     },
     fileExtension: ".cpp",
   },

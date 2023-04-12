@@ -33,30 +33,42 @@ interface Props {
 
 interface FlattenedCodeFields {
   fileExtension: string;
-  header: string;
-  body: string;
-  footer: string;
+  cppHeader: string;
+  cppBody: string;
+  cppFooter: string;
+  pyHeader: string;
+  pyBody: string;
+  pyFooter: string;
+  javaHeader: string;
+  javaBody: string;
+  javaFooter: string;
 }
 
 interface Errors {
   fileExtension?: string;
-  header?: string;
-  body?: string;
-  footer?: string;
+  cppHeader?: string;
+  cppBody?: string;
+  cppFooter?: string;
+  pyHeader?: string;
+  pyBody?: string;
+  pyFooter?: string;
+  javaHeader?: string;
+  javaBody?: string;
+  javaFooter?: string;
 }
 
-const defaultHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
+const defaultCppHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
 #include <iostream>
 #include <vector>
 using namespace std;
 `;
 
-const defaultBody = `int addTwoNums(int x, int y) {
+const defaultCppBody = `int addTwoNums(int x, int y) {
 	// Your code here
 }
 `;
 
-const defaultFooter = `// The main does not have to be in the footer.
+const defaultCppFooter = `// The main does not have to be in the footer.
 // The main should remain in the footer if you don't want students to be able to see it nor change it.
 int main()
 {
@@ -68,6 +80,52 @@ int main()
     cout << result;
     return 0;
 }
+`;
+
+const defaultPyHeader = `# If students import packages or use namespaces on their own, it shouldn't cause problems
+import sys
+import math
+import numpy as np
+import pandas as pd
+`;
+
+const defaultPyBody = `def addTwoNums(x, y):
+# Your code here
+pass
+`;
+
+const defaultPyFooter = `# The main does not have to be in the footer.
+# The main should remain in the footer if you don't want students to be able to see it nor change it.
+if __name__ == '__main__':
+    x, y = map(int, input().split())
+    result = addTwoNums(x, y)
+    # You should print out whatever the expected output should be.
+    # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
+    print(result)
+`;
+
+const defaultJavaHeader = `import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+`;
+
+const defaultJavaBody = `public class Main {
+  public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      int x = input.nextInt();
+      int y = input.nextInt();
+      int result = addTwoNums(x, y);
+      System.out.println(result);
+      input.close();
+  }
+
+  public static int addTwoNums(int x, int y) {
+      // Your code here
+  }
+}
+`;
+
+const defaultJavaFooter = `
 `;
 
 
@@ -91,13 +149,25 @@ export const CodeEditorForm = ({ formRef }: Props) => {
 
   if (
     !touched &&
-    isBlank(initialValues.header) &&
-    isBlank(initialValues.body) &&
-    isBlank(initialValues.footer)
+    isBlank(initialValues.cppHeader) &&
+    isBlank(initialValues.cppBody) &&
+    isBlank(initialValues.cppFooter) &&
+    isBlank(initialValues.pyHeader) &&
+    isBlank(initialValues.pyBody) &&
+    isBlank(initialValues.pyFooter) &&
+    isBlank(initialValues.javaHeader) &&
+    isBlank(initialValues.javaBody) &&
+    isBlank(initialValues.javaFooter)
   ) {
-    initialValues.header = defaultHeader;
-    initialValues.body = defaultBody;
-    initialValues.footer = defaultFooter;
+    initialValues.cppHeader = defaultCppHeader;
+    initialValues.cppBody = defaultCppBody;
+    initialValues.cppFooter = defaultCppFooter;
+    initialValues.pyHeader = defaultPyHeader;
+    initialValues.pyBody = defaultPyBody;
+    initialValues.pyFooter = defaultPyFooter;
+    initialValues.javaHeader = defaultJavaHeader;
+    initialValues.javaBody = defaultJavaBody;
+    initialValues.javaFooter = defaultJavaFooter;
   }
 
   const validation = (values: FlattenedCodeFields) => {
@@ -113,9 +183,15 @@ export const CodeEditorForm = ({ formRef }: Props) => {
         const formattedFields: CodeEditorFields = {
           fileExtension: values.fileExtension,
           code: {
-            header: values.header,
-            body: values.body,
-            footer: values.footer,
+            cppHeader: values.cppHeader,
+            cppBody: values.cppBody,
+            cppFooter: values.cppFooter,
+            pyHeader: values.pyHeader,
+            pyBody: values.pyBody,
+            pyFooter: values.pyFooter,
+            javaHeader: values.javaHeader,
+            javaBody: values.javaBody,
+            javaFooter: values.javaFooter,
           },
         };
         dispatch(updateCodeEditor(formattedFields));
@@ -175,7 +251,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.header}
+                        value={values.cppHeader}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -194,7 +270,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.body}
+                        value={values.cppBody}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -215,7 +291,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.footer}
+                        value={values.cppFooter}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -270,7 +346,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.header}
+                        value={values.pyHeader}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -289,7 +365,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.body}
+                        value={values.pyBody}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -310,7 +386,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.footer}
+                        value={values.pyFooter}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -365,7 +441,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.header}
+                        value={values.javaHeader}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -384,7 +460,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.body}
+                        value={values.javaBody}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -405,7 +481,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.footer}
+                        value={values.javaFooter}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);

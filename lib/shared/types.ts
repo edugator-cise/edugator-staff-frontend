@@ -16,9 +16,15 @@ export interface IProblem extends IProblemBase {
   dueDate: string; //iso format
   statement: string;
   code: {
-    header: string;
-    body: string;
-    footer: string;
+    cppHeader: string;
+    cppBody: string;
+    cppFooter: string;
+    pyHeader: string;
+    pyBody: string;
+    pyFooter: string;
+    javaHeader: string;
+    javaBody: string;
+    javaFooter: string;
   };
   fileExtension: string;
   testCases: ITestCase[];
