@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
-import { blankAnswer } from "./exportStructures";
+import { BlankAnswer } from "./exportStructures";
 import { ModalAnswer } from "./MultipleSelectModal";
 
 const QuestionHolder = styled("div")({
@@ -222,9 +222,9 @@ export function FillInTheBlankDisplayBlock({
   correctAnswers,
 }: {
   questionSegments: string[];
-  correctAnswers: blankAnswer[];
+  correctAnswers: BlankAnswer[];
 }) {
-  const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
+  const getNonFirstAnswerPossibilities = (correctAnswer: BlankAnswer) => {
     const possibleChoices = correctAnswer.possibleChoices;
     return possibleChoices.slice(1, possibleChoices.length).join('\n');
   };

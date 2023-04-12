@@ -1,7 +1,7 @@
 /** Problem Interfaces */
 
 import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
-import { blankAnswer } from "components/ContentEditor/components/exportStructures";
+import { BlankAnswer } from "components/ContentEditor/components/exportStructures";
 
 export interface ITestCase {
   input: string;
@@ -89,7 +89,7 @@ export type FillInTheBlankBlock = {
   type: "fill_in_the_blank";
   data: {
     questionSegments: string[];
-    correctAnswers: blankAnswer[];
+    correctAnswers: BlankAnswer[];
   };
 };
 
@@ -141,7 +141,7 @@ export type FillInTheBlankContent = {
   type: "fill_in_the_blank";
   content: {
     questionSegments: string[];
-    correctAnswers: blankAnswer[];
+    correctAnswers: BlankAnswer[];
   };
 };
 
@@ -179,7 +179,7 @@ export type FillInTheBlankEntity = {
   type: "fill_in_the_blank";
   data: {
     questionSegments: string[];
-    correctAnswers: blankAnswer[];
+    correctAnswers: BlankAnswer[];
   };
 };
 

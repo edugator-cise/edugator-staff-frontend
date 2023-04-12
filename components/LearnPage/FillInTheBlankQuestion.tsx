@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Box, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
-import { blankAnswer } from "components/ContentEditor/components/exportStructures";
+import { BlankAnswer } from "components/ContentEditor/components/exportStructures";
 import theme from "constants/theme";
 
 interface FillIntheBlankProps {
     questionSegments: string[];
-    correctAnswers: blankAnswer[];
+    correctAnswers: BlankAnswer[];
     number: number;
 }
 
@@ -72,7 +72,7 @@ function FillIntheBlankQuestion(props: FillIntheBlankProps) {
     const [correct, setCorrect] = useState(false);    // Whether all answers are correct
     const [answered, setAnswered] = useState(false);    // Whether the question was attempted yet
 
-    const getNonFirstAnswerPossibilities = (correctAnswer: blankAnswer) => {
+    const getNonFirstAnswerPossibilities = (correctAnswer: BlankAnswer) => {
         const possibleChoices = correctAnswer.possibleChoices;
         return possibleChoices.slice(1, possibleChoices.length).join('\n');
     };

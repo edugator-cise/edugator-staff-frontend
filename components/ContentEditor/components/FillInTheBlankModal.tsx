@@ -12,7 +12,7 @@ import { Info } from "phosphor-react";
 import React, { useState, useRef, useEffect } from "react";
 import { MuiChipsInput } from "mui-chips-input";
 import Tooltip from '@mui/material/Tooltip';
-import { blankAnswer } from "./exportStructures";
+import { BlankAnswer } from "./exportStructures";
 
 export const FillInTheBlankModal = ({
     open,
@@ -24,7 +24,7 @@ export const FillInTheBlankModal = ({
     insert: (
         e: any,
         questionSegments: string[],
-        correctAnswers: blankAnswer[],
+        correctAnswers: BlankAnswer[],
     ) => void;
 }) => {
     const toolTipMessage = "Press Enter to add possible answer choice(s).\n“Require exact match” toggles case-sensitivity and will not approximate decimals.";
@@ -37,7 +37,7 @@ export const FillInTheBlankModal = ({
 
     const [question, setQuestion] = useState("");
     const [questionSegments, setQuestionSegments] = useState<string[]>([]);
-    const [correctAnswers, setCorrectAnswers] = useState<blankAnswer[]>([]);
+    const [correctAnswers, setCorrectAnswers] = useState<BlankAnswer[]>([]);
     const [placeholderCharCount, setPlaceholderCharCount] = useState(0);
     const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
@@ -102,13 +102,13 @@ export const FillInTheBlankModal = ({
         setCorrectAnswers(updatedCorrectAnswers);
     }
 
-    // Adds a new blankAnswer object to correctAnswers[] if needed, otherwise deletes unnecessary blankAnswers.
+    // Adds a new BlankAnswer object to correctAnswers[] if needed, otherwise deletes unnecessary BlankAnswers.
     const updateBlankAnswers = (question: string) => {
         let questionSegments = transformQuestionIntoSegments(question);
         let updatedCorrectAnswers = [...correctAnswers];
         // If a new placeholder/blank was added (via Insert Blank button)
         if (updatedCorrectAnswers.length < questionSegments.length - 1) {
-            let newBlankAnswer = new blankAnswer([], false);
+            let newBlankAnswer = new BlankAnswer([], false);
             updatedCorrectAnswers.push(newBlankAnswer);
         }
         // If one or more placeholder characters were deleted

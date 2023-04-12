@@ -22,7 +22,7 @@ class msAnswerChoice extends answerChoice {
   }
 }
 
-export class blankAnswer {
+export class BlankAnswer {
   possibleChoices: string[];
 
   shouldHaveExactMatch: boolean;
@@ -95,9 +95,9 @@ export class ms_content implements content {
 export class fitb_content implements content {
   questionSegments: string[];
 
-  correctAnswers: blankAnswer[];
+  correctAnswers: BlankAnswer[];
 
-  constructor(questionSegments: string[], correctAnswers: blankAnswer[]) {
+  constructor(questionSegments: string[], correctAnswers: BlankAnswer[]) {
     this.questionSegments = questionSegments;
     this.correctAnswers = correctAnswers;
   }

@@ -8,7 +8,7 @@ import {
 } from "draft-js";
 import { MultipleChoiceDisplayBlock, MultipleSelectDisplayBlock, FillInTheBlankDisplayBlock } from "../components/displayBlockComponents";
 import { ModalAnswer } from "../components/MultipleSelectModal";
-import { blankAnswer } from "../components/exportStructures";
+import { BlankAnswer } from "../components/exportStructures";
 
 export const mediaBlockRenderer = (block: ContentBlock) => {
   if (block.getType() === "atomic") {
@@ -78,7 +78,7 @@ const Media = ({
     const {
       questionSegments,
       correctAnswers
-    }: { questionSegments: string[], correctAnswers: blankAnswer[] } =
+    }: { questionSegments: string[], correctAnswers: BlankAnswer[] } =
       Object(entity.getData());
     media = (
       <FillInTheBlankDisplayBlock

@@ -27,7 +27,7 @@ import {
 } from "phosphor-react";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
-import { blankAnswer } from "./components/exportStructures";
+import { BlankAnswer } from "./components/exportStructures";
 import MultipleSelectModal, {
   ModalAnswer,
 } from "./components/MultipleSelectModal";
@@ -183,7 +183,7 @@ const TextEditorContent = ({
   const onAddFillInTheBlank = (
     e: any,
     questionSegments: string[],
-    correctAnswers: blankAnswer[],
+    correctAnswers: BlankAnswer[],
   ) => {
     e.preventDefault();
     const contentState = editorState.getCurrentContent();
