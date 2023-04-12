@@ -8,6 +8,7 @@ import {
   mc_content,
   ms_content,
   contentBlock,
+  fitb_content
 } from "./components/exportStructures";
 import { ILesson } from "lib/shared/types";
 
@@ -72,6 +73,16 @@ export const TextStack = ({
           content = new contentBlock(
             "multiple_select",
             new ms_content(data.data.question, data.data.answers)
+          );
+          break;
+
+        case "fill_in_the_blank":
+          content = new contentBlock(
+              "fill_in_the_blank",
+              new fitb_content(
+                  data.data.questionSegments,
+                  data.data.correctAnswers
+              )
           );
           break;
 

@@ -1,6 +1,7 @@
 /** Problem Interfaces */
 
 import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
+import { BlankAnswer } from "components/ContentEditor/components/exportStructures";
 
 export interface ITestCase {
   input: string;
@@ -34,14 +35,14 @@ export interface ILesson extends ILessonBase {
   title: string;
   author: string;
   content: Array<
-    TextContent | ImageContent | MultipleChoiceContent | MultipleSelectContent
+    TextContent | ImageContent | MultipleChoiceContent | MultipleSelectContent | FillInTheBlankContent
   >;
   editableContent: {
     blocks: {}[];
     entityMap: {}[];
   };
   blocks: {}[];
-  entityMap: Array<ImageEntity | MultipleChoiceEntity | MultipleSelectEntity>;
+  entityMap: Array<ImageEntity | MultipleChoiceEntity | MultipleSelectEntity | FillInTheBlankEntity>;
 }
 
 /** Final display blocks for each content block type */
@@ -49,7 +50,8 @@ export type LessonBlock =
   | TextBlock
   | ImageBlock
   | MultipleChoiceBlock
-  | MultipleSelectBlock;
+  | MultipleSelectBlock
+  | FillInTheBlankBlock;
 
 export type TextBlock = {
   type: "text";
@@ -81,6 +83,14 @@ export type MultipleSelectBlock = {
   data: {
     question: string;
     answers: ModalAnswer[];
+  };
+};
+
+export type FillInTheBlankBlock = {
+  type: "fill_in_the_blank";
+  data: {
+    questionSegments: string[];
+    correctAnswers: BlankAnswer[];
   };
 };
 
@@ -128,6 +138,15 @@ export type MultipleSelectContent = {
   };
 };
 
+export type FillInTheBlankContent = {
+  type: "fill_in_the_blank";
+  content: {
+    questionSegments: string[];
+    correctAnswers: BlankAnswer[];
+  };
+};
+
+
 /** Content block types in the lesson.entityMap array */
 
 export type ImageEntity = {
@@ -154,6 +173,14 @@ export type MultipleSelectEntity = {
   data: {
     question: string;
     answers: ModalAnswer[];
+  };
+};
+
+export type FillInTheBlankEntity = {
+  type: "fill_in_the_blank";
+  data: {
+    questionSegments: string[];
+    correctAnswers: BlankAnswer[];
   };
 };
 

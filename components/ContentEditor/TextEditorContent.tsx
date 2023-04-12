@@ -9,6 +9,7 @@ import {
 } from "draft-js";
 import { mediaBlockRenderer } from "./entities/mediaBlockRenderer";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { FillInTheBlankModal } from "./components/FillInTheBlankModal";
 import { MultipleChoiceModal } from "./components/MultipleChoiceModal";
 import draftToHtml from "draftjs-to-html";
 import {
@@ -22,9 +23,11 @@ import {
   Image,
   ListBullets,
   ListChecks,
+  ListPlus,
 } from "phosphor-react";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
+import { BlankAnswer } from "./components/exportStructures";
 import MultipleSelectModal, {
   ModalAnswer,
 } from "./components/MultipleSelectModal";
@@ -43,6 +46,7 @@ const TextEditorContent = ({
   const [html, setHTML] = useState("");
   const [MCModalOpen, setMCModalOpen] = useState(false);
   const [MSModalOpen, setMSModalOpen] = useState(false);
+  const [FITBModalOpen, setFITBModalOpen] = useState(false);
 
   // check if the lesson has a title (we are editing a lesson)
   const contentId = useSelector(
@@ -67,7 +71,8 @@ const TextEditorContent = ({
     if (
       entity.type === "image" ||
       entity.type === "multiple_choice" ||
-      entity.type === "multiple_select"
+      entity.type === "multiple_select" ||
+      entity.type === "fill_in_the_blank"
     )
       return "<atomic_entity />";
   };
@@ -175,6 +180,29 @@ const TextEditorContent = ({
     setTimeout(() => focus(), 0);
   };
 
+  const onAddFillInTheBlank = (
+    e: any,
+    questionSegments: string[],
+    correctAnswers: BlankAnswer[],
+  ) => {
+    e.preventDefault();
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "fill_in_the_blank",
+      "IMMUTABLE",
+      { questionSegments, correctAnswers }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
+    );
+    setFITBModalOpen(false);
+    setTimeout(() => focus(), 0);
+  };
+
   const onAddImage = (e: any) => {
     e.preventDefault();
     const urlValue = window.prompt("Enter a URL");
@@ -250,6 +278,11 @@ const TextEditorContent = ({
         open={MSModalOpen}
         setOpen={setMSModalOpen}
       />
+      <FillInTheBlankModal
+        insert={onAddFillInTheBlank}
+        open={FITBModalOpen}
+        setOpen={setFITBModalOpen}
+      />
 
       <button onClick={onH1Click}>
         <TextHOne weight="bold" size={18} />
@@ -290,6 +323,14 @@ const TextEditorContent = ({
         }}
       >
         <ListChecks weight="bold" size={18} />
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setFITBModalOpen(true);
+        }}
+      >
+        <ListPlus weight="bold" size={18} />
       </button>
       <div className="editor">
         <Editor

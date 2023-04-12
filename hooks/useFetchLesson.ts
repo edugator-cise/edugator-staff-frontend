@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import { FetchStatus } from "./types";
 import {
+  FillInTheBlankEntity,
   ILesson,
   ImageEntity,
   LessonDisplay,
@@ -75,8 +76,7 @@ const transformLesson = (lesson: ILesson) => {
   };
 
   let entityIterator = 0;
-  for (let i = 0; i < lesson.content.length; i++) {
-    const block = lesson.content[i];
+  for (const block of lesson.content) {
     if (block.type === "multiple_choice") {
       const entity = lesson.entityMap[entityIterator];
       if (isEntityOfType<MultipleChoiceEntity>(entity, "multiple_choice")) {
@@ -98,6 +98,18 @@ const transformLesson = (lesson: ILesson) => {
           data: {
             question: entity.data.question,
             answers: entity.data.answers,
+          },
+        });
+      }
+      entityIterator++;
+    } else if (block.type === "fill_in_the_blank") {
+      const entity = lesson.entityMap[entityIterator];
+      if (isEntityOfType<FillInTheBlankEntity>(entity, "fill_in_the_blank")) {
+        displayLesson.content.push({
+          type: "fill_in_the_blank",
+          data: {
+            questionSegments: entity.data.questionSegments,
+            correctAnswers: entity.data.correctAnswers,
           },
         });
       }

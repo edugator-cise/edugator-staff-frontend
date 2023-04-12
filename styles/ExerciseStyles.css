@@ -16,7 +16,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%; 
+  width: 100%;
 }
 
 .modal-ms-answers {
@@ -72,4 +72,64 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.fitb-modal-question-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  width: calc(100% + 20px);
+}
+
+.fitb-modal-question {
+  display: grid;
+  grid-column-start: 2;
+  text-align: center;
+}
+
+.fitb-modal-question-input {
+  background: #f1f1f1;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Inter', sans-serif;
+  color: rgb(39, 39, 39);
+  width: 100%;
+  resize: vertical;
+}
+
+.fitb-modal-insert-blank {
+  grid-column-start: 3;
+  text-align: right;
+}
+
+.fitb-modal-answer-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 2px;
+  align-items: center;
+  width: 100%;
+}
+
+.fitb-modal-answer {
+  display: grid;
+  grid-column-start: 3;
+  text-align: center;
+}
+
+.fitb-modal-answer-field {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 20px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.fitb-modal-answer-placeholder {
+  font-size: 28px;
+}
+
+.fitb-modal-answer-exact-match-label {
+  margin: 0px;
 }

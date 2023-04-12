@@ -1,6 +1,6 @@
 import { ModalAnswer } from "./MultipleSelectModal";
 
-interface content {}
+interface content { }
 
 class answerChoice {
   id: number;
@@ -19,6 +19,17 @@ class msAnswerChoice extends answerChoice {
   constructor(id: number, text: string, correct: boolean) {
     super(id, text);
     this.correct = correct;
+  }
+}
+
+export class BlankAnswer {
+  possibleChoices: string[];
+
+  shouldHaveExactMatch: boolean;
+
+  constructor(possibleChoices: string[], shouldHaveExactMatch: boolean) {
+    this.possibleChoices = possibleChoices;
+    this.shouldHaveExactMatch = shouldHaveExactMatch;
   }
 }
 
@@ -78,6 +89,17 @@ export class ms_content implements content {
     answers.forEach((answer, i) =>
       this.answers.push(new msAnswerChoice(i, answer.text, answer.correct))
     );
+  }
+}
+
+export class fitb_content implements content {
+  questionSegments: string[];
+
+  correctAnswers: BlankAnswer[];
+
+  constructor(questionSegments: string[], correctAnswers: BlankAnswer[]) {
+    this.questionSegments = questionSegments;
+    this.correctAnswers = correctAnswers;
   }
 }
 

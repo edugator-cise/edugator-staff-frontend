@@ -1,5 +1,7 @@
-import { Grid, Typography } from "@mui/material";
+import React from "react";
+import { Box, Grid, Typography, TextField, Tooltip, Button } from "@mui/material";
 import styled from "@emotion/styled";
+import { BlankAnswer } from "./exportStructures";
 import { ModalAnswer } from "./MultipleSelectModal";
 
 const QuestionHolder = styled("div")({
@@ -31,6 +33,27 @@ const AnswerHolder = styled("div")({
     backgroundColor: "#3b82f6",
     color: "white",
   },
+});
+
+const CorrectAnswerTextField = styled(TextField)({
+  '& fieldset': {
+    border: 'none',
+    display: 'inline'
+  },
+  '& .MuiInputBase-root.Mui-disabled': {
+    backgroundColor: 'LightGreen',
+  },
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: "#000000",
+  },
+  marginBottom: 10,
+  width: 175
+});
+
+const QuestionSegments = styled(Typography)({
+  fontWeight: 600,
+  display: 'inline',
+  whiteSpace: 'pre-wrap'
 });
 
 //displayed component when multiple choice is added
@@ -190,5 +213,73 @@ export function MultipleSelectDisplayBlock({
         })}
       </Grid>
     </QuestionHolder>
+  );
+}
+
+//displayed component when fill-in-the-blank is added
+export function FillInTheBlankDisplayBlock({
+  questionSegments,
+  correctAnswers,
+}: {
+  questionSegments: string[];
+  correctAnswers: BlankAnswer[];
+}) {
+  const getNonFirstAnswerPossibilities = (correctAnswer: BlankAnswer) => {
+    const possibleChoices = correctAnswer.possibleChoices;
+    return possibleChoices.slice(1, possibleChoices.length).join('\n');
+  };
+
+  return (
+    <QuestionHolder className="exercise-content-wrapper">
+      <Typography
+        variant="overline"
+        sx={{ fontWeight: 600, fontSize: "0.9em" }}
+        fontSize="subtitle2"
+        color={"#3b82f6"}
+      >
+        Fill-in-the-Blank Question
+      </Typography>
+      <Box sx={{ display: 'inline' }}>
+        {correctAnswers.map((correctAnswer, i) => (
+          <Box key={i + " " + correctAnswer.possibleChoices[0]} sx={{ display: 'inline' }}>
+            <QuestionSegments variant='h6'>
+              {questionSegments[i]}
+            </QuestionSegments>
+            <Tooltip
+              title={getNonFirstAnswerPossibilities(correctAnswer) === ''
+                ? ''
+                : <div style={{ whiteSpace: 'pre-line', textAlign: 'center' }}>
+                  {getNonFirstAnswerPossibilities(correctAnswer)}
+                </div>
+              }
+              arrow>
+              <CorrectAnswerTextField
+                hiddenLabel
+                inputProps={{ min: 0, style: { textAlign: 'center', fontFamily: "Inter", fontWeight: 500, fontSize: '1.0rem', padding: '5px 12px' } }}
+                value={correctAnswer.possibleChoices[0]}
+                variant="outlined"
+                size="small"
+                disabled
+              />
+            </Tooltip>
+          </Box>
+        ))}
+        <QuestionSegments variant='h6'>
+          {questionSegments[questionSegments.length - 1]}
+        </QuestionSegments>
+      </Box>
+      <div style={{ textAlign: 'right' }}>
+        <Button
+          onClick={() => {
+          }}
+          variant="contained"
+          color="primary"
+          disabled
+          style={{ maxWidth: '60px', maxHeight: '30px', minWidth: '60px', minHeight: '30px', fontSize: 12 }}
+        >
+          CHECK
+        </Button>
+      </div>
+    </QuestionHolder >
   );
 }
