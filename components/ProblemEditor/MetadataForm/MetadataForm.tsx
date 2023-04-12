@@ -189,11 +189,13 @@ export const MetadataForm = (props: Props) => {
               }
               label="Java"
             />
-            {errors.language && (
-              <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
-                {errors.language}
-              </Typography>
-            )}
+            {touched.cpp || touched.py || touched.java ? (
+              errors.language && (
+                <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
+                  {errors.language}
+                </Typography>
+              )
+            ) : null}
             </Box>
             
           </Stack>
