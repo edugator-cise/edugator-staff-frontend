@@ -4,6 +4,9 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import theme from "constants/theme";
 import { colors } from "constants/config";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 
 const CompileOutputContainer = styled("div")(
     ({ theme }) => `
@@ -42,6 +45,60 @@ const OutputPaper = styled("div")(
     if (checkOutput) {
       return <OutputPaper>Hello</OutputPaper>;
     } else {
-      return <OutputPaper>test</OutputPaper>;
+      return (
+        <>
+        <FormControl
+        sx={{ width: "calc(100% - 20px)", height: "100%" }}
+        variant="outlined"
+        >
+        <Box
+            sx={{
+              fontFamily: `'Inter', sans-serif`,
+              fontWeight: 600,
+            }}
+          >
+            Input
+          </Box>
+        <OutlinedInput
+          id="outlined-stdin"
+          multiline
+          minRows={1}
+        //   value={stdin}
+        //   onChange={handleStdinChange}
+          aria-describedby="outlined-stdin-text"
+          inputProps={{
+            "aria-label": "stdin",
+          }}
+        />
+        <br/>
+          <Box
+            sx={{
+              fontFamily: `'Inter', sans-serif`,
+              fontWeight: 600,
+            }}
+          >
+            Output
+          </Box>
+        <OutlinedInput
+          id="outlined-stdin"
+          multiline
+          minRows={1}
+          aria-describedby="outlined-stdin-text"
+          inputProps={{
+            "aria-label": "stdin",
+          }}
+        />
+        <br/>
+      <Button
+            variant="contained"
+            color="primary"
+            
+      >
+            Check Output
+        </Button>
+      </FormControl>
+      </>
+      );
+      //<OutputPaper>test</OutputPaper>;
     }
   };
