@@ -7,6 +7,8 @@ import { colors } from "constants/config";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
+import CheckCircle from "@mui/icons-material/CheckCircle";
+import Cancel from "@mui/icons-material/Cancel";
 
 const CompileOutputContainer = styled("div")(
     ({ theme }) => `
@@ -42,9 +44,6 @@ const OutputPaper = styled("div")(
   }
 
   export const TestOutput = ({ checkOutput }: Props) => {
-    if (checkOutput) {
-      return <OutputPaper>Hello</OutputPaper>;
-    } else {
       return (
         <>
         <FormControl
@@ -92,13 +91,20 @@ const OutputPaper = styled("div")(
       <Button
             variant="contained"
             color="primary"
-            
+            onClick={() => {
+                
+            }}
       >
             Check Output
         </Button>
       </FormControl>
+      <script>
+        if (checkOutput){
+            <Cancel style={{ color: "#DC143C" }}></Cancel>
+        }
+      </script>
       </>
       );
       //<OutputPaper>test</OutputPaper>;
-    }
+    
   };
