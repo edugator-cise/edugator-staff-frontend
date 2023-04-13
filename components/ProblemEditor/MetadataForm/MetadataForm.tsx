@@ -146,16 +146,6 @@ export const MetadataForm = (props: Props) => {
               helperText={touched.author && errors.author}
               sx={{ width: "50%" }}
             />
-            {/* <TextField
-              name="difficulty"
-              label="Difficulty"
-              value={values.difficulty}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.author && Boolean(errors.difficulty)}
-              helperText={touched.difficulty && errors.difficulty}
-              sx={{ width: "50%" }}
-            /> */}
 
             <FormControl fullWidth sx={{ width: "25%" }}>
               <InputLabel id="difficulty-label">Difficulty</InputLabel>
