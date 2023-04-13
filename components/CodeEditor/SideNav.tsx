@@ -6,7 +6,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { styled } from "@mui/material/styles";
-import { AccessTime, Quiz} from "@mui/icons-material";
+import { HourglassFullOutlined, Quiz} from "@mui/icons-material";
 import { ILessonItem, INavigationItem, IProblemItem } from "./types";
 import { colors } from "constants/config";
 import { BookOpen, Code } from "phosphor-react";
@@ -134,7 +134,7 @@ export const Sidenav = ({ isHidden, isShort, isQuiz }: SidenavProps) => {
                             problemItem.problemName
                           }`}
                         />
-                        <AccessTime
+                        <HourglassFullOutlined
                           fontSize="small"
                           //color="disabled"
                           sx={{
