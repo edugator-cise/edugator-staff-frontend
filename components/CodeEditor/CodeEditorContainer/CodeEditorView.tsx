@@ -239,6 +239,24 @@ export const CodeEditorView = ({
           />
         </EditorContainer>
         <ColumnContainer style={{ justifyContent: "flex-end" }}>
+        <Button
+            variant="outlined"
+            color="primary"
+            disabled={isSubmissionRunning}
+            sx={{ mr: 2 }}
+            onClick={() => {
+              runCode({
+                code: currentCode,
+                stdin,
+                problemId: problemId as string,
+                timeLimit: timeLimit as number,
+                memoryLimit: memoryLimit as number,
+                buildCommand: buildCommand as string,
+              });
+            }}
+          >
+            Check Output
+          </Button>
           <Button
             variant="outlined"
             color="primary"

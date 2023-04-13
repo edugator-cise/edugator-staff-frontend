@@ -46,6 +46,15 @@ const OutputPaper = styled("div")(
   export const TestOutput = ({ checkOutput }: Props) => {
       return (
         <>
+      <Box
+            sx={{
+              fontFamily: `'Inter', sans-serif`,
+              marginLeft: 33,
+              fontWeight: 300,
+            }}
+      >
+            Press Check Output to test your input
+      </Box>
         <FormControl
         sx={{ width: "calc(100% - 20px)", height: "100%" }}
         variant="outlined"
@@ -57,7 +66,7 @@ const OutputPaper = styled("div")(
             }}
           >
             Input
-          </Box>
+        </Box>
         <OutlinedInput
           id="outlined-stdin"
           multiline
@@ -88,15 +97,6 @@ const OutputPaper = styled("div")(
           }}
         />
         <br/>
-      <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-                
-            }}
-      >
-            Check Output
-        </Button>
       </FormControl>
       <script>
         if (checkOutput){
