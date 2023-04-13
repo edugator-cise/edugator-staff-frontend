@@ -7,6 +7,7 @@ export interface ITestCase {
   expectedOutput: string;
   hint: string;
   visibility: number;
+  testCaseCode: string;
 }
 
 export interface IProblem extends IProblemBase {
@@ -26,6 +27,7 @@ export interface IProblem extends IProblemBase {
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
+  templateZip: string;
 }
 
 // lesson type fetched directly from db

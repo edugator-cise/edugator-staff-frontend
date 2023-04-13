@@ -1,7 +1,7 @@
 import { FormHelperText, Paper, Stack, TextField } from "@mui/material";
 import { Field, Form, Formik, FieldProps } from "formik";
 import React from "react";
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MarkdownEditor } from "../MarkdownEditor/MarkdownEditor";
 import {
   ProblemFields,
@@ -32,9 +32,8 @@ export const ProblemEditorForm = (props: Props) => {
       errors.problemStatement = "Must contain non-whitespace characters";
     }
 
-    if (!values.templatePackage) {
-      errors.templatePackage = "Required";
-    } else if (
+    if (
+      values.templatePackage &&
       !values.templatePackage.match(
         /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g //https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
       )
@@ -108,7 +107,6 @@ export const ProblemEditorForm = (props: Props) => {
                 (touched.templatePackage && errors.templatePackage) ||
                 templatePackageHelperText
               }
-              required
             />
           </Stack>
         </Form>
