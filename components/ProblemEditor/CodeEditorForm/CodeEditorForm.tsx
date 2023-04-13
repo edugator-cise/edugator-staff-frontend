@@ -32,29 +32,26 @@ interface Props {
 }
 
 interface FlattenedCodeFields {
-  fileExtension: string;
-  cppHeader: string;
-  cppBody: string;
-  cppFooter: string;
-  pyHeader: string;
-  pyBody: string;
-  pyFooter: string;
-  javaHeader: string;
-  javaBody: string;
-  javaFooter: string;
+  code: {
+    name: string,
+    header: string;
+    body: string;
+    footer: string;
+    fileExtension: string;
+  }[];
+  
 }
 
 interface Errors {
-  fileExtension?: string;
-  cppHeader?: string;
-  cppBody?: string;
-  cppFooter?: string;
-  pyHeader?: string;
-  pyBody?: string;
-  pyFooter?: string;
-  javaHeader?: string;
-  javaBody?: string;
-  javaFooter?: string;
+  code?: {
+    name?: string,
+    header?: string;
+    body?: string;
+    footer?: string;
+    fileExtension?: string;
+  }[];
+
+  
 }
 
 const defaultCppHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
@@ -131,44 +128,53 @@ const defaultJavaFooter = `
 
 export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
-  const { cpp, py, java } = useCheckboxContext();
+  const { languages } = useCheckboxContext();
+
+  const cpp = languages.find((lang) => lang.name === "cpp");
+  const py = languages.find((lang) => lang.name === "py");
+  const java = languages.find((lang) => lang.name === "java");
 
   const [touched, setTouched] = React.useState(false);
 
   const initialValues = useSelector((state: RootState) => {
     const formattedFields: CodeEditorFields =
       state.problemEditorContainer.codeEditor;
-    const fileExtension = formattedFields.fileExtension;
     const code = formattedFields.code;
     const flattenedFields: FlattenedCodeFields = {
-      fileExtension,
-      ...code,
+      code
     };
     return flattenedFields;
   });
 
-  if (
-    !touched &&
-    isBlank(initialValues.cppHeader) &&
-    isBlank(initialValues.cppBody) &&
-    isBlank(initialValues.cppFooter) &&
-    isBlank(initialValues.pyHeader) &&
-    isBlank(initialValues.pyBody) &&
-    isBlank(initialValues.pyFooter) &&
-    isBlank(initialValues.javaHeader) &&
-    isBlank(initialValues.javaBody) &&
-    isBlank(initialValues.javaFooter)
-  ) {
-    initialValues.cppHeader = defaultCppHeader;
-    initialValues.cppBody = defaultCppBody;
-    initialValues.cppFooter = defaultCppFooter;
-    initialValues.pyHeader = defaultPyHeader;
-    initialValues.pyBody = defaultPyBody;
-    initialValues.pyFooter = defaultPyFooter;
-    initialValues.javaHeader = defaultJavaHeader;
-    initialValues.javaBody = defaultJavaBody;
-    initialValues.javaFooter = defaultJavaFooter;
+  for (const field of initialValues.code) {
+    if (
+      !touched &&
+      isBlank(field.header) &&
+      isBlank(field.body) &&
+      isBlank(field.footer)
+    ) {
+      switch (field.fileExtension) {
+        case "cpp":
+          field.header = defaultCppHeader;
+          field.body = defaultCppBody;
+          field.footer = defaultCppFooter;
+          break;
+        case "py":
+          field.header = defaultPyHeader;
+          field.body = defaultPyBody;
+          field.footer = defaultPyFooter;
+          break;
+        case "java":
+          field.header = defaultJavaHeader;
+          field.body = defaultJavaBody;
+          field.footer = defaultJavaFooter;
+          break;
+        default:
+          break;
+      }
+    }
   }
+  
 
   const validation = (values: FlattenedCodeFields) => {
     const errors: Errors = {};
@@ -181,18 +187,8 @@ export const CodeEditorForm = ({ formRef }: Props) => {
       initialValues={initialValues}
       onSubmit={(values) => {
         const formattedFields: CodeEditorFields = {
-          fileExtension: values.fileExtension,
-          code: {
-            cppHeader: values.cppHeader,
-            cppBody: values.cppBody,
-            cppFooter: values.cppFooter,
-            pyHeader: values.pyHeader,
-            pyBody: values.pyBody,
-            pyFooter: values.pyFooter,
-            javaHeader: values.javaHeader,
-            javaBody: values.javaBody,
-            javaFooter: values.javaFooter,
-          },
+          
+          code: values.code,
         };
         dispatch(updateCodeEditor(formattedFields));
       }}
@@ -226,7 +222,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.fileExtension}
+                        value={values.code.find((lang) => lang.name === "cpp")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -251,7 +247,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.cppHeader}
+                        value={values.code.find((lang) => lang.name === "py")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -270,7 +266,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.cppBody}
+                        value={values.code.find((lang) => lang.name === "py")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -291,7 +287,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.cppFooter}
+                        value={values.code.find((lang) => lang.name === "cpp")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -321,7 +317,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.fileExtension}
+                        value={values.code.find((lang) => lang.name === "py")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -346,7 +342,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.pyHeader}
+                        value={values.code.find((lang) => lang.name === "py")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -365,7 +361,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.pyBody}
+                        value={values.code.find((lang) => lang.name === "py")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -386,7 +382,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.pyFooter}
+                        value={values.code.find((lang) => lang.name === "py")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -416,7 +412,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.fileExtension}
+                        value={values.code.find((lang) => lang.name === "java")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -441,7 +437,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.javaHeader}
+                        value={values.code.find((lang) => lang.name === "java")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -460,7 +456,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.javaBody}
+                        value={values.code.find((lang) => lang.name === "java")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -481,7 +477,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.javaFooter}
+                        value={values.code.find((lang) => lang.name === "java")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);

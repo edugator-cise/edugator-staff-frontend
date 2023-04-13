@@ -9,35 +9,27 @@ export interface ITestCase {
 
 export interface IProblem extends IProblemBase {
   hidden: boolean;
-  cpp: boolean;
-  py: boolean;
-  java: boolean;
-  language: string;
+  languages: {
+    name: string;
+    selected: boolean;
+  }[];
   dueDate: string; //iso format
   statement: string;
   code: {
-    cppHeader: string;
-    cppBody: string;
-    cppFooter: string;
-    pyHeader: string;
-    pyBody: string;
-    pyFooter: string;
-    javaHeader: string;
-    javaBody: string;
-    javaFooter: string;
-  };
-  fileExtension: string;
+    name: string;
+    header: string;
+    body: string;
+    footer: string;
+    fileExtension: string;
+  }[];
   testCases: ITestCase[];
   templatePackage: string;
-  cppTimeLimit: number;
-  cppMemoryLimit: number;
-  cppBuildCommand: string;
-  pyTimeLimit: number;
-  pyMemoryLimit: number;
-  pyBuildCommand: string;
-  javaTimeLimit: number;
-  javaMemoryLimit: number;
-  javaBuildCommand: string;
+  config: {
+    name: string;
+    timeLimit: number;
+    memoryLimit: number;
+    buildCommand: string;
+  }[];
 }
 
 export interface ILesson extends ILessonBase {

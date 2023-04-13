@@ -41,7 +41,7 @@ interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
-  const { cpp, setCpp, py, setPy, java, setJava } = useCheckboxContext();
+  const { languages, setLanguages } = useCheckboxContext();
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.metadata
@@ -56,9 +56,12 @@ export const MetadataForm = (props: Props) => {
       errors.title = "Title must contain non-whitespace characters";
     }
 
-    if (!cpp && !py && !java) {
+    const selectedLanguages = values.languages.filter((lang) => lang.selected);
+
+    if (selectedLanguages.length === 0) {
       errors.language = "At least one language must be selected";
     }
+    
 
     if (dateError.message) {
       errors.dueDate = dateError.message;
@@ -95,7 +98,11 @@ export const MetadataForm = (props: Props) => {
         )}
       />
     );
+
+    
   };
+
+  
 
   return (
     <Formik
@@ -106,7 +113,7 @@ export const MetadataForm = (props: Props) => {
       innerRef={props.formRef}
       validate={validate}
     >
-      {({ errors, values, handleChange, handleBlur, touched }) => (
+      {({ errors, values, handleChange, handleBlur, touched, setFieldValue }) => (
         <Form style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
           <Stack spacing={5}>
             <TextField
@@ -152,10 +159,21 @@ export const MetadataForm = (props: Props) => {
                 <Checkbox
                   name="cpp"
                   onChange={(e) => {
-                    handleChange(e);
-                    setCpp(e.target.checked);
+                    // handleChange(e);
+                    const updatedLanguages = values.languages.map((lang) => {
+                      if (lang.name === "cpp") {
+                        return {
+                          ...lang,
+                          selected: e.target.checked,
+                        };
+                      }
+                      return lang;
+                    });
+                    setLanguages(updatedLanguages);
+                    setFieldValue("languages", updatedLanguages);
+
                   }}
-                  checked={values.cpp}
+                  checked={values.languages.find((lang) => lang.name === "cpp")?.selected}
                 />
               }
               sx={{ marginLeft: 0 }}
@@ -168,9 +186,19 @@ export const MetadataForm = (props: Props) => {
                   name="py"
                   onChange={(e) => {
                     handleChange(e);
-                    setPy(e.target.checked);
+                    const updatedLanguages = values.languages.map((lang) => {
+                      if (lang.name === "py") {
+                        return {
+                          ...lang,
+                          selected: e.target.checked,
+                        };
+                      }
+                      return lang;
+                    });
+                    setLanguages(updatedLanguages);
+                    setFieldValue("languages", updatedLanguages);
                   }}
-                  checked={values.py}
+                  checked={values.languages.find((lang) => lang.name === "py")?.selected}
                 />
               }
               label="Python"
@@ -182,20 +210,31 @@ export const MetadataForm = (props: Props) => {
                   name="java"
                   onChange={(e) => {
                     handleChange(e);
-                    setJava(e.target.checked);
+                    const updatedLanguages = values.languages.map((lang) => {
+                      if (lang.name === "java") {
+                        return {
+                          ...lang,
+                          selected: e.target.checked,
+                        };
+                      }
+                      return lang;
+                    });
+                    setLanguages(updatedLanguages);
+                    setFieldValue("languages", updatedLanguages);
                   }}
-                  checked={values.java}
+                  checked={values.languages.find((lang) => lang.name === "java")?.selected}
                 />
               }
               label="Java"
             />
-            {touched.cpp || touched.py || touched.java ? (
+{/*{touched.cpp || touched.py || touched.java ? (
               errors.language && (
                 <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
                   {errors.language}
                 </Typography>
               )
-            ) : null}
+            ) : null} */}
+
             </Box>
             
           </Stack>

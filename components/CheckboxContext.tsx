@@ -1,32 +1,53 @@
 import { createContext, useContext, useState } from "react";
 
 type CheckboxContextType = {
-  cpp: boolean;
-  setCpp: (value: boolean) => void;
-  py: boolean;
-  setPy: (value: boolean) => void;
-  java: boolean;
-  setJava: (value: boolean) => void;
+  languages: {
+    name: string;
+    selected: boolean;
+  }[];
+  setLanguages: (value: {name: string, selected: boolean}[]) => void;
 };
 
 const CheckboxContext = createContext<CheckboxContextType>({
-  cpp: false,
-  setCpp: () => {},
-  py: false,
-  setPy: () => {},
-  java: false,
-  setJava: () => {},
+  languages: [
+    {
+      name: "cpp",
+      selected: false
+    },
+    {
+      name: "py",
+      selected: false
+    },
+    {
+      name: "java",
+      selected: false
+    }
+  ],
+  setLanguages: () => {
+    
+  },
 });
 
 export const useCheckboxContext = () => useContext(CheckboxContext);
 
 export const CheckboxProvider: React.FC = ({ children }) => {
-  const [cpp, setCpp] = useState(false);
-  const [py, setPy] = useState(false);
-  const [java, setJava] = useState(false);
+  const [languages, setLanguages] = useState([
+    {
+      name: "cpp",
+      selected: false
+    },
+    {
+      name: "py",
+      selected: false
+    },
+    {
+      name: "java",
+      selected: false
+    }
+  ]);
 
   return (
-    <CheckboxContext.Provider value={{ cpp, setCpp, py, setPy, java, setJava }}>
+    <CheckboxContext.Provider value={{ languages, setLanguages }}>
       {children}
     </CheckboxContext.Provider>
   );

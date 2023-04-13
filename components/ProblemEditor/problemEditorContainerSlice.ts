@@ -7,41 +7,39 @@ export interface ProblemFields {
   templatePackage: string;
 }
 
+export interface MetadataLangConfig {
+  name: string;
+  selected: boolean;
+}
+
 export interface MetadataFields {
   title: string;
   hidden: boolean;
-  language: string;
-  cpp: boolean;
-  py: boolean;
-  java: boolean;
+  languages: MetadataLangConfig[];
   dueDate: string;
 }
 
-export interface CodeEditorFields {
-  code: {
-    cppHeader: string;
-    cppBody: string;
-    cppFooter: string;
-    pyHeader: string;
-    pyBody: string;
-    pyFooter: string;
-    javaHeader: string;
-    javaBody: string;
-    javaFooter: string;
-  };
+export interface CodeEditorLangConfig {
+  name: string,
+  header: string;
+  body: string;
+  footer: string;
   fileExtension: string;
 }
 
+export interface CodeEditorFields {
+  code: CodeEditorLangConfig[];
+}
+
+export interface ServerLangConfig {
+  name: string,
+  timeLimit: number;
+  memoryLimit: number;
+  buildCommand: string;
+}
+
 export interface ServerConfigFields {
-  cppTimeLimit: number;
-  cppMemoryLimit: number;
-  cppBuildCommand: string;
-  pyTimeLimit: number;
-  pyMemoryLimit: number;
-  pyBuildCommand: string;
-  javaTimeLimit: number;
-  javaMemoryLimit: number;
-  javaBuildCommand: string;
+  config: ServerLangConfig[];
 }
 
 export enum WarningTypes {
@@ -91,11 +89,22 @@ const initialState: ProblemEditorContainerState = {
   activeStep: 0,
   metadata: {
     title: "",
-    language: "",
+    languages: [
+      {
+        name: "cpp",
+        selected: false
+      },
+      {
+        name: "py",
+        selected: false
+      },
+      {
+        name: "java",
+        selected: false
+      }
+      
+    ],
     hidden: false,
-    cpp: false,
-    py: false,
-    java: false,
     dueDate: new Date().toISOString(),
   },
   problem: {
@@ -103,29 +112,103 @@ const initialState: ProblemEditorContainerState = {
     templatePackage: "",
   },
   codeEditor: {
-    code: {
-      cppHeader: "",
-      cppBody: "",
-      cppFooter: "",
-      pyHeader: "",
-      pyBody: "",
-      pyFooter: "",
-      javaHeader: "",
-      javaBody: "",
-      javaFooter: "",
-    },
-    fileExtension: ".cpp",
+    code: [
+      {
+        name: "cpp",
+        header: `//If students import packages or use namespaces on their own, it shouldn't cause problems
+        #include <iostream>
+        #include <vector>
+        using namespace std;
+        `,
+        body: `int addTwoNums(int x, int y) {
+          // Your code here
+        }
+        `,
+        footer: `// The main does not have to be in the footer.
+        // The main should remain in the footer if you don't want students to be able to see it nor change it.
+        int main()
+        {
+            int x = 0, y = 0;
+            cin >> x >> y;
+            int result = addTwoNums(x, y);
+            // You should print out whatever the expected output should be. 
+            // Be careful about whitespace. Ex: only put endl if you add an endline in your expected output.
+            cout << result;
+            return 0;
+        }
+        `,
+        fileExtension: ".h"
+      },
+      {
+        name: "py",
+        header: `# If students import packages or use namespaces on their own, it shouldn't cause problems
+        import sys
+        import math
+        import numpy as np
+        import pandas as pd
+        `,
+        body: `def addTwoNums(x, y):
+        # Your code here
+        pass
+        `,
+        footer: `# The main does not have to be in the footer.
+        # The main should remain in the footer if you don't want students to be able to see it nor change it.
+        if __name__ == '__main__':
+            x, y = map(int, input().split())
+            result = addTwoNums(x, y)
+            # You should print out whatever the expected output should be.
+            # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
+            print(result)
+        `,
+        fileExtension: ".py"
+      },
+      {
+        name: "java",
+        header: `import java.util.Scanner;
+        import java.util.ArrayList;
+        import java.util.List;
+        `,
+        body: `public class Main {
+          public static void main(String[] args) {
+              Scanner input = new Scanner(System.in);
+              int x = input.nextInt();
+              int y = input.nextInt();
+              int result = addTwoNums(x, y);
+              System.out.println(result);
+              input.close();
+          }
+        
+          public static int addTwoNums(int x, int y) {
+              // Your code here
+          }
+        }
+        `,
+        footer: ``,
+        fileExtension: ".java"
+      }
+    ]
   },
   serverConfig: {
-    cppTimeLimit: 0,
-    cppMemoryLimit: 0,
-    cppBuildCommand: "",
-    pyTimeLimit: 0,
-    pyMemoryLimit: 0,
-    pyBuildCommand: "",
-    javaTimeLimit: 0,
-    javaMemoryLimit: 0,
-    javaBuildCommand: "",
+    config: [
+      {
+        name: "cpp",
+        timeLimit: 0,
+        memoryLimit: 0,
+        buildCommand: ""
+      },
+      {
+        name: "py",
+        timeLimit: 0,
+        memoryLimit: 0,
+        buildCommand: ""
+      },
+      {
+        name: "java",
+        timeLimit: 0,
+        memoryLimit: 0,
+        buildCommand: ""
+      }
+    ],
   },
   testCases: [],
   problemId: undefined,
@@ -267,30 +350,18 @@ export const problemEditorContainerSlice = createSlice({
       state.metadata = {
         title: action.payload.title,
         hidden: action.payload.hidden,
-        language: action.payload.language,
-        cpp: action.payload.cpp,
-        py: action.payload.py,
-        java: action.payload.java,
+        languages: action.payload.languages,
         dueDate: new Date(action.payload.dueDate).toISOString(),
       };
       state.codeEditor = {
-        code: { ...action.payload.code },
-        fileExtension: action.payload.fileExtension,
+        code: action.payload.code
       };
       state.problem = {
         problemStatement: action.payload.statement,
         templatePackage: action.payload.templatePackage,
       };
       state.serverConfig = {
-        cppTimeLimit: action.payload.cppTimeLimit,
-        cppMemoryLimit: action.payload.cppMemoryLimit,
-        cppBuildCommand: action.payload.cppBuildCommand,
-        pyTimeLimit: action.payload.pyTimeLimit,
-        pyMemoryLimit: action.payload.pyMemoryLimit,
-        pyBuildCommand: action.payload.pyBuildCommand,
-        javaTimeLimit: action.payload.javaTimeLimit,
-        javaMemoryLimit: action.payload.javaMemoryLimit,
-        javaBuildCommand: action.payload.javaBuildCommand,
+        config: action.payload.config
       };
       state.testCases = action.payload.testCases.map((testCase) => ({
         input: testCase.input,
