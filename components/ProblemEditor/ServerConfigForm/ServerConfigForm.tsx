@@ -17,45 +17,38 @@ interface Props {
 }
 
 interface ServerConfigErrors {
-  cppBuildCommand?: string;
-  cppTimeLimit?: string;
-  cppMemoryLimit?: string;
-  pyBuildCommand?: string;
-  pyTimeLimit?: string;
-  pyMemoryLimit?: string;
-  javaBuildCommand?: string;
-  javaTimeLimit?: string;
-  javaMemoryLimit?: string;
+  language: string,
+  timeLimit: string,
+  memoryLimit: string,
+  buildCommand: string
 }
 
 export const ServerConfigForm = (props: Props) => {
   const dispatch = useDispatch();
-  const { cpp, py, java } = useCheckboxContext();
+  const { languages } = useCheckboxContext();
 
   const initialValues = useSelector(
     (state: RootState) => state.problemEditorContainer.serverConfig
   );
+  
+  const cpp = languages.find((lang) => lang.language === "cpp");
+  const py = languages.find((lang) => lang.language === "py");
+  const java = languages.find((lang) => lang.language === "java");
 
   const validate = (values: ServerConfigFields) => {
-    const errors: ServerConfigErrors = {};
-    if (!values.cppMemoryLimit.toString().match(/^[0-9]+$/)) {
-      errors.cppMemoryLimit = "Must contain digits only";
-    }
-    if (!values.cppTimeLimit.toString().match(/^[0-9]+$/)) {
-      errors.cppTimeLimit = "Must contain digits only";
-    }
-    if (!values.pyMemoryLimit.toString().match(/^[0-9]+$/)) {
-      errors.pyMemoryLimit = "Must contain digits only";
-    }
-    if (!values.pyTimeLimit.toString().match(/^[0-9]+$/)) {
-      errors.pyTimeLimit = "Must contain digits only";
-    }
-    if (!values.javaMemoryLimit.toString().match(/^[0-9]+$/)) {
-      errors.javaMemoryLimit = "Must contain digits only";
-    }
-    if (!values.javaTimeLimit.toString().match(/^[0-9]+$/)) {
-      errors.javaTimeLimit = "Must contain digits only";
-    }
+    const errors: ServerConfigErrors[] = [];
+
+    values.config.forEach(element => {
+      const time =  element.timeLimit.toString().match(/^[0-9]+$/);
+      const memory = element.memoryLimit.toString().match(/^[0-9]+$/);
+
+      errors.push({
+        language: element.language,
+        timeLimit: time ? "" : "Must contain digits only",
+        memoryLimit: memory ? "" : "Must contain digits only",
+        buildCommand: ""
+      });
+    });
 
     dispatch(validateServerConfig(Object.entries(errors).length === 0));
 
@@ -98,7 +91,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.cppTimeLimit}
+                value={values.config.find(lang => lang.language === "cpp")?.timeLimit}
                 error={touched.cppTimeLimit && Boolean(errors.cppTimeLimit)}
                 helperText={touched.cppTimeLimit && errors.cppTimeLimit}
                 sx={{ width: "25%" }}
@@ -115,7 +108,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.cppMemoryLimit}
+                value={values.config.find(lang => lang.language === "cpp")?.memoryLimit}
                 error={touched.cppMemoryLimit && Boolean(errors.cppMemoryLimit)}
                 helperText={touched.cppMemoryLimit && errors.cppMemoryLimit}
                 sx={{ width: "25%" }}
@@ -126,7 +119,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.cppBuildCommand}
+                value={values.config.find(lang => lang.language === "cpp")?.buildCommand}
                 error={touched.cppBuildCommand && Boolean(errors.cppBuildCommand)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
@@ -159,7 +152,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.pyTimeLimit}
+                value={values.config.find(lang => lang.language === "py")?.timeLimit}
                 error={touched.pyTimeLimit && Boolean(errors.pyTimeLimit)}
                 helperText={touched.pyTimeLimit && errors.pyTimeLimit}
                 sx={{ width: "25%" }}
@@ -176,7 +169,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.pyMemoryLimit}
+                value={values.config.find(lang => lang.language === "py")?.memoryLimit}
                 error={touched.pyMemoryLimit && Boolean(errors.pyMemoryLimit)}
                 helperText={touched.pyMemoryLimit && errors.pyMemoryLimit}
                 sx={{ width: "25%" }}
@@ -187,7 +180,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.pyBuildCommand}
+                value={values.config.find(lang => lang.language === "py")?.buildCommand}
                 error={touched.pyBuildCommand && Boolean(errors.pyBuildCommand)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
@@ -220,7 +213,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.javaTimeLimit}
+                value={values.config.find(lang => lang.language === "java")?.timeLimit}
                 error={touched.javaTimeLimit && Boolean(errors.javaTimeLimit)}
                 helperText={touched.javaTimeLimit && errors.javaTimeLimit}
                 sx={{ width: "25%" }}
@@ -237,7 +230,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.javaMemoryLimit}
+                value={values.config.find(lang => lang.language === "java")?.memoryLimit}
                 error={touched.javaMemoryLimit && Boolean(errors.javaMemoryLimit)}
                 helperText={touched.javaMemoryLimit && errors.javaMemoryLimit}
                 sx={{ width: "25%" }}
@@ -248,7 +241,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.javaBuildCommand}
+                value={values.config.find(lang => lang.language === "java")?.buildCommand}
                 error={touched.javaBuildCommand && Boolean(errors.javaBuildCommand)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
