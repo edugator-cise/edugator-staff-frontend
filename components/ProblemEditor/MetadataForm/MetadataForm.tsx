@@ -226,13 +226,11 @@ export const MetadataForm = (props: Props) => {
               }
               label="Java"
             />
-            {errors.languages && (
+            {errors.languages && touched.languages && (
               <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
                 {errors.languages}
               </Typography>
             )}
-
-
             </Box>
             
           </Stack>
