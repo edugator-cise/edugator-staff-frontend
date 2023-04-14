@@ -256,7 +256,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "py")?.header}
+                        value={values.code.find((lang) => lang.language === "cpp")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -275,7 +275,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "py")?.body}
+                        value={values.code.find((lang) => lang.language === "cpp")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
