@@ -30,7 +30,7 @@ interface Props {
 interface Errors {
   title?: string;
   dueDate?: string;
-  language?: string;
+  languages?: string;
 }
 
 interface DateError {
@@ -58,8 +58,8 @@ export const MetadataForm = (props: Props) => {
 
     const selectedLanguages = values.languages.filter((lang) => lang.selected);
 
-    if (selectedLanguages.length === 0) {
-      errors.language = "At least one language must be selected";
+    if (selectedLanguages.length == 0) {
+      errors.languages = "At least one language must be selected";
     }
     
 
@@ -226,13 +226,12 @@ export const MetadataForm = (props: Props) => {
               }
               label="Java"
             />
-{/*{touched.cpp || touched.py || touched.java ? (
-              errors.language && (
-                <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
-                  {errors.language}
-                </Typography>
-              )
-            ) : null} */}
+            {errors.languages && (
+              <Typography variant="body2" color="error" sx={{ marginLeft: 1 }}>
+                {errors.languages}
+              </Typography>
+            )}
+
 
             </Box>
             
