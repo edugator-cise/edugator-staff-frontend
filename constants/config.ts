@@ -11,4 +11,10 @@ export const colors = {
   navIconGray: "#969696",
 };
 
+export const languages = {
+  default: "C++",
+  java: "Java",
+  python: "Python"
+}
+
 export const adminPathRegex = /\/admin\/code*/;

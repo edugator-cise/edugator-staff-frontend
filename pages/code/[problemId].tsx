@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { adminPathRegex } from "constants/config";
+import { adminPathRegex, languages } from "constants/config";
 import PlaygroundLayout from "components/PlaygroundLayout";
 import {
   Grid,
@@ -126,7 +126,7 @@ export default function CodeEditor() {
               isSubmissionRunning={isSubmissionRunning}
               runCode={runCode}
               submitCode={submitCode}
-              code={currentProblem.code?.body}
+              code={currentProblem.langConfig.find(config => config.language === languages.default)!.code.body}
               templatePackage={currentProblem?.templatePackage}
               currentProblem={currentProblem}
               stdin={stdin}

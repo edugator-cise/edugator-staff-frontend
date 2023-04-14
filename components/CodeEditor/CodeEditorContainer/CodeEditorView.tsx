@@ -6,14 +6,16 @@ import { styled } from "@mui/material/styles";
 import { GetApp, Add, RotateLeft, CloudDownload } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { adminPathRegex, colors } from "constants/config";
+import { adminPathRegex, colors, languages } from "constants/config";
 // import { useTheme } from "@mui/material/styles";
 import theme from "constants/theme";
-import { IProblem } from "lib/shared/types";
+import { IProblem, ILangConfig } from "lib/shared/types";
 import { createNavStructure, handleDownload, parseFile } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import useNavigation from "hooks/useNavigation";
 import { LocalStorage } from "lib/auth/LocalStorage";
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ColumnContainer = styled("div")(
@@ -105,12 +107,18 @@ export const CodeEditorView = ({
   ); */
 
   const {
-    timeLimit,
-    memoryLimit,
-    buildCommand,
     _id: problemId,
-    fileExtension: fileType,
+    statement,
+    hidden,
+    langConfig,
+    dueDate,
+    testCases
   } = currentProblem;
+
+  const getLangConfig = (language: string): ILangConfig | undefined =>
+    currentProblem.langConfig.find(config => config.language === language)
+
+  var currLangConfig = getLangConfig(languages.default)
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
   const { problemAndLessonSet } = useNavigation(
@@ -149,6 +157,17 @@ export const CodeEditorView = ({
     }
   });
 
+  const languageOptions = currentProblem.langConfig.filter(config => config.selected).map(config => config.language)
+
+  const onLanguageSelect = (option: any) => {
+    var body = getLangConfig(option.value)!.code.body
+
+    if (editorRef.current) {
+      editorRef.current.setValue(body);
+    }
+  };
+
+
   return (
     <Grow in appear timeout={500}>
       <CodeHolder>
@@ -162,7 +181,9 @@ export const CodeEditorView = ({
           >
             Solution
           </Box>
-          <Box sx={{ paddingRight: 3 }}>
+          <Box sx={{ paddingRight: 3, display: 'flex' }}>
+
+            <Dropdown options={languageOptions} onChange={onLanguageSelect} value={currLangConfig!.language} placeholder="Please select a language" />
             <a
               href={templatePackage}
               style={{ textDecoration: "none" }}
@@ -189,7 +210,7 @@ export const CodeEditorView = ({
             <Tooltip title="Download Submission" placement="top">
               <IconButton
                 onClick={() => {
-                  handleDownload(currentCode, navigation, problemId, fileType);
+                  handleDownload(currentCode, navigation, problemId, currLangConfig!.fileExtension);
                 }}
               >
                 <GetApp />
@@ -234,9 +255,9 @@ export const CodeEditorView = ({
                 code: currentCode,
                 stdin,
                 problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
+                timeLimit: currLangConfig!.timeLimit as number,
+                memoryLimit: currLangConfig!.memoryLimit as number,
+                buildCommand: currLangConfig!.buildCommand as string,
               });
             }}
           >
@@ -252,9 +273,9 @@ export const CodeEditorView = ({
                 code: currentCode,
                 stdin,
                 problemId: problemId as string,
-                timeLimit: timeLimit as number,
-                memoryLimit: memoryLimit as number,
-                buildCommand: buildCommand as string,
+                timeLimit: currLangConfig!.timeLimit as number,
+                memoryLimit: currLangConfig!.memoryLimit as number,
+                buildCommand: currLangConfig!.buildCommand as string,
               })
             }
           >
