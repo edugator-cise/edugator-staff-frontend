@@ -63,6 +63,7 @@ export const useRunCode = (locationState: string) => {
 
   const runCode = async ({
     code,
+    language,
     stdin,
     problemId,
     timeLimit,
@@ -70,6 +71,7 @@ export const useRunCode = (locationState: string) => {
     buildCommand,
   }: {
     code: string;
+    language: string;
     stdin: string;
     problemId: string;
     timeLimit: number;
@@ -82,6 +84,7 @@ export const useRunCode = (locationState: string) => {
         apiRoutes.student.runCode,
         transformPayload({
           code,
+          language,
           stdin,
           problemId,
           timeLimit,
@@ -125,6 +128,7 @@ export const useRunCode = (locationState: string) => {
 
   const submitCode = async ({
     code,
+    language,
     stdin,
     problemId,
     timeLimit,
@@ -132,6 +136,7 @@ export const useRunCode = (locationState: string) => {
     buildCommand,
   }: {
     code: string;
+    language: string;
     stdin: string;
     problemId: string;
     timeLimit: number;
@@ -144,6 +149,7 @@ export const useRunCode = (locationState: string) => {
         apiRoutes.student.runCodeEvaluation,
         transformPayload({
           code,
+          language,
           stdin,
           problemId,
           timeLimit,

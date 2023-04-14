@@ -59,6 +59,7 @@ interface CodeEditorProps {
   isSubmissionRunning: boolean;
   runCode: ({
     code,
+    language,
     stdin,
     problemId,
     timeLimit,
@@ -66,6 +67,7 @@ interface CodeEditorProps {
     buildCommand,
   }: {
     code: string;
+    language: string;
     stdin: string;
     problemId: string;
     timeLimit: number;
@@ -74,6 +76,7 @@ interface CodeEditorProps {
   }) => void;
   submitCode: ({
     code,
+    language,
     stdin,
     problemId,
     timeLimit,
@@ -82,6 +85,7 @@ interface CodeEditorProps {
   }: {
     code: string;
     stdin: string;
+    language: string;
     problemId: string;
     timeLimit: number;
     memoryLimit: number;
@@ -118,7 +122,7 @@ export const CodeEditorView = ({
   const getLangConfig = (language: string): ILangConfig | undefined =>
     currentProblem.langConfig.find(config => config.language === language)
 
-  var currLangConfig = getLangConfig(languages.default)
+  const [currLangConfig, setCurrLangConfig] = useState(getLangConfig(languages.default))
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
   const { problemAndLessonSet } = useNavigation(
@@ -160,7 +164,10 @@ export const CodeEditorView = ({
   const languageOptions = currentProblem.langConfig.filter(config => config.selected).map(config => config.language)
 
   const onLanguageSelect = (option: any) => {
-    var body = getLangConfig(option.value)!.code.body
+    var langConfig = getLangConfig(option.value)
+
+    var body = langConfig!.code.body
+    setCurrLangConfig(langConfig)
 
     if (editorRef.current) {
       editorRef.current.setValue(body);
@@ -253,6 +260,7 @@ export const CodeEditorView = ({
             onClick={() => {
               runCode({
                 code: currentCode,
+                language: currLangConfig!.language,
                 stdin,
                 problemId: problemId as string,
                 timeLimit: currLangConfig!.timeLimit as number,
@@ -271,6 +279,7 @@ export const CodeEditorView = ({
             onClick={() =>
               submitCode({
                 code: currentCode,
+                language: currLangConfig!.language,
                 stdin,
                 problemId: problemId as string,
                 timeLimit: currLangConfig!.timeLimit as number,

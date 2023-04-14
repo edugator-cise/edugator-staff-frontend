@@ -6,6 +6,7 @@ import {
 } from "components/CodeEditor/types";
 import * as monaco from "monaco-editor";
 import { Buffer } from "buffer";
+import { languages } from "constants/config";
 
 export const generateFileName = (
   navStructure: INavigationItem[],
@@ -150,9 +151,21 @@ export const transformPayload = (payload: ICodeSubmission) => {
   const base64EncodedStdin = Buffer.from(payload.stdin || "", "utf-8").toString(
     "base64"
   );
+
+  var languageId = 54 // C++
+  switch (payload.language) {
+    case languages.java:
+      languageId = 64 
+      break;
+    case languages.python:
+      languageId = 71
+      break;
+  }
+
   const body = {
     source_code: base64EncodedCode,
-    language_id: 54, //C++
+    language_name: payload.language,
+    language_id: languageId,
     base_64: true,
     stdin: base64EncodedStdin,
     problemId: payload.problemId,
@@ -161,6 +174,7 @@ export const transformPayload = (payload: ICodeSubmission) => {
     compiler_options:
       payload.buildCommand === "" ? undefined : payload.buildCommand,
   };
+
   return body;
 };
 

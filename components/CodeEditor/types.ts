@@ -32,6 +32,7 @@ export interface IToken {
 
 export interface ICodeSubmission {
   code: string;
+  language: string
   stdin: string;
   problemId: string;
   timeLimit: number;
