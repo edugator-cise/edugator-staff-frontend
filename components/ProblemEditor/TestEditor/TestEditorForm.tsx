@@ -57,11 +57,9 @@ const requestAddOrEditProblem = async (value: ProblemEditorContainerState, type:
     title: problemState.metadata.title,
     hidden: problemState.metadata.hidden,
     langConfig: langConfig,
-    dueDate: problemState.metadata.dueDate,
-    templatePackage: problemState.problem.templatePackage,
-    ...problemState.codeEditor,
     testCases: problemState.testCases,
-    ...problemState.serverConfig,
+    dueDate: problemState.metadata.dueDate,
+    templatePackage: problemState.problem.templatePackage
   };
   if (type == "add") {
     const newProblem = { moduleId: problemState.moduleId, ...problem}
