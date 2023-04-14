@@ -7,12 +7,17 @@ import {
   requestAddProblemFailure,
   updateTestCases,
   requestAddProblemSuccess,
+  MetadataFields,
+  MetadataLangConfig,
+  CodeEditorLangConfig,
+  ServerLangConfig,
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import { Stack, Button, Alert } from "@mui/material";
 import { TestCase } from "./TestCase";
 import { generateDefaultTestCase, TestCaseField } from "./TestCase.utils";
 import { RootState } from "lib/store/store";
 import { IProblem } from "lib/shared/types";
+import { ILangConfig } from "lib/shared/types";
 import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
 
@@ -23,15 +28,37 @@ interface Props {
 const requestAddOrEditProblem = async (value: ProblemEditorContainerState, type: "add" | "edit") => {
   const problemState = value;
 
-  // preparing the payload
-  const language = "C++";
+  const langConfig: ILangConfig[] = [];
+
+  // Build the lang config for the backend
+  problemState.metadata.languages.forEach(metadataLang => {
+    const codeEditorLang = problemState.codeEditor.code.find(codeEditorLang => codeEditorLang.language === metadataLang.language);
+    const serverLang = problemState.serverConfig.config.find(serverLang => serverLang.language === metadataLang.language);
   
+    if (codeEditorLang && serverLang) {
+      langConfig.push({
+        language: metadataLang.language,
+        selected: metadataLang.selected,
+        code: {
+          header: codeEditorLang.header,
+          body: codeEditorLang.body,
+          footer: codeEditorLang.footer,
+        },
+        fileExtension: codeEditorLang.fileExtension,
+        timeLimit: serverLang.timeLimit,
+        memoryLimit: serverLang.memoryLimit,
+        buildCommand: serverLang.buildCommand
+      });
+    }
+  });
+
   let problem: IProblem = {
-    ...problemState.metadata,
-    language,
+    statement: problemState.problem.problemStatement,
+    title: problemState.metadata.title,
+    hidden: problemState.metadata.hidden,
+    langConfig: langConfig,
     dueDate: problemState.metadata.dueDate,
     templatePackage: problemState.problem.templatePackage,
-    statement: problemState.problem.problemStatement,
     ...problemState.codeEditor,
     testCases: problemState.testCases,
     ...problemState.serverConfig,

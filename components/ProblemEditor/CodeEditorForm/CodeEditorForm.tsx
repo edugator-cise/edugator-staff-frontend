@@ -33,7 +33,7 @@ interface Props {
 
 interface FlattenedCodeFields {
   code: {
-    name: string,
+    language: string,
     header: string;
     body: string;
     footer: string;
@@ -44,7 +44,7 @@ interface FlattenedCodeFields {
 
 interface Errors {
   code?: {
-    name?: string,
+    language?: string,
     header?: string;
     body?: string;
     footer?: string;
@@ -130,9 +130,9 @@ export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
   const { languages } = useCheckboxContext();
 
-  const cpp = languages.find((lang) => lang.name === "cpp");
-  const py = languages.find((lang) => lang.name === "py");
-  const java = languages.find((lang) => lang.name === "java");
+  const cpp = languages.find((lang) => lang.language === "cpp");
+  const py = languages.find((lang) => lang.language === "py");
+  const java = languages.find((lang) => lang.language === "java");
 
   const [touched, setTouched] = React.useState(false);
 
@@ -140,9 +140,18 @@ export const CodeEditorForm = ({ formRef }: Props) => {
     const formattedFields: CodeEditorFields =
       state.problemEditorContainer.codeEditor;
     const code = formattedFields.code;
-    const flattenedFields: FlattenedCodeFields = {
-      code
-    };
+    const flattenedFields: FlattenedCodeFields = {code: []};
+    
+    code.forEach(lang => {
+      flattenedFields.code.push({
+        language: lang.language,
+        header: lang.header,
+        body: lang.body,
+        footer: lang.footer,
+        fileExtension: lang.fileExtension,
+      });
+    });
+
     return flattenedFields;
   });
 
@@ -222,7 +231,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.name === "cpp")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "cpp")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -247,7 +256,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "py")?.header}
+                        value={values.code.find((lang) => lang.language === "py")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -266,7 +275,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "py")?.body}
+                        value={values.code.find((lang) => lang.language === "py")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -287,7 +296,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "cpp")?.footer}
+                        value={values.code.find((lang) => lang.language === "cpp")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -317,7 +326,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.name === "py")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "py")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -342,7 +351,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "py")?.header}
+                        value={values.code.find((lang) => lang.language === "py")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -361,7 +370,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "py")?.body}
+                        value={values.code.find((lang) => lang.language === "py")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -382,7 +391,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "py")?.footer}
+                        value={values.code.find((lang) => lang.language === "py")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -412,7 +421,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.name === "java")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "java")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -437,7 +446,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "java")?.header}
+                        value={values.code.find((lang) => lang.language === "java")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -456,7 +465,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "java")?.body}
+                        value={values.code.find((lang) => lang.language === "java")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -477,7 +486,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.name === "java")?.footer}
+                        value={values.code.find((lang) => lang.language === "java")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);

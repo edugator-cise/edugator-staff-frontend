@@ -8,7 +8,7 @@ export interface ProblemFields {
 }
 
 export interface MetadataLangConfig {
-  name: string;
+  language: string;
   selected: boolean;
 }
 
@@ -20,7 +20,7 @@ export interface MetadataFields {
 }
 
 export interface CodeEditorLangConfig {
-  name: string,
+  language: string,
   header: string;
   body: string;
   footer: string;
@@ -32,7 +32,7 @@ export interface CodeEditorFields {
 }
 
 export interface ServerLangConfig {
-  name: string,
+  language: string,
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
@@ -91,15 +91,15 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     languages: [
       {
-        name: "cpp",
+        language: "cpp",
         selected: false
       },
       {
-        name: "py",
+        language: "py",
         selected: false
       },
       {
-        name: "java",
+        language: "java",
         selected: false
       }
       
@@ -114,7 +114,7 @@ const initialState: ProblemEditorContainerState = {
   codeEditor: {
     code: [
       {
-        name: "cpp",
+        language: "cpp",
         header: `//If students import packages or use namespaces on their own, it shouldn't cause problems
         #include <iostream>
         #include <vector>
@@ -140,7 +140,7 @@ const initialState: ProblemEditorContainerState = {
         fileExtension: ".h"
       },
       {
-        name: "py",
+        language: "py",
         header: `# If students import packages or use namespaces on their own, it shouldn't cause problems
         import sys
         import math
@@ -163,7 +163,7 @@ const initialState: ProblemEditorContainerState = {
         fileExtension: ".py"
       },
       {
-        name: "java",
+        language: "java",
         header: `import java.util.Scanner;
         import java.util.ArrayList;
         import java.util.List;
@@ -191,19 +191,19 @@ const initialState: ProblemEditorContainerState = {
   serverConfig: {
     config: [
       {
-        name: "cpp",
+        language: "cpp",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        name: "py",
+        language: "py",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        name: "java",
+        language: "java",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
@@ -347,21 +347,46 @@ export const problemEditorContainerSlice = createSlice({
       state.serverConfigIsValid = true;
       state.testEditorIsValid = true;
 
+      // Unpack lang config
+      let metadata: MetadataLangConfig[] = []
+      let code: CodeEditorLangConfig[] = []
+      let server: ServerLangConfig[] = []
+
+      action.payload.langConfig.forEach(item => {
+        metadata.push({
+          language: item.language,
+          selected: item.selected
+        });
+        code.push({
+          language: item.language,
+          header: item.code.header,
+          body: item.code.body,
+          footer: item.code.footer,
+          fileExtension: item.fileExtension
+        });
+        server.push({
+          language: item.language,
+          timeLimit: item.timeLimit,
+          memoryLimit: item.memoryLimit,
+          buildCommand: item.buildCommand
+        });
+      });
+      
       state.metadata = {
         title: action.payload.title,
         hidden: action.payload.hidden,
-        languages: action.payload.languages,
+        languages: metadata,
         dueDate: new Date(action.payload.dueDate).toISOString(),
       };
       state.codeEditor = {
-        code: action.payload.code
+        code: code
       };
       state.problem = {
         problemStatement: action.payload.statement,
         templatePackage: action.payload.templatePackage,
       };
       state.serverConfig = {
-        config: action.payload.config
+        config: server
       };
       state.testCases = action.payload.testCases.map((testCase) => ({
         input: testCase.input,

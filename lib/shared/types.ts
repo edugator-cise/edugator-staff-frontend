@@ -7,29 +7,27 @@ export interface ITestCase {
   visibility: number;
 }
 
-export interface IProblem extends IProblemBase {
-  hidden: boolean;
-  languages: {
-    name: string;
-    selected: boolean;
-  }[];
-  dueDate: string; //iso format
-  statement: string;
+export interface ILangConfig {
+  language: string;
+  selected: boolean;
   code: {
-    name: string;
     header: string;
     body: string;
     footer: string;
-    fileExtension: string;
-  }[];
+  };
+  fileExtension: string;
+  timeLimit: number;
+  memoryLimit: number;
+  buildCommand: string;
+}
+
+export interface IProblem extends IProblemBase {
+  statement: string;
+  hidden: boolean;
+  langConfig: ILangConfig[];
+  dueDate: string; //iso format
   testCases: ITestCase[];
   templatePackage: string;
-  config: {
-    name: string;
-    timeLimit: number;
-    memoryLimit: number;
-    buildCommand: string;
-  }[];
 }
 
 export interface ILesson extends ILessonBase {

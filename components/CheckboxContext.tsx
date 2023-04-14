@@ -2,24 +2,24 @@ import { createContext, useContext, useState } from "react";
 
 type CheckboxContextType = {
   languages: {
-    name: string;
+    language: string;
     selected: boolean;
   }[];
-  setLanguages: (value: {name: string, selected: boolean}[]) => void;
+  setLanguages: (value: {language: string, selected: boolean}[]) => void;
 };
 
 const CheckboxContext = createContext<CheckboxContextType>({
   languages: [
     {
-      name: "cpp",
+      language: "cpp",
       selected: false
     },
     {
-      name: "py",
+      language: "py",
       selected: false
     },
     {
-      name: "java",
+      language: "java",
       selected: false
     }
   ],
@@ -33,15 +33,15 @@ export const useCheckboxContext = () => useContext(CheckboxContext);
 export const CheckboxProvider: React.FC = ({ children }) => {
   const [languages, setLanguages] = useState([
     {
-      name: "cpp",
+      language: "cpp",
       selected: false
     },
     {
-      name: "py",
+      language: "py",
       selected: false
     },
     {
-      name: "java",
+      language: "java",
       selected: false
     }
   ]);
