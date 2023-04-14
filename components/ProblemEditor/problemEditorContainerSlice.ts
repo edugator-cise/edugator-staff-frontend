@@ -91,15 +91,15 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     languages: [
       {
-        language: "cpp",
+        language: "C++",
         selected: false
       },
       {
-        language: "py",
+        language: "Python",
         selected: false
       },
       {
-        language: "java",
+        language: "Java",
         selected: false
       }
       
@@ -114,7 +114,7 @@ const initialState: ProblemEditorContainerState = {
   codeEditor: {
     code: [
       {
-        language: "cpp",
+        language: "C++",
         header: `//If students import packages or use namespaces on their own, it shouldn't cause problems
         #include <iostream>
         #include <vector>
@@ -140,7 +140,7 @@ const initialState: ProblemEditorContainerState = {
         fileExtension: ".h"
       },
       {
-        language: "py",
+        language: "Python",
         header: `# If students import packages or use namespaces on their own, it shouldn't cause problems
         import sys
         import math
@@ -163,7 +163,7 @@ const initialState: ProblemEditorContainerState = {
         fileExtension: ".py"
       },
       {
-        language: "java",
+        language: "Java",
         header: `import java.util.Scanner;
         import java.util.ArrayList;
         import java.util.List;
@@ -191,19 +191,19 @@ const initialState: ProblemEditorContainerState = {
   serverConfig: {
     config: [
       {
-        language: "cpp",
+        language: "C++",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        language: "py",
+        language: "Python",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        language: "java",
+        language: "Java",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""

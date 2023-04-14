@@ -130,9 +130,9 @@ export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
   const { languages } = useCheckboxContext();
 
-  const cpp = languages.find((lang) => lang.language === "cpp");
-  const py = languages.find((lang) => lang.language === "py");
-  const java = languages.find((lang) => lang.language === "java");
+  const cpp = languages.find((lang) => lang.language === "C++");
+  const py = languages.find((lang) => lang.language === "Python");
+  const java = languages.find((lang) => lang.language === "Java");
 
   const [touched, setTouched] = React.useState(false);
 
@@ -231,7 +231,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.language === "cpp")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "C++")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -256,7 +256,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "cpp")?.header}
+                        value={values.code.find((lang) => lang.language === "C++")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -275,7 +275,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "cpp")?.body}
+                        value={values.code.find((lang) => lang.language === "C++")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -296,7 +296,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="cpp"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "cpp")?.footer}
+                        value={values.code.find((lang) => lang.language === "C++")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -326,7 +326,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.language === "py")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "Python")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -351,7 +351,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "py")?.header}
+                        value={values.code.find((lang) => lang.language === "Python")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -370,7 +370,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "py")?.body}
+                        value={values.code.find((lang) => lang.language === "Python")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -391,7 +391,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="python"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "py")?.footer}
+                        value={values.code.find((lang) => lang.language === "Python")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
@@ -421,7 +421,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <InputLabel>Codebox file extension</InputLabel>
                       <Select
                         name="fileExtension"
-                        value={values.code.find((lang) => lang.language === "java")?.fileExtension}
+                        value={values.code.find((lang) => lang.language === "Java")?.fileExtension}
                         label="fileExtension"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -446,7 +446,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "java")?.header}
+                        value={values.code.find((lang) => lang.language === "Java")?.header}
                         onChange={(value) => {
                           setFieldValue("header", value);
                           setTouched(true);
@@ -465,7 +465,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "java")?.body}
+                        value={values.code.find((lang) => lang.language === "Java")?.body}
                         onChange={(value) => {
                           setFieldValue("body", value);
                           setTouched(true);
@@ -486,7 +486,7 @@ export const CodeEditorForm = ({ formRef }: Props) => {
                       <Editor
                         language="java"
                         height="250px"
-                        value={values.code.find((lang) => lang.language === "java")?.footer}
+                        value={values.code.find((lang) => lang.language === "Java")?.footer}
                         onChange={(value) => {
                           setFieldValue("footer", value);
                           setTouched(true);
