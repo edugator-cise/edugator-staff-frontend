@@ -42,15 +42,18 @@ export const ServerConfigForm = (props: Props) => {
       const time =  element.timeLimit.toString().match(/^[0-9]+$/);
       const memory = element.memoryLimit.toString().match(/^[0-9]+$/);
 
-      errors.push({
-        language: element.language,
-        timeLimit: time ? "" : "Must contain digits only",
-        memoryLimit: memory ? "" : "Must contain digits only",
-        buildCommand: ""
-      });
+      if (time == null || memory == null) {
+        errors.push({
+          language: element.language,
+          timeLimit: (time == null) ? "Must contain digits only" : "",
+          memoryLimit: (memory == null) ? "Must contain digits only" : "",
+          buildCommand: ""
+        });  
+      }
     });
-
-    dispatch(validateServerConfig(Object.entries(errors).length === 0));
+    
+    console.log(errors)
+    dispatch(validateServerConfig(Object.entries(errors).length == 0));
 
     return errors;
   };
