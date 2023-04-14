@@ -17,10 +17,10 @@ interface Props {
 }
 
 interface ServerConfigErrors {
-  language: string,
-  timeLimit: string,
-  memoryLimit: string,
-  buildCommand: string
+  language?: string,
+  timeLimit?: string,
+  memoryLimit?: string,
+  buildCommand?: string
 }
 
 export const ServerConfigForm = (props: Props) => {
@@ -80,7 +80,7 @@ export const ServerConfigForm = (props: Props) => {
             <Stack spacing={5}>
               <TextField
                 id="time-limit"
-                name="cppTimeLimit"
+                name="config[0].timeLimit"
                 label="Time limit"
                 inputProps={{
                   inputMode: "numeric",
@@ -92,13 +92,13 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "cpp")?.timeLimit}
-                error={touched.cppTimeLimit && Boolean(errors.cppTimeLimit)}
-                helperText={touched.cppTimeLimit && errors.cppTimeLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="memory-limit"
-                name="cppMemoryLimit"
+                name="config[0].memoryLimit"
                 label="Memory limit"
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
@@ -109,18 +109,18 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "cpp")?.memoryLimit}
-                error={touched.cppMemoryLimit && Boolean(errors.cppMemoryLimit)}
-                helperText={touched.cppMemoryLimit && errors.cppMemoryLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="build-command"
-                name="cppBuildCommand"
+                name="config[0].buildCommand"
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "cpp")?.buildCommand}
-                error={touched.cppBuildCommand && Boolean(errors.cppBuildCommand)}
+                error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
             </Stack>
@@ -141,7 +141,7 @@ export const ServerConfigForm = (props: Props) => {
             <Stack spacing={5}>
               <TextField
                 id="time-limit"
-                name="pyTimeLimit"
+                name="config[1].timeLimit"
                 label="Time limit"
                 inputProps={{
                   inputMode: "numeric",
@@ -153,13 +153,13 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "py")?.timeLimit}
-                error={touched.pyTimeLimit && Boolean(errors.pyTimeLimit)}
-                helperText={touched.pyTimeLimit && errors.pyTimeLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="memory-limit"
-                name="pyMemoryLimit"
+                name="config[1].memoryLimit"
                 label="Memory limit"
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
@@ -170,18 +170,18 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "py")?.memoryLimit}
-                error={touched.pyMemoryLimit && Boolean(errors.pyMemoryLimit)}
-                helperText={touched.pyMemoryLimit && errors.pyMemoryLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="build-command"
-                name="pyBuildCommand"
+                name="config[1].buildCommand"
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "py")?.buildCommand}
-                error={touched.pyBuildCommand && Boolean(errors.pyBuildCommand)}
+                error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
             </Stack>
@@ -202,7 +202,7 @@ export const ServerConfigForm = (props: Props) => {
             <Stack spacing={5}>
               <TextField
                 id="time-limit"
-                name="javaTimeLimit"
+                name="config[2].timeLimit"
                 label="Time limit"
                 inputProps={{
                   inputMode: "numeric",
@@ -214,13 +214,13 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "java")?.timeLimit}
-                error={touched.javaTimeLimit && Boolean(errors.javaTimeLimit)}
-                helperText={touched.javaTimeLimit && errors.javaTimeLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="memory-limit"
-                name="javaMemoryLimit"
+                name="config[2].memoryLimit"
                 label="Memory limit"
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
@@ -231,18 +231,18 @@ export const ServerConfigForm = (props: Props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "java")?.memoryLimit}
-                error={touched.javaMemoryLimit && Boolean(errors.javaMemoryLimit)}
-                helperText={touched.javaMemoryLimit && errors.javaMemoryLimit}
+                error={touched.config && Boolean(errors.config)}
+                helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
               />
               <TextField
                 id="build-command"
-                name="javaBuildCommand"
+                name="config[2].buildCommand"
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.config.find(lang => lang.language === "java")?.buildCommand}
-                error={touched.javaBuildCommand && Boolean(errors.javaBuildCommand)}
+                error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
             </Stack>
