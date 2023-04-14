@@ -155,7 +155,7 @@ export const transformPayload = (payload: ICodeSubmission) => {
   var languageId = 54 // C++
   switch (payload.language) {
     case languages.java:
-      languageId = 64 
+      languageId = 62 
       break;
     case languages.python:
       languageId = 71
