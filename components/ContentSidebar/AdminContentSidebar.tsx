@@ -270,10 +270,20 @@ const AdminContentSidebar = ({
                             </AnimatePresence>
                           </AnimateHeight>
                           <div className="flex items-center justify-center px-4 py-4 bg-nav-darker">
-                            <button className="flex space-x-2 items-center justify-center w-full px-2 py-2 bg-blue-500 hover:bg-blue-600 rounded-md">
-                              <PlusIcon className="w-4 h-4 text-white" />
-                              <p className="text-white text-sm">Add Content</p>
-                            </button>
+                            <div className="flex space-x-2 w-full">
+                              <button className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/60 border-dashed rounded-md">
+                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
+                                <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-sm">
+                                  Add Lesson
+                                </p>
+                              </button>
+                              <button className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/problembutton border border-blue-500/60 border-dashed rounded-md">
+                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
+                                <p className="text-slate-100/60 group-hover/problembutton:text-white text-sm">
+                                  Add Problem
+                                </p>
+                              </button>
+                            </div>
                           </div>
                         </AccordionContent>
                       </Accordion.Item>
@@ -281,9 +291,11 @@ const AdminContentSidebar = ({
                   }
                 )}
               <div className="flex items-center justify-center px-4 py-4">
-                <button className="flex space-x-2 items-center justify-center w-full px-2 py-3 bg-blue-500 hover:bg-blue-600 rounded-md">
-                  <PlusIcon className="w-4 h-4 text-white" />
-                  <p className="text-white text-sm">Add Module</p>
+                <button className="flex space-x-2 items-center justify-center w-full px-2 py-3 group/modulebutton border border-blue-500/60 border-dashed rounded-md">
+                  <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/modulebutton:text-white" />
+                  <p className="text-slate-100/60 group-hover/modulebutton:text-white text-sm">
+                    Add Module
+                  </p>
                 </button>
               </div>
             </Accordion.Root>

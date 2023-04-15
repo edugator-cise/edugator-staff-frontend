@@ -22,6 +22,8 @@ const EditorBlock = ({ data, onChange, holder }: Props) => {
       const editor = new EditorJS({
         holder: holder,
         tools: EDITOR_TOOLS,
+        inlineToolbar: ["link", "bold", "italic", "underline", "strikethrough"],
+        placeholder: "Start typing...",
         data,
         async onChange(api, event) {
           const data = await api.saver.save();
@@ -39,12 +41,7 @@ const EditorBlock = ({ data, onChange, holder }: Props) => {
     };
   }, []);
 
-  return (
-    <div
-      id={holder}
-      className="bg-slate-50 text-nav-darkest prose max-w-full px-6 py-6"
-    />
-  );
+  return <div id={holder} className="text-nav-darkest prose max-w-full p-4" />;
 };
 
 export default memo(EditorBlock);

@@ -4,26 +4,24 @@
 }
 
 .lesson-title {
-  font-family: 'DM Serif Display', serif;
+  font-family: "DM Serif Display", serif;
   font-size: 3rem;
 }
 
 .lesson-subtitle {
-  font-family: 'DM Serif Display', serif;
+  font-family: "DM Serif Display", serif;
   font-weight: 500;
   margin-bottom: 10px;
   font-size: 1.2rem;
 }
 
 .lesson-subtitle span {
-  font-family: 'DM Serif Display', serif;
+  font-family: "DM Serif Display", serif;
   font-size: 1rem;
 }
 
-
 .round {
   position: relative;
-  
 }
 
 .round label {

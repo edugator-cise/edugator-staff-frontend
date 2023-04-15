@@ -77,6 +77,16 @@
   animation: fadeOut 150ms ease-in;
 }
 
+.SelectContent[data-state="open"] {
+  transform-origin: top;
+  animation: fadeIn 150ms ease-out;
+}
+
+.SelectContent[data-state="closed"] {
+  transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
 @keyframes dash {
   from {
     stroke-dashoffset: 1000;
