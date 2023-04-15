@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Editor from "@monaco-editor/react";
+import Editor, { useMonaco } from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
@@ -105,6 +105,7 @@ export const CodeEditorView = ({
   const router = useRouter();
   const locationState = router.asPath;
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const monacoRef = useMonaco();
   const [currentCode, setCurrentCode] = useState(code);
   /* const isSubmissionRunning = useSelector(
     (state: RootState) => state.codeEditor.runningSubmission
@@ -168,9 +169,22 @@ export const CodeEditorView = ({
 
     var body = langConfig!.code.body
     setCurrLangConfig(langConfig)
+    
 
     if (editorRef.current) {
-      editorRef.current.setValue(body);
+      var model = editorRef.current.getModel()
+
+      if (monacoRef) {
+        monacoRef.editor.onDidChangeModelLanguage(() => {
+          editorRef.current?.setValue(body);    
+        })
+        
+        if (option.value == languages.default) {
+          monacoRef.editor.setModelLanguage(model!, "cpp")  
+        } else {
+          monacoRef.editor.setModelLanguage(model!, option.value.toLowerCase())
+        }
+      }
     }
   };
 
