@@ -17,6 +17,7 @@ import { icons } from "./editorIcons";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { toast } from "react-hot-toast";
 import { useTheme } from "next-themes";
+import { setEditorTheme } from "utils/monacoUtils";
 
 interface CodeEditorProps {
   code: string;
@@ -121,23 +122,6 @@ export const CodeEditorView = ({
   );
   const navigation = createNavStructure(problemAndLessonSet);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
-
-  function setEditorTheme(monaco: any) {
-    monaco.editor.defineTheme("dark-theme", {
-      base: "vs-dark",
-      inherit: true,
-      rules: [
-        {
-          token: "comment",
-          foreground: "#5d7988",
-          fontStyle: "italic",
-        },
-      ],
-      colors: {
-        "editor.background": "#192231",
-      },
-    });
-  }
 
   const handleReset = () => {
     handleCodeReset(code);
