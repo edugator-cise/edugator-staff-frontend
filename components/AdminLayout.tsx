@@ -88,8 +88,29 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
           >
             {pageTitle}
           </Typography>
-          {actionButtons.map((button) => (
-            <Button
+          {actionButtons.map((button) => {
+            return (
+              <button
+                style={{
+                  backgroundColor:
+                    button.variant === "outlined"
+                      ? "trasnparent"
+                      : button.color === "primary"
+                      ? "#207dff"
+                      : button.color === "error"
+                      ? "#ff4d4f"
+                      : "",
+                }}
+                className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${
+                  button.variant === "outlined"
+                    ? "border border-blue-500 text-blue-700 !bg-transparent hover:!bg-blue-100"
+                    : ""
+                }`}
+                onClick={button.onClick}
+              >
+                {button.label}
+              </button>
+              /*  <Button
               onClick={button.onClick}
               key={button.label}
               variant={button.variant as ButtonVariant}
@@ -97,8 +118,9 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               sx={{ marginLeft: 1 }}
             >
               {button.label}
-            </Button>
-          ))}
+            </Button> */
+            );
+          })}
         </Box>
         <Divider sx={{ marginTop: "1rem", marginBottom: "2rem" }} />
         <Box

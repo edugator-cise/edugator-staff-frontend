@@ -138,14 +138,14 @@ export const TestEditor = (props: Props) => {
                   <Stack direction="column" spacing={4}>
                     {testCaseComponents}
                   </Stack>
-                  <Button
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
                     onClick={() => {
                       arrayHelpers.push(generateDefaultTestCase());
                     }}
-                    variant="contained"
                   >
                     Add test case
-                  </Button>
+                  </button>
                 </Stack>
               );
             }}

@@ -23,15 +23,6 @@ class msAnswerChoice extends answerChoice {
   }
 }
 
-class msAnswerChoice extends answerChoice {
-  correct: boolean;
-
-  constructor(id: number, text: string, correct: boolean) {
-    super(id, text);
-    this.correct = correct;
-  }
-}
-
 export class text_content implements content {
   html: string;
 
