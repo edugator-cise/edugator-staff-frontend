@@ -16,8 +16,10 @@ import ProblemEditorPane from "components/ProblemEditor/NewEditor/ProblemEditorP
 import {
   ProblemAction,
   ProblemData,
+  TestCaseVisibility,
 } from "components/ProblemEditor/NewEditor/types";
 import { getFileExtension } from "components/ProblemEditor/NewEditor/utils";
+import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
 
 /* const EditorBlock = dynamic(() => import("components/TestEditor/Editor"), {
   ssr: false,
@@ -89,7 +91,14 @@ const initialProblemState: ProblemData = {
   timeLimit: 5,
   memoryLimit: 2048,
   buildCommand: "",
-  testCases: [],
+  testCases: [
+    {
+      input: "1 2",
+      expectedOutput: "3",
+      hint: "Add the two numbers",
+      visibility: TestCaseVisibility.IO_VISIBLE,
+    },
+  ],
 };
 
 function problemReducer(
@@ -176,10 +185,28 @@ const AdminProblemEditor = () => {
 
   return (
     <div
-      className={`w-full h-full dark:bg-nav-darkest relative ${
+      className={`w-full h-full flex flex-col dark:bg-nav-darkest relative ${
         preview ? "bg-white" : "bg-slate-100"
       }`}
     >
+      <div className="w-full h-16 bg-nav-darkest flex items-center justify-between px-6 border-b border-b-slate-700">
+        <div>
+          <h1 className="text-white font-dm font-medium text-2xl">
+            New Problem
+          </h1>
+        </div>
+        <div className="flex space-x-4 items-center">
+          <button
+            onClick={() => setPreview(!preview)}
+            className="px-6 py-3 rounded-md bg-blue-500/20 hover:bg-blue-600/30 text-white font-dm font-medium text-sm flex items-center space-x-2"
+          >
+            <p>{preview ? "Edit" : "Preview"}</p>
+          </button>
+          <button className="px-6 py-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-dm font-medium text-sm flex items-center space-x-2">
+            <p>Publish</p>
+          </button>
+        </div>
+      </div>
       <div className="w-full h-full relative">
         {/* <AIChat /> */}
         <Allotment
@@ -211,17 +238,12 @@ const AdminProblemEditor = () => {
                 dispatch={problemDispatch}
               />
             </>
-            <div className="w-full h-full bg-amber-500/10">
-              {/* <InputOutputView
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                submissionOutput={submissionOutput}
-                stdin={stdin}
-                setStdin={setStdin}
-                compilerOutput={compilerOutput}
-                isAcceptedOutput={isAcceptedOutput}
-              /> */}
-            </div>
+            <>
+              <InputOutputEditorPane
+                problemState={problemState}
+                dispatch={problemDispatch}
+              />
+            </>
           </Allotment>
         </Allotment>
       </div>

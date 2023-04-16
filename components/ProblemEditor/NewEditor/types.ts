@@ -32,6 +32,12 @@ export interface ProblemData {
   testCases: TestCase[];
 }
 
+export enum TestCaseVisibility {
+  IO_HIDDEN = 0,
+  I_VISIBLE_O_HIDDEN = 1,
+  IO_VISIBLE = 2,
+}
+
 export type ProblemAction =
   | { type: "SET_TITLE"; payload: string }
   | { type: "SET_HIDDEN"; payload: boolean }
