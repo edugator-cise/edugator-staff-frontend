@@ -45,6 +45,7 @@ const CodeEditorPane = ({
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const tabStates: Record<Language, TabState[]> = {
+    // we define a list of tabs for each language. This is handled by Editor via the path prop
     python: [
       {
         id: "py-header",
@@ -124,35 +125,11 @@ const CodeEditorPane = ({
       },
     ],
   };
-  /* const tabsState: TabState[] = [
-    {
-      id: "header",
-      value: problemState?.codeData?.[activeLanguage as Language]
-        ?.header as string,
-    },
-    {
-      id: "footer",
-      value: problemState?.codeData?.[activeLanguage as Language]
-        ?.footer as string,
-    },
-    {
-      id: "body",
-      value: problemState?.codeData?.[activeLanguage as Language]
-        ?.body as string,
-    },
-    {
-      id: "solution",
-      value: problemState?.codeData?.[activeLanguage as Language]
-        ?.solution as string,
-    },
-  ]; */
 
   const beforeMount = (monaco: any) => {
-    // iterate through tabStates
+    // before mount, we want to populate the editor with the previously entered code data
     for (const language in tabStates) {
-      // iterate through each tabState
       for (const tabState of tabStates[language as Language]) {
-        // set the value of the tabState
         tabState.value = problemState?.codeData?.[language as Language]?.[
           tabState.type
         ] as string;
@@ -181,22 +158,6 @@ const CodeEditorPane = ({
     dispatch({
       type: "REMOVE_LANGUAGE",
       payload: language,
-    });
-  };
-
-  const updateEditor = ({
-    language,
-    options,
-  }: {
-    language: Language;
-    options: Pick<Record<Language, LanguageData>, Language>;
-  }) => {
-    dispatch({
-      type: "SET_LANGUAGE_DATA",
-      payload: {
-        language,
-        data: options[language],
-      },
     });
   };
 
@@ -297,7 +258,7 @@ const CodeEditorPane = ({
               Select languages
             </h1>
             <p className={`text-center text-sm text-slate-600 font-dm mt-2`}>
-              You can add more languages at any time
+              You can add more languages at any time.
             </p>
             <div className="flex justify-center flex-col space-y-4 mt-4 font-dm items-center">
               {Object.keys(languageLabels).map((language, index) => {
@@ -415,8 +376,8 @@ const CodeEditorPane = ({
                     }}
                     className={`${
                       activeTab === index
-                        ? "bg-nav-dark text-white"
-                        : "text-nav-dark hover:bg-nav-dark/10"
+                        ? "bg-mirage-600 text-white"
+                        : "text-nav-dark hover:bg-mirage-600/10"
                     } rounded-md px-4 py-2 flex space-x-2 items-center`}
                   >
                     <p className="text-sm font-dm">{toTitleCase(tab.type)}</p>

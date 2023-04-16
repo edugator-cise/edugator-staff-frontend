@@ -198,11 +198,11 @@ const AdminProblemEditor = () => {
         <div className="flex space-x-4 items-center">
           <button
             onClick={() => setPreview(!preview)}
-            className="px-6 py-3 rounded-md bg-blue-500/20 hover:bg-blue-600/30 text-white font-dm font-medium text-sm flex items-center space-x-2"
+            className="px-6 py-3 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-sm flex items-center space-x-2"
           >
             <p>{preview ? "Edit" : "Preview"}</p>
           </button>
-          <button className="px-6 py-3 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-dm font-medium text-sm flex items-center space-x-2">
+          <button className="px-6 py-3 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-sm flex items-center space-x-2">
             <p>Publish</p>
           </button>
         </div>

@@ -52,6 +52,19 @@ module.exports = {
           dark: "#192231",
         },
         "ai-purple": "#7C3AED",
+        mirage: {
+          50: "#f4f6fb",
+          100: "#e9edf5",
+          200: "#cedae9",
+          300: "#a3bbd6",
+          400: "#7195bf",
+          500: "#4f78a8",
+          600: "#3d5f8c",
+          700: "#324d72",
+          800: "#2d435f",
+          900: "#293951",
+          950: "#192231",
+        },
       },
       keyframes: {
         slideDownAndFade: {

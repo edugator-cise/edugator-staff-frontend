@@ -198,7 +198,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="w-full rounded-t-md bg-nav-dark text-white flex flex-wrap p-2 items-center">
+    <div className="w-full rounded-t-md bg-mirage-700 text-white flex flex-wrap p-2 items-center">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -438,7 +438,7 @@ const ProblemEditorPane = ({
               </label>
               <div className="w-full flex flex-col">
                 {editor && <MenuBar editor={editor} />}
-                <div className="w-full rounded-b-md border-[3px] border-t-0 overflow-hidden border-nav-dark dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 outline-none">
+                <div className="w-full rounded-b-md border-[2px] border-t-0 overflow-hidden border-mirage-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 outline-none">
                   {/* <EditorBlock
                           data={problemDescription}
                           onChange={setProblemDescription}
@@ -454,10 +454,10 @@ const ProblemEditorPane = ({
             </div>
           </>
         )}
-        <div className="w-full flex items-center justify-end sticky bottom-0">
+        {/* <div className="w-full flex items-center justify-end sticky bottom-0">
           <button
             onClick={() => setPreview(!preview)}
-            className="px-6 h-12 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-dm font-medium text-sm flex items-center space-x-2"
+            className="px-6 h-12 rounded-md border border-mirage-600 text-nav-darkest hover:bg-mirage-600/10 font-dm font-medium text-sm flex items-center space-x-2"
           >
             {preview ? (
               <Pencil2Icon className="w-5 h-5" />
@@ -466,7 +466,7 @@ const ProblemEditorPane = ({
             )}
             <p>{preview ? "Edit" : "Preview"}</p>
           </button>
-        </div>
+        </div> */}
         {/* <ProblemView
                   problemTitle={currentProblem?.title}
                   problemStatement={currentProblem?.statement}
