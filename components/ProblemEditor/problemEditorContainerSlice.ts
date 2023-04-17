@@ -115,75 +115,23 @@ const initialState: ProblemEditorContainerState = {
     code: [
       {
         language: "cpp",
-        header: `//If students import packages or use namespaces on their own, it shouldn't cause problems
-        #include <iostream>
-        #include <vector>
-        using namespace std;
-        `,
-        body: `int addTwoNums(int x, int y) {
-          // Your code here
-        }
-        `,
-        footer: `// The main does not have to be in the footer.
-        // The main should remain in the footer if you don't want students to be able to see it nor change it.
-        int main()
-        {
-            int x = 0, y = 0;
-            cin >> x >> y;
-            int result = addTwoNums(x, y);
-            // You should print out whatever the expected output should be. 
-            // Be careful about whitespace. Ex: only put endl if you add an endline in your expected output.
-            cout << result;
-            return 0;
-        }
-        `,
+        header: "",
+        body: "",
+        footer: "",
         fileExtension: ".h"
       },
       {
         language: "py",
-        header: `# If students import packages or use namespaces on their own, it shouldn't cause problems
-        import sys
-        import math
-        import numpy as np
-        import pandas as pd
-        `,
-        body: `def addTwoNums(x, y):
-        # Your code here
-        pass
-        `,
-        footer: `# The main does not have to be in the footer.
-        # The main should remain in the footer if you don't want students to be able to see it nor change it.
-        if __name__ == '__main__':
-            x, y = map(int, input().split())
-            result = addTwoNums(x, y)
-            # You should print out whatever the expected output should be.
-            # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
-            print(result)
-        `,
+        header: "",
+        body: "",
+        footer: "",
         fileExtension: ".py"
       },
       {
         language: "java",
-        header: `import java.util.Scanner;
-        import java.util.ArrayList;
-        import java.util.List;
-        `,
-        body: `public class Main {
-          public static void main(String[] args) {
-              Scanner input = new Scanner(System.in);
-              int x = input.nextInt();
-              int y = input.nextInt();
-              int result = addTwoNums(x, y);
-              System.out.println(result);
-              input.close();
-          }
-        
-          public static int addTwoNums(int x, int y) {
-              // Your code here
-          }
-        }
-        `,
-        footer: ``,
+        header: "",
+        body: "",
+        footer: "",
         fileExtension: ".java"
       }
     ]

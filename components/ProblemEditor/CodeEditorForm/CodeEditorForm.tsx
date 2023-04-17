@@ -54,7 +54,8 @@ interface Errors {
   
 }
 
-const defaultCppHeader = `//If students import packages or use namespaces on their own, it shouldn't cause problems
+const defaultCppHeader = `// If students import packages or use namespaces on their own, it shouldn't cause problems
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -62,24 +63,27 @@ using namespace std;
 
 const defaultCppBody = `int addTwoNums(int x, int y) {
 	// Your code here
+
 }
 `;
 
 const defaultCppFooter = `// The main does not have to be in the footer.
 // The main should remain in the footer if you don't want students to be able to see it nor change it.
+
 int main()
 {
-    int x = 0, y = 0;
-    cin >> x >> y;
-    int result = addTwoNums(x, y);
-    // You should print out whatever the expected output should be. 
-    // Be careful about whitespace. Ex: only put endl if you add an endline in your expected output.
-    cout << result;
-    return 0;
+  int x = 0, y = 0;
+  cin >> x >> y;
+  int result = addTwoNums(x, y);
+  // You should print out whatever the expected output should be. 
+  // Be careful about whitespace. Ex: only put endl if you add an endline in your expected output.
+  cout << result;
+  return 0;
 }
 `;
 
 const defaultPyHeader = `# If students import packages or use namespaces on their own, it shouldn't cause problems
+
 import sys
 import math
 import numpy as np
@@ -87,18 +91,19 @@ import pandas as pd
 `;
 
 const defaultPyBody = `def addTwoNums(x, y):
-# Your code here
-pass
+  # Your code here
+  pass
 `;
 
 const defaultPyFooter = `# The main does not have to be in the footer.
 # The main should remain in the footer if you don't want students to be able to see it nor change it.
+
 if __name__ == '__main__':
-    x, y = map(int, input().split())
-    result = addTwoNums(x, y)
-    # You should print out whatever the expected output should be.
-    # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
-    print(result)
+  x, y = map(int, input().split())
+  result = addTwoNums(x, y)
+  # You should print out whatever the expected output should be.
+  # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
+  print(result)
 `;
 
 const defaultJavaHeader = `import java.util.Scanner;
@@ -106,23 +111,24 @@ import java.util.ArrayList;
 import java.util.List;
 `;
 
-const defaultJavaBody = `public class Main {
-  public static void main(String[] args) {
-      Scanner input = new Scanner(System.in);
-      int x = input.nextInt();
-      int y = input.nextInt();
-      int result = addTwoNums(x, y);
-      System.out.println(result);
-      input.close();
-  }
-
+const defaultJavaBody = `class Exercise {
   public static int addTwoNums(int x, int y) {
-      // Your code here
+    // Your code here
   }
 }
 `;
 
-const defaultJavaFooter = `
+const defaultJavaFooter = `public class Main {
+  public static void main(String[] args) {
+    Exercise e = new Exercise();
+    Scanner input = new Scanner(System.in);
+    int x = input.nextInt();
+    int y = input.nextInt();
+    int result = e.addTwoNums(x, y);
+    System.out.println(result);
+    input.close();
+  }
+}
 `;
 
 
@@ -130,9 +136,9 @@ export const CodeEditorForm = ({ formRef }: Props) => {
   const dispatch = useDispatch();
   const { languages } = useCheckboxContext();
 
-  const cpp = languages.find((lang) => lang.language === "cpp");
-  const py = languages.find((lang) => lang.language === "py");
-  const java = languages.find((lang) => lang.language === "java");
+  const cpp = languages.find((lang) => lang.language === "cpp")?.selected;
+  const py = languages.find((lang) => lang.language === "py")?.selected;
+  const java = languages.find((lang) => lang.language === "java")?.selected;
 
   const [touched, setTouched] = React.useState(false);
 
@@ -158,11 +164,11 @@ export const CodeEditorForm = ({ formRef }: Props) => {
   for (const field of initialValues.code) {
     if (
       !touched &&
-      isBlank(field.header) &&
-      isBlank(field.body) &&
+      isBlank(field.header) ||
+      isBlank(field.body) ||
       isBlank(field.footer)
     ) {
-      switch (field.fileExtension) {
+      switch (field.language) {
         case "cpp":
           field.header = defaultCppHeader;
           field.body = defaultCppBody;

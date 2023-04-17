@@ -31,9 +31,9 @@ export const ServerConfigForm = (props: Props) => {
     (state: RootState) => state.problemEditorContainer.serverConfig
   );
   
-  const cpp = languages.find((lang) => lang.language === "cpp");
-  const py = languages.find((lang) => lang.language === "py");
-  const java = languages.find((lang) => lang.language === "java");
+  const cpp = languages.find((lang) => lang.language === "cpp")?.selected;
+  const py = languages.find((lang) => lang.language === "py")?.selected;
+  const java = languages.find((lang) => lang.language === "java")?.selected;
 
   const validate = (values: ServerConfigFields) => {
     const errors: ServerConfigErrors[] = [];
