@@ -11,15 +11,15 @@ type CheckboxContextType = {
 const CheckboxContext = createContext<CheckboxContextType>({
   languages: [
     {
-      language: "cpp",
+      language: "C++",
       selected: false
     },
     {
-      language: "py",
+      language: "Python",
       selected: false
     },
     {
-      language: "java",
+      language: "Java",
       selected: false
     }
   ],
@@ -33,15 +33,15 @@ export const useCheckboxContext = () => useContext(CheckboxContext);
 export const CheckboxProvider: React.FC = ({ children }) => {
   const [languages, setLanguages] = useState([
     {
-      language: "cpp",
+      language: "C++",
       selected: false
     },
     {
-      language: "py",
+      language: "Python",
       selected: false
     },
     {
-      language: "java",
+      language: "Java",
       selected: false
     }
   ]);

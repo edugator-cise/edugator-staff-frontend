@@ -157,10 +157,10 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="cpp"
+                  name="C++"
                   onChange={(e) => {
                     const updatedLanguages = values.languages.map((lang) => {
-                      if (lang.language === "cpp") {
+                      if (lang.language === "C++") {
                         return {
                           ...lang,
                           selected: e.target.checked,
@@ -172,7 +172,7 @@ export const MetadataForm = (props: Props) => {
                     setFieldValue("languages", updatedLanguages);
 
                   }}
-                  checked={values.languages.find((lang) => lang.language === "cpp")?.selected}
+                  checked={values.languages.find((lang) => lang.language === "C++")?.selected}
                 />
               }
               sx={{ marginLeft: 0 }}
@@ -182,11 +182,11 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="py"
+                  name="Python"
                   onChange={(e) => {
                     handleChange(e);
                     const updatedLanguages = values.languages.map((lang) => {
-                      if (lang.language === "py") {
+                      if (lang.language === "Python") {
                         return {
                           ...lang,
                           selected: e.target.checked,
@@ -197,7 +197,7 @@ export const MetadataForm = (props: Props) => {
                     setLanguages(updatedLanguages);
                     setFieldValue("languages", updatedLanguages);
                   }}
-                  checked={values.languages.find((lang) => lang.language === "py")?.selected}
+                  checked={values.languages.find((lang) => lang.language === "Python")?.selected}
                 />
               }
               label="Python"
@@ -206,11 +206,11 @@ export const MetadataForm = (props: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="java"
+                  name="Java"
                   onChange={(e) => {
                     handleChange(e);
                     const updatedLanguages = values.languages.map((lang) => {
-                      if (lang.language === "java") {
+                      if (lang.language === "Java") {
                         return {
                           ...lang,
                           selected: e.target.checked,
@@ -221,7 +221,7 @@ export const MetadataForm = (props: Props) => {
                     setLanguages(updatedLanguages);
                     setFieldValue("languages", updatedLanguages);
                   }}
-                  checked={values.languages.find((lang) => lang.language === "java")?.selected}
+                  checked={values.languages.find((lang) => lang.language === "Java")?.selected}
                 />
               }
               label="Java"

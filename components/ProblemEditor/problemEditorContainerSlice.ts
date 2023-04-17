@@ -91,15 +91,15 @@ const initialState: ProblemEditorContainerState = {
     title: "",
     languages: [
       {
-        language: "cpp",
+        language: "C++",
         selected: false
       },
       {
-        language: "py",
+        language: "Python",
         selected: false
       },
       {
-        language: "java",
+        language: "Java",
         selected: false
       }
       
@@ -114,21 +114,21 @@ const initialState: ProblemEditorContainerState = {
   codeEditor: {
     code: [
       {
-        language: "cpp",
+        language: "C++",
         header: "",
         body: "",
         footer: "",
         fileExtension: ".h"
       },
       {
-        language: "py",
+        language: "Python",
         header: "",
         body: "",
         footer: "",
         fileExtension: ".py"
       },
       {
-        language: "java",
+        language: "Java",
         header: "",
         body: "",
         footer: "",
@@ -139,19 +139,19 @@ const initialState: ProblemEditorContainerState = {
   serverConfig: {
     config: [
       {
-        language: "cpp",
+        language: "C++",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        language: "py",
+        language: "Python",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
       },
       {
-        language: "java",
+        language: "Java",
         timeLimit: 0,
         memoryLimit: 0,
         buildCommand: ""
