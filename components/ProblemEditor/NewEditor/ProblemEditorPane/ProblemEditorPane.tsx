@@ -366,29 +366,29 @@ const ProblemEditorPane = ({
           ],
         },
         /* {
-              type: "multipleChoice",
-              attrs: {
-                question: "What is the capital of India?",
-                answerOptions: [
-                  {
-                    text: "Delhi",
-                    correct: true,
-                  },
-                  {
-                    text: "Mumbai",
-                    correct: false,
-                  },
-                  {
-                    text: "Kolkata",
-                    correct: false,
-                  },
-                  {
-                    text: "Chennai",
-                    correct: false,
-                  },
-                ],
+          type: "multipleChoice",
+          attrs: {
+            question: "What is the capital of India?",
+            answerOptions: [
+              {
+                text: "Delhi",
+                correct: true,
               },
-            }, */
+              {
+                text: "Mumbai",
+                correct: false,
+              },
+              {
+                text: "Kolkata",
+                correct: false,
+              },
+              {
+                text: "Chennai",
+                correct: false,
+              },
+            ],
+          },
+        }, */
       ],
     },
   });

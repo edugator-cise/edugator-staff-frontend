@@ -52,7 +52,10 @@ const InputOutputEditorPane = ({
         <div className={`w-full h-full flex flex-col p-4 space-y-2`}>
           <div className={`flex w-full items-center justify-between`}>
             <h1 className="text-xl font-dm font-bold">Test Cases</h1>
-            <div className="w-8 h-8 rounded-md bg-nav-dark/10 hover:bg-nav-dark/20 group cursor-pointer flex items-center justify-center">
+            <div className="h-8 rounded-md bg-nav-dark/10 hover:bg-nav-dark/20 group cursor-pointer flex items-center justify-center px-3 space-x-2">
+              <p className="text-sm text-slate-800 font-dm group-hover:text-slate-900 transition">
+                Compiler Settings
+              </p>
               <Gear
                 className="w-5 h-5 text-slate-800 group-hover:rotate-12 transition"
                 weight="duotone"
@@ -196,6 +199,7 @@ const InputOutputEditorPane = ({
                     <textarea
                       className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
                       value={testCase.hint}
+                      placeholder="Add two numbers"
                       onChange={(e) => {
                         dispatch({
                           type: "UPDATE_TEST_CASE",
