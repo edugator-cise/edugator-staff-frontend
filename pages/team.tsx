@@ -216,7 +216,7 @@ const Team = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col space-y-2">
+        {/* <div className="flex flex-col space-y-2">
           <h1 className="text-2xl font-semibold text-nav-darkest font-ambit text-left pl-4">
             Supporters
           </h1>
@@ -229,7 +229,7 @@ const Team = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
