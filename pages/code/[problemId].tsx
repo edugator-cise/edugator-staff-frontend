@@ -27,6 +27,7 @@ import { useRunCode } from "hooks/useRunCode";
 import dynamic from "next/dynamic";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { AllotmentProps } from "allotment";
+import { IProblem } from "lib/shared/types";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -40,6 +41,7 @@ export default function CodeEditor() {
   const locationState = router.asPath;
 
   const [stdin, setStdin] = useState<string>("");
+  const [problem, setProblem] = useState<IProblem | undefined>(undefined);
 
   const {
     compilerOutput,
@@ -65,8 +67,9 @@ export default function CodeEditor() {
   useEffect(() => {
     if (defaultStdin) {
       setStdin(defaultStdin);
+      setProblem(currentProblem);
     }
-  }, [defaultStdin]);
+  }, [defaultStdin, currentProblem]);
 
   return (
     <>
