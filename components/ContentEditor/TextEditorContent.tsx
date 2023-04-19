@@ -154,15 +154,18 @@ const TextEditorContent = ({
   const onAddMultipleChoice = (
     e: any,
     question: string,
-    answers: string[],
-    correct: number
+    answers: {
+      text: string;
+      correct: boolean;
+    }[]
   ) => {
     e.preventDefault();
+    console.log("answers");
     const contentState = editorState.getCurrentContent();
     const contentStateWithEntity = contentState.createEntity(
       "multiple_choice",
       "IMMUTABLE",
-      { question, answers, correct }
+      { question, answers }
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, {
@@ -220,6 +223,7 @@ const TextEditorContent = ({
 
   const onH1Click = (e: any) => {
     e.preventDefault();
+    console.log("clicked");
     onChange(RichUtils.toggleBlockType(editorState, "header-one"));
   };
 
@@ -291,7 +295,7 @@ const TextEditorContent = ({
       >
         <ListChecks weight="bold" size={18} />
       </button>
-      <div className="editor">
+      <div className="editor markdown">
         <Editor
           editorState={editorState}
           handleKeyCommand={handleKeyCommand}

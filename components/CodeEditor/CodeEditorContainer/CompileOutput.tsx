@@ -1,38 +1,5 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import theme from "constants/theme";
-import { colors } from "constants/config";
-
-const CompileOutputContainer = styled("div")(
-  ({ theme }) => `
-  text-align: left;
-  overflow-y: scroll;
-  margin-right: ${theme.spacing(1)};
-  margin-left: ${theme.spacing(1)};
-  height: calc(100%);
-`
-);
-
-const OutputPaper = styled("div")(
-  ({ theme }) => `
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  line-height: 20px;
-  font-weight: 400;
-  border-radius: 0;
-  overflow: auto;
-  background-color: #f7f9fa;
-  border-radius: 4px;
-  margin-right: ${theme.spacing(1)};
-  margin-left: ${theme.spacing(1)};
-`
-);
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 interface Props {
   accepted: boolean | undefined;
@@ -44,44 +11,39 @@ export const CompileOutput = ({
   compileMessage,
   compileBody,
 }: Props) => {
-  if (accepted) {
-    return (
-      <CompileOutputContainer id="compile-container">
-        <Typography variant="h5" color={theme.palette.success.main}>
-          Compilation Successful
-        </Typography>
-        <Paper
-          sx={{
-            backgroundColor: colors.lightGray,
-            height: "60%",
-            p: 2,
-            whiteSpace: "pre-wrap",
-            overflowY: "auto",
-          }}
-        >
-          {compileBody}
-        </Paper>
-      </CompileOutputContainer>
-    );
-  } else if (accepted === false) {
-    return (
-      <CompileOutputContainer id="compile-container">
-        <Typography variant="h5" color={theme.palette.error.main}>
-          {compileMessage}
-        </Typography>
-        <Paper
-          sx={{
-            backgroundColor: colors.lightPink,
-            color: colors.redText,
-            p: 2,
-            whiteSpace: "pre-wrap",
-            overflowY: "auto",
-          }}
-        >
-          {compileBody}
-        </Paper>
-      </CompileOutputContainer>
-    );
-  }
-  return <OutputPaper>Press Run to run code</OutputPaper>;
+  return (
+    <div className="w-full h-full max-h-full bg-slate-100 dark:bg-nav-darkest ">
+      {accepted !== null && accepted !== undefined ? (
+        <div className="w-full rounded-sm bg-slate-50 dark:bg-nav-darker flex flex-col p-4 space-y-2">
+          <h1
+            className={`text-2xl font-dm ${
+              accepted ? "text-emerald-600" : "text-red-600"
+            }`}
+          >
+            Compilation {accepted ? "Successful" : "Failed"}
+          </h1>
+
+          <div
+            className={`bg-slate-100 dark:bg-nav-darkest w-full py-4 px-4 font-inter h-full rounded-sm ${
+              accepted
+                ? "bg-slate-100 border border-slate-300 dark:border-none"
+                : "bg-red-500/10"
+            }`}
+          >
+            <p
+              className={`whitespace-pre-wrap ${
+                accepted ? "text-slate-900 dark:text-white" : "text-red-600"
+              }`}
+            >
+              {compileBody}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="font-dm text-slate-900 dark:text-white bg-slate-50 dark:bg-nav-dark w-full h-full flex items-center justify-center text-center rounded-sm">
+          Press Run to run code
+        </div>
+      )}
+    </div>
+  );
 };

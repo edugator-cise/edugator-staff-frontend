@@ -1,41 +1,20 @@
 import React from "react";
 import { Markdown } from "components/shared/Markdown";
-import { Typography, Grow } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 interface Props {
   problemTitle: string;
   problemStatement: string;
 }
 
-const ProblemDescriptionPaper = styled("div")(
-  ({ theme }) => `
-  padding: ${theme.spacing(4)};
-  text-align: left;
-  overflow-y: auto;
-  height: calc(100vh - 145px);
-  background-color: white;
-  margin: ${theme.spacing(1)};
-  border-radius: 4px;
-  min-width: 200px;
-`
-);
 export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
-    <Grow in appear timeout={500}>
-      <ProblemDescriptionPaper
-        id="problem-description"
-        sx={{
-          "& pre": {
-            whiteSpace: "pre-wrap",
-          },
-        }}
-      >
-        <Typography variant="h4" sx={{ textAlign: "left" }}>
-          {problemTitle}
-        </Typography>
-        <Markdown markdownString={problemStatement} />
-      </ProblemDescriptionPaper>
-    </Grow>
+    <div className="bg-white flex flex-col px-5 rounded-sm w-full dark:bg-[#141c2b] h-auto mb-4 overflow-hidden">
+      <h1 className="text-3xl underline decoration-emerald-500 underline-offset-4 font-ambit font-semibold text-slate-900 dark:text-slate-100 mb-4 mt-8">
+        {problemTitle}
+      </h1>
+      <Markdown markdownString={problemStatement} />
+      <div className="h-12 w-full min-h-[3rem]"></div>
+    </div>
   );
 };

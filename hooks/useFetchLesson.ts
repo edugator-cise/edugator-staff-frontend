@@ -31,6 +31,8 @@ export const useFetchLesson = ({ id }: { id: string }) => {
           const transformed = transformLesson(values);
           setLesson(transformed);
           setRawLesson(values);
+          console.log(values);
+          console.log(transformed);
         }
         setStatus(FetchStatus.succeed);
       })
@@ -54,12 +56,12 @@ export const useFetchLesson = ({ id }: { id: string }) => {
   return { status, lesson, error, rawLesson };
 };
 
-export function isEntityOfType<T extends { type: string }>(
+/* export function isEntityOfType<T extends { type: string }>(
   entity: any,
   type: string
 ): entity is T {
   return entity.type === type;
-}
+} */
 
 // convert the lesson into a cohesive block structure
 const transformLesson = (lesson: ILesson) => {
@@ -74,54 +76,59 @@ const transformLesson = (lesson: ILesson) => {
     content: [],
   };
 
-  let entityIterator = 0;
+  console.log(lesson.content);
+  console.log(lesson.entityMap);
   for (let i = 0; i < lesson.content.length; i++) {
     const block = lesson.content[i];
-    if (block.type === "multiple_choice") {
-      const entity = lesson.entityMap[entityIterator];
-      if (isEntityOfType<MultipleChoiceEntity>(entity, "multiple_choice")) {
-        displayLesson.content.push({
-          type: "multiple_choice",
-          data: {
-            question: entity.data.question,
-            answers: entity.data.answers,
-            correct: entity.data.correct,
-          },
-        });
+    console.log(block);
+    if (!block || !block.type) {
+      console.log("block ignored");
+      continue;
+      // ignore this block
+    } else if (block?.type === "multiple_choice") {
+      const content = block.content;
+      console.log("multiple choice content", content);
+      displayLesson.content.push({
+        type: "multiple_choice",
+        data: {
+          question: content.question,
+          answers: content.answers,
+        },
+      });
+    } else if (block?.type === "multiple_select") {
+      console.log("here");
+      const content = block.content;
+      //console.log(entity);
+      displayLesson.content.push({
+        type: "multiple_select",
+        data: {
+          question: content.question,
+          answers: content.answers,
+        },
+      });
+    } else if (block?.type === "image") {
+      console.log("image");
+      const content = block.content;
+      displayLesson.content.push({
+        type: "image",
+        data: {
+          src: content.sourcePath,
+          //todo: add alt text and alignment to image entity
+        },
+      });
+    } else if (block?.type === "text") {
+      if (!block.content) {
+        console.log("no content");
+        continue;
       }
-      entityIterator++;
-    } else if (block.type === "multiple_select") {
-      const entity = lesson.entityMap[entityIterator];
-      if (isEntityOfType<MultipleSelectEntity>(entity, "multiple_select")) {
-        displayLesson.content.push({
-          type: "multiple_select",
-          data: {
-            question: entity.data.question,
-            answers: entity.data.answers,
-          },
-        });
-      }
-      entityIterator++;
-    } else if (block.type === "image") {
-      const entity = lesson.entityMap[entityIterator];
-      if (isEntityOfType<ImageEntity>(entity, "image")) {
-        displayLesson.content.push({
-          type: "image",
-          data: {
-            src: entity.data.src,
-            //todo: add alt text and alignment to image entity
-          },
-        });
-      }
-      entityIterator++;
-    } else if (block.type === "text") {
       displayLesson.content.push({
         type: "text",
         data: {
-          html: block.content.html,
+          html: block.content.html || "",
         },
       });
     }
   }
+  console.log(displayLesson);
   return displayLesson;
 };

@@ -1,4 +1,4 @@
-import PlaygroundLayout from "components/PlaygroundLayout";
+import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
 import { ReactNode } from "react";
 import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";
@@ -6,36 +6,20 @@ import CrocodileOnAScooter from "public/crocodileonascooter.json";
 
 export default function CodePage() {
   return (
-    <Container
-      sx={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Grow in appear timeout={500}>
-        <div
-          style={{
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
-          <div style={{ width: 450, marginTop: -250 }}>
-            <Lottie animationData={CrocodileOnAScooter} />
-          </div>
-          <div>
-            <Typography variant="h4">Get Started</Typography>
-          </div>
-          <Typography variant="body1">
-            Choose a problem on the navigation bar to start!
-          </Typography>
-        </div>
-      </Grow>
-    </Container>
+    <div className="flex items-center justify-center w-full flex-col h-full bg-slate-50 dark:bg-nav-darkest">
+      <Lottie
+        animationData={CrocodileOnAScooter}
+        style={{
+          width: 400,
+        }}
+      />
+      <h1 className="text-3xl font-dm font-semibold mb-4 text-slate-900 dark:text-slate-200">
+        Welcome to Edugator!
+      </h1>
+      <p className="text-slate-900 dark:text-slate-300">
+        Select an exercise to get started.
+      </p>
+    </div>
   );
 }
 
