@@ -203,8 +203,9 @@ export const CodeEditorView = ({
             Solution
           </Box>
           <Box sx={{ paddingRight: 3, display: 'flex' }}>
-
-            <Dropdown options={languageOptions} onChange={onLanguageSelect} value={currLangConfig!.language} placeholder="Please select a language" />
+            <Box sx={{ paddingRight: 1}}>
+              <Dropdown options={languageOptions} onChange={onLanguageSelect} value={currLangConfig!.language} placeholder="Please select a language" />
+            </Box>
             <a
               href={templatePackage}
               style={{ textDecoration: "none" }}
