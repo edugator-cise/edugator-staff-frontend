@@ -126,7 +126,7 @@ export default function CodeEditor() {
               isSubmissionRunning={isSubmissionRunning}
               runCode={runCode}
               submitCode={submitCode}
-              code={currentProblem.langConfig.find(config => config.language === languages.default)!.code.body}
+              code={currentProblem.langConfig[0]!.code.body}
               templatePackage={currentProblem?.templatePackage}
               currentProblem={currentProblem}
               stdin={stdin}

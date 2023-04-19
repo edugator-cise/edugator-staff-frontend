@@ -123,7 +123,7 @@ export const CodeEditorView = ({
   const getLangConfig = (language: string): ILangConfig | undefined =>
     currentProblem.langConfig.find(config => config.language === language)
 
-  const [currLangConfig, setCurrLangConfig] = useState(getLangConfig(languages.default))
+  const [currLangConfig, setCurrLangConfig] = useState(getLangConfig(currentProblem.langConfig[0]!.language))
 
   // recalling the use navigation hook because navStructure is passed through when downloading a problem
   const { problemAndLessonSet } = useNavigation(
