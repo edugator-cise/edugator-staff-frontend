@@ -13,14 +13,9 @@ const RotatingText = () => {
     return () => clearTimeout(intervalId);
   }, []);
   return (
-    <TextTransition delay={2000} inline>
-      <span
-        //GRADIENT TEXT
-        className="bg-clip-text text-transparent bg-gradient-to-br from-blue-500 to-emerald-400"
-      >
-        {TEXTS[index % TEXTS.length]}
-      </span>
-    </TextTransition>
+    <span className="text-emerald-500 ">
+      <TextTransition delay={2000} inline text={TEXTS[index % TEXTS.length]} />
+    </span>
   );
 };
 
