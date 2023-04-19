@@ -86,13 +86,11 @@ const defaultPyHeader = `# If students import packages or use namespaces on thei
 
 import sys
 import math
-import numpy as np
-import pandas as pd
 `;
 
 const defaultPyBody = `def addTwoNums(x, y):
   # Your code here
-  pass
+  
 `;
 
 const defaultPyFooter = `# The main does not have to be in the footer.
@@ -114,6 +112,7 @@ import java.util.List;
 const defaultJavaBody = `class Exercise {
   public static int addTwoNums(int x, int y) {
     // Your code here
+    
   }
 }
 `;
