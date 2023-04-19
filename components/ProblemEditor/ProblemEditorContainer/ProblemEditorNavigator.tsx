@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   incrementActiveStep,
   decrementActiveStep,
-} from "components/ProblemEditor/problemEditorContainerSlice";
-import { RootState } from "lib/store/store"
+} from "state/problemEditorContainerSlice";
+import { RootState } from "lib/store/store";
 interface Props {
   formRef: any;
 }
@@ -62,21 +62,29 @@ export const ProblemEditorNavigator = ({ formRef }: Props) => {
       justifyContent="space-between"
       paddingTop={3}
     >
-      <Button
+      <button
         onClick={handleBack}
+        className={`${
+          activeStep === 0
+            ? "bg-gray-500 hover:bg-gray-700 text-white py-2 px-4 rounded"
+            : "bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        }`}
         disabled={activeStep === 0 || isSubmitting}
-        variant="outlined"
       >
         Back
-      </Button>
-      <Button
+      </button>
+
+      <button
         onClick={handleNext}
-        variant={activeStep === 4 ? "contained" : "outlined"}
-        color={activeStep === 4 ? "success" : "primary"}
+        className={`${
+          activeStep === 4
+            ? "bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
+            : "bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+        }`}
         disabled={isSubmitting}
       >
         {activeStep === 4 ? (problemId ? "Save changes" : "Submit") : "Next"}
-      </Button>
+      </button>
     </Box>
   );
 };

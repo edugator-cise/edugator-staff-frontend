@@ -10,7 +10,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { setSelectedAccount } from "components/Accounts/AdminAccountsPage.slice";
+import { setSelectedAccount } from "state/AdminAccountsPage.slice";
 import { rolesEnum } from "./types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";

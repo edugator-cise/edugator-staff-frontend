@@ -1,0 +1,28 @@
+body {
+  --focus-border: #007cd4;
+  --separator-border: #4d546349;
+}
+
+
+[data-theme='dark'], [data-theme='dark'] .sash {
+    @apply bg-green-500;
+}
+
+
+/* 
+
+couldnt get these to work 
+
+[data-theme='dark'],
+[data-theme='dark'] body {
+    --focus-border: #00d478;
+    --separator-border: blue !important; 
+}
+
+[data-theme='light'],
+[data-theme='light'] body {
+    --focus-border: #00d478;
+    --separator-border: green !important;
+}
+
+*/

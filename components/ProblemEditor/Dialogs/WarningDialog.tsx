@@ -13,7 +13,7 @@ import {
   closeWarningModal,
   requestDeleteProblem,
   WarningTypes,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
 import { useRouter } from "next/router";
 import { apiRoutes } from "constants/apiRoutes";

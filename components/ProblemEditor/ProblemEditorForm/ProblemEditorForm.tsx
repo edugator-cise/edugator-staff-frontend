@@ -1,13 +1,13 @@
 import { FormHelperText, Paper, Stack, TextField } from "@mui/material";
 import { Field, Form, Formik, FieldProps } from "formik";
 import React from "react";
-import { useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MarkdownEditor } from "../MarkdownEditor/MarkdownEditor";
 import {
   ProblemFields,
   updateProblem,
   validateProblem,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
 
 interface Props {

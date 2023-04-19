@@ -11,7 +11,7 @@ import {
   updateModuleId,
   updateModuleName,
   WarningTypes,
-} from "./contentEditorPageSlice";
+} from "../../state/contentEditorPageSlice";
 import { SuccessDialog } from "./SuccessDialog";
 import { FailureDialog } from "./FailureDialog";
 import { WarningDialog } from "./WarningDialog";

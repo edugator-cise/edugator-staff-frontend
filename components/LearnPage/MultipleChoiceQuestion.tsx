@@ -83,8 +83,10 @@ const AnswerFeedback = styled.div((props: any) => ({
 
 interface MultipleChoiceProps {
   question: string;
-  correctAnswer: number;
-  answers: string[];
+  answers: {
+    text: string;
+    correct: boolean;
+  }[];
   number: number;
   image: boolean;
   sourcePath?: string;
@@ -160,7 +162,7 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
                 onClick={() => {
                   //set styling for question holder based on answer
                   setAnswered(true);
-                  if (i === props.correctAnswer) {
+                  if (props.answers[i].correct === true) {
                     setCorrect(true);
                   } else if (correct !== true) {
                     setCorrect(false);
@@ -177,7 +179,7 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
                 }}
                 clicked={questionsClicked[i]}
                 correct={correct}
-                isAnswerCorrect={i === props.correctAnswer}
+                isAnswerCorrect={props.answers[i].correct === true}
                 key={i}
               >
                 <Typography
@@ -185,7 +187,7 @@ function MultipleChoiceQuestion(props: MultipleChoiceProps) {
                   sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
                   key={i}
                 >
-                  {ans}
+                  {ans.text}
                 </Typography>
               </AnswerHolder>
             </Grid>

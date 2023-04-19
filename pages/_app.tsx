@@ -4,17 +4,25 @@ import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
 import theme from "constants/theme";
-import { ThemeProvider, StyledEngineProvider } from "@mui/system";
-import "styles/App.module.css";
+import {
+  ThemeProvider as MUIThemeProvider,
+  StyledEngineProvider,
+} from "@mui/system";
 import "styles/App.css";
-import "styles/index.css";
 import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
 import "styles/TextEditorCreationStyles.css";
 import "styles/ExerciseStyles.css";
 import "styles/FormStyles.css";
+import "styles/globals.css";
+import "styles/fonts.css";
+import "styles/animations.css";
+import "styles/markdown.css";
+import "styles/allotment.css";
+import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "next-themes";
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -36,11 +44,18 @@ const App = ({ Component, pageProps }: Props) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
     <Provider store={store}>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
+      />
+
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={theme}>
-          <Toaster />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
+        <MUIThemeProvider theme={theme}>
+          <ThemeProvider enableSystem={true} attribute="class">
+            <Toaster containerClassName="font-dm" />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </MUIThemeProvider>
       </StyledEngineProvider>
     </Provider>
   );

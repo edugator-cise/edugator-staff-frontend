@@ -26,7 +26,7 @@ import { RootState } from "lib/store/store";
 import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
 import toast from "react-hot-toast";
-import { changeProblemOrderSuccess } from "./ModulesSlice";
+import { changeProblemOrderSuccess } from "../../state/ModulesSlice";
 
 const Module = styled(Accordion)(({ theme }) => ({
   position: "inherit",

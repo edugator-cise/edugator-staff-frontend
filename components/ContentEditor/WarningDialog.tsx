@@ -10,7 +10,10 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { Routes } from "constants/navigationRoutes";
-import { closeWarningModal, WarningTypes } from "./contentEditorPageSlice";
+import {
+  closeWarningModal,
+  WarningTypes,
+} from "../../state/contentEditorPageSlice";
 import { RootState } from "lib/store/store";
 import apiClient from "lib/api/apiClient";
 import toast from "react-hot-toast";
@@ -64,6 +67,9 @@ export const WarningDialog = () => {
           }}
           variant="contained"
           color="error"
+          sx={{
+            backgroundColor: "#f44336 !important",
+          }}
         >
           Yes
         </Button>
@@ -71,6 +77,9 @@ export const WarningDialog = () => {
           onClick={() => dispatch(closeWarningModal())}
           variant="contained"
           color="primary"
+          sx={{
+            backgroundColor: "#2196f3 !important",
+          }}
         >
           No
         </Button>

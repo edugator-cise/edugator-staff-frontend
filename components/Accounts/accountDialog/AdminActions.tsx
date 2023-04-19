@@ -14,7 +14,7 @@ import {
   requestDeleteAccountEnd,
   requestModifyAccountEnd,
   unsetSelectedAccount,
-} from "components/Accounts/AdminAccountsPage.slice";
+} from "state/AdminAccountsPage.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
 import toast from "react-hot-toast";
@@ -31,7 +31,9 @@ enum ActionsEnum {
 const base: ActionsEnum = ActionsEnum.noAction;
 
 export function AdminActions() {
-  const { selectedAccount } = useSelector((state: RootState) => state.accountManager);
+  const { selectedAccount } = useSelector(
+    (state: RootState) => state.accountManager
+  );
 
   const [selectedAction, setSelectedAction] = React.useState<ActionsEnum>(base);
 
@@ -121,15 +123,18 @@ const AdminActionInfo = (
       role: payload.role,
       username: payload.username,
       _id: payload._id,
-    }
+    };
     try {
-      const { data }: {data: IAccount } = await apiClient.put(apiRoutes.admin.updateUser, body);
+      const { data }: { data: IAccount } = await apiClient.put(
+        apiRoutes.admin.updateUser,
+        body
+      );
       dispatch(requestModifyAccountEnd(data));
       toast.success("User is modified");
     } catch (e) {
       toast.error("User failed to update");
     }
-  }
+  };
 
   const handleDeleteAccountRequest = async (payload: IAccount) => {
     // backend wants username in the body
@@ -137,21 +142,24 @@ const AdminActionInfo = (
     const config = {
       data: {
         username: payload.username,
-      }
-    }
+      },
+    };
     try {
-      const { data }: { data: IRequestMessage } = await apiClient.delete(apiRoutes.admin.deleteUser, config);
+      const { data }: { data: IRequestMessage } = await apiClient.delete(
+        apiRoutes.admin.deleteUser,
+        config
+      );
       const accountDeleted: IAccountDELETE = {
         id: payload._id as string,
         message: data.message as string,
-      }
+      };
       dispatch(requestDeleteAccountEnd(accountDeleted));
       dispatch(unsetSelectedAccount());
       toast.success("Account Successfully deleted");
     } catch (e) {
-      toast.error(`Account Delete unsuccessful`)
+      toast.error(`Account Delete unsuccessful`);
     }
-  }
+  };
 
   const { valid, reason } = IsValidOperation(action, targetAccount);
 
@@ -210,7 +218,9 @@ const IsValidOperation = (
   valid: boolean;
   reason?: string;
 } => {
-  const { currentAccount } = useSelector((state: RootState) => state.accountManager);
+  const { currentAccount } = useSelector(
+    (state: RootState) => state.accountManager
+  );
 
   if (targetAccount === undefined) {
     return {

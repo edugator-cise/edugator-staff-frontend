@@ -17,18 +17,52 @@ export const MultipleChoiceModal = ({
   insert: (
     e: any,
     question: string,
-    answers: string[],
-    correct: number
+    answers: {
+      text: string;
+      correct: boolean;
+    }[]
   ) => void;
 }) => {
   const [question, setQuestion] = useState("");
-  const [answers, setAnswers] = useState(["", "", "", ""]);
-  const [correct, setCorrect] = useState(0);
+  const [answers, setAnswers] = useState([
+    {
+      text: "",
+      correct: true,
+    },
+    {
+      text: "",
+      correct: false,
+    },
+    {
+      text: "",
+      correct: false,
+    },
+    {
+      text: "",
+      correct: false,
+    },
+  ]);
 
   const resetValues = () => {
     setQuestion("");
-    setAnswers(["", "", "", ""]);
-    setCorrect(0);
+    setAnswers([
+      {
+        text: "",
+        correct: true,
+      },
+      {
+        text: "",
+        correct: false,
+      },
+      {
+        text: "",
+        correct: false,
+      },
+      {
+        text: "",
+        correct: false,
+      },
+    ]);
   };
 
   return (
@@ -52,25 +86,28 @@ export const MultipleChoiceModal = ({
               <div className="modal-answers">
                 {/* Input box and checkbox for each answer */}
                 {Array.from(Array(4).keys()).map((i) => {
-                  const answerCorrect = correct === i;
+                  const answerCorrect = answers[i].correct;
                   return (
                     <div className="modal-answer">
                       <div className="modal-answer-input">
                         <Checkbox
                           checked={answerCorrect}
                           onChange={() => {
-                            setCorrect(i);
+                            // Update answers array
+                            const newAnswers = [...answers];
+                            newAnswers[i].correct = !answerCorrect;
+                            setAnswers(newAnswers);
                           }}
                         />
                         <input
                           type="text"
                           className="modal-input"
-                          value={answers[i]}
+                          value={answers[i].text}
                           placeholder={`Answer ${i + 1}`}
                           onChange={(e) => {
                             // Update answers array
                             const newAnswers = [...answers];
-                            newAnswers[i] = e.target.value;
+                            newAnswers[i].text = e.target.value;
                             setAnswers(newAnswers);
                           }}
                         />
@@ -93,8 +130,8 @@ export const MultipleChoiceModal = ({
         </Button>
         <Button
           onClick={(e) => {
-            console.log("Print MC Data:", question, correct, answers);
-            insert(e, question, answers, correct);
+            console.log("Print MC Data:", question, answers);
+            insert(e, question, answers);
             resetValues();
             setOpen(false);
           }}
