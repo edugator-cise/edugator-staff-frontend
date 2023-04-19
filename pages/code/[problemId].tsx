@@ -18,6 +18,7 @@ import * as monaco from "monaco-editor";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import AnimateHeight from "react-animate-height";
 import { toTitleCase } from "utils/textUtils";
+import { IProblem } from "lib/shared/types";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -33,6 +34,7 @@ export default function CodeEditor() {
   const locationState = router.asPath;
 
   const [stdin, setStdin] = useState<string>("");
+
   /* const [editorCode, setEditorCode] = useState<string>(""); */
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileActivePanel, setMobileActivePanel] =
@@ -69,18 +71,16 @@ export default function CodeEditor() {
     stdin: defaultStdin,
     error,
   } = useFetchProblem({
-    id: params && params.problemId ? (params.problemId as string) : "",
+    id: params.problemId as string,
     isAdmin: LocalStorage.getToken() !== null,
   });
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (defaultStdin) {
       setStdin(defaultStdin);
+      setProblem(currentProblem);
     }
-    /* if (currentProblem) {
-      setEditorCode(currentProblem?.code?.body);
-    } */
-  }, [currentProblem]);
+  }, [currentProblem, defaultStdin]); */
 
   const handleCodeReset = (newCode: string) => {
     editorRef.current?.setValue(newCode);
@@ -109,7 +109,10 @@ export default function CodeEditor() {
     }
   };
 
+  console.log(currentProblem);
+
   if (status === FetchStatus.loading) {
+    console.log("loading");
     return (
       <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
         <CircularProgress />
@@ -180,7 +183,7 @@ export default function CodeEditor() {
                       isSubmissionRunning={isSubmissionRunning}
                       runCode={runCode}
                       submitCode={submitCode}
-                      code={currentProblem.code?.body}
+                      code={currentProblem?.code?.body}
                       templatePackage={currentProblem?.templatePackage}
                       currentProblem={currentProblem}
                       stdin={stdin}
@@ -191,7 +194,7 @@ export default function CodeEditor() {
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}
                         submissionOutput={submissionOutput}
-                        stdin={stdin}
+                        stdin={defaultStdin}
                         setStdin={setStdin}
                         compilerOutput={compilerOutput}
                         isAcceptedOutput={isAcceptedOutput}
@@ -251,7 +254,7 @@ export default function CodeEditor() {
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
                   submissionOutput={submissionOutput}
-                  stdin={stdin}
+                  stdin={defaultStdin}
                   setStdin={setStdin}
                   compilerOutput={compilerOutput}
                   isAcceptedOutput={isAcceptedOutput}

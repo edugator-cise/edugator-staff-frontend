@@ -31,7 +31,7 @@ export default function LearnPage() {
     lesson: currentLesson,
     error,
   } = useFetchLesson({
-    id: params && params.lessonId ? (params.lessonId as string) : "",
+    id: params.lessonId as string,
   });
 
   function transform(node: HTMLElement, children: Node[]): React.ReactNode {

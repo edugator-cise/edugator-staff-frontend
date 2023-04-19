@@ -4,6 +4,7 @@ import { CompilerOutput } from "hooks/types";
 import { IResultSubmission } from "../../types";
 import * as Tabs from "@radix-ui/react-tabs";
 import { toTitleCase } from "utils/textUtils";
+import { useEffect, useState } from "react";
 
 export const InputOutputView = ({
   stdin,
@@ -26,8 +27,17 @@ export const InputOutputView = ({
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     event.preventDefault();
+    setInput(event.target.value);
     setStdin(event.target.value);
   };
+
+  // ensure that the input is updated when the stdin prop changes
+  const [input, setInput] = useState(stdin);
+  useEffect(() => {
+    // on mount, set the input to the stdin prop so CodeEditorView can update the stdin prop
+    setInput(stdin);
+    setStdin(stdin);
+  }, [stdin]);
 
   const tabs = ["stdin", "output", "submission"];
 
@@ -74,7 +84,7 @@ export const InputOutputView = ({
       <Tabs.Content className="w-full flex-1 p-4" value="stdin">
         <textarea
           className="w-full font-inter max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-sm min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-slate-900 dark:text-white"
-          value={stdin}
+          value={input}
           onChange={handleStdinChange}
         />
       </Tabs.Content>

@@ -25,6 +25,7 @@ export const useFetchLesson = ({ id }: { id: string }) => {
       );
       return data;
     };
+    if (!id) return;
     fetchData()
       .then((values) => {
         if (values) {
