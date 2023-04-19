@@ -13,7 +13,7 @@ const RotatingText = () => {
     return () => clearTimeout(intervalId);
   }, []);
   return (
-    <span className="text-emerald-500 ">
+    <span className="text-emerald-500">
       <TextTransition delay={2000} inline text={TEXTS[index % TEXTS.length]} />
     </span>
   );
