@@ -34,7 +34,6 @@ export default function CodeEditor() {
   const locationState = router.asPath;
 
   const [stdin, setStdin] = useState<string>("");
-
   /* const [editorCode, setEditorCode] = useState<string>(""); */
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileActivePanel, setMobileActivePanel] =
