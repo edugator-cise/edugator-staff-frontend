@@ -31,7 +31,9 @@ interface DateError {
   message?: string;
 }
 
-interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
+type TDate = any;
+
+interface DatePickerFieldProps extends FieldProps, DatePickerProps<TDate> {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
