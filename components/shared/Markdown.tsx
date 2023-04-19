@@ -14,6 +14,7 @@ export const Markdown = ({ markdownString }: Props) => (
   <ReactMarkdown
     children={markdownString}
     components={{ img: Image }}
+    className="markdown"
     remarkPlugins={[remarkGfm]}
   />
 );
