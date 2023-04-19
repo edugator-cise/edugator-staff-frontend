@@ -26,7 +26,6 @@ import {
 } from "components/ProblemEditor/problemEditorContainerSlice";
 import { useCheckboxContext } from "components/CheckboxContext";
 
-
 interface Props {
   formRef: any;
 }
