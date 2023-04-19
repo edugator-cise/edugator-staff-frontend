@@ -105,6 +105,16 @@ export const CodeEditorView = ({
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [currentCode, setCurrentCode] = useState(code);
 
+  //ensure stdin is populated on every change
+  const [inputToRun, setInputToRun] = useState(stdin);
+
+  useEffect(() => {
+    if (stdin) {
+      console.log(stdin);
+      setInputToRun(stdin);
+    }
+  }, [stdin]);
+
   const {
     timeLimit,
     memoryLimit,
@@ -205,9 +215,11 @@ export const CodeEditorView = ({
           </ButtonToolTip>
           <ButtonToolTip label="Download Submission">
             <button
-              onClick={(e) =>
-                handleDownload(currentCode, title, fileType, fileName)
-              }
+              onClick={(e) => {
+                if (title && fileType && fileName && currentCode) {
+                  handleDownload(currentCode, title, fileType, fileName);
+                }
+              }}
               className="w-8 h-8 p-2 rounded-md hidden sm:flex transition hover:bg-slate-300 dark:hover:bg-nav-darkest items-center justify-center group"
             >
               {icons.downloadSubmission}
@@ -286,7 +298,7 @@ export const CodeEditorView = ({
               toast.promise(
                 runCode({
                   code: currentCode,
-                  stdin,
+                  stdin: inputToRun,
                   problemId: problemId as string,
                   timeLimit: timeLimit as number,
                   memoryLimit: memoryLimit as number,
@@ -315,7 +327,7 @@ export const CodeEditorView = ({
               toast.promise(
                 submitCode({
                   code: currentCode,
-                  stdin,
+                  stdin: inputToRun,
                   problemId: problemId as string,
                   timeLimit: timeLimit as number,
                   memoryLimit: memoryLimit as number,

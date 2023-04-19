@@ -25,25 +25,26 @@ export default class MyDocument extends Document {
           />
           <link
             rel="preload"
-            href="/fonts/ambit/Ambit-Bold.otf"
+            href="/fonts/Ambit-Bold.otf"
             as="font"
             type="font/otf"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href="/fonts/ambit/Ambit-SemiBold.otf"
+            href="/fonts/Ambit-SemiBold.otf"
             as="font"
             type="font/otf"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href="/fonts/ambit/Ambit-Regular.otf"
+            href="/fonts/Ambit-Regular.otf"
             as="font"
             type="font/otf"
             crossOrigin="anonymous"
           />
+          <link href="/fonts/style.css" rel="stylesheet" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"
