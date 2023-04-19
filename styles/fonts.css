@@ -2,21 +2,4 @@
 @import url("https://fonts.googleapis.com/css2?&family=Inter");
 @import url("https://fonts.googleapis.com/css2?&family=Public+Sans");
 @import url("https://fonts.googleapis.com/css2?&family=DM+Sans");
-
-@font-face {
-  font-family: "Ambit";
-  src: url("/fonts/Ambit-Regular.otf") format("otf");
-  font-weight: normal;
-}
-
-@font-face {
-  font-family: "Ambit";
-  src: url("/fonts/Ambit-Bold.otf") format("otf");
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "Ambit";
-  src: url("/fonts/Ambit-Semibold.otf") format("otf");
-  font-weight: 600;
-}
+@import url("https://fonts.cdnfonts.com/css/ambit");
