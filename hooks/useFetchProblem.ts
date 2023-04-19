@@ -26,8 +26,10 @@ export const useFetchProblem = ({
       );
       return data;
     };
+    if (!id) return;
     fetchData()
       .then((values) => {
+        console.log(values);
         setProblem(values);
         setStatus(FetchStatus.succeed);
         if (values?.testCases?.length > 0) {
@@ -40,6 +42,7 @@ export const useFetchProblem = ({
         setStatus(FetchStatus.failed);
         setError(e);
       });
+    console.log("useFetchProblem", id, isAdmin, problem);
     return () => {
       setStatus(FetchStatus.loading);
     };

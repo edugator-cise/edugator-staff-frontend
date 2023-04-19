@@ -3,7 +3,13 @@ import Editor from "@monaco-editor/react";
 import { Button, Grow, IconButton, Tooltip, Box } from "@mui/material";
 import * as monaco from "monaco-editor";
 import { styled } from "@mui/material/styles";
-import { GetApp, Add, RotateLeft, CloudDownload, BugReport} from "@mui/icons-material";
+import {
+  GetApp,
+  Add,
+  RotateLeft,
+  CloudDownload,
+  BugReport,
+} from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { adminPathRegex, colors } from "constants/config";
@@ -150,8 +156,12 @@ export const CodeEditorView = ({
   };
 
   const handleReportABug = () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform', '_blank', 'noopener');
-  }
+    window.open(
+      "https://docs.google.com/forms/d/e/1FAIpQLSf5MJP3NNd1MvIzulx4mE0zQ4K3l4TTyuT3JtUHVp_HFNifOw/viewform",
+      "_blank",
+      "noopener"
+    );
+  };
 
   window.addEventListener("resize", () => {
     if (editorRef.current) {
@@ -199,7 +209,11 @@ export const CodeEditorView = ({
             <Tooltip title="Download Submission" placement="top">
               <IconButton
                 onClick={() => {
-                  handleDownload(currentCode, title, fileType, fileName);
+                  {
+                    if (title && fileType && fileName && currentCode) {
+                      handleDownload(currentCode, title, fileType, fileName);
+                    }
+                  }
                 }}
               >
                 <GetApp />

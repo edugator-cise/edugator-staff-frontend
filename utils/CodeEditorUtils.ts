@@ -8,7 +8,7 @@ import * as monaco from "monaco-editor";
 import { Buffer } from "buffer";
 
 export const generateFileName = (title: string, fileType: string) => {
-  let fileName = title.trim().replaceAll(" ", "_");
+  let fileName = title?.trim().replaceAll(" ", "_");
 
   if (!fileName) {
     return "not_found.cpp";
