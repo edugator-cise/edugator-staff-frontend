@@ -31,9 +31,9 @@ export const ServerConfigForm = (props: Props) => {
     (state: RootState) => state.problemEditorContainer.serverConfig
   );
   
-  const cpp = languages.find((lang) => lang.language === "cpp");
-  const py = languages.find((lang) => lang.language === "py");
-  const java = languages.find((lang) => lang.language === "java");
+  const cpp = languages.find((lang) => lang.language === "C++")?.selected;
+  const py = languages.find((lang) => lang.language === "Python")?.selected;
+  const java = languages.find((lang) => lang.language === "Java")?.selected;
 
   const validate = (values: ServerConfigFields) => {
     const errors: ServerConfigErrors[] = [];
@@ -94,7 +94,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "cpp")?.timeLimit}
+                value={values.config.find(lang => lang.language === "C++")?.timeLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -111,7 +111,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "cpp")?.memoryLimit}
+                value={values.config.find(lang => lang.language === "C++")?.memoryLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -122,7 +122,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "cpp")?.buildCommand}
+                value={values.config.find(lang => lang.language === "C++")?.buildCommand}
                 error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
@@ -155,7 +155,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "py")?.timeLimit}
+                value={values.config.find(lang => lang.language === "Python")?.timeLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -172,7 +172,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "py")?.memoryLimit}
+                value={values.config.find(lang => lang.language === "Python")?.memoryLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -183,7 +183,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "py")?.buildCommand}
+                value={values.config.find(lang => lang.language === "Python")?.buildCommand}
                 error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
@@ -216,7 +216,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "java")?.timeLimit}
+                value={values.config.find(lang => lang.language === "Java")?.timeLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -233,7 +233,7 @@ export const ServerConfigForm = (props: Props) => {
                 }}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "java")?.memoryLimit}
+                value={values.config.find(lang => lang.language === "Java")?.memoryLimit}
                 error={touched.config && Boolean(errors.config)}
                 helperText={touched.config && errors.config}
                 sx={{ width: "25%" }}
@@ -244,7 +244,7 @@ export const ServerConfigForm = (props: Props) => {
                 label="Build command"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.config.find(lang => lang.language === "java")?.buildCommand}
+                value={values.config.find(lang => lang.language === "Java")?.buildCommand}
                 error={touched.config && Boolean(errors.config)}
                 helperText="Add compiler flags here e.g. '-Wall'"
               />
