@@ -68,7 +68,7 @@ export const MetadataForm = (props: Props) => {
   }: DatePickerFieldProps) => {
     return (
       <DatePicker
-        onError={(reason, value) => {
+        onError={(reason: any, value: any) => {
           if (reason) {
             dateError.message = "Invalid date";
           } else {
@@ -76,12 +76,12 @@ export const MetadataForm = (props: Props) => {
           }
           form.setFieldValue("dueDate", value, true);
         }}
-        onChange={(newValue) => {
+        onChange={(newValue: any) => {
           form.setFieldValue("dueDate", newValue, false);
         }}
         label="Due date"
         value={field.value}
-        renderInput={(params) => (
+        renderInput={(params: any) => (
           <TextField {...params} helperText={dateError.message} />
         )}
       />
