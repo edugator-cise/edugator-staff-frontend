@@ -1,6 +1,6 @@
 import { Stack, Alert, AlertTitle, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { requestDeleteModuleSuccess } from "components/Modules/ModulesSlice";
+import { requestDeleteModuleSuccess } from "state/ModulesSlice";
 import Dialog from "components/shared/GenericDialog";
 import { IAdminModule } from "components/Modules/types";
 import { useDispatch } from "react-redux";
@@ -29,21 +29,23 @@ export function DeleteDialog(props: DeleteDialogProps) {
   const deleteModule = async () => {
     try {
       if (!toDelete._id) {
-        throw "DeleteDialog: module id does not exist in delete"
+        throw "DeleteDialog: module id does not exist in delete";
       }
-      const response: AxiosResponse<IRequestMessage> = await apiClient.delete("/v1/module/" + toDelete._id);
-      toast.success('Module deleted');
+      const response: AxiosResponse<IRequestMessage> = await apiClient.delete(
+        "/v1/module/" + toDelete._id
+      );
+      toast.success("Module deleted");
       const payload = {
         response: response.data,
-        id: toDelete._id
+        id: toDelete._id,
       };
       dispatch(requestDeleteModuleSuccess(payload));
     } catch (e) {
-      toast.error('Module failed to delete')
+      toast.error("Module failed to delete");
     }
 
     handleClose();
-  }
+  };
 
   const FooterButtons = [
     {

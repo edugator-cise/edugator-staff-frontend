@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, FormGroup, Switch } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { validateCurrentStep } from "components/ProblemEditor/problemEditorContainerSlice";
+import { validateCurrentStep } from "state/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
 
 export const ExampleValidator = () => {

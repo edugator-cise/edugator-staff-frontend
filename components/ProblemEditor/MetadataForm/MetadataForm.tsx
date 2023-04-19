@@ -12,7 +12,7 @@ import {
   MetadataFields,
   updateMetadata,
   validateMetadata,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker, { DatePickerProps } from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -31,7 +31,9 @@ interface DateError {
   message?: string;
 }
 
-interface DatePickerFieldProps extends FieldProps, DatePickerProps {}
+type TDate = any;
+
+interface DatePickerFieldProps extends FieldProps, DatePickerProps<TDate> {}
 
 export const MetadataForm = (props: Props) => {
   const dispatch = useDispatch();
@@ -66,7 +68,7 @@ export const MetadataForm = (props: Props) => {
   }: DatePickerFieldProps) => {
     return (
       <DatePicker
-        onError={(reason, value) => {
+        onError={(reason: any, value: any) => {
           if (reason) {
             dateError.message = "Invalid date";
           } else {
@@ -74,12 +76,12 @@ export const MetadataForm = (props: Props) => {
           }
           form.setFieldValue("dueDate", value, true);
         }}
-        onChange={(newValue) => {
+        onChange={(newValue: any) => {
           form.setFieldValue("dueDate", newValue, false);
         }}
         label="Due date"
         value={field.value}
-        renderInput={(params) => (
+        renderInput={(params: any) => (
           <TextField {...params} helperText={dateError.message} />
         )}
       />

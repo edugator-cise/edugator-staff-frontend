@@ -1,4 +1,3 @@
-
 import AdminLayout from "components/AdminLayout";
 import { useEffect } from "react";
 import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
@@ -10,11 +9,11 @@ import {
   updateModuleId,
   updateModuleName,
   WarningTypes,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 
 const ProblemCreatePage = () => {
   const router = useRouter();
-  const { moduleId , moduleName } = router.query;
+  const { moduleId, moduleName } = router.query;
 
   const dispatch = useDispatch();
   const actions = {
@@ -46,4 +45,3 @@ const ProblemCreatePage = () => {
 };
 
 export default ProblemCreatePage;
-

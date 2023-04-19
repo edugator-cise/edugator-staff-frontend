@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect} from "react";
+import { useState, useRef, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Icon,
@@ -9,7 +9,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { requestModifyAccountEnd } from "components/Accounts/AdminAccountsPage.slice";
+import { requestModifyAccountEnd } from "state/AdminAccountsPage.slice";
 import { AccountEditForm } from "./AccountInfoEdit";
 import { AccountInfo } from "./AccountInfo";
 import { AdminActions } from "./AdminActions";
@@ -36,7 +36,9 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
 
   const [editMode, setEditMode] = useState<boolean>(false);
 
-  const { selectedAccount } = useSelector((state: RootState) => state.accountManager);
+  const { selectedAccount } = useSelector(
+    (state: RootState) => state.accountManager
+  );
 
   // https://www.letmegooglethat.com/?q=js+%3F%3F+operator
   const unedited: IAccount = {
@@ -81,19 +83,22 @@ export function AccountDialog({ open, handleClose }: AccountDialogProps) {
       role: payload.role,
       username: payload.username,
       _id: payload._id,
-    }
+    };
     try {
-      const { data }: {data: IAccount } = await apiClient.put(apiRoutes.admin.updateUser, body);
+      const { data }: { data: IAccount } = await apiClient.put(
+        apiRoutes.admin.updateUser,
+        body
+      );
       dispatch(requestModifyAccountEnd(data));
       toast.success("User is modified");
     } catch (e) {
       toast.error("User failed to update");
     }
-  }
+  };
 
   const handleEditSubmit = (edited: IAccount) => {
     if (!nameError && validEmail) {
-      handleModifyAccountRequest(edited)
+      handleModifyAccountRequest(edited);
       setEditMode(false);
     }
   };

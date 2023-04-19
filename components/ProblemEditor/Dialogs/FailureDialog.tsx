@@ -9,7 +9,7 @@ import {
 import { RootState } from "lib/store/store";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { closeFailureModal } from "components/ProblemEditor/problemEditorContainerSlice";
+import { closeFailureModal } from "state/problemEditorContainerSlice";
 
 export const FailureDialog = () => {
   const showFailureModal = useSelector(

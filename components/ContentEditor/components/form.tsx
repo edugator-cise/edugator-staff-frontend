@@ -4,7 +4,7 @@ import {
   requestAddContentSuccess,
   updateContentEditor,
   updateMetadata,
-} from "../contentEditorPageSlice";
+} from "../../../state/contentEditorPageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
 import { ILesson, INewLesson } from "lib/shared/types";

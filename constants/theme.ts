@@ -105,8 +105,8 @@ let theme = createTheme({
     },
     secondary: {
       main: "#3A4F58",
-      light: "#fff",
       dark: "#3966ad",
+      light: "#3966ad",
     },
   },
   breakpoints: {

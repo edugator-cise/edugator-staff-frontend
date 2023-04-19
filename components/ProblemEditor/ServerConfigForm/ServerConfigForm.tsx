@@ -6,7 +6,7 @@ import {
   ServerConfigFields,
   updateServerConfig,
   validateServerConfig,
-} from "components/ProblemEditor/problemEditorContainerSlice";
+} from "state/problemEditorContainerSlice";
 import { RootState } from "lib/store/store";
 
 interface Props {

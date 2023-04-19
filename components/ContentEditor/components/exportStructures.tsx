@@ -4,12 +4,13 @@ interface content {}
 
 class answerChoice {
   id: number;
-
+  correct: boolean;
   text: string;
 
-  constructor(id: number, text: string) {
+  constructor(id: number, text: string, correct: boolean) {
     this.id = id;
     this.text = text;
+    this.correct = correct;
   }
 }
 
@@ -17,7 +18,7 @@ class msAnswerChoice extends answerChoice {
   correct: boolean;
 
   constructor(id: number, text: string, correct: boolean) {
-    super(id, text);
+    super(id, text, correct);
     this.correct = correct;
   }
 }
@@ -54,17 +55,20 @@ export class image_content implements content {
 
 export class mc_content implements content {
   question: string;
-
-  correctAnswer: number;
-
   answers: answerChoice[];
 
-  constructor(question: string, correctAnswer: string, answers: string[]) {
+  constructor(
+    question: string,
+    answers: {
+      text: string;
+      correct: boolean;
+    }[]
+  ) {
     this.question = question;
-    this.correctAnswer = parseInt(correctAnswer);
     this.answers = [];
+    console.log(answers);
     answers.forEach((answer, i) =>
-      this.answers.push(new answerChoice(i, answer))
+      this.answers.push(new answerChoice(i, answer.text, answer.correct))
     );
   }
 }

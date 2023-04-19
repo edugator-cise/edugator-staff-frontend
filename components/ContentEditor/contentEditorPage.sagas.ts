@@ -5,7 +5,7 @@ import {
   requestDeleteContentFailure,
   requestDeleteContentSuccess,
   requestUpdateContentSuccess,
-} from "./contentEditorPageSlice";
+} from "../../state/contentEditorPageSlice";
 import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
 

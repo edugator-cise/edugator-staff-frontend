@@ -179,96 +179,89 @@ function MultipleSelectQuestion({
   }, []);
 
   return (
-    <QuestionHolder checked={checked}>
-      <Typography
-        variant="overline"
-        sx={{ fontWeight: 600, fontSize: "0.9em" }}
-        fontSize="subtitle2"
-        color={theme.palette.primary.main}
-      >
+    <div
+      className={`w-[70%] rounded-md transition-transform flex flex-col border p-5 self-center dark:border-emerald-500 ${
+        checked ? "" : "hover:scale-[101%]"
+      }`}
+    >
+      <h1 className="uppercase font-dm font-bold !text-sm !text-blue-500 dark:!text-emerald-500">
         Question {number}
-      </Typography>
-      <Typography
-        variant="h6"
-        sx={{ fontWeight: 200, fontFamily: "DM Serif Display" }}
-      >
+      </h1>
+      <h1 className="font-dm !text-lg !font-normal !text-slate-900 dark:!text-slate-100">
         {question}
-      </Typography>
+      </h1>
 
-      <Grid
-        container
-        rowSpacing={2}
-        columnSpacing={2}
-        sx={{ marginTop: 1, alignSelf: "center", justifySelf: "center" }}
-      >
+      <div className="grid grid-cols-2 gap-2 mt-2 self-center w-full">
         {answers.map((ans, i) => {
           return (
-            <Grid
-              key={number * i}
-              sx={{
-                minHeight: "100",
+            <div
+              onClick={() => {
+                if (checked) return;
+                //set the answer state to clicked
+                const currentClickState = [];
+                for (const status of questionsClicked)
+                  currentClickState.push(status);
+                currentClickState[i] = !currentClickState[i];
+                setQuestionsClicked(currentClickState);
               }}
-              item
-              xs={answers.length % 2 === 0 ? 6 : 12}
+              className={`w-full flex !text-slate-900 justify-between items-center px-4 py-3 rounded-sm transition cursor-pointer ${
+                checked
+                  ? ans.correct
+                    ? questionsClicked[i]
+                      ? "bg-emerald-500 hover:bg-emerald-500 hover:text-white"
+                      : "bg-green-100 hover:bg-green-100 hover:text-slate-900"
+                    : questionsClicked[i]
+                    ? "bg-rose-400 hover:bg-rose-400 hover:text-white"
+                    : "bg-blue-200 hover:bg-blue-200 hover:text-slate-900"
+                  : questionsClicked[i]
+                  ? "bg-blue-400 hover:bg-blue-400 hover:text-white"
+                  : "bg-blue-200 hover:bg-blue-400 hover:text-white"
+              } ${questionsClicked[i] ? "text-white" : "text-slate-900"} ${
+                checked
+                  ? ans.correct
+                    ? questionsClicked[i]
+                      ? "none"
+                      : "border-2 border-dashed border-emerald-500"
+                    : ""
+                  : ""
+              }`}
+              key={number * i}
             >
-              <AnswerHolder
-                className="answerHolder"
-                onClick={() => {
-                  if (checked) return;
-                  //set the answer state to clicked
-                  const currentClickState = [];
-                  for (const status of questionsClicked)
-                    currentClickState.push(status);
-                  currentClickState[i] = !currentClickState[i];
-                  setQuestionsClicked(currentClickState);
-                }}
-                clicked={questionsClicked[i]}
-                checked={checked}
-                correct={correct}
-                isAnswerCorrect={ans.correct}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: 500, marginLeft: 2, marginRight: 2 }}
-                >
-                  {ans.text}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "0.7em",
-                    fontWeight: 700,
-                    letterSpacing: 0.5,
-                    marginLeft: 2,
-                    marginRight: 2,
-                  }}
-                >
-                  {checked && answerText(ans.correct, questionsClicked[i])}
-                </Typography>
-              </AnswerHolder>
-            </Grid>
+              <p className="font-dm !text-sm !font-normal !text-slate-900">
+                {ans.text}
+              </p>
+              <p className="font-dm uppercase !text-xs !font-bold !text-slate-900 tracking-wide">
+                {checked && answerText(ans.correct, questionsClicked[i])}
+              </p>
+            </div>
           );
         })}
-      </Grid>
-      <CheckButton
-        checked={checked}
+      </div>
+      <button
         onClick={() => {
           //check if all answers are correct
           const isCorrect = checkCorrect();
           setCorrect(isCorrect);
           setChecked(true);
         }}
+        className={`mt-4 cursor-pointer rounded-sm bg-blue-600 hover:bg-blue-700 transition-colors text-white items-center justify-center py-4 ${
+          checked ? "hidden" : "flex"
+        }`}
       >
-        <Typography
-          variant="overline"
-          sx={{ fontWeight: 600, fontSize: "0.8em" }}
-          fontSize="subtitle2"
-          color={"white"}
-        >
-          CHECK ANSWER
-        </Typography>
-      </CheckButton>
+        <p className="font-dm uppercase !text-xs !font-bold !text-white !tracking-wide">
+          Check Answer
+        </p>
+      </button>
 
-      <AnswerFeedback checked={checked} correct={correct}>
+      <div
+        className={`flex transition-all overflow-y-hidden items-center justify-start mt-4 rounded-sm ${
+          checked
+            ? correct
+              ? "border-2 border-emerald-500 text-emerald-700 bg-emerald-100"
+              : "border-2 border-rose-400 text-rose-700 bg-rose-100"
+            : ""
+        } ${checked ? "max-h-44 py-4" : "max-h-0"}`}
+      >
         {correct ? (
           <CheckCircle
             weight="duotone"
@@ -284,17 +277,13 @@ function MultipleSelectQuestion({
             color={"#f76f7a"}
           />
         )}
-        <Typography
-          variant="body2"
-          sx={{ fontWeight: 500, marginLeft: 1, marginRight: 2 }}
-          color={correct ? "#22B16E" : "#f76f7a"}
-        >
+        <p className="font-dm !text-sm !font-normal !text-slate-900 ml-2">
           {correct
             ? "Correct! Nice job!"
             : "That's incorrect. Review your answer."}
-        </Typography>
-      </AnswerFeedback>
-    </QuestionHolder>
+        </p>
+      </div>
+    </div>
   );
 }
 

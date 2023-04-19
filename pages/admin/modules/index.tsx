@@ -1,11 +1,11 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { CircularProgress, Grid } from "@mui/material";
 import AdminLayout from "components/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { ModuleAccordian } from "components/Modules/ModuleAccordion";
 import { ModuleDialog } from "components/Modules/ModuleDialog";
 import { DeleteDialog } from "components/Modules/DeleteDialog";
-import { openCreateDialog, requestModulesSuccess } from "components/Modules/ModulesSlice";
+import { openCreateDialog, requestModulesSuccess } from "state/ModulesSlice";
 import { Routes } from "constants/navigationRoutes";
 import { IAdminModule, NullModule } from "components/Modules/types";
 import { rolesEnum } from "components/Accounts/types";
@@ -19,7 +19,7 @@ import { LocalStorage } from "lib/auth/LocalStorage";
 
 const ModulesPage = () => {
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const loginState = useSelector((state: RootState) => state.login);
   // Module to delete - hooks
 
@@ -73,22 +73,24 @@ const ModulesPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data }: { data: IAdminModule[] } =
-        await apiClient.get(apiRoutes.admin.getNavigation);
+      const { data }: { data: IAdminModule[] } = await apiClient.get(
+        apiRoutes.admin.getNavigation
+      );
       return data;
     };
 
-    fetchData().then((values) => {
-      dispatch(requestModulesSuccess(values));
-      setStatus(FetchStatus.succeed)
-    })
-    .catch((e) => {
-      toast.error(e.message)
-      //dispatch(setRunningSubmission(false));
-      setStatus(FetchStatus.failed);
-    });
+    fetchData()
+      .then((values) => {
+        dispatch(requestModulesSuccess(values));
+        setStatus(FetchStatus.succeed);
+      })
+      .catch((e) => {
+        toast.error(e.message);
+        //dispatch(setRunningSubmission(false));
+        setStatus(FetchStatus.failed);
+      });
   }, []);
-  
+
   return (
     <AdminLayout pageTitle={"Modules"} actionButtons={HeaderButtons}>
       <>
@@ -117,6 +119,6 @@ const ModulesPage = () => {
       </>
     </AdminLayout>
   );
-}
+};
 
 export default ModulesPage;

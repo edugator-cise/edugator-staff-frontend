@@ -81,6 +81,7 @@ function TopicSidebar({ isHidden, setIsHidden }: SidebarProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
           marginBottom: 1,
         }}
       >

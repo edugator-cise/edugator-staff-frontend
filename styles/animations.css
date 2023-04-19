@@ -1,0 +1,262 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+
+@keyframes slideLeftAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRightAndFade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.AccordionContent[data-state="open"] {
+  animation: slideDown 300ms ease-out;
+}
+.AccordionContent[data-state="closed"] {
+  animation: slideUp 300ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.PopoverContent[data-state="open"] {
+  transform-origin: right bottom;
+  animation: fadeIn 150ms ease-out;
+}
+
+.PopoverContent[data-state="closed"] {
+  transform-origin: right bottom;
+  animation: fadeOut 150ms ease-in;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.dash {
+  stroke-dasharray: 1000;
+  animation: dash 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards,
+    opacity 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards;
+  transition: all 0.3s ease-in-out;
+}
+
+.dashreverse {
+  stroke-dasharray: 1000;
+  animation: dashreverse 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards,
+    opacity 3s cubic-bezier(0.785, 0.9, 0.15, 0.86) forwards;
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes dashreverse {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+.TooltipContent[data-state="open"][data-side="right"] {
+  transform-origin: left;
+  animation: fadeIn 150ms ease-out;
+}
+
+.TooltipContent[data-state="closed"][data-side="right"] {
+  transform-origin: left;
+  animation: fadeOut 150ms ease-in;
+}
+
+.TooltipContent[data-state="open"][data-side="bottom"] {
+  transform-origin: top;
+  animation: fadeIn 150ms ease-out;
+}
+
+.TooltipContent[data-state="closed"][data-side="bottom"] {
+  transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.DialogContent[data-state="open"] {
+  animation: contentShow 150ms ease-out;
+}
+
+.DialogContent[data-state="closed"] {
+  animation: contentHide 150ms ease-in;
+}
+
+.DialogOverlay[data-state="open"] {
+  animation: overlayFadeIn 150ms ease-out;
+}
+
+.DialogOverlay[data-state="closed"] {
+  animation: overlayFadeOut 150ms ease-in;
+}
+
+/*  .PopoverContent {
+    animation: scaleIn 150mss ease-out;
+  }
+  
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  } */
+
+@keyframes live-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(41, 107, 168, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(41, 107, 168, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(41, 107, 168, 0);
+  }
+}
+
+.vignette {
+  -webkit-mask-image: radial-gradient(
+    circle at 70% 30%,
+    rgba(0, 0, 0, 1) 20%,
+    transparent 60%
+  );
+}
+
+/* Bouncing Loader Animation */
+
+.bouncing-loader {
+  display: flex;
+  justify-content: center;
+}
+
+.bouncing-loader > div {
+  width: 5px;
+  height: 5px;
+  margin: 3px 1px;
+  border-radius: 50%;
+  background-color: white;
+  opacity: 1;
+  animation: bouncing-loader 0.6s infinite alternate;
+}
+
+@keyframes bouncing-loader {
+  to {
+    opacity: 0.3;
+    transform: translateY(-5px);
+  }
+}
+
+.bouncing-loader > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.bouncing-loader > div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.ai-message {
+  transition: opacity 1s linear 2s, transform 0.3s ease-in-out 0.3s;
+}
