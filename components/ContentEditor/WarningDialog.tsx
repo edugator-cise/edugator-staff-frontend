@@ -67,6 +67,9 @@ export const WarningDialog = () => {
           }}
           variant="contained"
           color="error"
+          sx={{
+            backgroundColor: "#f44336 !important",
+          }}
         >
           Yes
         </Button>
@@ -74,6 +77,9 @@ export const WarningDialog = () => {
           onClick={() => dispatch(closeWarningModal())}
           variant="contained"
           color="primary"
+          sx={{
+            backgroundColor: "#2196f3 !important",
+          }}
         >
           No
         </Button>

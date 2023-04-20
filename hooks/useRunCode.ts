@@ -35,6 +35,7 @@ const getCodeRequest = ({
 };
 
 export const useRunCode = (locationState: string) => {
+  const [stdIn, setStdIn] = useState<string>("");
   const [isSubmissionRunning, setIsSubmissionRunning] =
     useState<boolean>(false);
   const [isAcceptedOutput, setIsAcceptedOutput] = useState<boolean | undefined>(

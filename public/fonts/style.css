@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Ambit";
+  src: url("/fonts/Ambit-Regular.otf") format("otf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Ambit";
+  src: url("/fonts/Ambit-Bold.otf") format("otf");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Ambit";
+  src: url("/fonts/Ambit-Semibold.otf") format("otf");
+  font-weight: 600;
+}
