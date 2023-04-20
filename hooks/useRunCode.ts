@@ -157,6 +157,7 @@ export const useRunCode = (locationState: string) => {
           buildCommand,
         })
       );
+      console.log(data)
       setActiveTab(2);
       setIsSubmissionRunning(false);
       setSubmissionOutput(data);

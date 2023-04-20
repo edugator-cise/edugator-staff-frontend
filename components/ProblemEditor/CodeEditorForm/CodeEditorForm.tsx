@@ -100,7 +100,7 @@ if __name__ == '__main__':
   result = addTwoNums(x, y)
   # You should print out whatever the expected output should be.
   # Be careful about whitespace. Ex: only put end='' if you don't want to end the line.
-  print(result)
+  print(result, end='')
 `;
 
 const defaultJavaHeader = `import java.util.Scanner;
@@ -123,7 +123,7 @@ const defaultJavaFooter = `public class Main {
     int x = input.nextInt();
     int y = input.nextInt();
     int result = e.addTwoNums(x, y);
-    System.out.println(result);
+    System.out.print(result);
     input.close();
   }
 }
