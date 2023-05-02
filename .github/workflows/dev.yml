@@ -19,5 +19,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Build Edugator Staff Application
         run: npm install && npm run build && npm run export
+      - name: move routes-manfiest.json to out folder
+        run: mv .next/routes-manifest.json ./out/
       - name: Deploy app dev build to S3 bucket
         run: aws s3 sync ./out/ s3://development-trunk-edugator --delete
