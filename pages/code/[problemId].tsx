@@ -47,7 +47,7 @@ export default function CodeEditor() {
   useEffect(() => {
     if (!windowWidth) return;
     if (windowWidth < 1168) {
-      setIsMobile(true);
+      setIsMobile(false); // TODO: Change to true after mobile fix
     } else {
       setIsMobile(false);
     }
