@@ -22,7 +22,7 @@ import "styles/allotment.css";
 import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider, SignedIn, SignedOut, UserButton, useUser, RedirectToSignIn } from "@clerk/clerk-react"
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react"
 import { ThemeProvider } from "next-themes";
 
 type Page<P = {}> = NextPage<P> & {
