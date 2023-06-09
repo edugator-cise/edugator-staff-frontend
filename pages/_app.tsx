@@ -22,6 +22,7 @@ import "styles/allotment.css";
 import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
+import { ClerkProvider, SignedIn, SignedOut, UserButton, useUser, RedirectToSignIn } from "@clerk/clerk-react"
 import { ThemeProvider } from "next-themes";
 
 type Page<P = {}> = NextPage<P> & {
@@ -31,6 +32,15 @@ type Page<P = {}> = NextPage<P> & {
 type Props = AppProps & {
   Component: Page;
 };
+
+
+if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  throw "Missing Publishable Key"
+}
+
+
+const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
 
 const App = ({ Component, pageProps }: Props) => {
   useEffect(() => {
@@ -43,21 +53,36 @@ const App = ({ Component, pageProps }: Props) => {
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
   return (
-    <Provider store={store}>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
-      />
+    <AuthComponent>
+      <Provider store={store}>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
+        />
 
-      <StyledEngineProvider injectFirst>
-        <MUIThemeProvider theme={theme}>
-          <ThemeProvider enableSystem={true} attribute="class">
-            <Toaster containerClassName="font-dm" />
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
-        </MUIThemeProvider>
-      </StyledEngineProvider>
-    </Provider>
+        <StyledEngineProvider injectFirst>
+          <MUIThemeProvider theme={theme}>
+            <ThemeProvider enableSystem={true} attribute="class">
+              <Toaster containerClassName="font-dm" />
+              {getLayout(<Component {...pageProps} />)}
+            </ThemeProvider>
+          </MUIThemeProvider>
+        </StyledEngineProvider>
+      </Provider>
+    </AuthComponent>
   );
 };
+
+const AuthComponent = ({ children }: { children: ReactNode}) => {
+  return (
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <SignedIn>
+        {children}
+      </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+    </ClerkProvider>
+  )
+}
 export default App;
