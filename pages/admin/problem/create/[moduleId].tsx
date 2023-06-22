@@ -10,6 +10,7 @@ import {
   updateModuleName,
   WarningTypes,
 } from "state/problemEditorContainerSlice";
+import AdminProblemEditor from "components/ProblemEditor/NewEditor/ProblemEditor";
 
 const ProblemCreatePage = () => {
   const router = useRouter();
@@ -36,10 +37,12 @@ const ProblemCreatePage = () => {
 
   return (
     <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
-      actionButtons={[actions.back]}
+      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`} //unneeded
+      actionButtons={[actions.back]} //unneeded
     >
-      <ProblemEditorContainer />
+      <AdminProblemEditor />
+      {/* Reference below component */}
+      {/* <ProblemEditorContainer /> */}
     </AdminLayout>
   );
 };

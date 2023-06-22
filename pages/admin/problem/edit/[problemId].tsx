@@ -18,10 +18,12 @@ import { useState } from "react";
 import { FetchStatus } from "hooks/types";
 import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
+import AdminProblemEditor from "components/ProblemEditor/NewEditor/ProblemEditor";
 
 const ProblemEditPage = () => {
   const router = useRouter();
   const { problemId, moduleName, moduleId } = router.query;
+  console.log(problemId);
   const [status, setStatus] = useState(FetchStatus.loading);
   const dispatch = useDispatch();
 
@@ -46,6 +48,9 @@ const ProblemEditPage = () => {
     const getProblemRequest = () =>
       apiClient.get(apiRoutes.admin.getProblem(problemId as string));
 
+    if (!problemId) {
+      return;
+    }
     getProblemRequest()
       .then((value) => {
         dispatch(updateModuleId(moduleId as string));
@@ -54,6 +59,7 @@ const ProblemEditPage = () => {
         setStatus(FetchStatus.succeed);
       })
       .catch((e) => {
+        console.log(e);
         toast.error("failed to get problem");
         setStatus(FetchStatus.failed);
       });
@@ -65,13 +71,17 @@ const ProblemEditPage = () => {
 
   return (
     <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
-      actionButtons={[actions.back, actions.delete]}
+      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`} //unneeded
+      actionButtons={[actions.back, actions.delete]} //unneeded
     >
       {status === FetchStatus.loading ? (
         <CircularProgress />
       ) : (
-        <ProblemEditorContainer />
+        <>
+          <AdminProblemEditor />
+          {/* Reference below component */}
+          {/* <ProblemEditorContainer /> */}
+        </>
       )}
     </AdminLayout>
   );

@@ -164,6 +164,7 @@ export const CodeEditorView = ({
   };
 
   window.addEventListener("resize", () => {
+    console.log("resize");
     if (editorRef.current) {
       editorRef.current.layout();
     }

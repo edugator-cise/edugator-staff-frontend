@@ -17,6 +17,7 @@ import {
   NodeViewWrapper,
   NodeViewContent,
 } from "@tiptap/react";
+import { Markdown } from "tiptap-markdown";
 import { mergeAttributes, Node, Content } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import {
@@ -32,6 +33,7 @@ import {
   Underline as UnderlineIcon,
 } from "tabler-icons-react";
 import { ProblemAction, ProblemData } from "../types";
+import { JSONContent } from "@tiptap/react";
 
 const MultipleChoiceNode = Node.create({
   name: "multipleChoice",
@@ -303,7 +305,34 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   );
 };
 
-const ProblemEditorPane = ({
+const sampleEditorContent = {
+  type: "doc",
+  content: [
+    {
+      type: "heading",
+      attrs: {
+        level: 1,
+      },
+      content: [
+        {
+          type: "text",
+          text: "Problem Statement",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "Write a program to print 'Hello World'",
+        },
+      ],
+    },
+  ],
+};
+
+const MetadataEditorPane = ({
   preview,
   setPreview,
   problemState,
@@ -314,6 +343,16 @@ const ProblemEditorPane = ({
   problemState: ProblemData;
   dispatch: React.Dispatch<ProblemAction>;
 }) => {
+  console.log(problemState?.description);
+  console.log(typeof problemState?.description);
+
+  const editorContent =
+    typeof problemState?.description === "string"
+      ? problemState?.description
+      : typeof problemState?.description === "undefined"
+      ? sampleEditorContent
+      : (problemState?.description as JSONContent);
+
   const editor = useEditor({
     onUpdate: ({ editor }) => {
       dispatch({
@@ -330,6 +369,7 @@ const ProblemEditorPane = ({
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
       MultipleChoiceNode,
       Underline,
+      Markdown,
       StarterKit.configure({
         bulletList: {
           keepMarks: true,
@@ -341,56 +381,7 @@ const ProblemEditorPane = ({
         },
       }),
     ],
-    content: {
-      type: "doc",
-      content: [
-        {
-          type: "heading",
-          attrs: {
-            level: 1,
-          },
-          content: [
-            {
-              type: "text",
-              text: "Problem Statement",
-            },
-          ],
-        },
-        {
-          type: "paragraph",
-          content: [
-            {
-              type: "text",
-              text: "Write a program to print 'Hello World'",
-            },
-          ],
-        },
-        /* {
-          type: "multipleChoice",
-          attrs: {
-            question: "What is the capital of India?",
-            answerOptions: [
-              {
-                text: "Delhi",
-                correct: true,
-              },
-              {
-                text: "Mumbai",
-                correct: false,
-              },
-              {
-                text: "Kolkata",
-                correct: false,
-              },
-              {
-                text: "Chennai",
-                correct: false,
-              },
-            ],
-          },
-        }, */
-      ],
-    },
+    content: editorContent,
   });
 
   return (
@@ -408,6 +399,11 @@ const ProblemEditorPane = ({
           </>
         ) : (
           <>
+            {/* <div className={`flex w-full items-center justify-center`}>
+              <h1 className="text-xl text-left w-full font-dm font-bold">
+                Problem Metadata
+              </h1>
+            </div> */}
             <div className="flex flex-col space-y-1">
               <label
                 htmlFor="problem-title"
@@ -476,4 +472,4 @@ const ProblemEditorPane = ({
   );
 };
 
-export default ProblemEditorPane;
+export default MetadataEditorPane;

@@ -1,7 +1,7 @@
 import { Box, Step, StepLabel, Stepper } from "@mui/material";
 import { FormikValues } from "formik";
 import React, { useRef } from "react";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 import { CodeEditorForm } from "../CodeEditorForm/CodeEditorForm";
 import { MetadataForm } from "../MetadataForm/MetadataForm";
 import { ProblemEditorForm } from "components/ProblemEditor/ProblemEditorForm/ProblemEditorForm";

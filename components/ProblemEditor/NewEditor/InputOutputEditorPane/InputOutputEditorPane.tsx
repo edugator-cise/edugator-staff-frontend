@@ -15,17 +15,17 @@ const InputOutputEditorPane = ({
   const testCasesEmpty = problemState?.testCases?.length === 0;
   return (
     <div className="w-full h-full bg-slate-100 flex flex-col overflow-auto">
-      <div className="w-full sticky top-0 z-10 dark:border-b-slate-700 border-b-slate-600 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-nav-dark">
+      {/* <div className="w-full sticky top-0 z-10 dark:border-b-slate-700 border-b-slate-600 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-nav-dark">
         <p className="text-sm text-slate-300 font-dm dark:text-white">
           Test Editor
         </p>
-      </div>
+      </div> */}
       {testCasesEmpty ? (
         <div
           className={`w-full h-full flex flex-col p-4 space-y-2 justify-center items-center`}
         >
-          <div className={`flex w-full items-center justify-center`}>
-            <h1 className="text-xl font-dm font-bold">Test Cases</h1>
+          <div className={`flex w-full items-center justify-center underline`}>
+            <h1 className="text-xl font-dm font-bold ">Test Cases</h1>
           </div>
           <p className={`text-center text-sm text-slate-600 font-dm`}>
             At least one test case is required with visible input and output.
@@ -68,7 +68,10 @@ const InputOutputEditorPane = ({
           <div className="flex flex-col space-y-4 !mt-6">
             {problemState?.testCases?.map((testCase, index) => {
               return (
-                <div className="flex flex-col space-y-2 p-4 bg-slate-50 rounded-md border">
+                <div
+                  key={index}
+                  className="flex flex-col space-y-2 p-4 bg-slate-50 rounded-md border"
+                >
                   <div className="flex flex-row space-x-4 items-center">
                     <p className="text-sm text-slate-800 font-dm font-semibold">
                       Test Case {index + 1}

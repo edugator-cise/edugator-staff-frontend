@@ -20,6 +20,8 @@ import {
 } from "components/ProblemEditor/NewEditor/types";
 import { getFileExtension } from "components/ProblemEditor/NewEditor/utils";
 import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
+import { useSelector } from "react-redux";
+import { RootState } from "lib/store/store";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -58,51 +60,6 @@ const getCodeData: (language: Language) => LanguageData = (
   } else {
     return {} as LanguageData;
   }
-};
-
-const initialProblemState: ProblemData = {
-  title: "",
-  hidden: false,
-  dueDate: new Date().toISOString(),
-  language: "cpp",
-  description: {
-    type: "doc",
-    content: [
-      {
-        type: "heading",
-        attrs: {
-          level: 1,
-        },
-        content: [
-          {
-            type: "text",
-            text: "Problem Statement",
-          },
-        ],
-      },
-      {
-        type: "paragraph",
-        content: [
-          {
-            type: "text",
-            text: "Write a program to print 'Hello World'",
-          },
-        ],
-      },
-    ],
-  },
-  codeData: getCodeData("cpp"),
-  timeLimit: 5,
-  memoryLimit: 2048,
-  buildCommand: "",
-  testCases: [
-    {
-      input: "1 2",
-      expectedOutput: "3",
-      hint: "Add the two numbers",
-      visibility: TestCaseVisibility.IO_VISIBLE,
-    },
-  ],
 };
 
 function problemReducer(
@@ -156,6 +113,53 @@ function problemReducer(
 }
 
 const AdminProblemEditor = () => {
+  // collect values from global state to pass into form
+
+  // first, module name and id
+  const moduleName = useSelector(
+    (state: RootState) => state.problemEditorContainer.moduleName
+  );
+  const moduleId = useSelector(
+    (state: RootState) => state.problemEditorContainer.moduleId
+  );
+
+  // metadata for title, hidden, dueDate
+  const metadataValues = useSelector(
+    (state: RootState) => state.problemEditorContainer.metadata
+  );
+
+  // now problem data - problemStatement and templatePackage (might need to move templatepackage to codeData)
+  const problemDataValues = useSelector(
+    (state: RootState) => state.problemEditorContainer.problem
+  );
+
+  console.log(problemDataValues);
+
+  // codeData for language, solution, body, fileName, header, footer
+  // etc
+
+  const initialProblemState: ProblemData = {
+    title: metadataValues.title || undefined,
+    hidden: false,
+    dueDate: new Date().toISOString(),
+    language: "cpp",
+    description: problemDataValues?.problemStatement || undefined,
+    codeData: getCodeData("cpp"),
+    timeLimit: 5,
+    memoryLimit: 2048,
+    buildCommand: "",
+    testCases: [
+      {
+        input: "1 2",
+        expectedOutput: "3",
+        hint: "Add the two numbers",
+        visibility: TestCaseVisibility.IO_VISIBLE,
+      },
+    ],
+  };
+
+  console.log(metadataValues);
+
   const [preview, setPreview] = useState(false);
   const [problemState, problemDispatch] = useReducer(
     problemReducer,
@@ -171,10 +175,10 @@ const AdminProblemEditor = () => {
       <div className="absolute left-8 opacity-70 hover:opacity-100 transition-opacity rounded-xl bg-nav-darkest border border-slate-700 z-10 space-x-8 shadow-md top-6 flex px-6 py-4 items-center justify-between">
         <div>
           <p className="text-xs text-slate-400 font-dm dark:text-white">
-            Module Name
+            {moduleName}
           </p>
           <h1 className="text-white font-dm font-medium text-xl">
-            New Problem
+            {problemState.title || "New Problem"}
           </h1>
         </div>
         <div className="flex space-x-4 items-center">
@@ -192,10 +196,10 @@ const AdminProblemEditor = () => {
       <div className="w-full h-16 bg-nav-darkest flex items-center justify-between px-6 border-b border-b-slate-700">
         <div>
           <p className="text-xs text-slate-400 font-dm dark:text-white">
-            Module Name
+            {moduleName}
           </p>
           <h1 className="text-white font-dm font-medium text-xl">
-            New Problem
+            {problemState.title || "New Problem"}
           </h1>
         </div>
         <div className="flex space-x-4 items-center">
@@ -220,13 +224,13 @@ const AdminProblemEditor = () => {
         >
           <div className="flex w-full h-full flex-col">
             {/* <div className="w-full dark:border-b-slate-700 border-b-slate-600 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-nav-dark">
-              <p className="text-sm text-slate-400 font-dm dark:text-white">
-                Module Name
-                <span className="text-slate-300 dark:text-slate-400 font-normal truncate">
-                  &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problemState.title || "Untitled"}
-                </span>
-              </p>
-            </div> */}
+                <p className="text-sm text-slate-400 font-dm dark:text-white">
+                  Module Name
+                  <span className="text-slate-300 dark:text-slate-400 font-normal truncate">
+                    &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problemState.title || "Untitled"}
+                  </span>
+                </p>
+              </div> */}
             <MetadataEditorPane
               preview={preview}
               setPreview={setPreview}

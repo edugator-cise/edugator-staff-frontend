@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProblem } from "lib/shared/types";
 import { TestCaseField } from "components/ProblemEditor/TestEditor/TestCase.utils";
+import { Content } from "@tiptap/react";
 
 export interface ProblemFields {
-  problemStatement: string;
+  problemStatement: Content;
   templatePackage: string;
 }
 

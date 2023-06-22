@@ -10,7 +10,6 @@ interface TestCase {
 }
 
 export interface LanguageData {
-  enabled: boolean;
   header?: string;
   footer?: string;
   solution: string;
@@ -21,11 +20,12 @@ export interface LanguageData {
 export type Language = "python" | "java" | "cpp";
 
 export interface ProblemData {
-  title: string;
+  title: string | undefined;
   dueDate: string; // iso format
   hidden: boolean;
-  description: Content;
-  codeData: Record<Language, LanguageData>;
+  description: Content | undefined;
+  language: Language;
+  codeData: LanguageData;
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
