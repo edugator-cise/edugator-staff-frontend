@@ -343,9 +343,6 @@ const MetadataEditorPane = ({
   problemState: ProblemData;
   dispatch: React.Dispatch<ProblemAction>;
 }) => {
-  console.log(problemState?.description);
-  console.log(typeof problemState?.description);
-
   const editorContent =
     typeof problemState?.description === "string"
       ? problemState?.description

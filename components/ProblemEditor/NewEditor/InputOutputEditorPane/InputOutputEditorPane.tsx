@@ -24,7 +24,7 @@ const InputOutputEditorPane = ({
         <div
           className={`w-full h-full flex flex-col p-4 space-y-2 justify-center items-center`}
         >
-          <div className={`flex w-full items-center justify-center underline`}>
+          <div className={`flex w-full items-center justify-center`}>
             <h1 className="text-xl font-dm font-bold ">Test Cases</h1>
           </div>
           <p className={`text-center text-sm text-slate-600 font-dm`}>

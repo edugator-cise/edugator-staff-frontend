@@ -12,9 +12,9 @@ interface TestCase {
 export interface LanguageData {
   header?: string;
   footer?: string;
-  solution: string;
+  solution?: string;
   body: string;
-  fileName: string;
+  fileName?: string;
 }
 
 export type Language = "python" | "java" | "cpp";

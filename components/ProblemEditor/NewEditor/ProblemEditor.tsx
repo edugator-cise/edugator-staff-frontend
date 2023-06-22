@@ -18,7 +18,11 @@ import {
   ProblemData,
   TestCaseVisibility,
 } from "components/ProblemEditor/NewEditor/types";
-import { getFileExtension } from "components/ProblemEditor/NewEditor/utils";
+import {
+  getFileExtension,
+  sampleCodeData,
+  sampleTestCases,
+} from "components/ProblemEditor/NewEditor/utils";
 import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
@@ -28,38 +32,18 @@ const Allotment = dynamic<AllotmentProps>(
   { ssr: false }
 );
 
-const getCodeData: (language: Language) => LanguageData = (
+const getSampleCodeData: (language: Language) => LanguageData = (
   language: Language
 ) => {
-  if (language === "cpp") {
-    return {
-      solution:
-        '#include <iostream>\n\nint main() {\n std::cout << "Hello, world!\\n";\n return 0;\n}',
-      body: "#include <iostream>\n\nint main() {\n // TODO: Add code here\n return 0;\n}",
-      fileName: `example.${getFileExtension("cpp")}`,
-      header: "#ifndef HEADER_H\n#define HEADER_H\n#endif // HEADER_H",
-      footer: "#endif // FOOTER_H",
-    } as LanguageData;
-  } else if (language === "java") {
-    return {
-      solution:
-        'public class Main {\n public static void main(String[] args) {\n System.out.println("Hello, world!");\n }\n}',
-      body: "public class Main {\n public static void main(String[] args) {\n // TODO: Add code here\n }\n}",
-      fileName: `example.${getFileExtension("java")}`,
-      header: "public class Header {\n}",
-      footer: "}",
-    } as LanguageData;
-  } else if (language === "python") {
-    return {
-      solution: 'print("Hello, world!")',
-      body: "# TODO: Add code here",
-      fileName: `example.${getFileExtension("python")}`,
-      header: "# Header.py",
-      footer: "# Footer.py",
-    } as LanguageData;
-  } else {
-    return {} as LanguageData;
-  }
+  return (
+    sampleCodeData[language] ||
+    ({
+      solution: "",
+      body: "",
+      fileName: "",
+      header: "",
+    } as LanguageData)
+  );
 };
 
 function problemReducer(
@@ -77,12 +61,12 @@ function problemReducer(
       return { ...state, description: action.payload };
 
     case "SET_LANGUAGE_DATA":
-      console.log(action.payload);
+      console.log(action.payload.data);
       return {
         ...state,
+        language: action.payload.language,
         codeData: {
-          ...state.codeData,
-          [action.payload.language]: action.payload.data,
+          ...action.payload.data,
         },
       };
     case "SET_TIME_LIMIT":
@@ -123,42 +107,48 @@ const AdminProblemEditor = () => {
     (state: RootState) => state.problemEditorContainer.moduleId
   );
 
-  // metadata for title, hidden, dueDate
+  // metadata for title, hidden, dueDate, fileName, language
   const metadataValues = useSelector(
     (state: RootState) => state.problemEditorContainer.metadata
   );
+
+  const language = !metadataValues.language
+    ? "cpp" // replace with course language later
+    : metadataValues.language === "C++"
+    ? "cpp"
+    : (metadataValues.language as Language);
 
   // now problem data - problemStatement and templatePackage (might need to move templatepackage to codeData)
   const problemDataValues = useSelector(
     (state: RootState) => state.problemEditorContainer.problem
   );
 
-  console.log(problemDataValues);
+  // next - codeData for solution, body, header, footer
+  const codeDataValues = useSelector(
+    (state: RootState) => state.problemEditorContainer.codeEditor
+  );
 
-  // codeData for language, solution, body, fileName, header, footer
-  // etc
+  // finally, test cases
+  const testCases = useSelector(
+    (state: RootState) => state.problemEditorContainer.testCases
+  );
+
+  console.log(testCases);
 
   const initialProblemState: ProblemData = {
     title: metadataValues.title || undefined,
     hidden: false,
     dueDate: new Date().toISOString(),
-    language: "cpp",
+    language: language, // should derive this from course info
     description: problemDataValues?.problemStatement || undefined,
-    codeData: getCodeData("cpp"),
+    codeData: codeDataValues.code
+      ? { ...codeDataValues?.code, fileName: metadataValues?.fileName }
+      : getSampleCodeData(language),
     timeLimit: 5,
     memoryLimit: 2048,
     buildCommand: "",
-    testCases: [
-      {
-        input: "1 2",
-        expectedOutput: "3",
-        hint: "Add the two numbers",
-        visibility: TestCaseVisibility.IO_VISIBLE,
-      },
-    ],
+    testCases: testCases ? testCases : sampleTestCases,
   };
-
-  console.log(metadataValues);
 
   const [preview, setPreview] = useState(false);
   const [problemState, problemDispatch] = useReducer(
@@ -184,12 +174,12 @@ const AdminProblemEditor = () => {
         <div className="flex space-x-4 items-center">
           <button
             onClick={() => setPreview(!preview)}
-            className="px-6 py-3 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-sm flex items-center space-x-2"
+            className="px-4 py-2 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-xs flex items-center space-x-2"
           >
             <p>{preview ? "Edit" : "Preview"}</p>
           </button>
-          <button className="px-6 py-3 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-sm flex items-center space-x-2">
-            <p>Publish</p>
+          <button className="px-4 py-2 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
+            <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
           </button>
         </div>
       </div>
@@ -205,12 +195,12 @@ const AdminProblemEditor = () => {
         <div className="flex space-x-4 items-center">
           <button
             onClick={() => setPreview(!preview)}
-            className="px-6 py-3 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-sm flex items-center space-x-2"
+            className="px-4 py-2 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-xs flex items-center space-x-2"
           >
             <p>{preview ? "Edit" : "Preview"}</p>
           </button>
-          <button className="px-6 py-3 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-sm flex items-center space-x-2">
-            <p>Publish</p>
+          <button className="px-4 py-2 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
+            <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
           </button>
         </div>
       </div>

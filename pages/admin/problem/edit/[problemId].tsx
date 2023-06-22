@@ -55,6 +55,7 @@ const ProblemEditPage = () => {
       .then((value) => {
         dispatch(updateModuleId(moduleId as string));
         dispatch(updateModuleName(moduleName as string));
+        console.log(value);
         dispatch(requestGetProblemSuccess(value.data));
         setStatus(FetchStatus.succeed);
       })

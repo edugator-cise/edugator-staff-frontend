@@ -13,14 +13,18 @@ export interface MetadataFields {
   hidden: boolean;
   dueDate: string;
   fileName: string;
+  language?: string;
 }
 
 export interface CodeEditorFields {
-  code: {
-    header: string;
-    body: string;
-    footer: string;
-  };
+  code:
+    | {
+        header: string;
+        body: string;
+        footer: string;
+        solution?: string;
+      }
+    | undefined;
   fileExtension: string;
 }
 
@@ -54,7 +58,7 @@ export interface ProblemEditorContainerState {
   problem: ProblemFields;
   codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
-  testCases: TestCaseField[];
+  testCases: TestCaseField[] | undefined;
 
   problemId: string | undefined;
   moduleId: string;
@@ -86,11 +90,7 @@ const initialState: ProblemEditorContainerState = {
     templatePackage: "",
   },
   codeEditor: {
-    code: {
-      header: "",
-      body: "",
-      footer: "",
-    },
+    code: undefined,
     fileExtension: ".cpp",
   },
   serverConfig: {
@@ -98,7 +98,7 @@ const initialState: ProblemEditorContainerState = {
     memoryLimit: 0,
     buildCommand: "",
   },
-  testCases: [],
+  testCases: undefined,
   problemId: undefined,
   moduleId: "",
   moduleName: "",
@@ -240,6 +240,7 @@ export const problemEditorContainerSlice = createSlice({
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
         fileName: action.payload.fileName,
+        language: action.payload.language,
       };
       state.codeEditor = {
         code: { ...action.payload.code },
