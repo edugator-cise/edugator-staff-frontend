@@ -26,6 +26,18 @@ import {
 import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
+import {
+  ArrowRightIcon,
+  CheckCircledIcon,
+  CheckIcon,
+  EyeOpenIcon,
+  GearIcon,
+  Pencil1Icon,
+  Pencil2Icon,
+  RocketIcon,
+} from "@radix-ui/react-icons";
+import { Eye } from "tabler-icons-react";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -133,8 +145,6 @@ const AdminProblemEditor = () => {
     (state: RootState) => state.problemEditorContainer.testCases
   );
 
-  console.log(testCases);
-
   const initialProblemState: ProblemData = {
     title: metadataValues.title || undefined,
     hidden: false,
@@ -162,7 +172,74 @@ const AdminProblemEditor = () => {
         preview ? "bg-white" : "bg-slate-100"
       }`}
     >
-      <div className="absolute left-8 opacity-70 hover:opacity-100 transition-opacity rounded-xl bg-nav-darkest border border-slate-700 z-10 space-x-8 shadow-md top-6 flex px-6 py-4 items-center justify-between">
+      {/* Top Banner */}
+      <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
+        <div className="flex items-end">
+          <p className="text-base text-slate-400 font-dm dark:text-white">
+            {moduleName}
+            <span className="text-slate-600">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
+          </p>
+          <h1 className="text-white font-dm font-medium text-base">
+            {metadataValues.title || "New Problem"}
+          </h1>
+        </div>
+        <div className="flex space-x-2 items-center">
+          <Tooltip.Provider delayDuration={100}>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <div
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  onClick={() => setPreview(!preview)}
+                >
+                  <GearIcon color="white" />
+                </div>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                >
+                  Settings
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+          <Tooltip.Provider delayDuration={100}>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <div
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  onClick={() => setPreview(!preview)}
+                >
+                  {preview ? (
+                    <Pencil1Icon color="white" />
+                  ) : (
+                    <EyeOpenIcon color="white" />
+                  )}
+                </div>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                >
+                  {preview ? "Edit" : "Preview"}
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+          <button className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
+            {problemState?.title ? <CheckCircledIcon /> : <RocketIcon />}
+            <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
+          </button>
+        </div>
+      </div>
+      {/* Floating */}
+      {/* <div className="absolute left-1/2 -translate-x-1/2 bottom-4 opacity-50 hover:opacity-100 transition-opacity rounded-xl bg-nav-darkest border border-slate-700 z-10 space-x-8 shadow-md flex px-6 py-4 items-center justify-between">
         <div>
           <p className="text-xs text-slate-400 font-dm dark:text-white">
             {moduleName}
@@ -171,39 +248,61 @@ const AdminProblemEditor = () => {
             {problemState.title || "New Problem"}
           </h1>
         </div>
-        <div className="flex space-x-4 items-center">
-          <button
-            onClick={() => setPreview(!preview)}
-            className="px-4 py-2 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-xs flex items-center space-x-2"
-          >
-            <p>{preview ? "Edit" : "Preview"}</p>
-          </button>
-          <button className="px-4 py-2 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
+        <div className="flex space-x-2 items-center">
+          <Tooltip.Provider delayDuration={100}>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <div
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  onClick={() => setPreview(!preview)}
+                >
+                  <GearIcon color="white" />
+                </div>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                >
+                  Settings
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+          <Tooltip.Provider delayDuration={100}>
+            <Tooltip.Root>
+              <Tooltip.Trigger asChild>
+                <div
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  onClick={() => setPreview(!preview)}
+                >
+                  {preview ? (
+                    <Pencil1Icon color="white" />
+                  ) : (
+                    <EyeOpenIcon color="white" />
+                  )}
+                </div>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                >
+                  {preview ? "Edit" : "Preview"}
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Tooltip.Provider>
+          <button className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
             <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
           </button>
         </div>
-      </div>
-      <div className="w-full h-16 bg-nav-darkest flex items-center justify-between px-6 border-b border-b-slate-700">
-        <div>
-          <p className="text-xs text-slate-400 font-dm dark:text-white">
-            {moduleName}
-          </p>
-          <h1 className="text-white font-dm font-medium text-xl">
-            {problemState.title || "New Problem"}
-          </h1>
-        </div>
-        <div className="flex space-x-4 items-center">
-          <button
-            onClick={() => setPreview(!preview)}
-            className="px-4 py-2 rounded-md border border-mirage-500 hover:bg-mirage-600/10 text-white font-dm font-medium text-xs flex items-center space-x-2"
-          >
-            <p>{preview ? "Edit" : "Preview"}</p>
-          </button>
-          <button className="px-4 py-2 rounded-md bg-mirage-500 hover:bg-mirage-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
-            <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
-          </button>
-        </div>
-      </div>
+      </div> */}
+
       <div className="w-full h-full relative">
         {/* <AIChat /> */}
         <Allotment

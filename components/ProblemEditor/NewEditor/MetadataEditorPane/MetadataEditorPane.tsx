@@ -200,7 +200,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="w-full rounded-t-md bg-mirage-700 text-white flex flex-wrap p-2 items-center">
+    <div className="w-full rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -404,14 +404,14 @@ const MetadataEditorPane = ({
             <div className="flex flex-col space-y-1">
               <label
                 htmlFor="problem-title"
-                className="text-sm text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
               >
                 Problem Title
               </label>
               <input
                 type="text"
                 id="problem-title"
-                className="w-full h-14 text-xl rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                className="w-full py-2 text-lg rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
                 placeholder="Untitled"
                 value={problemState?.title}
                 onChange={(e) => {
@@ -425,13 +425,13 @@ const MetadataEditorPane = ({
             <div className="flex flex-col space-y-1">
               <label
                 htmlFor="problem-description"
-                className="text-sm text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
               >
                 Problem Description
               </label>
               <div className="w-full flex flex-col">
                 {editor && <MenuBar editor={editor} />}
-                <div className="w-full rounded-b-md border-[2px] border-t-0 overflow-hidden border-mirage-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 outline-none">
+                <div className="w-full rounded-b-md border-[2px] border-t-0 overflow-hidden border-slate-600 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 outline-none">
                   {/* <EditorBlock
                           data={problemDescription}
                           onChange={setProblemDescription}
@@ -439,7 +439,7 @@ const MetadataEditorPane = ({
                         /> */}
                   <EditorContent
                     className="prose-sm prose-pre:bg-nav-dark dark:prose-pre:bg-slate-700 prose-pre:text-white
-                             prose-headings:font-dm prose-h1:text-xl prose-h1:font-bold prose-h2:!text-base prose-h2:font-bold p-3 !outline-none "
+                             prose-headings:font-dm prose-h1:text-xl prose-h1:font-bold prose-h2:!text-base prose-h2:font-bold p-2 !outline-none "
                     editor={editor}
                   />
                 </div>

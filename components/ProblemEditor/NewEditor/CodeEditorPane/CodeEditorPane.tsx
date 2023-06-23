@@ -145,20 +145,20 @@ const CodeEditorPane = ({
     <div className={`w-full h-full bg-slate-100 flex flex-col justify-start`}>
       <div className={`w-full h-full flex flex-col p-4 justify-start`}>
         <div className="h-full w-full flex flex-col space-y-4">
-          <h1 className="text-xl font-dm font-bold">
+          <h1 className="text-lg font-dm font-bold">
             Code Configuration ({languageLabels[activeLanguage as Language]})
           </h1>
           <div className="flex flex-col space-y-1">
             <label
               htmlFor="filename"
-              className="text-sm text-slate-800 dark:text-white font-dm font-medium"
+              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
             >
               File Name
             </label>
             <input
               type="text"
               id="filename"
-              className="w-fit h-12 text-lg rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+              className="w-fit py-2 text-base rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
               placeholder={`example.${getFileExtension(
                 activeLanguage as Language
               )}`}
@@ -177,7 +177,7 @@ const CodeEditorPane = ({
               }}
             />
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-2">
             {tabStates[activeLanguage as Language]?.map((tab, index) => {
               return (
                 <button
@@ -187,20 +187,22 @@ const CodeEditorPane = ({
                   }}
                   className={`${
                     activeTab === index
-                      ? "bg-mirage-600 text-white"
-                      : "text-nav-dark hover:bg-mirage-600/10"
-                  } rounded-md px-4 py-2 flex space-x-2 items-center`}
+                      ? "bg-mirage-500/[15%] ring-1 ring-mirage-500/30 text-mirage-900"
+                      : "text-nav-dark hover:bg-mirage-500/5"
+                  } rounded-t-sm px-4 py-2 flex space-x-2 items-center transition`}
                 >
-                  <p className="text-sm font-dm">{toTitleCase(tab.type)}</p>
+                  <p className="text-xs font-dm">{toTitleCase(tab.type)}</p>
                 </button>
               );
             })}
           </div>
 
-          <div className="w-full h-full flex justify-start items-start">
+          <div className="w-full h-full flex justify-start items-start !mt-0">
             <Editor
               theme={"light"}
-              className="rounded-md overflow-hidden border border-slate-300"
+              className={`rounded-md overflow-hidden ring-1 ring-slate-300 transition ${
+                activeTab === 0 ? "rounded-tl-none" : "rounded-tl-md"
+              }`}
               height="99%"
               beforeMount={beforeMount}
               language={editorLanguage}
