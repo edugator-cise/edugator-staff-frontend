@@ -21,6 +21,7 @@ import {
 import {
   getFileExtension,
   sampleCodeData,
+  sampleEditorContent,
   sampleTestCases,
 } from "components/ProblemEditor/NewEditor/utils";
 import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
@@ -57,56 +58,6 @@ const getSampleCodeData: (language: Language) => LanguageData = (
     } as LanguageData)
   );
 };
-
-function problemReducer(
-  state: ProblemData,
-  action: ProblemAction
-): ProblemData {
-  switch (action.type) {
-    case "SET_TITLE":
-      console.log(action.payload);
-      console.log(state);
-      return { ...state, title: action.payload };
-    case "SET_HIDDEN":
-      return { ...state, hidden: action.payload };
-    case "SET_DESCRIPTION":
-      return { ...state, description: action.payload };
-
-    case "SET_LANGUAGE_DATA":
-      console.log(action.payload.data);
-      return {
-        ...state,
-        language: action.payload.language,
-        codeData: {
-          ...action.payload.data,
-        },
-      };
-    case "SET_TIME_LIMIT":
-      return { ...state, timeLimit: action.payload };
-    case "SET_MEMORY_LIMIT":
-      return { ...state, memoryLimit: action.payload };
-    case "SET_BUILD_COMMAND":
-      return { ...state, buildCommand: action.payload };
-    case "ADD_TEST_CASE":
-      return { ...state, testCases: [...state.testCases, action.payload] };
-    case "UPDATE_TEST_CASE":
-      return {
-        ...state,
-        testCases: state.testCases.map((testCase, index) =>
-          index === action.payload.index ? action.payload.testCase : testCase
-        ),
-      };
-    case "REMOVE_TEST_CASE":
-      return {
-        ...state,
-        testCases: state.testCases.filter(
-          (_, index) => index !== action.payload
-        ),
-      };
-    default:
-      return state;
-  }
-}
 
 const AdminProblemEditor = () => {
   // collect values from global state to pass into form
@@ -146,7 +97,7 @@ const AdminProblemEditor = () => {
   );
 
   const initialProblemState: ProblemData = {
-    title: metadataValues.title || undefined,
+    title: metadataValues.title || "",
     hidden: false,
     dueDate: new Date().toISOString(),
     language: language, // should derive this from course info
@@ -160,11 +111,89 @@ const AdminProblemEditor = () => {
     testCases: testCases ? testCases : sampleTestCases,
   };
 
+  function problemReducer(
+    state: ProblemData,
+    action: ProblemAction
+  ): ProblemData {
+    switch (action.type) {
+      case "SET_TITLE":
+        console.log(action.payload);
+        console.log(state);
+        return { ...state, title: action.payload };
+      case "SET_HIDDEN":
+        return { ...state, hidden: action.payload };
+      case "SET_DESCRIPTION":
+        return { ...state, description: action.payload };
+
+      case "SET_LANGUAGE_DATA":
+        console.log(action.payload.data);
+        return {
+          ...state,
+          language: action.payload.language,
+          codeData: {
+            ...action.payload.data,
+          },
+        };
+      case "SET_TIME_LIMIT":
+        return { ...state, timeLimit: action.payload };
+      case "SET_MEMORY_LIMIT":
+        return { ...state, memoryLimit: action.payload };
+      case "SET_BUILD_COMMAND":
+        return { ...state, buildCommand: action.payload };
+      case "ADD_TEST_CASE":
+        return { ...state, testCases: [...state.testCases, action.payload] };
+      case "UPDATE_TEST_CASE":
+        return {
+          ...state,
+          testCases: state.testCases.map((testCase, index) =>
+            index === action.payload.index ? action.payload.testCase : testCase
+          ),
+        };
+      case "REMOVE_TEST_CASE":
+        return {
+          ...state,
+          testCases: state.testCases.filter(
+            (_, index) => index !== action.payload
+          ),
+        };
+      case "RESET_PROBLEM":
+        return initialProblemState;
+
+      default:
+        return state;
+    }
+  }
+
   const [preview, setPreview] = useState(false);
-  const [problemState, problemDispatch] = useReducer(
-    problemReducer,
-    initialProblemState
-  );
+  const [problemState, problemDispatch] = useReducer<
+    React.Reducer<ProblemData, ProblemAction>
+  >(problemReducer, initialProblemState);
+
+  // this below useEffect is really bad practice
+
+  // basically i cant figure out why this component isn't rerendering when you navigate to a new problem from
+  // a populated problem. The old problem data is still rendered in the UI despite it changing in the redux store
+
+  // so I hackily just check when testCases changes to undefined (only happens when you navigate to a new problem)
+  // and then reset the problem state. this is then drilled down to the editor in MetadataEditorPane, so that pane
+  // resets whenever test cases change as well
+
+  useEffect(() => {
+    console.log("test cases");
+    console.log(testCases);
+    console.log(problemDataValues.problemStatement);
+    if (!testCases) {
+      //reset problem state
+      problemDispatch({
+        type: "RESET_PROBLEM",
+      });
+    }
+  }, [testCases]);
+
+  useEffect(() => {
+    console.log("problem state");
+    console.log(problemState);
+  }, [problemState]);
 
   return (
     <div
@@ -188,7 +217,7 @@ const AdminProblemEditor = () => {
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
                   onClick={() => setPreview(!preview)}
                 >
                   <GearIcon color="white" />
@@ -210,7 +239,7 @@ const AdminProblemEditor = () => {
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
                   onClick={() => setPreview(!preview)}
                 >
                   {preview ? (

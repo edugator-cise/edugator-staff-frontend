@@ -34,6 +34,7 @@ import {
 } from "tabler-icons-react";
 import { ProblemAction, ProblemData } from "../types";
 import { JSONContent } from "@tiptap/react";
+import { sampleEditorContent } from "../utils";
 
 const MultipleChoiceNode = Node.create({
   name: "multipleChoice",
@@ -305,33 +306,6 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   );
 };
 
-const sampleEditorContent = {
-  type: "doc",
-  content: [
-    {
-      type: "heading",
-      attrs: {
-        level: 1,
-      },
-      content: [
-        {
-          type: "text",
-          text: "Problem Statement",
-        },
-      ],
-    },
-    {
-      type: "paragraph",
-      content: [
-        {
-          type: "text",
-          text: "Write a program to print 'Hello World'",
-        },
-      ],
-    },
-  ],
-};
-
 const MetadataEditorPane = ({
   preview,
   setPreview,
@@ -350,36 +324,39 @@ const MetadataEditorPane = ({
       ? sampleEditorContent
       : (problemState?.description as JSONContent);
 
-  const editor = useEditor({
-    onUpdate: ({ editor }) => {
-      dispatch({
-        type: "SET_DESCRIPTION",
-        payload: editor.getJSON(),
-      });
-    },
-    editorProps: {
-      attributes: {
-        class: "!outline-none p-3",
+  const editor = useEditor(
+    {
+      onUpdate: ({ editor }) => {
+        dispatch({
+          type: "SET_DESCRIPTION",
+          payload: editor.getJSON(),
+        });
       },
+      editorProps: {
+        attributes: {
+          class: "!outline-none p-3",
+        },
+      },
+      extensions: [
+        Color.configure({ types: [TextStyle.name, ListItem.name] }),
+        MultipleChoiceNode,
+        Underline,
+        Markdown,
+        StarterKit.configure({
+          bulletList: {
+            keepMarks: true,
+            keepAttributes: true,
+          },
+          orderedList: {
+            keepMarks: true,
+            keepAttributes: true,
+          },
+        }),
+      ],
+      content: editorContent,
     },
-    extensions: [
-      Color.configure({ types: [TextStyle.name, ListItem.name] }),
-      MultipleChoiceNode,
-      Underline,
-      Markdown,
-      StarterKit.configure({
-        bulletList: {
-          keepMarks: true,
-          keepAttributes: true,
-        },
-        orderedList: {
-          keepMarks: true,
-          keepAttributes: true,
-        },
-      }),
-    ],
-    content: editorContent,
-  });
+    [problemState?.testCases]
+  );
 
   return (
     <div

@@ -71,22 +71,19 @@ const ProblemEditPage = () => {
     };
   }, [problemId, moduleName]);
 
-  return (
-    <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`} //unneeded
-      actionButtons={[actions.back, actions.delete]} //unneeded
-    >
-      {status === FetchStatus.loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <AdminProblemEditor />
-          {/* Reference below component */}
-          {/* <ProblemEditorContainer /> */}
-        </>
-      )}
-    </AdminLayout>
+  return status === FetchStatus.loading ? (
+    <CircularProgress /> // replace with skeleton loader
+  ) : (
+    <>
+      <AdminProblemEditor />
+      {/* Reference below component */}
+      {/* <ProblemEditorContainer /> */}
+    </>
   );
 };
+
+ProblemEditPage.getLayout = (page: React.ReactNode) => (
+  <AdminLayout pageTitle="Problem Editor">{page}</AdminLayout>
+);
 
 export default ProblemEditPage;

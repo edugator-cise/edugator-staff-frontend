@@ -12,7 +12,7 @@ import { Routes } from "constants/navigationRoutes";
 import { closeAlert } from "../../state/ModulesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalStorage } from "lib/auth/LocalStorage";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 import AdminNavigation from "components/SideNav/AdminNavigation";
 import { RootState } from "lib/store/store";
@@ -23,7 +23,10 @@ import {
 import { useSidebarLayout } from "hooks/useSidebarLayout";
 import ContentSidebar from "components/ContentSidebar/ContentSidebar";
 import MobileHeader from "components/PlaygroundLayout/MobileHeader/MobileHeader";
-import { SidebarHideOverlay } from "components/PlaygroundLayout/PlaygroundLayout";
+import {
+  ContentType,
+  SidebarHideOverlay,
+} from "components/PlaygroundLayout/PlaygroundLayout";
 import AdminContentSidebar from "components/ContentSidebar/AdminContentSidebar";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
@@ -49,6 +52,46 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const locationState = router.asPath;
+
+  const [activeContent, setActiveContent] = useState<ContentType>("all");
+
+  const [dropdownHeights, setDropdownHeights] = useState<
+    Record<number, number>
+  >({});
+
+  useEffect(() => {
+    calculateDropdownHeights(activeContent);
+  }, [activeContent]);
+
+  const calculateDropdownHeights = (activeContent: ContentType) => {
+    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
+    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
+    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
+    const dropdownHeights: Record<number, number> = {};
+    const dropdowns = document.getElementsByClassName("dropdown");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const allHeight = Array.from(
+        document.getElementsByClassName(`${i}-content-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const lessonHeight = Array.from(
+        document.getElementsByClassName(`${i}-lesson-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const problemHeight = Array.from(
+        document.getElementsByClassName(`${i}-problem-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      if (activeContent === "all") {
+        dropdownHeights[i] = allHeight;
+      } else if (activeContent === "lessons") {
+        dropdownHeights[i] = lessonHeight;
+      } else if (activeContent === "problems") {
+        dropdownHeights[i] = problemHeight;
+      }
+    }
+    setDropdownHeights(dropdownHeights);
+  };
 
   const { adminContentSidebarHidden, adminMainSidebarHidden } = useSelector(
     (state: RootState) => state.interfaceControls
@@ -112,12 +155,12 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
                 ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
                 : contentSidebarOffset(),
             }}
-            className={`mobile:left-auto !absolute top-0 transition-all h-full`}
+            className={`mobile:left-auto !absolute top-0 transition-all h-full ease-[cubic-bezier(0.87,_0,_0.13,_1)]`}
           >
             <AdminContentSidebar
-              dropdownHeights={[]}
-              setActiveContent={() => {}}
-              activeContent={"all"}
+              dropdownHeights={dropdownHeights}
+              setActiveContent={setActiveContent}
+              activeContent={activeContent}
             />
           </div>
 

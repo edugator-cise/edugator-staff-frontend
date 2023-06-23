@@ -67,10 +67,10 @@ const AdminContentSidebar = ({
   const toggleExercisesLinks = navLinks.filter((link) => link.toggleExercises);
 
   return (
-    <ScrollArea.Root
-      className={`overflow-hidden w-[350px] min-w-[350px] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
-    >
-      <ScrollArea.Viewport className="w-full h-full">
+    <>
+      <ScrollArea.Root
+        className={`overflow-auto w-[350px] min-w-[350px] h-full bg-nav-dark flex-col z-40 border-r border-r-slate-700 `}
+      >
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
           <h1 className="text-white font-dm font-medium text-lg">Exercises</h1>
@@ -157,12 +157,15 @@ const AdminContentSidebar = ({
                         className="border-t border-slate-700 last:border-b group dropdown"
                       >
                         <Accordion.Trigger
-                          className={`pl-4 relative pr-4 group py-3 w-full flex items-center justify-between overflow-hidden`}
+                          className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden`}
                         >
                           <div className="flex items-center">
-                            <p className="font-medium text-left text-sm text-white">{`${
-                              primaryIndex + 1
-                            }. ${value.name}`}</p>
+                            <p className="font-medium text-left text-sm text-white">
+                              <span className="text-slate-300 mr-1">{`${
+                                primaryIndex + 1
+                              }.`}</span>
+                              {`${value.name}`}
+                            </p>
                           </div>
                           <div className="flex space-x-2 items-center">
                             <div className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center">
@@ -180,7 +183,7 @@ const AdminContentSidebar = ({
                             height={
                               allContent.length == 0
                                 ? 44
-                                : dropdownHeights[primaryIndex] + 44
+                                : dropdownHeights[primaryIndex]
                             }
                             className="flex flex-col"
                           >
@@ -264,9 +267,12 @@ const AdminContentSidebar = ({
                                             }}
                                             className="text-white text-sm py-4 w-full line"
                                           >
-                                            {`${primaryIndex + 1}.${
-                                              secondaryIndex + 1
-                                            } ${name}`}
+                                            <span className="text-slate-500 mr-1">
+                                              {`${primaryIndex + 1}.${
+                                                secondaryIndex + 1
+                                              }`}
+                                            </span>{" "}
+                                            {`${name}`}
                                           </p>
                                         </m.div>
                                       </Link>
@@ -284,12 +290,18 @@ const AdminContentSidebar = ({
                                   Add Lesson
                                 </p>
                               </button>
-                              <button className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/problembutton border border-blue-500/60 border-dashed rounded-md">
-                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
-                                <p className="text-slate-100/60 group-hover/problembutton:text-white text-sm">
-                                  Add Problem
-                                </p>
-                              </button>
+                              <Link
+                                href={`/admin/problem/create/${
+                                  value._id
+                                }?moduleName=${encodeURIComponent(value.name)}`}
+                              >
+                                <div className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/problembutton border border-blue-500/60 border-dashed rounded-md">
+                                  <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
+                                  <p className="text-slate-100/60 group-hover/problembutton:text-white text-sm pointer-events-none">
+                                    Add Problem
+                                  </p>
+                                </div>
+                              </Link>
                             </div>
                           </div>
                         </AccordionContent>
@@ -306,27 +318,14 @@ const AdminContentSidebar = ({
                 </button>
               </div>
             </Accordion.Root>
-            <HiddenSizingItems
-              navigation={navigation}
-              activeContent={activeContent}
-            />
           </>
         )}
-      </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-        orientation="vertical"
-      >
-        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-      </ScrollArea.Scrollbar>
-      <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-        orientation="horizontal"
-      >
-        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-      </ScrollArea.Scrollbar>
-      <ScrollArea.Corner className="bg-white/20" />
-    </ScrollArea.Root>
+      </ScrollArea.Root>
+      <HiddenSizingItems
+        navigation={navigation}
+        activeContent={activeContent}
+      />
+    </>
   );
 };
 
@@ -369,7 +368,7 @@ export const HiddenSizingItems = ({
               return (
                 <div key={id}>
                   <div
-                    className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start ${primaryIndex}-${type} ${primaryIndex}-content`}
+                    className={`relative font-dm flex pr-14 pl-0 items-center cursor-pointer justify-start ${primaryIndex}-${type}-admin ${primaryIndex}-content-admin`}
                   >
                     <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
                     <p
@@ -380,9 +379,12 @@ export const HiddenSizingItems = ({
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
                       }}
-                      className="text-white text-sm py-3 w-full line"
+                      className="text-white text-sm py-4 w-full line"
                     >
-                      {`${primaryIndex + 1}.${secondaryIndex + 1} ${name}`}
+                      <span className="text-slate-500 mr-1">
+                        {`${primaryIndex + 1}.${secondaryIndex + 1}`}
+                      </span>{" "}
+                      {`${name}`}
                     </p>
                   </div>
                 </div>

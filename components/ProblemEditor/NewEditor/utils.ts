@@ -52,3 +52,30 @@ export const sampleTestCases = [
     visibility: TestCaseVisibility.IO_VISIBLE,
   },
 ];
+
+export const sampleEditorContent = {
+  type: "doc",
+  content: [
+    {
+      type: "heading",
+      attrs: {
+        level: 1,
+      },
+      content: [
+        {
+          type: "text",
+          text: "Problem Statement",
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "Write a program to print 'Hello World'",
+        },
+      ],
+    },
+  ],
+};

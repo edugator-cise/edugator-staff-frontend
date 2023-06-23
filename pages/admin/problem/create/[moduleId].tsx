@@ -1,10 +1,11 @@
 import AdminLayout from "components/AdminLayout/AdminLayout";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import {
   openWarningModal,
+  requestResetProblem,
   resetState,
   updateModuleId,
   updateModuleName,
@@ -27,24 +28,29 @@ const ProblemCreatePage = () => {
   };
 
   useEffect(() => {
+    console.log("new problem");
+    dispatch(requestResetProblem());
     dispatch(updateModuleId(moduleId as string));
     dispatch(updateModuleName(moduleName as string));
 
-    return () => {
+    /* return () => {
+      console.log("resetting state");
       dispatch(resetState());
-    };
+    }; */
   }, [moduleId, moduleName]);
 
-  return (
-    <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`} //unneeded
-      actionButtons={[actions.back]} //unneeded
-    >
-      <AdminProblemEditor />
-      {/* Reference below component */}
-      {/* <ProblemEditorContainer /> */}
-    </AdminLayout>
-  );
+  return <AdminProblemEditor />;
 };
+
+ProblemCreatePage.getLayout = (page: ReactNode) => (
+  <AdminLayout pageTitle="Problem Editor">{page}</AdminLayout>
+);
+
+{
+  /* Reference below component */
+}
+{
+  /* <ProblemEditorContainer /> */
+}
 
 export default ProblemCreatePage;

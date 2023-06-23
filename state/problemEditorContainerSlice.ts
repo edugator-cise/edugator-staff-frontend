@@ -4,12 +4,12 @@ import { TestCaseField } from "components/ProblemEditor/TestEditor/TestCase.util
 import { Content } from "@tiptap/react";
 
 export interface ProblemFields {
-  problemStatement: Content;
+  problemStatement: Content | undefined;
   templatePackage: string;
 }
 
 export interface MetadataFields {
-  title: string;
+  title: string | undefined;
   hidden: boolean;
   dueDate: string;
   fileName: string;
@@ -80,13 +80,13 @@ const initialState: ProblemEditorContainerState = {
   testEditorIsValid: false,
   activeStep: 0,
   metadata: {
-    title: "",
+    title: undefined,
     hidden: false,
     dueDate: new Date().toISOString(),
     fileName: "example.cpp",
   },
   problem: {
-    problemStatement: "",
+    problemStatement: undefined,
     templatePackage: "",
   },
   codeEditor: {
@@ -206,7 +206,7 @@ export const problemEditorContainerSlice = createSlice({
     },
 
     resetState: (state) => {
-      return getProblemEditorInitialState();
+      console.log("resetting state 2");
     },
 
     /* API calls */
@@ -285,6 +285,44 @@ export const problemEditorContainerSlice = createSlice({
     requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
       alert(action.payload);
     },
+    requestResetProblem: (state) => {
+      state.metadataIsValid = false;
+      state.problemIsValid = false;
+      state.codeIsValid = false;
+      state.serverConfigIsValid = false;
+      state.testEditorIsValid = false;
+
+      state.activeStep = 0;
+      state.metadata = {
+        title: undefined,
+        hidden: false,
+        dueDate: new Date().toISOString(),
+        fileName: "example.cpp",
+      };
+      state.problem = {
+        problemStatement: undefined,
+        templatePackage: "",
+      };
+      state.codeEditor = {
+        code: undefined,
+        fileExtension: ".cpp",
+      };
+      state.serverConfig = {
+        timeLimit: 0,
+        memoryLimit: 0,
+        buildCommand: "",
+      };
+      state.testCases = undefined;
+      state.problemId = undefined;
+      state.moduleId = "";
+      state.moduleName = "";
+      state.isSubmitting = false;
+      state.fetchingProblem = false;
+      state.showSuccessModal = false;
+      state.showFailureModal = false;
+      state.showWarningModal = false;
+      state.warningType = undefined;
+    },
   },
 });
 
@@ -321,5 +359,6 @@ export const {
   resetState,
   openWarningModal,
   closeWarningModal,
+  requestResetProblem,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

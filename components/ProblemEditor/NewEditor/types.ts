@@ -53,4 +53,5 @@ export type ProblemAction =
   | { type: "SET_BUILD_COMMAND"; payload: string }
   | { type: "ADD_TEST_CASE"; payload: TestCase }
   | { type: "UPDATE_TEST_CASE"; payload: { index: number; testCase: TestCase } }
-  | { type: "REMOVE_TEST_CASE"; payload: number };
+  | { type: "REMOVE_TEST_CASE"; payload: number }
+  | { type: "RESET_PROBLEM" };
