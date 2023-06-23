@@ -51,6 +51,7 @@ const ProblemEditPage = () => {
     if (!problemId) {
       return;
     }
+    setStatus(FetchStatus.loading);
     getProblemRequest()
       .then((value) => {
         dispatch(updateModuleId(moduleId as string));

@@ -216,7 +216,14 @@ const AdminContentSidebar = ({
                                       type === "problem" ? "code" : "learn";
 
                                     return (
-                                      <Link href={`/${urlPath}/${id}`} key={id}>
+                                      <Link
+                                        href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
+                                          value.name
+                                        )}&moduleId=${encodeURIComponent(
+                                          value._id
+                                        )}`}
+                                        key={id}
+                                      >
                                         <m.div
                                           initial={{ opacity: 0 }}
                                           animate={{

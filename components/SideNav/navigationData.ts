@@ -62,7 +62,7 @@ export const navLinks: NavLinkItem[] = [
 
 export const adminNavLinks: NavLinkItem[] = [
   {
-    icon: icons.dashboard,
+    icon: icons.list,
     text: "Course Content",
     id: "dashboard",
     toggleExercises: true,
