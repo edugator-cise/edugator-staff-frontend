@@ -207,7 +207,7 @@ const InputOutputEditorPane = ({
                                   <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
                                 </RadioGroup.Item>
                                 <label
-                                  className="text-slate-600 text-[15px] leading-none pl-[15px] font-dm"
+                                  className="text-slate-600 text-sm leading-none pl-3 font-dm"
                                   htmlFor={TestCaseVisibility.IO_VISIBLE.toString()}
                                 >
                                   Input and output visible
@@ -222,7 +222,7 @@ const InputOutputEditorPane = ({
                                   <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
                                 </RadioGroup.Item>
                                 <label
-                                  className="text-slate-600 text-[15px] leading-none pl-[15px] font-dm"
+                                  className="text-slate-600 text-sm leading-none pl-3 font-dm"
                                   htmlFor={TestCaseVisibility.I_VISIBLE_O_HIDDEN.toString()}
                                 >
                                   Input visible, output hidden
@@ -237,7 +237,7 @@ const InputOutputEditorPane = ({
                                   <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
                                 </RadioGroup.Item>
                                 <label
-                                  className="text-slate-600 text-[15px] leading-none pl-[15px] font-dm"
+                                  className="text-slate-600 text-sm leading-none pl-3 font-dm"
                                   htmlFor={TestCaseVisibility.IO_HIDDEN.toString()}
                                 >
                                   Input and output hidden
@@ -267,6 +267,12 @@ const InputOutputEditorPane = ({
                                 });
                               }}
                             />
+                          </div>
+                          <div className="w-full bg-red-500/10 cursor-pointer hover:bg-red-500/20 flex items-center justify-center py-2 !mt-4 space-x-2">
+                            <TrashIcon className="w-4 h-4 text-red-500" />
+                            <p className="text-xs text-red-500 font-dm font-medium pointer-events-none">
+                              Delete Test Case
+                            </p>
                           </div>
                         </div>
                       </div>
