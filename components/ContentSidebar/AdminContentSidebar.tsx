@@ -361,7 +361,7 @@ const AdminContentSidebar = ({
                                                 </DropdownMenu.Sub>
 
                                                 <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-2" />
-                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
+                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
                                                   <TrashIcon />
                                                   <p>Delete Problem</p>
                                                 </DropdownMenu.Item>
