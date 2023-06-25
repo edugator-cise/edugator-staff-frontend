@@ -67,6 +67,25 @@
   }
 }
 
+/* @keyframes slideUpAndFade {
+  from {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+} */
+
+
+
+.DropdownMenuContent[data-state="closed"] {
+  transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
+
 .PopoverContent[data-state="open"] {
   transform-origin: right bottom;
   animation: fadeIn 150ms ease-out;

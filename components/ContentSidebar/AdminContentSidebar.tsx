@@ -5,11 +5,20 @@ import { FetchStatus } from "hooks/types";
 import * as Accordion from "@radix-ui/react-accordion";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import {
+  CheckIcon,
   ChevronDownIcon,
+  ChevronRightIcon,
+  DotFilledIcon,
   DotsHorizontalIcon,
   DotsVerticalIcon,
+  DoubleArrowDownIcon,
+  DoubleArrowUpIcon,
+  HamburgerMenuIcon,
+  HeightIcon,
   Pencil1Icon,
+  Pencil2Icon,
   PlusIcon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
 import { createNavStructure } from "utils/CodeEditorUtils";
 import {
@@ -31,6 +40,7 @@ import { RootState } from "lib/store/store";
 import { setAdminContentSidebarHidden } from "state/interfaceControls.slice";
 import { AnimatePresence, motion as m } from "framer-motion";
 import AnimateHeight from "react-animate-height";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 const AdminContentSidebar = ({
   activeContent,
@@ -238,24 +248,75 @@ const AdminContentSidebar = ({
                                           exit={{ opacity: 0 }}
                                           key={`${primaryIndex}-${secondaryIndex}`}
                                           className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-t border-t-nav-dark/90 ${
-                                            id === activeId ? "bg-blue-600" : ""
+                                            id === activeId
+                                              ? "!bg-nav-darkest"
+                                              : ""
                                           }`}
                                         >
-                                          <div
-                                            className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 ${
-                                              id === activeId
-                                                ? "bg-blue-800"
-                                                : "hover:bg-slate-800"
-                                            }`}
-                                          >
-                                            <DotsHorizontalIcon
-                                              className={`w-4 h-4 group-hover/dotgroup:text-white ${
-                                                id === activeId
-                                                  ? "text-white"
-                                                  : "text-slate-400"
-                                              }`}
-                                            />
-                                          </div>
+                                          <DropdownMenu.Root>
+                                            <DropdownMenu.Trigger asChild>
+                                              <button
+                                                className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 hover:bg-slate-800`}
+                                              >
+                                                <DotsHorizontalIcon
+                                                  className={`w-4 h-4 group-hover/dotgroup:text-white ${
+                                                    id === activeId
+                                                      ? "text-white"
+                                                      : "text-slate-400"
+                                                  }`}
+                                                />
+                                              </button>
+                                            </DropdownMenu.Trigger>
+
+                                            <DropdownMenu.Portal>
+                                              <DropdownMenu.Content
+                                                side="bottom"
+                                                className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[200px] z-50 bg-white rounded-md p-1"
+                                                sideOffset={5}
+                                              >
+                                                <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                  <Pencil2Icon />
+                                                  <p>Edit Problem</p>
+                                                </DropdownMenu.Item>
+
+                                                <DropdownMenu.Sub>
+                                                  <DropdownMenu.SubTrigger className="justify-between group text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[state=open]:bg-violet4 data-[state=open] data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700 data-[highlighted]:data-[state=open]:bg-slate-100 data-[highlighted]:data-[state=open]:text-gray-600">
+                                                    <div className="space-x-2 flex items-center">
+                                                      <HeightIcon />
+                                                      <p>Reorder Problem</p>
+                                                    </div>
+                                                    <div className="ml-auto text-slate-800 group-data-[highlighted]:text-gray-700 group-data-[disabled]:text-gray-300">
+                                                      <ChevronRightIcon />
+                                                    </div>
+                                                  </DropdownMenu.SubTrigger>
+                                                  <DropdownMenu.Portal>
+                                                    <DropdownMenu.SubContent
+                                                      className="DropdownMenuContent data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-1 shadow-2xl"
+                                                      sideOffset={2}
+                                                      alignOffset={-5}
+                                                    >
+                                                      <DropdownMenu.Item className="space-x-2 text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                        <DoubleArrowUpIcon />
+                                                        <p>Move Up</p>
+                                                      </DropdownMenu.Item>
+                                                      <DropdownMenu.Item className="space-x-2 text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                        <DoubleArrowDownIcon />
+                                                        <p>Move Down</p>
+                                                      </DropdownMenu.Item>
+                                                    </DropdownMenu.SubContent>
+                                                  </DropdownMenu.Portal>
+                                                </DropdownMenu.Sub>
+
+                                                <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-2" />
+                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
+                                                  <TrashIcon />
+                                                  <p>Delete Problem</p>
+                                                </DropdownMenu.Item>
+                                                <DropdownMenu.Arrow className="fill-white" />
+                                              </DropdownMenu.Content>
+                                            </DropdownMenu.Portal>
+                                          </DropdownMenu.Root>
+
                                           <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
                                           <p
                                             style={{

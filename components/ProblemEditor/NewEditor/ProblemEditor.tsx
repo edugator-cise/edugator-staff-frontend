@@ -36,9 +36,14 @@ import {
   Pencil1Icon,
   Pencil2Icon,
   RocketIcon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
 import { Eye } from "tabler-icons-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
+import Modal from "components/shared/Modals/Modal";
+import SwitchToggle from "components/shared/SwitchToggle";
+import AlertModal from "components/shared/Modals/AlertModal";
+import { toast } from "react-hot-toast";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -165,6 +170,9 @@ const AdminProblemEditor = () => {
   }
 
   const [preview, setPreview] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const [problemState, problemDispatch] = useReducer<
     React.Reducer<ProblemData, ProblemAction>
   >(problemReducer, initialProblemState);
@@ -190,6 +198,8 @@ const AdminProblemEditor = () => {
     }
   }, [testCases]);
 
+  // for testing
+
   useEffect(() => {
     console.log("problem state");
     console.log(problemState);
@@ -201,6 +211,154 @@ const AdminProblemEditor = () => {
         preview ? "bg-white" : "bg-slate-100"
       }`}
     >
+      <Modal
+        title="Problem Settings"
+        open={settingsOpen}
+        setOpen={setSettingsOpen}
+      >
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-2 w-full">
+            <label
+              htmlFor="hidden"
+              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+            >
+              Visibility
+            </label>
+            <div className="flex items-center justify-between space-x-2 w-full">
+              <div className="text-sm font-dm">Problem Hidden?</div>
+              <SwitchToggle
+                checked={problemState.hidden}
+                onCheckedChange={(checked) => {
+                  problemDispatch({
+                    type: "SET_HIDDEN",
+                    payload: checked,
+                  });
+                }}
+              />
+              {/* <button
+                  className={`${
+                    problemState.hidden
+                      ? "bg-emerald-500 text-white"
+                      : "bg-white text-slate-800"
+                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm font-medium text-xs`}
+                  onClick={() => {
+                    problemDispatch({
+                      type: "SET_HIDDEN",
+                      payload: true,
+                    });
+                  }}
+                >
+                  <CheckIcon />
+                  <p>Hidden</p>
+                </button>
+                <button
+                  className={`${
+                    !problemState.hidden
+                      ? "bg-emerald-500 text-white"
+                      : "bg-white text-slate-800"
+                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm font-medium text-xs`}
+                  onClick={() => {
+                    problemDispatch({
+                      type: "SET_HIDDEN",
+                      payload: false,
+                    });
+                  }}
+                >
+                  <CheckIcon />
+                  <p>Visible</p>
+                </button> */}
+            </div>
+          </div>
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex flex-col space-y-2 w-full">
+              <label
+                htmlFor="time limit"
+                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+              >
+                Time Limit (seconds)
+              </label>
+              <input
+                type="number"
+                id="time limit"
+                className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                placeholder="5"
+                value={problemState.timeLimit}
+                onChange={(e) => {
+                  problemDispatch({
+                    type: "SET_TIME_LIMIT",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+              />
+            </div>
+            <div className="flex flex-col space-y-2 w-full">
+              <label
+                htmlFor="memory limit"
+                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+              >
+                Memory Limit (MB)
+              </label>
+              <input
+                type="number"
+                id="memory limit"
+                className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                placeholder="2048"
+                value={problemState.memoryLimit}
+                onChange={(e) => {
+                  problemDispatch({
+                    type: "SET_MEMORY_LIMIT",
+                    payload: parseInt(e.target.value),
+                  });
+                }}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col space-y-2 w-full">
+            <label
+              htmlFor="build command"
+              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+            >
+              Build Command
+            </label>
+            <input
+              type="text"
+              id="build command"
+              className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+              placeholder="g++ -std=c++17 -O2 -o main main.cpp"
+              value={problemState.buildCommand}
+              onChange={(e) => {
+                problemDispatch({
+                  type: "SET_BUILD_COMMAND",
+                  payload: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <button
+            onClick={() => setDeleteModalOpen(true)}
+            className="w-full py-3 bg-red-100 hover:bg-red-200 cursor-pointer text-red-600 rounded-md flex space-x-2 items-center justify-center"
+          >
+            <TrashIcon />
+            <p className="text-xs font-dm font-medium">Delete Problem</p>
+          </button>
+        </div>
+      </Modal>
+      <AlertModal
+        title="Delete Problem"
+        open={deleteModalOpen}
+        setOpen={setDeleteModalOpen}
+        description="Are you sure you want to delete this problem? This action cannot be undone."
+        cancel={true}
+        onConfirm={() => {
+          console.log("delete problem");
+          toast.success("Problem deleted successfully!");
+          setDeleteModalOpen(false);
+          setSettingsOpen(false);
+          // navigate to module page
+        }}
+        confirmText="Delete Problem"
+      />
+
       {/* Top Banner */}
       <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
         <div className="flex items-end">
@@ -218,7 +376,9 @@ const AdminProblemEditor = () => {
               <Tooltip.Trigger asChild>
                 <div
                   className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
-                  onClick={() => setPreview(!preview)}
+                  onClick={() => {
+                    setSettingsOpen(!settingsOpen);
+                  }}
                 >
                   <GearIcon color="white" />
                 </div>
@@ -228,7 +388,7 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
                 >
                   Settings
                 </Tooltip.Content>
@@ -254,7 +414,7 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
                 >
                   {preview ? "Edit" : "Preview"}
                 </Tooltip.Content>
@@ -293,7 +453,7 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
                 >
                   Settings
                 </Tooltip.Content>
@@ -319,7 +479,7 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
                 >
                   {preview ? "Edit" : "Preview"}
                 </Tooltip.Content>

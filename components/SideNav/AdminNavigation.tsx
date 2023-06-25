@@ -1,4 +1,3 @@
-import * as Switch from "@radix-ui/react-switch";
 import { EdugatorLogo, icons } from "components/SideNav/navIcons";
 import { RootState } from "lib/store/store";
 import { useTheme } from "next-themes";
@@ -13,6 +12,7 @@ import {
 import { adminNavLinks, NavLinkItem } from "./navigationData";
 import { NavLink } from "./NavLink";
 import { NavLinkTooltip } from "./NavLinkTooltip";
+import SwitchToggle from "components/shared/SwitchToggle";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -162,16 +162,13 @@ const AdminNavigation = () => {
                       Dark Mode
                     </label>
                   </div>
-                  <Switch.Root
-                    className="w-[42px] h-[25px] rounded-full relative border border-emerald-500/50 data-[state=checked]:bg-emerald-500 outline-none cursor-default"
-                    id="dark-mode"
+
+                  <SwitchToggle
                     checked={currentTheme === "dark"}
                     onCheckedChange={(checked) => {
                       setTheme(checked ? "dark" : "light");
                     }}
-                  >
-                    <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                  </Switch.Root>
+                  />
                 </div>
               </NavLinkTooltip>
             ) : (

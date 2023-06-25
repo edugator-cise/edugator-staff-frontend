@@ -155,7 +155,7 @@ const NewTestCaseModal = ({
         </div>
         <button
           onClick={addTestCase}
-          className="px-4 py-2 self-end bg-slate-700 cursor-pointer rounded-sm hover:bg-slate-600 w-full flex items-center justify-center !mt-4 space-x-2"
+          className="px-4 py-2 self-end bg-slate-700 cursor-pointer rounded-md hover:bg-slate-600 w-full flex items-center justify-center !mt-4 space-x-2"
         >
           <PlusIcon className="w-4 h-4 text-white" />
           <p className="text-xs text-white font-dm font-medium pointer-events-none">

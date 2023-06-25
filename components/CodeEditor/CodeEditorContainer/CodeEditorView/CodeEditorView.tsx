@@ -77,7 +77,7 @@ const ButtonToolTip = ({
           side="bottom"
           sideOffset={5}
           align="center"
-          className={`TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2 ${
+          className={`TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2 ${
             className ? className : ""
           }`}
         >
