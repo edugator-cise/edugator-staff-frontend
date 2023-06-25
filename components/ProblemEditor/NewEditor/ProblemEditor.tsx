@@ -16,25 +16,19 @@ import {
   LanguageData,
   ProblemAction,
   ProblemData,
-  TestCaseVisibility,
 } from "components/ProblemEditor/NewEditor/types";
 import {
-  getFileExtension,
   sampleCodeData,
-  sampleEditorContent,
   sampleTestCases,
 } from "components/ProblemEditor/NewEditor/utils";
 import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
 import {
-  ArrowRightIcon,
   CheckCircledIcon,
-  CheckIcon,
   EyeOpenIcon,
   GearIcon,
   Pencil1Icon,
-  Pencil2Icon,
   RocketIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
@@ -44,6 +38,7 @@ import Modal from "components/shared/Modals/Modal";
 import SwitchToggle from "components/shared/SwitchToggle";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { toast } from "react-hot-toast";
+import { Router, useRouter } from "next/router";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -101,6 +96,16 @@ const AdminProblemEditor = () => {
     (state: RootState) => state.problemEditorContainer.testCases
   );
 
+  const [preview, setPreview] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const [unsavedChanges, setUnsavedChanges] = useState(false); // set to true when user makes changes to anything in problem state
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false); // set to true when user tries navigating away from page with unsaved changes
+  const [nextUrl, setNextUrl] = useState<null | string>(null); // stores the url to navigate to when user confirms navigation
+
+  const router = useRouter();
+
   const initialProblemState: ProblemData = {
     title: metadataValues.title || "",
     hidden: false,
@@ -120,6 +125,11 @@ const AdminProblemEditor = () => {
     state: ProblemData,
     action: ProblemAction
   ): ProblemData {
+    // when any changes to the problem state are made for the first time, let global state know there is unsaved changes
+    // to know when to show the "unsaved changes" dialog
+    if (action.type !== "RESET_PROBLEM") setUnsavedChanges(true);
+
+    console.log("changing state");
     switch (action.type) {
       case "SET_TITLE":
         console.log(action.payload);
@@ -169,10 +179,6 @@ const AdminProblemEditor = () => {
     }
   }
 
-  const [preview, setPreview] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
   const [problemState, problemDispatch] = useReducer<
     React.Reducer<ProblemData, ProblemAction>
   >(problemReducer, initialProblemState);
@@ -187,9 +193,7 @@ const AdminProblemEditor = () => {
   // resets whenever test cases change as well
 
   useEffect(() => {
-    console.log("test cases");
     console.log(testCases);
-    console.log(problemDataValues.problemStatement);
     if (!testCases) {
       //reset problem state
       problemDispatch({
@@ -198,19 +202,74 @@ const AdminProblemEditor = () => {
     }
   }, [testCases]);
 
+  // Ref to keep track of whether the event listener should be active or not
+  const eventListenerActive = useRef(true);
+
+  const nextNavigationHandler = (url: string) => {
+    if (unsavedChanges && eventListenerActive.current) {
+      setConfirmModalOpen(true);
+      setNextUrl(url);
+      router.events.emit("routeChangeError");
+      throw "Abort route change by user confirmation";
+    }
+  };
+
+  // make sure to confirm navigation if there are unsaved changes
+  useEffect(() => {
+    router.events.on("routeChangeStart", nextNavigationHandler);
+
+    return () => {
+      router.events.off("routeChangeStart", nextNavigationHandler);
+    };
+  }, [unsavedChanges, router.events]);
+
+  const handleModalClose = (shouldNavigate: boolean) => {
+    setConfirmModalOpen(false);
+    if (shouldNavigate && nextUrl) {
+      eventListenerActive.current = false; // deactivate event listener
+
+      router
+        .push(nextUrl)
+        .then(() => {
+          eventListenerActive.current = true; // reactivate event listener after successful navigation
+        })
+        .catch(() => {
+          // In case of error during navigation, reactivate the event listener
+          eventListenerActive.current = true;
+        });
+    }
+  };
+
   // for testing
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log("problem state");
     console.log(problemState);
-  }, [problemState]);
+  }, [problemState]); */
 
   return (
     <div
-      className={`w-full h-full flex flex-col dark:bg-nav-darkest relative ${
+      className={`w-full h-full flex flex-col relative ${
         preview ? "bg-white" : "bg-slate-100"
       }`}
     >
+      <AlertModal
+        title="Unsaved Changes"
+        open={confirmModalOpen}
+        setOpen={setConfirmModalOpen}
+        description="You have unsaved changes. Are you sure you want to navigate away from this page?"
+        onCancel={() => {
+          handleModalClose(false);
+        }}
+        onConfirm={() => {
+          setConfirmModalOpen(false);
+          setTimeout(() => {
+            handleModalClose(true);
+          }, 200);
+        }}
+        confirmText="Confirm"
+      />
+
       <Modal
         title="Problem Settings"
         open={settingsOpen}
@@ -218,14 +277,13 @@ const AdminProblemEditor = () => {
       >
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col space-y-2 w-full">
-            <label
-              htmlFor="hidden"
-              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
-            >
+            <label htmlFor="hidden" className="text-xs text-slate-800 font-dm">
               Visibility
             </label>
             <div className="flex items-center justify-between space-x-2 w-full">
-              <div className="text-sm font-dm">Problem Hidden?</div>
+              <div className="text-sm font-dm text-slate-800">
+                Problem Hidden?
+              </div>
               <SwitchToggle
                 checked={problemState.hidden}
                 onCheckedChange={(checked) => {
@@ -240,7 +298,7 @@ const AdminProblemEditor = () => {
                     problemState.hidden
                       ? "bg-emerald-500 text-white"
                       : "bg-white text-slate-800"
-                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm font-medium text-xs`}
+                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm text-xs`}
                   onClick={() => {
                     problemDispatch({
                       type: "SET_HIDDEN",
@@ -256,7 +314,7 @@ const AdminProblemEditor = () => {
                     !problemState.hidden
                       ? "bg-emerald-500 text-white"
                       : "bg-white text-slate-800"
-                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm font-medium text-xs`}
+                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm text-xs`}
                   onClick={() => {
                     problemDispatch({
                       type: "SET_HIDDEN",
@@ -273,14 +331,14 @@ const AdminProblemEditor = () => {
             <div className="flex flex-col space-y-2 w-full">
               <label
                 htmlFor="time limit"
-                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 font-dm"
               >
                 Time Limit (seconds)
               </label>
               <input
                 type="number"
                 id="time limit"
-                className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                className="w-full py-2 text-sm rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
                 placeholder="5"
                 value={problemState.timeLimit}
                 onChange={(e) => {
@@ -294,14 +352,14 @@ const AdminProblemEditor = () => {
             <div className="flex flex-col space-y-2 w-full">
               <label
                 htmlFor="memory limit"
-                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 font-dm"
               >
                 Memory Limit (MB)
               </label>
               <input
                 type="number"
                 id="memory limit"
-                className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                className="w-full py-2 text-sm rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
                 placeholder="2048"
                 value={problemState.memoryLimit}
                 onChange={(e) => {
@@ -316,14 +374,14 @@ const AdminProblemEditor = () => {
           <div className="flex flex-col space-y-2 w-full">
             <label
               htmlFor="build command"
-              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+              className="text-xs text-slate-800 font-dm"
             >
               Build Command
             </label>
             <input
               type="text"
               id="build command"
-              className="w-full py-2 text-sm rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+              className="w-full py-2 text-sm rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
               placeholder="g++ -std=c++17 -O2 -o main main.cpp"
               value={problemState.buildCommand}
               onChange={(e) => {
@@ -339,7 +397,7 @@ const AdminProblemEditor = () => {
             className="w-full py-3 bg-red-100 hover:bg-red-200 cursor-pointer text-red-600 rounded-md flex space-x-2 items-center justify-center"
           >
             <TrashIcon />
-            <p className="text-xs font-dm font-medium">Delete Problem</p>
+            <p className="text-xs font-dm">Delete Problem</p>
           </button>
         </div>
       </Modal>
@@ -348,7 +406,9 @@ const AdminProblemEditor = () => {
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
         description="Are you sure you want to delete this problem? This action cannot be undone."
-        cancel={true}
+        onCancel={() => {
+          setDeleteModalOpen(false);
+        }}
         onConfirm={() => {
           console.log("delete problem");
           toast.success("Problem deleted successfully!");
@@ -362,11 +422,11 @@ const AdminProblemEditor = () => {
       {/* Top Banner */}
       <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
         <div className="flex items-end">
-          <p className="text-base text-slate-400 font-dm dark:text-white">
+          <p className="text-base text-slate-400 font-dm">
             {moduleName}
             <span className="text-slate-600">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
           </p>
-          <h1 className="text-white font-dm font-medium text-base">
+          <h1 className="text-white font-dm text-base">
             {metadataValues.title || "New Problem"}
           </h1>
         </div>
@@ -388,7 +448,7 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
                 >
                   Settings
                 </Tooltip.Content>
@@ -414,83 +474,22 @@ const AdminProblemEditor = () => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
+                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
                 >
                   {preview ? "Edit" : "Preview"}
                 </Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
           </Tooltip.Provider>
-          <button className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
+          <button
+            disabled={!unsavedChanges}
+            className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
+          >
             {problemState?.title ? <CheckCircledIcon /> : <RocketIcon />}
             <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
           </button>
         </div>
       </div>
-      {/* Floating */}
-      {/* <div className="absolute left-1/2 -translate-x-1/2 bottom-4 opacity-50 hover:opacity-100 transition-opacity rounded-xl bg-nav-darkest border border-slate-700 z-10 space-x-8 shadow-md flex px-6 py-4 items-center justify-between">
-        <div>
-          <p className="text-xs text-slate-400 font-dm dark:text-white">
-            {moduleName}
-          </p>
-          <h1 className="text-white font-dm font-medium text-xl">
-            {problemState.title || "New Problem"}
-          </h1>
-        </div>
-        <div className="flex space-x-2 items-center">
-          <Tooltip.Provider delayDuration={100}>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
-                  onClick={() => setPreview(!preview)}
-                >
-                  <GearIcon color="white" />
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="bottom"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
-                >
-                  Settings
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
-          <Tooltip.Provider delayDuration={100}>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-nav-dark"
-                  onClick={() => setPreview(!preview)}
-                >
-                  {preview ? (
-                    <Pencil1Icon color="white" />
-                  ) : (
-                    <EyeOpenIcon color="white" />
-                  )}
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="bottom"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs font-medium rounded-md p-2`}
-                >
-                  {preview ? "Edit" : "Preview"}
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
-          <button className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm font-medium text-xs flex items-center space-x-2">
-            <p>{problemState?.title ? "Save Changes" : "Publish"}</p>
-          </button>
-        </div>
-      </div> */}
 
       <div className="w-full h-full relative">
         {/* <AIChat /> */}
@@ -501,14 +500,6 @@ const AdminProblemEditor = () => {
           className="code-editor-allotment"
         >
           <div className="flex w-full h-full flex-col">
-            {/* <div className="w-full dark:border-b-slate-700 border-b-slate-600 pb-3 border-b pt-4 pl-5 pr-3 dark:bg-nav-darkest bg-nav-dark">
-                <p className="text-sm text-slate-400 font-dm dark:text-white">
-                  Module Name
-                  <span className="text-slate-300 dark:text-slate-400 font-normal truncate">
-                    &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problemState.title || "Untitled"}
-                  </span>
-                </p>
-              </div> */}
             <MetadataEditorPane
               preview={preview}
               setPreview={setPreview}

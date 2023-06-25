@@ -211,7 +211,7 @@ const NextOverlay = () => {
   return (
     <div className="tablet:flex hidden font-dm space-x-4 cursor-pointer max-w-[30rem] absolute items-center justify-between rounded-md opacity-50 transition-opacity hover:opacity-100 bg-white dark:bg-slate-800 dark:border-slate-600 shadow-lg shadow-black/5 border bottom-4 right-4 z-50 px-4 whitespace-nowrap">
       <div className="flex flex-col py-3 text-slate-900 dark:text-white">
-        <h1 className="font-bold">Up Next:</h1>
+        <h1 className="font-medium">Up Next:</h1>
         <p className="text-sm">Introduction to C++</p>
       </div>
       <div className="flex items-end h-10">

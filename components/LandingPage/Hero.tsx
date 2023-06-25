@@ -30,19 +30,18 @@ const Hero = () => {
         >
           Introducing Edugator
         </a>
-        <span className="relative flex max-w-5xl text-4xl font-semibold text-center md:text-5xl lg:text-6xl font-ambit">
-          <h1
-            style={{
-              WebkitMaskImage:
-                "linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 100%)",
-            }}
-            className="text-white"
-          >
-            A New Way to Learn&nbsp;
-            <RotatingText />
+        <span className="relative flex max-w-5xl text-[30px] font-semibold text-center sm:text-5xl lg:text-5xl font-ambit">
+          <h1 className="text-slate-200 leading-tight">
+            Experience the
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-emerald-400 to-blue-500">
+              &nbsp;Future&nbsp;
+            </span>
+            of <br />
+            Computing Education
+            {/* <RotatingText /> */}
           </h1>
         </span>
-        <p className="max-w-2xl font-inter text-lg text-center text-white/70 leading-8">
+        <p className="max-w-2xl font-inter text-sm text-center text-white/70 leading-8">
           Edugator is a platform where any UF student can practice computing
           concepts with rich immediate feedback. Designed to promote
           experiential life-long learning for computing learners.
@@ -53,7 +52,7 @@ const Hero = () => {
           <GradientButton text="Start Coding" href="/code" />
           <Link href="/#about">
             <button className="group flex items-center space-x-1">
-              <span className="font-dm text-white font-bold">Learn More</span>
+              <span className="font-dm text-white font-medium">Learn More</span>
               <ExpandArrowLight />
             </button>
           </Link>

@@ -360,14 +360,14 @@ const MetadataEditorPane = ({
 
   return (
     <div
-      className={`w-full h-auto dark:bg-nav-darkest p-4 overflow-y-scroll ${
+      className={`w-full h-auto p-4 overflow-y-scroll ${
         preview ? "bg-white" : "bg-slate-100"
       }`}
     >
       <div className="h-auto w-full flex flex-col space-y-4">
         {preview ? (
           <>
-            <h1 className="text-3xl font-ambit underline decoration-emerald-500 underline-offset-4 font-semibold text-slate-900 dark:text-slate-100 mb-4 mt-8">
+            <h1 className="text-3xl font-ambit underline decoration-emerald-500 underline-offset-4 font-semibold text-slate-900 mb-4 mt-8">
               {problemState?.title}
             </h1>
           </>
@@ -381,14 +381,14 @@ const MetadataEditorPane = ({
             <div className="flex flex-col space-y-1">
               <label
                 htmlFor="problem-title"
-                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 font-dm"
               >
                 Problem Title
               </label>
               <input
                 type="text"
                 id="problem-title"
-                className="w-full py-2 text-lg rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+                className="w-full py-2 text-lg rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
                 placeholder="Untitled"
                 value={problemState?.title}
                 onChange={(e) => {
@@ -402,21 +402,21 @@ const MetadataEditorPane = ({
             <div className="flex flex-col space-y-1">
               <label
                 htmlFor="problem-description"
-                className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+                className="text-xs text-slate-800 font-dm"
               >
                 Problem Description
               </label>
               <div className="w-full flex flex-col">
                 {editor && <MenuBar editor={editor} />}
-                <div className="w-full rounded-b-md border-[2px] border-t-0 overflow-hidden border-slate-600 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 outline-none">
+                <div className="w-full rounded-b-md border-[2px] border-t-0 overflow-hidden border-slate-600 bg-white text-slate-800 outline-none">
                   {/* <EditorBlock
                           data={problemDescription}
                           onChange={setProblemDescription}
                           holder="editorjs-container"
                         /> */}
                   <EditorContent
-                    className="prose-sm prose-pre:bg-nav-dark dark:prose-pre:bg-slate-700 prose-pre:text-white
-                             prose-headings:font-dm prose-h1:text-xl prose-h1:font-bold prose-h2:!text-base prose-h2:font-bold p-2 !outline-none "
+                    className="prose-sm prose-pre:bg-nav-dark prose-pre:text-white
+                             prose-headings:font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-lg prose-h2:!font-semibold p-2 !outline-none"
                     editor={editor}
                   />
                 </div>
@@ -424,23 +424,6 @@ const MetadataEditorPane = ({
             </div>
           </>
         )}
-        {/* <div className="w-full flex items-center justify-end sticky bottom-0">
-          <button
-            onClick={() => setPreview(!preview)}
-            className="px-6 h-12 rounded-md border border-mirage-600 text-nav-darkest hover:bg-mirage-600/10 font-dm font-medium text-sm flex items-center space-x-2"
-          >
-            {preview ? (
-              <Pencil2Icon className="w-5 h-5" />
-            ) : (
-              <EyeOpenIcon className="w-5 h-5" />
-            )}
-            <p>{preview ? "Edit" : "Preview"}</p>
-          </button>
-        </div> */}
-        {/* <ProblemView
-                  problemTitle={currentProblem?.title}
-                  problemStatement={currentProblem?.statement}
-                /> */}
       </div>
     </div>
   );

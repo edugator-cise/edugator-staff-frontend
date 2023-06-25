@@ -69,7 +69,7 @@ const NewTestCaseModal = ({
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+            className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
             placeholder="1 2"
           />
         </div>
@@ -78,7 +78,7 @@ const NewTestCaseModal = ({
           <textarea
             value={output}
             onChange={(e) => setOutput(e.target.value)}
-            className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+            className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
             placeholder="3"
           />
         </div>
@@ -148,7 +148,7 @@ const NewTestCaseModal = ({
             <textarea
               value={hint}
               onChange={(e) => setHint(e.target.value)}
-              className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+              className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
               placeholder="Add two numbers"
             />
           </div>
@@ -158,7 +158,7 @@ const NewTestCaseModal = ({
           className="px-4 py-2 self-end bg-slate-700 cursor-pointer rounded-md hover:bg-slate-600 w-full flex items-center justify-center !mt-4 space-x-2"
         >
           <PlusIcon className="w-4 h-4 text-white" />
-          <p className="text-xs text-white font-dm font-medium pointer-events-none">
+          <p className="text-xs text-white font-dm  pointer-events-none">
             Add Test Case
           </p>
         </button>
@@ -189,7 +189,9 @@ const InputOutputEditorPane = ({
           className={`w-full h-full flex flex-col p-4 space-y-2 justify-center items-center`}
         >
           <div className={`flex w-full items-center justify-center`}>
-            <h1 className="text-lg font-dm font-bold ">Test Cases</h1>
+            <h1 className="text-lg font-dm font-medium text-slate-800">
+              Test Cases
+            </h1>
           </div>
           <p className={`text-center text-sm text-slate-600 font-dm`}>
             At least one test case is required with visible input and output.
@@ -220,16 +222,9 @@ const InputOutputEditorPane = ({
       ) : (
         <div className={`w-full h-full flex flex-col p-4 space-y-2`}>
           <div className={`flex w-full items-center justify-between`}>
-            <h1 className="text-lg font-dm font-bold">Test Cases</h1>
-            {/*  <div className="sticky h-8 rounded-md bg-nav-dark/10 hover:bg-nav-dark/20 group cursor-pointer flex items-center justify-center px-3 space-x-2">
-              <p className="text-sm text-slate-800 font-dm group-hover:text-slate-900 transition">
-                Compiler Settings
-              </p>
-              <Gear
-                className="w-5 h-5 text-slate-800 group-hover:rotate-12 transition"
-                weight="duotone"
-              />
-            </div> */}
+            <h1 className="text-lg font-dm font-medium text-slate-800">
+              Test Cases
+            </h1>
           </div>
           <p className={`text-left text-xs text-slate-600 font-dm`}>
             At least one test case is required with visible input and output.
@@ -251,7 +246,7 @@ const InputOutputEditorPane = ({
                   >
                     <Accordion.Trigger className="flex flex-row space-x-4 items-center justify-between w-full px-3 py-2">
                       <div className="flex space-x-2 items-center">
-                        <p className="text-sm text-slate-800 font-dm font-semibold">
+                        <p className="text-sm text-slate-800 font-dm">
                           Test Case {index + 1}
                         </p>
                       </div>
@@ -276,7 +271,7 @@ const InputOutputEditorPane = ({
                                 side="top"
                                 sideOffset={5}
                                 align="center"
-                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs font-medium rounded-md p-2`}
+                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
                               >
                                 {testCase.visibility ===
                                 TestCaseVisibility.IO_VISIBLE
@@ -311,7 +306,7 @@ const InputOutputEditorPane = ({
                                 side="top"
                                 sideOffset={5}
                                 align="center"
-                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs font-medium rounded-md p-2`}
+                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
                               >
                                 Delete Test Case
                               </Tooltip.Content>
@@ -331,7 +326,7 @@ const InputOutputEditorPane = ({
                             Input
                           </p>
                           <textarea
-                            className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+                            className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
                             value={testCase.input}
                             placeholder="1 2"
                             onChange={(e) => {
@@ -353,7 +348,7 @@ const InputOutputEditorPane = ({
                             Output
                           </p>
                           <textarea
-                            className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+                            className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
                             value={testCase.expectedOutput}
                             placeholder="3"
                             onChange={(e) => {
@@ -445,7 +440,7 @@ const InputOutputEditorPane = ({
                               <span className="text-slate-400">(Optional)</span>
                             </p>
                             <textarea
-                              className="w-full bg-white dark:bg-nav-darkest border border-slate-300 dark:border-slate-700 rounded-md p-2 text-sm text-slate-600 font-dm"
+                              className="w-full bg-white border border-slate-300 rounded-md p-2 text-sm text-slate-600 font-dm"
                               value={testCase.hint}
                               placeholder="Add two numbers"
                               onChange={(e) => {
@@ -464,7 +459,7 @@ const InputOutputEditorPane = ({
                           </div>
                           <div className="w-full bg-red-500/10 cursor-pointer rounded-sm hover:bg-red-500/20 flex items-center justify-center py-2 !mt-4 space-x-2">
                             <TrashIcon className="w-4 h-4 text-red-500" />
-                            <p className="text-xs text-red-500 font-dm font-medium pointer-events-none">
+                            <p className="text-xs text-red-500 font-dm pointer-events-none">
                               Delete Test Case
                             </p>
                           </div>

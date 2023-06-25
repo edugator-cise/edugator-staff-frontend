@@ -145,20 +145,20 @@ const CodeEditorPane = ({
     <div className={`w-full h-full bg-slate-100 flex flex-col justify-start`}>
       <div className={`w-full h-full flex flex-col p-4 justify-start`}>
         <div className="h-full w-full flex flex-col space-y-4">
-          <h1 className="text-lg font-dm font-bold">
+          <h1 className="text-lg font-dm font-medium text-slate-800">
             Code Configuration ({languageLabels[activeLanguage as Language]})
           </h1>
           <div className="flex flex-col space-y-1">
             <label
               htmlFor="filename"
-              className="text-xs text-slate-800 dark:text-white font-dm font-medium"
+              className="text-xs text-slate-800 font-dm"
             >
               File Name
             </label>
             <input
               type="text"
               id="filename"
-              className="w-fit py-2 text-base rounded-md border border-slate-300 dark:border-slate-700 dark:bg-nav-darkest bg-white dark:text-white text-slate-800 px-3 font-dm font-medium outline-none"
+              className="w-fit py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
               placeholder={`example.${getFileExtension(
                 activeLanguage as Language
               )}`}

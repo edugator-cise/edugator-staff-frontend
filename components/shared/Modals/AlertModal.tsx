@@ -8,7 +8,7 @@ const AlertModal = ({
   title,
   description,
   trigger,
-  cancel = true,
+  onCancel,
   onConfirm,
   confirmText,
 }: {
@@ -18,7 +18,7 @@ const AlertModal = ({
   title?: string;
   description?: string;
   trigger?: React.ReactNode;
-  cancel?: boolean;
+  onCancel: () => void;
   onConfirm: () => void;
   confirmText: string;
 }) => {
@@ -30,7 +30,7 @@ const AlertModal = ({
         <AlertDialog.Overlay className="DialogOverlay z-[250] bg-black/50 fixed inset-0" />
         <AlertDialog.Content className="DialogContent z-[300] fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           {title && (
-            <AlertDialog.Title className="m-0 text-base font-bold mb-2 font-dm">
+            <AlertDialog.Title className="m-0 text-base font-semibold mb-2 font-dm text-slate-800">
               {title}
             </AlertDialog.Title>
           )}
@@ -39,21 +39,20 @@ const AlertModal = ({
           </AlertDialog.Description>
           {children}
           <div className="flex justify-end gap-4">
-            {cancel && (
-              <AlertDialog.Cancel asChild onClick={() => setOpen(false)}>
-                <button className="text-slate-600 text-sm font-dm bg-slate-200 hover:bg-slate-300 focus:outline-blue-500 inline-flex py-3 items-center justify-center rounded-[4px] px-[15px] font-medium leading-none ">
-                  Cancel
-                </button>
-              </AlertDialog.Cancel>
-            )}
+            <AlertDialog.Cancel asChild onClick={() => onCancel()}>
+              <button className="text-slate-600 text-sm font-dm bg-slate-200 hover:bg-slate-300 focus:outline-blue-500 inline-flex py-3 items-center justify-center rounded-md px-[15px] leading-none ">
+                Cancel
+              </button>
+            </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
               <button
                 onClick={() => {
                   setLoading(true);
                   onConfirm();
+                  setOpen(false);
                   setLoading(false);
                 }}
-                className="text-white text-sm font-dm min-w-[70px] bg-red-500 hover:bg-red-600 cursor-pointer inline-flex py-3 focus:outline-red-800 items-center justify-center rounded-md px-4 font-medium leading-none "
+                className="text-white text-sm font-dm min-w-[70px] bg-red-500 hover:bg-red-600 cursor-pointer inline-flex py-3 focus:outline-red-800 items-center justify-center rounded-md px-4 leading-none "
               >
                 {loading ? (
                   <div className="bouncing-loader">

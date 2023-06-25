@@ -14,7 +14,7 @@ const aboutData = [
   //     "Build your curriculum and set your students up for success with our interactive instruction portal.",
   //   illustration: <BuildIllustration />,
   // },
-    {
+  {
     title: "Learn",
     description:
       "Learn the fundamentals of computer science with our interactive lessons and practice exercises.",
@@ -134,10 +134,6 @@ const AboutSection = ({
         {title}
       </h3>
       <p className="font-inter text-nav-darker/80 pt-2">{description}</p>
-      {/* <button className=" flex items-center space-x-1 mt-4">
-        <span className="font-dm text-nav-darkest font-bold">Learn More</span>
-        <ExpandArrow />
-      </button> */}
     </li>
   );
 };

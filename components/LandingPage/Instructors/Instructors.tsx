@@ -16,10 +16,11 @@ const Instructors = () => {
               className="font-ambit text-white text-3xl font-semibold md:text-4xl lg:text-4xl 
                   !max-w-xl pb-6 sm:max-w-xl md:max-w-3xl lg:max-w-4xl"
             >
-              Set your students up for success
+              Empower your students with hands-on learning
             </h2>
             <p className="font-inter text-white/80 sm:max-w-xl md:max-w-3xl lg:max-w-4xl">
-              Build and distribute lessons and exercises to your students.
+              Build and distribute your coding curriculum with Edugator's
+              interactive platform.
             </p>
           </div>
         </div>

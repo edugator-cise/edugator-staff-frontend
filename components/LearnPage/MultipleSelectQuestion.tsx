@@ -184,7 +184,7 @@ function MultipleSelectQuestion({
         checked ? "" : "hover:scale-[101%]"
       }`}
     >
-      <h1 className="uppercase font-dm font-bold !text-sm !text-blue-500 dark:!text-emerald-500">
+      <h1 className="uppercase font-dm !text-sm !text-blue-500 dark:!text-emerald-500">
         Question {number}
       </h1>
       <h1 className="font-dm !text-lg !font-normal !text-slate-900 dark:!text-slate-100">
@@ -230,7 +230,7 @@ function MultipleSelectQuestion({
               <p className="font-dm !text-sm !font-normal !text-slate-900">
                 {ans.text}
               </p>
-              <p className="font-dm uppercase !text-xs !font-bold !text-slate-900 tracking-wide">
+              <p className="font-dm uppercase !text-xs !text-slate-900 tracking-wide">
                 {checked && answerText(ans.correct, questionsClicked[i])}
               </p>
             </div>
@@ -248,7 +248,7 @@ function MultipleSelectQuestion({
           checked ? "hidden" : "flex"
         }`}
       >
-        <p className="font-dm uppercase !text-xs !font-bold !text-white !tracking-wide">
+        <p className="font-dm uppercase !text-xs !text-white !tracking-wide">
           Check Answer
         </p>
       </button>

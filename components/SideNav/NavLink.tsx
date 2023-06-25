@@ -22,7 +22,7 @@ export const NavLink = ({
         }}
         className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
           active
-            ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white font-medium"
+            ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white"
             : "text-nav-inactive-light hover:bg-emerald-500/5"
         }`}
       >

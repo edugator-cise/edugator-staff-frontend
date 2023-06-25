@@ -99,7 +99,7 @@ const MobileHeader = ({
         <Dialog.Root open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
           <button
             onClick={() => setMobileNavOpen(true)}
-            className="inline-flex max-w-[50%] py-3 text-sm items-center justify-center rounded-[4px] bg-nav-darkest border border-nav-dark px-[15px] font-medium leading-none"
+            className="inline-flex max-w-[50%] py-3 text-sm items-center justify-center rounded-[4px] bg-nav-darkest border border-nav-dark px-[15px] leading-none"
           >
             <span
               style={{
@@ -116,7 +116,7 @@ const MobileHeader = ({
           <Dialog.Portal>
             <Dialog.Overlay className="DialogOverlay bg-black/50 fixed inset-0 z-[100]" />
             <Dialog.Content className="DialogContent z-[200] fixed top-[50%] left-[50%] max-h-[85vh] overflow-y-scroll w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-white shadow-xl focus:outline-none">
-              <Dialog.Title className="m-0 font-medium py-4 sticky top-0 px-4 bg-nav-darker dark:bg-nav-dark">
+              <Dialog.Title className="m-0 py-4 sticky top-0 px-4 bg-nav-darker dark:bg-nav-dark">
                 <p className="text-white text-sm">Exercises</p>
               </Dialog.Title>
               <div
@@ -229,7 +229,7 @@ const MobileHeader = ({
                                           : ""
                                       }`}
                                     ></div>
-                                    <p className="font-medium text-left text-sm text-white">{`${
+                                    <p className="text-left text-sm text-white">{`${
                                       primaryIndex + 1
                                     }. ${value.name}`}</p>
                                   </div>

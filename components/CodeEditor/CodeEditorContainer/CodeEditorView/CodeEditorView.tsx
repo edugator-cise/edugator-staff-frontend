@@ -175,7 +175,7 @@ export const CodeEditorView = ({
     <div className="w-full h-full flex flex-col font-dm">
       <div className="w-full pt-2 pl-5 pr-3 flex justify-between items-center bg-slate-200 dark:bg-nav-darkest border-b dark:border-b-slate-700 border-b-slate-300">
         <div className="flex space-x-8 items-center">
-          <p className="text-sm text-slate-800 font-dm font-bold dark:text-white">
+          <p className="text-sm text-slate-800 font-dm font-medium dark:text-white">
             Solution
           </p>
           <div className="rounded-t-sm border-l border-r border-t -mb-2 border-slate-300 dark:border-slate-700 shadow-lg shadow-emerald-500/50 bg-slate-100 dark:bg-nav-darkest px-3 py-2">

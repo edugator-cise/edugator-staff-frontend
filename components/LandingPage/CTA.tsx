@@ -21,7 +21,7 @@ const CTA = () => {
             </p>
             <Link href="mailto:kapooramanpreet@ufl.edu">
               <button className="group flex items-center space-x-1 mt-4">
-                <span className="font-dm text-nav-darker font-bold">
+                <span className="font-dm text-nav-darker font-medium">
                   Contact Us
                 </span>
                 <ExpandArrow />
@@ -61,7 +61,7 @@ const CTA = () => {
             </span>
             <Link href="/team">
               <button className="group flex items-center space-x-1 mt-4">
-                <span className="font-dm text-nav-darker font-bold">
+                <span className="font-dm text-nav-darker font-medium">
                   Meet Our Team
                 </span>
                 <ExpandArrow />

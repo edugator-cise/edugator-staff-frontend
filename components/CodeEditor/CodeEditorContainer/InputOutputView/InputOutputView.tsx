@@ -51,7 +51,7 @@ export const InputOutputView = ({
       }}
     >
       <div className="w-full overflow-hidden flex items-center min-h-[49px] space-x-8 dark:border-b-slate-700 border-b-slate-300 border-b py-3 px-5 dark:bg-nav-darkest bg-slate-200">
-        <p className="text-sm text-slate-800 font-dm font-bold dark:text-white ">
+        <p className="text-sm text-slate-800 font-dm font-medium semibold dark:text-white ">
           Testing
         </p>
 

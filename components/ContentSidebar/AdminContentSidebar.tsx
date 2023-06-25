@@ -1,5 +1,5 @@
 import useNavigation from "hooks/useNavigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { FetchStatus } from "hooks/types";
 import * as Accordion from "@radix-ui/react-accordion";
@@ -41,6 +41,37 @@ import { setAdminContentSidebarHidden } from "state/interfaceControls.slice";
 import { AnimatePresence, motion as m } from "framer-motion";
 import AnimateHeight from "react-animate-height";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { IProblemBase } from "lib/shared/types";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
+import { changeProblemOrderSuccess } from "state/ModulesSlice";
+import { toast } from "react-hot-toast";
+
+const moveProblem = async (
+  problemId: string,
+  moduleId: string,
+  direction: string,
+  dispatch: any
+) => {
+  try {
+    const { data }: { data: IProblemBase } = await apiClient.post(
+      apiRoutes.admin.changeProblemOrder,
+      { moduleId, problemId, direction }
+    );
+
+    dispatch(
+      changeProblemOrderSuccess({
+        moduleId: String(moduleId),
+        problemId: String(problemId),
+        direction: direction,
+      })
+    );
+    toast.success("Problem was moved successfully");
+  } catch (e) {
+    console.log(e);
+    toast.error("Error moving problem");
+  }
+};
 
 const AdminContentSidebar = ({
   activeContent,
@@ -51,7 +82,9 @@ const AdminContentSidebar = ({
   setActiveContent: (activeContent: ContentType) => void;
   dropdownHeights: Record<number, number>;
 }) => {
-  const [openModules, setOpenModules] = React.useState<string[]>([]);
+  const [openModules, setOpenModules] = useState<string[]>([]);
+  const [unsavedChangesDialogOpen, setUnsavedChangesDialogOpen] =
+    useState(false);
 
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
@@ -83,7 +116,7 @@ const AdminContentSidebar = ({
       >
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
-          <h1 className="text-white font-dm font-medium text-lg">Exercises</h1>
+          <h1 className="text-white font-dm text-lg">Exercises</h1>
           <div
             onClick={() => {
               toggleContentSidebar(!adminContentSidebarHidden);
@@ -164,13 +197,13 @@ const AdminContentSidebar = ({
                       <Accordion.Item
                         value={value.name}
                         key={primaryIndex}
-                        className="border-t border-slate-700 last:border-b group dropdown"
+                        className="border-b border-slate-700 last:border-b group dropdown"
                       >
                         <Accordion.Trigger
                           className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden`}
                         >
                           <div className="flex items-center">
-                            <p className="font-medium text-left text-sm text-white">
+                            <p className="text-left text-sm text-white">
                               <span className="text-slate-300 mr-1">{`${
                                 primaryIndex + 1
                               }.`}</span>
@@ -247,7 +280,7 @@ const AdminContentSidebar = ({
                                           }}
                                           exit={{ opacity: 0 }}
                                           key={`${primaryIndex}-${secondaryIndex}`}
-                                          className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-t border-t-nav-dark/90 ${
+                                          className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
                                             id === activeId
                                               ? "!bg-nav-darkest"
                                               : ""
@@ -271,16 +304,16 @@ const AdminContentSidebar = ({
                                             <DropdownMenu.Portal>
                                               <DropdownMenu.Content
                                                 side="bottom"
-                                                className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[200px] z-50 bg-white rounded-md p-1"
+                                                className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[200px] z-50 bg-white rounded-md p-2"
                                                 sideOffset={5}
                                               >
-                                                <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
                                                   <Pencil2Icon />
                                                   <p>Edit Problem</p>
                                                 </DropdownMenu.Item>
 
                                                 <DropdownMenu.Sub>
-                                                  <DropdownMenu.SubTrigger className="justify-between group text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[state=open]:bg-violet4 data-[state=open] data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700 data-[highlighted]:data-[state=open]:bg-slate-100 data-[highlighted]:data-[state=open]:text-gray-600">
+                                                  <DropdownMenu.SubTrigger className="justify-between group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[state=open]:bg-violet4 data-[state=open] data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700 data-[highlighted]:data-[state=open]:bg-slate-100 data-[highlighted]:data-[state=open]:text-gray-600">
                                                     <div className="space-x-2 flex items-center">
                                                       <HeightIcon />
                                                       <p>Reorder Problem</p>
@@ -291,15 +324,35 @@ const AdminContentSidebar = ({
                                                   </DropdownMenu.SubTrigger>
                                                   <DropdownMenu.Portal>
                                                     <DropdownMenu.SubContent
-                                                      className="DropdownMenuContent data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-1 shadow-2xl"
+                                                      className="DropdownMenuContent data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-2 shadow-2xl"
                                                       sideOffset={2}
                                                       alignOffset={-5}
                                                     >
-                                                      <DropdownMenu.Item className="space-x-2 text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                      <DropdownMenu.Item
+                                                        onClick={() => {
+                                                          moveProblem(
+                                                            id,
+                                                            value._id,
+                                                            "up",
+                                                            dispatch
+                                                          );
+                                                        }}
+                                                        className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
+                                                      >
                                                         <DoubleArrowUpIcon />
                                                         <p>Move Up</p>
                                                       </DropdownMenu.Item>
-                                                      <DropdownMenu.Item className="space-x-2 text-xs leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                      <DropdownMenu.Item
+                                                        onClick={() => {
+                                                          moveProblem(
+                                                            id,
+                                                            value._id,
+                                                            "down",
+                                                            dispatch
+                                                          );
+                                                        }}
+                                                        className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
+                                                      >
                                                         <DoubleArrowDownIcon />
                                                         <p>Move Down</p>
                                                       </DropdownMenu.Item>
@@ -308,7 +361,7 @@ const AdminContentSidebar = ({
                                                 </DropdownMenu.Sub>
 
                                                 <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-2" />
-                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-3 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
+                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
                                                   <TrashIcon />
                                                   <p>Delete Problem</p>
                                                 </DropdownMenu.Item>
@@ -343,11 +396,11 @@ const AdminContentSidebar = ({
                               )}
                             </AnimatePresence>
                           </AnimateHeight>
-                          <div className="flex items-center justify-center px-4 py-4 bg-nav-darker">
+                          <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
                             <div className="flex space-x-2 w-full">
-                              <button className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/60 border-dashed rounded-md">
+                              <button className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/30 rounded-md">
                                 <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
-                                <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-sm">
+                                <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs">
                                   Add Lesson
                                 </p>
                               </button>
@@ -356,9 +409,9 @@ const AdminContentSidebar = ({
                                   value._id
                                 }?moduleName=${encodeURIComponent(value.name)}`}
                               >
-                                <div className="flex items-center justify-center w-full px-2 space-x-2 py-3 group/problembutton border border-blue-500/60 border-dashed rounded-md">
+                                <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
                                   <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
-                                  <p className="text-slate-100/60 group-hover/problembutton:text-white text-sm pointer-events-none">
+                                  <p className="text-slate-100/60 group-hover/problembutton:text-white text-xs pointer-events-none">
                                     Add Problem
                                   </p>
                                 </div>

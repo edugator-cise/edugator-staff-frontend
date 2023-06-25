@@ -47,7 +47,7 @@ export const MobileFriendlyFeature = () => {
               WebkitMaskImage:
                 "linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0.5) 100%)",
             }}
-            className="font-dm tracking-wider text-slate-400 text-xs font-bold"
+            className="font-dm tracking-wider text-slate-400 text-xs font-medium"
           >
             Problem 1
           </p>
