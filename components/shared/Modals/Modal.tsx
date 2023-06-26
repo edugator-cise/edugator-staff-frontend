@@ -29,7 +29,7 @@ const Modal = ({
             </Dialog.Title>
           )}
           <Dialog.Description className="text-slate-500 mt-2 mb-4 text-sm leading-normal font-dm">
-            {description && { description }}
+            {description && description}
           </Dialog.Description>
           {children}
 

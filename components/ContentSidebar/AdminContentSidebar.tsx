@@ -324,7 +324,7 @@ const AdminContentSidebar = ({
                                                   </DropdownMenu.SubTrigger>
                                                   <DropdownMenu.Portal>
                                                     <DropdownMenu.SubContent
-                                                      className="DropdownMenuContent data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-2 shadow-2xl"
+                                                      className="DropdownMenuContent font-dm data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-2 shadow-2xl"
                                                       sideOffset={2}
                                                       alignOffset={-5}
                                                     >
@@ -398,12 +398,18 @@ const AdminContentSidebar = ({
                           </AnimateHeight>
                           <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
                             <div className="flex space-x-2 w-full">
-                              <button className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/30 rounded-md">
-                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
-                                <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs">
-                                  Add Lesson
-                                </p>
-                              </button>
+                              <Link
+                                href={`/admin/content/create/${
+                                  value._id
+                                }?moduleName=${encodeURIComponent(value.name)}`}
+                              >
+                                <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/30 rounded-md">
+                                  <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
+                                  <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs">
+                                    Add Lesson
+                                  </p>
+                                </div>
+                              </Link>
                               <Link
                                 href={`/admin/problem/create/${
                                   value._id

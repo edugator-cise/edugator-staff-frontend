@@ -23,6 +23,7 @@ import { useState } from "react";
 import { FetchStatus } from "hooks/types";
 import toast from "react-hot-toast";
 import { CircularProgress } from "@mui/material";
+import AdminLessonEditor from "components/LessonEditor/LessonEditor";
 
 const ContentCreatePage = () => {
   const router = useRouter();
@@ -33,19 +34,9 @@ const ContentCreatePage = () => {
   );
 
   const dispatch = useDispatch();
-  const actions = {
-    back: {
-      label: "Back to Modules",
-      onClick: () => dispatch(openWarningModal(WarningTypes.Quit)),
-      variant: "contained",
-      color: "primary",
-    },
-  };
 
   useEffect(() => {
-    if (moduleId) {
-      dispatch(updateModuleId(moduleId as string));
-    }
+    dispatch(updateModuleId(moduleId as string));
     dispatch(updateModuleName(moduleName as string));
 
     return () => {
@@ -53,21 +44,14 @@ const ContentCreatePage = () => {
     };
   }, [moduleId, moduleName, dispatch]);
 
-  return (
-    <>
-      <AdminLayout
-        pageTitle={`${moduleName ? moduleName + " - " : ""}${
-          lessonTitle || "New Lesson"
-        }`}
-        actionButtons={[actions.back]}
-      >
-        <TextStack moduleId={moduleId as string} />
-      </AdminLayout>
-      <SuccessDialog />
-      <WarningDialog />
-      <FailureDialog />
-    </>
-  );
+  return <AdminLessonEditor />;
 };
+{
+  /* <TextStack moduleId={moduleId as string} /> */
+}
+
+ContentCreatePage.getLayout = (page: React.ReactNode) => (
+  <AdminLayout pageTitle="Lesson Editor">{page}</AdminLayout>
+);
 
 export default ContentCreatePage;

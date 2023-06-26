@@ -10,6 +10,8 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import Underline from "@tiptap/extension-underline";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
 import {
   useEditor,
   EditorContent,
@@ -253,11 +255,11 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
       </button>
       <div className="w-px h-6 bg-white/40 mr-2" />
       <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        disabled={
-          !editor.can().chain().focus().toggleHeading({ level: 1 }).run()
-        }
-        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1`}
+        onClick={() => editor.commands.toggleHeading({ level: 1 })}
+        disabled={!editor.can().toggleHeading({ level: 1 })}
+        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
+        ${editor.isActive("heading", { level: 1 }) ? "bg-white/20" : ""}
+        `}
       >
         <H1 size={18} />
       </button>
@@ -266,14 +268,16 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         disabled={
           !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
         }
-        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1`}
+        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
+        ${editor.isActive("heading", { level: 2 }) ? "bg-white/20" : ""}
+        `}
       >
         <H2 size={18} />
       </button>
       <div className="w-px h-6 bg-white/40 mr-2" />
       <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        disabled={!editor.can().chain().focus().toggleBulletList().run()}
+        onClick={() => editor.commands.toggleBulletList()}
+        disabled={!editor.can().toggleBulletList()}
         className={`
               w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
                   ${editor.isActive("bulletList") ? "bg-white/20" : ""}
@@ -352,6 +356,16 @@ const MetadataEditorPane = ({
             keepAttributes: true,
           },
         }),
+        BulletList.configure({
+          HTMLAttributes: {
+            class: "list-disc",
+          },
+        }),
+        OrderedList.configure({
+          HTMLAttributes: {
+            class: "list-decimal",
+          },
+        }),
       ],
       content: editorContent,
     },
@@ -415,7 +429,7 @@ const MetadataEditorPane = ({
                           holder="editorjs-container"
                         /> */}
                   <EditorContent
-                    className="prose-sm prose-pre:bg-nav-dark prose-pre:text-white
+                    className="prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc
                              prose-headings:font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-lg prose-h2:!font-semibold p-2 !outline-none"
                     editor={editor}
                   />

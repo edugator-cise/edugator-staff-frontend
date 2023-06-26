@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILesson } from "lib/shared/types";
+import { Content } from "@tiptap/react";
 
 export interface ContentEditorFields {
   content: Object[];
@@ -22,8 +23,8 @@ interface Block {
 }
 
 export interface MetadataFields {
-  title: string;
-  author: string;
+  title: string | undefined;
+  author: string | undefined;
 }
 
 export enum WarningTypes {
@@ -33,6 +34,10 @@ export enum WarningTypes {
 
 export interface ContentEditorContainerState {
   metadata: MetadataFields;
+
+  //USE THIS
+  lessonContent: Content | undefined;
+  //below will be deprecated
   contentEditor: ContentEditorFields;
 
   contentId: string | undefined;
@@ -41,6 +46,8 @@ export interface ContentEditorContainerState {
 
   isSubmitting: boolean;
   fetchingContent: boolean;
+
+  //remove below
   showSuccessModal: boolean;
   showFailureModal: boolean;
   showWarningModal: boolean;
@@ -49,9 +56,10 @@ export interface ContentEditorContainerState {
 
 const initialState: ContentEditorContainerState = {
   metadata: {
-    title: "",
-    author: "",
+    title: undefined,
+    author: undefined,
   },
+  lessonContent: undefined,
   contentEditor: {
     content: [],
     editableContent: {

@@ -129,7 +129,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         style={{
           left: mobileView ? -80 : 0,
         }}
-        className={`absolute -left-[80px] transition-all sm:left-0 top-0 h-full z-50 ${
+        className={`absolute -left-[80px] transition-all sm:left-0 top-0 h-full z-50 ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
           !adminMainSidebarHidden
             ? "min-w-[18rem] w-[18rem]"
             : "w-5 min-w-[5rem]"
@@ -143,7 +143,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         style={{
           left: mobileView ? -1 : dividerOffset(),
         }}
-        className="w-px h-full absolute transition-all bg-slate-700 z-[100] min-w-[1px]"
+        className="w-px h-full absolute transition-all bg-slate-700 z-[100] min-w-[1px] ease-[cubic-bezier(0.87,_0,_0.13,_1)]"
       />
 
       <div className="w-full h-full flex flex-col">
@@ -170,7 +170,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               paddingTop: mobileView ? 56 : 0,
               paddingLeft: laptopView ? laptopContentMargin() : contentMargin(),
             }}
-            className={`relative w-full h-full transition-all flex flex-col ${
+            className={`relative w-full h-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
               tabletView ? "!pl-[80px]" : ""
             } ${mobileView ? "!pl-0" : ""}`}
           >

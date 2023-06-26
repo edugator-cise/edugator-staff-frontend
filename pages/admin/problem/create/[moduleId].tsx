@@ -18,14 +18,6 @@ const ProblemCreatePage = () => {
   const { moduleId, moduleName } = router.query;
 
   const dispatch = useDispatch();
-  const actions = {
-    back: {
-      label: "Back to Modules",
-      onClick: () => dispatch(openWarningModal(WarningTypes.Quit)),
-      variant: "contained",
-      color: "primary",
-    },
-  };
 
   useEffect(() => {
     console.log("new problem");
