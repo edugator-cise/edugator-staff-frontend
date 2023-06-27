@@ -1,5 +1,5 @@
 import { EdugatorLogo } from "components/SideNav/navIcons";
-import Link from "next/link";
+import { UserButton } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { GradientButton } from "./GradientButton";
 import { useScroll } from "framer-motion";
@@ -100,7 +100,7 @@ const Header = () => {
             // scroll to top
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="cursor-pointer flex col-span-4 lg:col-span-1 justify-start items-center space-x-2 cursor-pointer"
+          className="cursor-pointer flex col-span-4 lg:col-span-1 justify-start items-center space-x-2"
         >
           <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
             <EdugatorLogo />
@@ -136,8 +136,9 @@ const Header = () => {
             />
           ))}
         </div>
-        <div className="flex justify-end col-span-2 lg:col-span-1">
+        <div className="flex justify-end col-span-2 lg:col-span-1 lg:space-x-4">
           <GradientButton text="Beta" href="/code" />
+          <UserButton/>
         </div>
       </div>
     </header>
