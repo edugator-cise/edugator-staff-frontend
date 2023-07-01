@@ -376,13 +376,13 @@ const AdminProblemEditor = () => {
               htmlFor="build command"
               className="text-xs text-slate-800 font-dm"
             >
-              Build Command
+              Build Flags
             </label>
             <input
               type="text"
               id="build command"
               className="w-full py-2 text-sm rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
-              placeholder="g++ -std=c++17 -O2 -o main main.cpp"
+              placeholder="-Werror -Wall"
               value={problemState.buildCommand}
               onChange={(e) => {
                 problemDispatch({
@@ -435,7 +435,7 @@ const AdminProblemEditor = () => {
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
+                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5 flex items-center justify-center space-x-2"
                   onClick={() => {
                     setSettingsOpen(!settingsOpen);
                   }}

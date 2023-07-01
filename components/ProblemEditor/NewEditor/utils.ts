@@ -21,11 +21,12 @@ export const fileNameWithExtensionRegex = (language: Language) => {
 export const sampleCodeData: Record<Language, LanguageData> = {
   cpp: {
     solution:
-      '#include <iostream>\n\nint main() {\n std::cout << "Hello, world!\\n";\n return 0;\n}',
-    body: "#include <iostream>\n\nint main() {\n // TODO: Add code here\n return 0;\n}",
+      "#include <iostream>\n\tint sumOfTwoNumbers(int a, int b) {\n\t return a + b;\n}\nint main() {\n\t int a, b;\n\t std::cin >> a >> b;\n\t std::cout << sumOfTwoNumbers(a, b);\n\t return 0;\n}",
+    body: "int sumOfTwoNumbers(int a, int b) {\n\t// TODO: Add code here\n}",
     fileName: `example.${getFileExtension("cpp")}`,
-    header: "#ifndef HEADER_H\n#define HEADER_H\n#endif // HEADER_H",
-    footer: "#endif // FOOTER_H",
+    header: "#include <iostream>",
+    footer:
+      "int main() {\n\tint a, b;\n\tstd::cin >> a >> b;\n\tstd::cout << sumOfTwoNumbers(a, b);\n\treturn 0;\n}",
   },
   java: {
     solution:
@@ -64,7 +65,7 @@ export const sampleEditorContent = {
       content: [
         {
           type: "text",
-          text: "Problem Statement",
+          text: "Sum of Two Numbers",
         },
       ],
     },
@@ -73,7 +74,7 @@ export const sampleEditorContent = {
       content: [
         {
           type: "text",
-          text: "Write a program to print 'Hello World'",
+          text: "Write a program to add two numbers.",
         },
       ],
     },

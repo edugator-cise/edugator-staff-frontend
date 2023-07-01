@@ -1,4 +1,4 @@
-import { Editor } from "@tiptap/react";
+import { Editor, getNodeAttributes } from "@tiptap/react";
 import {
   Bold,
   Italic,
@@ -22,6 +22,8 @@ import {
   ArrowBackUp,
   ArrowForwardUp,
   Photo,
+  ListDetails,
+  ListCheck,
 } from "tabler-icons-react";
 
 export const sampleLessonContent = {
@@ -150,7 +152,8 @@ export const menuOptions: (
   {},
   {
     title: "Heading 1",
-    command: (editor: Editor) => editor?.commands.toggleHeading({ level: 1 }),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleHeading({ level: 1 }).run(),
     icon: <H1 size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("heading", { level: 1 }),
     disabled: (editor: Editor) => !editor?.can().toggleHeading({ level: 1 }),
@@ -170,13 +173,6 @@ export const menuOptions: (
     disabled: (editor: Editor) => !editor?.can().toggleHeading({ level: 3 }),
   },
   {},
-  {
-    title: "Blockquote",
-    command: (editor: Editor) => editor?.commands.toggleBlockquote(),
-    icon: <Blockquote size={ICON_SIZE} />,
-    active: (editor: Editor) => editor?.isActive("blockquote"),
-    disabled: (editor: Editor) => !editor?.can().toggleBlockquote(),
-  },
   {
     title: "Bullet List",
     command: (editor: Editor) => editor?.commands.toggleBulletList(),
@@ -198,5 +194,66 @@ export const menuOptions: (
     icon: <SourceCode size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("codeBlock"),
     disabled: (editor: Editor) => !editor?.can().toggleCodeBlock(),
+  },
+  {},
+  {
+    title: "Muliple Choice",
+    command: (editor: Editor) => {
+      // insert a gap, then a multiple choice question, then a gap
+      /* editor
+        ?.chain()
+        .setNode("multipleChoice", { question: "", answers: ["", "", "", ""] })
+        .run() */
+      console.log("nodesize", editor?.state.doc.nodeSize);
+      const endPos = editor?.state.selection.$to.pos;
+      console.log("endpos", endPos);
+      editor?.commands.focus("start");
+      editor
+        ?.chain()
+        .insertContentAt(endPos, { type: "multipleChoice" })
+
+        .run();
+      /* editor
+        ?.chain()
+        .setHardBreak()
+        .focus()
+        .setNode("multipleChoice", { question: "", answers: ["", "", "", ""] })
+        .focus()
+        .run(); */
+      //editor?.chain().focus().setHardBreak().run();
+    },
+    icon: <ListDetails size={ICON_SIZE} />,
+    active: (editor: Editor) => editor?.isActive("multipleChoice"),
+    disabled: (editor: Editor) => false,
+  },
+  {
+    title: "Multiple Select",
+    command: (editor: Editor) => {
+      // insert a gap, then a multiple choice question, then a gap
+      /* editor
+        ?.chain()
+        .setNode("multipleChoice", { question: "", answers: ["", "", "", ""] })
+        .run() */
+      console.log("nodesize", editor?.state.doc.nodeSize);
+      const endPos = editor?.state.selection.$to.pos;
+      console.log("endpos", endPos);
+      editor?.commands.focus("start");
+      editor
+        ?.chain()
+        .insertContentAt(endPos, { type: "multipleSelect" })
+
+        .run();
+      /* editor
+        ?.chain()
+        .setHardBreak()
+        .focus()
+        .setNode("multipleChoice", { question: "", answers: ["", "", "", ""] })
+        .focus()
+        .run(); */
+      //editor?.chain().focus().setHardBreak().run();
+    },
+    icon: <ListCheck size={ICON_SIZE} />,
+    active: (editor: Editor) => editor?.isActive("multipleSelect"),
+    disabled: (editor: Editor) => false,
   },
 ];

@@ -52,16 +52,16 @@ const CodeEditorPane = ({
         value: problemState?.codeData?.header as string,
       },
       {
-        id: "py-footer",
-        type: "footer",
-        language: "python",
-        value: problemState?.codeData?.footer as string,
-      },
-      {
         id: "py-body",
         type: "body",
         language: "python",
         value: problemState?.codeData?.body as string,
+      },
+      {
+        id: "py-footer",
+        type: "footer",
+        language: "python",
+        value: problemState?.codeData?.footer as string,
       },
       {
         id: "py-solution",
@@ -77,17 +77,18 @@ const CodeEditorPane = ({
         language: "cpp",
         value: problemState?.codeData?.header as string,
       },
-      {
-        id: "cpp-footer",
-        type: "footer",
-        language: "cpp",
-        value: problemState?.codeData?.footer as string,
-      },
+
       {
         id: "cpp-body",
         type: "body",
         language: "cpp",
         value: problemState?.codeData?.body as string,
+      },
+      {
+        id: "cpp-footer",
+        type: "footer",
+        language: "cpp",
+        value: problemState?.codeData?.footer as string,
       },
       {
         id: "cpp-solution",
@@ -103,17 +104,18 @@ const CodeEditorPane = ({
         language: "java",
         value: problemState?.codeData?.header as string,
       },
-      {
-        id: "java-footer",
-        type: "footer",
-        language: "java",
-        value: problemState?.codeData?.footer as string,
-      },
+
       {
         id: "java-body",
         type: "body",
         language: "java",
         value: problemState?.codeData?.body as string,
+      },
+      {
+        id: "java-footer",
+        type: "footer",
+        language: "java",
+        value: problemState?.codeData?.footer as string,
       },
       {
         id: "java-solution",

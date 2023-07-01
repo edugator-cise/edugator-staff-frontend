@@ -403,7 +403,7 @@ const MetadataEditorPane = ({
                 type="text"
                 id="problem-title"
                 className="w-full py-2 text-lg rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
-                placeholder="Untitled"
+                placeholder="Sum of Two Numbers"
                 value={problemState?.title}
                 onChange={(e) => {
                   dispatch({
