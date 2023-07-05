@@ -28,6 +28,7 @@ import {
   SidebarHideOverlay,
 } from "components/PlaygroundLayout/PlaygroundLayout";
 import AdminContentSidebar from "components/ContentSidebar/AdminContentSidebar";
+import { useGetCourseStructure } from "hooks/course/useGetCourseStructure";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -59,9 +60,12 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     Record<number, number>
   >({});
 
+  // run the function to calculate dropdown heights when the activeContent or the course structure changes
+  const { data: courseStructureData } = useGetCourseStructure();
+
   useEffect(() => {
     calculateDropdownHeights(activeContent);
-  }, [activeContent]);
+  }, [activeContent, courseStructureData]);
 
   const calculateDropdownHeights = (activeContent: ContentType) => {
     // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3

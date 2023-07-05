@@ -9,9 +9,9 @@ export interface InterfaceControlsState {
 }
 
 const initialState: InterfaceControlsState = {
-  mainSidebarHidden: false,
+  mainSidebarHidden: true,
   contentSidebarHidden: false,
-  adminMainSidebarHidden: false,
+  adminMainSidebarHidden: true,
   adminContentSidebarHidden: false,
   aiChatHidden: false,
 };

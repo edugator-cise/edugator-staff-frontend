@@ -162,7 +162,7 @@ const MultipleSelectComponent: React.FC<MultipleSelectProps> = ({
                       e.preventDefault();
                     }}
                     type="text"
-                    className={`w-full text-slate-800 p-2 font-dm text-base outline-none rounded-md`}
+                    className={`w-full bg-white text-slate-800 p-2 font-dm text-base outline-none rounded-md`}
                     value={answer}
                     onChange={(e) => handleAnswerChange(index, e)}
                     placeholder={`Answer ${index + 1}`}

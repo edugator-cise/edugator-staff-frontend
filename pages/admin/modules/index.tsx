@@ -106,6 +106,7 @@ const ModulesPage = () => {
           direction="row"
           justifyContent="center"
           alignItems="center"
+          overflow={"auto"}
         >
           {status === FetchStatus.loading ? (
             <CircularProgress />

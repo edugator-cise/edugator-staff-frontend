@@ -1,31 +1,18 @@
-import useNavigation from "hooks/useNavigation";
 import React, { useEffect, useState } from "react";
-import { LocalStorage } from "lib/auth/LocalStorage";
-import { FetchStatus } from "hooks/types";
 import * as Accordion from "@radix-ui/react-accordion";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import {
-  CheckIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  DotFilledIcon,
   DotsHorizontalIcon,
-  DotsVerticalIcon,
   DoubleArrowDownIcon,
   DoubleArrowUpIcon,
-  HamburgerMenuIcon,
   HeightIcon,
   Pencil1Icon,
   Pencil2Icon,
   PlusIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
-import { createNavStructure } from "utils/CodeEditorUtils";
-import {
-  ILessonItem,
-  INavigationItem,
-  IProblemItem,
-} from "components/CodeEditor/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -46,31 +33,123 @@ import apiClient from "lib/api/apiClient";
 import { apiRoutes } from "constants/apiRoutes";
 import { changeProblemOrderSuccess } from "state/ModulesSlice";
 import { toast } from "react-hot-toast";
+import Modal from "components/shared/Modals/Modal";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import {
+  CourseModule,
+  CourseStructure,
+  ModuleContent,
+  useGetCourseStructure,
+} from "hooks/course/useGetCourseStructure";
+import { useCreateModule } from "hooks/module/useCreateModule";
+import AlertModal from "components/shared/Modals/AlertModal";
+import { useDeleteModule } from "hooks/module/useDeleteModule";
+import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
+import { toTitleCase } from "utils/textUtils";
 
-const moveProblem = async (
-  problemId: string,
-  moduleId: string,
-  direction: string,
-  dispatch: any
-) => {
-  try {
-    const { data }: { data: IProblemBase } = await apiClient.post(
-      apiRoutes.admin.changeProblemOrder,
-      { moduleId, problemId, direction }
-    );
+const AddModuleModal = ({
+  open,
+  setOpen,
+  moduleCount,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  moduleCount: number;
+}) => {
+  const [moduleName, setModuleName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    dispatch(
-      changeProblemOrderSuccess({
-        moduleId: String(moduleId),
-        problemId: String(problemId),
-        direction: direction,
-      })
-    );
-    toast.success("Problem was moved successfully");
-  } catch (e) {
-    console.log(e);
-    toast.error("Error moving problem");
-  }
+  const {
+    mutate,
+    isLoading: createModuleLoading,
+    isError: createModuleError,
+  } = useCreateModule();
+
+  const handleCreateModule = async () => {
+    console.log(moduleCount);
+    setLoading(true);
+    await mutate({ moduleName, orderNumber: moduleCount + 1 });
+    setLoading(false);
+    setOpen(false);
+  };
+
+  return (
+    <Modal
+      open={open}
+      setOpen={setOpen}
+      title="Add Module"
+      description="Enter a name for your new module."
+    >
+      <div className="flex flex-col space-y-4">
+        <input
+          type="text"
+          id="module-name"
+          className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+          placeholder="My new module"
+          value={moduleName}
+          onChange={(e) => setModuleName(e.target.value)}
+        />
+
+        <div className="flex justify-end items-center">
+          <button
+            className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm text-sm flex items-center space-x-2 disabled:bg-emerald-500/50 disabled:cursor-not-allowed transition"
+            disabled={moduleName.length === 0 || loading}
+            onClick={handleCreateModule}
+          >
+            {loading ? (
+              <div className="bouncing-loader py-2">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            ) : (
+              <>
+                <PlusIcon />
+                <p>Create Module</p>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+const DeleteModuleModal = ({
+  open,
+  setOpen,
+  moduleId,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  moduleId: string;
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const {
+    mutate,
+    isLoading: deleteModuleLoading,
+    isError: deleteModuleError,
+  } = useDeleteModule();
+
+  const handleDeleteModule = async () => {
+    setLoading(true);
+    await mutate(moduleId);
+    setLoading(false);
+    setOpen(false);
+  };
+
+  return (
+    <AlertModal
+      open={open}
+      setOpen={setOpen}
+      title="Delete Module"
+      description="Are you sure you want to delete this module? All content in this module will be deleted. This action cannot be undone."
+      onConfirm={handleDeleteModule}
+      onCancel={() => setOpen(false)}
+      confirmText="Delete Module"
+    />
+  );
 };
 
 const AdminContentSidebar = ({
@@ -83,24 +162,34 @@ const AdminContentSidebar = ({
   dropdownHeights: Record<number, number>;
 }) => {
   const [openModules, setOpenModules] = useState<string[]>([]);
-  const [unsavedChangesDialogOpen, setUnsavedChangesDialogOpen] =
-    useState(false);
+  const [newModuleModalOpen, setNewModuleModalOpen] = useState(false);
+  const [deleteModuleModalOpen, setDeleteModuleModalOpen] = useState(false);
 
-  const { problemAndLessonSet, status } = useNavigation(
-    LocalStorage.getToken() !== null
-  );
+  const [moduleToDelete, setModuleToDelete] = useState<string>("");
 
-  const { adminContentSidebarHidden } = useSelector(
-    (state: RootState) => state.interfaceControls
-  );
+  const openDeleteModuleModal = (moduleId: string) => {
+    setModuleToDelete(moduleId);
+    setDeleteModuleModalOpen(true);
+  };
 
+  // content sidebar hidden controls + state (VISUAL)
   const dispatch = useDispatch();
 
   const toggleContentSidebar = (hidden: boolean) => {
     dispatch(setAdminContentSidebarHidden(hidden));
   };
 
-  const navigation = createNavStructure(problemAndLessonSet);
+  const { adminContentSidebarHidden } = useSelector(
+    (state: RootState) => state.interfaceControls
+  );
+
+  const {
+    data: courseStructure,
+    isLoading: courseStructureLoading,
+    isError: courseStructureError,
+  } = useGetCourseStructure();
+
+  const { mutate: deleteLesson } = useDeleteLesson();
 
   const router = useRouter();
   const { lessonId, problemId } = router.query;
@@ -151,12 +240,26 @@ const AdminContentSidebar = ({
           </Tabs.Root>
         </div>
 
-        {status === FetchStatus.loading ? (
+        {courseStructureLoading ? (
           <LoadingState />
-        ) : status === FetchStatus.failed ? (
+        ) : courseStructureError ? (
           <ErrorState />
         ) : (
           <>
+            {courseStructure && (
+              <>
+                <AddModuleModal
+                  open={newModuleModalOpen}
+                  setOpen={setNewModuleModalOpen}
+                  moduleCount={courseStructure?.modules.length}
+                />
+                <DeleteModuleModal
+                  open={deleteModuleModalOpen}
+                  setOpen={setDeleteModuleModalOpen}
+                  moduleId={moduleToDelete}
+                />
+              </>
+            )}
             <Accordion.Root
               onValueChange={(value) => {
                 //value is array of open modules
@@ -166,36 +269,50 @@ const AdminContentSidebar = ({
               type="multiple"
             >
               <div className="w-full h-px bg-slate-500"></div>
-              {navigation &&
-                navigation.map(
-                  (value: INavigationItem, primaryIndex: number) => {
+              {courseStructure && courseStructure.modules.length === 0 && (
+                <div className="flex items-center justify-center px-4 py-4">
+                  <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                    Looks like you have no content yet. Add a module below to
+                    get started!
+                  </p>
+                </div>
+              )}
+              {courseStructure &&
+                courseStructure.modules.map(
+                  (value: CourseModule, primaryIndex: number) => {
                     const filterContent = (
-                      contentList: INavigationItem,
+                      contentList: ModuleContent[],
                       activeContent: "problems" | "lessons" | "all"
                     ) => {
                       if (activeContent === "problems") {
-                        return contentList.problems;
+                        return contentList.map(
+                          (item) => item.contentType === "problem"
+                        );
                       } else if (activeContent === "lessons") {
-                        return contentList.lessons;
+                        return contentList.map(
+                          (item) => item.contentType === "lesson"
+                        );
                       } else {
-                        return [
-                          ...contentList.problems,
-                          ...contentList.lessons,
-                        ];
+                        return contentList;
                       }
                     };
 
-                    const filteredContent = filterContent(value, activeContent); // Get content based on activeContent parameter
+                    const filteredContent = filterContent(
+                      value.content,
+                      activeContent
+                    ); // Get content based on activeContent parameter
                     const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
                     const isEmpty = itemCount === 0; // if module is empty
-                    const allContent = isEmpty ? [] : filteredContent; // all problems and lessons in a module based on activeContent
+                    const allContent = isEmpty
+                      ? ([] as ModuleContent[])
+                      : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
                     const isActiveModule = allContent.some(
-                      (item) => item._id === activeId // if module contains the current active content
+                      (item) => item.id === activeId // if module contains the current active content
                     );
 
                     return (
                       <Accordion.Item
-                        value={value.name}
+                        value={value.moduleName}
                         key={primaryIndex}
                         className="border-b border-slate-700 last:border-b group dropdown"
                       >
@@ -207,13 +324,38 @@ const AdminContentSidebar = ({
                               <span className="text-slate-300 mr-1">{`${
                                 primaryIndex + 1
                               }.`}</span>
-                              {`${value.name}`}
+                              {`${value.moduleName}`}
                             </p>
                           </div>
                           <div className="flex space-x-2 items-center">
-                            <div className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center">
-                              <Pencil1Icon className="text-white w-4 h-4" />
-                            </div>
+                            <Tooltip.Provider delayDuration={100}>
+                              <Tooltip.Root>
+                                <Tooltip.Trigger asChild>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+
+                                      openDeleteModuleModal(value.id);
+                                    }}
+                                    className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center"
+                                  >
+                                    <TrashIcon className="text-red-400 w-4 h-4" />
+                                    {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
+                                  </button>
+                                </Tooltip.Trigger>
+                                <Tooltip.Portal>
+                                  <Tooltip.Content
+                                    side="left"
+                                    sideOffset={5}
+                                    align="center"
+                                    className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-red-700 text-white font-dm text-xs rounded-md p-2`}
+                                  >
+                                    Delete Module
+                                  </Tooltip.Content>
+                                </Tooltip.Portal>
+                              </Tooltip.Root>
+                            </Tooltip.Provider>
+
                             <ChevronDownIcon
                               className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
                               aria-hidden
@@ -245,28 +387,25 @@ const AdminContentSidebar = ({
                               ) : (
                                 allContent.map(
                                   (
-                                    item: IProblemItem | ILessonItem,
+                                    item: ModuleContent,
                                     secondaryIndex: number
                                   ) => {
-                                    const id = item._id;
+                                    const id = item.id;
                                     //check type of item
-                                    const type =
-                                      "problemName" in item
-                                        ? "problem"
-                                        : "lesson";
-                                    const name =
-                                      "problemName" in item
-                                        ? item.problemName
-                                        : item.lessonName;
+                                    const type = item.contentType;
+                                    "problemName" in item
+                                      ? "problem"
+                                      : "lesson";
+                                    const name = item.title;
                                     const urlPath =
                                       type === "problem" ? "code" : "learn";
 
                                     return (
                                       <Link
                                         href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                                          value.name
+                                          value.moduleName
                                         )}&moduleId=${encodeURIComponent(
-                                          value._id
+                                          value.id
                                         )}`}
                                         key={id}
                                       >
@@ -304,14 +443,26 @@ const AdminContentSidebar = ({
                                             <DropdownMenu.Portal>
                                               <DropdownMenu.Content
                                                 side="bottom"
+                                                align="start"
                                                 className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[200px] z-50 bg-white rounded-md p-2"
                                                 sideOffset={5}
                                               >
-                                                <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
-                                                  <Pencil2Icon />
-                                                  <p>Edit Problem</p>
-                                                </DropdownMenu.Item>
-
+                                                <Link
+                                                  href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
+                                                    value.moduleName
+                                                  )}&moduleId=${encodeURIComponent(
+                                                    value.id
+                                                  )}`}
+                                                  key={id}
+                                                >
+                                                  <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700">
+                                                    <Pencil2Icon />
+                                                    <p>
+                                                      Edit {toTitleCase(type)}
+                                                    </p>
+                                                  </DropdownMenu.Item>
+                                                </Link>
+                                                {/*
                                                 <DropdownMenu.Sub>
                                                   <DropdownMenu.SubTrigger className="justify-between group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[state=open]:bg-violet4 data-[state=open] data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700 data-[highlighted]:data-[state=open]:bg-slate-100 data-[highlighted]:data-[state=open]:text-gray-600">
                                                     <div className="space-x-2 flex items-center">
@@ -329,28 +480,14 @@ const AdminContentSidebar = ({
                                                       alignOffset={-5}
                                                     >
                                                       <DropdownMenu.Item
-                                                        onClick={() => {
-                                                          moveProblem(
-                                                            id,
-                                                            value._id,
-                                                            "up",
-                                                            dispatch
-                                                          );
-                                                        }}
+                                                        onClick={() => {}}
                                                         className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
                                                       >
                                                         <DoubleArrowUpIcon />
                                                         <p>Move Up</p>
                                                       </DropdownMenu.Item>
                                                       <DropdownMenu.Item
-                                                        onClick={() => {
-                                                          moveProblem(
-                                                            id,
-                                                            value._id,
-                                                            "down",
-                                                            dispatch
-                                                          );
-                                                        }}
+                                                        onClick={() => {}}
                                                         className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
                                                       >
                                                         <DoubleArrowDownIcon />
@@ -359,11 +496,22 @@ const AdminContentSidebar = ({
                                                     </DropdownMenu.SubContent>
                                                   </DropdownMenu.Portal>
                                                 </DropdownMenu.Sub>
-
+                                                  */}
                                                 <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-2" />
-                                                <DropdownMenu.Item className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600">
+                                                <DropdownMenu.Item
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    type === "problem"
+                                                      ? console.log("problem")
+                                                      : deleteLesson(id);
+                                                  }}
+                                                  className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 bg-red-50 text-red-600"
+                                                >
                                                   <TrashIcon />
-                                                  <p>Delete Problem</p>
+                                                  <p>
+                                                    Delete {toTitleCase(type)}
+                                                  </p>
                                                 </DropdownMenu.Item>
                                                 <DropdownMenu.Arrow className="fill-white" />
                                               </DropdownMenu.Content>
@@ -399,21 +547,25 @@ const AdminContentSidebar = ({
                           <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
                             <div className="flex space-x-2 w-full">
                               <Link
-                                href={`/admin/content/create/${
-                                  value._id
-                                }?moduleName=${encodeURIComponent(value.name)}`}
+                                href={`/admin/lesson/create/${
+                                  value.id
+                                }?moduleName=${encodeURIComponent(
+                                  value.moduleName
+                                )}`}
                               >
-                                <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 group/lessonbutton border dash border-blue-500/30 rounded-md">
+                                <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
                                   <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
-                                  <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs">
+                                  <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs pointer-events-none">
                                     Add Lesson
                                   </p>
                                 </div>
                               </Link>
                               <Link
                                 href={`/admin/problem/create/${
-                                  value._id
-                                }?moduleName=${encodeURIComponent(value.name)}`}
+                                  value.id
+                                }?moduleName=${encodeURIComponent(
+                                  value.moduleName
+                                )}`}
                               >
                                 <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
                                   <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
@@ -430,7 +582,12 @@ const AdminContentSidebar = ({
                   }
                 )}
               <div className="flex items-center justify-center px-4 py-4">
-                <button className="flex space-x-2 items-center justify-center w-full px-2 py-3 group/modulebutton border border-blue-500/60 border-dashed rounded-md">
+                <button
+                  onClick={() => {
+                    setNewModuleModalOpen(true);
+                  }}
+                  className="flex space-x-2 items-center justify-center w-full px-2 py-3 group/modulebutton border border-blue-500/60 border-dashed rounded-md"
+                >
                   <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/modulebutton:text-white" />
                   <p className="text-slate-100/60 group-hover/modulebutton:text-white text-sm">
                     Add Module
@@ -442,7 +599,8 @@ const AdminContentSidebar = ({
         )}
       </ScrollArea.Root>
       <HiddenSizingItems
-        navigation={navigation}
+        //navigation={navigation}
+        courseStructure={courseStructure as CourseStructure}
         activeContent={activeContent}
       />
     </>
@@ -450,68 +608,78 @@ const AdminContentSidebar = ({
 };
 
 export const HiddenSizingItems = ({
-  navigation,
+  //navigation,
+  courseStructure,
   activeContent,
 }: {
-  navigation: INavigationItem[];
+  //navigation: INavigationItem[];
+  courseStructure: CourseStructure;
   activeContent: "problems" | "lessons" | "all";
 }) => {
   return (
     <div className="w-full absolute pointer-events-none -z-10 opacity-0">
       {/* Sizing Elements to animate height (stay hidden) */}
-      {navigation &&
-        navigation.map((value: INavigationItem, primaryIndex: number) => {
-          const filterContent = (
-            contentList: INavigationItem,
-            activeContent: "problems" | "lessons" | "all"
-          ) => {
-            if (activeContent === "problems") {
-              return contentList.problems;
-            } else if (activeContent === "lessons") {
-              return contentList.lessons;
-            } else {
-              return [...contentList.problems, ...contentList.lessons];
-            }
-          };
+      {courseStructure &&
+        courseStructure.modules.map(
+          (value: CourseModule, primaryIndex: number) => {
+            const filterContent = (
+              contentList: ModuleContent[],
+              activeContent: "problems" | "lessons" | "all"
+            ) => {
+              if (activeContent === "problems") {
+                return contentList.map(
+                  (item) => item.contentType === "problem"
+                );
+              } else if (activeContent === "lessons") {
+                return contentList.map((item) => item.contentType === "lesson");
+              } else {
+                return contentList;
+              }
+            };
 
-          const filteredContent = filterContent(value, activeContent);
+            const filteredContent = filterContent(value.content, activeContent); // Get content based on activeContent parameter
+            const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
+            const isEmpty = itemCount === 0; // if module is empty
+            const allContent = isEmpty
+              ? ([] as ModuleContent[])
+              : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
 
-          const allContent = [...value.problems, ...value.lessons];
+            return allContent.map(
+              (item: ModuleContent, secondaryIndex: number) => {
+                const id = item.id;
+                //check type of item
+                const type = item.contentType;
+                "problemName" in item ? "problem" : "lesson";
+                const name = item.title;
 
-          return allContent.map(
-            (item: IProblemItem | ILessonItem, secondaryIndex: number) => {
-              const id = item._id;
-              const name =
-                "problemName" in item ? item.problemName : item.lessonName;
-              const type = "problemName" in item ? "problem" : "lesson";
-
-              return (
-                <div key={id}>
-                  <div
-                    className={`relative font-dm flex pr-14 pl-0 items-center cursor-pointer justify-start ${primaryIndex}-${type}-admin ${primaryIndex}-content-admin`}
-                  >
-                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                    <p
-                      style={{
-                        //clamp lines to 3
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                      className="text-white text-sm py-4 w-full line"
+                return (
+                  <div key={id}>
+                    <div
+                      className={`relative font-dm flex pr-14 pl-0 items-center cursor-pointer justify-start ${primaryIndex}-${type}-admin ${primaryIndex}-content-admin`}
                     >
-                      <span className="text-slate-500 mr-1">
-                        {`${primaryIndex + 1}.${secondaryIndex + 1}`}
-                      </span>{" "}
-                      {`${name}`}
-                    </p>
+                      <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                      <p
+                        style={{
+                          //clamp lines to 3
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                        className="text-white text-sm py-4 w-full line"
+                      >
+                        <span className="text-slate-500 mr-1">
+                          {`${primaryIndex + 1}.${secondaryIndex + 1}`}
+                        </span>{" "}
+                        {`${name}`}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-          );
-        })}
+                );
+              }
+            );
+          }
+        )}
     </div>
   );
 };

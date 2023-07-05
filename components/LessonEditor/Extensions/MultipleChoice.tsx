@@ -161,7 +161,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceProps> = ({
                         e.preventDefault();
                       }}
                       type="text"
-                      className={`w-full text-slate-800 p-2 font-dm text-base outline-none rounded-md`}
+                      className={`w-full text-slate-800 p-2 bg-white font-dm text-base outline-none rounded-md`}
                       value={answer}
                       onChange={(e) => handleAnswerChange(index, e)}
                       placeholder={`Answer ${index + 1}`}

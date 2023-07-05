@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   GearIcon,
@@ -62,55 +62,119 @@ import {
 import { TrailingNode } from "./Extensions/TrailingNode";
 import { MultipleChoice } from "./Extensions/MultipleChoice";
 import { MultipleSelect } from "./Extensions/MultipleSelect";
+import { toast } from "react-hot-toast";
+import { apiRoutes } from "constants/apiRoutes";
+import apiClient from "lib/api/apiClient";
+import { useCourseStructure } from "hooks/useNavigation";
+import { useCreateLesson } from "hooks/lesson/useCreateLesson";
+import { Lesson } from "hooks/lesson/useGetLesson";
+import { useRouter } from "next/router";
+import { Content } from "@tiptap/react";
+import { useUpdateLesson } from "hooks/lesson/useUpdateLesson";
 
-const AdminLessonEditor = () => {
+const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [preview, setPreview] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [disableToolbar, setDisableToolbar] = useState(false);
 
-  const moduleName = useSelector(
-    (state: RootState) => state.contentEditorPage.moduleName
-  );
+  const router = useRouter();
+  const params = router.query;
+  const { moduleName, moduleId } = params;
 
-  const moduleId = useSelector(
-    (state: RootState) => state.contentEditorPage.moduleId
-  );
-
-  const metadataValues = useSelector(
-    (state: RootState) => state.contentEditorPage.metadata
-  );
-
-  const lessonContent = useSelector(
-    (state: RootState) => state.contentEditorPage.lessonContent
-  );
+  /* console.log(lesson); */
 
   const initialLessonState: LessonData = {
-    title: metadataValues?.title || undefined,
-    author: metadataValues?.author || undefined,
-    content: lessonContent || undefined,
+    title: lesson?.title || undefined,
+    content: lesson?.content
+      ? JSON.parse(lesson?.content as string)
+      : undefined,
   };
 
   function lessonReducer(state: LessonData, action: LessonAction) {
     switch (action.type) {
       case "SET_TITLE":
         return { ...state, title: action.payload };
-      case "SET_AUTHOR":
-        return { ...state, author: action.payload };
       case "SET_CONTENT":
         return { ...state, content: action.payload };
+      case "RESET_LESSON":
+        return initialLessonState;
       default:
         return state;
     }
   }
+
+  useEffect(() => {
+    console.log(lesson);
+    // empty timeout, see https://github.com/ueberdosis/tiptap/issues/3764
+    lessonDispatch({ type: "RESET_LESSON" });
+    setTimeout(() => {
+      if (lesson?.content)
+        editor?.commands.setContent(JSON.parse(lesson?.content as string));
+    });
+  }, [lesson]);
 
   const [lessonState, lessonDispatch] = useReducer(
     lessonReducer,
     initialLessonState
   );
 
+  const {
+    mutate: updateLesson,
+    isLoading: updateLessonLoading,
+    isError: updateLessonError,
+  } = useUpdateLesson(lesson?.id as string);
+
+  const {
+    mutate: createLesson,
+    isLoading: createLessonLoading,
+    isError: createLessonError,
+  } = useCreateLesson(moduleId as string);
+
+  const publishLesson = async () => {
+    if (!lessonState.title || lessonState.title === "") {
+      toast.error("Please enter a title for the lesson.");
+      window.scrollTo(0, 0);
+      return;
+    } else if (!lessonState.content || lessonState.content === "") {
+      toast.error("Please enter content for the lesson.");
+      return;
+    }
+    console.log("creating lesson");
+    console.log(lessonState);
+    const content = JSON.stringify(lessonState.content);
+    // create lesson
+    await createLesson({
+      title: lessonState.title,
+      content: content,
+      hidden: false, // TODO: add hidden checkbox
+      moduleId: moduleId as string,
+    });
+  };
+
+  const saveLesson = async () => {
+    if (!lessonState.title || lessonState.title === "") {
+      toast.error("Please enter a title for the lesson.");
+      window.scrollTo(0, 0);
+      return;
+    } else if (!lessonState.content || lessonState.content === "") {
+      toast.error("Please enter content for the lesson.");
+      return;
+    }
+    console.log("updating lesson");
+    console.log(lessonState);
+    const content = JSON.stringify(lessonState.content);
+    // update lesson
+    await updateLesson({
+      title: lessonState.title,
+      content: content,
+      hidden: false, // TODO: add hidden checkbox
+    });
+  };
+
   const editor = useEditor(
     {
+      content: lessonState?.content || undefined,
       onUpdate: ({ editor }) => {
         console.log(editor.getJSON());
         lessonDispatch({
@@ -182,8 +246,9 @@ const AdminLessonEditor = () => {
         Image,
         TrailingNode,
       ],
-      content: lessonState?.content || undefined, //sampleLessonContent,
+      // content: lessonState?.content || undefined, //sampleLessonContent,
     }
+
     //[problemState?.testCases] // dependency change from edit to create
   ) as Editor;
 
@@ -241,11 +306,11 @@ const AdminLessonEditor = () => {
             <span className="text-slate-600">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
           </p>
           <h1 className="text-white font-dm text-base">
-            {metadataValues.title || "New Lesson"}
+            {lesson?.title || "New Lesson"}
           </h1>
         </div>
         <div className="flex space-x-2 items-center">
-          <Tooltip.Provider delayDuration={100}>
+          {/* <Tooltip.Provider delayDuration={100}>
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
                 <div
@@ -292,14 +357,44 @@ const AdminLessonEditor = () => {
                 </Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
-          </Tooltip.Provider>
-          <button
-            disabled={!unsavedChanges}
-            className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
-          >
-            {metadataValues?.title ? <CheckCircledIcon /> : <RocketIcon />}
-            <p>{metadataValues?.title ? "Save Changes" : "Publish"}</p>
-          </button>
+          </Tooltip.Provider> */}
+          {lesson ? (
+            <button
+              disabled={
+                lessonState.title === "" ||
+                lessonState.content === "" ||
+                !lessonState.title ||
+                !lessonState.content ||
+                updateLessonLoading
+              }
+              onClick={async () => {
+                console.log(lessonState);
+                await saveLesson();
+              }}
+              className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
+            >
+              <CheckCircledIcon />
+              <p>Save Changes</p>
+            </button>
+          ) : (
+            <button
+              disabled={
+                lessonState.title === "" ||
+                lessonState.content === "" ||
+                !lessonState.title ||
+                !lessonState.content ||
+                createLessonLoading
+              }
+              onClick={async () => {
+                console.log(lessonState);
+                await publishLesson();
+              }}
+              className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
+            >
+              <RocketIcon />
+              <p>Publish</p>
+            </button>
+          )}
         </div>
       </div>
       <div
@@ -370,9 +465,12 @@ const AdminLessonEditor = () => {
               onFocus={() => setDisableToolbar(true)}
               onBlur={() => setDisableToolbar(false)}
               placeholder="Lesson Title"
-              value={metadataValues?.title}
+              value={lessonState.title}
               onChange={(e) => {
-                // dispatch(updateLessonTitle(e.target.value));
+                lessonDispatch({
+                  type: "SET_TITLE",
+                  payload: e.target.value,
+                });
               }}
             />
           </div>

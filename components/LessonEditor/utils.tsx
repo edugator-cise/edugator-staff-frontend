@@ -74,62 +74,65 @@ export const menuOptions: (
 ) => [
   {
     title: "Undo",
-    command: (editor: Editor) => editor?.commands.undo(),
+    command: (editor: Editor) => editor?.chain().focus().undo().run(),
     icon: <ArrowBackUp size={ICON_SIZE} />,
     disabled: (editor: Editor) => !editor?.can().undo(),
   },
   {
     title: "Redo",
-    command: (editor: Editor) => editor?.commands.redo(),
+    command: (editor: Editor) => editor?.chain().focus().redo().run(),
     icon: <ArrowForwardUp size={ICON_SIZE} />,
     disabled: (editor: Editor) => !editor?.can().redo(),
   },
   {},
   {
     title: "Bold",
-    command: (editor: Editor) => editor?.commands.toggleBold(),
+    command: (editor: Editor) => editor?.chain().focus().toggleBold().run(),
     icon: <Bold size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("bold"),
     disabled: (editor: Editor) => !editor?.can().toggleBold(),
   },
   {
     title: "Italic",
-    command: (editor: Editor) => editor?.commands.toggleItalic(),
+    command: (editor: Editor) => editor?.chain().focus().toggleItalic().run(),
     icon: <Italic size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("italic"),
     disabled: (editor: Editor) => !editor?.can().toggleItalic(),
   },
   {
     title: "Underline",
-    command: (editor: Editor) => editor?.commands.toggleUnderline(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleUnderline().run(),
     icon: <Underline size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("underline"),
     disabled: (editor: Editor) => !editor?.can().toggleUnderline(),
   },
   {
     title: "Strikethrough",
-    command: (editor: Editor) => editor?.commands.toggleStrike(),
+    command: (editor: Editor) => editor?.chain().focus().toggleStrike().run(),
     icon: <Strikethrough size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("strike"),
     disabled: (editor: Editor) => !editor?.can().toggleStrike(),
   },
   {
     title: "Code",
-    command: (editor: Editor) => editor?.commands.toggleCode(),
+    command: (editor: Editor) => editor?.chain().focus().toggleCode().run(),
     icon: <Code size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("code"),
     disabled: (editor: Editor) => !editor?.can().toggleCode(),
   },
   {
     title: "Subscript",
-    command: (editor: Editor) => editor?.commands.toggleSubscript(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleSubscript().run(),
     icon: <Subscript size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("subscript"),
     disabled: (editor: Editor) => !editor?.can().toggleSubscript(),
   },
   {
     title: "Superscript",
-    command: (editor: Editor) => editor?.commands.toggleSuperscript(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleSuperscript().run(),
     icon: <Superscript size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("superscript"),
     disabled: (editor: Editor) => !editor?.can().toggleSuperscript(),
@@ -160,14 +163,16 @@ export const menuOptions: (
   },
   {
     title: "Heading 2",
-    command: (editor: Editor) => editor?.commands.toggleHeading({ level: 2 }),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleHeading({ level: 2 }).run(),
     icon: <H2 size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("heading", { level: 2 }),
     disabled: (editor: Editor) => !editor?.can().toggleHeading({ level: 2 }),
   },
   {
     title: "Heading 3",
-    command: (editor: Editor) => editor?.commands.toggleHeading({ level: 3 }),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleHeading({ level: 3 }).run(),
     icon: <H3 size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("heading", { level: 3 }),
     disabled: (editor: Editor) => !editor?.can().toggleHeading({ level: 3 }),
@@ -175,14 +180,16 @@ export const menuOptions: (
   {},
   {
     title: "Bullet List",
-    command: (editor: Editor) => editor?.commands.toggleBulletList(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleBulletList().run(),
     icon: <List size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("bulletList"),
     disabled: (editor: Editor) => !editor?.can().toggleBulletList(),
   },
   {
     title: "Numbered List",
-    command: (editor: Editor) => editor?.commands.toggleOrderedList(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleOrderedList().run(),
     icon: <ListNumbers size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("orderedList"),
     disabled: (editor: Editor) => !editor?.can().toggleOrderedList(),
@@ -190,7 +197,8 @@ export const menuOptions: (
   {},
   {
     title: "Source Code",
-    command: (editor: Editor) => editor?.commands.toggleCodeBlock(),
+    command: (editor: Editor) =>
+      editor?.chain().focus().toggleCodeBlock().run(),
     icon: <SourceCode size={ICON_SIZE} />,
     active: (editor: Editor) => editor?.isActive("codeBlock"),
     disabled: (editor: Editor) => !editor?.can().toggleCodeBlock(),

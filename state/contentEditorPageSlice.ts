@@ -88,6 +88,12 @@ export const contentEditorPageSlice = createSlice({
   name: "contentEditorPage",
   initialState,
   reducers: {
+    updateLessonContent: (
+      state,
+      action: PayloadAction<Content | undefined>
+    ) => {
+      state.lessonContent = action.payload;
+    },
     updateMetadata: (state, action: PayloadAction<MetadataFields>) => {
       state.metadata = action.payload;
     },
@@ -98,9 +104,11 @@ export const contentEditorPageSlice = createSlice({
       state.contentEditor = action.payload;
     },
     updateBlocks: (state, action: PayloadAction<Block[]>) => {
+      //depr
       state.contentEditor.editableContent.blocks = action.payload;
     },
     updateEntityMap: (state, action: PayloadAction<Array<Object>>) => {
+      //depr
       state.contentEditor.editableContent.entityMap = action.payload;
     },
 
@@ -115,14 +123,17 @@ export const contentEditorPageSlice = createSlice({
     },
 
     closeFailureModal: (state) => {
+      //depr
       state.showFailureModal = false;
     },
 
     openWarningModal: (state, action: PayloadAction<WarningTypes>) => {
+      //depr
       state.showWarningModal = true;
       state.warningType = action.payload;
     },
     closeWarningModal: (state) => {
+      //depr
       state.showWarningModal = false;
       state.warningType = undefined;
     },
@@ -134,17 +145,21 @@ export const contentEditorPageSlice = createSlice({
     /* API calls */
 
     requestAddContent: (state) => {
+      //depr
       state.isSubmitting = true;
     },
     requestAddContentSuccess: (state) => {
+      //depr
       state.isSubmitting = false;
       state.showSuccessModal = true;
     },
     requestAddContentFailure: (state) => {
+      //depr
       state.isSubmitting = false;
       state.showFailureModal = true;
     },
     requestGetContentSuccess: (state, action: PayloadAction<ILesson>) => {
+      //depr
       state.metadata = {
         title: action.payload.title,
         author: action.payload.author,
@@ -164,15 +179,17 @@ export const contentEditorPageSlice = createSlice({
       state.showSuccessModal = true;
       // TODO some kind of edit confirmation then back to modules
     },
-    requestDeleteContent: (state) => {},
-    requestDeleteContentSuccess: (state) => {},
+    requestDeleteContent: (state) => {}, //depr
+    requestDeleteContentSuccess: (state) => {}, //depr
     requestDeleteContentFailure: (state, action: PayloadAction<any>) => {
+      //depr
       alert(action.payload);
     },
   },
 });
 
 export const {
+  updateLessonContent,
   updateMetadata,
   updateContentEditor,
   closeFailureModal,

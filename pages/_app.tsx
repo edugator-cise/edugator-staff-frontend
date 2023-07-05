@@ -23,6 +23,10 @@ import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -51,10 +55,13 @@ const App = ({ Component, pageProps }: Props) => {
 
       <StyledEngineProvider injectFirst>
         <MUIThemeProvider theme={theme}>
-          <ThemeProvider enableSystem={true} attribute="class">
-            <Toaster containerClassName="font-dm" />
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <ThemeProvider enableSystem={true} attribute="class">
+              <Toaster containerClassName="font-dm" />
+              {getLayout(<Component {...pageProps} />)}
+            </ThemeProvider>
+          </QueryClientProvider>
         </MUIThemeProvider>
       </StyledEngineProvider>
     </Provider>

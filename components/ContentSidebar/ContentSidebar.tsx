@@ -1,4 +1,4 @@
-import useNavigation from "hooks/useNavigation";
+import useNavigation, { useCourseStructure } from "hooks/useNavigation";
 import React, { useEffect } from "react";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import { FetchStatus } from "hooks/types";
@@ -40,6 +40,14 @@ const ContentSidebar = ({
 
   const { problemAndLessonSet, status } = useNavigation(
     LocalStorage.getToken() !== null
+  );
+
+  const {
+    status: structureStatus,
+    error,
+    courseStructure,
+  } = useCourseStructure(
+    "978f5c19-e07d-4999-b88a-f39d2e812080" // TODO: get course id from url or auth
   );
 
   const { contentSidebarHidden } = useSelector(
