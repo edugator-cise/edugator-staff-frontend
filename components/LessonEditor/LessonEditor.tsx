@@ -311,11 +311,13 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       type: "SET_CONTENT",
       payload: JSON.parse(lesson?.content as string),
     }); */
-    resetEditor();
-    setEditable(false);
-    editor.setOptions({ editable: false });
-    queryClient.invalidateQueries(["lesson", lessonId]);
     setConfirmModalOpen(false);
+    setTimeout(() => {
+      resetEditor();
+      setEditable(false);
+      editor.setOptions({ editable: false });
+      queryClient.invalidateQueries(["lesson", lessonId]);
+    }, 200);
   };
 
   // image logic
