@@ -285,11 +285,13 @@ const AdminContentSidebar = ({
                       activeContent: "problems" | "lessons" | "all"
                     ) => {
                       if (activeContent === "problems") {
-                        return contentList.map(
+                        // filter contentList to only include problems
+                        return contentList.filter(
                           (item) => item.contentType === "problem"
                         );
                       } else if (activeContent === "lessons") {
-                        return contentList.map(
+                        // filter contentList to only include lessons
+                        return contentList.filter(
                           (item) => item.contentType === "lesson"
                         );
                       } else {
@@ -314,7 +316,7 @@ const AdminContentSidebar = ({
                       <Accordion.Item
                         value={value.moduleName}
                         key={primaryIndex}
-                        className="border-b border-slate-700 last:border-b group dropdown"
+                        className="border-b border-t border-t-slate-700 border-b-slate-950 last:border-b group dropdown"
                       >
                         <Accordion.Trigger
                           className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden`}
@@ -373,6 +375,8 @@ const AdminContentSidebar = ({
                             className="flex flex-col"
                           >
                             <AnimatePresence exitBeforeEnter>
+                              {" "}
+                              {/* //exitBeforeEnter */}
                               {isEmpty ? (
                                 <m.div
                                   initial={{ opacity: 0 }}
@@ -393,12 +397,8 @@ const AdminContentSidebar = ({
                                     const id = item.id;
                                     //check type of item
                                     const type = item.contentType;
-                                    "problemName" in item
-                                      ? "problem"
-                                      : "lesson";
+
                                     const name = item.title;
-                                    const urlPath =
-                                      type === "problem" ? "code" : "learn";
 
                                     return (
                                       <Link
@@ -627,11 +627,15 @@ export const HiddenSizingItems = ({
               activeContent: "problems" | "lessons" | "all"
             ) => {
               if (activeContent === "problems") {
-                return contentList.map(
+                // filter contentList to only include problems
+                return contentList.filter(
                   (item) => item.contentType === "problem"
                 );
               } else if (activeContent === "lessons") {
-                return contentList.map((item) => item.contentType === "lesson");
+                // filter contentList to only include lessons
+                return contentList.filter(
+                  (item) => item.contentType === "lesson"
+                );
               } else {
                 return contentList;
               }
@@ -649,7 +653,6 @@ export const HiddenSizingItems = ({
                 const id = item.id;
                 //check type of item
                 const type = item.contentType;
-                "problemName" in item ? "problem" : "lesson";
                 const name = item.title;
 
                 return (

@@ -147,7 +147,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         style={{
           left: mobileView ? -1 : dividerOffset(),
         }}
-        className="w-px h-full absolute transition-all bg-slate-700 z-[100] min-w-[1px] ease-[cubic-bezier(0.87,_0,_0.13,_1)]"
+        className="w-px h-full absolute transition-all bg-slate-800 z-[100] min-w-[1px] ease-[cubic-bezier(0.87,_0,_0.13,_1)]"
       />
 
       <div className="w-full h-full flex flex-col">

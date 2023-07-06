@@ -42,6 +42,10 @@
   }
 }
 
+.aws-btn {
+  @apply !text-xs
+}
+
 .AccordionContent[data-state="open"] {
   animation: slideDown 300ms ease-out;
 }

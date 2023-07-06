@@ -26,6 +26,7 @@ const fetchLesson = async ({ lessonId }: GetLessonParams) => {
 
 export const useGetLesson = ({ lessonId }: GetLessonParams) => {
   return useQuery<Lesson, Error>({
+    refetchOnWindowFocus: false,
     queryKey: ["lesson", lessonId],
     queryFn: () => fetchLesson({ lessonId }),
     onError: () => {

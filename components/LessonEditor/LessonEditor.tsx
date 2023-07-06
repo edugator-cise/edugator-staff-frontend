@@ -71,6 +71,8 @@ import { Lesson } from "hooks/lesson/useGetLesson";
 import { useRouter } from "next/router";
 import { Content } from "@tiptap/react";
 import { useUpdateLesson } from "hooks/lesson/useUpdateLesson";
+import AlertModal from "components/shared/Modals/AlertModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -78,9 +80,13 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [disableToolbar, setDisableToolbar] = useState(false);
 
+  const [editable, setEditable] = useState(lesson ? false : true);
+
   const router = useRouter();
   const params = router.query;
-  const { moduleName, moduleId } = params;
+  const { moduleName, moduleId, lessonId } = params;
+
+  const queryClient = useQueryClient();
 
   /* console.log(lesson); */
 
@@ -104,14 +110,18 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(lesson);
-    // empty timeout, see https://github.com/ueberdosis/tiptap/issues/3764
+  const resetEditor = () => {
     lessonDispatch({ type: "RESET_LESSON" });
     setTimeout(() => {
       if (lesson?.content)
         editor?.commands.setContent(JSON.parse(lesson?.content as string));
     });
+  };
+
+  useEffect(() => {
+    console.log(lesson);
+    // empty timeout, see https://github.com/ueberdosis/tiptap/issues/3764
+    resetEditor();
   }, [lesson]);
 
   const [lessonState, lessonDispatch] = useReducer(
@@ -163,17 +173,19 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     }
     console.log("updating lesson");
     console.log(lessonState);
-    const content = JSON.stringify(lessonState.content);
     // update lesson
     await updateLesson({
       title: lessonState.title,
-      content: content,
+      content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
+    editor.setOptions({ editable: false });
+    setEditable(false);
   };
 
   const editor = useEditor(
     {
+      editable: editable,
       content: lessonState?.content || undefined,
       onUpdate: ({ editor }) => {
         console.log(editor.getJSON());
@@ -239,15 +251,21 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           },
         }),
         Typography,
-        MultipleChoice,
-        MultipleSelect,
+        MultipleChoice.configure({
+          isStudentView: !editable,
+        }),
+        MultipleSelect.configure({
+          isStudentView: !editable,
+        }),
         Gapcursor,
         HardBreak,
         Image,
         TrailingNode,
       ],
+
       // content: lessonState?.content || undefined, //sampleLessonContent,
-    }
+    },
+    [editable]
 
     //[problemState?.testCases] // dependency change from edit to create
   ) as Editor;
@@ -287,6 +305,19 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     closeLinkModal();
   }, [editor, closeLinkModal]);
 
+  const onCancelChanges = () => {
+    // set content back to old content
+    /* lessonDispatch({
+      type: "SET_CONTENT",
+      payload: JSON.parse(lesson?.content as string),
+    }); */
+    resetEditor();
+    setEditable(false);
+    editor.setOptions({ editable: false });
+    queryClient.invalidateQueries(["lesson", lessonId]);
+    setConfirmModalOpen(false);
+  };
+
   // image logic
 
   const addImage = () => {
@@ -297,9 +328,24 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     }
   };
 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
   return (
     <div className="w-full h-full flex flex-col relative bg-white">
-      <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700 z-10">
+      <AlertModal
+        title="Are you sure?"
+        open={confirmModalOpen}
+        setOpen={setConfirmModalOpen}
+        description="Are you sure you want to cancel? All unsaved changes will be lost."
+        onCancel={() => {
+          setConfirmModalOpen(false);
+        }}
+        onConfirm={() => {
+          onCancelChanges();
+        }}
+        confirmText="Confirm"
+      />
+      <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-950 z-10">
         <div className="flex items-end">
           <p className="text-base text-slate-400 font-dm">
             {moduleName}
@@ -359,23 +405,53 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             </Tooltip.Root>
           </Tooltip.Provider> */}
           {lesson ? (
-            <button
-              disabled={
-                lessonState.title === "" ||
-                lessonState.content === "" ||
-                !lessonState.title ||
-                !lessonState.content ||
-                updateLessonLoading
-              }
-              onClick={async () => {
-                console.log(lessonState);
-                await saveLesson();
-              }}
-              className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
-            >
-              <CheckCircledIcon />
-              <p>Save Changes</p>
-            </button>
+            <div className="flex space-x-2 items-center">
+              {editable ? (
+                <>
+                  <button
+                    onClick={() => {
+                      setConfirmModalOpen(true);
+                    }}
+                    className="px-3 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-dm text-xs flex items-center space-x-2"
+                  >
+                    <Cross2Icon />
+                    <p>Cancel</p>
+                  </button>
+
+                  <button
+                    disabled={
+                      lessonState.title === "" ||
+                      lessonState.content === "" ||
+                      !lessonState.title ||
+                      !lessonState.content ||
+                      updateLessonLoading ||
+                      !editable
+                    }
+                    onClick={async () => {
+                      console.log(lessonState);
+                      await saveLesson();
+                    }}
+                    className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
+                  >
+                    <CheckCircledIcon />
+                    <p>Save Changes</p>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      editor.setOptions({ editable: true });
+                      setEditable(true);
+                    }}
+                    className="px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
+                  >
+                    <Pencil1Icon />
+                    <p>Edit</p>
+                  </button>
+                </>
+              )}
+            </div>
           ) : (
             <button
               disabled={
@@ -398,10 +474,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         </div>
       </div>
       <div
-        className={`w-full p-[10px] bg-slate-700 flex items-center justify-between border-b border-slate-600 transition ${
-          disableToolbar
-            ? "-translate-y-full !cursor-not-allowed pointer-events-none"
-            : ""
+        className={`w-full p-[10px] bg-slate-700 flex items-center justify-between border-b border-b-slate-400 border-t border-t-slate-600 transition-all ${
+          !editable ? "-mt-[54px] !cursor-not-allowed pointer-events-none" : ""
         }`}
       >
         <div className="flex flex-wrap gap-2 items-center">
@@ -420,19 +494,23 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               return (
                 <Tooltip.Root key={index} delayDuration={300}>
                   <Tooltip.Trigger asChild>
-                    <div
+                    <button
                       key={index}
                       className={`w-8 h-8 rounded-md cursor-pointer hover:bg-white/20 transition flex items-center justify-center text-slate-100 ${
                         menuOption.active &&
                         menuOption.active(editor) &&
                         "bg-white/20"
+                      } ${
+                        disableToolbar &&
+                        "opacity-50 cursor-not-allowed pointer-events-none"
                       }`}
                       onClick={() => {
+                        if (disableToolbar) return;
                         menuOption.command(editor);
                       }}
                     >
                       {menuOption.icon}
-                    </div>
+                    </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>
                     <Tooltip.Content
@@ -455,13 +533,16 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               </button> */}
       </div>
       <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white">
-        <div className="max-w-4xl mt-14 w-[90%] h-auto flex flex-col py-4 bg-white space-y-4">
+        <div
+          className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 bg-white space-y-4 transition-all`}
+        >
           <div className="flex flex-col space-y-1">
             <input
               type="text"
               id="problem-title"
               className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white !text-slate-800 font-dm outline-none"
               autoComplete="off"
+              disabled={!editable}
               onFocus={() => setDisableToolbar(true)}
               onBlur={() => setDisableToolbar(false)}
               placeholder="Lesson Title"

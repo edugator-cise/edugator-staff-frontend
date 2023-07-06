@@ -32,6 +32,7 @@ export const useUpdateLesson = (lessonId: string) => {
     onSuccess: () => {
       // invalidate course structure query
       queryClient.invalidateQueries([COURSE_STRUCTURE_QUERY_KEY, courseId]);
+      queryClient.invalidateQueries(["lesson", lessonId]);
       toast.success("Lesson updated successfully");
       // navigate to dashboard page
     },

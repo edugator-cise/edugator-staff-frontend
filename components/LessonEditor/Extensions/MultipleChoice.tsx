@@ -2,6 +2,7 @@ import {
   MinusCircledIcon,
   PlusCircledIcon,
   QuestionMarkCircledIcon,
+  ReloadIcon,
 } from "@radix-ui/react-icons";
 import {
   Editor,
@@ -16,6 +17,10 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { ListDetails } from "tabler-icons-react";
+import { toast } from "react-hot-toast";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
+import AnimateHeight from "react-animate-height";
 
 interface MultipleChoiceProps {
   node: NodeConfig;
@@ -23,7 +28,195 @@ interface MultipleChoiceProps {
   editor: Editor;
 }
 
-const MultipleChoiceComponent: React.FC<MultipleChoiceProps> = ({
+const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
+  node,
+  updateAttributes,
+  editor,
+}) => {
+  const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+
+  const buttonClassName = (index: number) => {
+    if (submitted) {
+      if (index === node.attrs.correctAnswer) {
+        return "ring-2 bg-white ring-emerald-400 text-white";
+      } else if (index === selectedAnswer) {
+        return "ring-2 bg-white ring-red-400 text-white";
+      } else {
+        return "bg-white ring-1 ring-slate-200 text-slate-800";
+      }
+    } else {
+      if (index === selectedAnswer) {
+        return "bg-white ring-2 ring-blue-500";
+      } else {
+        return "bg-white ring-1 ring-slate-200 text-slate-800 hover:ring-slate-300";
+      }
+    }
+  };
+
+  const handleAnswerClick = (index: number) => {
+    if (!submitted) {
+      setSelectedAnswer(index);
+    }
+  };
+
+  const handleCheckAnswer = () => {
+    if (selectedAnswer === -1) {
+      toast.error("Please select an answer");
+    } else {
+      setSubmitted(true);
+      if (selectedAnswer === node.attrs.correctAnswer) {
+        setIsCorrect(true);
+      } else {
+        setIsCorrect(false);
+      }
+    }
+  };
+
+  const handleReset = () => {
+    setSelectedAnswer(-1);
+    setSubmitted(false);
+    setTimeout(() => {
+      setIsCorrect(false);
+    }, 200);
+  };
+
+  return (
+    <NodeViewWrapper
+      contentEditable={false}
+      className="bg-slate-50 border border-slate-200 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+    >
+      <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
+        <ListDetails className="w-4 h-4 text-white" />
+      </div>
+      {/* Question */}
+      <div className="w-full text-slate-800 font-dm mb-4 mt-2 text-lg text-center">
+        {node.attrs.question}
+      </div>
+      {/* Answers */}
+      <RadioGroup.Root
+        className="flex flex-col gap-2.5"
+        aria-label="Answer Correct"
+        value={selectedAnswer.toString()}
+        onValueChange={(value) => {
+          setSelectedAnswer(parseInt(value));
+        }}
+        disabled={submitted}
+      >
+        <div className="grid gap w-full grid-cols-2 gap-3 mb-4">
+          {node.attrs.answers.map((answer: string, index: number) => (
+            <div
+              key={index}
+              onClick={() => handleAnswerClick(index)}
+              className={`rounded-md overflow-hidden transition w-full cursor-pointer py-3 flex justify-between items-center space-x-2 font-dm outline-none px-4 text-sm ${buttonClassName(
+                index
+              )}`}
+            >
+              <div className="text-slate-800 font-dm text-sm">{answer}</div>
+              <RadioGroup.Item
+                className={`bg-white w-6 min-w-[1.5rem] h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
+                  index === selectedAnswer ? "" : "border border-slate-300"
+                } ${
+                  submitted && index === node.attrs.correctAnswer
+                    ? "ring-2 !ring-emerald-500/50 ring-offset-2 !bg-emerald-500 !border-none"
+                    : ""
+                } ${
+                  submitted && index === selectedAnswer
+                    ? "ring-2 ring-red-300 ring-offset-2 !bg-red-500 !border-none"
+                    : ""
+                }`}
+                value={index.toString()}
+                id={index.toString()}
+              >
+                {submitted && index === node.attrs.correctAnswer ? (
+                  <div className="w-full h-full rounded-full bg-emerald-500 flex items-center justify-center">
+                    <CheckIcon className="w-5 h-5 text-white" />
+                  </div>
+                ) : submitted && index === selectedAnswer ? (
+                  <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
+                    <Cross2Icon className="w-5 h-5 text-white" />
+                  </div>
+                ) : (
+                  <RadioGroup.Indicator
+                    asChild
+                    className="flex items-center justify-center w-full h-full relative"
+                  >
+                    <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </RadioGroup.Indicator>
+                )}
+              </RadioGroup.Item>
+            </div>
+          ))}
+        </div>
+      </RadioGroup.Root>
+      {/* Feedback */}
+      <AnimateHeight
+        duration={200}
+        height={submitted ? "auto" : 0}
+        className="w-full"
+      >
+        <div
+          className={`w-full flex items-center justify-center space-x-2 py-2 pb-4 ${
+            isCorrect ? "text-emerald-500" : "text-red-500"
+          }`}
+        >
+          {isCorrect ? (
+            <CheckIcon className="w-5 h-5" />
+          ) : (
+            <Cross2Icon className="w-5 h-5" />
+          )}
+          <div className="font-dm text-sm">
+            {isCorrect ? "Nice job!" : "Incorrect. Please review your answer."}
+          </div>
+        </div>
+      </AnimateHeight>
+
+      {/* Submit Button */}
+      <div className="flex w-full items-center justify-center space-x-4">
+        {/* Submit Button */}
+        <AwesomeButton
+          disabled={submitted || selectedAnswer === -1}
+          className={`text-white px-4 py-3 w-fit uppercase rounded-md font-dm text-xs transition disabled:!cursor-not-allowed`}
+          onPress={() => handleCheckAnswer()}
+        >
+          <div className="flex items-center px-2">
+            <div>Submit</div>
+          </div>
+        </AwesomeButton>
+        {/* Reset Button */}
+        {/* <AwesomeButton
+          type="secondary"
+          disabled={!submitted}
+          onPress={handleReset}
+        >
+          <div className="flex items-center uppercase">
+            <div>Reset</div>
+          </div>
+        </AwesomeButton> */}
+      </div>
+      <div
+        onClick={() => {
+          handleReset();
+        }}
+        className={`absolute !cursor-pointer right-4 bottom-4 flex space-x-2 items-center transition ${
+          submitted
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="font-dm text-sm text-blue-500 uppercase font-bold">
+          Reset
+        </div>
+        <ReloadIcon className="w-5 h-5 text-blue-500" />
+      </div>
+    </NodeViewWrapper>
+  );
+};
+
+const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
   node,
   updateAttributes,
   editor,
@@ -85,7 +278,7 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceProps> = ({
       contentEditable={false}
       className="bg-slate-100 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
     >
-      <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-500 to-blue-600 w-fit px-4 py-2 rounded-md border border-blue-500 ring ring-blue-500/30">
+      <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-400 to-blue-500 w-fit px-4 py-2 rounded-md border border-blue-400 ring ring-blue-500/30">
         <ListDetails className="w-4 h-4" />
         <div className="font-dm !text-xs uppercase tracking-wide">
           Multiple Choice Question
@@ -242,10 +435,17 @@ const MultipleChoiceComponent: React.FC<MultipleChoiceProps> = ({
 export const MultipleChoice = Node.create({
   name: "multipleChoice",
 
-  defaultOptions: {
+  /* defaultOptions: {
+    isStudentView: true,
     question: "",
     answers: ["", "", "", ""],
-    correctAnswer: 0,
+    correctAnswer: 0, 
+  }, */
+
+  addOptions() {
+    return {
+      isStudentView: true,
+    };
   },
 
   addAttributes() {
@@ -283,6 +483,9 @@ export const MultipleChoice = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(MultipleChoiceComponent);
+    const component = this.options.isStudentView
+      ? MultipleChoiceStudentComponent
+      : MultipleChoiceAdminComponent;
+    return ReactNodeViewRenderer(component);
   },
 });

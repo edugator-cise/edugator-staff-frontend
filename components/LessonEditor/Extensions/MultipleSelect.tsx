@@ -4,6 +4,9 @@ import {
   PlusCircledIcon,
   MinusCircledIcon,
   CheckIcon,
+  Cross2Icon,
+  ResetIcon,
+  ReloadIcon,
 } from "@radix-ui/react-icons";
 import {
   Editor,
@@ -16,6 +19,8 @@ import {
 import * as Checkbox from "@radix-ui/react-checkbox";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { ListCheck } from "tabler-icons-react";
+import { AwesomeButton } from "react-awesome-button";
+import AnimateHeight from "react-animate-height";
 
 interface MultipleSelectProps {
   node: NodeConfig;
@@ -23,7 +28,234 @@ interface MultipleSelectProps {
   editor: Editor;
 }
 
-const MultipleSelectComponent: React.FC<MultipleSelectProps> = ({
+const MultipleSelectStudentComponent: React.FC<MultipleSelectProps> = ({
+  node,
+  updateAttributes,
+  editor,
+}) => {
+  const [selectedAnswers, setSelectedAnswers] = useState<Array<number>>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+
+  const correctAnswers = node.attrs.correctAnswers;
+
+  const buttonClassName = (index: number) => {
+    if (submitted) {
+      if (selectedAnswers.includes(index)) {
+        if (correctAnswers.includes(index)) {
+          // if answer is selected and correct
+          return "bg-white ring-2 ring-emerald-500 text-white";
+        } else {
+          // if answer is selected and incorrect
+          return "bg-white ring-2 ring-red-500 text-white";
+        }
+      } else {
+        if (correctAnswers.includes(index)) {
+          // if answer is not selected and correct
+          return "bg-white outline-2 outline-emerald-500/50 outline-offset-0 outline-dashed text-white";
+        } else {
+          // if answer is not selected and incorrect
+          return "bg-white ring-1 ring-slate-200";
+        }
+      }
+    } else {
+      if (selectedAnswers.includes(index)) {
+        return "bg-white ring-2 ring-blue-500";
+      } else {
+        return "bg-white ring-1 ring-slate-200 text-slate-800 hover:ring-slate-300";
+      }
+    }
+  };
+
+  const handleAnswerClick = (index: number) => {
+    if (submitted) return;
+    const newSelectedAnswers = [...selectedAnswers];
+    const answerIndex = newSelectedAnswers.indexOf(index);
+
+    if (answerIndex > -1) {
+      newSelectedAnswers.splice(answerIndex, 1);
+    } else {
+      newSelectedAnswers.push(index);
+    }
+
+    setSelectedAnswers(newSelectedAnswers);
+  };
+
+  const handleCheckAnswer = () => {
+    // check if all correct answers are selected, note that order does not matter
+    const isCorrect =
+      selectedAnswers.length === correctAnswers.length &&
+      selectedAnswers.every((value, index) => correctAnswers.includes(value));
+
+    console.log(selectedAnswers);
+    console.log(
+      selectedAnswers.every((value, index) => value === correctAnswers[index])
+    );
+
+    console.log(isCorrect);
+
+    setIsCorrect(isCorrect);
+    setSubmitted(true);
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setSelectedAnswers([]);
+    setTimeout(() => {
+      setIsCorrect(false);
+    }, 200);
+  };
+
+  return (
+    <NodeViewWrapper
+      contentEditable={false}
+      className="bg-slate-50 border border-slate-200 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+    >
+      <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
+        <ListCheck className="w-4 h-4 text-white" />
+      </div>
+      {/* Question */}
+      <div className="w-full text-slate-800 font-dm mb-4 mt-2 text-lg text-center">
+        {node.attrs.question}
+      </div>
+      {/* Answers */}
+      <div className="flex flex-col space-y-4 mb-4">
+        {node.attrs.answers.map((answer: string, index: number) => (
+          <button
+            key={index}
+            className={`w-full rounded-md p-3 text-base outline-none transition ${buttonClassName(
+              index
+            )}`}
+            onClick={() => handleAnswerClick(index)}
+          >
+            <div className="w-full flex justify-between">
+              <div className="flex items-center space-x-4">
+                <Checkbox.Root
+                  className={`bg-white  w-6 min-w-[1.5rem] h-6 rounded-sm shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
+                    selectedAnswers.includes(index)
+                      ? "focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                      : "border border-slate-300"
+                  } ${
+                    submitted &&
+                    correctAnswers.includes(index) &&
+                    selectedAnswers.includes(index)
+                      ? "ring-2 !ring-emerald-500/50 ring-offset-2 !border-none"
+                      : ""
+                  } ${
+                    submitted &&
+                    !correctAnswers.includes(index) &&
+                    selectedAnswers.includes(index)
+                      ? "ring-2 !ring-red-500/50 ring-offset-2 !bg-red-500 !border-none"
+                      : ""
+                  }`}
+                  id={index.toString()}
+                  onCheckedChange={() => {
+                    handleAnswerClick(index);
+                  }}
+                  checked={selectedAnswers.includes(index)}
+                >
+                  {submitted &&
+                  correctAnswers.includes(index) &&
+                  selectedAnswers.includes(index) ? (
+                    <div className="w-full h-full rounded-sm !bg-emerald-500 flex items-center justify-center">
+                      <CheckIcon className="w-5 h-5 text-white" />
+                    </div>
+                  ) : submitted &&
+                    !correctAnswers.includes(index) &&
+                    selectedAnswers.includes(index) ? (
+                    <div className="w-full h-full rounded-sm bg-red-500 flex items-center justify-center">
+                      <Cross2Icon className="w-5 h-5 text-white" />
+                    </div>
+                  ) : (
+                    <Checkbox.Indicator
+                      asChild
+                      className="flex items-center justify-center w-full h-full relative"
+                    >
+                      <div className="w-full h-full rounded-sm bg-blue-500 flex items-center justify-center">
+                        <CheckIcon className="w-5 h-5 text-white" />
+                      </div>
+                    </Checkbox.Indicator>
+                  )}
+                </Checkbox.Root>
+                <div className="text-slate-800 font-dm text-base">{answer}</div>
+              </div>
+              {submitted &&
+              !selectedAnswers.includes(index) &&
+              correctAnswers.includes(index) ? (
+                <div className="flex items-center space-x-2">
+                  <div className="text-emerald-500 uppercase font-bold font-dm text-xs min-w-fit whitespace-nowrap">
+                    Correct Answer
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
+      <AnimateHeight
+        duration={200}
+        height={submitted ? "auto" : 0}
+        className="w-full"
+      >
+        <div
+          className={`w-full flex items-center justify-center space-x-2 py-2 pb-4 ${
+            isCorrect ? "text-emerald-500" : "text-red-500"
+          }`}
+        >
+          {isCorrect ? (
+            <CheckIcon className="w-5 h-5" />
+          ) : (
+            <Cross2Icon className="w-5 h-5" />
+          )}
+          <div className="font-dm text-sm">
+            {isCorrect ? "Nice job!" : "Incorrect. Please review your answer."}
+          </div>
+        </div>
+      </AnimateHeight>
+      <div className="flex w-full items-center justify-center space-x-4">
+        {/* Submit Button */}
+        <AwesomeButton
+          type="primary"
+          disabled={submitted || selectedAnswers.length === 0}
+          onPress={handleCheckAnswer}
+        >
+          <div className="flex items-center px-2 uppercase">
+            <div>Submit</div>
+          </div>
+        </AwesomeButton>
+        {/* Reset Button */}
+        {/* <AwesomeButton
+          type="secondary"
+          disabled={!submitted}
+          onPress={handleReset}
+        >
+          <div className="flex items-center uppercase">
+            <div>Reset</div>
+          </div>
+        </AwesomeButton> */}
+      </div>
+      <div
+        onClick={() => {
+          handleReset();
+        }}
+        className={`absolute !cursor-pointer right-4 bottom-4 flex space-x-2 items-center transition ${
+          submitted
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div className="font-dm text-sm text-blue-500 uppercase font-bold">
+          Reset
+        </div>
+        <ReloadIcon className="w-5 h-5 text-blue-500" />
+      </div>
+    </NodeViewWrapper>
+  );
+};
+
+const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
   node,
   updateAttributes,
   editor,
@@ -91,7 +323,7 @@ const MultipleSelectComponent: React.FC<MultipleSelectProps> = ({
       contentEditable={false}
       className="bg-slate-100 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
     >
-      <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-500 to-blue-600 w-fit px-4 py-2 rounded-md border border-blue-500 ring ring-blue-500/30">
+      <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-400 to-blue-500 w-fit px-4 py-2 rounded-md border border-blue-400 ring ring-blue-500/30">
         <ListCheck className="w-4 h-4" />
         <div className="font-dm !text-xs uppercase tracking-wide">
           Multiple Select Question
@@ -241,10 +473,10 @@ const MultipleSelectComponent: React.FC<MultipleSelectProps> = ({
 export const MultipleSelect = Node.create({
   name: "multipleSelect",
 
-  defaultOptions: {
-    question: "",
-    answers: Array(5).fill(""),
-    correctAnswers: [],
+  addOptions() {
+    return {
+      isStudentView: true,
+    };
   },
 
   addAttributes() {
@@ -282,6 +514,9 @@ export const MultipleSelect = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(MultipleSelectComponent);
+    const component = this.options.isStudentView
+      ? MultipleSelectStudentComponent
+      : MultipleSelectAdminComponent;
+    return ReactNodeViewRenderer(component);
   },
 });
