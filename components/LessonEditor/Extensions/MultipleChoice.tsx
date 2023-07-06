@@ -75,8 +75,8 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
   };
 
   const handleReset = () => {
-    setSelectedAnswer(-1);
     setSubmitted(false);
+    setSelectedAnswer(-1);
     setTimeout(() => {
       setIsCorrect(false);
     }, 200);
@@ -119,11 +119,11 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
                   index === selectedAnswer ? "" : "border border-slate-300"
                 } ${
                   submitted && index === node.attrs.correctAnswer
-                    ? "ring-2 !ring-emerald-500/50 ring-offset-2 !bg-emerald-500 !border-none"
+                    ? "ring-2 !ring-emerald-500/50 ring-offset-2 !border-none"
                     : ""
                 } ${
                   submitted && index === selectedAnswer
-                    ? "ring-2 ring-red-300 ring-offset-2 !bg-red-500 !border-none"
+                    ? "ring-2 ring-red-300 ring-offset-2 !border-none"
                     : ""
                 }`}
                 value={index.toString()}

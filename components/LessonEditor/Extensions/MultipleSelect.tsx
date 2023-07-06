@@ -177,7 +177,7 @@ const MultipleSelectStudentComponent: React.FC<MultipleSelectProps> = ({
                     </Checkbox.Indicator>
                   )}
                 </Checkbox.Root>
-                <div className="text-slate-800 font-dm text-base">{answer}</div>
+                <div className="text-slate-800 font-dm text-sm">{answer}</div>
               </div>
               {submitted &&
               !selectedAnswers.includes(index) &&
