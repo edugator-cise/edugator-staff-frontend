@@ -31,7 +31,13 @@ import {
   Underline as UnderlineIcon,
 } from "tabler-icons-react";
 import { LessonAction, LessonData } from "./types";
-import { Editor, EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
+import {
+  Editor,
+  EditorContent,
+  useEditor,
+  BubbleMenu,
+  JSONContent,
+} from "@tiptap/react";
 
 /* TipTap Extensions */
 import Color from "@tiptap/extension-color";
@@ -51,7 +57,13 @@ import Gapcursor from "@tiptap/extension-gapcursor";
 import HardBreak from "@tiptap/extension-hard-break";
 import Image from "@tiptap/extension-image";
 
-import { Divider, MenuOption, menuOptions, sampleLessonContent } from "./utils";
+import {
+  Divider,
+  MenuOption,
+  menuOptions,
+  sampleLessonContent,
+  validateContent,
+} from "./utils";
 import Modal from "components/shared/Modals/Modal";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
@@ -103,6 +115,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   };
 
   function lessonReducer(state: LessonData, action: LessonAction) {
+    if (action.type !== "RESET_LESSON") setUnsavedChanges(true);
+
     switch (action.type) {
       case "SET_TITLE":
         return { ...state, title: action.payload };
@@ -147,12 +161,9 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   } = useCreateLesson(moduleId as string);
 
   const publishLesson = async () => {
-    if (!lessonState.title || lessonState.title === "") {
-      toast.error("Please enter a title for the lesson.");
-      window.scrollTo(0, 0);
-      return;
-    } else if (!lessonState.content || lessonState.content === "") {
-      toast.error("Please enter content for the lesson.");
+    if (
+      !validateContent(lessonState.content as any, lessonState.title as string)
+    ) {
       return;
     }
     console.log("creating lesson");
@@ -168,24 +179,21 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   };
 
   const saveLesson = async () => {
-    if (!lessonState.title || lessonState.title === "") {
-      toast.error("Please enter a title for the lesson.");
-      window.scrollTo(0, 0);
-      return;
-    } else if (!lessonState.content || lessonState.content === "") {
-      toast.error("Please enter content for the lesson.");
+    // check for empty MCQ / MSQ
+    if (
+      !validateContent(lessonState.content as any, lessonState.title as string)
+    ) {
       return;
     }
     console.log("updating lesson");
     console.log(lessonState);
     // update lesson
     await updateLesson({
-      title: lessonState.title,
+      title: lessonState.title as string,
       content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
-    editor.setOptions({ editable: false });
-    setEditable(false);
+    toggleEditable(false);
   };
 
   const editor = useEditor(
@@ -278,6 +286,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [modalUrl, setModalUrl] = useState("");
+  const [modalUrlText, setModalUrlText] = useState("");
 
   // link logic
 
@@ -300,35 +309,58 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       toast.error("Please enter a valid URL.");
       return;
     }
+    if (!modalUrlText || modalUrlText === "") {
+      toast.error("Please enter a link text.");
+      return;
+    }
     if (modalUrl) {
       editor
         .chain()
         .focus()
         .extendMarkRange("link")
         .setLink({ href: modalUrl, target: "_blank" })
+        .command(({ tr, state }) => {
+          console.log(state);
+          tr.insertText(modalUrlText);
+          return true;
+        })
         .run();
     } else {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
     }
     closeLinkModal();
-  }, [editor, modalUrl, closeLinkModal]);
+  }, [editor, modalUrl, closeLinkModal, modalUrlText]);
 
   const removeLink = useCallback(() => {
     editor.chain().focus().extendMarkRange("link").unsetLink().run();
     closeLinkModal();
   }, [editor, closeLinkModal]);
 
+  const onCancelWithoutChanges = () => {
+    console.log("no unsaved changes");
+    toggleEditable(false);
+    return;
+  };
+
+  const toggleEditable = (editable: boolean) => {
+    setTimeout(() => {
+      setEditable(editable);
+      editor?.setOptions({ editable });
+    }, 0);
+  };
+
+  //if there are changes
   const onCancelChanges = () => {
     // set content back to old content
     /* lessonDispatch({
       type: "SET_CONTENT",
       payload: JSON.parse(lesson?.content as string),
     }); */
+
     setConfirmModalOpen(false);
     setTimeout(() => {
       resetEditor();
-      setEditable(false);
-      editor.setOptions({ editable: false });
+      toggleEditable(false);
       queryClient.invalidateQueries(["lesson", lessonId]);
     }, 200);
   };
@@ -338,6 +370,27 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   useEffect(() => {
     if (editor?.isActive("link")) {
       setUrl(editor.getAttributes("link").href);
+      let urlText = "";
+      // extend selection to whole link, grab url text, then unset selection
+      editor
+        ?.chain()
+        .focus()
+        .extendMarkRange("link")
+        .command(({ tr, state }) => {
+          console.log(state);
+          urlText = state.doc.textBetween(
+            state.selection.from,
+            state.selection.to
+          );
+          return true;
+        })
+        .setTextSelection(editor.state.selection.from)
+        .run();
+      setModalUrlText(urlText);
+
+      // grab url text
+      //const text = editor.commands.extendMarkRange("link").valueOf();
+      //console.log(text);
     }
     setEditingLink(false);
   }, [editor?.getAttributes("link").href]);
@@ -438,6 +491,10 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                   <ActionButton
                     color="red"
                     onClick={() => {
+                      if (!unsavedChanges) {
+                        onCancelWithoutChanges();
+                        return;
+                      }
                       setConfirmModalOpen(true);
                     }}
                   >
@@ -453,7 +510,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                       !lessonState.title ||
                       !lessonState.content ||
                       updateLessonLoading ||
-                      !editable
+                      !editable ||
+                      !unsavedChanges
                     }
                     onClick={async () => {
                       console.log(lessonState);
@@ -469,8 +527,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                   <ActionButton
                     color="blue"
                     onClick={() => {
-                      editor.setOptions({ editable: true });
-                      setEditable(true);
+                      toggleEditable(true);
                     }}
                   >
                     <Pencil1Icon />
@@ -480,7 +537,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               )}
             </div>
           ) : (
-            <button
+            <ActionButton
+              color="green"
               disabled={
                 lessonState.title === "" ||
                 lessonState.content === "" ||
@@ -496,7 +554,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             >
               <RocketIcon />
               <p>Publish</p>
-            </button>
+            </ActionButton>
           )}
         </div>
       </div>
@@ -523,7 +581,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                   <Tooltip.Trigger asChild>
                     <button
                       key={index}
-                      className={`w-8 h-8 rounded-md cursor-pointer hover:bg-white/20 transition flex items-center justify-center text-slate-100 ${
+                      className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
                         menuOption.active &&
                         menuOption.active(editor) &&
                         "bg-white/20"
@@ -734,6 +792,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         onClose={() => {
           setTimeout(() => {
             setModalUrl(url);
+            setModalUrlText("");
           }, 300);
         }}
         open={linkModalOpen}
@@ -744,14 +803,39 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         contentClassName="!z-[200]"
       >
         <div className="flex flex-col space-y-4">
-          <input
-            type="text"
-            className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
-            placeholder="https://example.com"
-            defaultValue={url}
-            value={modalUrl}
-            onChange={(e) => setModalUrl(e.target.value)}
-          />
+          <div className="flex space-y-1 flex-col">
+            <label
+              htmlFor="link-text"
+              className="text-xs text-slate-800 font-dm"
+            >
+              Link Text
+            </label>
+            <input
+              type="text"
+              id="link-text"
+              className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+              placeholder="Example"
+              value={modalUrlText}
+              onChange={(e) => setModalUrlText(e.target.value)}
+            />
+          </div>
+          <div className="flex space-y-1 flex-col">
+            <label
+              htmlFor="link-url"
+              className="text-xs text-slate-800 font-dm"
+            >
+              Link URL
+            </label>
+            <input
+              type="text"
+              id="link-url"
+              className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+              placeholder="https://example.com"
+              value={modalUrl}
+              onChange={(e) => setModalUrl(e.target.value)}
+            />
+          </div>
+
           <div className="flex space-x-2 justify-end items-center">
             <button
               className="px-4 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-dm text-sm flex items-center space-x-2"

@@ -24,7 +24,7 @@ import AnimateHeight from "react-animate-height";
 
 interface MultipleChoiceProps {
   node: NodeConfig;
-  updateAttributes: (attrs: any) => void;
+  updateAttributes: (attrs: MultipleChoiceAttributes) => void;
   editor: Editor;
 }
 
@@ -85,7 +85,7 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-50 border border-slate-200 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+      className="bg-slate-50 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
     >
       <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
         <ListDetails className="w-4 h-4 text-white" />
@@ -225,13 +225,15 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
   const [answers, setAnswers] = useState(
     node.attrs.answers || Array(4).fill("")
   );
-  const [correctAnswer, setCorrectAnswer] = useState<number>(0);
+  const [correctAnswer, setCorrectAnswer] = useState<number>(
+    node.attrs.correctAnswer
+  );
 
   const addAnswer = () => {
     if (answers.length < 6) {
       const newAnswers = [...answers, ""];
       setAnswers(newAnswers);
-      updateAttributes({ answers: newAnswers });
+      updateAttributes({ ...node.attrs, answers: newAnswers });
     }
   };
 
@@ -240,14 +242,14 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
       const newAnswers = [...answers];
       newAnswers.splice(index, 1);
       setAnswers(newAnswers);
-      updateAttributes({ answers: newAnswers });
+      updateAttributes({ ...node.attrs, answers: newAnswers });
 
       if (correctAnswer === index) {
         setCorrectAnswer(0);
-        updateAttributes({ correctAnswer: 0 });
+        updateAttributes({ ...node.attrs, correctAnswer: 0 });
       } else if (index < correctAnswer) {
         setCorrectAnswer(correctAnswer - 1);
-        updateAttributes({ correctAnswer: correctAnswer - 1 });
+        updateAttributes({ ...node.attrs, correctAnswer: correctAnswer - 1 });
       }
     }
   };
@@ -255,7 +257,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuestion = e.target.value;
     setQuestion(newQuestion);
-    updateAttributes({ question: newQuestion });
+    updateAttributes({ ...node.attrs, question: newQuestion });
   };
 
   const handleAnswerChange = (
@@ -265,12 +267,12 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
     const newAnswers = [...answers];
     newAnswers[index] = e.target.value;
     setAnswers(newAnswers);
-    updateAttributes({ answers: newAnswers });
+    updateAttributes({ ...node.attrs, answers: newAnswers });
   };
 
   const handleCorrectAnswerChange = (index: number) => {
     setCorrectAnswer(index);
-    updateAttributes({ correctAnswer: index });
+    updateAttributes({ ...node.attrs, correctAnswer: index });
   };
 
   return (
@@ -312,7 +314,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
           <Tooltip.Provider delayDuration={100}>
             <RadioGroup.Root
               className="flex flex-col gap-2.5"
-              defaultValue={"0"}
+              value={correctAnswer.toString()}
               aria-label="Answer Correct"
               onValueChange={(value) => {
                 handleCorrectAnswerChange(parseInt(value));
@@ -431,6 +433,12 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
     </NodeViewWrapper>
   );
 };
+
+export interface MultipleChoiceAttributes {
+  question: string;
+  answers: string[];
+  correctAnswer: number;
+}
 
 export const MultipleChoice = Node.create({
   name: "multipleChoice",

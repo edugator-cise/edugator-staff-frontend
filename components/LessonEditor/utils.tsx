@@ -1,4 +1,5 @@
-import { Editor, getNodeAttributes } from "@tiptap/react";
+import { Editor, JSONContent, getNodeAttributes } from "@tiptap/react";
+import { toast } from "react-hot-toast";
 import {
   Bold,
   Italic,
@@ -25,6 +26,88 @@ import {
   ListDetails,
   ListCheck,
 } from "tabler-icons-react";
+import { MultipleChoiceAttributes } from "./Extensions/MultipleChoice";
+import { MultipleSelectAttributes } from "./Extensions/MultipleSelect";
+
+type EditorContent = {
+  type: string;
+  content: JSONContent[];
+};
+
+export function validateContent(content: EditorContent, title: string) {
+  console.log(content);
+  const errorMessages = {
+    multipleChoice: {
+      emptyQuestion: "Multiple choice question must not be empty.",
+      emptyAnswer:
+        "All answer choices for multiple choice question must be non-empty.",
+      invalidCorrectAnswer:
+        "Invalid correct answer index for multiple choice question.",
+    },
+    multipleSelect: {
+      emptyQuestion: "Multiple select question must not be empty.",
+      emptyAnswer:
+        "All answer choices for multiple select question must be non-empty.",
+      noCorrectAnswer:
+        "At least one correct answer must be selected for multiple select question.",
+    },
+  };
+
+  let isValid = true;
+
+  if (!title || title === "") {
+    toast.error("Please enter a title for the lesson.");
+    window.scrollTo(0, 0);
+    return;
+  } else if (!content) {
+    toast.error("Please enter content for the lesson.");
+    return;
+  }
+
+  content.content.forEach((item: JSONContent) => {
+    const { type, attrs } = item;
+
+    if (type === "multipleChoice") {
+      const { question, answers, correctAnswer } =
+        attrs as MultipleChoiceAttributes;
+      if (question === "") {
+        toast.error(errorMessages.multipleChoice.emptyQuestion);
+        isValid = false;
+      }
+
+      if (answers.some((answer: string) => answer === "")) {
+        toast.error(errorMessages.multipleChoice.emptyAnswer);
+        isValid = false;
+      }
+
+      if (correctAnswer < 0 || correctAnswer >= answers.length) {
+        toast.error(errorMessages.multipleChoice.invalidCorrectAnswer);
+        isValid = false;
+      }
+    }
+
+    if (type === "multipleSelect") {
+      const { question, answers, correctAnswers } =
+        attrs as MultipleSelectAttributes;
+      if (question === "") {
+        toast.error(errorMessages.multipleSelect.emptyQuestion);
+        isValid = false;
+      }
+
+      if (answers.some((answer: string) => answer === "")) {
+        toast.error(errorMessages.multipleSelect.emptyAnswer);
+        isValid = false;
+      }
+
+      if (correctAnswers.length === 0) {
+        toast.error(errorMessages.multipleSelect.noCorrectAnswer);
+        isValid = false;
+      }
+    }
+  });
+
+  return isValid;
+}
 
 export const sampleLessonContent = {
   type: "doc",

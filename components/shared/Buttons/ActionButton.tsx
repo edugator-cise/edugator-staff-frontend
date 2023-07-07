@@ -18,11 +18,11 @@ const ActionButton: React.FC<CustomButtonProps> = ({
 }) => {
   const containerClassName = () => {
     if (color === "blue")
-      return "from-[#648AE8] from-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
+      return "bg-gradient-to-b from-[#648AE8] from-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
     if (color === "green")
-      return "from-emerald-200 via-emerald-200 to-emerald-500 shadow-emerald-500/10";
+      return "bg-gradient-to-b from-emerald-200 via-emerald-200 to-emerald-500 shadow-emerald-500/10";
     if (color === "red")
-      return "from-red-300 from-red-300 to-red-500 shadow-red-500/10 hover:shadow-red-500/10";
+      return "bg-gradient-to-b from-red-300 from-red-300 to-red-500 shadow-red-500/10 hover:shadow-red-500/10";
   };
 
   const innerClassName = () => {
@@ -34,12 +34,12 @@ const ActionButton: React.FC<CustomButtonProps> = ({
   return (
     <button
       {...rest}
-      className={`p-px flex items-center justify-center hover:brightness-110 cursor-pointer rounded-lg bg-gradient-to-b group shadow-lg hover:shadow-xl transition duration-200 ease-in-out ${
+      className={`p-px flex items-center group justify-center disabled:from-white disabled:opacity-50 disabled:to-gray-400 enabled:hover:brightness-110 cursor-pointer rounded-md group shadow-lg disabled:cursor-not-allowed enabled:hover:shadow-xl transition duration-200 ease-in-out ${
         containerClassName() || ""
       }`}
     >
       <div
-        className={`w-full h-full rounded-[7px] flex items-center space-x-2 transition px-3 py-2 text-xs text-white font-dm ${
+        className={`w-full h-full group-disabled:bg-gray-400 rounded-[5px] flex items-center space-x-2 px-3 py-2 text-xs text-white font-dm ${
           innerClassName() || ""
         }`}
       >

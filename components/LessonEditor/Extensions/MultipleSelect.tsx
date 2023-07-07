@@ -24,7 +24,7 @@ import AnimateHeight from "react-animate-height";
 
 interface MultipleSelectProps {
   node: NodeConfig;
-  updateAttributes: (attrs: any) => void;
+  updateAttributes: (attrs: MultipleSelectAttributes) => void;
   editor: Editor;
 }
 
@@ -109,7 +109,7 @@ const MultipleSelectStudentComponent: React.FC<MultipleSelectProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-50 border border-slate-200 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+      className="bg-slate-50 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
     >
       <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
         <ListCheck className="w-4 h-4 text-white" />
@@ -269,7 +269,7 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuestion = e.target.value;
     setQuestion(newQuestion);
-    updateAttributes({ question: newQuestion });
+    updateAttributes({ ...node.attrs, question: newQuestion });
   };
 
   const handleAnswerChange = (
@@ -279,7 +279,7 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
     const newAnswers = [...answers];
     newAnswers[index] = e.target.value;
     setAnswers(newAnswers);
-    updateAttributes({ answers: newAnswers });
+    updateAttributes({ ...node.attrs, answers: newAnswers });
   };
 
   const handleCorrectAnswerChange = (index: number) => {
@@ -293,12 +293,12 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
     }
 
     setCorrectAnswers(newCorrectAnswers);
-    updateAttributes({ correctAnswers: newCorrectAnswers });
+    updateAttributes({ ...node.attrs, correctAnswers: newCorrectAnswers });
   };
 
   const addAnswer = () => {
     if (answers.length < 8) {
-      updateAttributes({ answers: [...answers, ""] });
+      updateAttributes({ ...node.attrs, answers: [...answers, ""] });
       setAnswers([...answers, ""]);
     }
   };
@@ -469,6 +469,12 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
     </NodeViewWrapper>
   );
 };
+
+export interface MultipleSelectAttributes {
+  question: string;
+  answers: Array<string>;
+  correctAnswers: Array<number>;
+}
 
 export const MultipleSelect = Node.create({
   name: "multipleSelect",
