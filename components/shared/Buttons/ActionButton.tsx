@@ -1,0 +1,52 @@
+import React, { ButtonHTMLAttributes } from "react";
+
+// an action button is a button that is used to perform an action (duh)
+// it can be red, green, or blue
+
+type CustomButtonProps = {
+  color: "red" | "green" | "blue";
+  children: React.ReactNode;
+} & Partial<ButtonHTMLAttributes<HTMLButtonElement>>;
+
+const ActionButton: React.FC<CustomButtonProps> = ({
+  children,
+  color = "blue",
+  ...rest
+}: {
+  color?: "red" | "green" | "blue";
+  children: React.ReactNode;
+}) => {
+  const containerClassName = () => {
+    if (color === "blue")
+      return "from-[#648AE8] from-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
+    if (color === "green")
+      return "from-emerald-200 via-emerald-200 to-emerald-500 shadow-emerald-500/10";
+    if (color === "red")
+      return "from-red-300 from-red-300 to-red-500 shadow-red-500/10 hover:shadow-red-500/10";
+  };
+
+  const innerClassName = () => {
+    if (color === "blue") return "bg-[#2458F2]";
+    if (color === "green") return "bg-emerald-500";
+    if (color === "red") return "bg-red-500";
+  };
+
+  return (
+    <button
+      {...rest}
+      className={`p-px flex items-center justify-center hover:brightness-110 cursor-pointer rounded-lg bg-gradient-to-b group shadow-lg hover:shadow-xl transition duration-200 ease-in-out ${
+        containerClassName() || ""
+      }`}
+    >
+      <div
+        className={`w-full h-full rounded-[7px] flex items-center space-x-2 transition px-3 py-2 text-xs text-white font-dm ${
+          innerClassName() || ""
+        }`}
+      >
+        {children}
+      </div>
+    </button>
+  );
+};
+
+export default ActionButton;

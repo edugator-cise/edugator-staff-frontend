@@ -11,6 +11,9 @@ import {
   QuestionMarkCircledIcon,
   CheckIcon,
   Cross2Icon,
+  Pencil2Icon,
+  Link1Icon,
+  Link2Icon,
 } from "@radix-ui/react-icons";
 import { useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
@@ -73,6 +76,8 @@ import { Content } from "@tiptap/react";
 import { useUpdateLesson } from "hooks/lesson/useUpdateLesson";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { useQueryClient } from "@tanstack/react-query";
+import ActionButton from "components/shared/Buttons/ActionButton";
+import { isUrl } from "utils/textUtils";
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -272,8 +277,13 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
 
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [modalUrl, setModalUrl] = useState("");
 
   // link logic
+
+  useEffect(() => {
+    setModalUrl(url);
+  }, [url]);
 
   const openLinkModal = useCallback(() => {
     console.log(editor.chain().focus());
@@ -283,22 +293,25 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
 
   const closeLinkModal = useCallback(() => {
     setLinkModalOpen(false);
-    setUrl("");
   }, []);
 
   const saveLink = useCallback(() => {
-    if (url) {
+    if (!isUrl(modalUrl)) {
+      toast.error("Please enter a valid URL.");
+      return;
+    }
+    if (modalUrl) {
       editor
         .chain()
         .focus()
         .extendMarkRange("link")
-        .setLink({ href: url, target: "_blank" })
+        .setLink({ href: modalUrl, target: "_blank" })
         .run();
     } else {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
     }
     closeLinkModal();
-  }, [editor, url, closeLinkModal]);
+  }, [editor, modalUrl, closeLinkModal]);
 
   const removeLink = useCallback(() => {
     editor.chain().focus().extendMarkRange("link").unsetLink().run();
@@ -319,6 +332,15 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       queryClient.invalidateQueries(["lesson", lessonId]);
     }, 200);
   };
+
+  const [editingLink, setEditingLink] = useState(false);
+
+  useEffect(() => {
+    if (editor?.isActive("link")) {
+      setUrl(editor.getAttributes("link").href);
+    }
+    setEditingLink(false);
+  }, [editor?.getAttributes("link").href]);
 
   // image logic
 
@@ -347,7 +369,10 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         }}
         confirmText="Confirm"
       />
-      <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-950 z-10">
+      <div
+        className="w-full 
+      h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-slate-950 z-10"
+      >
         <div className="flex items-end">
           <p className="text-base text-slate-400 font-dm">
             {moduleName}
@@ -410,17 +435,18 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <div className="flex space-x-2 items-center">
               {editable ? (
                 <>
-                  <button
+                  <ActionButton
+                    color="red"
                     onClick={() => {
                       setConfirmModalOpen(true);
                     }}
-                    className="px-3 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-dm text-xs flex items-center space-x-2"
                   >
                     <Cross2Icon />
                     <p>Cancel</p>
-                  </button>
+                  </ActionButton>
 
-                  <button
+                  <ActionButton
+                    color="green"
                     disabled={
                       lessonState.title === "" ||
                       lessonState.content === "" ||
@@ -433,24 +459,23 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                       console.log(lessonState);
                       await saveLesson();
                     }}
-                    className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
                   >
                     <CheckCircledIcon />
                     <p>Save Changes</p>
-                  </button>
+                  </ActionButton>
                 </>
               ) : (
                 <>
-                  <button
+                  <ActionButton
+                    color="blue"
                     onClick={() => {
                       editor.setOptions({ editable: true });
                       setEditable(true);
                     }}
-                    className="px-3 py-2 rounded-md bg-blue-500 hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
                   >
                     <Pencil1Icon />
                     <p>Edit</p>
-                  </button>
+                  </ActionButton>
                 </>
               )}
             </div>
@@ -560,26 +585,142 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           <div className="h-auto w-full text-slate-800">
             {/* Bubble Menu (Only for Links for now) */}
             <BubbleMenu
-              className="p-2 bg-slate-700 rounded-md flex space-x-2 font-dm"
-              tippyOptions={{ duration: 150 }}
+              className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
+              tippyOptions={{
+                zIndex: 99,
+                duration: 150,
+                onClickOutside(instance, event) {
+                  instance.hide();
+                  //clear url, set editing link to false, and close the instance
+                  setTimeout(() => {
+                    setUrl(editor?.getAttributes("link").href);
+                  }, 300);
+                  setEditingLink(false);
+                },
+              }}
               editor={editor}
               shouldShow={({ editor, view, state, oldState, from, to }) => {
                 // only show the bubble menu for links.
+                if (!editor || !editable) return false;
                 return from === to && editor.isActive("link");
               }}
             >
-              <button
-                className="rounded-sm px-3 py-2 z-10 text-xs bg-slate-50 hover:bg-slate-200 transition text-slate-700"
-                onClick={openLinkModal}
-              >
-                Edit
-              </button>
-              <button
-                className="rounded-sm transition bg-red-200 hover:bg-red-500 text-red-500 hover:text-white p-2 flex items-center justify-center"
-                onClick={removeLink}
-              >
-                <TrashIcon />
-              </button>
+              {/* Input to edit the link */}
+              <input
+                type="text"
+                className="w-full py-1 pr-2 bg-slate-800 text-ellipsis text-slate-200 rounded-md text-xs font-dm outline-none"
+                placeholder="https://example.com"
+                value={url}
+                onClick={(e) => {
+                  // select the input text when the user clicks on it.
+                  e.currentTarget.select();
+                }}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setEditingLink(true);
+                }}
+              />
+              <div className="w-px h-6 bg-slate-600" />
+              <Tooltip.Provider delayDuration={300}>
+                <Tooltip.Root delayDuration={300}>
+                  <Tooltip.Trigger asChild className="relative">
+                    <button
+                      className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
+                      onClick={
+                        editingLink
+                          ? () => {
+                              if (!isUrl(url)) {
+                                toast.error("Please enter a valid URL.");
+                                return;
+                              }
+                              setUrl(editor.getAttributes("link").href);
+                              //set editor link value to current link value
+                              editor
+                                ?.chain()
+                                .focus()
+                                .extendMarkRange("link")
+                                .setLink({ href: url, target: "_blank" })
+                                .run();
+                              setTimeout(() => {
+                                setEditingLink(false);
+                              }, 300);
+                            }
+                          : openLinkModal
+                      }
+                    >
+                      <>
+                        <CheckIcon
+                          className={`transition absolute -translate-y-[calc(100%+16px)] ${
+                            editingLink ? "!translate-y-0" : ""
+                          }`}
+                        />
+
+                        <Pencil1Icon
+                          className={`transition ${
+                            editingLink ? "translate-y-[calc(100%+16px)]" : ""
+                          }`}
+                        />
+                      </>
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="top"
+                      sideOffset={5}
+                      align="center"
+                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                    >
+                      {editingLink ? "Save" : "Edit Link"}
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+                <Tooltip.Root delayDuration={300}>
+                  <Tooltip.Trigger asChild className="relative">
+                    <button
+                      className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
+                        editingLink
+                          ? "hover:bg-white/10"
+                          : "hover:bg-red-500/30"
+                      }`}
+                      onClick={
+                        editingLink
+                          ? () => {
+                              // cancel current link changes
+                              setUrl(editor.getAttributes("link").href);
+                              setEditingLink(false);
+                            }
+                          : removeLink
+                      }
+                    >
+                      <>
+                        <Cross2Icon
+                          className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
+                            editingLink ? "!translate-y-0" : ""
+                          }`}
+                        />
+
+                        <TrashIcon
+                          className={`transition text-red-500 ${
+                            editingLink ? "-translate-y-[calc(100%+16px)]" : ""
+                          }`}
+                        />
+                      </>
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      side="top"
+                      sideOffset={5}
+                      align="center"
+                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
+                        editingLink ? "text-slate-300" : "text-red-500"
+                      }`}
+                    >
+                      {editingLink ? "Cancel" : "Remove Link"}
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
             </BubbleMenu>
             <EditorContent
               onFocus={() => setDisableToolbar(false)}
@@ -594,16 +735,17 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         setOpen={setLinkModalOpen}
         title="Edit Link"
         description="Insert a link to an external website."
-        overlayClassName="!z-[10000]"
-        contentClassName="!z-[10001]"
+        overlayClassName="!z-[100]"
+        contentClassName="!z-[200]"
       >
         <div className="flex flex-col space-y-4">
           <input
             type="text"
             className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
             placeholder="https://example.com"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            defaultValue={url}
+            value={modalUrl}
+            onChange={(e) => setModalUrl(e.target.value)}
           />
           <div className="flex space-x-2 justify-end items-center">
             <button
