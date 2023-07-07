@@ -6,6 +6,7 @@ const Modal = ({
   children,
   open,
   setOpen,
+  onClose,
   title,
   description,
   trigger,
@@ -15,6 +16,7 @@ const Modal = ({
   children: React.ReactNode;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose?: () => void;
   title?: string;
   description?: string;
   trigger?: React.ReactNode;
@@ -22,7 +24,15 @@ const Modal = ({
   contentClassName?: string;
 }) => {
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          setOpen(open);
+          onClose && onClose();
+        }
+      }}
+    >
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
       <Dialog.Portal>
         <Dialog.Overlay

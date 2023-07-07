@@ -587,7 +587,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <BubbleMenu
               className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
               tippyOptions={{
-                zIndex: 99,
+                zIndex: 101,
                 duration: 150,
                 onClickOutside(instance, event) {
                   instance.hide();
@@ -731,11 +731,16 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         </div>
       </div>
       <Modal
+        onClose={() => {
+          setTimeout(() => {
+            setModalUrl(url);
+          }, 300);
+        }}
         open={linkModalOpen}
         setOpen={setLinkModalOpen}
         title="Edit Link"
         description="Insert a link to an external website."
-        overlayClassName="!z-[100]"
+        overlayClassName="!z-[102]"
         contentClassName="!z-[200]"
       >
         <div className="flex flex-col space-y-4">
