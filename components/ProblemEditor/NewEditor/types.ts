@@ -24,8 +24,13 @@ export interface ProblemData {
   dueDate: string; // iso format
   hidden: boolean;
   description: Content | undefined;
-  language: Language;
-  codeData: LanguageData;
+  header: string;
+  body: string;
+  footer: string;
+  solution: string;
+  language: string;
+  templatePackage: string;
+  fileName: string;
   timeLimit: number;
   memoryLimit: number;
   buildCommand: string;
@@ -48,6 +53,12 @@ export type ProblemAction =
       type: "SET_LANGUAGE_DATA";
       payload: { language: Language; data: LanguageData };
     }
+  | { type: "SET_DUE_DATE"; payload: string }
+  | { type: "SET_HEADER"; payload: string }
+  | { type: "SET_BODY"; payload: string }
+  | { type: "SET_FOOTER"; payload: string }
+  | { type: "SET_TEMPLATE_PACKAGE"; payload: string }
+  | { type: "SET_FILE_NAME"; payload: string }
   | { type: "SET_TIME_LIMIT"; payload: number }
   | { type: "SET_MEMORY_LIMIT"; payload: number }
   | { type: "SET_BUILD_COMMAND"; payload: string }

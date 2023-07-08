@@ -109,7 +109,7 @@ const MultipleSelectStudentComponent: React.FC<MultipleSelectProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-50 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+      className="bg-slate-50 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
     >
       <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
         <ListCheck className="w-4 h-4 text-white" />
@@ -321,7 +321,7 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-100 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-4 mt-10 relative"
+      className="bg-slate-100 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
     >
       <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-400 to-blue-500 w-fit px-4 py-2 rounded-md border border-blue-400 ring ring-blue-500/30">
         <ListCheck className="w-4 h-4" />

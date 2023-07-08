@@ -30,12 +30,21 @@ export const apiRoutes = {
       getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
     },
     admin: {
+      // module
       createModule: "v2/module",
       deleteModule: (moduleId: string) => `v2/module/${moduleId}`,
+
+      // lesson
       createLesson: "v2/admin/lesson",
-      deleteLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
-      updateLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
       getLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
+      updateLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
+      deleteLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
+
+      // problem
+      createProblem: "v2/admin/problem",
+      getProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
+      updateProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
+      deleteProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
     },
   },
 };

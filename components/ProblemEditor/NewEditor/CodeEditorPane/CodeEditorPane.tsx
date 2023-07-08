@@ -1,18 +1,8 @@
-import {
-  ArrowLeftIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import * as monaco from "monaco-editor";
-import * as Select from "@radix-ui/react-select";
 import { getFileExtension } from "../utils";
 import { Language, LanguageData, ProblemAction, ProblemData } from "../types";
 import Editor from "@monaco-editor/react";
-import * as Checkbox from "@radix-ui/react-checkbox";
 import { toTitleCase } from "utils/textUtils";
 
 const languageLabels: { [key in Language]: string } = {
@@ -38,7 +28,7 @@ const CodeEditorPane = ({
   dispatch: React.Dispatch<ProblemAction>;
 }) => {
   const [activeLanguage, setActiveLanguage] = useState<Language>("cpp"); // active language - TODO - SET THIS TO COURSE LANGUAGE
-  const [editorLanguage, setEditorLanguage] = useState<Language>(); // language for editor
+  const [editorLanguage, setEditorLanguage] = useState<Language>("cpp"); // language for editor
   const [activeTab, setActiveTab] = useState(0);
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -49,25 +39,25 @@ const CodeEditorPane = ({
         id: "py-header",
         type: "header",
         language: "python",
-        value: problemState?.codeData?.header as string,
+        value: problemState?.header as string,
       },
       {
         id: "py-body",
         type: "body",
         language: "python",
-        value: problemState?.codeData?.body as string,
+        value: problemState?.body as string,
       },
       {
         id: "py-footer",
         type: "footer",
         language: "python",
-        value: problemState?.codeData?.footer as string,
+        value: problemState?.footer as string,
       },
       {
         id: "py-solution",
         type: "solution",
         language: "python",
-        value: problemState?.codeData?.solution as string,
+        value: problemState?.solution as string,
       },
     ],
     cpp: [
@@ -75,26 +65,26 @@ const CodeEditorPane = ({
         id: "cpp-header",
         type: "header",
         language: "cpp",
-        value: problemState?.codeData?.header as string,
+        value: problemState?.header as string,
       },
 
       {
         id: "cpp-body",
         type: "body",
         language: "cpp",
-        value: problemState?.codeData?.body as string,
+        value: problemState?.body as string,
       },
       {
         id: "cpp-footer",
         type: "footer",
         language: "cpp",
-        value: problemState?.codeData?.footer as string,
+        value: problemState?.footer as string,
       },
       {
         id: "cpp-solution",
         type: "solution",
         language: "cpp",
-        value: problemState?.codeData?.solution as string,
+        value: problemState?.solution as string,
       },
     ],
     java: [
@@ -102,34 +92,34 @@ const CodeEditorPane = ({
         id: "java-header",
         type: "header",
         language: "java",
-        value: problemState?.codeData?.header as string,
+        value: problemState?.header as string,
       },
 
       {
         id: "java-body",
         type: "body",
         language: "java",
-        value: problemState?.codeData?.body as string,
+        value: problemState?.body as string,
       },
       {
         id: "java-footer",
         type: "footer",
         language: "java",
-        value: problemState?.codeData?.footer as string,
+        value: problemState?.footer as string,
       },
       {
         id: "java-solution",
         type: "solution",
         language: "java",
-        value: problemState?.codeData?.solution as string,
+        value: problemState?.solution as string,
       },
     ],
   };
 
   const beforeMount = (monaco: any) => {
     // before mount, we want to populate the editor with the previously entered code data
-    for (const tabState of tabStates[problemState?.language as Language]) {
-      tabState.value = problemState?.codeData?.[tabState.type] as string;
+    for (const tabState of tabStates["cpp"]) {
+      tabState.value = problemState?.[tabState.type] as string;
     }
 
     setEditorLanguage(activeLanguage as Language);
@@ -164,17 +154,11 @@ const CodeEditorPane = ({
               placeholder={`example.${getFileExtension(
                 activeLanguage as Language
               )}`}
-              value={problemState?.codeData?.fileName}
+              value={problemState?.fileName}
               onChange={(e) => {
                 dispatch({
-                  type: "SET_LANGUAGE_DATA",
-                  payload: {
-                    language: activeLanguage as Language,
-                    data: {
-                      ...(problemState?.codeData as LanguageData),
-                      fileName: e.target.value,
-                    },
-                  },
+                  type: "SET_FILE_NAME",
+                  payload: e.target.value,
                 });
               }}
             />
@@ -215,15 +199,10 @@ const CodeEditorPane = ({
               onChange={(value) => {
                 // dispatch
                 dispatch({
-                  type: "SET_LANGUAGE_DATA",
-                  payload: {
-                    language: activeLanguage as Language,
-                    data: {
-                      ...(problemState?.codeData as LanguageData),
-                      [tabStates[activeLanguage as Language][activeTab].type]:
-                        value,
-                    },
-                  },
+                  type: `SET_${tabStates[activeLanguage as Language][
+                    activeTab
+                  ].type.toUpperCase()}` as any,
+                  payload: value,
                 });
               }}
               path={tabStates[activeLanguage as Language][activeTab].id}

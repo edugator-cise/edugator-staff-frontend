@@ -288,7 +288,7 @@ export const menuOptions: (
   },
   {},
   {
-    title: "Muliple Choice",
+    title: "Multiple Choice",
     command: (editor: Editor) => {
       // insert a gap, then a multiple choice question, then a gap
       /* editor

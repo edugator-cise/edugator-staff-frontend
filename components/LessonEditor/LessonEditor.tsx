@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   GearIcon,
@@ -90,63 +96,36 @@ import AlertModal from "components/shared/Modals/AlertModal";
 import { useQueryClient } from "@tanstack/react-query";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { isUrl } from "utils/textUtils";
+import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [preview, setPreview] = useState(false);
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const [disableToolbar, setDisableToolbar] = useState(false);
+  // MODAL CONTROLS
 
-  const [editable, setEditable] = useState(lesson ? false : true);
+  const [linkModalOpen, setLinkModalOpen] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
+  // STATES FOR LINKS
+
+  const [url, setUrl] = useState("");
+  const [modalUrl, setModalUrl] = useState("");
+  const [modalUrlText, setModalUrlText] = useState("");
+  const [editingLink, setEditingLink] = useState(false);
+
+  const [unsavedChanges, setUnsavedChanges] = useState(false); // true when user makes any changes to lesson
+  const [disableToolbar, setDisableToolbar] = useState(false); // enable toolbar when user is editing a question
+  const [nextUrl, setNextUrl] = useState<null | string>(null); // stores the url to navigate to when user confirms navigation
+
+  const [editable, setEditable] = useState(lesson ? false : true); // whether editor is in preview mode or edit mode
+
+  // QUERY PARAMS
 
   const router = useRouter();
   const params = router.query;
   const { moduleName, moduleId, lessonId } = params;
 
+  // MUTATORS
+
   const queryClient = useQueryClient();
-
-  /* console.log(lesson); */
-
-  const initialLessonState: LessonData = {
-    title: lesson?.title || undefined,
-    content: lesson?.content
-      ? JSON.parse(lesson?.content as string)
-      : undefined,
-  };
-
-  function lessonReducer(state: LessonData, action: LessonAction) {
-    if (action.type !== "RESET_LESSON") setUnsavedChanges(true);
-
-    switch (action.type) {
-      case "SET_TITLE":
-        return { ...state, title: action.payload };
-      case "SET_CONTENT":
-        return { ...state, content: action.payload };
-      case "RESET_LESSON":
-        return initialLessonState;
-      default:
-        return state;
-    }
-  }
-
-  const resetEditor = () => {
-    lessonDispatch({ type: "RESET_LESSON" });
-    setTimeout(() => {
-      if (lesson?.content)
-        editor?.commands.setContent(JSON.parse(lesson?.content as string));
-    });
-  };
-
-  useEffect(() => {
-    console.log(lesson);
-    // empty timeout, see https://github.com/ueberdosis/tiptap/issues/3764
-    resetEditor();
-  }, [lesson]);
-
-  const [lessonState, lessonDispatch] = useReducer(
-    lessonReducer,
-    initialLessonState
-  );
 
   const {
     mutate: updateLesson,
@@ -160,24 +139,81 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     isError: createLessonError,
   } = useCreateLesson(moduleId as string);
 
+  // REDUCER (for local lesson state)
+
+  const initialLessonState: LessonData = {
+    title: lesson?.title || undefined,
+    content: lesson?.content
+      ? JSON.parse(lesson?.content as string)
+      : undefined,
+  };
+
+  function lessonReducer(state: LessonData, action: LessonAction) {
+    setUnsavedChanges(true);
+
+    switch (action.type) {
+      case "SET_TITLE":
+        return { ...state, title: action.payload };
+      case "SET_CONTENT":
+        return { ...state, content: action.payload };
+
+      default:
+        return state;
+    }
+  }
+
+  const [lessonState, lessonDispatch] = useReducer(
+    lessonReducer,
+    initialLessonState
+  );
+
+  // UTIL FUNCTIONS
+
+  // Reset editor content to originally fetched content
+  const resetEditor = () => {
+    setTimeout(() => {
+      if (lesson?.content)
+        editor?.commands.setContent(JSON.parse(lesson?.content as string));
+    });
+  };
+
+  // Toggle editable state of editor
+  const toggleEditable = (editable: boolean) => {
+    setTimeout(() => {
+      setEditable(editable);
+      editor?.setOptions({ editable });
+    }, 0);
+  };
+
+  // Reset editor content to originally fetched content
+  const onCancelChanges = () => {
+    // set content back to old content
+    setConfirmModalOpen(false);
+    setTimeout(() => {
+      resetEditor();
+      toggleEditable(false);
+      queryClient.invalidateQueries(["lesson", lessonId]);
+    }, 200);
+  };
+
+  // Publish a new lesson
   const publishLesson = async () => {
     if (
       !validateContent(lessonState.content as any, lessonState.title as string)
     ) {
       return;
     }
-    console.log("creating lesson");
-    console.log(lessonState);
     const content = JSON.stringify(lessonState.content);
     // create lesson
     await createLesson({
-      title: lessonState.title,
+      title: lessonState?.title as string,
       content: content,
       hidden: false, // TODO: add hidden checkbox
       moduleId: moduleId as string,
     });
   };
 
+  // Save changes to existing lesson
   const saveLesson = async () => {
     // check for empty MCQ / MSQ
     if (
@@ -185,8 +221,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     ) {
       return;
     }
-    console.log("updating lesson");
-    console.log(lessonState);
     // update lesson
     await updateLesson({
       title: lessonState.title as string,
@@ -195,6 +229,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     });
     toggleEditable(false);
   };
+
+  // EDITOR INITIALIZATION
 
   const editor = useEditor(
     {
@@ -275,28 +311,32 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         Image,
         TrailingNode,
       ],
-
-      // content: lessonState?.content || undefined, //sampleLessonContent,
     },
     [editable]
-
-    //[problemState?.testCases] // dependency change from edit to create
   ) as Editor;
 
-  const [linkModalOpen, setLinkModalOpen] = useState(false);
-  const [url, setUrl] = useState("");
-  const [modalUrl, setModalUrl] = useState("");
-  const [modalUrlText, setModalUrlText] = useState("");
-
-  // link logic
-
+  // Uhhh.. when the url changes in the BubbleMenu, update the url in the modal (for some reason)
   useEffect(() => {
     setModalUrl(url);
   }, [url]);
 
+  // Custom callback function to insert and edit links
   const openLinkModal = useCallback(() => {
     console.log(editor.chain().focus());
     setUrl(editor.getAttributes("link").href);
+    // extend selection to whole link, grab url text, then set selection to whole link
+    editor
+      ?.chain()
+      .focus()
+      .extendMarkRange("link")
+      .command(({ tr, state }) => {
+        console.log(state);
+        setModalUrlText(
+          state.doc.textBetween(state.selection.from, state.selection.to)
+        );
+        return true;
+      })
+      .run();
     setLinkModalOpen(true);
   }, [editor]);
 
@@ -342,36 +382,11 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     return;
   };
 
-  const toggleEditable = (editable: boolean) => {
-    setTimeout(() => {
-      setEditable(editable);
-      editor?.setOptions({ editable });
-    }, 0);
-  };
-
-  //if there are changes
-  const onCancelChanges = () => {
-    // set content back to old content
-    /* lessonDispatch({
-      type: "SET_CONTENT",
-      payload: JSON.parse(lesson?.content as string),
-    }); */
-
-    setConfirmModalOpen(false);
-    setTimeout(() => {
-      resetEditor();
-      toggleEditable(false);
-      queryClient.invalidateQueries(["lesson", lessonId]);
-    }, 200);
-  };
-
-  const [editingLink, setEditingLink] = useState(false);
-
   useEffect(() => {
     if (editor?.isActive("link")) {
       setUrl(editor.getAttributes("link").href);
       let urlText = "";
-      // extend selection to whole link, grab url text, then unset selection
+      // extend selection to whole link, grab url text, then set selection to whole link
       editor
         ?.chain()
         .focus()
@@ -384,19 +399,17 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           );
           return true;
         })
-        .setTextSelection(editor.state.selection.from)
+        .setTextSelection({
+          from: editor.state.selection.to,
+          to: editor.state.selection.to,
+        })
         .run();
       setModalUrlText(urlText);
-
-      // grab url text
-      //const text = editor.commands.extendMarkRange("link").valueOf();
-      //console.log(text);
     }
     setEditingLink(false);
   }, [editor?.getAttributes("link").href]);
 
-  // image logic
-
+  // image logic TODO replace with custom callback like with link above
   const addImage = () => {
     const url = window.prompt("URL");
 
@@ -405,10 +418,28 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     }
   };
 
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  // make user confirm navigation if there are unsaved changes
+
+  const {
+    confirmModalOpen: confirmNavigationModalOpen,
+    handleModalClose: handleConfirmNavigationModalClose,
+    setConfirmModalOpen: setConfirmNavigationModalOpen,
+  } = useNavigationConfirmation(unsavedChanges, router);
+  // Ref to keep track of whether the event listener should be active or not
+  const eventListenerActive = useRef(true);
+
+  const nextNavigationHandler = (url: string) => {
+    if (unsavedChanges && eventListenerActive.current) {
+      setConfirmModalOpen(true);
+      setNextUrl(url);
+      router.events.emit("routeChangeError");
+      throw "Abort route change by user confirmation";
+    }
+  };
 
   return (
     <div className="w-full h-full flex flex-col relative bg-white">
+      {/* Modal for cancelling changes */}
       <AlertModal
         title="Are you sure?"
         open={confirmModalOpen}
@@ -422,6 +453,24 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         }}
         confirmText="Confirm"
       />
+      {/* Modal for confirming navigation */}
+      <AlertModal
+        title="Are you sure?"
+        open={confirmNavigationModalOpen}
+        setOpen={setConfirmNavigationModalOpen}
+        description="Are you sure you want to leave? All unsaved changes will be lost."
+        onCancel={() => {
+          handleConfirmNavigationModalClose(false);
+        }}
+        onConfirm={() => {
+          setConfirmModalOpen(false);
+          setTimeout(() => {
+            handleConfirmNavigationModalClose(true);
+          }, 200);
+        }}
+        confirmText="Confirm"
+      />
+
       <div
         className="w-full 
       h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-slate-950 z-10"
@@ -436,54 +485,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           </h1>
         </div>
         <div className="flex space-x-2 items-center">
-          {/* <Tooltip.Provider delayDuration={100}>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
-                  onClick={() => {
-                    setSettingsOpen(!settingsOpen);
-                  }}
-                >
-                  <GearIcon color="white" />
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="bottom"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                >
-                  Settings
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <div
-                  className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5"
-                  onClick={() => setPreview(!preview)}
-                >
-                  {preview ? (
-                    <Pencil1Icon color="white" />
-                  ) : (
-                    <EyeOpenIcon color="white" />
-                  )}
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="bottom"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-20 TooltipContent data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                >
-                  {preview ? "Edit" : "Preview"}
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider> */}
           {lesson ? (
             <div className="flex space-x-2 items-center">
               {editable ? (
@@ -645,6 +646,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <BubbleMenu
               className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
               tippyOptions={{
+                moveTransition: "transform 0.2s ease-out",
                 zIndex: 101,
                 duration: 150,
                 onClickOutside(instance, event) {

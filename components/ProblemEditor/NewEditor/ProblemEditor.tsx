@@ -39,6 +39,7 @@ import SwitchToggle from "components/shared/SwitchToggle";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { toast } from "react-hot-toast";
 import { Router, useRouter } from "next/router";
+import { Problem } from "hooks/problem/useGetProblem";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -59,67 +60,64 @@ const getSampleCodeData: (language: Language) => LanguageData = (
   );
 };
 
-const AdminProblemEditor = () => {
-  // collect values from global state to pass into form
+const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
+  const router = useRouter();
+  const { problemId, moduleId, moduleName } = router.query;
 
-  // first, module name and id
-  const moduleName = useSelector(
-    (state: RootState) => state.problemEditorContainer.moduleName
-  );
-  const moduleId = useSelector(
-    (state: RootState) => state.problemEditorContainer.moduleId
-  );
+  const {
+    id,
+    title,
+    statement,
+    hidden,
+    fileName,
+    dueDate,
+    codeHeader,
+    codeBody,
+    codeFooter,
+    templatePackage,
+    timeLimit,
+    memoryLimit,
+    buildCommand,
+    languages,
+    orderNumber,
+    createdAt,
+    updatedAt,
+    testCases,
+  } = problem || {};
 
-  // metadata for title, hidden, dueDate, fileName, language
-  const metadataValues = useSelector(
-    (state: RootState) => state.problemEditorContainer.metadata
-  );
+  console.log(id);
+  console.log(problem?.id);
 
-  const language = !metadataValues.language
-    ? "cpp" // replace with course language later
-    : metadataValues.language === "C++"
-    ? "cpp"
-    : (metadataValues.language as Language);
-
-  // now problem data - problemStatement and templatePackage (might need to move templatepackage to codeData)
-  const problemDataValues = useSelector(
-    (state: RootState) => state.problemEditorContainer.problem
-  );
-
-  // next - codeData for solution, body, header, footer
-  const codeDataValues = useSelector(
-    (state: RootState) => state.problemEditorContainer.codeEditor
-  );
-
-  // finally, test cases
-  const testCases = useSelector(
-    (state: RootState) => state.problemEditorContainer.testCases
-  );
+  const language = "cpp";
 
   const [preview, setPreview] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false); // set to true when user makes changes to anything in problem state
+
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
-  const [unsavedChanges, setUnsavedChanges] = useState(false); // set to true when user makes changes to anything in problem state
   const [confirmModalOpen, setConfirmModalOpen] = useState(false); // set to true when user tries navigating away from page with unsaved changes
-  const [nextUrl, setNextUrl] = useState<null | string>(null); // stores the url to navigate to when user confirms navigation
-
-  const router = useRouter();
 
   const initialProblemState: ProblemData = {
-    title: metadataValues.title || "",
-    hidden: false,
-    dueDate: new Date().toISOString(),
-    language: language, // should derive this from course info
-    description: problemDataValues?.problemStatement || undefined,
-    codeData: codeDataValues.code
-      ? { ...codeDataValues?.code, fileName: metadataValues?.fileName }
-      : getSampleCodeData(language),
-    timeLimit: 5,
-    memoryLimit: 2048,
-    buildCommand: "",
-    testCases: testCases ? testCases : sampleTestCases,
+    title: title || "",
+    hidden: hidden || false,
+    dueDate: dueDate || new Date().toISOString(),
+    description: statement || undefined,
+    language: "cpp",
+    header: codeHeader || "C++ sample header",
+    body: codeBody || "C++ sample body",
+    footer: codeFooter || "C++ sample footer",
+    templatePackage: templatePackage || "",
+    fileName: fileName || "",
+    timeLimit: timeLimit || 10,
+    memoryLimit: memoryLimit || 2048,
+    buildCommand: buildCommand || "",
+    testCases: testCases || sampleTestCases,
+    solution: "",
   };
+
+  useEffect(() => {
+    console.log(problem);
+  }, [problem]);
 
   function problemReducer(
     state: ProblemData,
@@ -139,16 +137,16 @@ const AdminProblemEditor = () => {
         return { ...state, hidden: action.payload };
       case "SET_DESCRIPTION":
         return { ...state, description: action.payload };
-
-      case "SET_LANGUAGE_DATA":
-        console.log(action.payload.data);
-        return {
-          ...state,
-          language: action.payload.language,
-          codeData: {
-            ...action.payload.data,
-          },
-        };
+      case "SET_HEADER":
+        return { ...state, header: action.payload };
+      case "SET_BODY":
+        return { ...state, body: action.payload };
+      case "SET_FOOTER":
+        return { ...state, footer: action.payload };
+      case "SET_TEMPLATE_PACKAGE":
+        return { ...state, templatePackage: action.payload };
+      case "SET_FILE_NAME":
+        return { ...state, fileName: action.payload };
       case "SET_TIME_LIMIT":
         return { ...state, timeLimit: action.payload };
       case "SET_MEMORY_LIMIT":
@@ -202,6 +200,8 @@ const AdminProblemEditor = () => {
     }
   }, [testCases]);
 
+  const [nextUrl, setNextUrl] = useState<null | string>(null); // stores the url to navigate to when user confirms navigation
+
   // Ref to keep track of whether the event listener should be active or not
   const eventListenerActive = useRef(true);
 
@@ -239,13 +239,6 @@ const AdminProblemEditor = () => {
         });
     }
   };
-
-  // for testing
-
-  /* useEffect(() => {
-    console.log("problem state");
-    console.log(problemState);
-  }, [problemState]); */
 
   return (
     <div
@@ -293,38 +286,6 @@ const AdminProblemEditor = () => {
                   });
                 }}
               />
-              {/* <button
-                  className={`${
-                    problemState.hidden
-                      ? "bg-emerald-500 text-white"
-                      : "bg-white text-slate-800"
-                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm text-xs`}
-                  onClick={() => {
-                    problemDispatch({
-                      type: "SET_HIDDEN",
-                      payload: true,
-                    });
-                  }}
-                >
-                  <CheckIcon />
-                  <p>Hidden</p>
-                </button>
-                <button
-                  className={`${
-                    !problemState.hidden
-                      ? "bg-emerald-500 text-white"
-                      : "bg-white text-slate-800"
-                  } px-4 py-2 rounded-md flex items-center space-x-2 font-dm text-xs`}
-                  onClick={() => {
-                    problemDispatch({
-                      type: "SET_HIDDEN",
-                      payload: false,
-                    });
-                  }}
-                >
-                  <CheckIcon />
-                  <p>Visible</p>
-                </button> */}
             </div>
           </div>
           <div className="flex items-center justify-between space-x-4">
@@ -340,7 +301,7 @@ const AdminProblemEditor = () => {
                 id="time limit"
                 className="w-full py-2 text-sm rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
                 placeholder="5"
-                value={problemState.timeLimit}
+                value={problemState?.timeLimit}
                 onChange={(e) => {
                   problemDispatch({
                     type: "SET_TIME_LIMIT",
@@ -420,14 +381,14 @@ const AdminProblemEditor = () => {
       />
 
       {/* Top Banner */}
-      <div className="w-full h-16 bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
+      <div className="w-full h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
         <div className="flex items-end">
           <p className="text-base text-slate-400 font-dm">
             {moduleName}
             <span className="text-slate-600">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
           </p>
           <h1 className="text-white font-dm text-base">
-            {metadataValues.title || "New Problem"}
+            {title || "New Problem"}
           </h1>
         </div>
         <div className="flex space-x-2 items-center">
