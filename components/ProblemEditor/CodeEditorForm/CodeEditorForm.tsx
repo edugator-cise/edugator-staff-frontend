@@ -1,3 +1,5 @@
+// delete
+
 import Editor from "@monaco-editor/react";
 import {
   Box,

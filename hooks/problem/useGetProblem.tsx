@@ -6,21 +6,21 @@ import apiClient from "lib/api/apiClient";
 import { toast } from "react-hot-toast";
 
 export interface TestCase {
-  id: string;
-  testType: string;
+  id?: string;
+  testType?: string;
   input: string;
   expectedOutput: string;
   hint: string;
   visibility: number;
-  feedback: string;
-  orderNumber: number;
-  createdAt: string;
-  updatedAt: string;
-  problemId: string;
+  feedback?: string;
+  orderNumber?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  problemId?: string;
 }
 
 export interface Problem {
-  id: string;
+  id?: string;
   title: string;
   statement: string | Content;
   hidden: boolean;
@@ -34,10 +34,10 @@ export interface Problem {
   memoryLimit: number;
   buildCommand: string;
   languages: string;
-  orderNumber: number;
-  createdAt: string;
-  updatedAt: string;
-  moduleId: string;
+  orderNumber?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  moduleId?: string;
   testCases: TestCase[];
 }
 

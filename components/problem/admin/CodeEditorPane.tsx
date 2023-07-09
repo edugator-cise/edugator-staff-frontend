@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
-import { getFileExtension } from "../utils";
-import { Language, LanguageData, ProblemAction, ProblemData } from "../types";
+import { getFileExtension } from "./utils";
+import { Language, LanguageData, ProblemAction } from "./types";
 import Editor from "@monaco-editor/react";
 import { toTitleCase } from "utils/textUtils";
+import { Problem } from "hooks/problem/useGetProblem";
 
 const languageLabels: { [key in Language]: string } = {
   cpp: "C++",
@@ -23,106 +24,64 @@ type TabState = {
 const CodeEditorPane = ({
   problemState,
   dispatch,
+  problem,
 }: {
-  problemState: ProblemData;
+  problemState: Problem;
   dispatch: React.Dispatch<ProblemAction>;
+  problem: Problem;
 }) => {
   const [activeLanguage, setActiveLanguage] = useState<Language>("cpp"); // active language - TODO - SET THIS TO COURSE LANGUAGE
   const [editorLanguage, setEditorLanguage] = useState<Language>("cpp"); // language for editor
   const [activeTab, setActiveTab] = useState(0);
 
+  const [tabStates, setTabStates] = useState<TabState[]>([
+    {
+      id: `cpp-header-${problem?.id}`,
+      type: "header",
+      language: "cpp",
+      value: problemState?.codeHeader as string,
+    },
+
+    {
+      id: `cpp-body-${problem?.id}`,
+      type: "body",
+      language: "cpp",
+      value: problemState?.codeBody as string,
+    },
+    {
+      id: `cpp-footer-${problem?.id}`,
+      type: "footer",
+      language: "cpp",
+      value: problemState?.codeFooter as string,
+    },
+    /* {
+      id: `cpp-solution-${problem?.id}`,
+      type: "solution",
+      language: "cpp",
+      value: problemState?.solution as string,
+    }, */
+  ]);
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const tabStates: Record<Language, TabState[]> = {
-    // we define a list of tabs for each language. This is handled by Editor via the path prop
-    python: [
-      {
-        id: "py-header",
-        type: "header",
-        language: "python",
-        value: problemState?.header as string,
-      },
-      {
-        id: "py-body",
-        type: "body",
-        language: "python",
-        value: problemState?.body as string,
-      },
-      {
-        id: "py-footer",
-        type: "footer",
-        language: "python",
-        value: problemState?.footer as string,
-      },
-      {
-        id: "py-solution",
-        type: "solution",
-        language: "python",
-        value: problemState?.solution as string,
-      },
-    ],
-    cpp: [
-      {
-        id: "cpp-header",
-        type: "header",
-        language: "cpp",
-        value: problemState?.header as string,
-      },
-
-      {
-        id: "cpp-body",
-        type: "body",
-        language: "cpp",
-        value: problemState?.body as string,
-      },
-      {
-        id: "cpp-footer",
-        type: "footer",
-        language: "cpp",
-        value: problemState?.footer as string,
-      },
-      {
-        id: "cpp-solution",
-        type: "solution",
-        language: "cpp",
-        value: problemState?.solution as string,
-      },
-    ],
-    java: [
-      {
-        id: "java-header",
-        type: "header",
-        language: "java",
-        value: problemState?.header as string,
-      },
-
-      {
-        id: "java-body",
-        type: "body",
-        language: "java",
-        value: problemState?.body as string,
-      },
-      {
-        id: "java-footer",
-        type: "footer",
-        language: "java",
-        value: problemState?.footer as string,
-      },
-      {
-        id: "java-solution",
-        type: "solution",
-        language: "java",
-        value: problemState?.solution as string,
-      },
-    ],
-  };
 
   const beforeMount = (monaco: any) => {
     // before mount, we want to populate the editor with the previously entered code data
-    for (const tabState of tabStates["cpp"]) {
-      tabState.value = problemState?.[tabState.type] as string;
+    for (const tabState of tabStates) {
+      setTabStates((prev) => {
+        return prev.map((tab) => {
+          if (tab.id === tabState.id) {
+            return {
+              ...tab,
+              value: tabState.value,
+            };
+          }
+          return tab;
+        });
+      });
+      // tabState.value = problemState?.[tabState.type] as string;
     }
 
-    setEditorLanguage(activeLanguage as Language);
+    //setEditorLanguage(activeLanguage as Language);
   };
 
   const handleEditorMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -138,7 +97,7 @@ const CodeEditorPane = ({
       <div className={`w-full h-full flex flex-col p-4 justify-start`}>
         <div className="h-full w-full flex flex-col space-y-4">
           <h1 className="text-lg font-dm font-medium text-slate-800">
-            Code Configuration ({languageLabels[activeLanguage as Language]})
+            Code Configuration
           </h1>
           <div className="flex flex-col space-y-1">
             <label
@@ -164,7 +123,7 @@ const CodeEditorPane = ({
             />
           </div>
           <div className="flex space-x-2">
-            {tabStates[activeLanguage as Language]?.map((tab, index) => {
+            {tabStates.map((tab, index) => {
               return (
                 <button
                   key={index}
@@ -192,20 +151,15 @@ const CodeEditorPane = ({
               height="99%"
               beforeMount={beforeMount}
               language={editorLanguage}
-              defaultValue={
-                tabStates[activeLanguage as Language][activeTab].value
-              }
-              value={tabStates[activeLanguage as Language][activeTab].value}
+              value={tabStates[activeTab].value}
               onChange={(value) => {
                 // dispatch
                 dispatch({
-                  type: `SET_${tabStates[activeLanguage as Language][
-                    activeTab
-                  ].type.toUpperCase()}` as any,
-                  payload: value,
+                  type: `SET_${tabStates[activeTab].type.toUpperCase()}` as any,
+                  payload: value as string,
                 });
               }}
-              path={tabStates[activeLanguage as Language][activeTab].id}
+              path={tabStates[activeTab].id}
               options={{
                 minimap: {
                   enabled: false,

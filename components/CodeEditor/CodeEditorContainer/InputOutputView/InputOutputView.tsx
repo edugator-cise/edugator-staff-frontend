@@ -43,32 +43,31 @@ export const InputOutputView = ({
 
   return (
     <Tabs.Root
-      className="flex flex-col w-full h-full bg-slate-100 dark:bg-nav-darkest"
+      className="flex flex-col w-full h-full bg-[#d3d9df] p-2 pl-1 pt-1"
       defaultValue="stdin"
       value={tabs[activeTab]}
       onValueChange={(value) => {
         setActiveTab(tabs.indexOf(value));
       }}
     >
-      <div className="w-full overflow-hidden flex items-center min-h-[49px] space-x-8 dark:border-b-slate-700 border-b-slate-300 border-b py-3 px-5 dark:bg-nav-darkest bg-slate-200">
-        <p className="text-sm text-slate-800 font-dm font-medium semibold dark:text-white ">
-          Testing
-        </p>
+      <div className="w-full overflow-hidden flex items-center rounded-t-md py-1 min-h-[41px] max-h-[41px] space-x-8 dark:border-b-slate-700 border-b-slate-300 border-b px-5 dark:bg-nav-darkest bg-slate-100">
+        <p className="text-xs font-dm font-bold dark:text-white">Testing</p>
 
         <Tabs.List
-          className="flex w-full relative max-w-md items-center space-x-4"
-          aria-label="Select content type"
+          className="flex w-fit relative items-center space-x-4"
+          aria-label="Select view"
         >
           {tabs.map((tab) => (
             <Tabs.Trigger
               key={tab}
-              className="cursor-pointer relative rounded-md px-2 group py-1 flex-1 text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:text-slate-700 dark:hover:text-white dark:data-[state=active]:text-white outline-none"
+              asChild
+              className="cursor-pointer after:h-full after:w-full after:absolute after:rounded-md after:scale-75 after:transition hover:after:scale-100 hover:after:bg-slate-300/50 z-0 after:-z-10 px-2 relative rounded-md group py-3 flex-1 text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:bg-slate-300 data-[state=active]:text-slate-900 dark:hover:text-white dark:data-[state=active]:text-white outline-none"
               value={tab}
             >
-              <div className="w-full h-full flex items-center justify-center z-20">
+              <div className="h-full flex items-center justify-center z-20 font-mono text-[10px]">
                 {toTitleCase(tab)}
               </div>
-              <div
+              {/* <div
                 style={{
                   background:
                     activeTab === tabs.indexOf(tab)
@@ -76,20 +75,23 @@ export const InputOutputView = ({
                       : "",
                 }}
                 className="absolute w-[80%] h-[400%] left-1/2 -translate-x-1/2 top-1/2 -translate-y-[(calc(50%+40px))] scale-150 z-10"
-              ></div>
+              ></div> */}
             </Tabs.Trigger>
           ))}
         </Tabs.List>
       </div>
-      <Tabs.Content className="w-full flex-1 p-4" value="stdin">
+      <Tabs.Content
+        className="w-full rounded-b-md flex-1 bg-white p-4 h-full"
+        value="stdin"
+      >
         <textarea
-          className="w-full font-inter max-h-full p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-sm min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-slate-900 dark:text-white"
+          className="w-full text-sm bg-slate-50 !max-h-full font-inter p-2 border dark:bg-nav-dark border-slate-300 dark:border-slate-700 rounded-sm min-h-[10rem] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-slate-900 dark:text-white"
           value={input}
           onChange={handleStdinChange}
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full max-h-full p-4 relative overflow-y-scroll "
+        className="w-full h-full rounded-b-md max-h-full p-4 bg-white relative overflow-y-scroll "
         value="output"
       >
         <CompileOutput
@@ -99,7 +101,7 @@ export const InputOutputView = ({
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full p-4 overflow-y-scroll"
+        className="w-full h-full rounded-b-md p-4 bg-white overflow-y-scroll"
         value="submission"
       >
         <SubmitOutput results={submissionOutput} />

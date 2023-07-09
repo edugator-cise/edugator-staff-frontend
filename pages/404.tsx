@@ -33,48 +33,54 @@ const shadowVariants = {
   },
 };
 
+export const NotFoundFrame = () => {
+  return (
+    <div className="relative">
+      <m.div
+        initial="initial"
+        animate="animate"
+        variants={frameVariants}
+        style={{
+          transformOrigin: "top center",
+        }}
+        className="relative h-64 w-72 z-10"
+      >
+        <Image
+          style={{}}
+          src="/images/404Frame.png"
+          layout="fill"
+          objectFit="contain"
+        />
+      </m.div>
+      <div className="w-full h-10 absolute -translate-x-1/2 !left-1/2">
+        <m.div
+          className="absolute -bottom-10 h-full w-full mx-auto"
+          variants={shadowVariants}
+          initial="initial"
+          animate="animate"
+          style={{
+            backgroundColor: "rgba(0,0,0,.3)",
+            filter: "blur(10px)",
+            borderRadius: "50%",
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function NotFoundPage() {
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-nav-darkest flex-col">
-      <div className="relative">
-        <m.div
-          initial="initial"
-          animate="animate"
-          variants={frameVariants}
-          style={{
-            transformOrigin: "top center",
-          }}
-          className="relative h-80 w-96 z-10"
-        >
-          <Image
-            style={{}}
-            src="/images/404Frame.png"
-            layout="fill"
-            objectFit="contain"
-          />
-        </m.div>
-        <div className="w-full h-10 absolute -translate-x-1/2 !left-1/2">
-          <m.div
-            className="absolute -bottom-10 h-full w-full mx-auto"
-            variants={shadowVariants}
-            initial="initial"
-            animate="animate"
-            style={{
-              backgroundColor: "rgba(0,0,0,.3)",
-              filter: "blur(10px)",
-              borderRadius: "50%",
-            }}
-          />
-        </div>
-      </div>
+      <NotFoundFrame />
 
-      <m.div className="text-white text-4xl font-semibold font-ambit mt-36">
+      <m.div className="text-white text-2xl font-semibold font-ambit mt-28">
         Page Not Found
       </m.div>
       <div className="flex justify-end col-span-2 lg:col-span-1 mt-8">
         <Link href={"/"}>
           <button className="btn-gradient">
-            <p className="text-white font-dm text-base text-center whitespace-nowrap">
+            <p className="text-white font-dm text-xs text-center whitespace-nowrap">
               Go Back Home
             </p>
           </button>

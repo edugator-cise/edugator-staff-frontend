@@ -46,7 +46,7 @@ export default function LearnPage() {
         </div>
       ) : currentLesson === undefined ? (
         <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
-          <h1 className="text-2xl font-dm text-slate-900 dark:text-white">
+          <h1 className="text-base font-dm text-slate-900 dark:text-white">
             Lesson not found
           </h1>
         </div>

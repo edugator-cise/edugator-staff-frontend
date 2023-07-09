@@ -7,43 +7,15 @@ import React, {
 } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
-  GearIcon,
-  EyeOpenIcon,
   Pencil1Icon,
   CheckCircledIcon,
   RocketIcon,
   TrashIcon,
-  QuestionMarkIcon,
-  QuestionMarkCircledIcon,
   CheckIcon,
   Cross2Icon,
-  Pencil2Icon,
-  Link1Icon,
-  Link2Icon,
 } from "@radix-ui/react-icons";
-import { useSelector } from "react-redux";
-import { RootState } from "lib/store/store";
-import {
-  Bold,
-  Code,
-  H1,
-  H2,
-  H3,
-  Italic,
-  List,
-  ListNumbers,
-  SourceCode,
-  Strikethrough,
-  Underline as UnderlineIcon,
-} from "tabler-icons-react";
 import { LessonAction, LessonData } from "./types";
-import {
-  Editor,
-  EditorContent,
-  useEditor,
-  BubbleMenu,
-  JSONContent,
-} from "@tiptap/react";
+import { Editor, EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
 /* TipTap Extensions */
 import Color from "@tiptap/extension-color";
@@ -63,34 +35,15 @@ import Gapcursor from "@tiptap/extension-gapcursor";
 import HardBreak from "@tiptap/extension-hard-break";
 import Image from "@tiptap/extension-image";
 
-import {
-  Divider,
-  MenuOption,
-  menuOptions,
-  sampleLessonContent,
-  validateContent,
-} from "./utils";
+import { Divider, MenuOption, menuOptions, validateContent } from "./utils";
 import Modal from "components/shared/Modals/Modal";
-import * as RadioGroup from "@radix-ui/react-radio-group";
-
-import { Node, mergeAttributes } from "@tiptap/core";
-import {
-  ReactNodeViewRenderer,
-  NodeViewWrapper,
-  NodeViewContent,
-  NodeConfig,
-} from "@tiptap/react";
 import { TrailingNode } from "./Extensions/TrailingNode";
 import { MultipleChoice } from "./Extensions/MultipleChoice";
 import { MultipleSelect } from "./Extensions/MultipleSelect";
 import { toast } from "react-hot-toast";
-import { apiRoutes } from "constants/apiRoutes";
-import apiClient from "lib/api/apiClient";
-import { useCourseStructure } from "hooks/useNavigation";
 import { useCreateLesson } from "hooks/lesson/useCreateLesson";
 import { Lesson } from "hooks/lesson/useGetLesson";
 import { useRouter } from "next/router";
-import { Content } from "@tiptap/react";
 import { useUpdateLesson } from "hooks/lesson/useUpdateLesson";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { useQueryClient } from "@tanstack/react-query";
@@ -227,7 +180,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
-    toggleEditable(false);
   };
 
   // EDITOR INITIALIZATION
@@ -425,17 +377,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     handleModalClose: handleConfirmNavigationModalClose,
     setConfirmModalOpen: setConfirmNavigationModalOpen,
   } = useNavigationConfirmation(unsavedChanges, router);
-  // Ref to keep track of whether the event listener should be active or not
-  const eventListenerActive = useRef(true);
-
-  const nextNavigationHandler = (url: string) => {
-    if (unsavedChanges && eventListenerActive.current) {
-      setConfirmModalOpen(true);
-      setNextUrl(url);
-      router.events.emit("routeChangeError");
-      throw "Abort route change by user confirmation";
-    }
-  };
 
   return (
     <div className="w-full h-full flex flex-col relative bg-white">
@@ -551,7 +492,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                 console.log(lessonState);
                 await publishLesson();
               }}
-              className="px-3 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 text-white font-dm text-xs flex items-center space-x-2"
             >
               <RocketIcon />
               <p>Publish</p>

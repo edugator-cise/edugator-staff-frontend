@@ -9,17 +9,17 @@ import "allotment/dist/style.css";
 import dynamic from "next/dynamic";
 import { AllotmentProps } from "allotment";
 import AdminLayout from "components/AdminLayout/AdminLayout";
-import CodeEditorPane from "components/ProblemEditor/NewEditor/CodeEditorPane/CodeEditorPane";
-import MetadataEditorPane from "components/ProblemEditor/NewEditor/MetadataEditorPane/MetadataEditorPane";
+import CodeEditorPane from "components/problem/admin/CodeEditorPane";
+import MetadataEditorPane from "components/problem/admin/MetadataEditorPane";
 import {
   Language,
   LanguageData,
   ProblemAction,
   ProblemData,
   TestCaseVisibility,
-} from "components/ProblemEditor/NewEditor/types";
-import { getFileExtension } from "components/ProblemEditor/NewEditor/utils";
-import InputOutputEditorPane from "components/ProblemEditor/NewEditor/InputOutputEditorPane/InputOutputEditorPane";
+} from "components/problem/admin/types";
+import { getFileExtension } from "components/problem/admin/utils";
+import InputOutputEditorPane from "components/problem/admin/InputOutputEditorPane";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),

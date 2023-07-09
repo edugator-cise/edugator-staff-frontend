@@ -19,24 +19,6 @@ export interface LanguageData {
 
 export type Language = "python" | "java" | "cpp";
 
-export interface ProblemData {
-  title: string | undefined;
-  dueDate: string; // iso format
-  hidden: boolean;
-  description: Content | undefined;
-  header: string;
-  body: string;
-  footer: string;
-  solution: string;
-  language: string;
-  templatePackage: string;
-  fileName: string;
-  timeLimit: number;
-  memoryLimit: number;
-  buildCommand: string;
-  testCases: TestCase[];
-}
-
 export enum TestCaseVisibility {
   IO_HIDDEN = 0,
   I_VISIBLE_O_HIDDEN = 1,
@@ -46,7 +28,7 @@ export enum TestCaseVisibility {
 export type ProblemAction =
   | { type: "SET_TITLE"; payload: string }
   | { type: "SET_HIDDEN"; payload: boolean }
-  | { type: "SET_DESCRIPTION"; payload: Content }
+  | { type: "SET_STATEMENT"; payload: Content }
   | { type: "ADD_LANGUAGE"; payload: Language }
   | { type: "REMOVE_LANGUAGE"; payload: Language }
   | {
@@ -64,5 +46,4 @@ export type ProblemAction =
   | { type: "SET_BUILD_COMMAND"; payload: string }
   | { type: "ADD_TEST_CASE"; payload: TestCase }
   | { type: "UPDATE_TEST_CASE"; payload: { index: number; testCase: TestCase } }
-  | { type: "REMOVE_TEST_CASE"; payload: number }
-  | { type: "RESET_PROBLEM" };
+  | { type: "REMOVE_TEST_CASE"; payload: number };

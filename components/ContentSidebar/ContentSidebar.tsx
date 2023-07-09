@@ -26,6 +26,12 @@ import { RootState } from "lib/store/store";
 import { setContentSidebarHidden } from "state/interfaceControls.slice";
 import { AnimatePresence, motion as m } from "framer-motion";
 import AnimateHeight from "react-animate-height";
+import {
+  CourseModule,
+  CourseStructure,
+  ModuleContent,
+  useGetCourseStructure,
+} from "hooks/course/useGetCourseStructure";
 
 const ContentSidebar = ({
   activeContent,
@@ -38,17 +44,11 @@ const ContentSidebar = ({
 }) => {
   const [openModules, setOpenModules] = React.useState<string[]>([]);
 
-  const { problemAndLessonSet, status } = useNavigation(
-    LocalStorage.getToken() !== null
-  );
-
   const {
-    status: structureStatus,
-    error,
-    courseStructure,
-  } = useCourseStructure(
-    "978f5c19-e07d-4999-b88a-f39d2e812080" // TODO: get course id from url or auth
-  );
+    data: courseStructure,
+    isLoading: courseStructureLoading,
+    isError: courseStructureError,
+  } = useGetCourseStructure();
 
   const { contentSidebarHidden } = useSelector(
     (state: RootState) => state.interfaceControls
@@ -60,8 +60,6 @@ const ContentSidebar = ({
     dispatch(setContentSidebarHidden(hidden));
   };
 
-  const navigation = createNavStructure(problemAndLessonSet);
-
   const router = useRouter();
   const { lessonId, problemId } = router.query;
 
@@ -70,13 +68,13 @@ const ContentSidebar = ({
   const toggleExercisesLinks = navLinks.filter((link) => link.toggleExercises);
 
   return (
-    <ScrollArea.Root
-      className={`overflow-hidden w-72 min-w-[18rem] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
-    >
-      <ScrollArea.Viewport className="w-full h-full">
+    <>
+      <ScrollArea.Root
+        className={`overflow-auto w-72 min-w-[18rem] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
+      >
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
-          <h1 className="text-white font-dm text-lg">Exercises</h1>
+          <h1 className="text-white font-dm text-base">Exercises</h1>
           <div
             onClick={() => {
               toggleContentSidebar(!contentSidebarHidden);
@@ -111,9 +109,9 @@ const ContentSidebar = ({
           </Tabs.Root>
         </div>
 
-        {status === FetchStatus.loading ? (
+        {courseStructureLoading ? (
           <LoadingState />
-        ) : status === FetchStatus.failed ? (
+        ) : courseStructureError ? (
           <ErrorState />
         ) : (
           <>
@@ -126,36 +124,44 @@ const ContentSidebar = ({
               type="multiple"
             >
               <div className="w-full h-px bg-slate-500"></div>
-              {navigation &&
-                navigation.map(
-                  (value: INavigationItem, primaryIndex: number) => {
+              {courseStructure &&
+                courseStructure.modules.map(
+                  (value: CourseModule, primaryIndex: number) => {
                     const filterContent = (
-                      contentList: INavigationItem,
+                      contentList: ModuleContent[],
                       activeContent: "problems" | "lessons" | "all"
                     ) => {
                       if (activeContent === "problems") {
-                        return contentList.problems;
+                        // filter contentList to only include problems
+                        return contentList.filter(
+                          (item) => item.contentType === "problem"
+                        );
                       } else if (activeContent === "lessons") {
-                        return contentList.lessons;
+                        // filter contentList to only include lessons
+                        return contentList.filter(
+                          (item) => item.contentType === "lesson"
+                        );
                       } else {
-                        return [
-                          ...contentList.problems,
-                          ...contentList.lessons,
-                        ];
+                        return contentList;
                       }
                     };
 
-                    const filteredContent = filterContent(value, activeContent); // Get content based on activeContent parameter
+                    const filteredContent = filterContent(
+                      value.content,
+                      activeContent
+                    ); // Get content based on activeContent parameter
                     const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
                     const isEmpty = itemCount === 0; // if module is empty
-                    const allContent = isEmpty ? [] : filteredContent; // all problems and lessons in a module based on activeContent
+                    const allContent = isEmpty
+                      ? ([] as ModuleContent[])
+                      : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
                     const isActiveModule = allContent.some(
-                      (item) => item._id === activeId // if module contains the current active content
+                      (item) => item.id === activeId // if module contains the current active content
                     );
 
                     return (
                       <Accordion.Item
-                        value={value.name}
+                        value={value.moduleName}
                         key={primaryIndex}
                         className="border-t border-slate-700 last:border-b group dropdown"
                       >
@@ -166,7 +172,7 @@ const ContentSidebar = ({
                             <AnimatePresence>
                               {!isEmpty ? (
                                 <m.div
-                                  key={`${value.name}-${primaryIndex}`}
+                                  key={`${value.moduleName}-${primaryIndex}`}
                                   initial={{ opacity: 0 }}
                                   animate={{ opacity: 1 }}
                                   exit={{ opacity: 0 }}
@@ -174,7 +180,7 @@ const ContentSidebar = ({
                                 >
                                   <ModulePath
                                     moduleOpen={openModules.includes(
-                                      value.name
+                                      value.moduleName
                                     )}
                                   />
                                 </m.div>
@@ -189,7 +195,7 @@ const ContentSidebar = ({
                             ></div>
                             <p className="text-left text-sm text-white">{`${
                               primaryIndex + 1
-                            }. ${value.name}`}</p>
+                            }. ${value.moduleName}`}</p>
                           </div>
                           <ChevronDownIcon
                             className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
@@ -221,19 +227,15 @@ const ContentSidebar = ({
                               ) : (
                                 allContent.map(
                                   (
-                                    item: IProblemItem | ILessonItem,
+                                    item: ModuleContent,
                                     secondaryIndex: number
                                   ) => {
-                                    const id = item._id;
+                                    const id = item.id;
                                     //check type of item
-                                    const type =
-                                      "problemName" in item
-                                        ? "problem"
-                                        : "lesson";
-                                    const name =
-                                      "problemName" in item
-                                        ? item.problemName
-                                        : item.lessonName;
+                                    //check type of item
+                                    const type = item.contentType;
+
+                                    const name = item.title;
                                     const urlPath =
                                       type === "problem" ? "code" : "learn";
 
@@ -255,7 +257,7 @@ const ContentSidebar = ({
                                           <div className="absolute left-7 bottom-[40%]">
                                             <ItemPath
                                               moduleOpen={openModules.includes(
-                                                value.name
+                                                value.moduleName
                                               )}
                                               index={secondaryIndex}
                                             />
@@ -296,90 +298,88 @@ const ContentSidebar = ({
                   }
                 )}
             </Accordion.Root>
-            <HiddenSizingItems
-              navigation={navigation}
-              activeContent={activeContent}
-            />
           </>
         )}
-      </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-        orientation="vertical"
-      >
-        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-      </ScrollArea.Scrollbar>
-      <ScrollArea.Scrollbar
-        className="flex select-none touch-none p-0.5 bg-slate-600/60 transition duration-[160ms] ease-out hover:bg-white/20 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-        orientation="horizontal"
-      >
-        <ScrollArea.Thumb className="flex-1 bg-slate-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-      </ScrollArea.Scrollbar>
-      <ScrollArea.Corner className="bg-white/20" />
-    </ScrollArea.Root>
+      </ScrollArea.Root>
+      <HiddenSizingItems
+        courseStructure={courseStructure as CourseStructure}
+        activeContent={activeContent}
+      />
+    </>
   );
 };
 
 export const HiddenSizingItems = ({
-  navigation,
+  courseStructure,
   activeContent,
 }: {
-  navigation: INavigationItem[];
+  courseStructure: CourseStructure;
   activeContent: "problems" | "lessons" | "all";
 }) => {
   return (
     <div className="w-full absolute pointer-events-none -z-10 opacity-0">
       {/* Sizing Elements to animate height (stay hidden) */}
-      {navigation &&
-        navigation.map((value: INavigationItem, primaryIndex: number) => {
-          const filterContent = (
-            contentList: INavigationItem,
-            activeContent: "problems" | "lessons" | "all"
-          ) => {
-            if (activeContent === "problems") {
-              return contentList.problems;
-            } else if (activeContent === "lessons") {
-              return contentList.lessons;
-            } else {
-              return [...contentList.problems, ...contentList.lessons];
-            }
-          };
+      {courseStructure &&
+        courseStructure.modules.map(
+          (value: CourseModule, primaryIndex: number) => {
+            const filterContent = (
+              contentList: ModuleContent[],
+              activeContent: "problems" | "lessons" | "all"
+            ) => {
+              if (activeContent === "problems") {
+                // filter contentList to only include problems
+                return contentList.filter(
+                  (item) => item.contentType === "problem"
+                );
+              } else if (activeContent === "lessons") {
+                // filter contentList to only include lessons
+                return contentList.filter(
+                  (item) => item.contentType === "lesson"
+                );
+              } else {
+                return contentList;
+              }
+            };
 
-          const filteredContent = filterContent(value, activeContent);
+            const filteredContent = filterContent(value.content, activeContent); // Get content based on activeContent parameter
+            const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
+            const isEmpty = itemCount === 0; // if module is empty
+            const allContent = isEmpty
+              ? ([] as ModuleContent[])
+              : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
 
-          const allContent = [...value.problems, ...value.lessons];
+            return allContent.map(
+              (item: ModuleContent, secondaryIndex: number) => {
+                const id = item.id;
+                //check type of item
+                const type = item.contentType;
+                const name = item.title;
 
-          return allContent.map(
-            (item: IProblemItem | ILessonItem, secondaryIndex: number) => {
-              const id = item._id;
-              const name =
-                "problemName" in item ? item.problemName : item.lessonName;
-              const type = "problemName" in item ? "problem" : "lesson";
-
-              return (
-                <div key={id}>
-                  <div
-                    className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start ${primaryIndex}-${type} ${primaryIndex}-content`}
-                  >
-                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                    <p
-                      style={{
-                        //clamp lines to 3
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                      className="text-white text-sm py-3 w-full line"
+                return (
+                  <div key={id}>
+                    <div
+                      className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start ${primaryIndex}-${type} ${primaryIndex}-content`}
                     >
-                      {`${primaryIndex + 1}.${secondaryIndex + 1} ${name}`}
-                    </p>
+                      <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                      <p
+                        style={{
+                          //clamp lines to 3
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                        className="text-white text-sm py-3 w-full line"
+                      >
+                        {`${primaryIndex + 1}.${secondaryIndex + 1} ${name}`}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-          );
-        })}
+                );
+              }
+            );
+          }
+        )}
     </div>
   );
 };

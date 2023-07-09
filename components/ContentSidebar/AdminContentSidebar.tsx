@@ -3,12 +3,7 @@ import * as Accordion from "@radix-ui/react-accordion";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import {
   ChevronDownIcon,
-  ChevronRightIcon,
   DotsHorizontalIcon,
-  DoubleArrowDownIcon,
-  DoubleArrowUpIcon,
-  HeightIcon,
-  Pencil1Icon,
   Pencil2Icon,
   PlusIcon,
   TrashIcon,
@@ -28,11 +23,6 @@ import { setAdminContentSidebarHidden } from "state/interfaceControls.slice";
 import { AnimatePresence, motion as m } from "framer-motion";
 import AnimateHeight from "react-animate-height";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { IProblemBase } from "lib/shared/types";
-import apiClient from "lib/api/apiClient";
-import { apiRoutes } from "constants/apiRoutes";
-import { changeProblemOrderSuccess } from "state/ModulesSlice";
-import { toast } from "react-hot-toast";
 import Modal from "components/shared/Modals/Modal";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import {
@@ -205,7 +195,7 @@ const AdminContentSidebar = ({
       >
         {/* Header */}
         <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
-          <h1 className="text-white font-dm text-lg">Exercises</h1>
+          <h1 className="text-white font-dm text-base">Exercises</h1>
           <div
             onClick={() => {
               toggleContentSidebar(!adminContentSidebarHidden);
