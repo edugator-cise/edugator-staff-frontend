@@ -1,5 +1,5 @@
 import AdminLayout from "components/AdminLayout/AdminLayout";
-import AdminLessonEditor from "components/LessonEditor/LessonEditor";
+import AdminLessonEditor from "components/lesson/admin/LessonEditor";
 
 const ContentCreatePage = () => {
   return <AdminLessonEditor />;

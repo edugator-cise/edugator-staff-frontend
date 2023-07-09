@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import AdminLayout from "components/AdminLayout/AdminLayout";
 import { useGetLesson } from "hooks/lesson/useGetLesson";
-import AdminLessonEditor from "components/LessonEditor/LessonEditor";
+import AdminLessonEditor from "components/lesson/admin/LessonEditor";
 
 const LoadingState = () => (
   <div className="w-full h-full flex flex-col items-center bg-white">

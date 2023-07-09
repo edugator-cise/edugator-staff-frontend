@@ -64,7 +64,7 @@ export const InputOutputView = ({
               className="cursor-pointer after:h-full after:w-full after:absolute after:rounded-md after:scale-75 after:transition hover:after:scale-100 hover:after:bg-slate-300/50 z-0 after:-z-10 px-2 relative rounded-md group py-3 flex-1 text-sm font-dm leading-none text-slate-500 select-none hover:text-slate-700 data-[state=active]:bg-slate-300 data-[state=active]:text-slate-900 dark:hover:text-white dark:data-[state=active]:text-white outline-none"
               value={tab}
             >
-              <div className="h-full flex items-center justify-center z-20 font-mono text-[10px]">
+              <div className="h-full flex items-center justify-center z-20 font-mono !text-[10px]">
                 {toTitleCase(tab)}
               </div>
               {/* <div

@@ -27,9 +27,13 @@ import {
 } from "tabler-icons-react";
 import { ProblemAction } from "./types";
 import { JSONContent } from "@tiptap/react";
-import { sampleEditorContent } from "./utils";
+import { menuOptions, sampleEditorContent } from "./utils";
 import { Extensions } from "@tiptap/react";
 import { Problem } from "hooks/problem/useGetProblem";
+import Superscript from "@tiptap/extension-superscript";
+import Subscript from "@tiptap/extension-subscript";
+import * as Tooltip from "@radix-ui/react-tooltip";
+import { Divider, MenuOption } from "components/lesson/admin/utils";
 
 const MenuBar = ({ editor }: { editor: Editor }) => {
   if (!editor) {
@@ -37,109 +41,45 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="w-full rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={`
-          w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-            ${editor.isActive("bold") ? "bg-white/20" : ""}
-          `}
-      >
-        <Bold size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={`
-          w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-            ${editor.isActive("italic") ? "bg-white/20" : ""}
-          `}
-      >
-        <Italic size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-        disabled={!editor.can().chain().focus().toggleUnderline().run()}
-        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-            ${editor.isActive("underline") ? "bg-white/20" : ""}
-          `}
-      >
-        <UnderlineIcon size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={`
-          w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-            ${editor.isActive("strike") ? "bg-white/20" : ""}
-          `}
-      >
-        <Strikethrough size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        disabled={!editor.can().chain().focus().toggleCode().run()}
-        className={`
-          w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-            ${editor.isActive("code") ? "bg-white/20" : ""}
-          `}
-      >
-        <Code size={18} />
-      </button>
-      <div className="w-px h-6 bg-white/40 mr-2" />
-      <button
-        onClick={() => editor.commands.toggleHeading({ level: 1 })}
-        disabled={!editor.can().toggleHeading({ level: 1 })}
-        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-        ${editor.isActive("heading", { level: 1 }) ? "bg-white/20" : ""}
-        `}
-      >
-        <H1 size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        disabled={
-          !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
-        }
-        className={`w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-        ${editor.isActive("heading", { level: 2 }) ? "bg-white/20" : ""}
-        `}
-      >
-        <H2 size={18} />
-      </button>
-      <div className="w-px h-6 bg-white/40 mr-2" />
-      <button
-        onClick={() => editor.commands.toggleBulletList()}
-        disabled={!editor.can().toggleBulletList()}
-        className={`
-              w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-                  ${editor.isActive("bulletList") ? "bg-white/20" : ""}
-              `}
-      >
-        <List size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        disabled={!editor.can().chain().focus().toggleOrderedList().run()}
-        className={`
-              w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1   
-                  ${editor.isActive("orderedList") ? "bg-white/20" : ""}
-              `}
-      >
-        <ListNumbers size={18} />
-      </button>
-      {/* Code block */}
-      <button
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
-        className={`
-              w-8 h-8 flex items-center justify-center rounded-md hover:bg-white/20 mr-1
-                  ${editor.isActive("codeBlock") ? "bg-white/20" : ""}
-              `}
-      >
-        <SourceCode size={18} />
-      </button>
+    <div className="w-full space-x-2 rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
+      <Tooltip.Provider delayDuration={400}>
+        {menuOptions().map((option: MenuOption | Divider, index: number) => {
+          // check if option is a divider (if object is empty)
+          if (Object.keys(option).length === 0) {
+            return <div key={index} className="w-px h-6 bg-slate-500"></div>;
+          }
+          const menuOption = option as MenuOption;
+          return (
+            <Tooltip.Root key={index} delayDuration={300}>
+              <Tooltip.Trigger asChild>
+                <button
+                  key={index}
+                  className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
+                    menuOption.active &&
+                    menuOption.active(editor) &&
+                    "bg-white/20"
+                  } `}
+                  onClick={() => {
+                    menuOption.command(editor);
+                  }}
+                >
+                  {menuOption.icon}
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                >
+                  {menuOption.title}
+                </Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          );
+        })}
+      </Tooltip.Provider>
     </div>
   );
 };
@@ -174,6 +114,8 @@ const MetadataEditorPane = ({
       },
     },
     extensions: [
+      Superscript,
+      Subscript,
       Underline,
       Markdown,
       StarterKit.configure({
