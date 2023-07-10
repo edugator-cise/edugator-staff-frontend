@@ -617,175 +617,179 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                 <p>Preview</p>
               </button> */}
       </div>
-      <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white">
-        <div
-          className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 bg-white space-y-4 transition-all`}
-        >
-          <div className="flex flex-col space-y-1">
-            <input
-              type="text"
-              id="problem-title"
-              className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white !text-slate-800 font-dm outline-none"
-              autoComplete="off"
-              disabled={!editable}
-              onFocus={() => setDisableToolbar(true)}
-              onBlur={() => setDisableToolbar(false)}
-              placeholder="Lesson Title"
-              value={lessonState.title}
-              onChange={(e) => {
-                lessonDispatch({
-                  type: "SET_TITLE",
-                  payload: e.target.value,
-                });
-              }}
-            />
-          </div>
-          <div className="h-auto w-full text-slate-800">
-            {/* Bubble Menu (Only for Links for now) */}
-            <BubbleMenu
-              className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
-              tippyOptions={{
-                moveTransition: "transform 0.2s ease-out",
-                zIndex: 101,
-                duration: 150,
-                onClickOutside(instance, event) {
-                  instance.hide();
-                  //clear url, set editing link to false, and close the instance
-                  setTimeout(() => {
-                    setUrl(editor?.getAttributes("link").href);
-                  }, 300);
-                  setEditingLink(false);
-                },
-              }}
-              editor={editor}
-              shouldShow={({ editor, view, state, oldState, from, to }) => {
-                // only show the bubble menu for links.
-                if (!editor || !editable) return false;
-                return from === to && editor.isActive("link");
-              }}
-            >
-              {/* Input to edit the link */}
+      <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
+        <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
+          <div
+            className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 space-y-4 transition-all`}
+          >
+            <div className="flex flex-col space-y-1">
               <input
                 type="text"
-                className="w-full py-1 pr-2 bg-slate-800 text-ellipsis text-slate-200 rounded-md text-xs font-dm outline-none"
-                placeholder="https://example.com"
-                value={url}
-                onClick={(e) => {
-                  // select the input text when the user clicks on it.
-                  e.currentTarget.select();
-                }}
+                id="problem-title"
+                className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white dark:bg-nav-darker dark:text-white text-slate-800 font-dm outline-none"
+                autoComplete="off"
+                disabled={!editable}
+                onFocus={() => setDisableToolbar(true)}
+                onBlur={() => setDisableToolbar(false)}
+                placeholder="Lesson Title"
+                value={lessonState.title}
                 onChange={(e) => {
-                  setUrl(e.target.value);
-                  setEditingLink(true);
+                  lessonDispatch({
+                    type: "SET_TITLE",
+                    payload: e.target.value,
+                  });
                 }}
               />
-              <div className="w-px h-6 bg-slate-600" />
-              <Tooltip.Provider delayDuration={300}>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
-                      onClick={
-                        editingLink
-                          ? () => {
-                              if (!isUrl(url)) {
-                                toast.error("Please enter a valid URL.");
-                                return;
+            </div>
+            <div className="h-auto w-full text-slate-800 dark:text-white">
+              {/* Bubble Menu (Only for Links for now) */}
+              <BubbleMenu
+                className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
+                tippyOptions={{
+                  moveTransition: "transform 0.2s ease-out",
+                  zIndex: 101,
+                  duration: 150,
+                  onClickOutside(instance, event) {
+                    instance.hide();
+                    //clear url, set editing link to false, and close the instance
+                    setTimeout(() => {
+                      setUrl(editor?.getAttributes("link").href);
+                    }, 300);
+                    setEditingLink(false);
+                  },
+                }}
+                editor={editor}
+                shouldShow={({ editor, view, state, oldState, from, to }) => {
+                  // only show the bubble menu for links.
+                  if (!editor || !editable) return false;
+                  return from === to && editor.isActive("link");
+                }}
+              >
+                {/* Input to edit the link */}
+                <input
+                  type="text"
+                  className="w-full py-1 pr-2 bg-slate-800 text-ellipsis text-slate-200 rounded-md text-xs font-dm outline-none"
+                  placeholder="https://example.com"
+                  value={url}
+                  onClick={(e) => {
+                    // select the input text when the user clicks on it.
+                    e.currentTarget.select();
+                  }}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    setEditingLink(true);
+                  }}
+                />
+                <div className="w-px h-6 bg-slate-600" />
+                <Tooltip.Provider delayDuration={300}>
+                  <Tooltip.Root delayDuration={300}>
+                    <Tooltip.Trigger asChild className="relative">
+                      <button
+                        className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
+                        onClick={
+                          editingLink
+                            ? () => {
+                                if (!isUrl(url)) {
+                                  toast.error("Please enter a valid URL.");
+                                  return;
+                                }
+                                setUrl(editor.getAttributes("link").href);
+                                //set editor link value to current link value
+                                editor
+                                  ?.chain()
+                                  .focus()
+                                  .extendMarkRange("link")
+                                  .setLink({ href: url, target: "_blank" })
+                                  .run();
+                                setTimeout(() => {
+                                  setEditingLink(false);
+                                }, 300);
                               }
-                              setUrl(editor.getAttributes("link").href);
-                              //set editor link value to current link value
-                              editor
-                                ?.chain()
-                                .focus()
-                                .extendMarkRange("link")
-                                .setLink({ href: url, target: "_blank" })
-                                .run();
-                              setTimeout(() => {
+                            : openLinkModal
+                        }
+                      >
+                        <>
+                          <CheckIcon
+                            className={`transition absolute -translate-y-[calc(100%+16px)] ${
+                              editingLink ? "!translate-y-0" : ""
+                            }`}
+                          />
+
+                          <Pencil1Icon
+                            className={`transition ${
+                              editingLink ? "translate-y-[calc(100%+16px)]" : ""
+                            }`}
+                          />
+                        </>
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        side="top"
+                        sideOffset={5}
+                        align="center"
+                        className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                      >
+                        {editingLink ? "Save" : "Edit Link"}
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                  <Tooltip.Root delayDuration={300}>
+                    <Tooltip.Trigger asChild className="relative">
+                      <button
+                        className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
+                          editingLink
+                            ? "hover:bg-white/10"
+                            : "hover:bg-red-500/30"
+                        }`}
+                        onClick={
+                          editingLink
+                            ? () => {
+                                // cancel current link changes
+                                setUrl(editor.getAttributes("link").href);
                                 setEditingLink(false);
-                              }, 300);
-                            }
-                          : openLinkModal
-                      }
-                    >
-                      <>
-                        <CheckIcon
-                          className={`transition absolute -translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
+                              }
+                            : removeLink
+                        }
+                      >
+                        <>
+                          <Cross2Icon
+                            className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
+                              editingLink ? "!translate-y-0" : ""
+                            }`}
+                          />
 
-                        <Pencil1Icon
-                          className={`transition ${
-                            editingLink ? "translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                    >
-                      {editingLink ? "Save" : "Edit Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
-                        editingLink
-                          ? "hover:bg-white/10"
-                          : "hover:bg-red-500/30"
-                      }`}
-                      onClick={
-                        editingLink
-                          ? () => {
-                              // cancel current link changes
-                              setUrl(editor.getAttributes("link").href);
-                              setEditingLink(false);
-                            }
-                          : removeLink
-                      }
-                    >
-                      <>
-                        <Cross2Icon
-                          className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
-
-                        <TrashIcon
-                          className={`transition text-red-500 ${
-                            editingLink ? "-translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
-                        editingLink ? "text-slate-300" : "text-red-500"
-                      }`}
-                    >
-                      {editingLink ? "Cancel" : "Remove Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
-            </BubbleMenu>
-            <EditorContent
-              onFocus={() => setDisableToolbar(false)}
-              className="!prose-lime px-6 pb-6 h-auto prose-a:!text-blue-400 prose-a:underline prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc prose-headings:font-dm prose-h1:!my-4 prose-h2:!my-4 prose-h3:!my-4 prose-h3:!text-lg prose-h3:!font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-xl prose-h2:!font-semibold prose-headings:!my-0 !outline-none"
-              editor={editor}
-            />
+                          <TrashIcon
+                            className={`transition text-red-500 ${
+                              editingLink
+                                ? "-translate-y-[calc(100%+16px)]"
+                                : ""
+                            }`}
+                          />
+                        </>
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        side="top"
+                        sideOffset={5}
+                        align="center"
+                        className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
+                          editingLink ? "text-slate-300" : "text-red-500"
+                        }`}
+                      >
+                        {editingLink ? "Cancel" : "Remove Link"}
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
+              </BubbleMenu>
+              <EditorContent
+                onFocus={() => setDisableToolbar(false)}
+                className="!prose-lime px-6 pb-6 h-auto prose-a:!text-blue-400 prose-a:underline prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc prose-headings:font-dm prose-h1:!my-4 prose-h2:!my-4 prose-h3:!my-4 prose-h3:!text-lg prose-h3:!font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-xl prose-h2:!font-semibold prose-headings:!my-0 !outline-none"
+                editor={editor}
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -40,17 +40,17 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
   const buttonClassName = (index: number) => {
     if (submitted) {
       if (index === node.attrs.correctAnswer) {
-        return "ring-2 bg-white ring-emerald-400 text-white";
+        return "ring-2 bg-white dark:bg-slate-700 ring-emerald-400 text-white";
       } else if (index === selectedAnswer) {
-        return "ring-2 bg-white ring-red-400 text-white";
+        return "ring-2 bg-white dark:bg-slate-700 ring-red-400 text-white";
       } else {
-        return "bg-white ring-1 ring-slate-200 text-slate-800";
+        return "bg-white dark:bg-slate-700 ring-1 ring-slate-200 dark:ring-slate-600 text-slate-800";
       }
     } else {
       if (index === selectedAnswer) {
-        return "bg-white ring-2 ring-blue-500";
+        return "bg-white dark:bg-slate-700 ring-2 ring-blue-500 dark:ring-blue-400";
       } else {
-        return "bg-white ring-1 ring-slate-200 text-slate-800 hover:ring-slate-300";
+        return "bg-white dark:bg-slate-700 ring-1 ring-slate-200 text-slate-800 hover:ring-slate-300 dark:ring-slate-600 dark:hover:ring-slate-400";
       }
     }
   };
@@ -85,13 +85,13 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-50 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
+      className="bg-slate-50 dark:bg-slate-800 ring-1 ring-slate-300 dark:ring-slate-500 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
     >
       <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
         <ListDetails className="w-4 h-4 text-white" />
       </div>
       {/* Question */}
-      <div className="w-full text-slate-800 font-dm mb-4 mt-2 text-lg text-center">
+      <div className="w-full text-slate-800 dark:text-white font-dm mb-4 mt-2 text-lg text-center">
         {node.attrs.question}
       </div>
       {/* Answers */}
@@ -113,10 +113,14 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
                 index
               )}`}
             >
-              <div className="text-slate-800 font-dm text-sm">{answer}</div>
+              <div className="text-slate-800 dark:text-white font-dm text-sm">
+                {answer}
+              </div>
               <RadioGroup.Item
                 className={`bg-white w-6 min-w-[1.5rem] h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
-                  index === selectedAnswer ? "" : "border border-slate-300"
+                  index === selectedAnswer
+                    ? ""
+                    : "border border-slate-300 dark:border-slate-600"
                 } ${
                   submitted && index === node.attrs.correctAnswer
                     ? "ring-2 !ring-emerald-500/50 ring-offset-2 !border-none"
