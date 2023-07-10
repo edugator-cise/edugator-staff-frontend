@@ -548,6 +548,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               }
               onClick={async () => {
                 console.log(lessonState);
+                setUnsavedChanges(false);
                 await publishLesson();
               }}
             >
