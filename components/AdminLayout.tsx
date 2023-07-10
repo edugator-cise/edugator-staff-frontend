@@ -110,15 +110,6 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               >
                 {button.label}
               </button>
-              /*  <Button
-              onClick={button.onClick}
-              key={button.label}
-              variant={button.variant as ButtonVariant}
-              color={button.color as ButtonColor}
-              sx={{ marginLeft: 1 }}
-            >
-              {button.label}
-            </Button> */
             );
           })}
         </Box>

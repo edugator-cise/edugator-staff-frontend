@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { GradientButton } from "./GradientButton";
 import { useScroll } from "framer-motion";
 import useYPosition from "hooks/useYPosition";
+import { useAuthenticatedFetch } from "hooks/useAuthenticatedFetch";
+import { Button } from "@mui/material";
+import { apiRoutes } from "constants/apiRoutes";
 
 const NavLink = ({
   id,
@@ -49,7 +52,7 @@ const navLinks = [
 
 const Header = () => {
   const { scrollY } = useScroll();
-
+  const authenticatedFetch = useAuthenticatedFetch();
   // track when scrollY exceeds 100
   const [isScrolled, setIsScrolled] = useState(false);
   const [headerDark, setHeaderDark] = useState(true);
@@ -139,6 +142,15 @@ const Header = () => {
         <div className="flex justify-end col-span-2 lg:col-span-1 lg:space-x-4">
           <GradientButton text="Beta" href="/code" />
           <UserButton/>
+          <Button
+            onClick={async () => {
+              const val = await authenticatedFetch(apiRoutes.student.health);
+              //eslint-disable-next-line
+              console.log(val)
+            }}
+          >
+            test
+          </Button>
         </div>
       </div>
     </header>

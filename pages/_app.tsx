@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import { NextPage } from "next";
 import { Provider } from "react-redux";
@@ -22,7 +23,7 @@ import "styles/allotment.css";
 import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react"
+import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 
 type Page<P = {}> = NextPage<P> & {
@@ -39,8 +40,7 @@ if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
 }
 
 
-const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
+const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
 
 const App = ({ Component, pageProps }: Props) => {
   useEffect(() => {
@@ -51,38 +51,53 @@ const App = ({ Component, pageProps }: Props) => {
     }
   }, []);
 
+
+  const { pathname } = useRouter();
+
+  const isPublicPage = publicPages.includes(pathname);
+
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
+
   return (
-    <AuthComponent>
+    <ClerkProvider {...pageProps}>
       <Provider store={store}>
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
         />
-
-        <StyledEngineProvider injectFirst>
-          <MUIThemeProvider theme={theme}>
-            <ThemeProvider enableSystem={true} attribute="class">
-              <Toaster containerClassName="font-dm" />
-              {getLayout(<Component {...pageProps} />)}
-            </ThemeProvider>
-          </MUIThemeProvider>
-        </StyledEngineProvider>
+          <StylingProviders>
+            <Toaster containerClassName="font-dm" />
+            {isPublicPage ? (
+              getLayout(<Component { ...pageProps } />)
+            ) : (
+              <>
+                <SignedIn>
+                  {getLayout(<Component { ...pageProps } />)}
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            )}
+          </StylingProviders>
       </Provider>
-    </AuthComponent>
+    </ClerkProvider>
   );
 };
 
-const AuthComponent = ({ children }: { children: ReactNode}) => {
+const StylingProviders = ({ children }: { children: ReactNode }) => {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
-      <SignedIn>
-        {children}
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </ClerkProvider>
+    <StyledEngineProvider injectFirst>
+      <MUIThemeProvider theme={theme}>
+        <ThemeProvider enableSystem={true} attribute="class">
+          {children}
+        </ThemeProvider>
+      </MUIThemeProvider>
+    </StyledEngineProvider>
   )
 }
+
+
+
+
 export default App;

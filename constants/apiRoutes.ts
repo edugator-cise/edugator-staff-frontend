@@ -7,6 +7,7 @@ export const apiRoutes = {
     runCode: "v1/code/run",
     runCodeSubmission: "v1/code/run/submission",
     runCodeEvaluation: "v1/code/run/evaluate",
+    health: "v1/health"
   },
   admin: {
     getLesson: (id: string) => `v1/admin/lesson/${id}`,
