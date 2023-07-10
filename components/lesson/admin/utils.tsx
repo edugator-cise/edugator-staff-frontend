@@ -13,10 +13,6 @@ import {
   H1,
   H2,
   H3,
-  H4,
-  H5,
-  H6,
-  Blockquote,
   List,
   ListNumbers,
   SourceCode,
@@ -34,7 +30,7 @@ type EditorContent = {
   content: JSONContent[];
 };
 
-export function validateContent(content: EditorContent, title: string) {
+export function validateLesson(content: EditorContent, title: string) {
   console.log(content);
   const errorMessages = {
     multipleChoice: {
