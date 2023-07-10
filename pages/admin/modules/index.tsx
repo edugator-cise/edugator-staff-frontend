@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import { LocalStorage } from "lib/auth/LocalStorage";
 
 const ModulesPage = () => {
-  const router = useRouter();
+  /* const router = useRouter();
   const dispatch = useDispatch();
   const loginState = useSelector((state: RootState) => state.login);
   // Module to delete - hooks
@@ -32,10 +32,10 @@ const ModulesPage = () => {
     setToDelete(module);
   };
 
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading);
+  const [status, setStatus] = useState<FetchStatus>(FetchStatus.loading); */
   // Problem to grade - hooks
 
-  const ProfessorHeaderButtons = [
+  /* const ProfessorHeaderButtons = [
     {
       label: "Go To Code Editor",
       onClick: () => router.push(Routes.Code),
@@ -89,37 +89,13 @@ const ModulesPage = () => {
         //dispatch(setRunningSubmission(false));
         setStatus(FetchStatus.failed);
       });
-  }, []);
+  }, []); */
 
-  return (
-    <AdminLayout pageTitle={"Modules"} actionButtons={HeaderButtons}>
-      <>
-        <ModuleDialog />
-
-        <DeleteDialog
-          open={confirmDelete}
-          handleClose={onDeleteDialogClose}
-          toDelete={toDelete}
-        />
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          overflow={"auto"}
-        >
-          {status === FetchStatus.loading ? (
-            <CircularProgress />
-          ) : (
-            <ModuleAccordian
-              setModuleToDelete={setModuleToDelete}
-              setProblemToGrade={() => {}}
-            />
-          )}
-        </Grid>
-      </>
-    </AdminLayout>
-  );
+  return <div className="h-full w-full bg-red-500"></div>;
 };
+
+ModulesPage.getLayout = (page: React.ReactNode) => (
+  <AdminLayout pageTitle="Modules">{page}</AdminLayout>
+);
 
 export default ModulesPage;

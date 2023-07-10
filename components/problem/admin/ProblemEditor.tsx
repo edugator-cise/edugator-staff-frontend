@@ -243,6 +243,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
   };
 
   const removeProblem = async () => {
+    setUnsavedChanges(false);
     await deleteProblem(problemId as string);
     setDeleteModalOpen(false);
     setSettingsOpen(false);

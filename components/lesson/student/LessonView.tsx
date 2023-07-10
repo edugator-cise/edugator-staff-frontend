@@ -99,7 +99,7 @@ const LessonView = ({ lesson }: { lesson: Lesson }) => {
     <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
       <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
         <div
-          className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4  space-y-4`}
+          className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 space-y-4`}
         >
           <div className="flex flex-col space-y-1 ">
             <h1 className="w-full px-6 py-2 text-3xl rounded-md font-bold text-slate-800  font-dm outline-none dark:text-white">

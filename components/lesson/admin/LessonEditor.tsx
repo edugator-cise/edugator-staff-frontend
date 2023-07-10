@@ -191,6 +191,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   };
 
   const removeLesson = async () => {
+    setUnsavedChanges(false);
     await deleteLesson(lessonId as string);
     setDeleteModalOpen(false);
     /* setSettingsOpen(false); */
