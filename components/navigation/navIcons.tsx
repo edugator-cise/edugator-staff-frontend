@@ -14,6 +14,125 @@ export const EdugatorLogo = () => (
   </svg>
 );
 
+export const EdugatorFullLogo = () => (
+  <svg
+    className="w-full"
+    viewBox="0 0 49 44"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M34.2874 21.5777C33.9382 21.9283 33.7862 22.3417 33.7563 22.5098L33.4941 23.9847L2.58482 23.9848C1.59736 23.9848 0.796875 23.1843 0.796875 22.1968C0.796875 21.2094 1.59736 20.4089 2.58482 20.4089L30.764 20.4089C31.5333 18.9582 33.1362 17.3994 35.9269 17.3994C37.7723 17.3994 39.1427 18.1112 40.0621 19.0952C40.4545 19.5151 40.7504 19.968 40.9694 20.4089L46.8839 20.4089C47.8714 20.4089 48.6719 21.2094 48.6719 22.1968C48.6719 23.1843 47.8714 23.9848 46.8839 23.9848L38.2049 23.9847L37.9427 22.5098C37.9003 22.2711 37.7511 21.8595 37.4494 21.5366C37.1971 21.2666 36.7687 20.9753 35.9269 20.9753C35.0777 20.9753 34.59 21.2739 34.2874 21.5777Z"
+      fill="#5BBD53"
+    />
+    <rect
+      opacity="0.7"
+      x="1.99805"
+      y="13.8271"
+      width="8.17488"
+      height="3.5718"
+      rx="1.7859"
+      fill="#004373"
+    />
+    <rect
+      opacity="0.7"
+      width="6.65117"
+      height="3.5718"
+      rx="1.7859"
+      transform="matrix(-1 0 0 1 18.1982 13.8271)"
+      fill="#92C5EA"
+    />
+    <rect
+      opacity="0.7"
+      x="1.99805"
+      y="27.0596"
+      width="4.59074"
+      height="3.5718"
+      rx="1.7859"
+      fill="#92C5EA"
+    />
+    <rect
+      opacity="0.7"
+      x="7.70703"
+      y="27.0596"
+      width="10.4894"
+      height="3.5718"
+      rx="1.7859"
+      fill="#247DBD"
+    />
+    <rect
+      opacity="0.7"
+      x="5.81055"
+      y="33.5049"
+      width="30.8659"
+      height="3.5718"
+      rx="1.7859"
+      fill="#004373"
+    />
+    <rect
+      opacity="0.7"
+      width="6.92838"
+      height="3.5718"
+      rx="1.7859"
+      transform="matrix(-1 0 0 1 45.0771 33.5049)"
+      fill="#92C5EA"
+    />
+    <rect
+      opacity="0.7"
+      width="5.50905"
+      height="3.5718"
+      rx="1.7859"
+      transform="matrix(-1 0 0 1 37.1865 0.93457)"
+      fill="#92C5EA"
+    />
+    <rect
+      opacity="0.7"
+      width="6.58247"
+      height="3.5718"
+      rx="1.7859"
+      transform="matrix(-1 0 0 1 46.7012 13.8271)"
+      fill="#004373"
+    />
+    <rect
+      opacity="0.7"
+      width="6.27225"
+      height="3.5718"
+      rx="1.7859"
+      transform="matrix(-1 0 0 1 20.1406 40.1543)"
+      fill="#92C5EA"
+    />
+    <rect
+      opacity="0.7"
+      x="21.8223"
+      y="40.1543"
+      width="15.3654"
+      height="3.5718"
+      rx="1.7859"
+      fill="#247DBD"
+    />
+    <rect
+      opacity="0.7"
+      x="5.81055"
+      y="7.38086"
+      width="37.319"
+      height="3.5718"
+      rx="1.7859"
+      fill="#247DBD"
+    />
+    <rect
+      opacity="0.7"
+      x="15.2666"
+      y="0.93457"
+      width="14.7302"
+      height="3.5718"
+      rx="1.7859"
+      fill="#004373"
+    />
+  </svg>
+);
+
 export const icons: Record<string, (active: boolean) => JSX.Element> = {
   dashboard: (active: boolean) => (
     <svg

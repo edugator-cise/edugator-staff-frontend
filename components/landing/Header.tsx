@@ -1,4 +1,4 @@
-import { EdugatorLogo } from "components/navigation/navIcons";
+import { EdugatorFullLogo, EdugatorLogo } from "components/navigation/navIcons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { GradientButton } from "./GradientButton";
@@ -100,7 +100,7 @@ const Header = () => {
             // scroll to top
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="cursor-pointer flex col-span-4 lg:col-span-1 justify-start items-center space-x-2 cursor-pointer"
+          className=" flex col-span-4 lg:col-span-1 justify-start items-center space-x-2 cursor-pointer"
         >
           <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
             <EdugatorLogo />
