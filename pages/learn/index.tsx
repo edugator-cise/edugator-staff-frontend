@@ -1,4 +1,4 @@
-import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
+import PlaygroundLayout from "components/layouts/PlaygroundLayout";
 import { ReactNode } from "react";
 import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";

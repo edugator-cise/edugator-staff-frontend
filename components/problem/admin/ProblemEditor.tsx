@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState, useReducer } from "react";
 import "allotment/dist/style.css";
 import dynamic from "next/dynamic";
 import { AllotmentProps } from "allotment";
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import CodeEditorPane from "components/problem/admin/CodeEditorPane";
 import MetadataEditorPane from "components/problem/admin/MetadataEditorPane";
 import { ProblemAction } from "components/problem/admin/types";
@@ -59,7 +59,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
   } = problem || {};
 
   const [unsavedChanges, setUnsavedChanges] = useState(false); // set to true when user makes changes to anything in problem state
-  const [editable, setEditable] = useState(false); // set to true when user clicks "edit" button
+  const [editable, setEditable] = useState(problem ? false : true); // set to true when user clicks "edit" button
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false); // set to true when user tries navigating away from page with unsaved changes

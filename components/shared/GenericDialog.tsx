@@ -12,7 +12,7 @@ import {
   ButtonProps,
   ButtonColor,
   ButtonVariant,
-} from "components/AdminLayout/AdminLayout";
+} from "components/layouts/AdminLayout";
 import { Breakpoint } from "@mui/system";
 
 interface DialogButtonProps extends ButtonProps {

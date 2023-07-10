@@ -1,4 +1,4 @@
-import { IModuleWithProblemsAndLessons } from "components/CodeEditor/types";
+import { IModuleWithProblemsAndLessons } from "components/problem/student/types";
 import { useEffect, useState } from "react";
 import apiClient from "lib/api/apiClient";
 import { FetchStatus } from "./types";

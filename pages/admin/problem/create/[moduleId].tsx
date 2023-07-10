@@ -1,4 +1,4 @@
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import AdminProblemEditor from "components/problem/admin/ProblemEditor";
 
 const ProblemCreatePage = () => {

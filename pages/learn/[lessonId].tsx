@@ -14,7 +14,7 @@ import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
 import ImageBlock from "components/LearnPage/ImageBlock";
 import MultipleSelectQuestion from "components/LearnPage/MultipleSelectQuestion";
-import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
+import PlaygroundLayout from "components/layouts/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";

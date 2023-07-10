@@ -1,4 +1,4 @@
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import { useRouter } from "next/router";
 import AdminProblemEditor from "components/problem/admin/ProblemEditor";
 import { useGetProblem } from "hooks/problem/useGetProblem";

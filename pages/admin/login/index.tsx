@@ -3,7 +3,7 @@ import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { FormTextField } from "components/shared/FormTextField";
 import { receiveLoginSuccess } from "state/LoginSlice";
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
 import { ILoginSuccess, IRequestLoginAction } from "components/Login/types";
@@ -22,7 +22,7 @@ import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import AdminHeader from "components/AdminLayout/AdminHeader";
+import AdminHeader from "components/layouts/AdminHeader";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
 const LoginForm = styled(Form)(

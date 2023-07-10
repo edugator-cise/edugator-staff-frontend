@@ -8,7 +8,7 @@ import React, {
 import "allotment/dist/style.css";
 import dynamic from "next/dynamic";
 import { AllotmentProps } from "allotment";
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import CodeEditorPane from "components/problem/admin/CodeEditorPane";
 import MetadataEditorPane from "components/problem/admin/MetadataEditorPane";
 import {

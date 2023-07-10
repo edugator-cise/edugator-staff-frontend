@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import { Fade, Stack, duration, Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { unsetSelectedAccount } from "state/AdminAccountsPage.slice";

@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminLayout from "components/layouts/AdminLayout";
 import { useGetLesson } from "hooks/lesson/useGetLesson";
 import AdminLessonEditor from "components/lesson/admin/LessonEditor";
 

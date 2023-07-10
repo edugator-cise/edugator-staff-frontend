@@ -41,7 +41,7 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
   }
 
   return (
-    <div className="w-full space-x-2 rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
+    <div className="w-full gap-2 rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
       <Tooltip.Provider delayDuration={400}>
         {menuOptions().map((option: MenuOption | Divider, index: number) => {
           // check if option is a divider (if object is empty)

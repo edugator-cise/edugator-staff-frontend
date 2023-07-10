@@ -56,7 +56,7 @@ const App = ({ Component, pageProps }: Props) => {
       <StyledEngineProvider injectFirst>
         <MUIThemeProvider theme={theme}>
           <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
+            <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
             <ThemeProvider enableSystem={true} attribute="class">
               <Toaster containerClassName="font-dm" />
               {getLayout(<Component {...pageProps} />)}

@@ -1,8 +1,8 @@
 import React, { ReactNode, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
-import { CodeEditorView } from "components/CodeEditor/CodeEditorContainer/CodeEditorView/CodeEditorView";
-import { InputOutputView } from "components/CodeEditor/CodeEditorContainer/InputOutputView/InputOutputView";
+import PlaygroundLayout from "components/layouts/PlaygroundLayout";
+import { CodeEditorView } from "components/problem/student/CodeEditorView";
+import { InputOutputView } from "components/problem/student/InputOutputView";
 import "allotment/dist/style.css";
 import { useRunCode } from "hooks/useRunCode";
 import dynamic from "next/dynamic";
@@ -67,7 +67,7 @@ export default function ProblemView({
   };
 
   return (
-    <div className="w-full h-full bg-slate-100 dark:bg-nav-darkest relative">
+    <div className="w-full h-full bg-[#d3d9df] dark:bg-slate-950 relative">
       {/* <AIChat /> */}
       <Allotment
         sizes={[310, 350]}

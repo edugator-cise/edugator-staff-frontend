@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { useRouter } from "next/router";
-import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
+import PlaygroundLayout from "components/layouts/PlaygroundLayout";
 import "allotment/dist/style.css";
 import { useGetProblem } from "hooks/problem/useGetProblem";
 import ProblemView from "components/problem/student/ProblemView";
@@ -43,38 +43,38 @@ export const StudentLoadingState = () => (
   <div className="w-full h-full flex flex-col">
     <div className="w-full h-full flex">
       {/* Metadata */}
-      <div className="h-full w-full bg-slate-100 border-r border-slate-300 p-4 flex flex-col items-start space-y-4">
-        <div className="rounded-md h-12 w-80 bg-slate-300 animate-pulse"></div>
+      <div className="h-full w-full bg-slate-100 dark:bg-nav-darkest border-r border-slate-300 dark:border-slate-700 p-4 flex flex-col items-start space-y-4">
+        <div className="rounded-md h-12 w-80 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
         <div className="flex items-center justify-center space-x-4">
-          <div className="rounded-full h-6 w-24 bg-slate-300 animate-pulse"></div>
-          <div className="rounded-full h-6 w-16 bg-slate-300 animate-pulse"></div>
-          <div className="rounded-full h-6 w-20 bg-slate-300 animate-pulse"></div>
+          <div className="rounded-full h-6 w-24 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+          <div className="rounded-full h-6 w-16 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+          <div className="rounded-full h-6 w-20 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
         </div>
-        <div className="rounded-md w-56 h-4 bg-slate-300 animate-pulse !mt-12"></div>
-        <div className="rounded-md w-80 h-4 bg-slate-300 animate-pulse"></div>
-        <div className="rounded-md w-96 h-4 bg-slate-300 animate-pulse"></div>
-        <div className="rounded-md w-48 h-4 bg-slate-300 animate-pulse"></div>
+        <div className="rounded-md w-56 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse !mt-12"></div>
+        <div className="rounded-md w-80 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+        <div className="rounded-md w-96 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+        <div className="rounded-md w-48 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
         <div className="rounded-md w-24 h-4 animate-pulse"></div>
-        <div className="rounded-md w-52 h-4 bg-slate-300 animate-pulse"></div>
-        <div className="rounded-md w-28 h-4 bg-slate-300 animate-pulse"></div>
-        <div className="rounded-md w-36 h-4 bg-slate-300 animate-pulse"></div>
+        <div className="rounded-md w-52 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+        <div className="rounded-md w-28 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+        <div className="rounded-md w-36 h-4 bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
       </div>
       <div className="h-full w-full flex flex-col">
         {/* Code Editor */}
-        <div className="h-full w-full border-b border-slate-300 space-y-4 bg-slate-100 p-4 flex flex-col">
-          <div className="w-full h-full rounded-md bg-gradient-to-b from-slate-300 to-slate-200 animate-pulse"></div>
+        <div className="h-full w-full border-b border-slate-300 dark:border-slate-700 space-y-4 bg-slate-100 dark:bg-nav-darkest p-4 flex flex-col">
+          <div className="w-full h-full rounded-md bg-gradient-to-b from-slate-300 dark:from-slate-800 to-slate-200 dark:to-slate-700 animate-pulse"></div>
           <div className="w-full flex justify-end items-center space-x-4">
-            <div className="w-24 h-8 rounded-md bg-slate-300 animate-pulse"></div>
-            <div className="w-24 h-8 rounded-md bg-slate-300 animate-pulse"></div>
+            <div className="w-24 h-8 rounded-md bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+            <div className="w-24 h-8 rounded-md bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
           </div>
         </div>
-        <div className="h-full w-full space-y-4 bg-slate-100 p-4 flex flex-col">
+        <div className="h-full w-full space-y-4 bg-slate-100 dark:bg-nav-darkest p-4 flex flex-col">
           <div className="w-full flex justify-start items-center space-x-4">
-            <div className="w-24 h-10 rounded-md bg-slate-300 animate-pulse"></div>
-            <div className="w-24 h-10 rounded-md bg-slate-300 animate-pulse"></div>
-            <div className="w-24 h-10 rounded-md bg-slate-300 animate-pulse"></div>
+            <div className="w-24 h-10 rounded-md bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+            <div className="w-24 h-10 rounded-md bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
+            <div className="w-24 h-10 rounded-md bg-slate-300 dark:bg-slate-700 animate-pulse"></div>
           </div>
-          <div className="w-full h-full rounded-md bg-gradient-to-b to-slate-300 from-slate-200 animate-pulse"></div>
+          <div className="w-full h-full rounded-md bg-gradient-to-b to-slate-300 from-slate-200 dark:from-slate-700 dark:to-slate-800  animate-pulse"></div>
         </div>
       </div>
     </div>
