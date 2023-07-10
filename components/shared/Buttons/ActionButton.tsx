@@ -10,10 +10,12 @@ type CustomButtonProps = {
 
 const ActionButton: React.FC<CustomButtonProps> = ({
   children,
+  className,
   color = "blue",
   ...rest
 }: {
   color?: "red" | "green" | "blue" | "gray";
+  className?: string;
   children: React.ReactNode;
 }) => {
   const containerClassName = () => {
@@ -44,7 +46,7 @@ const ActionButton: React.FC<CustomButtonProps> = ({
       <div
         className={`w-full h-full group-disabled:bg-gray-400 rounded-[5px] flex items-center space-x-2 px-3 py-2 text-xs text-white font-dm ${
           innerClassName() || ""
-        }`}
+        } ${className || ""}`}
       >
         {children}
       </div>

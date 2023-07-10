@@ -27,7 +27,11 @@ import {
 } from "tabler-icons-react";
 import { ProblemAction } from "./types";
 import { JSONContent } from "@tiptap/react";
-import { menuOptions, sampleEditorContent } from "./utils";
+import {
+  menuOptions,
+  processProblemStatement,
+  sampleEditorContent,
+} from "./utils";
 import { Extensions } from "@tiptap/react";
 import { Problem } from "hooks/problem/useGetProblem";
 import Superscript from "@tiptap/extension-superscript";
@@ -101,6 +105,8 @@ const MetadataEditorPane = ({
           problemState?.statement as unknown as string
         ) as JSONContent); */
 
+  const content = processProblemStatement(problemState?.statement);
+
   const editor = useEditor({
     onUpdate: ({ editor }) => {
       dispatch({
@@ -139,9 +145,7 @@ const MetadataEditorPane = ({
         },
       }),
     ],
-    content: problemState?.statement
-      ? problemState?.statement
-      : sampleEditorContent,
+    content: content,
   });
 
   return (

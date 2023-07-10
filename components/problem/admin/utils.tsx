@@ -12,7 +12,7 @@ export const getFileExtension = (language: Language) => {
       return "";
   }
 };
-import { Editor, JSONContent, getNodeAttributes } from "@tiptap/react";
+import { Content, Editor, JSONContent, getNodeAttributes } from "@tiptap/react";
 import { toast } from "react-hot-toast";
 import {
   Bold,
@@ -22,25 +22,77 @@ import {
   Code,
   Subscript,
   Superscript,
-  Link,
-  Heading,
   H1,
   H2,
-  H3,
-  H4,
-  H5,
-  H6,
-  Blockquote,
   List,
   ListNumbers,
   SourceCode,
   ArrowBackUp,
   ArrowForwardUp,
-  Photo,
-  ListDetails,
-  ListCheck,
 } from "tabler-icons-react";
 import { Divider, MenuOption } from "components/lesson/admin/utils";
+import { Problem } from "hooks/problem/useGetProblem";
+
+export const processProblemStatement = (
+  statement: string | Content
+): string => {
+  let editorContent = "";
+
+  if (statement === undefined) {
+    // Use empty editor content
+    editorContent = "";
+  } else {
+    try {
+      // Try parsing problem.statement as JSONContent
+      const parsedContent = JSON.parse(statement as string);
+      editorContent = parsedContent;
+    } catch {
+      // Use problem.statement as a string
+      editorContent = statement as string;
+    }
+  }
+  return editorContent;
+};
+
+export const validateProblem = (problem: Problem) => {
+  if (!problem.title) {
+    toast.error("Please enter a title");
+    return false;
+  }
+  /* if (!problem.statement) {
+    toast.error("Please enter a statement");
+    return false;
+  } */
+  if (!problem.fileName) {
+    toast.error("Please enter a file name");
+    return false;
+  }
+  if (!problem.dueDate) {
+    toast.error("Please enter a due date");
+    return false;
+  }
+  /* if (!problem.templatePackage) {
+    toast.error("Please enter a template package");
+    return false;
+  } */
+  if (!problem.timeLimit) {
+    toast.error("Please enter a time limit");
+    return false;
+  }
+  if (!problem.memoryLimit) {
+    toast.error("Please enter a memory limit");
+    return false;
+  }
+  /* if (!problem.buildCommand) {
+    toast.error("Please enter a build command");
+    return false;
+  } */
+  if (!problem.testCases || problem.testCases.length === 0) {
+    toast.error("Please enter at least one test case");
+    return false;
+  }
+  return true;
+};
 
 export const fileNameWithExtensionRegex = (language: Language) => {
   const extension = getFileExtension(language);

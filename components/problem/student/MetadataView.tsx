@@ -1,6 +1,6 @@
 import React from "react";
-import { EditorContent, JSONContent, useEditor } from "@tiptap/react";
-import { sampleEditorContent } from "../admin/utils";
+import { Content, EditorContent, JSONContent, useEditor } from "@tiptap/react";
+import { processProblemStatement, sampleEditorContent } from "../admin/utils";
 import StarterKit from "@tiptap/starter-kit";
 import { Extensions } from "@tiptap/react";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -13,15 +13,15 @@ import { Problem } from "hooks/problem/useGetProblem";
 const MetadataView = ({ problem }: { problem: Problem }) => {
   // preview editor, not editable and has no toolbar or anything
 
-  const editorContent =
-    typeof problem?.statement === "string"
-      ? problem?.statement
-      : typeof problem?.statement === "undefined"
-      ? sampleEditorContent
-      : (JSON.parse(problem?.statement as unknown as string) as JSONContent);
+  // if problem?.statement is undefined, then use empty editor content
+  // then, try to parse problem?.statement as JSONContent
+  // if that works then use that as editor content
+  // if that doesnt work, just use it as a string
+
+  const content = processProblemStatement(problem?.statement);
 
   const editor = useEditor({
-    content: editorContent,
+    content: content,
     extensions: [
       Underline,
       Markdown,

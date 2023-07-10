@@ -173,7 +173,7 @@ export const CodeEditorView = ({
             <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
               Solution
             </p>
-            <h3 className="text-[10px] text-slate-500 dark:text-white font-mono">
+            <h3 className="text-[10px] text-slate-500 dark:text-white font-mono px-2 py-1 bg-slate-200/80 dark:bg-nav-dark rounded-md">
               {generateFileName(title, fileExtension)}
             </h3>
           </div>

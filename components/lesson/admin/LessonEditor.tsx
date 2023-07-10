@@ -35,7 +35,7 @@ import Gapcursor from "@tiptap/extension-gapcursor";
 import HardBreak from "@tiptap/extension-hard-break";
 import Image from "@tiptap/extension-image";
 
-import { Divider, MenuOption, menuOptions, validateContent } from "./utils";
+import { Divider, MenuOption, menuOptions, validateLesson } from "./utils";
 import Modal from "components/shared/Modals/Modal";
 import { TrailingNode } from "./Extensions/TrailingNode";
 import { MultipleChoice } from "./Extensions/MultipleChoice";
@@ -50,12 +50,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { isUrl } from "utils/textUtils";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
+import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   // MODAL CONTROLS
 
   const [linkModalOpen, setLinkModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   // STATES FOR LINKS
 
@@ -91,6 +93,12 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     isLoading: createLessonLoading,
     isError: createLessonError,
   } = useCreateLesson(moduleId as string);
+
+  const {
+    mutate: deleteLesson,
+    isLoading: deleteLessonLoading,
+    isError: deleteLessonError,
+  } = useDeleteLesson();
 
   // REDUCER (for local lesson state)
 
@@ -152,7 +160,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   // Publish a new lesson
   const publishLesson = async () => {
     if (
-      !validateContent(lessonState.content as any, lessonState.title as string)
+      !validateLesson(lessonState.content as any, lessonState.title as string)
     ) {
       return;
     }
@@ -170,7 +178,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   const saveLesson = async () => {
     // check for empty MCQ / MSQ
     if (
-      !validateContent(lessonState.content as any, lessonState.title as string)
+      !validateLesson(lessonState.content as any, lessonState.title as string)
     ) {
       return;
     }
@@ -180,6 +188,14 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
+  };
+
+  const removeLesson = async () => {
+    await deleteLesson(lessonId as string);
+    setDeleteModalOpen(false);
+    /* setSettingsOpen(false); */
+    // navigate to module page
+    router.push(`/admin/modules`);
   };
 
   // EDITOR INITIALIZATION
@@ -411,6 +427,21 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         }}
         confirmText="Confirm"
       />
+      {/* Modal for deleting lesson */}
+      <AlertModal
+        title="Delete Lesson"
+        open={deleteModalOpen}
+        setOpen={setDeleteModalOpen}
+        description="Are you sure you want to delete this lesson? This action cannot be undone."
+        onCancel={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={async () => {
+          console.log("delete lesson");
+          await removeLesson();
+        }}
+        confirmText="Delete Lesson"
+      />
 
       <div
         className="w-full 
@@ -430,8 +461,35 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <div className="flex space-x-2 items-center">
               {editable ? (
                 <>
+                  <Tooltip.Provider delayDuration={100}>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <div className="w-fit">
+                          <ActionButton
+                            disabled={deleteLessonLoading}
+                            color="red"
+                            onClick={() => setDeleteModalOpen(true)}
+                            className="!px-2"
+                          >
+                            <TrashIcon />
+                          </ActionButton>
+                        </div>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          side="bottom"
+                          sideOffset={5}
+                          align="center"
+                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                        >
+                          Delete Lesson
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
+
                   <ActionButton
-                    color="red"
+                    color="gray"
                     onClick={() => {
                       if (!unsavedChanges) {
                         onCancelWithoutChanges();
@@ -441,7 +499,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                     }}
                   >
                     <Cross2Icon />
-                    <p>Cancel</p>
+                    <p>Discard Changes</p>
                   </ActionButton>
 
                   <ActionButton

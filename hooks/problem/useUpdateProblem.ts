@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Content } from "@tiptap/react";
 import { apiRoutes } from "constants/apiRoutes";
 import { COURSE_STRUCTURE_QUERY_KEY } from "hooks/course/useGetCourseStructure";
 import apiClient from "lib/api/apiClient";
@@ -21,7 +22,7 @@ export interface ProblemUpdate {
   hidden: boolean;
   fileName: string;
   dueDate: string;
-  statement: string;
+  statement: string | Content;
   codeHeader: string;
   codeBody: string;
   codeFooter: string;

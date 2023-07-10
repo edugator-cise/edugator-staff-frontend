@@ -6,7 +6,10 @@ import AdminLayout from "components/layouts/AdminLayout";
 import CodeEditorPane from "components/problem/admin/CodeEditorPane";
 import MetadataEditorPane from "components/problem/admin/MetadataEditorPane";
 import { ProblemAction } from "components/problem/admin/types";
-import { sampleTestCases } from "components/problem/admin/utils";
+import {
+  sampleTestCases,
+  validateProblem,
+} from "components/problem/admin/utils";
 import InputOutputEditorPane from "components/problem/admin/InputOutputEditorPane";
 import {
   CheckCircledIcon,
@@ -27,6 +30,10 @@ import ActionButton from "components/shared/Buttons/ActionButton";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import ProblemView from "../student/ProblemView";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUpdateProblem } from "hooks/problem/useUpdateProblem";
+import { useCreateProblem } from "hooks/problem/useCreateProblem";
+import { Content } from "@tiptap/react";
+import { useDeleteProblem } from "hooks/problem/useDeleteProblem";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -175,6 +182,108 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
     return;
   };
 
+  const {
+    mutate: updateProblem,
+    isLoading: updateProblemLoading,
+    isError: updateProblemError,
+  } = useUpdateProblem(problem?.id as string);
+
+  const {
+    mutate: createProblem,
+    isLoading: createProblemLoading,
+    isError: createProblemError,
+  } = useCreateProblem();
+
+  const {
+    mutate: deleteProblem,
+    isLoading: deleteProblemLoading,
+    isError: deleteProblemError,
+  } = useDeleteProblem();
+
+  function stringifyContent(content: any) {
+    // Check if the content is already a string
+    if (typeof content === "string") {
+      return content; // Return the content as it is
+    } else {
+      return JSON.stringify(content); // Stringify the content
+    }
+  }
+
+  // Publish a new lesson
+  const publishProblem = async () => {
+    if (!validateProblem(problemState)) {
+      return;
+    }
+    // create lesson
+    await createProblem({
+      moduleId: moduleId as string,
+      title: problemState.title,
+      statement: JSON.stringify(problemState.statement),
+      hidden: problemState.hidden,
+      fileName: problemState.fileName,
+      dueDate: problemState.dueDate,
+      codeHeader: problemState.codeHeader,
+      codeBody: problemState.codeBody,
+      codeFooter: problemState.codeFooter,
+      templatePackage: problemState.templatePackage,
+      timeLimit: problemState.timeLimit,
+      memoryLimit: problemState.memoryLimit,
+      buildCommand: problemState.buildCommand,
+      languages: problemState.languages,
+      testCases: problemState.testCases.map((testCase, i) => ({
+        input: testCase.input,
+        expectedOutput: testCase.expectedOutput,
+        hint: testCase.hint,
+        visibility: testCase.visibility,
+        orderNumber: i,
+        feedback: "",
+        testType: "unit",
+      })),
+    });
+  };
+
+  const removeProblem = async () => {
+    await deleteProblem(problemId as string);
+    setDeleteModalOpen(false);
+    setSettingsOpen(false);
+    // navigate to module page
+    router.push(`/admin/modules`);
+  };
+
+  // Save changes to existing lesson
+  const saveProblem = async () => {
+    // check for empty MCQ / MSQ
+    if (!validateProblem(problemState)) {
+      return;
+    }
+    // update lesson
+    await updateProblem({
+      moduleId: moduleId as string,
+      title: problemState.title,
+      statement: stringifyContent(problemState.statement),
+      hidden: problemState.hidden,
+      fileName: problemState.fileName,
+      dueDate: problemState.dueDate,
+      codeHeader: problemState.codeHeader,
+      codeBody: problemState.codeBody,
+      codeFooter: problemState.codeFooter,
+      templatePackage: problemState.templatePackage,
+      timeLimit: problemState.timeLimit,
+      memoryLimit: problemState.memoryLimit,
+      buildCommand: problemState.buildCommand,
+      languages: problemState.languages,
+      testCases: problemState.testCases.map((testCase, i) => ({
+        input: testCase.input,
+        expectedOutput: testCase.expectedOutput,
+        hint: testCase.hint,
+        visibility: testCase.visibility,
+        orderNumber: i,
+        feedback: "",
+        testType: "unit",
+      })),
+    });
+  };
+
   return (
     <div className={`w-full h-full flex flex-col relative bg-slate-100`}>
       {/* Modal for cancelling changes */}
@@ -298,13 +407,21 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
               }}
             />
           </div>
-          <button
-            onClick={() => setDeleteModalOpen(true)}
-            className="w-full py-3 bg-red-100 hover:bg-red-200 cursor-pointer text-red-600 rounded-md flex space-x-2 items-center justify-center"
-          >
-            <TrashIcon />
-            <p className="text-xs font-dm">Delete Problem</p>
-          </button>
+          {/* <div className="flex flex-col space-y-2 w-full">
+            <label className="text-xs text-slate-800 font-dm">
+              Delete Problem
+            </label>
+            <div className="w-fit">
+              <ActionButton
+                color="red"
+                onClick={() => setDeleteModalOpen(true)}
+                className="w-fit px-4 py-3 bg-red-500 hover:bg-red-200 cursor-pointer text-red-600 rounded-md flex space-x-2 items-center justify-center"
+              >
+                <TrashIcon />
+                <p className="text-xs font-dm">Delete Problem</p>
+              </ActionButton>
+            </div>
+          </div> */}
         </div>
       </Modal>
       <AlertModal
@@ -315,12 +432,9 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
         onCancel={() => {
           setDeleteModalOpen(false);
         }}
-        onConfirm={() => {
+        onConfirm={async () => {
           console.log("delete problem");
-          toast.success("Problem deleted successfully!");
-          setDeleteModalOpen(false);
-          setSettingsOpen(false);
-          // navigate to module page
+          await removeProblem();
         }}
         confirmText="Delete Problem"
       />
@@ -364,9 +478,35 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                         </Tooltip.Content>
                       </Tooltip.Portal>
                     </Tooltip.Root>
+
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <div className="w-fit">
+                          <ActionButton
+                            disabled={deleteProblemLoading}
+                            color="red"
+                            onClick={() => setDeleteModalOpen(true)}
+                            className="!px-2"
+                          >
+                            <TrashIcon />
+                          </ActionButton>
+                        </div>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          side="bottom"
+                          sideOffset={5}
+                          align="center"
+                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                        >
+                          Delete Problem
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
                   </Tooltip.Provider>
+
                   <ActionButton
-                    color="red"
+                    color="gray"
                     onClick={() => {
                       if (!unsavedChanges) {
                         onCancelWithoutChanges();
@@ -376,23 +516,22 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                     }}
                   >
                     <Cross2Icon />
-                    <p>Cancel</p>
+                    <p>Discard Changes</p>
                   </ActionButton>
                   <ActionButton
                     color="green"
                     disabled={
-                      !unsavedChanges || !editable
+                      !unsavedChanges || updateProblemLoading
                       /* lessonState.title === "" ||
                       lessonState.content === "" ||
                       !lessonState.title ||
                       !lessonState.content ||
-                      updateLessonLoading ||
                       !editable ||
                       !unsavedChanges */
                     }
                     onClick={async () => {
-                      /* console.log(lessonState);
-                      await saveLesson(); */
+                      console.log(problemState);
+                      await saveProblem();
                     }}
                   >
                     <CheckCircledIcon />
@@ -441,17 +580,11 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
               </Tooltip.Provider>
               <ActionButton
                 color="green"
-                disabled={
-                  true
-                  /* lessonState.title === "" ||
-                lessonState.content === "" ||
-                !lessonState.title ||
-                !lessonState.content ||
-                createLessonLoading */
-                }
+                disabled={!unsavedChanges || createProblemLoading}
                 onClick={async () => {
-                  /* console.log(lessonState);
-                await publishLesson(); */
+                  console.log(problemState);
+                  setUnsavedChanges(false);
+                  await publishProblem();
                 }}
               >
                 <RocketIcon />
