@@ -277,7 +277,6 @@ export const CodeEditorView = ({
                   }
                 );
               }}
-              className="bg-transparent text-slate-600 dark:text-slate-300 px-3 text-sm py-2 rounded-md border border-slate-400"
             >
               Run Code
             </ActionButton>
