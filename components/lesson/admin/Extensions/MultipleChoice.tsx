@@ -123,11 +123,11 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
                     : "border border-slate-300 dark:border-slate-600"
                 } ${
                   submitted && index === node.attrs.correctAnswer
-                    ? "ring-2 !ring-emerald-500/50 ring-offset-2 !border-none"
+                    ? "ring-2 !ring-emerald-500/50 ring-offset-2 ring-offset-slate-700 !border-none"
                     : ""
                 } ${
                   submitted && index === selectedAnswer
-                    ? "ring-2 ring-red-300 ring-offset-2 !border-none"
+                    ? "ring-2 ring-red-500/50 ring-offset-2 ring-offset-slate-700 !border-none"
                     : ""
                 }`}
                 value={index.toString()}

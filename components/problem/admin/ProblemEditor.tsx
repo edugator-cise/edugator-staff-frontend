@@ -34,6 +34,7 @@ import { useUpdateProblem } from "hooks/problem/useUpdateProblem";
 import { useCreateProblem } from "hooks/problem/useCreateProblem";
 import { Content } from "@tiptap/react";
 import { useDeleteProblem } from "hooks/problem/useDeleteProblem";
+import { Trash } from "tabler-icons-react";
 
 const Allotment = dynamic<AllotmentProps>(
   () => import("allotment").then((mod) => mod.Allotment),
@@ -460,7 +461,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                     <Tooltip.Root>
                       <Tooltip.Trigger asChild>
                         <div
-                          className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5 flex items-center justify-center space-x-2"
+                          className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
                           onClick={() => {
                             setSettingsOpen(!settingsOpen);
                           }}
@@ -480,6 +481,38 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                       </Tooltip.Portal>
                     </Tooltip.Root>
 
+                    <ActionButton
+                      color="gray"
+                      onClick={() => {
+                        if (!unsavedChanges) {
+                          onCancelWithoutChanges();
+                          return;
+                        }
+                        setConfirmModalOpen(true);
+                      }}
+                    >
+                      <Cross2Icon />
+                      <p>Discard Changes</p>
+                    </ActionButton>
+                    <ActionButton
+                      color="green"
+                      disabled={
+                        !unsavedChanges || updateProblemLoading
+                        /* lessonState.title === "" ||
+                      lessonState.content === "" ||
+                      !lessonState.title ||
+                      !lessonState.content ||
+                      !editable ||
+                      !unsavedChanges */
+                      }
+                      onClick={async () => {
+                        console.log(problemState);
+                        await saveProblem();
+                      }}
+                    >
+                      <CheckCircledIcon />
+                      <p>Save Changes</p>
+                    </ActionButton>
                     <Tooltip.Root>
                       <Tooltip.Trigger asChild>
                         <div className="w-fit">
@@ -489,7 +522,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                             onClick={() => setDeleteModalOpen(true)}
                             className="!px-2"
                           >
-                            <TrashIcon />
+                            <Trash className="w-4 h-4" strokeWidth={1.5} />
                           </ActionButton>
                         </div>
                       </Tooltip.Trigger>
@@ -505,39 +538,6 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                       </Tooltip.Portal>
                     </Tooltip.Root>
                   </Tooltip.Provider>
-
-                  <ActionButton
-                    color="gray"
-                    onClick={() => {
-                      if (!unsavedChanges) {
-                        onCancelWithoutChanges();
-                        return;
-                      }
-                      setConfirmModalOpen(true);
-                    }}
-                  >
-                    <Cross2Icon />
-                    <p>Discard Changes</p>
-                  </ActionButton>
-                  <ActionButton
-                    color="green"
-                    disabled={
-                      !unsavedChanges || updateProblemLoading
-                      /* lessonState.title === "" ||
-                      lessonState.content === "" ||
-                      !lessonState.title ||
-                      !lessonState.content ||
-                      !editable ||
-                      !unsavedChanges */
-                    }
-                    onClick={async () => {
-                      console.log(problemState);
-                      await saveProblem();
-                    }}
-                  >
-                    <CheckCircledIcon />
-                    <p>Save Changes</p>
-                  </ActionButton>
                 </>
               ) : (
                 <>
@@ -559,7 +559,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
                 <Tooltip.Root>
                   <Tooltip.Trigger asChild>
                     <div
-                      className="p-2 rounded-md cursor-pointer border border-slate-700 bg-white/5 flex items-center justify-center space-x-2"
+                      className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
                       onClick={() => {
                         setSettingsOpen(!settingsOpen);
                       }}

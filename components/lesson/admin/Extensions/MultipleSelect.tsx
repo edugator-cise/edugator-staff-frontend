@@ -139,13 +139,13 @@ const MultipleSelectStudentComponent: React.FC<MultipleSelectProps> = ({
                     submitted &&
                     correctAnswers.includes(index) &&
                     selectedAnswers.includes(index)
-                      ? "ring-2 !ring-emerald-500/50 ring-offset-2 !border-none"
+                      ? "ring-2 !ring-emerald-500/50 ring-offset-2 ring-offset-slate-700 !border-none"
                       : ""
                   } ${
                     submitted &&
                     !correctAnswers.includes(index) &&
                     selectedAnswers.includes(index)
-                      ? "ring-2 !ring-red-500/50 ring-offset-2 !bg-red-500 !border-none"
+                      ? "ring-2 !ring-red-500/50 ring-offset-2 ring-offset-slate-700 !bg-red-500 !border-none"
                       : ""
                   }`}
                   id={index.toString()}
