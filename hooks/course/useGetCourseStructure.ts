@@ -50,5 +50,6 @@ export const useGetCourseStructure = () => {
   return useQuery<CourseStructure, Error>({
     queryKey: [COURSE_STRUCTURE_QUERY_KEY, courseId],
     queryFn: () => fetchCourseStructure({ courseId }),
+    refetchOnWindowFocus: false,
   });
 };

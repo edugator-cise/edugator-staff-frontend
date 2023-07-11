@@ -57,13 +57,13 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
   });
 
   return (
-    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px]">
-      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-700">
+    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px] ">
+      <div className="h-full w-full flex flex-col justify-start rounded-md shadow-sm overflow-hidden bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-700">
         <div className="w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 py-3 dark:bg-nav-darkest bg-slate-100">
           <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
             Modules
             <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
-              &nbsp;&nbsp;&gt;&nbsp;&nbsp;Module Name
+              &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problem?.moduleName}
             </span>
             <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
               &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problem?.title}

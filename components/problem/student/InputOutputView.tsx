@@ -50,7 +50,7 @@ export const InputOutputView = ({
         setActiveTab(tabs.indexOf(value));
       }}
     >
-      <div className="w-full border border-slate-300 dark:border-slate-700 rounded-t-md overflow-hidden flex items-center py-1 min-h-[41px] max-h-[41px] space-x-8 dark:border-b-slate-700 border-b-slate-300 border-b px-5 dark:bg-nav-darkest bg-slate-100">
+      <div className="w-full border border-slate-300 dark:border-slate-700 shadow-sm rounded-t-md overflow-hidden flex items-center py-1 min-h-[41px] max-h-[41px] space-x-8 dark:border-b-slate-700 border-b-slate-300 border-b px-5 dark:bg-nav-darkest bg-slate-100">
         <p className="text-xs font-dm font-bold dark:text-white">Testing</p>
 
         <Tabs.List
@@ -85,7 +85,7 @@ export const InputOutputView = ({
         </Tabs.List>
       </div>
       <Tabs.Content
-        className="w-full rounded-b-md flex-1 bg-white dark:bg-nav-darker p-4 h-full border border-t-0 dark:border-slate-700 border-slate-300"
+        className="w-full rounded-b-md flex-1 bg-white shadow-sm dark:bg-nav-darker p-4 h-full border border-t-0 dark:border-slate-700 border-slate-300"
         value="stdin"
       >
         <textarea
@@ -95,7 +95,7 @@ export const InputOutputView = ({
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full rounded-b-md max-h-full p-4 bg-white dark:bg-nav-darker  relative overflow-y-scroll border border-t-0 dark:border-slate-700 border-slate-300"
+        className="w-full h-full rounded-b-md max-h-full p-4 bg-white shadow-sm dark:bg-nav-darker  relative overflow-y-scroll border border-t-0 dark:border-slate-700 border-slate-300"
         value="output"
       >
         <CompileOutput
@@ -105,7 +105,7 @@ export const InputOutputView = ({
         />
       </Tabs.Content>
       <Tabs.Content
-        className="w-full h-full rounded-b-md p-4 bg-white  dark:bg-nav-darker overflow-y-scroll border border-t-0 dark:border-slate-700 border-slate-300"
+        className="w-full h-full rounded-b-md p-4 bg-white shadow-sm  dark:bg-nav-darker overflow-y-scroll border border-t-0 dark:border-slate-700 border-slate-300"
         value="submission"
       >
         <SubmitOutput results={submissionOutput} />

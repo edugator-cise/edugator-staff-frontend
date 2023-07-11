@@ -167,7 +167,7 @@ export const CodeEditorView = ({
 
   return (
     <div className="w-full h-full flex flex-col justify-start p-3 pl-[6px] pb-[6px]">
-      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden bg-white dark:bg-nav-dark border border-slate-300 dark:border-slate-700">
+      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden shadow-sm bg-white dark:bg-nav-dark border border-slate-300 dark:border-slate-700">
         <div className="rounded-t-md flex items-center justify-between w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 pr-1 py-1 dark:bg-nav-darkest bg-slate-100">
           <div className="flex space-x-4 items-center">
             <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">

@@ -37,7 +37,7 @@ import { useDeleteModule } from "hooks/module/useDeleteModule";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 import { toTitleCase } from "utils/textUtils";
 
-const AddModuleModal = ({
+export const AddModuleModal = ({
   open,
   setOpen,
   moduleCount,
@@ -48,6 +48,11 @@ const AddModuleModal = ({
 }) => {
   const [moduleName, setModuleName] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const toggleContentSidebar = (hidden: boolean) => {
+    dispatch(setAdminContentSidebarHidden(hidden));
+  };
 
   const {
     mutate,
@@ -58,6 +63,7 @@ const AddModuleModal = ({
   const handleCreateModule = async () => {
     console.log(moduleCount);
     setLoading(true);
+    toggleContentSidebar(false);
     await mutate({ moduleName, orderNumber: moduleCount + 1 });
     setLoading(false);
     setOpen(false);

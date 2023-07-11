@@ -67,18 +67,27 @@ export default function ProblemView({
   };
 
   return (
-    <div className="w-full h-full bg-[#d3d9df] dark:bg-slate-950 relative">
+    <div className="w-full h-full bg-gray-200 dark:bg-slate-950 relative student-view-holder">
       {/* <AIChat /> */}
       <Allotment
+        separator={false}
         sizes={[310, 350]}
         snap={true}
         minSize={400}
         className="code-editor-allotment"
       >
-        <div className="w-full flex flex-col h-full">
+        <div className="w-full flex flex-col h-full relative">
           <MetadataView problem={problem as Problem} />
         </div>
-        <Allotment sizes={[100, 100]} vertical snap={false} minSize={300}>
+
+        <Allotment
+          sizes={[100, 100]}
+          vertical
+          snap={false}
+          minSize={300}
+          separator={false}
+          className="relative"
+        >
           <CodeEditorView
             parseFile={parseFile}
             handleCodeReset={handleCodeReset}

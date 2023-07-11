@@ -19,7 +19,7 @@ const Divider = () => {
 };
 
 const AdminNavigation = () => {
-  const [activeLink, setActiveLink] = useState<NavLinkItem>(adminNavLinks[1]);
+  const [activeLink, setActiveLink] = useState<NavLinkItem>(adminNavLinks[0]);
   const [mounted, setMounted] = useState(false);
 
   const { adminMainSidebarHidden, adminContentSidebarHidden } = useSelector(
@@ -101,8 +101,16 @@ const AdminNavigation = () => {
                   toggleContentSidebar(true);
                 }
 
+                // if link has href, push to href
+                if (link.href) {
+                  router.push(link.href);
+                }
+
                 setActiveLink(link);
               };
+
+              // if admincontentsidebar is hidden, then 0 should be active. otherwise, 1 should be active
+              const activeIndex = adminContentSidebarHidden ? 0 : 1;
 
               return (
                 <NavLink
@@ -110,7 +118,7 @@ const AdminNavigation = () => {
                   open={!adminMainSidebarHidden}
                   icon={link.icon}
                   text={link.text}
-                  active={activeLink.id === link.id}
+                  active={i === activeIndex}
                   onClick={clickHandler}
                 />
               );

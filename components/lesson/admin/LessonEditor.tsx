@@ -51,6 +51,7 @@ import ActionButton from "components/shared/Buttons/ActionButton";
 import { isUrl } from "utils/textUtils";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
+import { Trash } from "tabler-icons-react";
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   // MODAL CONTROLS
@@ -462,33 +463,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <div className="flex space-x-2 items-center">
               {editable ? (
                 <>
-                  <Tooltip.Provider delayDuration={100}>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <div className="w-fit">
-                          <ActionButton
-                            disabled={deleteLessonLoading}
-                            color="red"
-                            onClick={() => setDeleteModalOpen(true)}
-                            className="!px-2"
-                          >
-                            <TrashIcon />
-                          </ActionButton>
-                        </div>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                        >
-                          Delete Lesson
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  </Tooltip.Provider>
-
                   <ActionButton
                     color="gray"
                     onClick={() => {
@@ -522,6 +496,32 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                     <CheckCircledIcon />
                     <p>Save Changes</p>
                   </ActionButton>
+                  <Tooltip.Provider delayDuration={100}>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <div className="w-fit">
+                          <ActionButton
+                            disabled={deleteLessonLoading}
+                            color="red"
+                            onClick={() => setDeleteModalOpen(true)}
+                            className="!px-2"
+                          >
+                            <Trash className="w-4 h-4" strokeWidth={1.5} />
+                          </ActionButton>
+                        </div>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          side="bottom"
+                          sideOffset={5}
+                          align="center"
+                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                        >
+                          Delete Lesson
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
                 </>
               ) : (
                 <>

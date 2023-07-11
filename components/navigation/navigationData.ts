@@ -18,6 +18,7 @@ export type NavLinkItem = {
   text: NavLinkText | AdminNavLinkText;
   id: string;
   toggleExercises?: boolean;
+  href?: string;
 };
 
 export type NavLinkText =
@@ -62,15 +63,16 @@ export const navLinks: NavLinkItem[] = [
 
 export const adminNavLinks: NavLinkItem[] = [
   {
-    icon: icons.list,
-    text: "Course Content",
+    icon: icons.dashboard,
+    text: "Dashboard",
     id: "dashboard",
-    toggleExercises: true,
+    toggleExercises: false,
+    href: "/admin/modules",
   },
   {
-    icon: icons.bug,
-    text: "Blank",
-    id: "blank",
-    toggleExercises: false,
+    icon: icons.list,
+    text: "Course Content",
+    id: "content",
+    toggleExercises: true,
   },
 ];

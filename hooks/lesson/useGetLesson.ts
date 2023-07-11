@@ -17,6 +17,7 @@ export interface Lesson {
   hidden: boolean;
   createdAt: string;
   updatedAt: string;
+  moduleName: string;
 }
 
 const fetchLesson = async ({ lessonId }: GetLessonParams) => {

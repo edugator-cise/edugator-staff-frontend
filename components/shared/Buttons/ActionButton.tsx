@@ -20,7 +20,7 @@ const ActionButton: React.FC<CustomButtonProps> = ({
 }) => {
   const containerClassName = () => {
     if (color === "blue")
-      return "bg-gradient-to-b from-[#648AE8] from-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
+      return "bg-gradient-to-b from-[#648AE8] via-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
     if (color === "green")
       return "bg-gradient-to-b from-emerald-200 via-emerald-200 to-emerald-500 shadow-emerald-500/10";
     if (color === "red")

@@ -38,6 +38,7 @@ export interface Problem {
   createdAt?: string;
   updatedAt?: string;
   moduleId?: string;
+  moduleName?: string;
   testCases: TestCase[];
 }
 

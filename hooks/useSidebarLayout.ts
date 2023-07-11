@@ -41,7 +41,7 @@ export const useSidebarLayout = ({
 
   useEffect(() => {
     if (!mobileView && !tabletView && !laptopView) {
-      dispatch(setContentSidebarHidden(false));
+      dispatch(setContentSidebarHidden(true)); // set this to true if you want content bar to open by default
       dispatch(setMainSidebarHidden(mainSidebarHidden));
     } else {
       setMobileNavOpen(false);
