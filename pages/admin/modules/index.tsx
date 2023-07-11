@@ -1,8 +1,11 @@
 import AdminLayout from "components/layouts/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
-import { MixIcon } from "@radix-ui/react-icons";
-import { useGetCourseStructure } from "hooks/course/useGetCourseStructure";
+import { MixIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+  CourseModule,
+  useGetCourseStructure,
+} from "hooks/course/useGetCourseStructure";
 import { FidgetSpinner } from "tabler-icons-react";
 import { useAnimation } from "framer-motion";
 import LearnIllustration from "components/landing/About/Illustrations/LearnIllustration";
@@ -16,6 +19,170 @@ import BuildIllustration from "components/landing/About/Illustrations/BuildIllus
 import { setAdminContentSidebarHidden } from "state/interfaceControls.slice";
 import { AddModuleModal } from "components/navigation/AdminContentSidebar";
 import { useState } from "react";
+import Link from "next/link";
+import Modal from "components/shared/Modals/Modal";
+
+/**
+ * 
+ * @param param0 <Modal
+      open={open}
+      setOpen={setOpen}
+      title="Add Module"
+      description="Enter a name for your new module."
+    >
+      <div className="flex flex-col space-y-4">
+        <input
+          type="text"
+          id="module-name"
+          className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+          placeholder="My new module"
+          value={moduleName}
+          onChange={(e) => setModuleName(e.target.value)}
+        />
+
+        <div className="flex justify-end items-center">
+          <button
+            className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm text-sm flex items-center space-x-2 disabled:bg-emerald-500/50 disabled:cursor-not-allowed transition"
+            disabled={moduleName.length === 0 || loading}
+            onClick={handleCreateModule}
+          >
+            {loading ? (
+              <div className="bouncing-loader py-2">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            ) : (
+              <>
+                <PlusIcon />
+                <p>Create Module</p>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+    </Modal>
+ * @returns 
+ */
+
+// modal for adding a new lesson, will have a dropdown to select which module to add it to
+// button should be enabled only if a module is selected and will link to lesson creation page when clicked
+const AddLessonModal = ({
+  open,
+  setOpen,
+  modules,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modules: CourseModule[];
+}) => {
+  const [selectedModule, setSelectedModule] = useState<string>(""); // contains the id of the selected module
+
+  return (
+    <Modal
+      open={open}
+      setOpen={setOpen}
+      title="Add Lesson"
+      description="Select a module to add your new lesson to."
+    >
+      <div className="flex flex-col space-y-4">
+        <select
+          className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+          value={selectedModule}
+          onChange={(e) => setSelectedModule(e.target.value)}
+        >
+          <option value={undefined} disabled>
+            Select a module
+          </option>
+          {modules.map((module) => (
+            <option key={module.id} value={module.id}>
+              {module.moduleName}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex justify-end items-center">
+          <Link
+            href={`/admin/lesson/create/${encodeURIComponent(
+              selectedModule
+            )}?moduleName=${encodeURIComponent(
+              modules.find((module) => module.id === selectedModule)
+                ?.moduleName || ""
+            )}`}
+          >
+            <button
+              className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm text-sm flex items-center space-x-2 disabled:bg-emerald-500/50 disabled:cursor-not-allowed transition"
+              disabled={selectedModule === ""}
+            >
+              <PlusIcon />
+              <p>Create Lesson</p>
+            </button>
+          </Link>
+        </div>
+      </div>
+    </Modal>
+  );
+};
+
+// modal for adding a new problem, will have a dropdown to select which module to add it to
+// button should be enabled only if a module is selected and will link to problem creation page when clicked
+
+const AddProblemModal = ({
+  open,
+  setOpen,
+  modules,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modules: CourseModule[];
+}) => {
+  const [selectedModule, setSelectedModule] = useState<string>(""); // contains the id of the selected module
+
+  return (
+    <Modal
+      open={open}
+      setOpen={setOpen}
+      title="Add Problem"
+      description="Select a module to add your new problem to."
+    >
+      <div className="flex flex-col space-y-4">
+        <select
+          className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
+          value={selectedModule}
+          onChange={(e) => setSelectedModule(e.target.value)}
+        >
+          <option value={undefined} disabled>
+            Select a module
+          </option>
+          {modules.map((module) => (
+            <option key={module.id} value={module.id}>
+              {module.moduleName}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex justify-end items-center">
+          <Link
+            href={`/admin/problem/create/${encodeURIComponent(
+              selectedModule
+            )}?moduleName=${encodeURIComponent(
+              modules.find((module) => module.id === selectedModule)
+                ?.moduleName || ""
+            )}`}
+          >
+            <button
+              className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm text-sm flex items-center space-x-2 disabled:bg-emerald-500/50 disabled:cursor-not-allowed transition"
+              disabled={selectedModule === ""}
+            >
+              <PlusIcon />
+              <p>Create Problem</p>
+            </button>
+          </Link>
+        </div>
+      </div>
+    </Modal>
+  );
+};
 
 const ModulesPage = () => {
   const { data: courseStructureData, isFetching: courseStructureFetching } =
@@ -32,6 +199,8 @@ const ModulesPage = () => {
   );
 
   const [newModuleModalOpen, setNewModuleModalOpen] = useState(false);
+  const [newLessonModalOpen, setNewLessonModalOpen] = useState(false);
+  const [newProblemModalOpen, setNewProblemModalOpen] = useState(false);
 
   const buttonData = [
     {
@@ -47,14 +216,14 @@ const ModulesPage = () => {
         "Create an empty lesson with interactive content from scratch",
       illustration: <BuildIllustration />,
       color: "emerald",
-      onClick: () => toggleContentSidebar(!adminContentSidebarHidden),
+      onClick: () => setNewLessonModalOpen(true),
     },
     {
       title: "New Problem",
       description: "Create a new problem with a starter code template",
       illustration: <PracticeIllustration />,
       color: "amber",
-      onClick: () => toggleContentSidebar(!adminContentSidebarHidden),
+      onClick: () => setNewProblemModalOpen(true),
     },
   ];
 
@@ -73,6 +242,17 @@ const ModulesPage = () => {
         setOpen={setNewModuleModalOpen}
         moduleCount={courseStructureData?.modules.length || 0}
       />
+      <AddLessonModal
+        open={newLessonModalOpen}
+        setOpen={setNewLessonModalOpen}
+        modules={courseStructureData?.modules || []}
+      />
+      <AddProblemModal
+        open={newProblemModalOpen}
+        setOpen={setNewProblemModalOpen}
+        modules={courseStructureData?.modules || []}
+      />
+
       {/* <div className="min-h-[3rem] bg-nav-dark w-full"></div> */}
       <div className="w-full h-14 bg-white px-8 border border-b grid grid-cols-6 items-center">
         {/* Class Name */}
@@ -85,39 +265,8 @@ const ModulesPage = () => {
             <span className="font-normal"> Data Structures and Algorithms</span>
           </h1>
         </div>
-        {/* Search */}
-        {/* <div className="rounded-md px-3 py-1 border bg-slate-100 flex items-center space-x-2 justify-start col-span-2">
-          <MagnifyingGlassIcon className="w-4 h-4 text-slate-500" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full bg-transparent outline-none text-slate-500 font-dm text-sm"
-          />
-        </div> */}
-        {/* Profile Avatar */}
-        {/*  <div className="w-full flex items-center justify-end col-span-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-amber-500 ">
-            <p className="text-white text-sm font-dm">DK</p>
-          </div>
-        </div> */}
       </div>
       <div className="w-full h-full bg-slate-100 p-8 flex flex-col items-center justify-start xl:justify-center space-y-8 overflow-auto">
-        {/* <h1 className="text-xl font-semibold font-dm">Courses</h1>
-        <div className="w-96 rounded-md border bg-white p-6 flex flex-col space-y-2">
-          <div className="w-12 h-12 rounded-sm !p-px bg-gradient-to-b from-[#648AE8] via-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10 flex items-center justify-center">
-            <div className="w-full h-full bg-gradient-to-b to-[#2458F2] from-[#648AE8] flex items-end p-1 justify-start rounded-[1px] outline outline-2 outline-blue-500/20 outline-offset-[3px]">
-              <MixIcon className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div className="flex space-x-2 h-12">
-            <div className="flex flex-col justify-center">
-              <h1 className="text-lg font-semibold font-dm line-clamp-1">
-                COP3530 Data Structures and Algorithms
-              </h1>
-              <p className="text-xs font-dm text-slate-500">Due: 10/10/2021</p>
-            </div>
-          </div>
-        </div> */}
         <h3 className="text-5xl">👋</h3>
         <h1 className="text-xl font-semibold font-dm !mt-4">
           Welcome to your course!
@@ -135,16 +284,26 @@ const ModulesPage = () => {
           below.
         </p>
         <div className="flex gap-4 flex-wrap w-full items-center justify-center">
-          {buttonData.map((button, index) => (
+          {courseStructureData?.modules?.length === 0 ? (
             <NewSection
-              key={index}
-              title={button.title}
-              description={button.description}
-              illustration={button.illustration}
-              color={button.color}
-              onClick={button.onClick}
+              title="New Module"
+              description="Create a new module to organize your lessons and problems"
+              illustration={<LearnIllustration />}
+              color="blue"
+              onClick={() => setNewModuleModalOpen(true)}
             />
-          ))}
+          ) : (
+            buttonData.map((button, index) => (
+              <NewSection
+                key={index}
+                title={button.title}
+                description={button.description}
+                illustration={button.illustration}
+                color={button.color}
+                onClick={button.onClick}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

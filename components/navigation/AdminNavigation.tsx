@@ -109,8 +109,18 @@ const AdminNavigation = () => {
                 setActiveLink(link);
               };
 
+              // if route contains either "problem" or "lesson", then 1 is active.
               // if admincontentsidebar is hidden, then 0 should be active. otherwise, 1 should be active
-              const activeIndex = adminContentSidebarHidden ? 0 : 1;
+              const activeIndex = () => {
+                if (
+                  pathname.includes("problem") ||
+                  pathname.includes("lesson")
+                ) {
+                  return 1;
+                } else {
+                  return adminContentSidebarHidden ? 0 : 1;
+                }
+              };
 
               return (
                 <NavLink
@@ -118,7 +128,7 @@ const AdminNavigation = () => {
                   open={!adminMainSidebarHidden}
                   icon={link.icon}
                   text={link.text}
-                  active={i === activeIndex}
+                  active={i === activeIndex()}
                   onClick={clickHandler}
                 />
               );
