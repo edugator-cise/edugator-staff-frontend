@@ -266,7 +266,7 @@ const ModulesPage = () => {
           </h1>
         </div>
       </div>
-      <div className="w-full h-full bg-slate-100 p-8 flex flex-col items-center justify-start xl:justify-center space-y-8 overflow-auto">
+      <div className="w-full h-full bg-slate-100 px-8 py-36 flex flex-col items-center justify-start space-y-8 overflow-auto">
         <h3 className="text-5xl">👋</h3>
         <h1 className="text-xl font-semibold font-dm !mt-4">
           Welcome to your course!
