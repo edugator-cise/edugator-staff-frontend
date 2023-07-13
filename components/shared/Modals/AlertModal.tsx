@@ -35,7 +35,7 @@ const AlertModal = ({
             </AlertDialog.Title>
           )}
           <AlertDialog.Description className="text-slate-500 mt-2 mb-4 text-sm leading-normal font-dm">
-            {description && description}
+            {description ? description : ""}
           </AlertDialog.Description>
           {children}
           <div className="flex justify-end gap-4">
