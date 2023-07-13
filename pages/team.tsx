@@ -154,7 +154,8 @@ const Team = () => {
       </h1>
       <p className="text-nav-darkest">
         Edugator is designed by researchers and engineers with excessive
-        obsession for student centered learning.
+        obsession for student centered learning. Our goal is to accelerate 
+        the adoption of learning by doing practices in computing education. 
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-16">
         {teamData.map((member) => (
