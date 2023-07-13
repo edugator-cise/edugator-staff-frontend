@@ -48,12 +48,15 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     Record<number, number>
   >({});
 
+  const [shouldRecalculate, recalculate] = useState({});
+  const recalculateDropdownHeights = () => recalculate({});
+
   // run the function to calculate dropdown heights when the activeContent or the course structure changes
   const { data: courseStructureData } = useGetCourseStructure();
 
   useEffect(() => {
     calculateDropdownHeights(activeContent);
-  }, [activeContent, courseStructureData]);
+  }, [activeContent, courseStructureData, shouldRecalculate]);
 
   const calculateDropdownHeights = (activeContent: ContentType) => {
     // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
@@ -153,6 +156,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               dropdownHeights={dropdownHeights}
               setActiveContent={setActiveContent}
               activeContent={activeContent}
+              recalculateDropdownHeights={recalculateDropdownHeights}
             />
           </div>
 

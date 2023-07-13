@@ -67,7 +67,7 @@ export const adminNavLinks: NavLinkItem[] = [
     text: "Dashboard",
     id: "dashboard",
     toggleExercises: false,
-    href: "/admin/modules",
+    href: "/admin/dashboard",
   },
   {
     icon: icons.list,

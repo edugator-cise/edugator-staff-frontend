@@ -1,4 +1,6 @@
 import React, {
+  Dispatch,
+  SetStateAction,
   useCallback,
   useEffect,
   useReducer,
@@ -53,6 +55,33 @@ import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 import { Trash } from "tabler-icons-react";
 
+export const DeleteLessonModal = ({
+  open,
+  setOpen,
+  removeLesson,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  removeLesson: () => void;
+}) => {
+  return (
+    <AlertModal
+      title="Delete Lesson"
+      open={open}
+      setOpen={setOpen}
+      description="Are you sure you want to delete this lesson? This action cannot be undone."
+      onCancel={() => {
+        setOpen(false);
+      }}
+      onConfirm={async () => {
+        console.log("delete lesson");
+        await removeLesson();
+      }}
+      confirmText="Delete Lesson"
+    />
+  );
+};
+
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   // MODAL CONTROLS
 
@@ -100,6 +129,15 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     isLoading: deleteLessonLoading,
     isError: deleteLessonError,
   } = useDeleteLesson();
+
+  const removeLesson = async () => {
+    setUnsavedChanges(false);
+    await deleteLesson(lessonId as string);
+    setDeleteModalOpen(false);
+    /* setSettingsOpen(false); */
+    // navigate to module page
+    router.push(`/admin/dashboard`);
+  };
 
   // REDUCER (for local lesson state)
 
@@ -189,15 +227,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
-  };
-
-  const removeLesson = async () => {
-    setUnsavedChanges(false);
-    await deleteLesson(lessonId as string);
-    setDeleteModalOpen(false);
-    /* setSettingsOpen(false); */
-    // navigate to module page
-    router.push(`/admin/modules`);
   };
 
   // EDITOR INITIALIZATION
@@ -430,19 +459,10 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         confirmText="Confirm"
       />
       {/* Modal for deleting lesson */}
-      <AlertModal
-        title="Delete Lesson"
+      <DeleteLessonModal
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        description="Are you sure you want to delete this lesson? This action cannot be undone."
-        onCancel={() => {
-          setDeleteModalOpen(false);
-        }}
-        onConfirm={async () => {
-          console.log("delete lesson");
-          await removeLesson();
-        }}
-        confirmText="Delete Lesson"
+        removeLesson={removeLesson}
       />
 
       <div

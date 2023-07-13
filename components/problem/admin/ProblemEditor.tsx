@@ -41,6 +41,33 @@ const Allotment = dynamic<AllotmentProps>(
   { ssr: false }
 );
 
+export const DeleteProblemModal = ({
+  open,
+  setOpen,
+  removeProblem,
+}: {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  removeProblem: () => void;
+}) => {
+  return (
+    <AlertModal
+      title="Delete Problem"
+      open={open}
+      setOpen={setOpen}
+      description="Are you sure you want to delete this problem? This action cannot be undone."
+      onCancel={() => {
+        setOpen(false);
+      }}
+      onConfirm={async () => {
+        console.log("delete problem");
+        await removeProblem();
+      }}
+      confirmText="Delete Problem"
+    />
+  );
+};
+
 const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
   const router = useRouter();
   const { problemId, moduleId, moduleName } = router.query;
@@ -249,7 +276,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
     setDeleteModalOpen(false);
     setSettingsOpen(false);
     // navigate to module page
-    router.push(`/admin/modules`);
+    router.push(`/admin/dashboard`);
   };
 
   // Save changes to existing lesson
@@ -426,19 +453,10 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
           </div> */}
         </div>
       </Modal>
-      <AlertModal
-        title="Delete Problem"
+      <DeleteProblemModal
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        description="Are you sure you want to delete this problem? This action cannot be undone."
-        onCancel={() => {
-          setDeleteModalOpen(false);
-        }}
-        onConfirm={async () => {
-          console.log("delete problem");
-          await removeProblem();
-        }}
-        confirmText="Delete Problem"
+        removeProblem={removeProblem}
       />
 
       {/* Top Banner */}

@@ -4,7 +4,6 @@ import { LocalStorage } from "lib/auth/LocalStorage";
 import { useRouter } from "next/router";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { closeAlert } from "state/ModulesSlice";
 
 const AdminHeader = () => {
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ const AdminHeader = () => {
           </h1>
         </div>
 
-        <div className="flex justify-end col-span-3">
+        {/* <div className="flex justify-end col-span-3">
           {locationState !== Routes.Login && (
             <button
               onClick={() => {
@@ -44,7 +43,7 @@ const AdminHeader = () => {
               Logout
             </button>
           )}
-        </div>
+        </div> */}
       </div>
     </header>
   );

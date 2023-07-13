@@ -4,6 +4,7 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import {
   ChevronDownIcon,
   DotsHorizontalIcon,
+  DragHandleDots2Icon,
   LineHeightIcon,
   Pencil2Icon,
   PlusIcon,
@@ -37,6 +38,28 @@ import AlertModal from "components/shared/Modals/AlertModal";
 import { useDeleteModule } from "hooks/module/useDeleteModule";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 import { toTitleCase } from "utils/textUtils";
+import { DeleteLessonModal } from "components/lesson/admin/LessonEditor";
+import { useDeleteProblem } from "hooks/problem/useDeleteProblem";
+import { DeleteProblemModal } from "components/problem/admin/ProblemEditor";
+import { Trash } from "tabler-icons-react";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+  ResponderProvided,
+} from "react-beautiful-dnd";
+import {
+  ReorderContent,
+  useReorderContent,
+} from "hooks/reorder/useReorderContent";
+import apiClient from "lib/api/apiClient";
+import { apiRoutes } from "constants/apiRoutes";
+import { toast } from "react-hot-toast";
+import {
+  ReorderModule,
+  useReorderModule,
+} from "hooks/reorder/useReorderModule";
 
 export const AddModuleModal = ({
   open,
@@ -153,16 +176,21 @@ const AdminContentSidebar = ({
   activeContent,
   setActiveContent,
   dropdownHeights,
+  recalculateDropdownHeights,
 }: {
   activeContent: ContentType;
   setActiveContent: (activeContent: ContentType) => void;
   dropdownHeights: Record<number, number>;
+  recalculateDropdownHeights: () => void;
 }) => {
   const [openModules, setOpenModules] = useState<string[]>([]);
   const [newModuleModalOpen, setNewModuleModalOpen] = useState(false);
   const [deleteModuleModalOpen, setDeleteModuleModalOpen] = useState(false);
+  const [deleteLessonModalOpen, setDeleteLessonModalOpen] = useState(false);
+  const [deleteProblemModalOpen, setDeleteProblemModalOpen] = useState(false);
 
   const [moduleToDelete, setModuleToDelete] = useState<string>("");
+  const [itemToDelete, setItemToDelete] = useState<string>("");
 
   const openDeleteModuleModal = (moduleId: string) => {
     setModuleToDelete(moduleId);
@@ -186,10 +214,41 @@ const AdminContentSidebar = ({
     isError: courseStructureError,
   } = useGetCourseStructure();
 
-  const { mutate: deleteLesson } = useDeleteLesson();
-
   const router = useRouter();
   const { lessonId, problemId } = router.query;
+
+  const {
+    mutate: deleteLesson,
+    isLoading: deleteLessonLoading,
+    isError: deleteLessonError,
+  } = useDeleteLesson();
+
+  const removeLesson = async () => {
+    await deleteLesson(itemToDelete as string);
+    setDeleteLessonModalOpen(false);
+    /* setSettingsOpen(false); */
+    // navigate to module page
+
+    if (lessonId && lessonId === itemToDelete) {
+      router.push(`/admin/dashboard`);
+    }
+  };
+
+  const {
+    mutate: deleteProblem,
+    isLoading: deleteProblemLoading,
+    isError: deleteProblemError,
+  } = useDeleteProblem();
+
+  const removeProblem = async () => {
+    await deleteProblem(itemToDelete as string);
+    setDeleteProblemModalOpen(false);
+    /* setSettingsOpen(false); */
+    // navigate to module page
+    if (problemId && problemId === itemToDelete) {
+      router.push(`/admin/dashboard`);
+    }
+  };
 
   const activeId = lessonId || problemId || "";
 
@@ -199,6 +258,68 @@ const AdminContentSidebar = ({
   const [reorderedModules, setReorderedModules] = useState<CourseModule[]>(
     courseStructure?.modules || []
   );
+
+  useEffect(() => {
+    console.log("rererere");
+    setReorderedModules(courseStructure?.modules || []);
+  }, [courseStructure]);
+
+  useEffect(() => {
+    recalculateDropdownHeights();
+  }, [reorderedModules]);
+
+  //REORDER LOGIC
+
+  const { mutateAsync: reorderModule } = useReorderModule();
+
+  const handleModuleDragEnd = (
+    result: DropResult,
+    provided: ResponderProvided
+  ) => {
+    console.log(result);
+    console.log(provided);
+    const { destination, source } = result;
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    // here we need to reorderContent, and if successful, update the reorderedModules state
+    // if not successful, revert the reorderedModules state
+
+    //get contentType from after | in draggableId
+    const id = result.draggableId.split("|")[0];
+    const contentType = result.draggableId.split("|")[1];
+    console.log(destination.index);
+    const newOrderNumber = destination.index + 1;
+
+    const reorderModulePayload: ReorderModule = {
+      id,
+      newOrderNumber,
+    };
+
+    //store old order in case mutate fails
+    const oldContent = Array.from(reorderedModules);
+
+    // optimistically update content
+    const newContent = Array.from(reorderedModules);
+    const [reorderedItem] = newContent.splice(source.index, 1);
+    newContent.splice(destination.index, 0, reorderedItem);
+    setReorderedModules(newContent);
+
+    // now mutate and revert if fails
+
+    console.log(newContent);
+
+    reorderModule(reorderModulePayload).catch((err) => {
+      console.log(err);
+      toast.error("Something went wrong. Please try again.");
+      setReorderedModules(oldContent);
+      return;
+    });
+  };
 
   return (
     <>
@@ -213,14 +334,11 @@ const AdminContentSidebar = ({
               <Tooltip.Trigger asChild>
                 <div
                   onClick={() => {
-                    // reorder
-                    setActiveContent("all");
-                    setReorderingContent(!reorderingContent);
-                    //toggleContentSidebar(!adminContentSidebarHidden);
+                    toggleContentSidebar(!adminContentSidebarHidden);
                   }}
                   className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
                 >
-                  <LineHeightIcon className="text-slate-300" />
+                  <DoubleArrowLeftIcon className="text-slate-300" />
                 </div>
               </Tooltip.Trigger>
               <Tooltip.Portal>
@@ -230,7 +348,7 @@ const AdminContentSidebar = ({
                   align="center"
                   className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-slate-800 border border-slate-700 text-white font-dm text-xs rounded-md p-2`}
                 >
-                  {reorderingContent ? "Save" : "Reorder Content"}
+                  Collapse
                 </Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
@@ -279,6 +397,16 @@ const AdminContentSidebar = ({
                   setOpen={setDeleteModuleModalOpen}
                   moduleId={moduleToDelete}
                 />
+                <DeleteLessonModal
+                  open={deleteLessonModalOpen}
+                  setOpen={setDeleteLessonModalOpen}
+                  removeLesson={removeLesson}
+                />
+                <DeleteProblemModal
+                  open={deleteProblemModalOpen}
+                  setOpen={setDeleteProblemModalOpen}
+                  removeProblem={removeProblem}
+                />
               </>
             )}
             <Accordion.Root
@@ -286,6 +414,7 @@ const AdminContentSidebar = ({
                 //value is array of open modules
                 setOpenModules(value);
               }}
+              value={openModules}
               className="w-full font-dm"
               type="multiple"
             >
@@ -298,185 +427,189 @@ const AdminContentSidebar = ({
                   </p>
                 </div>
               )}
-              {courseStructure && (
-                <Reorder.Group
-                  values={reorderedModules}
-                  onReorder={setReorderedModules}
-                >
-                  {courseStructure.modules.map(
-                    (module: CourseModule, primaryIndex: number) => {
-                      const filterContent = (
-                        contentList: ModuleContent[],
-                        activeContent: "problems" | "lessons" | "all"
-                      ) => {
-                        if (activeContent === "problems") {
-                          // filter contentList to only include problems
-                          return contentList.filter(
-                            (item) => item.contentType === "problem"
-                          );
-                        } else if (activeContent === "lessons") {
-                          // filter contentList to only include lessons
-                          return contentList.filter(
-                            (item) => item.contentType === "lesson"
-                          );
-                        } else {
-                          return contentList;
-                        }
-                      };
+              <DragDropContext
+                onDragStart={() => {
+                  console.log(reorderedModules);
+                  console.log("dragging");
+                  /* setOpenModules([]); */
+                }}
+                onDragEnd={handleModuleDragEnd}
+              >
+                <Droppable droppableId="list">
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {reorderedModules.length > 0 &&
+                        reorderedModules.map(
+                          (module: CourseModule, primaryIndex: number) => {
+                            const filterContent = (
+                              contentList: ModuleContent[],
+                              activeContent: "problems" | "lessons" | "all"
+                            ) => {
+                              if (activeContent === "problems") {
+                                // filter contentList to only include problems
+                                return contentList.filter(
+                                  (item) => item.contentType === "problem"
+                                );
+                              } else if (activeContent === "lessons") {
+                                // filter contentList to only include lessons
+                                return contentList.filter(
+                                  (item) => item.contentType === "lesson"
+                                );
+                              } else {
+                                return contentList;
+                              }
+                            };
 
-                      const filteredContent = filterContent(
-                        module.content,
-                        activeContent
-                      ); // Get content based on activeContent parameter
-                      const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
-                      const isEmpty = itemCount === 0; // if module is empty
-                      const allContent = isEmpty
-                        ? ([] as ModuleContent[])
-                        : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
-                      const isActiveModule = allContent.some(
-                        (item) => item.id === activeId // if module contains the current active content
-                      );
+                            const filteredContent = filterContent(
+                              module.content,
+                              activeContent
+                            ); // Get content based on activeContent parameter
+                            const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
+                            const isEmpty = itemCount === 0; // if module is empty
+                            const allContent = isEmpty
+                              ? ([] as ModuleContent[])
+                              : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
+                            const isActiveModule = allContent.some(
+                              (item) => item.id === activeId // if module contains the current active content
+                            );
 
-                      return (
-                        <Reorder.Item
-                          value={module}
-                          key={primaryIndex}
-                          draggable={reorderingContent}
-                        >
-                          <Accordion.Item
-                            value={module.moduleName}
-                            key={primaryIndex}
-                            className="border-b border-t border-t-slate-700 border-b-slate-950 last:border-b group dropdown"
-                          >
-                            <Accordion.Trigger
-                              className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden`}
-                            >
-                              <div className="flex items-center">
-                                <p className="text-left text-sm text-white">
-                                  <span className="text-slate-300 mr-1">{`${
-                                    primaryIndex + 1
-                                  }.`}</span>
-                                  {`${module.moduleName}`}
-                                </p>
-                              </div>
-                              <div className="flex space-x-2 items-center">
-                                <Tooltip.Provider delayDuration={100}>
-                                  <Tooltip.Root>
-                                    <Tooltip.Trigger asChild>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-
-                                          openDeleteModuleModal(module.id);
-                                        }}
-                                        className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center"
-                                      >
-                                        <TrashIcon className="text-red-400 w-4 h-4" />
-                                        {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
-                                      </button>
-                                    </Tooltip.Trigger>
-                                    <Tooltip.Portal>
-                                      <Tooltip.Content
-                                        side="left"
-                                        sideOffset={5}
-                                        align="center"
-                                        className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-red-700 text-white font-dm text-xs rounded-md p-2`}
-                                      >
-                                        Delete Module
-                                      </Tooltip.Content>
-                                    </Tooltip.Portal>
-                                  </Tooltip.Root>
-                                </Tooltip.Provider>
-
-                                <ChevronDownIcon
-                                  className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
-                                  aria-hidden
-                                />
-                              </div>
-                            </Accordion.Trigger>
-                            <AccordionContent className="AccordionContent">
-                              <AnimateHeight
-                                contentClassName="h-full bg-nav-darker"
-                                height={
-                                  allContent.length == 0
-                                    ? 44
-                                    : dropdownHeights[primaryIndex]
-                                }
-                                className="flex flex-col"
+                            return (
+                              <Draggable
+                                draggableId={module.id}
+                                index={primaryIndex}
+                                key={module.id}
                               >
-                                <AnimatePresence exitBeforeEnter>
-                                  {" "}
-                                  {/* //exitBeforeEnter */}
-                                  {isEmpty ? (
-                                    <m.div
-                                      initial={{ opacity: 0 }}
-                                      animate={{ opacity: 1 }}
-                                      exit={{ opacity: 0 }}
-                                      className={`relative flex px-4 items-center cursor-pointer justify-center `}
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                  >
+                                    <Accordion.Item
+                                      value={module.moduleName}
+                                      key={module.id}
+                                      className="border-b border-t border-t-slate-700 border-b-slate-950 last:border-b group dropdown"
                                     >
-                                      <p className="text-slate-400 text-sm py-3 w-full line text-center">
-                                        No Content here :&#40;
-                                      </p>
-                                    </m.div>
-                                  ) : (
-                                    allContent.map(
-                                      (
-                                        item: ModuleContent,
-                                        secondaryIndex: number
-                                      ) => {
-                                        const id = item.id;
-                                        //check type of item
-                                        const type = item.contentType;
+                                      <Accordion.Trigger
+                                        className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden bg-nav-dark`}
+                                      >
+                                        <div
+                                          className={`absolute w-full h-full pointer-events-none z-50 bg-sky-500 inset-0 transition ${
+                                            snapshot.isDragging
+                                              ? "opacity-50"
+                                              : "opacity-0"
+                                          }`}
+                                        />
+                                        <div className="flex items-center space-x-2">
+                                          <div {...provided.dragHandleProps}>
+                                            <DragHandleDots2Icon className="text-slate-500 w-4 h-4 cursor-row-resize" />
+                                          </div>
+                                          <p className="text-left text-sm text-white">
+                                            <span className="text-slate-300 mr-1">{`${
+                                              primaryIndex + 1
+                                            }.`}</span>
+                                            {`${module.moduleName}`}
+                                          </p>
+                                        </div>
+                                        <div className="flex space-x-2 items-center">
+                                          <Tooltip.Provider delayDuration={100}>
+                                            <Tooltip.Root>
+                                              <Tooltip.Trigger asChild>
+                                                <button
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
 
-                                        const name = item.title;
+                                                    openDeleteModuleModal(
+                                                      module.id
+                                                    );
+                                                  }}
+                                                  className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center"
+                                                >
+                                                  <Trash
+                                                    className="text-red-400 w-4 h-4"
+                                                    strokeWidth={1.5}
+                                                  />
+                                                  {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
+                                                </button>
+                                              </Tooltip.Trigger>
+                                              <Tooltip.Portal>
+                                                <Tooltip.Content
+                                                  side="left"
+                                                  sideOffset={5}
+                                                  align="center"
+                                                  className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-red-700 text-white font-dm text-xs rounded-md p-2`}
+                                                >
+                                                  Delete Module
+                                                </Tooltip.Content>
+                                              </Tooltip.Portal>
+                                            </Tooltip.Root>
+                                          </Tooltip.Provider>
 
-                                        return (
-                                          <Link
-                                            href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                                              module.moduleName
-                                            )}&moduleId=${encodeURIComponent(
-                                              module.id
-                                            )}`}
-                                            key={id}
-                                          >
-                                            <m.div
-                                              initial={{ opacity: 0 }}
-                                              animate={{
-                                                opacity: 1,
-                                                transition: {
-                                                  delay: secondaryIndex * 0.1,
-                                                },
-                                              }}
-                                              exit={{ opacity: 0 }}
-                                              key={`${primaryIndex}-${secondaryIndex}`}
-                                              className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
-                                                id === activeId
-                                                  ? "!bg-nav-darkest"
-                                                  : ""
-                                              }`}
-                                            >
-                                              <DropdownMenu.Root>
-                                                <DropdownMenu.Trigger asChild>
-                                                  <button
-                                                    className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 hover:bg-slate-800`}
-                                                  >
-                                                    <DotsHorizontalIcon
-                                                      className={`w-4 h-4 group-hover/dotgroup:text-white ${
-                                                        id === activeId
-                                                          ? "text-white"
-                                                          : "text-slate-400"
-                                                      }`}
-                                                    />
-                                                  </button>
-                                                </DropdownMenu.Trigger>
+                                          <ChevronDownIcon
+                                            className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"
+                                            aria-hidden
+                                          />
+                                        </div>
+                                      </Accordion.Trigger>
+                                      <AccordionContent className="AccordionContent">
+                                        <AnimateHeight
+                                          contentClassName="h-full bg-nav-darker"
+                                          height={
+                                            allContent.length == 0
+                                              ? 44
+                                              : dropdownHeights[primaryIndex]
+                                          }
+                                          className="flex flex-col"
+                                        >
+                                          <AnimatePresence exitBeforeEnter>
+                                            {isEmpty ? (
+                                              <m.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                className={`relative flex px-4 items-center cursor-pointer justify-center `}
+                                              >
+                                                <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                                                  No Content here :&#40;
+                                                </p>
+                                              </m.div>
+                                            ) : (
+                                              <ModuleContentList
+                                                activeId={activeId as string}
+                                                module={module}
+                                                allContent={allContent}
+                                                setItemToDelete={
+                                                  setItemToDelete
+                                                }
+                                                setDeleteLessonModalOpen={
+                                                  setDeleteLessonModalOpen
+                                                }
+                                                setDeleteProblemModalOpen={
+                                                  setDeleteProblemModalOpen
+                                                }
+                                                activeContent={activeContent}
+                                                primaryIndex={primaryIndex}
+                                                setActiveContent={
+                                                  setActiveContent
+                                                }
+                                                setReorderedModules={
+                                                  setReorderedModules
+                                                }
+                                                reorderedModules={
+                                                  reorderedModules
+                                                }
+                                              />
+                                              /* allContent.map(
+                                                (
+                                                  item: ModuleContent,
+                                                  secondaryIndex: number
+                                                ) => {
+                                                  const id = item.id;
+                                                  //check type of item
+                                                  const type = item.contentType;
 
-                                                <DropdownMenu.Portal>
-                                                  <DropdownMenu.Content
-                                                    side="bottom"
-                                                    align="start"
-                                                    className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[200px] z-50 bg-white rounded-md p-1"
-                                                    sideOffset={5}
-                                                  >
+                                                  const name = item.title;
+
+                                                  return (
                                                     <Link
                                                       href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
                                                         module.moduleName
@@ -485,139 +618,164 @@ const AdminContentSidebar = ({
                                                       )}`}
                                                       key={id}
                                                     >
-                                                      <DropdownMenu.Item className="space-x-2 group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-blue-100 data-[highlighted]:text-blue-600">
-                                                        <Pencil2Icon />
-                                                        <p>
-                                                          Edit{" "}
-                                                          {toTitleCase(type)}
-                                                        </p>
-                                                      </DropdownMenu.Item>
-                                                    </Link>
-                                                    {/*
-                                                <DropdownMenu.Sub>
-                                                  <DropdownMenu.SubTrigger className="justify-between group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[state=open]:bg-violet4 data-[state=open] data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700 data-[highlighted]:data-[state=open]:bg-slate-100 data-[highlighted]:data-[state=open]:text-gray-600">
-                                                    <div className="space-x-2 flex items-center">
-                                                      <HeightIcon />
-                                                      <p>Reorder Problem</p>
-                                                    </div>
-                                                    <div className="ml-auto text-slate-800 group-data-[highlighted]:text-gray-700 group-data-[disabled]:text-gray-300">
-                                                      <ChevronRightIcon />
-                                                    </div>
-                                                  </DropdownMenu.SubTrigger>
-                                                  <DropdownMenu.Portal>
-                                                    <DropdownMenu.SubContent
-                                                      className="DropdownMenuContent font-dm data-[state=open]:animate-slideLeftAndFade  min-w-[180px] z-50 bg-white rounded-md p-2 shadow-2xl"
-                                                      sideOffset={2}
-                                                      alignOffset={-5}
-                                                    >
-                                                      <DropdownMenu.Item
-                                                        onClick={() => {}}
-                                                        className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
+                                                      <m.div
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{
+                                                          opacity: 1,
+                                                          transition: {
+                                                            delay:
+                                                              secondaryIndex *
+                                                              0.1,
+                                                          },
+                                                        }}
+                                                        exit={{ opacity: 0 }}
+                                                        key={`${primaryIndex}-${secondaryIndex}`}
+                                                        className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
+                                                          id === activeId
+                                                            ? "!bg-nav-darkest"
+                                                            : ""
+                                                        }`}
                                                       >
-                                                        <DoubleArrowUpIcon />
-                                                        <p>Move Up</p>
-                                                      </DropdownMenu.Item>
-                                                      <DropdownMenu.Item
-                                                        onClick={() => {}}
-                                                        className="space-x-2 text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-700"
-                                                      >
-                                                        <DoubleArrowDownIcon />
-                                                        <p>Move Down</p>
-                                                      </DropdownMenu.Item>
-                                                    </DropdownMenu.SubContent>
-                                                  </DropdownMenu.Portal>
-                                                </DropdownMenu.Sub>
-                                                  */}
-                                                    <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-1" />
-                                                    <DropdownMenu.Item
-                                                      onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        e.preventDefault();
-                                                        type === "problem"
-                                                          ? console.log(
-                                                              "problem"
-                                                            )
-                                                          : deleteLesson(id);
-                                                      }}
-                                                      className="group text-xs space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 text-red-600"
-                                                    >
-                                                      <TrashIcon />
-                                                      <p>
-                                                        Delete{" "}
-                                                        {toTitleCase(type)}
-                                                      </p>
-                                                    </DropdownMenu.Item>
-                                                    <DropdownMenu.Arrow className="fill-white" />
-                                                  </DropdownMenu.Content>
-                                                </DropdownMenu.Portal>
-                                              </DropdownMenu.Root>
+                                                        <DropdownMenu.Root>
+                                                          <DropdownMenu.Trigger
+                                                            asChild
+                                                          >
+                                                            <button
+                                                              className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 hover:bg-slate-800`}
+                                                            >
+                                                              <DotsHorizontalIcon
+                                                                className={`w-4 h-4 group-hover/dotgroup:text-white ${
+                                                                  id ===
+                                                                  activeId
+                                                                    ? "text-white"
+                                                                    : "text-slate-400"
+                                                                }`}
+                                                              />
+                                                            </button>
+                                                          </DropdownMenu.Trigger>
 
-                                              <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                                              <p
-                                                style={{
-                                                  //clamp lines to 3
-                                                  display: "-webkit-box",
-                                                  WebkitLineClamp: 3,
-                                                  WebkitBoxOrient: "vertical",
-                                                  overflow: "hidden",
-                                                }}
-                                                className="text-white text-sm py-4 w-full line"
-                                              >
-                                                <span className="text-slate-500 mr-1">
-                                                  {`${primaryIndex + 1}.${
-                                                    secondaryIndex + 1
-                                                  }`}
-                                                </span>{" "}
-                                                {`${name}`}
-                                              </p>
-                                            </m.div>
-                                          </Link>
-                                        );
-                                      }
-                                    )
-                                  )}
-                                </AnimatePresence>
-                              </AnimateHeight>
-                              <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
-                                <div className="flex space-x-2 w-full">
-                                  <Link
-                                    href={`/admin/lesson/create/${
-                                      module.id
-                                    }?moduleName=${encodeURIComponent(
-                                      module.moduleName
-                                    )}`}
-                                  >
-                                    <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
-                                      <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
-                                      <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs pointer-events-none">
-                                        Add Lesson
-                                      </p>
-                                    </div>
-                                  </Link>
-                                  <Link
-                                    href={`/admin/problem/create/${
-                                      module.id
-                                    }?moduleName=${encodeURIComponent(
-                                      module.moduleName
-                                    )}`}
-                                  >
-                                    <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
-                                      <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
-                                      <p className="text-slate-100/60 group-hover/problembutton:text-white text-xs pointer-events-none">
-                                        Add Problem
-                                      </p>
-                                    </div>
-                                  </Link>
-                                </div>
-                              </div>
-                            </AccordionContent>
-                          </Accordion.Item>
-                        </Reorder.Item>
-                      );
-                    }
+                                                          <DropdownMenu.Portal>
+                                                            <DropdownMenu.Content
+                                                              side="bottom"
+                                                              align="start"
+                                                              className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[150px] z-50 bg-white rounded-md p-1"
+                                                              sideOffset={5}
+                                                            >
+                                                              <Link
+                                                                href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
+                                                                  module.moduleName
+                                                                )}&moduleId=${encodeURIComponent(
+                                                                  module.id
+                                                                )}`}
+                                                                key={id}
+                                                              >
+                                                                <DropdownMenu.Item className="space-x-2 font-bold group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-slate-200 cursor-pointer data-[highlighted]:text-slate-600">
+                                                                  <p>Edit</p>
+                                                                </DropdownMenu.Item>
+                                                              </Link>
+                                                              <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-1" />
+                                                              <DropdownMenu.Item
+                                                                onClick={(
+                                                                  e
+                                                                ) => {
+                                                                  e.stopPropagation();
+                                                                  e.preventDefault();
+                                                                  setItemToDelete(
+                                                                    id
+                                                                  );
+                                                                  type ===
+                                                                  "problem"
+                                                                    ? setDeleteProblemModalOpen(
+                                                                        true
+                                                                      )
+                                                                    : setDeleteLessonModalOpen(
+                                                                        true
+                                                                      );
+                                                                }}
+                                                                className="group cursor-pointer text-xs font-bold space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 text-red-600"
+                                                              >
+                                                                <p>Delete</p>
+                                                              </DropdownMenu.Item>
+                                                              <DropdownMenu.Arrow className="fill-white" />
+                                                            </DropdownMenu.Content>
+                                                          </DropdownMenu.Portal>
+                                                        </DropdownMenu.Root>
+
+                                                        <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                                                        <p
+                                                          style={{
+                                                            //clamp lines to 3
+                                                            display:
+                                                              "-webkit-box",
+                                                            WebkitLineClamp: 3,
+                                                            WebkitBoxOrient:
+                                                              "vertical",
+                                                            overflow: "hidden",
+                                                          }}
+                                                          className="text-white text-sm py-4 w-full line"
+                                                        >
+                                                          <span className="text-slate-500 mr-1">
+                                                            {`${
+                                                              primaryIndex + 1
+                                                            }.${
+                                                              secondaryIndex + 1
+                                                            }`}
+                                                          </span>{" "}
+                                                          {`${name}`}
+                                                        </p>
+                                                      </m.div>
+                                                    </Link>
+                                                  );
+                                                }
+                                              ) */
+                                            )}
+                                          </AnimatePresence>
+                                        </AnimateHeight>
+                                        <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
+                                          <div className="flex space-x-2 w-full">
+                                            <Link
+                                              href={`/admin/lesson/create/${
+                                                module.id
+                                              }?moduleName=${encodeURIComponent(
+                                                module.moduleName
+                                              )}`}
+                                            >
+                                              <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
+                                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
+                                                <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs pointer-events-none">
+                                                  Add Lesson
+                                                </p>
+                                              </div>
+                                            </Link>
+                                            <Link
+                                              href={`/admin/problem/create/${
+                                                module.id
+                                              }?moduleName=${encodeURIComponent(
+                                                module.moduleName
+                                              )}`}
+                                            >
+                                              <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
+                                                <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
+                                                <p className="text-slate-100/60 group-hover/problembutton:text-white text-xs pointer-events-none">
+                                                  Add Problem
+                                                </p>
+                                              </div>
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </AccordionContent>
+                                    </Accordion.Item>
+                                  </div>
+                                )}
+                              </Draggable>
+                            );
+                          }
+                        )}
+                      {provided.placeholder}
+                    </div>
                   )}
-                </Reorder.Group>
-              )}
+                </Droppable>
+              </DragDropContext>
               <div className="flex items-center justify-center px-4 py-4">
                 <button
                   onClick={() => {
@@ -637,89 +795,320 @@ const AdminContentSidebar = ({
       </ScrollArea.Root>
       <HiddenSizingItems
         //navigation={navigation}
-        courseStructure={courseStructure as CourseStructure}
+        courseModules={reorderedModules as CourseModule[]}
         activeContent={activeContent}
       />
     </>
   );
 };
 
+const ModuleContentList = ({
+  allContent,
+  setItemToDelete,
+  setDeleteLessonModalOpen,
+  setDeleteProblemModalOpen,
+  activeId,
+  module,
+  activeContent,
+  primaryIndex,
+  setActiveContent,
+  setReorderedModules,
+  reorderedModules,
+}: {
+  module: CourseModule;
+  activeId: string;
+  activeContent: "problems" | "lessons" | "all";
+  primaryIndex: number;
+  allContent: ModuleContent[];
+  setItemToDelete: React.Dispatch<React.SetStateAction<string>>;
+  setDeleteLessonModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteProblemModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveContent: (activeContent: "problems" | "lessons" | "all") => void;
+  setReorderedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>;
+  reorderedModules: CourseModule[];
+}) => {
+  const [reorderedContent, setReorderedContent] = useState(
+    module.content || []
+  );
+
+  useEffect(() => {
+    // set reordered content to module content on mount, so moving content doesnt revert updated titles
+    setReorderedContent(module.content);
+  }, [reorderedModules]);
+
+  /* const reorderContent = async (
+    reorderContent: ReorderContent,
+    sourceIndex: number,
+    destinationIndex: number
+  ) => {
+    const { data } = await apiClient.post(
+      apiRoutes.v2.admin.reorderContent(module.id),
+      reorderContent
+    );
+  }; */
+
+  const { mutateAsync: reorderContent } = useReorderContent(module.id);
+
+  const handleDragEnd = (result: DropResult, provided: ResponderProvided) => {
+    console.log(result);
+    console.log(provided);
+    const { destination, source } = result;
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    // here we need to reorderContent, and if successful, update the reorderedModules state
+    // if not successful, revert the reorderedModules state
+
+    //get contentType from after | in draggableId
+    const id = result.draggableId.split("|")[0];
+    const contentType = result.draggableId.split("|")[1];
+    console.log(destination.index);
+    const newOrderNumber = destination.index + 1;
+
+    console.log(module.content);
+
+    const reorderContentPayload: ReorderContent = {
+      id,
+      contentType,
+      newOrderNumber,
+    };
+
+    //store old order in case mutate fails
+    const oldContent = Array.from(reorderedContent);
+
+    // optimistically update content
+    const newContent = Array.from(reorderedContent);
+    const [reorderedItem] = newContent.splice(source.index, 1);
+    newContent.splice(destination.index, 0, reorderedItem);
+    setReorderedContent(newContent);
+
+    const newModules = Array.from(reorderedModules);
+    newModules[primaryIndex].content = newContent;
+    setReorderedModules(newModules);
+
+    // now mutate and revert if fails
+
+    reorderContent(reorderContentPayload).catch((err) => {
+      console.log(err);
+      toast.error("Something went wrong. Please try again.");
+      setReorderedContent(oldContent);
+      return;
+    });
+  };
+
+  return (
+    <DragDropContext
+      onDragEnd={handleDragEnd}
+      onDragStart={(start, provided) => console.log(start, provided)}
+    >
+      <Droppable
+        droppableId={`module-${module.id}`}
+        isDropDisabled={activeContent !== "all"}
+      >
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {allContent.map((item: ModuleContent, secondaryIndex: number) => {
+              const id = item.id;
+              //check type of item
+              const type = item.contentType;
+
+              const name = item.title;
+              return (
+                <Draggable
+                  draggableId={`${item.id}|${item.contentType}`}
+                  index={secondaryIndex}
+                  key={item.id}
+                  isDragDisabled={activeContent !== "all"}
+                >
+                  {(provided, snapshot) => (
+                    <div ref={provided.innerRef} {...provided.draggableProps}>
+                      <Link
+                        href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
+                          module.moduleName
+                        )}&moduleId=${encodeURIComponent(module.id)}`}
+                        key={id}
+                      >
+                        <m.div
+                          key={`${primaryIndex}-${secondaryIndex}`}
+                          className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
+                            id === activeId ? "!bg-nav-darkest" : ""
+                          }`}
+                        >
+                          <div
+                            className={`absolute w-full h-full pointer-events-none z-50 bg-sky-500/80 inset-0 transition ${
+                              snapshot.isDragging ? "opacity-50" : "opacity-0"
+                            }`}
+                          />
+                          <DropdownMenu.Root>
+                            <DropdownMenu.Trigger asChild>
+                              <button
+                                className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 hover:bg-slate-800`}
+                              >
+                                <DotsHorizontalIcon
+                                  className={`w-4 h-4 group-hover/dotgroup:text-white ${
+                                    id === activeId
+                                      ? "text-white"
+                                      : "text-slate-400"
+                                  }`}
+                                />
+                              </button>
+                            </DropdownMenu.Trigger>
+
+                            <DropdownMenu.Portal>
+                              <DropdownMenu.Content
+                                side="bottom"
+                                align="start"
+                                className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[150px] z-50 bg-white rounded-md p-1"
+                                sideOffset={5}
+                              >
+                                <Link
+                                  href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
+                                    module.moduleName
+                                  )}&moduleId=${encodeURIComponent(module.id)}`}
+                                  key={id}
+                                >
+                                  <DropdownMenu.Item className="space-x-2 font-bold group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-slate-200 cursor-pointer data-[highlighted]:text-slate-600">
+                                    <p>Edit</p>
+                                  </DropdownMenu.Item>
+                                </Link>
+                                <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-1" />
+                                <DropdownMenu.Item
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setItemToDelete(id);
+                                    type === "problem"
+                                      ? setDeleteProblemModalOpen(true)
+                                      : setDeleteLessonModalOpen(true);
+                                  }}
+                                  className="group cursor-pointer text-xs font-bold space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 text-red-600"
+                                >
+                                  <p>Delete</p>
+                                </DropdownMenu.Item>
+                                <DropdownMenu.Arrow className="fill-white" />
+                              </DropdownMenu.Content>
+                            </DropdownMenu.Portal>
+                          </DropdownMenu.Root>
+
+                          <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                          <div className="flex items-center space-x-2">
+                            <div
+                              {...provided.dragHandleProps}
+                              className={
+                                activeContent === "all" ? "" : "hidden"
+                              }
+                            >
+                              <DragHandleDots2Icon className="text-slate-500 w-4 h-4 cursor-row-resize" />
+                            </div>
+                            <p
+                              style={{
+                                //clamp lines to 3
+                                display: "-webkit-box",
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                              }}
+                              className="text-white text-sm py-4 w-full line"
+                            >
+                              <span className="text-slate-500 mr-1">
+                                {`${primaryIndex + 1}.${secondaryIndex + 1}`}
+                              </span>{" "}
+                              {`${name}`}
+                            </p>
+                          </div>
+                        </m.div>
+                      </Link>
+                    </div>
+                  )}
+                </Draggable>
+              );
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
+
 export const HiddenSizingItems = ({
   //navigation,
-  courseStructure,
+  courseModules,
   activeContent,
 }: {
   //navigation: INavigationItem[];
-  courseStructure: CourseStructure;
+  courseModules: CourseModule[];
   activeContent: "problems" | "lessons" | "all";
 }) => {
   return (
     <div className="w-full absolute pointer-events-none -z-10 opacity-0">
       {/* Sizing Elements to animate height (stay hidden) */}
-      {courseStructure &&
-        courseStructure.modules.map(
-          (value: CourseModule, primaryIndex: number) => {
-            const filterContent = (
-              contentList: ModuleContent[],
-              activeContent: "problems" | "lessons" | "all"
-            ) => {
-              if (activeContent === "problems") {
-                // filter contentList to only include problems
-                return contentList.filter(
-                  (item) => item.contentType === "problem"
-                );
-              } else if (activeContent === "lessons") {
-                // filter contentList to only include lessons
-                return contentList.filter(
-                  (item) => item.contentType === "lesson"
-                );
-              } else {
-                return contentList;
-              }
-            };
+      {courseModules &&
+        courseModules.map((value: CourseModule, primaryIndex: number) => {
+          const filterContent = (
+            contentList: ModuleContent[],
+            activeContent: "problems" | "lessons" | "all"
+          ) => {
+            if (activeContent === "problems") {
+              // filter contentList to only include problems
+              return contentList.filter(
+                (item) => item.contentType === "problem"
+              );
+            } else if (activeContent === "lessons") {
+              // filter contentList to only include lessons
+              return contentList.filter(
+                (item) => item.contentType === "lesson"
+              );
+            } else {
+              return contentList;
+            }
+          };
 
-            const filteredContent = filterContent(value.content, activeContent); // Get content based on activeContent parameter
-            const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
-            const isEmpty = itemCount === 0; // if module is empty
-            const allContent = isEmpty
-              ? ([] as ModuleContent[])
-              : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
+          const filteredContent = filterContent(value.content, activeContent); // Get content based on activeContent parameter
+          const itemCount = filteredContent.length; // number of total problems, lessons or both in a module based on activeContent
+          const isEmpty = itemCount === 0; // if module is empty
+          const allContent = isEmpty
+            ? ([] as ModuleContent[])
+            : (filteredContent as ModuleContent[]); // all problems and lessons in a module based on activeContent
 
-            return allContent.map(
-              (item: ModuleContent, secondaryIndex: number) => {
-                const id = item.id;
-                //check type of item
-                const type = item.contentType;
-                const name = item.title;
+          return allContent.map(
+            (item: ModuleContent, secondaryIndex: number) => {
+              const id = item.id;
+              //check type of item
+              const type = item.contentType;
+              const name = item.title;
 
-                return (
-                  <div key={id}>
-                    <div
-                      className={`relative font-dm flex pr-14 pl-0 items-center cursor-pointer justify-start ${primaryIndex}-${type}-admin ${primaryIndex}-content-admin`}
+              return (
+                <div key={id}>
+                  <div
+                    className={`relative font-dm flex pr-14 pl-0 items-center cursor-pointer justify-start ${primaryIndex}-${type}-admin ${primaryIndex}-content-admin`}
+                  >
+                    <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
+                    <p
+                      style={{
+                        //clamp lines to 3
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                      className="text-white text-sm py-4 w-full line"
                     >
-                      <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                      <p
-                        style={{
-                          //clamp lines to 3
-                          display: "-webkit-box",
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                        }}
-                        className="text-white text-sm py-4 w-full line"
-                      >
-                        <span className="text-slate-500 mr-1">
-                          {`${primaryIndex + 1}.${secondaryIndex + 1}`}
-                        </span>{" "}
-                        {`${name}`}
-                      </p>
-                    </div>
+                      <span className="text-slate-500 mr-1">
+                        {`${primaryIndex + 1}.${secondaryIndex + 1}`}
+                      </span>{" "}
+                      {`${name}`}
+                    </p>
                   </div>
-                );
-              }
-            );
-          }
-        )}
+                </div>
+              );
+            }
+          );
+        })}
     </div>
   );
 };

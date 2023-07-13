@@ -28,6 +28,11 @@ export const apiRoutes = {
   v2: {
     student: {
       getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+
+      // code evaluation
+      runCode: "v2/code/run",
+      runCodeEvaluation: "v2/code/run/evaluate",
+      runCodeSubmission: "v2/code/run/submission",
     },
     admin: {
       // module
@@ -45,6 +50,12 @@ export const apiRoutes = {
       getProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
       updateProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
       deleteProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
+
+      // reorder
+      reorderContent: (moduleId: string) =>
+        `v2/module/${moduleId}/changeContentOrder`,
+      reorderModule: (courseId: string) =>
+        `v2/course/${courseId}/changeModuleOrder`,
     },
   },
 };
