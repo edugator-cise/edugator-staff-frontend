@@ -48,7 +48,9 @@ const ContentSidebar = ({
     data: courseStructure,
     isLoading: courseStructureLoading,
     isError: courseStructureError,
-  } = useGetCourseStructure();
+  } = useGetCourseStructure({
+    admin: false,
+  });
 
   const { contentSidebarHidden } = useSelector(
     (state: RootState) => state.interfaceControls

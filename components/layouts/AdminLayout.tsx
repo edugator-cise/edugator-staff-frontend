@@ -52,7 +52,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
   const recalculateDropdownHeights = () => recalculate({});
 
   // run the function to calculate dropdown heights when the activeContent or the course structure changes
-  const { data: courseStructureData } = useGetCourseStructure();
+  const { data: courseStructureData } = useGetCourseStructure({ admin: true });
 
   useEffect(() => {
     calculateDropdownHeights(activeContent);

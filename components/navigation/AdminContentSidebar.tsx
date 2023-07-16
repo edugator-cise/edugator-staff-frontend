@@ -212,7 +212,9 @@ const AdminContentSidebar = ({
     data: courseStructure,
     isLoading: courseStructureLoading,
     isError: courseStructureError,
-  } = useGetCourseStructure();
+  } = useGetCourseStructure({
+    admin: true,
+  });
 
   const router = useRouter();
   const { lessonId, problemId } = router.query;

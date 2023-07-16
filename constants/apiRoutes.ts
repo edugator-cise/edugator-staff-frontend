@@ -27,7 +27,8 @@ export const apiRoutes = {
   },
   v2: {
     student: {
-      getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+      getStructure: (courseId: string) =>
+        `v2/course/${courseId}/structure?hidden=false`,
 
       // code evaluation
       runCode: "v2/code/run",
@@ -35,6 +36,9 @@ export const apiRoutes = {
       runCodeSubmission: "v2/code/run/submission",
     },
     admin: {
+      // course
+      getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+
       // module
       createModule: "v2/module",
       deleteModule: (moduleId: string) => `v2/module/${moduleId}`,

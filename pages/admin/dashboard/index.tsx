@@ -186,7 +186,9 @@ const AddProblemModal = ({
 
 const ModulesPage = () => {
   const { data: courseStructureData, isFetching: courseStructureFetching } =
-    useGetCourseStructure();
+    useGetCourseStructure({
+      admin: true,
+    });
 
   const dispatch = useDispatch();
 
