@@ -9,7 +9,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Gear } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import { Settings } from "tabler-icons-react";
+import { Settings, Trash } from "tabler-icons-react";
 import { ProblemAction, TestCaseVisibility } from "./types";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import * as Accordion from "@radix-ui/react-accordion";
@@ -297,7 +297,10 @@ const InputOutputEditorPane = ({
                                     });
                                   }}
                                 >
-                                  <TrashIcon />
+                                  <Trash
+                                    className="w-4 h-4"
+                                    strokeWidth={1.5}
+                                  />
                                 </div>
                               </Tooltip.Trigger>
                               <Tooltip.Portal>
@@ -457,12 +460,6 @@ const InputOutputEditorPane = ({
                                   });
                                 }}
                               />
-                            </div>
-                            <div className="w-full bg-red-500/10 cursor-pointer rounded-sm hover:bg-red-500/20 flex items-center justify-center py-2 !mt-4 space-x-2">
-                              <TrashIcon className="w-4 h-4 text-red-500" />
-                              <p className="text-xs text-red-500 font-dm pointer-events-none">
-                                Delete Test Case
-                              </p>
                             </div>
                           </div>
                         </div>

@@ -14,6 +14,13 @@ const languageLabels: { [key in Language]: string } = {
 
 type EditorTab = "body" | "solution" | "footer" | "header";
 
+const tabMapping: { [key in EditorTab]: string } = {
+  body: "codeBody",
+  solution: "solution",
+  footer: "codeFooter",
+  header: "codeHeader",
+};
+
 type TabState = {
   id: string;
   value: string;
@@ -151,7 +158,14 @@ const CodeEditorPane = ({
               height="99%"
               beforeMount={beforeMount}
               language={editorLanguage}
-              value={tabStates[activeTab].value}
+              value={
+                problemState?.[
+                  tabMapping[tabStates[activeTab].type] as
+                    | "codeBody"
+                    | "codeHeader"
+                    | "codeFooter"
+                ] as any
+              }
               onChange={(value) => {
                 // dispatch
                 dispatch({
