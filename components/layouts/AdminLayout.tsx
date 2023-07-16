@@ -118,7 +118,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     }
   }, []);
   return (
-    <div className="h-screen flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
+    <div className="h-screen flex overflow-clip w-screen max-w-full bg-stone-100 relative">
       {/* Main sidebar */}
       <div
         style={{
