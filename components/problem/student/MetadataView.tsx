@@ -71,7 +71,7 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
           </p>
         </div>
         <div className="overflow-auto h-full w-full flex flex-col space-y-4 p-6">
-          <h1 className="text-2xl font-dm font-semibold text-slate-800 dark:text-white">
+          <h1 className="text-2xl font-dm font-semibold text-slate-800 dark:text-white underline underline-offset-4 dark:decoration-sky-500 decoration-emerald-500">
             {problem?.title || "New Problem"}
           </h1>
           <div className="flex space-x-2 items-center">
