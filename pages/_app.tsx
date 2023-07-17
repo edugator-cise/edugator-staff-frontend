@@ -3,11 +3,6 @@ import { ReactNode } from "react";
 import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
-import theme from "constants/theme";
-import {
-  ThemeProvider as MUIThemeProvider,
-  StyledEngineProvider,
-} from "@mui/system";
 import "styles/App.css";
 import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
@@ -53,17 +48,13 @@ const App = ({ Component, pageProps }: Props) => {
         href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
       />
 
-      <StyledEngineProvider injectFirst>
-        <MUIThemeProvider theme={theme}>
-          <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
-            <ThemeProvider enableSystem={true} attribute="class">
-              <Toaster containerClassName="font-dm" />
-              {getLayout(<Component {...pageProps} />)}
-            </ThemeProvider>
-          </QueryClientProvider>
-        </MUIThemeProvider>
-      </StyledEngineProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+        <ThemeProvider enableSystem={true} attribute="class">
+          <Toaster containerClassName="font-dm" />
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeProvider>
+      </QueryClientProvider>
     </Provider>
   );
 };

@@ -7,16 +7,6 @@ import AdminLayout from "components/layouts/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
 import { ILoginSuccess, IRequestLoginAction } from "components/Login/types";
-import {
-  Alert,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Stack,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { baseAPIURL } from "constants/config";
 import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";
@@ -24,27 +14,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AdminHeader from "components/layouts/AdminHeader";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
-
-const LoginForm = styled(Form)(
-  ({ theme }) => `
-  display: inline-block;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  margin: ${theme.spacing(2)} auto;
-  left: 50%;
-  top: 50%;
-`
-);
-
-const LoginButton = styled(Button)`
-  flex-grow: 1;
-`;
-
-const LoginFormCard = styled(Card)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
 
 export default function LoginPage(): React.ReactElement {
   const dispatch = useDispatch();
