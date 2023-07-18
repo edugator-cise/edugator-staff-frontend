@@ -15,7 +15,9 @@ import {
   TrashIcon,
   CheckIcon,
   Cross2Icon,
+  MagicWandIcon,
 } from "@radix-ui/react-icons";
+import { useChat, useCompletion } from "ai/react";
 import { LessonAction, LessonData } from "./types";
 import { Editor, EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
@@ -54,6 +56,8 @@ import { isUrl } from "utils/textUtils";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 import { Trash } from "tabler-icons-react";
+
+export const runtime = "experimental-edge";
 
 export const DeleteLessonModal = ({
   open,
@@ -231,9 +235,15 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
 
   // EDITOR INITIALIZATION
 
+  const [generatedContent, setGeneratedContent] = useState([]);
+
   const editor = useEditor(
     {
       editable: editable,
+      /* content: {
+        type: "doc",
+        content: generatedContent,
+      }, */
       content: lessonState?.content || undefined,
       onUpdate: ({ editor }) => {
         console.log(editor.getJSON());
@@ -424,6 +434,104 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     handleModalClose: handleConfirmNavigationModalClose,
     setConfirmModalOpen: setConfirmNavigationModalOpen,
   } = useNavigationConfirmation(unsavedChanges, router);
+
+  /* const { messages, handleSubmit, input, handleInputChange } = useChat({
+    api: "/api/completion",
+  }); */
+
+  const {
+    completion,
+    input,
+    stop,
+    isLoading,
+    handleInputChange,
+    handleSubmit,
+  } = useCompletion({
+    api: "/api/completion",
+  });
+
+  interface LessonContent {
+    type: string;
+    attrs?: { [key: string]: any };
+    content: Array<{ type: string; [key: string]: any }>;
+  }
+
+  function parseCompletion(response: string): LessonContent[] {
+    let result: LessonContent[] = [];
+    let buffer = "";
+
+    try {
+      let startIndex = response.indexOf("{");
+      let endIndex = -1;
+
+      while (startIndex !== -1) {
+        let openBrackets = 1;
+        let closeBrackets = 0;
+        let currentIndex = startIndex + 1;
+
+        while (openBrackets > closeBrackets && currentIndex < response.length) {
+          if (response[currentIndex] === "{") {
+            openBrackets++;
+          } else if (response[currentIndex] === "}") {
+            closeBrackets++;
+          }
+          currentIndex++;
+        }
+
+        if (openBrackets === closeBrackets) {
+          endIndex = currentIndex;
+          buffer += response.substring(startIndex, endIndex);
+
+          const parsedObject = JSON.parse(buffer);
+          if (parsedObject.type) {
+            result.push(parsedObject);
+          }
+
+          buffer = "";
+          startIndex = response.indexOf("{", endIndex);
+        } else {
+          buffer += response.substring(startIndex);
+          break;
+        }
+      }
+
+      // Check if the buffer contains an incomplete object within the "content" attribute
+      if (buffer && buffer.includes('"content":')) {
+        const lastObjectIndex = result.length - 1;
+        if (lastObjectIndex >= 0) {
+          const lastObject = result[lastObjectIndex];
+          const lastContentIndex = lastObject.content.length - 1;
+          if (lastContentIndex >= 0) {
+            const lastContent = lastObject.content[lastContentIndex];
+            const contentEndIndex = buffer.lastIndexOf("}");
+            if (contentEndIndex !== -1) {
+              const contentBuffer = buffer.substring(0, contentEndIndex + 1);
+              lastContent.text += contentBuffer;
+              buffer = buffer.substring(contentEndIndex + 1);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing completion:", error);
+    }
+
+    return result;
+  }
+
+  useEffect(() => {
+    //every time completion changes, set the lesson state to the parsed completion
+    if (completion) {
+      const parsedCompletion = parseCompletion(completion);
+      console.log(parsedCompletion);
+      setGeneratedContent(parsedCompletion as any);
+      /* lessonDispatch({
+        type: "SET_CONTENT",
+        payload: parsedCompletion,
+      }); */
+      editor?.commands.setContent(parsedCompletion);
+    }
+  }, [completion]);
 
   return (
     <div className="w-full h-full flex flex-col relative bg-white">
@@ -639,7 +747,59 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               </button> */}
       </div>
       {/* Surrounding Border */}
-      <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
+      <div className="w-full h-full flex flex-col justify-center relative items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
+        <form
+          onSubmit={handleSubmit}
+          className="absolute max-w-sm top-6 z-10 right-6 rounded-md bg-indigo-100 ring-2 ring-indigo-500 flex flex-col space-y-2 p-4"
+        >
+          <MagicWandIcon className="w-6 h-6 text-indigo-500" />
+          <h1 className="text-indigo-900 font-dm text-base font-semibold">
+            Looking for inspiration?
+          </h1>
+          <p className="text-indigo-900 font-dm text-xs">
+            Input your lesson topic and we'll generate a lesson for you!
+          </p>
+          <div className="relative w-full rounded-md bg-white">
+            <textarea
+              className="w-full h-28 p-3 rounded-md bg-white dark:bg-slate-800 dark:text-white text-slate-800 font-dm text-xs outline-none resize-none"
+              placeholder="Lesson Topic"
+              value={input}
+              onChange={handleInputChange}
+            />
+            {!isLoading && (
+              <button
+                disabled={isLoading}
+                className="absolute disabled:bg-gray-400 disabled:hover:bg-gray-400 right-1 bottom-1 py-2 rounded-md bg-indigo-500 hover:bg-indigo-600 text-white font-dm text-xs px-4"
+                type="submit"
+              >
+                Generate
+              </button>
+            )}
+            {/* Stop Button */}
+            {isLoading && (
+              <button
+                className="absolute right-1 bottom-1 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white font-dm text-xs px-4"
+                type="button"
+                onClick={stop}
+              >
+                Stop
+              </button>
+            )}
+          </div>
+          {completion && (
+            <div className="w-full h-28 p-3 rounded-md bg-white dark:bg-slate-800 dark:text-white text-slate-800 font-dm text-xs overflow-y-scroll">
+              {completion}
+            </div>
+          )}
+          {/*  {messages.length > 0 && (
+            <div className="w-full h-28 p-3 rounded-md bg-white dark:bg-slate-800 dark:text-white text-slate-800 font-dm text-xs overflow-y-scroll">
+              {messages.map((message, index) => (
+                <p key={index}>{message.content}</p>
+              ))}
+            </div>
+          )} */}
+        </form>
+
         {/* Editor and Title Holder ("Page") */}
         <div className="w-full h-full min-h-full max-h-[200px] !overflow-y-scroll flex flex-col justify-start items-center bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
           <div
@@ -666,145 +826,149 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             </div>
 
             {/* Bubble Menu (Only for Links for now) */}
-            <BubbleMenu
-              className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
-              tippyOptions={{
-                moveTransition: "transform 0.2s ease-out",
-                zIndex: 101,
-                duration: 150,
-                onClickOutside(instance, event) {
-                  instance.hide();
-                  //clear url, set editing link to false, and close the instance
-                  setTimeout(() => {
-                    setUrl(editor?.getAttributes("link").href);
-                  }, 300);
-                  setEditingLink(false);
-                },
-              }}
-              editor={editor}
-              shouldShow={({ editor, view, state, oldState, from, to }) => {
-                // only show the bubble menu for links.
-                if (!editor || !editable) return false;
-                return from === to && editor.isActive("link");
-              }}
-            >
-              {/* Input to edit the link */}
-              <input
-                type="text"
-                className="w-full py-1 pr-2 bg-slate-800 text-ellipsis text-slate-200 rounded-md text-xs font-dm outline-none"
-                placeholder="https://example.com"
-                value={url}
-                onClick={(e) => {
-                  // select the input text when the user clicks on it.
-                  e.currentTarget.select();
+            {editor && (
+              <BubbleMenu
+                className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
+                tippyOptions={{
+                  moveTransition: "transform 0.2s ease-out",
+                  zIndex: 101,
+                  duration: 150,
+                  onClickOutside(instance, event) {
+                    instance.hide();
+                    //clear url, set editing link to false, and close the instance
+                    setTimeout(() => {
+                      setUrl(editor?.getAttributes("link").href);
+                    }, 300);
+                    setEditingLink(false);
+                  },
                 }}
-                onChange={(e) => {
-                  setUrl(e.target.value);
-                  setEditingLink(true);
+                editor={editor}
+                shouldShow={({ editor, view, state, oldState, from, to }) => {
+                  // only show the bubble menu for links.
+                  if (!editor || !editable) return false;
+                  return from === to && editor.isActive("link");
                 }}
-              />
-              <div className="w-px h-6 bg-slate-600" />
-              <Tooltip.Provider delayDuration={300}>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
-                      onClick={
-                        editingLink
-                          ? () => {
-                              if (!isUrl(url)) {
-                                toast.error("Please enter a valid URL.");
-                                return;
+              >
+                {/* Input to edit the link */}
+                <input
+                  type="text"
+                  className="w-full py-1 pr-2 bg-slate-800 text-ellipsis text-slate-200 rounded-md text-xs font-dm outline-none"
+                  placeholder="https://example.com"
+                  value={url}
+                  onClick={(e) => {
+                    // select the input text when the user clicks on it.
+                    e.currentTarget.select();
+                  }}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    setEditingLink(true);
+                  }}
+                />
+                <div className="w-px h-6 bg-slate-600" />
+                <Tooltip.Provider delayDuration={300}>
+                  <Tooltip.Root delayDuration={300}>
+                    <Tooltip.Trigger asChild className="relative">
+                      <button
+                        className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
+                        onClick={
+                          editingLink
+                            ? () => {
+                                if (!isUrl(url)) {
+                                  toast.error("Please enter a valid URL.");
+                                  return;
+                                }
+                                setUrl(editor.getAttributes("link").href);
+                                //set editor link value to current link value
+                                editor
+                                  ?.chain()
+                                  .focus()
+                                  .extendMarkRange("link")
+                                  .setLink({ href: url, target: "_blank" })
+                                  .run();
+                                setTimeout(() => {
+                                  setEditingLink(false);
+                                }, 300);
                               }
-                              setUrl(editor.getAttributes("link").href);
-                              //set editor link value to current link value
-                              editor
-                                ?.chain()
-                                .focus()
-                                .extendMarkRange("link")
-                                .setLink({ href: url, target: "_blank" })
-                                .run();
-                              setTimeout(() => {
+                            : openLinkModal
+                        }
+                      >
+                        <>
+                          <CheckIcon
+                            className={`transition absolute -translate-y-[calc(100%+16px)] ${
+                              editingLink ? "!translate-y-0" : ""
+                            }`}
+                          />
+
+                          <Pencil1Icon
+                            className={`transition ${
+                              editingLink ? "translate-y-[calc(100%+16px)]" : ""
+                            }`}
+                          />
+                        </>
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        side="top"
+                        sideOffset={5}
+                        align="center"
+                        className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                      >
+                        {editingLink ? "Save" : "Edit Link"}
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                  <Tooltip.Root delayDuration={300}>
+                    <Tooltip.Trigger asChild className="relative">
+                      <button
+                        className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
+                          editingLink
+                            ? "hover:bg-white/10"
+                            : "hover:bg-red-500/30"
+                        }`}
+                        onClick={
+                          editingLink
+                            ? () => {
+                                // cancel current link changes
+                                setUrl(editor.getAttributes("link").href);
                                 setEditingLink(false);
-                              }, 300);
-                            }
-                          : openLinkModal
-                      }
-                    >
-                      <>
-                        <CheckIcon
-                          className={`transition absolute -translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
+                              }
+                            : removeLink
+                        }
+                      >
+                        <>
+                          <Cross2Icon
+                            className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
+                              editingLink ? "!translate-y-0" : ""
+                            }`}
+                          />
 
-                        <Pencil1Icon
-                          className={`transition ${
-                            editingLink ? "translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                    >
-                      {editingLink ? "Save" : "Edit Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
-                        editingLink
-                          ? "hover:bg-white/10"
-                          : "hover:bg-red-500/30"
-                      }`}
-                      onClick={
-                        editingLink
-                          ? () => {
-                              // cancel current link changes
-                              setUrl(editor.getAttributes("link").href);
-                              setEditingLink(false);
-                            }
-                          : removeLink
-                      }
-                    >
-                      <>
-                        <Cross2Icon
-                          className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
-
-                        <TrashIcon
-                          className={`transition text-red-500 ${
-                            editingLink ? "-translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
-                        editingLink ? "text-slate-300" : "text-red-500"
-                      }`}
-                    >
-                      {editingLink ? "Cancel" : "Remove Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
-            </BubbleMenu>
+                          <TrashIcon
+                            className={`transition text-red-500 ${
+                              editingLink
+                                ? "-translate-y-[calc(100%+16px)]"
+                                : ""
+                            }`}
+                          />
+                        </>
+                      </button>
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content
+                        side="top"
+                        sideOffset={5}
+                        align="center"
+                        className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
+                          editingLink ? "text-slate-300" : "text-red-500"
+                        }`}
+                      >
+                        {editingLink ? "Cancel" : "Remove Link"}
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
+                </Tooltip.Provider>
+              </BubbleMenu>
+            )}
             <EditorContent
               onFocus={() => setDisableToolbar(false)}
               className="!prose-lime px-6 pb-6 prose-a:!text-blue-400 prose-a:underline prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc prose-headings:font-dm prose-h1:!my-4 prose-h2:!my-4 prose-h3:!my-4 prose-h3:!text-lg prose-h3:!font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-xl prose-h2:!font-semibold prose-headings:!my-0 !outline-none"

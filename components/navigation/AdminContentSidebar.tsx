@@ -516,7 +516,7 @@ const AdminContentSidebar = ({
                                           <Tooltip.Provider delayDuration={100}>
                                             <Tooltip.Root>
                                               <Tooltip.Trigger asChild>
-                                                <button
+                                                <div
                                                   onClick={(e) => {
                                                     e.stopPropagation();
 
@@ -531,7 +531,7 @@ const AdminContentSidebar = ({
                                                     strokeWidth={1.5}
                                                   />
                                                   {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
-                                                </button>
+                                                </div>
                                               </Tooltip.Trigger>
                                               <Tooltip.Portal>
                                                 <Tooltip.Content
