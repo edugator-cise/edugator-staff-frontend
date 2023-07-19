@@ -90,15 +90,46 @@
 }
 
 
-.PopoverContent[data-state="open"] {
-  transform-origin: right bottom;
+.PopoverContent[data-state="open"][data-side="top"] {
+  transform-origin: bottom center;
   animation: fadeIn 150ms ease-out;
 }
 
-.PopoverContent[data-state="closed"] {
-  transform-origin: right bottom;
-  animation: fadeOut 150ms ease-in;
+.PopoverContent[data-state="open"][data-side="bottom"] {
+  transform-origin: top center;
+  animation: fadeIn 150ms ease-out;
 }
+
+.PopoverContent[data-state="closed"][data-side="bottom"] {
+  transform-origin: top center;
+  animation: fadeOut 150ms ease-out;
+}
+
+.PopoverContent[data-state="closed"][data-side="top"] {
+  transform-origin: bottom center;
+  animation: fadeOut 150ms ease-out;
+}
+
+.PopoverContent[data-state="open"][data-side="left"] {
+  transform-origin: right center;
+  animation: fadeIn 150ms ease-out;
+}
+
+.PopoverContent[data-state="closed"][data-side="left"] {
+  transform-origin: right center;
+  animation: fadeOut 150ms ease-out;
+}
+
+.PopoverContent[data-state="open"][data-side="right"] {
+  transform-origin: left center;
+  animation: fadeIn 150ms ease-out;
+}
+
+.PopoverContent[data-state="closed"][data-side="right"] {
+  transform-origin: left center;
+  animation: fadeOut 150ms ease-out;
+}
+
 
 .SelectContent[data-state="open"] {
   transform-origin: top;
@@ -317,4 +348,17 @@
 
 .ai-message {
   transition: opacity 1s linear 2s, transform 0.3s ease-in-out 0.3s;
+}
+
+:root {
+  --muted: #F1F5F9;
+  --muted-foreground: #64748b;
+  --popover: #ffffff; 
+  --popover-foreground: #0f172a; 
+  --border: #e2e8f0; 
+  --input: #e2e8f0; 
+  --primary: #0f172a; 
+  --primary-foreground: #f8fafc; 
+  --accent: #f1f5f9; 
+  --accent-foreground: #9a9b9e;
 }

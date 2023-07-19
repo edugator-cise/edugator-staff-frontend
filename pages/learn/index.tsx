@@ -1,6 +1,5 @@
 import PlaygroundLayout from "components/layouts/PlaygroundLayout";
 import { ReactNode } from "react";
-import { Container, Typography, Grow } from "@mui/material";
 import Lottie from "lottie-react";
 import CrocodileOnAScooter from "public/crocodileonascooter.json";
 
