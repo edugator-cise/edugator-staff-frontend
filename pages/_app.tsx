@@ -20,6 +20,7 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AnimatePresence } from "framer-motion";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,13 @@ const App = ({ Component, pageProps }: Props) => {
         <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
         <ThemeProvider enableSystem={true} attribute="class">
           <Toaster containerClassName="font-dm" />
-          {getLayout(<Component {...pageProps} />)}
+          <AnimatePresence
+            exitBeforeEnter
+            initial={false}
+            onExitComplete={() => window.scrollTo(0, 0)}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </AnimatePresence>
         </ThemeProvider>
       </QueryClientProvider>
     </Provider>
