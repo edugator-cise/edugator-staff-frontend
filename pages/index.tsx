@@ -1,11 +1,11 @@
-import About from "components/LandingPage/About/About";
-import Hero from "components/LandingPage/Hero";
-import Instructors from "components/LandingPage/Instructors/Instructors";
-import Students from "components/LandingPage/Students/Students";
-import AI from "components/LandingPage/AI";
-import Footer from "components/LandingPage/Footer";
-import CTA from "components/LandingPage/CTA";
-import Header from "components/LandingPage/Header";
+import About from "components/landing/About/About";
+import Hero from "components/landing/Hero";
+import Instructors from "components/landing/Instructors/Instructors";
+import Students from "components/landing/Students/Students";
+import AI from "components/landing/AI";
+import Footer from "components/landing/Footer";
+import CTA from "components/landing/CTA";
+import Header from "components/landing/Header";
 
 export default function LandingPage() {
   return (

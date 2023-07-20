@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import LegalLayout from "components/LegalLayout";
+import LegalLayout from "components/layouts/LegalLayout";
 
 function Ferpa() {
   return (

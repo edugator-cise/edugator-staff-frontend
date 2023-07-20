@@ -1,80 +1,42 @@
-import AdminLayout from "components/AdminLayout";
-import { useEffect } from "react";
-import { ProblemEditorContainer } from "components/ProblemEditor/ProblemEditorContainer/ProblemEditorContainer";
+import AdminLayout from "components/layouts/AdminLayout";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import {
-  openWarningModal,
-  requestGetProblemSuccess,
-  resetState,
-  updateModuleId,
-  updateModuleName,
-  updateProblemId,
-  WarningTypes,
-} from "state/problemEditorContainerSlice";
-import apiClient from "lib/api/apiClient";
-import { apiRoutes } from "constants/apiRoutes";
-import { useState } from "react";
-import { FetchStatus } from "hooks/types";
-import toast from "react-hot-toast";
-import { CircularProgress } from "@mui/material";
+import AdminProblemEditor from "components/problem/admin/ProblemEditor";
+import { useGetProblem } from "hooks/problem/useGetProblem";
+import { useEffect } from "react";
+import { StudentLoadingState } from "pages/code/[problemId]";
 
 const ProblemEditPage = () => {
   const router = useRouter();
-  const { problemId, moduleName, moduleId } = router.query;
-  const [status, setStatus] = useState(FetchStatus.loading);
-  const dispatch = useDispatch();
+  const { problemId } = router.query;
 
-  dispatch(updateProblemId(problemId as string));
+  const {
+    data: problemData,
+    isLoading: problemLoading, //only for initial load
+    isFetching: problemFetching,
+    isError: problemError, // TODO add error handling and visual state
+  } = useGetProblem({
+    problemId: problemId as string,
+  });
 
-  const actions = {
-    back: {
-      label: "Back to Modules",
-      onClick: () => dispatch(openWarningModal(WarningTypes.Quit)),
-      variant: "contained",
-      color: "primary",
-    },
-    delete: {
-      label: "Delete Problem",
-      onClick: () => dispatch(openWarningModal(WarningTypes.Delete)),
-      variant: "contained",
-      color: "error",
-    },
-  };
-
-  useEffect(() => {
-    const getProblemRequest = () =>
-      apiClient.get(apiRoutes.admin.getProblem(problemId as string));
-
-    getProblemRequest()
-      .then((value) => {
-        dispatch(updateModuleId(moduleId as string));
-        dispatch(updateModuleName(moduleName as string));
-        dispatch(requestGetProblemSuccess(value.data));
-        setStatus(FetchStatus.succeed);
-      })
-      .catch((e) => {
-        toast.error("failed to get problem");
-        setStatus(FetchStatus.failed);
-      });
-
-    return () => {
-      dispatch(resetState());
-    };
-  }, [problemId, moduleName]);
-
-  return (
-    <AdminLayout
-      pageTitle={`${moduleName ? moduleName + " - " : ""}New Problem`}
-      actionButtons={[actions.back, actions.delete]}
-    >
-      {status === FetchStatus.loading ? (
-        <CircularProgress />
-      ) : (
-        <ProblemEditorContainer />
-      )}
-    </AdminLayout>
+  return problemFetching ? (
+    <div className="flex flex-col w-full h-full">
+      <div className="h-14 py-3 bg-nav-darkest w-full flex justify-between px-4 items-center">
+        <div className="h-full w-48 rounded-md animate-pulse bg-nav-inactive-dark/50"></div>
+        <div className="flex space-x-2 items-center h-full">
+          <div className="w-8 h-8 rounded-md bg-nav-inactive-dark/50 animate-pulse"></div>
+          <div className="w-8 h-8 rounded-md bg-nav-inactive-dark/50 animate-pulse"></div>
+          <div className="w-24 h-8 rounded-md bg-nav-inactive-dark/50 animate-pulse"></div>
+        </div>
+      </div>
+      <StudentLoadingState />
+    </div>
+  ) : (
+    <AdminProblemEditor problem={problemData} />
   );
 };
+
+ProblemEditPage.getLayout = (page: React.ReactNode) => (
+  <AdminLayout pageTitle="Problem Editor">{page}</AdminLayout>
+);
 
 export default ProblemEditPage;

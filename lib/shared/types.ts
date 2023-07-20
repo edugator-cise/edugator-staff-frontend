@@ -1,7 +1,5 @@
 /** Problem Interfaces */
 
-import { ModalAnswer } from "components/ContentEditor/components/MultipleSelectModal";
-
 export interface ITestCase {
   input: string;
   expectedOutput: string;
@@ -90,7 +88,7 @@ export type MultipleSelectBlock = {
   type: "multiple_select";
   data: {
     question: string;
-    answers: ModalAnswer[];
+    answers: any[];
   };
 };
 
@@ -135,7 +133,7 @@ export type MultipleSelectContent = {
   type: "multiple_select";
   content: {
     question: string;
-    answers: ModalAnswer[];
+    answers: any[];
   };
 };
 
@@ -164,7 +162,7 @@ export type MultipleSelectEntity = {
   type: "multiple_select";
   data: {
     question: string;
-    answers: ModalAnswer[];
+    answers: any[];
   };
 };
 

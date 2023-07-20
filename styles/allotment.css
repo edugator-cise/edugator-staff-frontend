@@ -3,12 +3,36 @@ body {
   --separator-border: #4d546349;
 }
 
+[data-theme="dark"],
+[data-theme="dark"] .sash {
+  @apply bg-green-500;
+}
 
-[data-theme='dark'], [data-theme='dark'] .sash {
-    @apply bg-green-500;
+/* unset max width for editorjs */
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: unset;
+}
+
+.ce-popover {
+  @apply md:absolute md:top-0 md:-right-[58px] z-[99999];
+}
+
+.student-view-holder .sash {
+  @apply bg-slate-400;
+  border-radius: 4px;
+  align-self: center;
+  z-index: 10;
+  transform: scaleX(0.3) scaleY(0.1);
 }
 
 
+.student-view-holder .sash-horizontal {
+  @apply bg-slate-400;
+  transform: scaleX(0.2) scaleY(0.3);
+  border-radius: 4px;
+  align-self: center;
+}
 /* 
 
 couldnt get these to work 

@@ -40,7 +40,7 @@
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/TestEditor/EditorTools.js"],
   "exclude": ["node_modules"]
 }
 

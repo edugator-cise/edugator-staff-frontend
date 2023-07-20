@@ -3,11 +3,6 @@ import { ReactNode } from "react";
 import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
-import theme from "constants/theme";
-import {
-  ThemeProvider as MUIThemeProvider,
-  StyledEngineProvider,
-} from "@mui/system";
 import "styles/App.css";
 import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
@@ -23,6 +18,10 @@ import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -49,14 +48,17 @@ const App = ({ Component, pageProps }: Props) => {
         href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
       />
 
-      <StyledEngineProvider injectFirst>
-        <MUIThemeProvider theme={theme}>
-          <ThemeProvider enableSystem={true} attribute="class">
-            <Toaster containerClassName="font-dm" />
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
-        </MUIThemeProvider>
-      </StyledEngineProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+        <ThemeProvider
+          enableSystem={true}
+          disableTransitionOnChange={true}
+          attribute="class"
+        >
+          <Toaster containerClassName="font-dm" />
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeProvider>
+      </QueryClientProvider>
     </Provider>
   );
 };

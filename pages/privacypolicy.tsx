@@ -1,19 +1,18 @@
-import { styled } from "@mui/styles";
-import { Typography } from "@mui/material";
-import LegalLayout from "components/LegalLayout";
+import LegalLayout from "components/layouts/LegalLayout";
 import { ReactNode } from "react";
 
-const Link = styled("a")({
-  color: "black",
-  textDecoration: "none",
-});
+const Link = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a href={href} className="text-black hover:underline">
+    {children}
+  </a>
+);
 
 function PrivacyPolicy() {
   return (
     <>
       <div id="top" />
       <div className="leading-7">
-        <Typography variant="body1" sx={{ lineHeight: 2 }}>
+        <p>
           <b>INTRODUCTION</b>
           <br />
           <br />
@@ -80,9 +79,9 @@ function PrivacyPolicy() {
           </Link>{" "}
           <br />
           <br />
-        </Typography>
+        </p>
         <div id="1">
-          <Typography variant="body1" sx={{ lineHeight: 2 }}>
+          <p>
             <b>1. WHAT INFORMATION DO WE COLLECT?</b>
             <br />
             <br />
@@ -118,10 +117,10 @@ function PrivacyPolicy() {
             responsibility or liability for their respective privacy policies.
             <br />
             <br />
-          </Typography>
+          </p>
         </div>
         <div id="2">
-          <Typography variant="body1" sx={{ lineHeight: 2 }}>
+          <p>
             <b>2. HOW DO WE USE YOUR INFORMATION?</b>
             <br />
             <br />
@@ -170,10 +169,10 @@ function PrivacyPolicy() {
                 any potential issues you might have with the use of our Services
               </li>
             </ul>
-          </Typography>
+          </p>
         </div>
         <div id="3">
-          <Typography variant="body1" sx={{ lineHeight: 2 }}>
+          <p>
             <b>3. WILL YOUR INFORMATION BE SHARED WITH ANYONE?</b>
             <br />
             <br />
@@ -185,10 +184,10 @@ function PrivacyPolicy() {
             consent of the student or university.
             <br />
             <br />
-          </Typography>
+          </p>
         </div>
         <div id="4">
-          <Typography variant="body1" sx={{ lineHeight: 2 }}>
+          <p>
             <b>4. HOW LONG DO WE KEEP YOUR INFORMATION?</b>
             <br />
             <br />
@@ -216,10 +215,10 @@ function PrivacyPolicy() {
             any further processing until deletion is possible.
             <br />
             <br />
-          </Typography>
+          </p>
         </div>
         <div id="5">
-          <Typography variant="body1" sx={{ lineHeight: 2 }}>
+          <p>
             <b>5. HOW DO WE KEEP YOUR INFORMATION SAFE?</b>
             <br />
             <br />
@@ -244,9 +243,9 @@ function PrivacyPolicy() {
             Website within a secure environment.
             <br />
             <br />
-          </Typography>
+          </p>
           <div id="6">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>6. DO WE COLLECT INFORMATION FROM MINORS?</b>
               <br />
               <br />
@@ -269,10 +268,10 @@ function PrivacyPolicy() {
               .
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="7">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>7. WHAT ARE YOUR PRIVACY RIGHTS?</b>
               <br />
               <br />
@@ -300,10 +299,10 @@ function PrivacyPolicy() {
               .
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="8">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>8. CONTROLS FOR DO-NOT-TRACK FEATURES</b>
               <br />
               <br />
@@ -320,10 +319,10 @@ function PrivacyPolicy() {
               revised version of this privacy notice.
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="9">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>9. DO CALIFORNIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?</b>
               <br />
               <br />
@@ -346,10 +345,10 @@ function PrivacyPolicy() {
               contact information provided below.
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="10">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>10. DO WE MAKE UPDATES TO THIS NOTICE?</b>
               <br />
               <br />
@@ -370,10 +369,10 @@ function PrivacyPolicy() {
               protecting your information.
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="11">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>11. HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</b>
               <br />
               <br />
@@ -385,10 +384,10 @@ function PrivacyPolicy() {
               .
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
           <div id="12">
-            <Typography variant="body1" sx={{ lineHeight: 2 }}>
+            <p>
               <b>
                 12. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT
                 FROM YOU?{" "}
@@ -403,7 +402,7 @@ function PrivacyPolicy() {
               email. We will respond to your request within 30 days.
               <br />
               <br />
-            </Typography>
+            </p>
           </div>
         </div>
       </div>
