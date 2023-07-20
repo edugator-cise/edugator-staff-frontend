@@ -78,7 +78,7 @@ const AddLessonModal = ({
   modules: CourseModule[];
 }) => {
   const [selectedModule, setSelectedModule] = useState<string>(
-    modules[0].id || ""
+    modules[0]?.id || ""
   ); // contains the id of the selected module
 
   return (
