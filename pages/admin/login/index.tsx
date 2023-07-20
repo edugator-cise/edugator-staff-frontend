@@ -1,12 +1,10 @@
 import { Field, Form, Formik } from "formik";
 import { RootState } from "lib/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { FormTextField } from "components/shared/FormTextField";
 import { receiveLoginSuccess } from "state/LoginSlice";
 import AdminLayout from "components/layouts/AdminLayout";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
-import { ILoginSuccess, IRequestLoginAction } from "components/Login/types";
 import { baseAPIURL } from "constants/config";
 import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";
@@ -15,9 +13,27 @@ import toast from "react-hot-toast";
 import AdminHeader from "components/layouts/AdminHeader";
 //Refernce: https://github.com/creativesuraj/react-material-ui-login/blob/master/src/components/Login.tsx
 
+export enum rolesEnum {
+  TA = "TA",
+  Professor = "Professor",
+}
+
+export interface IAuthState {
+  role: rolesEnum;
+}
+
+export interface IRequestLoginAction {
+  username: string;
+  password: string;
+}
+
+export interface ILoginSuccess {
+  token: string;
+  role: rolesEnum;
+}
+
 export default function LoginPage(): React.ReactElement {
   const dispatch = useDispatch();
-  const authState = useSelector((state: RootState) => state.login);
   const router = useRouter();
   const [token, setToken] = useState(LocalStorage.getToken());
   const [loading, setLoading] = useState(false);

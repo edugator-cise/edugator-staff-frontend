@@ -50,7 +50,11 @@ const App = ({ Component, pageProps }: Props) => {
 
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
-        <ThemeProvider enableSystem={true} attribute="class">
+        <ThemeProvider
+          enableSystem={true}
+          disableTransitionOnChange={true}
+          attribute="class"
+        >
           <Toaster containerClassName="font-dm" />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>

@@ -29,21 +29,6 @@ const AdminHeader = () => {
             Edugator
           </h1>
         </div>
-
-        {/* <div className="flex justify-end col-span-3">
-          {locationState !== Routes.Login && (
-            <button
-              onClick={() => {
-                LocalStorage.removeToken();
-                dispatch(closeAlert());
-                router.push(Routes.Login);
-              }}
-              className="text-slate-50 font-semibold"
-            >
-              Logout
-            </button>
-          )}
-        </div> */}
       </div>
     </header>
   );

@@ -18,13 +18,6 @@ const ProblemEditPage = () => {
     problemId: problemId as string,
   });
 
-  useEffect(() => {
-    console.log("problemData CHANGEDDDD");
-    if (problemData) {
-      console.log(problemData);
-    }
-  }, [problemData]);
-
   return problemFetching ? (
     <div className="flex flex-col w-full h-full">
       <div className="h-14 py-3 bg-nav-darkest w-full flex justify-between px-4 items-center">
