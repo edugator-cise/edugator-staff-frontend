@@ -77,7 +77,9 @@ const AddLessonModal = ({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   modules: CourseModule[];
 }) => {
-  const [selectedModule, setSelectedModule] = useState<string>(""); // contains the id of the selected module
+  const [selectedModule, setSelectedModule] = useState<string>(
+    modules[0].id || ""
+  ); // contains the id of the selected module
 
   return (
     <Modal
@@ -95,7 +97,8 @@ const AddLessonModal = ({
           <option value={undefined} disabled>
             Select a module
           </option>
-          {modules.map((module) => (
+
+          {modules.map((module, index) => (
             <option key={module.id} value={module.id}>
               {module.moduleName}
             </option>
