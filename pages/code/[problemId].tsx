@@ -8,7 +8,29 @@ import ProblemView from "components/problem/student/ProblemView";
 export default function CodeEditor() {
   const router = useRouter();
   const { problemId } = router.query;
+  const params = router.query;
+  const locationState = router.asPath;
 
+  /* const [stdin, setStdin] = useState<string>("");
+  const [editorCode, setEditorCode] = useState<string>(""); 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mobileActivePanel, setMobileActivePanel] =
+    useState<MobilePanel>("editor");
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  const mobilePanels: Array<MobilePanel> = ["problem", "editor", "output"];
+
+  const windowWidth = useWindowWidth();
+
+  useEffect(() => {
+    if (!windowWidth) return;
+    if (windowWidth < 1168) {
+      setIsMobile(false); // TODO: Change to true after mobile fix
+    } else {
+      setIsMobile(false);
+    }
+  }, [windowWidth]);
+ */
   const {
     data: problemData,
     isLoading: problemLoading, //only for initial load
