@@ -13,6 +13,13 @@ import { adminNavLinks, NavLinkItem } from "./navigationData";
 import { NavLink } from "./NavLink";
 import { NavLinkTooltip } from "./NavLinkTooltip";
 import SwitchToggle from "components/shared/SwitchToggle";
+import { sampleCourses, setCourseId } from "state/courseSlice";
+import * as AspectRatio from "@radix-ui/react-aspect-ratio";
+import Image from "next/image";
+import * as Select from "@radix-ui/react-select";
+import { CheckIcon, ChevronDownIcon, PlusIcon } from "@radix-ui/react-icons";
+import { COURSE_STRUCTURE_QUERY_KEY } from "hooks/course/useGetCourseStructure";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -45,10 +52,20 @@ const AdminNavigation = () => {
     setMounted(true);
   }, []);
 
+  const activeCourseId = useSelector(
+    (state: RootState) => state.course.courseId
+  );
+
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { pathname } = router;
 
   const { systemTheme, theme, setTheme } = useTheme();
+
+  // force light theme
+  useEffect(() => {
+    setTheme("light");
+  }, [mounted]);
 
   const currentTheme = theme === "system" ? systemTheme : theme;
 
@@ -79,10 +96,124 @@ const AdminNavigation = () => {
       </div>
       {/* Main Sidebar Content */}
       <div className="h-full flex flex-col items-center justify-between py-4 w-full px-4">
+        {/* Class Group */}
         {/* Top Group */}
         <section className="w-full flex flex-col space-y-4">
+          {/* <div className="rounded-md h-16 w-full bg-white/[7.5%] border-t border-t-white/[10%]">
+            <div className="w-4 h-4 bg-white/5"></div>
+          </div> */}
+          <Select.Root
+            onValueChange={(value) => {
+              queryClient.invalidateQueries([
+                COURSE_STRUCTURE_QUERY_KEY,
+                value,
+              ]);
+              dispatch(setCourseId(value));
+            }}
+            value={activeCourseId}
+          >
+            {/* add in 'bg-gradient-t-b' for depth below */}
+            <div className="overflow-hidden bg-[#3A3F49] dark:bg-[#484F5B] from-[#3A3F49] dark:from-[#484F5B] via-[#242934] dark:via-[#242934] via-[12px] to-[#242934] dark:to-[#242934] cursor-pointer rounded-lg group p-px flex items-center group justify-center transition duration-200 ease-in-out">
+              <Select.Trigger
+                className={`flex font-dm relative items-center justify-between transition-all space-x-2 rounded-[7px] text-sm leading-none bg-[#242934] dark:bg-[#333B49] w-full text-white data-[placeholder]:text-slate-400 ${
+                  adminMainSidebarHidden ? "p-[3px]" : "p-2"
+                }`}
+                aria-label="Select an organization"
+              >
+                <div className="flex items-center space-x-4 whitespace-nowrap truncate">
+                  <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
+                    <Image
+                      placeholder="empty"
+                      src={
+                        sampleCourses.find(
+                          (course) => course.id === activeCourseId
+                        )?.logo ||
+                        "https://images.unsplash.com/photo-1622837137196-4b3b8b0b0b0e?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xhc3N8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"
+                      }
+                      alt={
+                        sampleCourses.find(
+                          (course) => course.id === activeCourseId
+                        )?.courseName || "Course Logo"
+                      }
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-[4px] z-10"
+                    />
+                  </div>
+                  <div
+                    className={`truncate transition ${
+                      adminMainSidebarHidden ? "opacity-0" : "opacity-100"
+                    }`}
+                  >
+                    <Select.Value placeholder="Select a course" />
+                  </div>
+                </div>
+                <ChevronDownIcon
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 duration-300 ${
+                    adminMainSidebarHidden ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+              </Select.Trigger>
+            </div>
+            <Select.Portal>
+              <Select.Content
+                position="popper"
+                side={adminMainSidebarHidden ? "right" : "bottom"}
+                sideOffset={adminMainSidebarHidden ? 18 : -48}
+                align={adminMainSidebarHidden ? "start" : "center"}
+                className={`SelectContent bg-[#3A3F49] dark:bg-[#484F5B]  from-[#3A3F49] dark:from-[#484F5B] via-[#242934] dark:via-[#242934] via-[12px] to-[#242934] dark:to-[#242934] p-px z-50 font-dm data-[state=closed]:animate-slideUp overflow-hidden rounded-lg ${
+                  adminMainSidebarHidden
+                    ? "w-[250px]"
+                    : "w-[calc(var(--radix-select-trigger-width)+16px)]"
+                }`}
+              >
+                {/* add in 'bg-gradient-t-b' for depth above */}
+                <Select.Viewport className="bg-[#242934] dark:bg-[#333B49] rounded-[7px]">
+                  <Select.Group>
+                    <Select.Label className="text-xs leading-[25px] text-gray-400 py-[6px] px-3 !font-bold">
+                      Select course
+                    </Select.Label>
+                    {sampleCourses?.map((course) => (
+                      <Select.Item
+                        key={course.id}
+                        value={course.id}
+                        className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#2F343E] dark:data-[highlighted]:bg-[#3D4552] data-[highlighted]:border-y-[#3A3F49] dark:data-[highlighted]:border-y-[#484F5B] border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
+                      >
+                        <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
+                          <Image
+                            placeholder="empty"
+                            src={course.logo}
+                            alt={course.courseName}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-lg"
+                          />
+                        </div>
+                        <div className="flex flex-col justify-center space-y-1 max-w-[calc(100%-90px)]">
+                          <div className="truncate ">
+                            <Select.ItemText>
+                              {course.courseName}
+                            </Select.ItemText>
+                          </div>
+                          <p className="text-xs text-white/40">0 students</p>
+                        </div>
+                        <Select.ItemIndicator className="absolute right-2 p-1 bg-[#46474A] rounded-full inline-flex items-center justify-center">
+                          <CheckIcon />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                    ))}
+                    <button className="text-xs leading-[25px] text-gray-400 w-full flex items-center justify-start space-x-2 hover:bg-[#2F343E] dark:hover:bg-[#3D4552] hover:border-t-[#3A3F49] dark:hover:border-t-[#484F5B] border-t border-t-transparent py-[6px] px-3 !font-bold">
+                      <PlusIcon />
+                      <p>Create new course</p>
+                    </button>
+                  </Select.Group>
+                </Select.Viewport>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+
           {/* Button Group */}
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-2 !mt-8">
             {adminNavLinks.map((link, i) => {
               const toggleExercises = toggleExercisesLinks.includes(link);
               const isActiveLink = activeLink.id === link.id;
@@ -137,62 +268,6 @@ const AdminNavigation = () => {
         </section>
         {/* Bottom Group */}
         <div className="w-full space-y-4">
-          <div className="flex flex-col space-y-2">
-            {/* Theme Toggle */}
-            {mounted ? (
-              <NavLinkTooltip
-                text="Toggle Theme"
-                disabled={!adminMainSidebarHidden}
-              >
-                <div
-                  className={`w-full h-12 cursor-pointer rounded-md overflow-hidden relative flex items-center justify-between px-[14px] group text-nav-inactive-light hover:bg-emerald-500/5`}
-                  onClick={() => {
-                    setTheme(currentTheme === "dark" ? "light" : "dark");
-                  }}
-                >
-                  <div className="flex space-x-4">
-                    <div className="w-5 h-5 min-w-[20px] relative">
-                      <div
-                        className={`absolute top-0 left-0 w-full h-full transition-all ${
-                          currentTheme === "dark"
-                            ? "right-5 opacity-0 rotate-90"
-                            : "opacity-100 rotate-0 right-0"
-                        }`}
-                      >
-                        {icons.sun(false)}
-                      </div>
-                      <div
-                        className={`absolute left-0 top-0 w-full h-full transition-all ${
-                          currentTheme === "dark"
-                            ? "opacity-100 rotate-0 right-0"
-                            : "opacity-0 -rotate-90 -right-5"
-                        }`}
-                      >
-                        {icons.moon(false)}
-                      </div>
-                    </div>
-                    <label
-                      className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                        !adminMainSidebarHidden ? "opacity-100" : "opacity-0"
-                      }`}
-                      htmlFor="dark-mode"
-                    >
-                      Dark Mode
-                    </label>
-                  </div>
-
-                  <SwitchToggle
-                    checked={currentTheme === "dark"}
-                    onCheckedChange={(checked) => {
-                      setTheme(checked ? "dark" : "light");
-                    }}
-                  />
-                </div>
-              </NavLinkTooltip>
-            ) : (
-              <></>
-            )}
-          </div>
           {/* Settings */}
           <NavLinkTooltip text="Settings" disabled={!adminMainSidebarHidden}>
             <div

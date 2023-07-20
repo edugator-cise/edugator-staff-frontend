@@ -1,19 +1,23 @@
 import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   EyeNoneIcon,
   EyeOpenIcon,
-  InfoCircledIcon,
 } from "@radix-ui/react-icons";
-import { EdugatorLogo } from "components/navigation/navIcons";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { useRouter } from "next/router";
 import { GraduationCap, HandWaving, SignIn } from "phosphor-react";
 import React, { useState, useEffect } from "react";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import AnimateHeight from "react-animate-height";
 import { toast } from "react-hot-toast";
-import AdminHeader from "components/layouts/AdminHeader";
-import ComponentTransition from "components/shared/ComponentTransition";
 import AuthLayout from "components/layouts/AuthLayout";
+import {
+  Organization,
+  useGetOrganizations,
+} from "hooks/org/useGetOrganizations";
+import * as Select from "@radix-ui/react-select";
+import Image from "next/image";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -22,12 +26,27 @@ const SignUpPage = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [userType, setUserType] = useState<"student" | "instructor">("student");
+  const [organization, setOrganization] = useState<string | undefined>( //id
+    undefined
+  );
+
+  const {
+    data: organizations,
+    isLoading,
+    isError,
+    error,
+  } = useGetOrganizations();
 
   return (
     <div className="w-[95vw] max-w-[550px] p-8 rounded-lg">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col items-center space-y-2">
-          <HandWaving size={36} className="text-white !mb-2" weight="duotone" />
+          <GraduationCap
+            size={36}
+            className="text-white !mb-2"
+            weight="duotone"
+          />
+
           <h1 className="text-white text-3xl font-semibold font-ambit">
             Welcome to Edugator!
           </h1>
@@ -95,19 +114,74 @@ const SignUpPage = () => {
           <div className="space-y-4">
             <div className="flex flex-col space-y-1">
               <label className="text-white text-sm font-dm">Organization</label>
-              <select
-                id="game"
-                value={"uf"}
-                onChange={(e) => {}}
-                className="block w-full rounded-lg bg-nav-dark text-white p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option
-                  value={"uf"}
-                  className="flex items-center space-x-2 text-white"
+              {isLoading ? (
+                <div className="flex items-center space-x-2 w-full bg-nav-dark rounded-md justify-between px-4 py-6">
+                  <div className="bouncing-loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                  <ChevronDownIcon className="text-slate-500" />
+                </div>
+              ) : (
+                <Select.Root
+                  onValueChange={(value) => setOrganization(value)}
+                  value={organization}
                 >
-                  UF
-                </option>
-              </select>
+                  <Select.Trigger
+                    className="inline-flex font-dm items-center justify-between space-x-2 rounded px-4 py-3 text-sm leading-none bg-nav-dark text-white data-[placeholder]:text-slate-400"
+                    aria-label="Select an organization"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="h-10 w-10 rounded-sm relative">
+                        <Image
+                          placeholder="empty"
+                          src={
+                            organizations?.find(
+                              (org) => org.id === organization
+                            )?.logo || "/images/universityicon.png"
+                          }
+                          alt={
+                            organizations?.find(
+                              (org) => org.id === organization
+                            )?.name || "Edugator"
+                          }
+                          layout="fill"
+                          objectFit="cover"
+                          className="rounded-sm"
+                        />
+                      </div>
+                      <Select.Value placeholder="Select an organization" />
+                    </div>
+                    <Select.Icon className="text-white">
+                      <ChevronDownIcon />
+                    </Select.Icon>
+                  </Select.Trigger>
+                  <Select.Portal>
+                    <Select.Content
+                      position="popper"
+                      side="bottom"
+                      sideOffset={5}
+                      className="SelectContent font-dm w-[var(--radix-select-trigger-width)]  overflow-hidden bg-white rounded-md"
+                    >
+                      <Select.Viewport className="p-2">
+                        {organizations?.map((org) => (
+                          <Select.Item
+                            key={org.id}
+                            value={org.id}
+                            className="text-sm space-x-2 rounded-sm leading-none text-slate-700 flex items-center py-3 transition px-2 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-slate-300 cursor-pointer data-[highlighted]:text-slate-900"
+                          >
+                            <Select.ItemText>{org.name}</Select.ItemText>
+                          </Select.Item>
+                        ))}
+                      </Select.Viewport>
+                      <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-violet11 cursor-default">
+                        <ChevronDownIcon />
+                      </Select.ScrollDownButton>
+                    </Select.Content>
+                  </Select.Portal>
+                </Select.Root>
+              )}
             </div>
           </div>
         </AnimateHeight>
@@ -183,7 +257,7 @@ const SignUpPage = () => {
           Already have an account?&nbsp;
         </span>
         <span
-          onClick={() => router.push("/admin/onboarding")}
+          onClick={() => router.push("/login")}
           className="text-blue-500 font-medium text-sm font-dm cursor-pointer hover:text-blue-400 transition"
         >
           Log In

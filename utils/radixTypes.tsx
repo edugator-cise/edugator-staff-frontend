@@ -1,4 +1,7 @@
 import * as Accordion from "@radix-ui/react-accordion";
+import React from "react";
+import * as Select from "@radix-ui/react-select";
+import { CheckIcon } from "@radix-ui/react-icons";
 
 export const AccordionContent = ({
   children,

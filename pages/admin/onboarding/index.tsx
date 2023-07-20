@@ -26,6 +26,7 @@ const OnboardingScreen = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [language, setLanguage] = useState<"cpp" | "java" | "python">("cpp");
+  const [coverPhoto, setCoverPhoto] = useState<File | undefined>(undefined);
 
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
@@ -43,31 +44,72 @@ const OnboardingScreen = () => {
             </h1>
           </div>
           <p className="text-white/80 text-sm font-dm">
-            Enter your course details below to get started.
+            Enter your course details to get started.
           </p>
         </div>
         {/* Form */}
-        <form className="flex flex-col  w-full rounded-md border border-slate-700 bg-nav-darker shadow-2xl shadow-blue-500/20 ring-offset-2 ring-offset-nav-darkest">
-          <div className="w-full px-6 py-6 flex flex-col space-y-3 border-b border-b-nav-dark">
+        <form className="flex flex-col overflow-auto w-full rounded-md ring-1 ring-slate-600 bg-slate-800 shadow-2xl shadow-blue-500/10 ring-offset-nav-darkest">
+          <div className="w-full px-6 py-6 flex flex-col space-y-3 border-b border-b-slate-700">
             <label className="text-white text-base font-semibold font-dm">
               What's the name of your course?
             </label>
-            <div className="flex space-x-2 w-full">
-              {/* Image */}
-              <div className="rounded-md bg-slate-900 flex items-center justify-center border-slate-700 border min-w-[46px]">
-                <CameraIcon className="text-white" />
-              </div>
+            <div className="flex space-x-2 w-full font-dm">
               <input
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Intro to Computer Science"
                 required
-                className="bg-nav-dark w-full text-white px-4 py-3 text-sm rounded-md border border-slate-800"
+                className="bg-slate-700 w-full text-white px-4 py-3 text-sm rounded-md ring-1 ring-slate-600"
               />
             </div>
           </div>
-          <div className="w-full px-6 py-6 flex flex-col space-y-3 border-b border-b-nav-dark">
+          <div className="w-full px-6 space-x-4 py-6 flex justify-between items-center border-b border-b-slate-700">
+            <div className="flex flex-col space-y-3">
+              <label className="text-white text-base font-semibold font-dm">
+                Attach a cover photo{" "}
+                <span className="text-white/80 text-sm font-normal">
+                  (optional)
+                </span>
+              </label>
+              <div className="flex justify-between w-full">
+                <div className="flex items-center space-x-2">
+                  <span className="text-white/80 text-sm font-dm">
+                    Recommended size: 512x512
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="h-16 w-16 min-h-[4rem] min-w-[4rem] rounded-md">
+              <div className="flex items-center justify-center w-full h-full">
+                <label
+                  htmlFor="dropzone-file"
+                  className="flex flex-col h-full w-full items-center justify-center border-2 border-dashed rounded-lg cursor-pointer bg-slate-700 border-slate-600 transition hover:border-slate-500 hover:bg-slate-600"
+                >
+                  {coverPhoto ? (
+                    <img
+                      src={URL.createObjectURL(coverPhoto)}
+                      className="h-full w-full object-cover rounded-md"
+                    />
+                  ) : (
+                    <CameraIcon className="h-6 w-6 text-gray-400" />
+                  )}
+
+                  <input
+                    id="dropzone-file"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        setCoverPhoto(e.target.files[0]);
+                      }
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="w-full px-6 py-6 flex flex-col space-y-3 border-b border-b-slate-700">
             <label className="text-white text-base font-semibold font-dm">
               When does your course start and end?
             </label>
@@ -75,7 +117,7 @@ const OnboardingScreen = () => {
               <Popover>
                 <PopoverTrigger asChild>
                   <button
-                    className={`w-fit min-w-[200px] flex items-center bg-nav-dark text-white border border-slate-800 px-4 py-3 font-dm text-sm rounded-md justify-start text-left font-normal ${
+                    className={`w-fit min-w-[200px] flex items-center bg-slate-700 ring-1 ring-slate-600 text-white px-4 py-3 font-dm text-sm rounded-md justify-start text-left font-normal ${
                       !startDate && "text-slate-300"
                     }`}
                   >
@@ -126,11 +168,18 @@ const OnboardingScreen = () => {
             >
               <div className="flex items-center">
                 <RadioGroup.Item
-                  className="peer bg-white border w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
+                  className="peer bg-white w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
                   value={"cpp"}
                   id={"cpp"}
                 >
-                  <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
+                  <RadioGroup.Indicator
+                    asChild
+                    className="flex items-center justify-center w-full h-full relative"
+                  >
+                    <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </RadioGroup.Indicator>
                 </RadioGroup.Item>
                 <label
                   className="text-slate-300 text-base leading-none pl-3 font-dm"
@@ -141,11 +190,18 @@ const OnboardingScreen = () => {
               </div>
               <div className="flex items-center">
                 <RadioGroup.Item
-                  className="peer bg-white border w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
+                  className="peer bg-white w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
                   value={"java"}
                   id={"java"}
                 >
-                  <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
+                  <RadioGroup.Indicator
+                    asChild
+                    className="flex items-center justify-center w-full h-full relative"
+                  >
+                    <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </RadioGroup.Indicator>
                 </RadioGroup.Item>
                 <label
                   className="text-slate-300 text-base leading-none pl-3 font-dm"
@@ -156,11 +212,18 @@ const OnboardingScreen = () => {
               </div>
               <div className="flex items-center">
                 <RadioGroup.Item
-                  className="peer bg-white border w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
+                  className="peer bg-white w-6 h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer"
                   value={"python"}
                   id={"python"}
                 >
-                  <RadioGroup.Indicator className="flex items-center justify-center w-full h-full relative after:content-[''] after:block after:w-[11px] after:h-[11px] after:rounded-full after:bg-blue-500" />
+                  <RadioGroup.Indicator
+                    asChild
+                    className="flex items-center justify-center w-full h-full relative"
+                  >
+                    <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </RadioGroup.Indicator>
                 </RadioGroup.Item>
                 <label
                   className="text-slate-300 text-base leading-none pl-3 font-dm"
@@ -175,21 +238,23 @@ const OnboardingScreen = () => {
       </div>
 
       <div className="w-full flex justify-between items-center">
-        <a className="text-white/80 text-sm font-dm hover:text-white hover:underline cursor-pointer">
-          Do this later
-        </a>
-        <ActionButton
-          color="blue"
-          disabled={!name || !date?.from || !date?.to || !language}
-          /* onClick={() => {
+        <Link href="/admin/dashboard">
+          <p className="text-white/80 text-sm font-dm hover:text-white hover:underline cursor-pointer">
+            Do this later
+          </p>
+        </Link>
+        <Link href="/admin/onboarding/complete">
+          <ActionButton
+            color="blue"
+            disabled={!name || !date?.from || !date?.to || !language}
+            /* onClick={() => {
             router.push("/admin/onboarding/complete");
           }} */
-        >
-          <Link href="/admin/onboarding/complete">
+          >
             <span className="font-dm text-sm">Next</span>
-          </Link>
-          <ArrowRightIcon className="ml-2" />
-        </ActionButton>
+            <ArrowRightIcon className="ml-2" />
+          </ActionButton>
+        </Link>
       </div>
     </div>
   );

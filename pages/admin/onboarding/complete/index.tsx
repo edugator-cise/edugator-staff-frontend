@@ -31,12 +31,12 @@ const OnboardingCompleteScreen = () => {
       </div>
 
       <div className="w-full flex justify-center items-center">
-        <ActionButton color="green">
-          <Link href="/admin/dashboard">
+        <Link href="/admin/dashboard">
+          <ActionButton color="green">
             <span className="font-dm text-sm">Dashboard</span>
-          </Link>
-          <ArrowRightIcon className="ml-2" />
-        </ActionButton>
+            <ArrowRightIcon className="ml-2" />
+          </ActionButton>
+        </Link>
       </div>
     </div>
   );

@@ -131,13 +131,23 @@
 }
 
 
-.SelectContent[data-state="open"] {
+.SelectContent[data-state="open"][data-side="bottom"] {
   transform-origin: top;
   animation: fadeIn 150ms ease-out;
 }
 
-.SelectContent[data-state="closed"] {
+.SelectContent[data-state="closed"][data-side="bottom"] {
   transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
+.SelectContent[data-state="open"][data-side="right"] {
+  transform-origin: left top;
+  animation: fadeIn 150ms ease-out;
+}
+
+.SelectContent[data-state="closed"][data-side="right"] {
+  transform-origin: left top;
   animation: fadeOut 150ms ease-in;
 }
 

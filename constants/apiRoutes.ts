@@ -36,6 +36,9 @@ export const apiRoutes = {
       runCodeSubmission: "v2/code/run/submission",
     },
     admin: {
+      // organization
+      getOrganizations: () => `v2/organization`,
+
       // course
       getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
 
