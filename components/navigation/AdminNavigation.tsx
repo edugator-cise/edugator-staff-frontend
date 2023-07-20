@@ -108,6 +108,7 @@ const AdminNavigation = () => {
                 COURSE_STRUCTURE_QUERY_KEY,
                 value,
               ]);
+              router.push(`/admin/dashboard`);
               dispatch(setCourseId(value));
             }}
             value={activeCourseId}

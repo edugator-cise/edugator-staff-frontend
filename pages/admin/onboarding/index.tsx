@@ -53,7 +53,7 @@ const OnboardingScreen = () => {
             <label className="text-white text-base font-semibold font-dm">
               What's the name of your course?
             </label>
-            <div className="flex space-x-2 w-full font-dm">
+            <div className="flex space-x-2 w-full">
               <input
                 name="name"
                 value={name}
@@ -117,7 +117,7 @@ const OnboardingScreen = () => {
               <Popover>
                 <PopoverTrigger asChild>
                   <button
-                    className={`w-fit min-w-[200px] flex items-center bg-slate-700 ring-1 ring-slate-600 text-white px-4 py-3 font-dm text-sm rounded-md justify-start text-left font-normal ${
+                    className={`w-fit min-w-[200px] flex items-center bg-slate-700 ring-1 ring-slate-600 text-white px-4 py-3 text-sm rounded-md justify-start text-left font-normal ${
                       !startDate && "text-slate-300"
                     }`}
                   >

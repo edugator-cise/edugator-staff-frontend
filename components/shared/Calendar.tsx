@@ -13,12 +13,12 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={`p-4 ${className} font-dm`}
+      className={`p-4 ${className}`}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-6 sm:space-y-0",
         month: "space-y-4",
         caption:
-          "flex justify-center pt-1 relative items-center text-slate-800",
+          "flex justify-center pt-1 relative items-center text-slate-800 font-dm",
         caption_label:
           "text-sm font-medium underline underline-offset-2 decoration-blue-500",
         nav: "space-x-1 flex items-center",

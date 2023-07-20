@@ -4,6 +4,7 @@ import {
   ChevronUpIcon,
   EyeNoneIcon,
   EyeOpenIcon,
+  PlusIcon,
 } from "@radix-ui/react-icons";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { useRouter } from "next/router";
@@ -47,7 +48,7 @@ const SignUpPage = () => {
             weight="duotone"
           />
 
-          <h1 className="text-white text-3xl font-semibold font-ambit">
+          <h1 className="text-white text-3xl font-semibold font-ambit text-center">
             Welcome to Edugator!
           </h1>
         </div>
@@ -110,8 +111,9 @@ const SignUpPage = () => {
           duration={300}
           height={userType === "instructor" ? "auto" : 0}
           animateOpacity={true}
+          className="!mt-0"
         >
-          <div className="space-y-4">
+          <div className="space-y-4 mt-6">
             <div className="flex flex-col space-y-1">
               <label className="text-white text-sm font-dm">Organization</label>
               {isLoading ? (
@@ -128,56 +130,94 @@ const SignUpPage = () => {
                   onValueChange={(value) => setOrganization(value)}
                   value={organization}
                 >
-                  <Select.Trigger
-                    className="inline-flex font-dm items-center justify-between space-x-2 rounded px-4 py-3 text-sm leading-none bg-nav-dark text-white data-[placeholder]:text-slate-400"
-                    aria-label="Select an organization"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="h-10 w-10 rounded-sm relative">
-                        <Image
-                          placeholder="empty"
-                          src={
-                            organizations?.find(
-                              (org) => org.id === organization
-                            )?.logo || "/images/universityicon.png"
-                          }
-                          alt={
-                            organizations?.find(
-                              (org) => org.id === organization
-                            )?.name || "Edugator"
-                          }
-                          layout="fill"
-                          objectFit="cover"
-                          className="rounded-sm"
-                        />
+                  <div className="overflow-hidden bg-slate-700 from-[#3A3F49] via-[#242934] via-[12px] to-[#242934] cursor-pointer rounded-lg group p-px flex items-center group justify-center transition duration-200 ease-in-out">
+                    <Select.Trigger
+                      className={`flex relative items-center justify-between transition-all space-x-2 rounded-[7px] text-sm leading-none bg-nav-dark w-full text-white data-[placeholder]:text-slate-400 p-2`}
+                      aria-label="Select an organization"
+                    >
+                      <div className="flex items-center space-x-4 whitespace-nowrap truncate">
+                        <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
+                          <Image
+                            placeholder="empty"
+                            src={
+                              organizations?.find(
+                                (org) => org.id === organization
+                              )?.logo || "/images/universityicon.png"
+                            }
+                            alt={
+                              organizations?.find(
+                                (org) => org.id === organization
+                              )?.name || "Edugator"
+                            }
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-sm z-10"
+                          />
+                        </div>
+                        <div
+                          className={`truncate transition opacity-100 text-white`}
+                        >
+                          <Select.Value placeholder="Select a course" />
+                        </div>
                       </div>
-                      <Select.Value placeholder="Select an organization" />
-                    </div>
-                    <Select.Icon className="text-white">
-                      <ChevronDownIcon />
-                    </Select.Icon>
-                  </Select.Trigger>
+                      <ChevronDownIcon
+                        className={`absolute right-3 top-1/2 -translate-y-1/2 duration-300 opacity-100`}
+                      />
+                    </Select.Trigger>
+                  </div>
                   <Select.Portal>
                     <Select.Content
                       position="popper"
                       side="bottom"
-                      sideOffset={5}
-                      className="SelectContent font-dm w-[var(--radix-select-trigger-width)]  overflow-hidden bg-white rounded-md"
+                      sideOffset={-48}
+                      align="center"
+                      className={`SelectContent bg-slate-700  from-[#3A3F49] via-[#242934] via-[12px] to-[#242934] p-px z-50 data-[state=closed]:animate-slideUp overflow-hidden rounded-lg w-[calc(var(--radix-select-trigger-width)+16px)]`}
                     >
-                      <Select.Viewport className="p-2">
-                        {organizations?.map((org) => (
-                          <Select.Item
-                            key={org.id}
-                            value={org.id}
-                            className="text-sm space-x-2 rounded-sm leading-none text-slate-700 flex items-center py-3 transition px-2 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-slate-300 cursor-pointer data-[highlighted]:text-slate-900"
-                          >
-                            <Select.ItemText>{org.name}</Select.ItemText>
-                          </Select.Item>
-                        ))}
+                      {/* add in 'bg-gradient-t-b' for depth above */}
+                      <Select.Viewport className="bg-nav-dark rounded-[7px]">
+                        <Select.Group>
+                          <Select.Label className="text-xs leading-[25px] text-gray-400 py-[6px] px-3 !font-bold">
+                            Select organization
+                          </Select.Label>
+                          {organizations?.map((org) => (
+                            <Select.Item
+                              key={org.id}
+                              value={org.id}
+                              className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#2F343E] data-[highlighted]:border-y-[#3A3F49]  border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
+                            >
+                              <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
+                                <Image
+                                  placeholder="empty"
+                                  src={org.logo}
+                                  alt={org.name}
+                                  layout="fill"
+                                  objectFit="cover"
+                                  className="rounded-lg"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-center space-y-1 max-w-[calc(100%-90px)]">
+                                <div className="truncate">
+                                  <Select.ItemText>{org.name}</Select.ItemText>
+                                </div>
+                              </div>
+                              <Select.ItemIndicator className="absolute right-2 p-1 bg-[#46474A] rounded-full inline-flex items-center justify-center">
+                                <CheckIcon />
+                              </Select.ItemIndicator>
+                            </Select.Item>
+                          ))}
+                          <button className="text-xs leading-[25px] text-gray-400 w-full flex items-center justify-start space-x-2 cursor-auto py-[6px] px-3 !font-bold">
+                            <p>
+                              Organization not listed? Contact us{" "}
+                              <a
+                                className="text-blue-400"
+                                href="mailto:csinfraweb@gmail.com"
+                              >
+                                here.
+                              </a>
+                            </p>
+                          </button>
+                        </Select.Group>
                       </Select.Viewport>
-                      <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-violet11 cursor-default">
-                        <ChevronDownIcon />
-                      </Select.ScrollDownButton>
                     </Select.Content>
                   </Select.Portal>
                 </Select.Root>
@@ -242,7 +282,7 @@ const SignUpPage = () => {
         onClick={() => {
           if (userType === "instructor") {
             // we create account, then bring to onboarding steps
-            router.push("/admin/onboarding");
+            router.push("/verify");
           } else {
             toast.success(
               "If user exists in course, redirect to student dashboard, where they see the course theyre enrolled in. If not, error message saying theyre not enrolled in any courses or empty dashboard."

@@ -89,6 +89,7 @@
     "phosphor-react": "^1.4.1",
     "react": "^17.0.2",
     "react-animate-height": "^3.1.1",
+    "react-auth-code-input": "^3.2.1",
     "react-awesome-button": "^7.0.5",
     "react-beautiful-dnd": "^13.1.1",
     "react-day-picker": "^8.8.0",
