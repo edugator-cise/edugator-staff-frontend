@@ -13,7 +13,12 @@ import { adminNavLinks, NavLinkItem } from "./navigationData";
 import { NavLink } from "./NavLink";
 import { NavLinkTooltip } from "./NavLinkTooltip";
 import SwitchToggle from "components/shared/SwitchToggle";
-import { sampleCourses, setCourseId } from "state/courseSlice";
+import {
+  Course,
+  sampleCourses,
+  setCourse,
+  setCourseId,
+} from "state/courseSlice";
 import * as AspectRatio from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 import * as Select from "@radix-ui/react-select";
@@ -110,6 +115,10 @@ const AdminNavigation = () => {
               ]);
               router.push(`/admin/dashboard`);
               dispatch(setCourseId(value));
+              console.log(sampleCourses.find((c) => c.id === value));
+              dispatch(
+                setCourse(sampleCourses.find((c) => c.id === value) as Course)
+              );
             }}
             value={activeCourseId}
           >
@@ -235,6 +244,10 @@ const AdminNavigation = () => {
 
                 // if link has href, push to href
                 if (link.href) {
+                  // one case to disable navigation: if active link is "content" and clicked link is "content"
+                  if (isActiveLink && link.id === "content") {
+                    return;
+                  }
                   router.push(link.href);
                 }
 
@@ -246,11 +259,14 @@ const AdminNavigation = () => {
               const activeIndex = () => {
                 if (
                   pathname.includes("problem") ||
-                  pathname.includes("lesson")
+                  pathname.includes("lesson") ||
+                  pathname.includes("content")
                 ) {
                   return 1;
+                } else if (pathname.includes("dashboard")) {
+                  return 0;
                 } else {
-                  return adminContentSidebarHidden ? 0 : 1;
+                  return 2;
                 }
               };
 

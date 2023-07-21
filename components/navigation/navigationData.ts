@@ -28,7 +28,7 @@ export type NavLinkText =
   | "Problems"
   | "Bug Bounty";
 
-export type AdminNavLinkText = "Course Content" | "Blank";
+export type AdminNavLinkText = "Course Content" | "Blank" | "Roster";
 
 export const navLinks: NavLinkItem[] = [
   {
@@ -74,5 +74,13 @@ export const adminNavLinks: NavLinkItem[] = [
     text: "Course Content",
     id: "content",
     toggleExercises: true,
+    href: "/admin/content",
+  },
+  {
+    icon: icons.roster,
+    text: "Roster",
+    id: "roster",
+    toggleExercises: false,
+    href: "/admin/roster",
   },
 ];

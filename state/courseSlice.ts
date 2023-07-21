@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CourseState {
   courseId: string | undefined;
+  course: Course | undefined;
 }
 
 export const TESTING_COURSE_ID = "978f5c19-e07d-4999-b88a-f39d2e812080";
@@ -23,7 +24,7 @@ export interface Course {
 export const sampleCourses = [
   {
     id: "978f5c19-e07d-4999-b88a-f39d2e812080",
-    courseName: "Testing Course",
+    courseName: "Data Structures and Algorithms",
     startDate: "2023-06-05T05:09:25.000Z",
     endDate: "2023-06-05T05:09:25.000Z",
     logo: "https://m.media-amazon.com/images/I/51KBkyE8upL.png",
@@ -33,7 +34,7 @@ export const sampleCourses = [
   },
   {
     id: "80599186-58e9-4560-b526-77a9e58733aa",
-    courseName: "Multicourse Test",
+    courseName: "Programming 1",
     startDate: "2023-06-05T05:09:25.000Z",
     endDate: "2023-06-05T05:09:25.000Z",
     logo: "https://images-platform.99static.com//KlBLMX8dQrcq6hZGnxf5HSnG29I=/8x543:525x1060/fit-in/500x500/99designs-contests-attachments/123/123360/attachment_123360235",
@@ -45,6 +46,7 @@ export const sampleCourses = [
 
 const initialState: CourseState = {
   courseId: TESTING_COURSE_ID, // undefined, set to undefined when we add multi-course support
+  course: sampleCourses[0],
 };
 
 export const getCourseInitialState = (): CourseState => {
@@ -58,8 +60,11 @@ export const courseSlice = createSlice({
     setCourseId: (state, action: PayloadAction<string>) => {
       state.courseId = action.payload;
     },
+    setCourse: (state, action: PayloadAction<Course>) => {
+      state.course = action.payload;
+    },
   },
 });
 
-export const { setCourseId } = courseSlice.actions;
+export const { setCourseId, setCourse } = courseSlice.actions;
 export default courseSlice.reducer;

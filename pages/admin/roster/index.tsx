@@ -189,7 +189,7 @@ const AddProblemModal = ({
   );
 };
 
-const ModulesPage = () => {
+const RosterPage = () => {
   const { data: courseStructureData, isFetching: courseStructureFetching } =
     useGetCourseStructure({
       admin: true,
@@ -255,94 +255,11 @@ const ModulesPage = () => {
         <div className="w-8 h-8 bg-gradient-to-b from-indigo-400 to-blue-400  shadow-md rounded-full"></div>
       </div>
       <div className="p-12 w-full h-full overflow-auto">
-        <AddModuleModal
-          open={newModuleModalOpen}
-          setOpen={setNewModuleModalOpen}
-          moduleCount={courseStructureData?.modules.length || 0}
-        />
-        <AddLessonModal
-          open={newLessonModalOpen}
-          setOpen={setNewLessonModalOpen}
-          modules={courseStructureData?.modules || []}
-        />
-        <AddProblemModal
-          open={newProblemModalOpen}
-          setOpen={setNewProblemModalOpen}
-          modules={courseStructureData?.modules || []}
-        />
-
-        {/* <div className="min-h-[3rem] bg-nav-dark w-full"></div> */}
-        {/* <div
-        className="w-full 
-      h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-slate-950 z-10"
-      >
-        <div className="flex items-center space-x-4">
-          <div className="w-7 h-7 relative rounded-md">
-            <Image
-              src={course?.logo || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md"
-              alt="Course Logo"
-            />
-          </div>
-          <div className="flex items-end">
-            <p className="text-base text-slate-400 font-dm">
-              {course?.courseName}
-              <span className="text-slate-600">
-                &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-              </span>
-            </p>
-            <h1 className="text-white font-dm text-base">Course Roster</h1>
-          </div>
-        </div>
-      </div>
-      <div className="w-full h-14 bg-white px-4 border border-b grid grid-cols-6 items-center">
-        <div className="flex items-center space-x-2 col-span-6">
-          <div className="w-7 h-7 relative rounded-md">
-            <Image
-              src={course?.logo || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md"
-              alt="Course Logo"
-            />
-          </div>
-          <h1 className="text-sm font-semibold font-dm text-slate-700">
-            <span className="font-normal">{course?.courseName}</span>
-          </h1>
-        </div>
-      </div> */}
-
         <div className="w-full h-full max-w-7xl">
-          <h1 className="text-3xl font-medium font-dm">Dashboard</h1>
+          <h1 className="text-3xl font-medium font-dm">Roster</h1>
           <p className="text-sm font-dm text-slate-600 leading-6 !mt-3 max-w-4xl text-left">
-            Welcome to your course! Here you can manage your course content and
-            view your students' progress.
+            Manage your course roster and view student progress.
           </p>
-          <h1 className="text-xl font-medium font-dm !mt-8 mb-4">Actions</h1>
-          {courseStructureData?.modules?.length === 0 ? (
-            <NewSection
-              title="New Module"
-              description="Create a new module to organize your lessons and problems"
-              illustration={<LearnIllustration />}
-              color="blue"
-              onClick={() => setNewModuleModalOpen(true)}
-            />
-          ) : (
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {buttonData.map((button, index) => (
-                <NewSection
-                  key={index}
-                  title={button.title}
-                  description={button.description}
-                  illustration={button.illustration}
-                  color={button.color}
-                  onClick={button.onClick}
-                />
-              ))}
-            </div>
-          )}
         </div>
         {/* <HandWaving size={48} className="text-blue-400" weight="duotone" /> */}
       </div>
@@ -350,75 +267,8 @@ const ModulesPage = () => {
   );
 };
 
-const NewSection = ({
-  title,
-  description,
-  illustration,
-  color,
-  onClick,
-}: {
-  title: string;
-  description: string;
-  illustration: React.ReactNode;
-  color: string;
-  onClick: () => void;
-}) => {
-  const cursorControls = useAnimation();
-
-  const animationIn = () => {
-    cursorControls.start("animate");
-  };
-
-  const animationOut = () => {
-    cursorControls.start("initial");
-  };
-
-  return (
-    <div
-      onClick={onClick}
-      onMouseEnter={animationIn}
-      onMouseLeave={animationOut}
-      className="group max-w-md cursor-pointer w-full rounded-xl hover:border-slate-300 transition border bg-white p-5 flex flex-col space-y-2"
-    >
-      <button className="flex flex-col items-start cursor-pointer space-y-4">
-        <div
-          style={{
-            backgroundImage:
-              "radial-gradient(50% 80% at 70% 10%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%)",
-          }}
-          className={`w-full h-52 rounded-md flex items-center justify-center relative overflow-hidden group-hover:bg-${color}-100 duration-500 bg-slate-200 transition`}
-        >
-          {/* Glare */}
-          <div className="w-full h-full absolute inset-0" />
-          {/* Rings */}
-          {RING_DURATIONS.map((duration, index) => (
-            <Ring
-              key={index}
-              color={color}
-              duration={duration}
-              controls={cursorControls}
-              opacity={RING_OPACITIES[index]}
-            />
-          ))}
-          <div className="absolute left-1/2 -translate-x-1/2 top-10 group-hover:-translate-y-3 transition duration-500 w-full h-full">
-            {illustration}
-          </div>
-        </div>
-        <div className="flex flex-col space-y-1 items-start">
-          <h1 className="text-lg font-semibold font-dm line-clamp-1">
-            {title}
-          </h1>
-          <p className="text-sm font-dm text-left text-slate-500">
-            {description}
-          </p>
-        </div>
-      </button>
-    </div>
-  );
-};
-
-ModulesPage.getLayout = (page: React.ReactNode) => (
-  <AdminLayout pageTitle="Modules">{page}</AdminLayout>
+RosterPage.getLayout = (page: React.ReactNode) => (
+  <AdminLayout pageTitle="Roster">{page}</AdminLayout>
 );
 
-export default ModulesPage;
+export default RosterPage;
