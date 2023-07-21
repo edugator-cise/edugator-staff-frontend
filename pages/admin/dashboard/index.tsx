@@ -21,7 +21,7 @@ import { AddModuleModal } from "components/navigation/AdminContentSidebar";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Modal from "components/shared/Modals/Modal";
-import { HandWaving } from "phosphor-react";
+import { HandWaving, ListBullets, SquaresFour } from "phosphor-react";
 import Image from "next/image";
 
 /**
@@ -240,21 +240,13 @@ const ModulesPage = () => {
     },
   ];
 
-  if (courseStructureFetching) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-100">
-        <FidgetSpinner className="w-10 h-10 animate-spin text-slate-800" />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen h-full w-full text-slate-800 bg-slate-100 ">
       <div className="w-full py-3 px-4 flex justify-between items-center bg-slate-50 border-b">
         <div />
         <div className="w-8 h-8 bg-gradient-to-b from-indigo-400 to-blue-400  shadow-md rounded-full"></div>
       </div>
-      <div className="p-12 w-full h-full overflow-auto">
+      <div className="p-6 lg:p-12 w-full h-full overflow-auto">
         <AddModuleModal
           open={newModuleModalOpen}
           setOpen={setNewModuleModalOpen}
@@ -271,57 +263,30 @@ const ModulesPage = () => {
           modules={courseStructureData?.modules || []}
         />
 
-        {/* <div className="min-h-[3rem] bg-nav-dark w-full"></div> */}
-        {/* <div
-        className="w-full 
-      h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-slate-950 z-10"
-      >
-        <div className="flex items-center space-x-4">
-          <div className="w-7 h-7 relative rounded-md">
-            <Image
-              src={course?.logo || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md"
-              alt="Course Logo"
-            />
-          </div>
-          <div className="flex items-end">
-            <p className="text-base text-slate-400 font-dm">
-              {course?.courseName}
-              <span className="text-slate-600">
-                &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-              </span>
-            </p>
-            <h1 className="text-white font-dm text-base">Course Roster</h1>
-          </div>
-        </div>
-      </div>
-      <div className="w-full h-14 bg-white px-4 border border-b grid grid-cols-6 items-center">
-        <div className="flex items-center space-x-2 col-span-6">
-          <div className="w-7 h-7 relative rounded-md">
-            <Image
-              src={course?.logo || ""}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md"
-              alt="Course Logo"
-            />
-          </div>
-          <h1 className="text-sm font-semibold font-dm text-slate-700">
-            <span className="font-normal">{course?.courseName}</span>
-          </h1>
-        </div>
-      </div> */}
-
         <div className="w-full h-full max-w-7xl">
-          <h1 className="text-3xl font-medium font-dm">Dashboard</h1>
-          <p className="text-sm font-dm text-slate-600 leading-6 !mt-3 max-w-4xl text-left">
-            Welcome to your course! Here you can manage your course content and
-            view your students' progress.
-          </p>
+          <div className="flex space-x-6 items-center">
+            <div className="w-14 h-14 rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
+              <SquaresFour
+                size={36}
+                weight="duotone"
+                className="text-slate-100"
+              />
+            </div>
+            <div className="flex flex-col space-y-[2px] justify-center">
+              <h1 className="text-[26px] font-medium font-dm">Dashboard</h1>
+              <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
+                Welcome to your course! Here you can manage your course content
+                and view your students' progress.
+              </p>
+            </div>
+          </div>
+          <div className="w-full h-px bg-slate-200 mt-8" />
           <h1 className="text-xl font-medium font-dm !mt-8 mb-4">Actions</h1>
-          {courseStructureData?.modules?.length === 0 ? (
+          {courseStructureFetching ? (
+            <div className="w-full h-48 flex items-center justify-center bg-slate-100">
+              <FidgetSpinner className="w-10 h-10 animate-spin text-slate-800" />
+            </div>
+          ) : courseStructureData?.modules?.length === 0 ? (
             <NewSection
               title="New Module"
               description="Create a new module to organize your lessons and problems"
@@ -344,7 +309,6 @@ const ModulesPage = () => {
             </div>
           )}
         </div>
-        {/* <HandWaving size={48} className="text-blue-400" weight="duotone" /> */}
       </div>
     </div>
   );

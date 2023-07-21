@@ -118,7 +118,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     }
   }, []);
   return (
-    <div className="h-screen flex overflow-clip w-screen max-w-full bg-stone-100 relative">
+    <div className="min-h-screen h-full flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
       {/* Main sidebar */}
       <div
         style={{
@@ -166,7 +166,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               paddingTop: mobileView ? 56 : 0,
               paddingLeft: laptopView ? laptopContentMargin() : contentMargin(),
             }}
-            className={`relative w-full h-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+            className={`relative w-full min-h-screen h-screen pb-12 transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
               tabletView ? "!pl-[80px]" : ""
             } ${mobileView ? "!pl-0" : ""}`}
           >

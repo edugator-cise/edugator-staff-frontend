@@ -1,6 +1,11 @@
 import AdminLayout from "components/layouts/AdminLayout";
 import { NextPage } from "next";
-import { MagnifyingGlass, MagnifyingGlassPlus, Queue } from "phosphor-react";
+import {
+  ListBullets,
+  MagnifyingGlass,
+  MagnifyingGlassPlus,
+  Queue,
+} from "phosphor-react";
 import React from "react";
 
 const BlankContentPage = () => {
@@ -17,14 +22,10 @@ const BlankContentPage = () => {
       </div>
       <div className="w-full h-full items-center justify-center flex flex-col space-y-4">
         <div className="w-14 h-14 rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
-          <MagnifyingGlass
-            size={36}
-            weight="duotone"
-            className="text-slate-100"
-          />
+          <ListBullets size={36} weight="duotone" className="text-slate-100" />
         </div>
-        <h1 className="text-3xl font-medium font-dm">Course Content</h1>
-        <p className="text-slate-500 font-dm text-base">
+        <h1 className="text-[26px] font-medium font-dm">Course Content</h1>
+        <p className="text-slate-500 font-dm text-sm !mt-2">
           Select a lesson or problem from the left sidebar to view or edit it
           here.
         </p>
