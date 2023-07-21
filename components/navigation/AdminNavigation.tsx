@@ -151,7 +151,7 @@ const AdminNavigation = () => {
                     />
                   </div>
                   <div
-                    className={`truncate transition ${
+                    className={`truncate w-full transition !max-w-[160px] ${
                       adminMainSidebarHidden ? "opacity-0" : "opacity-100"
                     }`}
                   >
@@ -200,7 +200,7 @@ const AdminNavigation = () => {
                           />
                         </div>
                         <div className="flex flex-col justify-center space-y-1 max-w-[calc(100%-90px)]">
-                          <div className="truncate ">
+                          <div className="truncate">
                             <Select.ItemText>
                               {course.courseName}
                             </Select.ItemText>

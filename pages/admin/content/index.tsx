@@ -23,6 +23,7 @@ const BlankContentPage = () => {
             className="text-slate-100"
           />
         </div>
+        <h1 className="text-3xl font-medium font-dm">Course Content</h1>
         <p className="text-slate-500 font-dm text-base">
           Select a lesson or problem from the left sidebar to view or edit it
           here.
