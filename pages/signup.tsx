@@ -157,7 +157,7 @@ const SignUpPage = () => {
                         <div
                           className={`truncate transition opacity-100 text-white`}
                         >
-                          <Select.Value placeholder="Select a course" />
+                          <Select.Value placeholder="Select an organization" />
                         </div>
                       </div>
                       <ChevronDownIcon

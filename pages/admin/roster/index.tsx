@@ -218,7 +218,7 @@ const RosterPage = () => {
             <div className="flex flex-col space-y-[2px] justify-center">
               <h1 className="text-[26px] font-medium font-dm">Roster</h1>
               <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
-                Manage your course roster and view student progress.
+                Manage your course roster to add students and collaborators.
               </p>
             </div>
           </div>

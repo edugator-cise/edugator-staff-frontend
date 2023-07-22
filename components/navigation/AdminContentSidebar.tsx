@@ -489,7 +489,7 @@ const AdminContentSidebar = ({
                                     <Accordion.Item
                                       value={module.moduleName}
                                       key={module.id}
-                                      className="border-b border-t border-t-slate-700 border-b-slate-950 last:border-b group dropdown"
+                                      className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown "
                                     >
                                       <Accordion.Trigger
                                         className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden bg-nav-dark`}
@@ -778,7 +778,7 @@ const AdminContentSidebar = ({
                   )}
                 </Droppable>
               </DragDropContext>
-              <div className="flex items-center justify-center px-4 py-4">
+              <div className="flex items-center justify-center px-4 py-4 border-t border-t-slate-700">
                 <button
                   onClick={() => {
                     setNewModuleModalOpen(true);

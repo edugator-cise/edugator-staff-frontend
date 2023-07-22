@@ -141,7 +141,9 @@ const AddProblemModal = ({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   modules: CourseModule[];
 }) => {
-  const [selectedModule, setSelectedModule] = useState<string>(""); // contains the id of the selected module
+  const [selectedModule, setSelectedModule] = useState<string>(
+    modules[0]?.id || ""
+  ); // contains the id of the selected module
 
   return (
     <Modal
@@ -302,7 +304,7 @@ const ModulesPage = () => {
               </div> */}
               <div className="flex flex-col space-y-[2px] justify-center">
                 <h1 className="text-[26px] font-medium font-dm">
-                  {courseStructureData?.courseName}
+                  Dashboard - {courseStructureData?.courseName}
                 </h1>
                 <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
                   Welcome to your course! Here you can manage your course
