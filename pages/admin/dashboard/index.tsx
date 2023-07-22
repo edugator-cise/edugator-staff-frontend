@@ -242,7 +242,7 @@ const ModulesPage = () => {
 
   return (
     <div className="min-h-screen h-full w-full text-slate-800 bg-slate-100 ">
-      <div className="w-full py-3 px-4 flex justify-between items-center bg-slate-50 border-b">
+      <div className="w-full py-3 px-4 flex justify-between items-center bg-white border-b">
         <div />
         <div className="w-8 h-8 bg-gradient-to-b from-indigo-400 to-blue-400  shadow-md rounded-full"></div>
       </div>
@@ -264,22 +264,53 @@ const ModulesPage = () => {
         />
 
         <div className="w-full h-full max-w-7xl">
-          <div className="flex space-x-6 items-center">
-            <div className="w-14 h-14 rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
-              <SquaresFour
-                size={36}
-                weight="duotone"
-                className="text-slate-100"
-              />
+          {courseStructureFetching ? (
+            <div className="flex space-x-6 items-center">
+              <div className="w-14 h-14 animate-pulse rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
+                <SquaresFour
+                  size={36}
+                  weight="duotone"
+                  className="text-slate-100"
+                />
+              </div>
+              <div className="w-80 h-[39px] bg-slate-300 rounded-md animate-pulse"></div>
             </div>
-            <div className="flex flex-col space-y-[2px] justify-center">
-              <h1 className="text-[26px] font-medium font-dm">Dashboard</h1>
-              <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
-                Welcome to your course! Here you can manage your course content
-                and view your students' progress.
-              </p>
+          ) : (
+            <div className="flex space-x-6 items-center">
+              <div className="w-14 h-14 group relative rounded-md overflow-hidden ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner ring-1">
+                <Image
+                  src={course?.logo || "/images/placeholder.png"}
+                  width={56}
+                  height={56}
+                  objectFit="cover"
+                  className="rounded-md"
+                />
+                <div className="absolute inset-0 w-full h-full bg-slate-300 flex items-center justify-center opacity-0 group-hover:opacity-80 transition">
+                  <SquaresFour
+                    size={36}
+                    weight="duotone"
+                    className="text-slate-100"
+                  />
+                </div>
+              </div>
+              {/* <div className="w-14 h-14 animate-pulse rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
+                <SquaresFour
+                  size={36}
+                  weight="duotone"
+                  className="text-slate-100"
+                />
+              </div> */}
+              <div className="flex flex-col space-y-[2px] justify-center">
+                <h1 className="text-[26px] font-medium font-dm">
+                  {courseStructureData?.courseName}
+                </h1>
+                <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
+                  Welcome to your course! Here you can manage your course
+                  content and view your students' progress.
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <div className="w-full h-px bg-slate-200 mt-8" />
           <h1 className="text-xl font-medium font-dm !mt-8 mb-4">Actions</h1>
           {courseStructureFetching ? (
