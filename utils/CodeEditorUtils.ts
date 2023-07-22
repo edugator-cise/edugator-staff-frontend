@@ -3,7 +3,7 @@ import {
   IJudge0Response,
   IModuleWithProblemsAndLessons,
   INavigationItem,
-} from "components/CodeEditor/types";
+} from "components/problem/student/types";
 import * as monaco from "monaco-editor";
 import { Buffer } from "buffer";
 

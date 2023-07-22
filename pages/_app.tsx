@@ -25,6 +25,10 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 type Page<P = {}> = NextPage<P> & {
   getLayout?: (page: ReactNode) => ReactNode;
@@ -59,29 +63,32 @@ const App = ({ Component, pageProps }: Props) => {
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
 
   return (
-    <ClerkProvider {...pageProps}>
       <Provider store={store}>
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
         />
           <StylingProviders>
-            <Toaster containerClassName="font-dm" />
-            {isPublicPage ? (
-              getLayout(<Component { ...pageProps } />)
-            ) : (
-              <>
-                <SignedIn>
-                  {getLayout(<Component { ...pageProps } />)}
-                </SignedIn>
-                <SignedOut>
-                  <RedirectToSignIn />
-                </SignedOut>
-              </>
-            )}
+            <ClerkProvider {...pageProps}>
+            <QueryClientProvider client={queryClient}>
+              <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+                <Toaster containerClassName="font-dm" />
+                {isPublicPage ? (
+                  getLayout(<Component { ...pageProps } />)
+                ) : (
+                  <>
+                    <SignedIn>
+                      {getLayout(<Component { ...pageProps } />)}
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn />
+                    </SignedOut>
+                  </>
+                )}
+            </QueryClientProvider>
+          </ClerkProvider>
           </StylingProviders>
       </Provider>
-    </ClerkProvider>
   );
 };
 

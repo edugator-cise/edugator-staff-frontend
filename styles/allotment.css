@@ -3,11 +3,20 @@ body {
   --separator-border: #4d546349;
 }
 
-
-[data-theme='dark'], [data-theme='dark'] .sash {
-    @apply bg-green-500;
+[data-theme="dark"],
+[data-theme="dark"] .sash {
+  @apply bg-green-500;
 }
 
+/* unset max width for editorjs */
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: unset;
+}
+
+.ce-popover {
+  @apply md:absolute md:top-0 md:-right-[58px] z-[99999];
+}
 
 /* 
 

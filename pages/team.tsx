@@ -1,4 +1,4 @@
-import LegalLayout from "components/LegalLayout";
+import LegalLayout from "components/layouts/LegalLayout";
 import Image from "next/image";
 import React, { ReactNode } from "react";
 

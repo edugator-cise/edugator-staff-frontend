@@ -8,7 +8,11 @@ import {
   DialogContent,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ButtonProps, ButtonColor, ButtonVariant } from "components/AdminLayout";
+import {
+  ButtonProps,
+  ButtonColor,
+  ButtonVariant,
+} from "components/layouts/AdminLayout";
 import { Breakpoint } from "@mui/system";
 
 interface DialogButtonProps extends ButtonProps {

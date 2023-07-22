@@ -14,7 +14,7 @@ import { Node, Markup } from "interweave";
 import MultipleChoiceQuestion from "components/LearnPage/MultipleChoiceQuestion";
 import ImageBlock from "components/LearnPage/ImageBlock";
 import MultipleSelectQuestion from "components/LearnPage/MultipleSelectQuestion";
-import PlaygroundLayout from "components/PlaygroundLayout/PlaygroundLayout";
+import PlaygroundLayout from "components/layouts/PlaygroundLayout";
 import { useRouter } from "next/router";
 import { useFetchLesson } from "hooks/useFetchLesson";
 import { FetchStatus } from "hooks/types";
@@ -46,7 +46,7 @@ export default function LearnPage() {
         </div>
       ) : currentLesson === undefined ? (
         <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-nav-darkest">
-          <h1 className="text-2xl font-dm text-slate-900 dark:text-white">
+          <h1 className="text-base font-dm text-slate-900 dark:text-white">
             Lesson not found
           </h1>
         </div>

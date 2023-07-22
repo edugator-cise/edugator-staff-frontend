@@ -25,5 +25,7 @@ export enum Routes {
 
 export enum NextRoutes {
   Code = "/code",
-  Login = "/admin/login"
+  Login = "/admin/login",
+  SignUp = "/sign-up",
+  SignIn = "/sign-in"
 }

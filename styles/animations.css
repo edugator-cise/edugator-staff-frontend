@@ -42,6 +42,10 @@
   }
 }
 
+.aws-btn {
+  @apply !text-xs
+}
+
 .AccordionContent[data-state="open"] {
   animation: slideDown 300ms ease-out;
 }
@@ -67,6 +71,25 @@
   }
 }
 
+/* @keyframes slideUpAndFade {
+  from {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+} */
+
+
+
+.DropdownMenuContent[data-state="closed"] {
+  transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
+
 .PopoverContent[data-state="open"] {
   transform-origin: right bottom;
   animation: fadeIn 150ms ease-out;
@@ -74,6 +97,16 @@
 
 .PopoverContent[data-state="closed"] {
   transform-origin: right bottom;
+  animation: fadeOut 150ms ease-in;
+}
+
+.SelectContent[data-state="open"] {
+  transform-origin: top;
+  animation: fadeIn 150ms ease-out;
+}
+
+.SelectContent[data-state="closed"] {
+  transform-origin: top;
   animation: fadeOut 150ms ease-in;
 }
 
@@ -119,6 +152,16 @@
   animation: fadeOut 150ms ease-in;
 }
 
+.TooltipContent[data-state="open"][data-side="left"] {
+  transform-origin: right;
+  animation: fadeIn 150ms ease-out;
+}
+
+.TooltipContent[data-state="closed"][data-side="left"] {
+  transform-origin: right;
+  animation: fadeOut 150ms ease-in;
+}
+
 .TooltipContent[data-state="open"][data-side="bottom"] {
   transform-origin: top;
   animation: fadeIn 150ms ease-out;
@@ -126,6 +169,21 @@
 
 .TooltipContent[data-state="closed"][data-side="bottom"] {
   transform-origin: top;
+  animation: fadeOut 150ms ease-in;
+}
+
+.TooltipContent[data-state="open"][data-side="top"] {
+  transform-origin: bottom;
+  animation: fadeIn 150ms ease-out;
+}
+
+.TooltipContent[data-state="closed"][data-side="top"] {
+  transform-origin: bottom;
+  animation: fadeOut 150ms ease-in;
+}
+
+.TooltipContent[data-state="closed"][data-side="bottom"] {
+  transform-origin: bottom;
   animation: fadeOut 150ms ease-in;
 }
 

@@ -5,8 +5,8 @@ import {
   poll,
   transformPayload,
 } from "utils/CodeEditorUtils";
-import { IResultSubmission, IToken } from "components/CodeEditor/types";
-import { IJudge0Response } from "components/CodeEditor/types";
+import { IResultSubmission, IToken } from "components/problem/student/types";
+import { IJudge0Response } from "components/problem/student/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CompilerOutput } from "./types";

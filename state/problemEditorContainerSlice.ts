@@ -1,25 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProblem } from "lib/shared/types";
 import { TestCaseField } from "components/ProblemEditor/TestEditor/TestCase.utils";
+import { Content } from "@tiptap/react";
 
 export interface ProblemFields {
-  problemStatement: string;
+  problemStatement: Content | undefined;
   templatePackage: string;
 }
 
 export interface MetadataFields {
-  title: string;
+  title: string | undefined;
   hidden: boolean;
   dueDate: string;
   fileName: string;
+  language?: string;
 }
 
 export interface CodeEditorFields {
-  code: {
-    header: string;
-    body: string;
-    footer: string;
-  };
+  code:
+    | {
+        header: string;
+        body: string;
+        footer: string;
+        solution?: string;
+      }
+    | undefined;
   fileExtension: string;
 }
 
@@ -53,7 +58,7 @@ export interface ProblemEditorContainerState {
   problem: ProblemFields;
   codeEditor: CodeEditorFields;
   serverConfig: ServerConfigFields;
-  testCases: TestCaseField[];
+  testCases: TestCaseField[] | undefined;
 
   problemId: string | undefined;
   moduleId: string;
@@ -75,21 +80,17 @@ const initialState: ProblemEditorContainerState = {
   testEditorIsValid: false,
   activeStep: 0,
   metadata: {
-    title: "",
+    title: undefined,
     hidden: false,
     dueDate: new Date().toISOString(),
     fileName: "example.cpp",
   },
   problem: {
-    problemStatement: "",
+    problemStatement: undefined,
     templatePackage: "",
   },
   codeEditor: {
-    code: {
-      header: "",
-      body: "",
-      footer: "",
-    },
+    code: undefined,
     fileExtension: ".cpp",
   },
   serverConfig: {
@@ -97,7 +98,7 @@ const initialState: ProblemEditorContainerState = {
     memoryLimit: 0,
     buildCommand: "",
   },
-  testCases: [],
+  testCases: undefined,
   problemId: undefined,
   moduleId: "",
   moduleName: "",
@@ -205,7 +206,7 @@ export const problemEditorContainerSlice = createSlice({
     },
 
     resetState: (state) => {
-      return getProblemEditorInitialState();
+      console.log("resetting state 2");
     },
 
     /* API calls */
@@ -239,6 +240,7 @@ export const problemEditorContainerSlice = createSlice({
         hidden: action.payload.hidden,
         dueDate: new Date(action.payload.dueDate).toISOString(),
         fileName: action.payload.fileName,
+        language: action.payload.language,
       };
       state.codeEditor = {
         code: { ...action.payload.code },
@@ -283,6 +285,44 @@ export const problemEditorContainerSlice = createSlice({
     requestDeleteProblemFailure: (state, action: PayloadAction<any>) => {
       alert(action.payload);
     },
+    requestResetProblem: (state) => {
+      state.metadataIsValid = false;
+      state.problemIsValid = false;
+      state.codeIsValid = false;
+      state.serverConfigIsValid = false;
+      state.testEditorIsValid = false;
+
+      state.activeStep = 0;
+      state.metadata = {
+        title: undefined,
+        hidden: false,
+        dueDate: new Date().toISOString(),
+        fileName: "example.cpp",
+      };
+      state.problem = {
+        problemStatement: undefined,
+        templatePackage: "",
+      };
+      state.codeEditor = {
+        code: undefined,
+        fileExtension: ".cpp",
+      };
+      state.serverConfig = {
+        timeLimit: 0,
+        memoryLimit: 0,
+        buildCommand: "",
+      };
+      state.testCases = undefined;
+      state.problemId = undefined;
+      state.moduleId = "";
+      state.moduleName = "";
+      state.isSubmitting = false;
+      state.fetchingProblem = false;
+      state.showSuccessModal = false;
+      state.showFailureModal = false;
+      state.showWarningModal = false;
+      state.warningType = undefined;
+    },
   },
 });
 
@@ -319,5 +359,6 @@ export const {
   resetState,
   openWarningModal,
   closeWarningModal,
+  requestResetProblem,
 } = problemEditorContainerSlice.actions;
 export default problemEditorContainerSlice.reducer;

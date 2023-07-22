@@ -1,6 +1,6 @@
 import { styled } from "@mui/styles";
 import { Typography } from "@mui/material";
-import LegalLayout from "components/LegalLayout";
+import LegalLayout from "components/layouts/LegalLayout";
 import { ReactNode } from "react";
 
 const Link = styled("a")({
