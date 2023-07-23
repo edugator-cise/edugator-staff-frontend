@@ -10,6 +10,9 @@ interface Props {
   problemDifficulty: string;
   problemDateCreated: Date;
   problemLastModified: Date;
+  problemIsShort: boolean;
+  problemHasTemplate: boolean;
+  problemIsQuiz: boolean;
 }
 
 const ProblemDescriptionPaper = styled("div")(
@@ -24,18 +27,7 @@ const ProblemDescriptionPaper = styled("div")(
   min-width: 200px;
 `
 );
-export const ProblemView = ({
-  problemTitle,
-  problemStatement,
-  problemAuthor,
-  problemDifficulty,
-  problemDateCreated,
-  problemLastModified,
-}: Props) => {
-  //check if problemDateCreated is null
-  const dateCreated = new Date(problemDateCreated).toLocaleDateString();
-  const lastModified = new Date(problemLastModified).toLocaleDateString();
-
+export const ProblemView = ({ problemTitle, problemStatement }: Props) => {
   return (
     <Grow in appear timeout={500}>
       <ProblemDescriptionPaper
@@ -50,21 +42,6 @@ export const ProblemView = ({
           {problemTitle}
         </Typography>
         <Markdown markdownString={problemStatement} />
-        {problemAuthor && problemDifficulty && problemLastModified ? (
-          <Typography variant="body2" sx={{ textAlign: "left" }}>
-            <b>Author:</b> {problemAuthor}
-            <br />
-            <b>Difficulty:</b> {problemDifficulty}
-            {dateCreated != "Invalid Date" ? (
-              <>
-                <br />
-                <b>Date Created: </b> {dateCreated}
-              </>
-            ) : null}
-            <br />
-            <b>Last Modified:</b> {lastModified}
-          </Typography>
-        ) : null}
       </ProblemDescriptionPaper>
     </Grow>
   );

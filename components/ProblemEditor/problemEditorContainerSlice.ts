@@ -13,6 +13,10 @@ export interface MetadataFields {
   dueDate: string;
   author: string;
   difficulty: string;
+  isShort: boolean;
+  hasTemplate: boolean;
+  isQuiz: boolean;
+  fileName: string;
 }
 
 export interface CodeEditorFields {
@@ -20,7 +24,6 @@ export interface CodeEditorFields {
     header: string;
     body: string;
     footer: string;
-    solution: string;
   };
   fileExtension: string;
 }
@@ -82,6 +85,10 @@ const initialState: ProblemEditorContainerState = {
     dueDate: new Date().toISOString(),
     author: "",
     difficulty: "",
+    isShort: false,
+    hasTemplate: false,
+    isQuiz: false,
+    fileName: "example.cpp",
   },
   problem: {
     problemStatement: "",
@@ -92,7 +99,6 @@ const initialState: ProblemEditorContainerState = {
       header: "",
       body: "",
       footer: "",
-      solution: "",
     },
     fileExtension: ".cpp",
   },
@@ -168,6 +174,7 @@ export const problemEditorContainerSlice = createSlice({
         state.activeStep -= 1;
       }
     },
+
     updateProblem: (state, action: PayloadAction<ProblemFields>) => {
       state.problem = action.payload;
     },
@@ -243,6 +250,10 @@ export const problemEditorContainerSlice = createSlice({
         dueDate: new Date(action.payload.dueDate).toISOString(),
         author: action.payload.author,
         difficulty: action.payload.difficulty,
+        isShort: action.payload.isShort,
+        hasTemplate: action.payload.hasTemplate,
+        isQuiz: action.payload.isQuiz,
+        fileName: action.payload.fileName,
       };
       state.codeEditor = {
         code: { ...action.payload.code },

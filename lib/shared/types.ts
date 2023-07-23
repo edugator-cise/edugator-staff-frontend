@@ -18,11 +18,14 @@ export interface IProblem extends IProblemBase {
   difficulty: string;
   dateCreated: Date;
   lastModified: Date;
+  isShort: boolean;
+  hasTemplate: boolean;
+  isQuiz: boolean;
+  fileName: string;
   code: {
     header: string;
     body: string;
     footer: string;
-    solution: string;
   };
   fileExtension: string;
   testCases: ITestCase[];

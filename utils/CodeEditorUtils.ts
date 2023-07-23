@@ -7,48 +7,31 @@ import {
 import * as monaco from "monaco-editor";
 import { Buffer } from "buffer";
 
-export const generateFileName = (
-  navStructure: INavigationItem[],
-  problemId: string | undefined,
-  fileType: string
-) => {
-  let currentModuleNumber = -1;
-  let currentProblemNumber = -1;
-  let foundProblem = false;
-  for (let i = 0; i < navStructure.length; i++) {
-    for (let j = 0; j < navStructure[i].problems.length; j++) {
-      if (navStructure[i].problems[j]._id === problemId) {
-        foundProblem = true;
-        currentModuleNumber = i;
-        currentProblemNumber = j;
-        break;
-      }
-    }
-    if (foundProblem) {
-      break;
-    }
+export const generateFileName = (title: string, fileType: string) => {
+  let fileName = title.trim().replaceAll(" ", "_");
+
+  if (!fileName) {
+    return "not_found.cpp";
   }
-  if (!foundProblem) {
-    return "edugator-code.cpp";
-  }
-  return `cop3530_${currentModuleNumber + 1}_${
-    currentProblemNumber + 1
-  }${fileType}`;
+  return `${fileName}${fileType}`;
 };
 
 export const handleDownload = (
   currentCode: string,
-  navStructure: INavigationItem[],
-  problemId: string | undefined,
-  fileType: string
+  title: string,
+  fileType: string,
+  fileName: string
 ) => {
   const blob = new Blob([currentCode]);
   const blobURL = URL.createObjectURL(blob);
-  const filename = generateFileName(navStructure, problemId, fileType);
+  if (fileName == undefined) {
+    fileName = generateFileName(title, fileType);
+  }
+
   // Create a new link
   const anchor = document.createElement("a");
   anchor.href = blobURL;
-  anchor.download = filename;
+  anchor.download = fileName;
   // Append to the DOM
   document.body.appendChild(anchor);
   // Trigger `click` event
@@ -185,8 +168,6 @@ export function isBlank(str: string) {
   return !str || /^\s*$/.test(str);
 }
 
-
-export const deepClone = <T>(value: T): T  => {
+export const deepClone = <T>(value: T): T => {
   return JSON.parse(JSON.stringify(value));
-}
-
+};
