@@ -23,3 +23,5 @@ jobs:
         run: mv ./.next/routes-manifest.json ./out/
       - name: Deploy app build to S3 bucket
         run: aws s3 sync ./out/ s3://edugator.app --delete
+      - name: Invalidate cache in cdn
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
