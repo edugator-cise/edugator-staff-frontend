@@ -24,7 +24,6 @@ const AdminHeader = () => {
             Edugator
           </h1>
         </div>
-
         <div className="flex justify-end col-span-3">
           <UserButton/>
         </div>

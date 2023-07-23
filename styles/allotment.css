@@ -18,6 +18,21 @@ body {
   @apply md:absolute md:top-0 md:-right-[58px] z-[99999];
 }
 
+.student-view-holder .sash {
+  @apply bg-slate-400;
+  border-radius: 4px;
+  align-self: center;
+  z-index: 10;
+  transform: scaleX(0.3) scaleY(0.1);
+}
+
+
+.student-view-holder .sash-horizontal {
+  @apply bg-slate-400;
+  transform: scaleX(0.2) scaleY(0.3);
+  border-radius: 4px;
+  align-self: center;
+}
 /* 
 
 couldnt get these to work 

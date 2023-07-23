@@ -1,4 +1,6 @@
 import React, {
+  Dispatch,
+  SetStateAction,
   useCallback,
   useEffect,
   useReducer,
@@ -51,6 +53,34 @@ import ActionButton from "components/shared/Buttons/ActionButton";
 import { isUrl } from "utils/textUtils";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
+import { Trash } from "tabler-icons-react";
+
+export const DeleteLessonModal = ({
+  open,
+  setOpen,
+  removeLesson,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  removeLesson: () => void;
+}) => {
+  return (
+    <AlertModal
+      title="Delete Lesson"
+      open={open}
+      setOpen={setOpen}
+      description="Are you sure you want to delete this lesson? This action cannot be undone."
+      onCancel={() => {
+        setOpen(false);
+      }}
+      onConfirm={async () => {
+        console.log("delete lesson");
+        await removeLesson();
+      }}
+      confirmText="Delete Lesson"
+    />
+  );
+};
 
 const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   // MODAL CONTROLS
@@ -99,6 +129,15 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     isLoading: deleteLessonLoading,
     isError: deleteLessonError,
   } = useDeleteLesson();
+
+  const removeLesson = async () => {
+    setUnsavedChanges(false);
+    await deleteLesson(lessonId as string);
+    setDeleteModalOpen(false);
+    /* setSettingsOpen(false); */
+    // navigate to module page
+    router.push(`/admin/dashboard`);
+  };
 
   // REDUCER (for local lesson state)
 
@@ -188,14 +227,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       content: JSON.stringify(lessonState.content),
       hidden: false, // TODO: add hidden checkbox
     });
-  };
-
-  const removeLesson = async () => {
-    await deleteLesson(lessonId as string);
-    setDeleteModalOpen(false);
-    /* setSettingsOpen(false); */
-    // navigate to module page
-    router.push(`/admin/modules`);
   };
 
   // EDITOR INITIALIZATION
@@ -428,19 +459,10 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         confirmText="Confirm"
       />
       {/* Modal for deleting lesson */}
-      <AlertModal
-        title="Delete Lesson"
+      <DeleteLessonModal
         open={deleteModalOpen}
         setOpen={setDeleteModalOpen}
-        description="Are you sure you want to delete this lesson? This action cannot be undone."
-        onCancel={() => {
-          setDeleteModalOpen(false);
-        }}
-        onConfirm={async () => {
-          console.log("delete lesson");
-          await removeLesson();
-        }}
-        confirmText="Delete Lesson"
+        removeLesson={removeLesson}
       />
 
       <div
@@ -461,33 +483,6 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             <div className="flex space-x-2 items-center">
               {editable ? (
                 <>
-                  <Tooltip.Provider delayDuration={100}>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <div className="w-fit">
-                          <ActionButton
-                            disabled={deleteLessonLoading}
-                            color="red"
-                            onClick={() => setDeleteModalOpen(true)}
-                            className="!px-2"
-                          >
-                            <TrashIcon />
-                          </ActionButton>
-                        </div>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                        >
-                          Delete Lesson
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  </Tooltip.Provider>
-
                   <ActionButton
                     color="gray"
                     onClick={() => {
@@ -521,6 +516,32 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                     <CheckCircledIcon />
                     <p>Save Changes</p>
                   </ActionButton>
+                  <Tooltip.Provider delayDuration={100}>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <div className="w-fit">
+                          <ActionButton
+                            disabled={deleteLessonLoading}
+                            color="red"
+                            onClick={() => setDeleteModalOpen(true)}
+                            className="!px-2"
+                          >
+                            <Trash className="w-4 h-4" strokeWidth={1.5} />
+                          </ActionButton>
+                        </div>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          side="bottom"
+                          sideOffset={5}
+                          align="center"
+                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                        >
+                          Delete Lesson
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
                 </>
               ) : (
                 <>
@@ -617,30 +638,33 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                 <p>Preview</p>
               </button> */}
       </div>
-      <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white">
-        <div
-          className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 bg-white space-y-4 transition-all`}
-        >
-          <div className="flex flex-col space-y-1">
-            <input
-              type="text"
-              id="problem-title"
-              className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white !text-slate-800 font-dm outline-none"
-              autoComplete="off"
-              disabled={!editable}
-              onFocus={() => setDisableToolbar(true)}
-              onBlur={() => setDisableToolbar(false)}
-              placeholder="Lesson Title"
-              value={lessonState.title}
-              onChange={(e) => {
-                lessonDispatch({
-                  type: "SET_TITLE",
-                  payload: e.target.value,
-                });
-              }}
-            />
-          </div>
-          <div className="h-auto w-full text-slate-800">
+      {/* Surrounding Border */}
+      <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
+        {/* Editor and Title Holder ("Page") */}
+        <div className="w-full h-full min-h-full max-h-[200px] !overflow-y-scroll flex flex-col justify-start items-center bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
+          <div
+            className={`max-w-4xl w-[90%] h-full mt-14 flex flex-col py-4 space-y-4 transition-all`}
+          >
+            <div className="flex flex-col space-y-1">
+              <input
+                type="text"
+                id="problem-title"
+                className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white dark:bg-nav-darker dark:text-white text-slate-800 font-dm outline-none"
+                autoComplete="off"
+                disabled={!editable}
+                onFocus={() => setDisableToolbar(true)}
+                onBlur={() => setDisableToolbar(false)}
+                placeholder="Lesson Title"
+                value={lessonState.title}
+                onChange={(e) => {
+                  lessonDispatch({
+                    type: "SET_TITLE",
+                    payload: e.target.value,
+                  });
+                }}
+              />
+            </div>
+
             {/* Bubble Menu (Only for Links for now) */}
             <BubbleMenu
               className="py-1 pr-1 max-h-10 pl-3 ring-slate-300 overflow-hidden items-center bg-slate-800 rounded-md flex space-x-1 font-dm"
@@ -783,7 +807,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             </BubbleMenu>
             <EditorContent
               onFocus={() => setDisableToolbar(false)}
-              className="!prose-lime px-6 pb-6 h-auto prose-a:!text-blue-400 prose-a:underline prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc prose-headings:font-dm prose-h1:!my-4 prose-h2:!my-4 prose-h3:!my-4 prose-h3:!text-lg prose-h3:!font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-xl prose-h2:!font-semibold prose-headings:!my-0 !outline-none"
+              className="!prose-lime px-6 pb-6 prose-a:!text-blue-400 prose-a:underline prose-sm prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc prose-headings:font-dm prose-h1:!my-4 prose-h2:!my-4 prose-h3:!my-4 prose-h3:!text-lg prose-h3:!font-dm prose-h1:text-2xl prose-h1:font-semibold prose-h2:!text-xl prose-h2:!font-semibold prose-headings:!my-0 !outline-none"
               editor={editor}
             />
           </div>

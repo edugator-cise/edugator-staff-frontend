@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 import problemEditorContainerReducer from "state/problemEditorContainerSlice";
 import contentEditorReducer from "state/contentEditorPageSlice";
 import loginReducer from "state/LoginSlice";
-import moduleReducer from "state/ModulesSlice";
 import accountManagerReducer from "state/AdminAccountsPage.slice";
 import interfaceControlsReducer from "state/interfaceControls.slice";
 import courseSlice from "state/courseSlice";
@@ -13,7 +12,6 @@ import courseSlice from "state/courseSlice";
 */
 const rootReducer = combineReducers({
   login: loginReducer,
-  modules: moduleReducer,
   accountManager: accountManagerReducer,
   problemEditorContainer: problemEditorContainerReducer,
   contentEditorPage: contentEditorReducer,

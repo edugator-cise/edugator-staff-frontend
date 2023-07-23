@@ -3,9 +3,8 @@ import { useSignUp } from "@clerk/nextjs";
 import { useGetAllOrganization } from "hooks/organization/useGetAllOrganization";
 import { IRequestLoginAction } from "components/Login/types";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import AdminHeader from "components/layouts/AdminHeader";
-import Link from "next/link";
 import { NextRoutes, Routes } from "constants/navigationRoutes";
 import toast from "react-hot-toast";
 
@@ -23,7 +22,11 @@ export default function SignUpPage(): React.ReactElement {
   } = useGetAllOrganization();
   const roles = ["Teaching Assistant", "Student"]
 
-
+  const Link = ({ href, children }: { href: string; children: ReactNode }) => (
+    <a href={href} className="text-black hover:underline">
+      {children}
+    </a>
+  );
   
   const handleSubmit = async (values: IRequestLoginAction) => {
     if (!isLoaded) {
@@ -193,7 +196,7 @@ export default function SignUpPage(): React.ReactElement {
             <p className="text-white/80 text-md font-dm">
                 Have an account?
             </p>
-            <Link href={NextRoutes.SignIn} className="text-purple-400">
+            <Link href={NextRoutes.SignIn}>
               Sign In
             </Link>
           </div>

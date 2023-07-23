@@ -6,21 +6,25 @@ import React, { ButtonHTMLAttributes } from "react";
 type CustomButtonProps = {
   color: "red" | "green" | "blue" | "gray";
   children: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
 } & Partial<ButtonHTMLAttributes<HTMLButtonElement>>;
 
 const ActionButton: React.FC<CustomButtonProps> = ({
   children,
   className,
+  containerClassName,
   color = "blue",
   ...rest
 }: {
   color?: "red" | "green" | "blue" | "gray";
   className?: string;
+  containerClassName?: string;
   children: React.ReactNode;
 }) => {
-  const containerClassName = () => {
+  const outerClassName = () => {
     if (color === "blue")
-      return "bg-gradient-to-b from-[#648AE8] from-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
+      return "bg-gradient-to-b from-[#648AE8] via-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10";
     if (color === "green")
       return "bg-gradient-to-b from-emerald-200 via-emerald-200 to-emerald-500 shadow-emerald-500/10";
     if (color === "red")
@@ -40,8 +44,8 @@ const ActionButton: React.FC<CustomButtonProps> = ({
     <button
       {...rest}
       className={`p-px flex items-center group justify-center disabled:from-white disabled:opacity-50 disabled:to-gray-400 enabled:hover:brightness-110 cursor-pointer rounded-md group shadow-lg disabled:cursor-not-allowed enabled:hover:shadow-xl transition duration-200 ease-in-out ${
-        containerClassName() || ""
-      }`}
+        outerClassName() || ""
+      } ${containerClassName || ""}`}
     >
       <div
         className={`w-full h-full group-disabled:bg-gray-400 rounded-[5px] flex items-center space-x-2 px-3 py-2 text-xs text-white font-dm ${

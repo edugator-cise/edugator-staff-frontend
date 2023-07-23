@@ -42,3 +42,8 @@ img {
   pointer-events: none;
 }
 
+.ProseMirror pre code {
+  background-color: inherit;
+  border: none;
+}
+

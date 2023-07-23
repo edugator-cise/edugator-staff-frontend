@@ -30,16 +30,7 @@ type GetCourseStructureParams = {
 
 export const COURSE_STRUCTURE_QUERY_KEY = "courseStructure";
 
-const fetchCourseStructure = async ({
-  courseId,
-}: GetCourseStructureParams): Promise<CourseStructure> => {
-  const { data } = await apiClient.get(
-    apiRoutes.v2.student.getStructure(courseId)
-  );
-  return data;
-};
-
-export const useGetCourseStructure = () => {
+export const useGetCourseStructure = ({ admin }: { admin?: boolean }) => {
   const { courseId } = useSelector((state: RootState) => state.course);
 
   if (!courseId) {
@@ -47,8 +38,20 @@ export const useGetCourseStructure = () => {
     throw new Error("Course id not found");
   }
 
+  const fetchCourseStructure = async ({
+    courseId,
+  }: GetCourseStructureParams): Promise<CourseStructure> => {
+    const { data } = await apiClient.get(
+      admin
+        ? apiRoutes.v2.admin.getStructure(courseId)
+        : apiRoutes.v2.student.getStructure(courseId)
+    );
+    return data;
+  };
+
   return useQuery<CourseStructure, Error>({
     queryKey: [COURSE_STRUCTURE_QUERY_KEY, courseId],
     queryFn: () => fetchCourseStructure({ courseId }),
+    refetchOnWindowFocus: false,
   });
 };

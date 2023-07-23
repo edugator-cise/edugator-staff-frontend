@@ -1,11 +1,16 @@
-import { styled } from "@mui/styles";
 import LegalLayout from "components/layouts/LegalLayout";
 import { ReactNode } from "react";
 
-const Link = styled("a")({
-  color: "black",
-  textDecoration: "none",
-});
+
+// make a Link component using tailwind css
+const Link = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a
+    href={href}
+    className="text-blue-500 hover:text-blue-700 transition duration-300"
+  >
+    {children}
+  </a>
+);
 
 function TermsOfUse() {
   return (

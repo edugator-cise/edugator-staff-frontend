@@ -57,13 +57,13 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
   });
 
   return (
-    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px]">
-      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-700">
+    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px] ">
+      <div className="h-full w-full flex flex-col justify-start rounded-md shadow-sm overflow-hidden bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-700">
         <div className="w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 py-3 dark:bg-nav-darkest bg-slate-100">
           <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
             Modules
             <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
-              &nbsp;&nbsp;&gt;&nbsp;&nbsp;Module Name
+              &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problem?.moduleName}
             </span>
             <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
               &nbsp;&nbsp;&gt;&nbsp;&nbsp;{problem?.title}
@@ -71,7 +71,7 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
           </p>
         </div>
         <div className="overflow-auto h-full w-full flex flex-col space-y-4 p-6">
-          <h1 className="text-2xl font-dm font-semibold text-slate-800 dark:text-white">
+          <h1 className="text-2xl font-dm font-semibold text-slate-800 dark:text-white underline underline-offset-4 dark:decoration-sky-500 decoration-emerald-500">
             {problem?.title || "New Problem"}
           </h1>
           <div className="flex space-x-2 items-center">
@@ -88,7 +88,8 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
           <EditorContent
             editor={editor}
             className="prose-sm prose-p:tracking-[-0.010em] dark:text-white text-slate-800 font-sans prose-pre:bg-nav-dark prose-pre:text-white !list-inside !list-disc
-        prose-headings:font-sans prose-h1:!text-base prose-h1:!font-semibold prose-h2:!text-sm prose-h2:!font-semibold !outline-none"
+        prose-headings:font-sans prose-h1:!text-base prose-h1:!font-semibold prose-h2:!text-sm prose-h2:!font-semibold !outline-none prose-code:p-[0.125rem] prose-code:bg-slate-100 
+        dark:prose-code:border-slate-700 dark:prose-code:bg-nav-dark prose-code:border prose-code:rounded-[4px]"
           />
         </div>
       </div>

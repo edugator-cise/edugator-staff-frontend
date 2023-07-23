@@ -51,11 +51,11 @@ const ringVariants = (scale: number) => ({
   },
 });
 
-const RING_DURATIONS = [1, 1.2, 1.44, 1.728, 2.07, 2.49];
-const RING_OPACITIES = [0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
-const COLORS = ["blue", "emerald", "amber"];
+export const RING_DURATIONS = [1, 1.2, 1.44, 1.728, 2.07, 2.49];
+export const RING_OPACITIES = [0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+export const COLORS = ["blue", "emerald", "amber"];
 
-const Ring = ({
+export const Ring = ({
   color,
   duration,
   controls,

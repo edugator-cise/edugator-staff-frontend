@@ -1,9 +1,6 @@
 import React from "react";
-import { Button, Card, CardActions, CardMedia, Stack } from "@mui/material";
-import { Routes } from "constants/navigationRoutes";
 import Link from "next/link";
 import Image from "next/image";
-import { GradientButton } from "components/landing/GradientButton";
 import { motion as m } from "framer-motion";
 
 const rotateVals = [20, -20, 7, -7, 2, -2, 0];

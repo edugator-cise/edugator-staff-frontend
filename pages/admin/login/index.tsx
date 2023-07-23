@@ -1,15 +1,9 @@
 import { Field, Form, Formik } from "formik";
-import { RootState } from "lib/store/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { receiveLoginSuccess } from "state/LoginSlice";
 import { LocalStorage } from "../../../lib/auth/LocalStorage";
 import { Routes } from "constants/navigationRoutes";
 import { ILoginSuccess, IRequestLoginAction } from "components/Login/types";
-import {
-  Button,
-  Card,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { baseAPIURL } from "constants/config";
 import apiClient from "lib/api/apiClient";
 import { useRouter } from "next/router";

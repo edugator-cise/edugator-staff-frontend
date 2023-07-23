@@ -5,8 +5,6 @@ import { GradientButton } from "./GradientButton";
 import { useScroll } from "framer-motion";
 import useYPosition from "hooks/useYPosition";
 import { useAuthenticatedFetch } from "hooks/useAuthenticatedFetch";
-import { Button } from "@mui/material";
-import { apiRoutes } from "constants/apiRoutes";
 import { NextRoutes } from "constants/navigationRoutes";
 
 const NavLink = ({
@@ -104,7 +102,7 @@ const Header = () => {
             // scroll to top
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="cursor-pointer flex col-span-4 lg:col-span-1 justify-start items-center space-x-2"
+          className=" flex col-span-4 lg:col-span-1 justify-start items-center space-x-2 cursor-pointer"
         >
           <div className="w-12 h-12 min-w-[3rem] p-1 flex items-center">
             <EdugatorLogo />
@@ -145,15 +143,6 @@ const Header = () => {
           <UserButton
             afterSignOutUrl={NextRoutes.SignIn}
           />
-          <Button
-            onClick={async () => {
-              const val = await authenticatedFetch(apiRoutes.student.health);
-              //eslint-disable-next-line
-              console.log(val)
-            }}
-          >
-            test
-          </Button>
         </div>
       </div>
     </header>

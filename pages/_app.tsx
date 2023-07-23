@@ -4,11 +4,6 @@ import { ReactNode } from "react";
 import { NextPage } from "next";
 import { Provider } from "react-redux";
 import store from "lib/store/store";
-import theme from "constants/theme";
-import {
-  ThemeProvider as MUIThemeProvider,
-  StyledEngineProvider,
-} from "@mui/system";
 import "styles/App.css";
 import "styles/learnStyles.css";
 import "styles/TextEditorStyles.css";
@@ -27,6 +22,7 @@ import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nex
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AnimatePresence } from "framer-motion";
 
 const queryClient = new QueryClient();
 
@@ -55,25 +51,29 @@ const App = ({ Component, pageProps }: Props) => {
     }
   }, []);
 
-
   const { pathname } = useRouter();
 
   const isPublicPage = publicPages.includes(pathname);
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
-
+  
   return (
-      <Provider store={store}>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
-        />
-          <StylingProviders>
-            <ClerkProvider {...pageProps}>
-            <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
-                <Toaster containerClassName="font-dm" />
-                {isPublicPage ? (
+    <Provider store={store}>
+      <ClerkProvider {...pageProps}>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+          <ThemeProvider
+            enableSystem={true}
+            disableTransitionOnChange={true}
+            attribute="class"
+          >
+            <Toaster containerClassName="font-dm" />
+            <AnimatePresence
+              exitBeforeEnter
+              initial={false}
+              onExitComplete={() => window.scrollTo(0, 0)}
+            >
+              {isPublicPage ? (
                   getLayout(<Component { ...pageProps } />)
                 ) : (
                   <>
@@ -84,25 +84,14 @@ const App = ({ Component, pageProps }: Props) => {
                       <RedirectToSignIn />
                     </SignedOut>
                   </>
-                )}
-            </QueryClientProvider>
-          </ClerkProvider>
-          </StylingProviders>
-      </Provider>
+              )}
+            </AnimatePresence>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </ClerkProvider>
+    </Provider>
   );
 };
-
-const StylingProviders = ({ children }: { children: ReactNode }) => {
-  return (
-    <StyledEngineProvider injectFirst>
-      <MUIThemeProvider theme={theme}>
-        <ThemeProvider enableSystem={true} attribute="class">
-          {children}
-        </ThemeProvider>
-      </MUIThemeProvider>
-    </StyledEngineProvider>
-  )
-}
 
 
 

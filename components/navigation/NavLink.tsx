@@ -20,20 +20,28 @@ export const NavLink = ({
         onClick={() => {
           onClick();
         }}
-        className={`w-full h-12 rounded-md overflow-hidden box-border flex items-center justify-start px-[14px] group space-x-4 ${
+        className={`w-full p-px transition rounded-lg ${
           active
-            ? "bg-emerald-500/10 ring-emerald-500/40 ring-2 text-white"
-            : "text-nav-inactive-light hover:bg-emerald-500/5"
+            ? "!bg-[#22403C] dark:!bg-[#2F4E4C]  from-[#22403C] via-[#19292E] to-[#19292E] dark:from-[#2F4E4C] dark:via-[#283A42] dark:to-[#283A42]" //add in 'bg-gradient-t-b' for depth
+            : ""
         }`}
       >
-        <div className="w-5 h-5 min-w-[20px]">{icon(active)}</div>
-        <label
-          className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
-            open ? "opacity-100" : "opacity-0"
+        <div
+          className={`w-full h-[46px] transition rounded-[7px] overflow-hidden box-border flex items-center justify-start px-[13px] group space-x-4 ${
+            active
+              ? "bg-[#19292E] dark:bg-[#283A42] text-white"
+              : "text-nav-inactive-light hover:bg-emerald-500/5"
           }`}
         >
-          {text}
-        </label>
+          <div className="w-5 h-5 min-w-[20px]">{icon(active)}</div>
+          <label
+            className={`text-sm group-hover:text-white pointer-events-none transition text-ellipsis whitespace-nowrap ${
+              open ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            {text}
+          </label>
+        </div>
       </button>
     </NavLinkTooltip>
   );

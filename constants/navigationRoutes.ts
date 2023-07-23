@@ -1,6 +1,6 @@
 export enum Routes {
-  Login = "/admin/login",
-  Modules = "/admin/modules",
+  Login = "/login",
+  Modules = "/admin/dashboard",
   ProblemEditor = "/admin/problem/edit/:problemId",
   ProblemEditorBaseWithoutId = "/admin/problem/edit/", //To be used only when pushing to a route.
   ContentEditorBaseWithoutId = "/admin/content/edit/", //To be used only when pushing to a route.

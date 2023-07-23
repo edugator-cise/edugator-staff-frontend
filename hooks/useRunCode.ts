@@ -28,7 +28,7 @@ const getCodeRequest = ({
   runId: string;
   base_64: string;
 }) => {
-  return apiClient.post(apiRoutes.student.runCodeSubmission, {
+  return apiClient.post(apiRoutes.v2.student.runCodeSubmission, {
     base_64,
     runId,
   });
@@ -79,8 +79,9 @@ export const useRunCode = (locationState: string) => {
   }) => {
     setIsSubmissionRunning(true);
     try {
+      console.log("hereee");
       const { data }: { data: IToken } = await apiClient.post(
-        apiRoutes.student.runCode,
+        apiRoutes.v2.student.runCode,
         transformPayload({
           code,
           stdin,
@@ -90,9 +91,12 @@ export const useRunCode = (locationState: string) => {
           buildCommand,
         })
       );
+      console.log("here");
       if (!data.token || data.token === "") {
+        console.log("no toke");
         throw new Error("Token not present");
       }
+
       const result: any = await poll(
         getCodeRequest,
         { runId: data.token, base_64: true },
@@ -112,7 +116,7 @@ export const useRunCode = (locationState: string) => {
         compilerBody: evaluateCompilerBody(resultData),
       });
       setActiveTab(1);
-      await apiClient.delete(apiRoutes.student.runCodeSubmission, {
+      await apiClient.delete(apiRoutes.v2.student.runCodeSubmission, {
         params: {
           base64: true,
           token: data.token,
@@ -142,7 +146,7 @@ export const useRunCode = (locationState: string) => {
     setIsSubmissionRunning(true);
     try {
       const { data }: { data: IResultSubmission[] } = await apiClient.post(
-        apiRoutes.student.runCodeEvaluation,
+        apiRoutes.v2.student.runCodeEvaluation,
         transformPayload({
           code,
           stdin,

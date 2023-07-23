@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
 import { generateFileName, handleDownload } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
 import * as Tooltip from "@radix-ui/react-tooltip";
@@ -166,8 +164,8 @@ export const CodeEditorView = ({
   const currentTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <div className="w-full h-full flex flex-col justify-start p-3 pl-[6px] pb-[6px]">
-      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden bg-white dark:bg-nav-dark border border-slate-300 dark:border-slate-700">
+    <div className="w-full h-full flex flex-col justify-start p-3 pl-[6px] pb-[6px] relative">
+      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden shadow-sm bg-white dark:bg-nav-dark border border-slate-300 dark:border-slate-700">
         <div className="rounded-t-md flex items-center justify-between w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 pr-1 py-1 dark:bg-nav-darkest bg-slate-100">
           <div className="flex space-x-4 items-center">
             <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
@@ -314,16 +312,16 @@ export const CodeEditorView = ({
         </div>
       </div>
 
-      <Backdrop
-        sx={{
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          position: "absolute",
-        }}
-        open={isSubmissionRunning}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {/* Backdrop */}
+      {isSubmissionRunning && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center">
+          <div className="bouncing-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

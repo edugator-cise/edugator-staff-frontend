@@ -28,12 +28,24 @@ export const apiRoutes = {
   },
   v2: {
     student: {
-      getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+      getStructure: (courseId: string) =>
+        `v2/course/${courseId}/structure?hidden=false`,
+
+      // code evaluation
+      runCode: "v2/code/run",
+      runCodeEvaluation: "v2/code/run/evaluate",
+      runCodeSubmission: "v2/code/run/submission",
     },
     organization: {
       getAll: "v2/organization"
     },
     admin: {
+      // organization
+      getOrganizations: () => `v2/organization`,
+
+      // course
+      getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+
       // module
       createModule: "v2/module",
       deleteModule: (moduleId: string) => `v2/module/${moduleId}`,
@@ -49,6 +61,12 @@ export const apiRoutes = {
       getProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
       updateProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
       deleteProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
+
+      // reorder
+      reorderContent: (moduleId: string) =>
+        `v2/module/${moduleId}/changeContentOrder`,
+      reorderModule: (courseId: string) =>
+        `v2/course/${courseId}/changeModuleOrder`,
     },
   },
 };

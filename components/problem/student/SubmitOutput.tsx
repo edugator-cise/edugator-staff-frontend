@@ -1,8 +1,7 @@
 import React from "react";
-import CheckCircle from "@mui/icons-material/CheckCircle";
-import Cancel from "@mui/icons-material/Cancel";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { IResultSubmission } from "./types";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 const TAGS = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );
@@ -80,9 +79,9 @@ export const SubmitOutput = ({ results }: Props) => {
                 align="center"
               >
                 {row.result ? (
-                  <CheckCircle style={{ color: "#2E7D32" }} />
+                  <CheckCircledIcon style={{ color: "#2E7D32" }} />
                 ) : (
-                  <Cancel style={{ color: "#DC143C" }} />
+                  <CrossCircledIcon style={{ color: "#DC143C" }} />
                 )}
               </th>
             </tr>
