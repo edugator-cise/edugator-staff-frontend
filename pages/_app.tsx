@@ -18,7 +18,12 @@ import "styles/allotment.css";
 import "styles/scrollbar.css";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  RedirectToSignIn,
+} from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -34,13 +39,15 @@ type Props = AppProps & {
   Component: Page;
 };
 
-
 if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
-  throw "Missing Publishable Key"
+  throw "Missing Publishable Key";
 }
 
-
-const publicPages = ["/sign-in/[[...index]]", "/sign-up/[[...index]]"];
+const publicPages = [
+  "/sign-in/[[...index]]",
+  "/sign-up/[[...index]]",
+  "/verify",
+];
 
 const App = ({ Component, pageProps }: Props) => {
   useEffect(() => {
@@ -56,7 +63,7 @@ const App = ({ Component, pageProps }: Props) => {
   const isPublicPage = publicPages.includes(pathname);
 
   const getLayout = Component.getLayout ?? ((page: ReactNode) => page);
-  
+
   return (
     <Provider store={store}>
       <ClerkProvider {...pageProps}>
@@ -74,16 +81,14 @@ const App = ({ Component, pageProps }: Props) => {
               onExitComplete={() => window.scrollTo(0, 0)}
             >
               {isPublicPage ? (
-                  getLayout(<Component { ...pageProps } />)
-                ) : (
-                  <>
-                    <SignedIn>
-                      {getLayout(<Component { ...pageProps } />)}
-                    </SignedIn>
-                    <SignedOut>
-                      <RedirectToSignIn />
-                    </SignedOut>
-                  </>
+                getLayout(<Component {...pageProps} />)
+              ) : (
+                <>
+                  <SignedIn>{getLayout(<Component {...pageProps} />)}</SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn />
+                  </SignedOut>
+                </>
               )}
             </AnimatePresence>
           </ThemeProvider>
@@ -92,8 +97,5 @@ const App = ({ Component, pageProps }: Props) => {
     </Provider>
   );
 };
-
-
-
 
 export default App;

@@ -9,16 +9,46 @@ import { useRouter } from "next/router";
 import AuthCode from "react-auth-code-input";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import Link from "next/link";
+import { useSignUp } from "@clerk/nextjs";
+import { Routes } from "constants/navigationRoutes";
 
 const VerifyPage = () => {
-  const dispatch = useDispatch();
-  const authState = useSelector((state: RootState) => state.login);
   const router = useRouter();
-  const [token, setToken] = useState(LocalStorage.getToken());
+
   const [code, setCode] = useState("");
+  const { isLoaded, signUp, setActive } = useSignUp();
 
   const handleOnCodeChange = (code: string) => {
     setCode(code);
+  };
+
+  const onPressVerify = async (values: { verificationCode: string }) => {
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const completeSignUp = await signUp!.attemptEmailAddressVerification({
+        code: values.verificationCode,
+      });
+      if (completeSignUp.status !== "complete") {
+        /*  investigate the response, to see if there was an error
+         or if the user needs to complete more steps.*/
+        console.log(JSON.stringify(completeSignUp, null, 2));
+      }
+      if (completeSignUp.status === "complete") {
+        if (!setActive) {
+          return;
+        }
+        await setActive({ session: completeSignUp.createdSessionId });
+
+        // TODO: Add toast notification
+        // make planetscale query to create user
+        router.push(Routes.Landing);
+      }
+    } catch (err: any) {
+      console.error(JSON.stringify(err, null, 2));
+    }
   };
 
   return (
@@ -48,8 +78,10 @@ const VerifyPage = () => {
         />
         <Link href="/admin/onboarding">
           <ActionButton
+            disabled={code.length < 6}
             color="green"
             type="submit"
+            onClick={() => onPressVerify({ verificationCode: code })}
             containerClassName="w-full mx-auto"
             className="flex justify-center py-[10px] px-4"
           >

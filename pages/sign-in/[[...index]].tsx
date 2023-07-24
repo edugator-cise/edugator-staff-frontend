@@ -9,7 +9,7 @@ import { IRequestLoginAction } from "components/Login/types";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { useSignIn } from "@clerk/clerk-react";
-
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -23,31 +23,30 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const result = await signIn?.create({
-        identifier: values.username,
-        password: values.password
+        identifier: values.email,
+        password: values.password,
       });
       if (result && result.status === "complete") {
         console.log(result);
         if (setActive) {
-          await setActive({session: result.createdSessionId});
+          await setActive({ session: result.createdSessionId });
         }
         toast.success("Logged in successfully");
         setLoading(false);
-        router.push(Routes.Landing)
-      }
-      else {
-          console.log(result);
-          toast.error(JSON.stringify(result));
-          setLoading(false);
+        router.push(Routes.Landing);
+      } else {
+        console.log(result);
+        toast.error(JSON.stringify(result));
+        setLoading(false);
       }
     } catch (err: any) {
       if (err && err.errors && err.errors[0].message) {
-        toast.error(err.errors[0].message)
+        toast.error(err.errors[0].message);
       }
       setLoading(false);
       console.error(JSON.stringify(err, null, 2));
     }
-  }
+  };
 
   return (
     <div className="w-[95vw] max-w-[550px] p-8 rounded-lg">
@@ -62,7 +61,7 @@ const LoginPage = () => {
           </p>
         </div>
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{ email: "", password: "" }}
           onSubmit={handleSubmit}
         >
           {() => (
@@ -70,10 +69,10 @@ const LoginPage = () => {
               <div className="flex flex-col space-y-6">
                 <div className="flex flex-col space-y-2"></div>
                 <div className="flex flex-col space-y-1">
-                  <label className="text-white text-sm font-dm">Username</label>
+                  <label className="text-white text-sm font-dm">Email</label>
                   <Field
-                    name="username"
-                    label="Username"
+                    name="email"
+                    label="Email"
                     placeholder="you@ufl.edu"
                     margin="normal"
                     fullWidth
@@ -119,12 +118,11 @@ const LoginPage = () => {
         <span className="text-white/80 text-sm font-dm">
           Don't have an account?&nbsp;
         </span>
-        <span
-          onClick={() => router.push("/signup")}
-          className="text-blue-500 font-medium text-sm font-dm cursor-pointer hover:text-blue-400 transition"
-        >
-          Sign Up
-        </span>
+        <Link href="/sign-up">
+          <span className="text-blue-500 font-medium text-sm font-dm cursor-pointer hover:text-blue-400 transition">
+            Sign Up
+          </span>
+        </Link>
       </div>
     </div>
   );

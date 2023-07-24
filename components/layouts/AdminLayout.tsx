@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Routes } from "constants/navigationRoutes";
+import { NextRoutes, Routes } from "constants/navigationRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { LocalStorage } from "lib/auth/LocalStorage";
 import React, { useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import {
 } from "components/layouts/PlaygroundLayout";
 import AdminContentSidebar from "components/navigation/AdminContentSidebar";
 import { useGetCourseStructure } from "hooks/course/useGetCourseStructure";
+import { useUser } from "@clerk/nextjs";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -38,6 +39,29 @@ const MAIN_SIDEBAR_EXPANDED_WIDTH = 288;
 const CONTENT_SIDEBAR_WIDTH = 350;
 
 const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  // useuser
+  const { user } = useUser();
+
+  useEffect(() => {
+    console.log(user);
+    if (!user || user.unsafeMetadata.role === "student") {
+      if (!user) {
+        alert("no user");
+      }
+      router.push(NextRoutes.Code);
+    } else {
+      setIsMounted(true);
+    }
+
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+  // if user is not logged in, redirect to login
+  // if user.metadata.role is not admin, redirect to login
+
   const dispatch = useDispatch();
   const router = useRouter();
   const locationState = router.asPath;
@@ -112,11 +136,8 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     contentSidebarWidth: CONTENT_SIDEBAR_WIDTH,
   });
 
-  useEffect(() => {
-    if (!LocalStorage.getToken() && locationState !== Routes.Login) {
-      router.push(Routes.Login);
-    }
-  }, []);
+  if (!isMounted) return <div className="w-screen h-screen bg-red-500"></div>;
+
   return (
     <div className="min-h-screen h-full flex overflow-hidden w-screen max-w-full bg-stone-100 relative">
       {/* Main sidebar */}

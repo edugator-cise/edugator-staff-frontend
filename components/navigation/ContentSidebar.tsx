@@ -1,16 +1,7 @@
-import useNavigation, { useCourseStructure } from "hooks/useNavigation";
-import React, { useEffect } from "react";
-import { LocalStorage } from "lib/auth/LocalStorage";
-import { FetchStatus } from "hooks/types";
+import React from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { createNavStructure } from "utils/CodeEditorUtils";
-import {
-  ILessonItem,
-  INavigationItem,
-  IProblemItem,
-} from "components/problem/student/types";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";

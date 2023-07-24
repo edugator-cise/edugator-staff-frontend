@@ -1,5 +1,5 @@
-export const baseAPIURL = "http://localhost:8080/";
-// export const baseAPIURL = "https://edugator-admin.com/"; // For local testing with backend running, use "http://localhost:8080/"
+//export const baseAPIURL = "http://localhost:8080/";
+export const baseAPIURL = "https://edugator-admin.com/"; // For local testing with backend running, use "http://localhost:8080/"
 //
 export const unauthorizedErrorMessage =
   "You are not authorized to perform this action currently. Please log out and log back in.";
