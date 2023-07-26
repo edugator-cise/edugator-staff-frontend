@@ -69,10 +69,12 @@ const SignUpPage = () => {
       await signUp!.prepareEmailAddressVerification({ strategy: "email_code" });
       setLoading(false);
       toast.success("Email verification sent");
-      router.push({
-        pathname: "/verify",
-        query: { email: values.email, role: values.role },
-      });
+      // push /verify with email and role, but hide in the url
+      router.push(
+        `/verify?email=${values.email}&role=${values.role}`,
+        `/verify`,
+        { shallow: true }
+      );
       //setPendingVerification(true);
     } catch (err: any) {
       if (err && err.errors && err.errors[0].message) {
@@ -257,7 +259,8 @@ const SignUpPage = () => {
                           position="popper"
                           side="bottom"
                           sideOffset={-48}
-                          align="center"
+                          align="start"
+                          alignOffset={-8}
                           className={`SelectContent bg-slate-700  from-[#3A3F49] via-[#242934] via-[12px] to-[#242934] p-px z-50 data-[state=closed]:animate-slideUp overflow-hidden rounded-lg w-[calc(var(--radix-select-trigger-width)+16px)]`}
                         >
                           {/* add in 'bg-gradient-t-b' for depth above */}

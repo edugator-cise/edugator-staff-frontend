@@ -11,6 +11,8 @@ import Modal from "components/shared/Modals/Modal";
 import AnimateHeight from "react-animate-height";
 import Papa from "papaparse";
 import { toast } from "react-hot-toast";
+import { UserButton } from "@clerk/nextjs";
+import { NextRoutes } from "constants/navigationRoutes";
 
 const AddStudentModal = ({
   open,
@@ -203,7 +205,9 @@ const RosterPage = () => {
 
       <div className="w-full h-[3.5rem] py-3 px-4 flex justify-between items-center bg-white border-b">
         <div />
-        <div className="w-8 h-8 bg-gradient-to-b from-indigo-400 to-blue-400  shadow-md rounded-full"></div>
+        <div className="w-8 h-8 rounded-full">
+          <UserButton afterSignOutUrl={NextRoutes.SignIn} />
+        </div>
       </div>
       <div className="p-6 lg:p-12 w-full h-full !overflow-y-auto">
         <div className="w-full max-w-7xl flex flex-col">

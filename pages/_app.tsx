@@ -47,17 +47,10 @@ const publicPages = [
   "/sign-in/[[...index]]",
   "/sign-up/[[...index]]",
   "/verify",
+  "/",
 ];
 
 const App = ({ Component, pageProps }: Props) => {
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles!.parentElement!.removeChild(jssStyles);
-    }
-  }, []);
-
   const { pathname } = useRouter();
 
   const isPublicPage = publicPages.includes(pathname);
@@ -66,7 +59,35 @@ const App = ({ Component, pageProps }: Props) => {
 
   return (
     <Provider store={store}>
-      <ClerkProvider {...pageProps}>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css"
+      />
+      <ClerkProvider
+        {...pageProps}
+        appearance={{
+          variables: {
+            colorPrimary: "#3b82f6",
+          },
+          userButton: {
+            elements: {
+              userPreview: "border-b px-2 pb-4 pt-2",
+            },
+          },
+          elements: {
+            card: "p-2 font-dm rounded-lg shadow-lg border border-slate-200",
+            userButtonPopoverActionButton:
+              "py-0 px-2 hover:bg-slate-100 text-slate-600",
+            userButtonPopoverFooter: "hidden",
+            userButtonPopoverActionButtonIconBox: "hidden",
+            profilePage: "p-0",
+            navbar: "!p-0 !pr-6",
+            pageScrollBox: "p-0 !pl-6",
+            headerTitle: "text-xl",
+            headerSubtitle: "text-sm",
+          },
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
           <ThemeProvider
@@ -75,22 +96,28 @@ const App = ({ Component, pageProps }: Props) => {
             attribute="class"
           >
             <Toaster containerClassName="font-dm" />
-            <AnimatePresence
-              exitBeforeEnter
-              initial={false}
-              onExitComplete={() => window.scrollTo(0, 0)}
-            >
-              {isPublicPage ? (
-                getLayout(<Component {...pageProps} />)
-              ) : (
-                <>
-                  <SignedIn>{getLayout(<Component {...pageProps} />)}</SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              )}
-            </AnimatePresence>
+            {pathname === "/" ? (
+              getLayout(<Component {...pageProps} />)
+            ) : (
+              <AnimatePresence
+                exitBeforeEnter
+                initial={false}
+                onExitComplete={() => window.scrollTo(0, 0)}
+              >
+                {isPublicPage ? (
+                  getLayout(<Component {...pageProps} />)
+                ) : (
+                  <>
+                    <SignedIn>
+                      {getLayout(<Component {...pageProps} />)}
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn />
+                    </SignedOut>
+                  </>
+                )}
+              </AnimatePresence>
+            )}
           </ThemeProvider>
         </QueryClientProvider>
       </ClerkProvider>

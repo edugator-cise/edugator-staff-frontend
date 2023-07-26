@@ -360,15 +360,10 @@
   transition: opacity 1s linear 2s, transform 0.3s ease-in-out 0.3s;
 }
 
-:root {
-  --muted: #F1F5F9;
-  --muted-foreground: #64748b;
-  --popover: #ffffff; 
-  --popover-foreground: #0f172a; 
-  --border: #e2e8f0; 
-  --input: #e2e8f0; 
-  --primary: #0f172a; 
-  --primary-foreground: #f8fafc; 
-  --accent: #f1f5f9; 
-  --accent-foreground: #9a9b9e;
+.cl-rootBox .cl-card > div:last-child {
+  display: none;
+}
+
+.cl-rootBox .cl-card {
+  @apply p-6
 }

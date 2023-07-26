@@ -23,49 +23,9 @@ import Link from "next/link";
 import Modal from "components/shared/Modals/Modal";
 import { HandWaving, ListBullets, SquaresFour } from "phosphor-react";
 import Image from "next/image";
-
-/**
- * 
- * @param param0 <Modal
-      open={open}
-      setOpen={setOpen}
-      title="Add Module"
-      description="Enter a name for your new module."
-    >
-      <div className="flex flex-col space-y-4">
-        <input
-          type="text"
-          id="module-name"
-          className="w-full py-2 text-base rounded-md border border-slate-300 bg-white text-slate-800 px-3 font-dm outline-none"
-          placeholder="My new module"
-          value={moduleName}
-          onChange={(e) => setModuleName(e.target.value)}
-        />
-
-        <div className="flex justify-end items-center">
-          <button
-            className="px-4 py-2 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-dm text-sm flex items-center space-x-2 disabled:bg-emerald-500/50 disabled:cursor-not-allowed transition"
-            disabled={moduleName.length === 0 || loading}
-            onClick={handleCreateModule}
-          >
-            {loading ? (
-              <div className="bouncing-loader py-2">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            ) : (
-              <>
-                <PlusIcon />
-                <p>Create Module</p>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </Modal>
- * @returns 
- */
+import { UserButton } from "@clerk/nextjs";
+import { NextRoutes } from "constants/navigationRoutes";
+import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
 
 // modal for adding a new lesson, will have a dropdown to select which module to add it to
 // button should be enabled only if a module is selected and will link to lesson creation page when clicked
@@ -244,9 +204,11 @@ const ModulesPage = () => {
 
   return (
     <div className="min-h-screen h-full w-full text-slate-800 bg-slate-100 ">
-      <div className="w-full py-3 px-4 flex justify-between items-center bg-white border-b">
+      <div className="w-full h-[3.5rem] py-3 px-4 flex justify-between items-center bg-white border-b">
         <div />
-        <div className="w-8 h-8 bg-gradient-to-b from-indigo-400 to-blue-400  shadow-md rounded-full"></div>
+        <div className="w-8 h-8 rounded-full">
+          <UserButton afterSignOutUrl={NextRoutes.SignIn} />
+        </div>
       </div>
       <div className="p-6 lg:p-12 w-full h-full overflow-auto">
         <AddModuleModal

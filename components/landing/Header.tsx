@@ -1,4 +1,3 @@
-import { UserButton } from "@clerk/clerk-react";
 import { EdugatorLogo } from "components/navigation/navIcons";
 import { useEffect, useState } from "react";
 import { GradientButton } from "./GradientButton";
@@ -140,9 +139,6 @@ const Header = () => {
         </div>
         <div className="flex justify-end col-span-2 lg:col-span-1 lg:space-x-4">
           <GradientButton text="Beta" href="/code" />
-          <UserButton
-            afterSignOutUrl={NextRoutes.SignIn}
-          />
         </div>
       </div>
     </header>

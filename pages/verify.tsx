@@ -10,10 +10,21 @@ import AuthCode from "react-auth-code-input";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import Link from "next/link";
 import { useSignUp } from "@clerk/nextjs";
-import { Routes } from "constants/navigationRoutes";
+import { NextRoutes, Routes } from "constants/navigationRoutes";
+import { toast } from "react-hot-toast";
 
 const VerifyPage = () => {
   const router = useRouter();
+  const { email, role } = router.query;
+
+  // if user has accessed this page without going through the sign up process, direct them to sign up
+  // note does not prevent someone manually entering the url with query params
+  // so we should do this with a clerk hook instead?
+  useEffect(() => {
+    if (!email || !role) {
+      router.push("/sign-up");
+    }
+  }, []);
 
   const [code, setCode] = useState("");
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -41,10 +52,19 @@ const VerifyPage = () => {
           return;
         }
         await setActive({ session: completeSignUp.createdSessionId });
+        toast.success("Account verified!");
 
         // TODO: Add toast notification
-        // make planetscale query to create user
-        router.push(Routes.Landing);
+        // make planetscale query to create user (nvm, do this as a webhook)
+        if (!role) {
+          toast.error("No role provided. Please try again.");
+        } else if (role === "student") {
+          router.push(NextRoutes.Code);
+        } else if (role === "instructor") {
+          router.push(NextRoutes.AdminDashboard);
+        } else {
+          toast.error("Invalid role. Please try again.");
+        }
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
@@ -64,8 +84,8 @@ const VerifyPage = () => {
             Verify your account
           </h1>
           <p className="text-white/80 text-sm font-dm text-center">
-            We've sent a code to your email - INSERT_EMAIL_HERE. Please enter
-            the code below.
+            We've sent a verification code to {email || ""}. Please enter the
+            code below.
           </p>
         </div>
       </div>
