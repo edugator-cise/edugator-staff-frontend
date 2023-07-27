@@ -7,10 +7,13 @@ import {
 } from "utils/CodeEditorUtils";
 import { IResultSubmission, IToken } from "components/problem/student/types";
 import { IJudge0Response } from "components/problem/student/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CompilerOutput } from "./types";
 import { apiRoutes } from "constants/apiRoutes";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
+const SOCKET_URL = "wss://edugator.prayujt.com/api/v2?token=sadasfaf";
 
 export interface ResponseGenerator {
   config?: any;
@@ -35,6 +38,33 @@ const getCodeRequest = ({
 };
 
 export const useRunCode = (locationState: string) => {
+  const { sendMessage, lastMessage, readyState, getWebSocket } =
+    useWebSocket(SOCKET_URL);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  useEffect(() => {
+    console.log("readyState", readyState);
+    console.log("connectionStatus", connectionStatus);
+  }, [readyState]);
+
+  const [messageHistory, setMessageHistory] = useState([]);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage.data));
+    }
+    console.log("lastMessage", lastMessage);
+  }, [lastMessage, setMessageHistory]);
+
+  const handleClickSendMessage = useCallback(() => sendMessage("Hello"), []);
+
   const [stdIn, setStdIn] = useState<string>("");
   const [isSubmissionRunning, setIsSubmissionRunning] =
     useState<boolean>(false);
@@ -79,9 +109,74 @@ export const useRunCode = (locationState: string) => {
   }) => {
     setIsSubmissionRunning(true);
     try {
+      // connect to the websocket
+      if (readyState !== ReadyState.OPEN) {
+        console.log("not open");
+        toast.error("Websocket not connected");
+        return;
+      } /* 
+
+      // wait until the websocket is connected
+      while (readyState !== ReadyState.OPEN) {
+        setTimeout(() => {
+          console.log("waiting");
+        }, 1000);
+      }
+
+      if (readyState !== ReadyState.OPEN) {
+        console.log("not open");
+        toast.error("Websocket not connected");
+        return;
+      }
+
+      // send the message
+      sendMessage(
+        JSON.stringify({
+          language_id: 71,
+          source_code: code,
+          stdin,
+          expected_output: "",
+          cpu_time_limit: timeLimit,
+          memory_limit: memoryLimit,
+          build_command: buildCommand,
+        })
+      );
+
+      // wait for the response
+      while (lastMessage === null) {
+        setTimeout(() => {
+          console.log("waiting");
+        }, 1000);
+      }
+
+      if (lastMessage === null) {
+        console.log("no message");
+        toast.error("No message received");
+        return;
+      }
+
+      // get the token from the response
+      const token = JSON.parse(lastMessage.data).token;
+
+      if (!token || token === "") {
+        console.log("no toke");
+        toast.error("Token not present");
+        return;
+      }
+
+      // get the response from the api
+      const { data }: { data: IJudge0Response } = await poll(
+        getCodeRequest,
+        { runId: token, base_64: true },
+        judge0Validator,
+        3000,
+        4
+      );
+ */
       console.log("hereee");
-      const { data }: { data: IToken } = await apiClient.post(
-        apiRoutes.v2.student.runCode,
+      await apiClient.post(
+        // apiRoutes.v2.student.runCode,
+        "https://edugator.prayujt.com/api/v2/code/run/evaluate",
         transformPayload({
           code,
           stdin,
@@ -89,8 +184,15 @@ export const useRunCode = (locationState: string) => {
           timeLimit,
           memoryLimit,
           buildCommand,
-        })
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "sadasfaf",
+          },
+        }
       );
+      /* 
       console.log("here");
       if (!data.token || data.token === "") {
         console.log("no toke");
@@ -121,7 +223,7 @@ export const useRunCode = (locationState: string) => {
           base64: true,
           token: data.token,
         },
-      });
+      }); */
     } catch (error: any) {
       setIsSubmissionRunning(false);
       toast.error(error.message || "Something went wrong");
