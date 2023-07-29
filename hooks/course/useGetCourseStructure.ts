@@ -26,32 +26,36 @@ export interface ModuleContent {
 
 type GetCourseStructureParams = {
   courseId: string;
+  admin?: boolean;
 };
 
 export const COURSE_STRUCTURE_QUERY_KEY = "courseStructure";
 
-export const useGetCourseStructure = ({ admin }: { admin?: boolean }) => {
-  const { courseId } = useSelector((state: RootState) => state.course);
+const fetchCourseStructure = async ({
+  courseId,
+  admin,
+}: GetCourseStructureParams): Promise<CourseStructure> => {
+  const { data } = await apiClient.get(
+    admin
+      ? apiRoutes.v2.admin.getStructure(courseId)
+      : apiRoutes.v2.student.getStructure(courseId)
+  );
+  return data;
+};
 
-  if (!courseId) {
-    toast.error("Course id not found");
-    throw new Error("Course id not found");
-  }
-
-  const fetchCourseStructure = async ({
-    courseId,
-  }: GetCourseStructureParams): Promise<CourseStructure> => {
-    const { data } = await apiClient.get(
-      admin
-        ? apiRoutes.v2.admin.getStructure(courseId)
-        : apiRoutes.v2.student.getStructure(courseId)
-    );
-    return data;
-  };
-
+export const useGetCourseStructure = ({
+  admin,
+  courseId,
+}: {
+  admin?: boolean;
+  courseId: string;
+}) => {
   return useQuery<CourseStructure, Error>({
     queryKey: [COURSE_STRUCTURE_QUERY_KEY, courseId],
-    queryFn: () => fetchCourseStructure({ courseId }),
+    queryFn: () => fetchCourseStructure({ courseId, admin }),
     refetchOnWindowFocus: false,
+    onError: () => {
+      toast.error("Error loading course structure");
+    },
   });
 };

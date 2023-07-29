@@ -106,7 +106,23 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
 
   const router = useRouter();
   const params = router.query;
-  const { moduleName, moduleId, lessonId } = params;
+  const {
+    lessonId,
+    moduleName: queryModuleName,
+    moduleId: queryModuleId,
+  } = params;
+
+  const courseId = params.courseId as string;
+
+  const { moduleName: fetchedModuleName, moduleId: fetchedModuleId } =
+    lesson || {};
+
+  const moduleName = queryModuleName ?? fetchedModuleName;
+  const moduleId = queryModuleId ?? fetchedModuleId;
+
+  console.log(moduleName);
+  console.log(queryModuleName);
+  console.log(fetchedModuleName);
 
   // MUTATORS
 
@@ -136,7 +152,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
     setDeleteModalOpen(false);
     /* setSettingsOpen(false); */
     // navigate to module page
-    router.push(`/admin/dashboard`);
+    router.push(`/courses/${courseId}/`);
   };
 
   // REDUCER (for local lesson state)
@@ -210,6 +226,8 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       content: content,
       hidden: false, // TODO: add hidden checkbox
       moduleId: moduleId as string,
+      author: "",
+      difficulty: "",
     });
   };
 
@@ -222,11 +240,23 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
       return;
     }
     // update lesson
-    await updateLesson({
-      title: lessonState.title as string,
-      content: JSON.stringify(lessonState.content),
-      hidden: false, // TODO: add hidden checkbox
-    });
+    await updateLesson(
+      {
+        title: lessonState.title as string,
+        content: JSON.stringify(lessonState.content),
+        hidden: false, // TODO: add hidden checkbox
+      },
+      {
+        onSuccess: () => {
+          toast.success("Lesson saved successfully.");
+          setUnsavedChanges(false);
+          toggleEditable(false);
+        },
+        onError: () => {
+          toast.error("Something went wrong. Please try again.");
+        },
+      }
+    );
   };
 
   // EDITOR INITIALIZATION
@@ -584,7 +614,9 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           !editable ? "-mt-[54px] !cursor-not-allowed pointer-events-none" : ""
         }`}
       >
-        <div className="flex flex-wrap gap-2 items-center">
+        <div
+          className={`flex  gap-2 items-center ${!editable ? "" : "flex-wrap"}`}
+        >
           <Tooltip.Provider delayDuration={400}>
             {menuOptions(
               openLinkModal, // on link click

@@ -4,7 +4,7 @@ import React, { ButtonHTMLAttributes } from "react";
 // it can be red, green, or blue
 
 type CustomButtonProps = {
-  color: "red" | "green" | "blue" | "gray";
+  color: "red" | "green" | "blue" | "gray" | "purple";
   children: React.ReactNode;
   className?: string;
   containerClassName?: string;
@@ -17,7 +17,7 @@ const ActionButton: React.FC<CustomButtonProps> = ({
   color = "blue",
   ...rest
 }: {
-  color?: "red" | "green" | "blue" | "gray";
+  color?: "red" | "green" | "blue" | "gray" | "purple";
   className?: string;
   containerClassName?: string;
   children: React.ReactNode;
@@ -31,6 +31,8 @@ const ActionButton: React.FC<CustomButtonProps> = ({
       return "bg-gradient-to-b from-red-300 via-red-300 to-red-500 shadow-red-500/10 hover:shadow-red-500/10";
     if (color === "gray")
       return "bg-gradient-to-b from-gray-300 via-gray-300 to-gray-400 shadow-gray-500/10 hover:shadow-gray-500/10";
+    if (color === "purple")
+      return "bg-gradient-to-b from-violet-300 via-violet-300 to-violet-500 shadow-violet-500/10 hover:shadow-violet-500/10";
   };
 
   const innerClassName = () => {
@@ -38,6 +40,7 @@ const ActionButton: React.FC<CustomButtonProps> = ({
     if (color === "green") return "bg-emerald-500";
     if (color === "red") return "bg-red-500";
     if (color === "gray") return "bg-gray-400";
+    if (color === "purple") return "bg-violet-500";
   };
 
   return (

@@ -173,17 +173,14 @@ const DeleteModuleModal = ({
 };
 
 const AdminContentSidebar = ({
-  activeContent,
-  setActiveContent,
-  dropdownHeights,
-  recalculateDropdownHeights,
+  courseId,
 }: {
-  activeContent: ContentType;
-  setActiveContent: (activeContent: ContentType) => void;
-  dropdownHeights: Record<number, number>;
-  recalculateDropdownHeights: () => void;
+  courseId: string | undefined;
 }) => {
   const [openModules, setOpenModules] = useState<string[]>([]);
+
+  // modal controls
+
   const [newModuleModalOpen, setNewModuleModalOpen] = useState(false);
   const [deleteModuleModalOpen, setDeleteModuleModalOpen] = useState(false);
   const [deleteLessonModalOpen, setDeleteLessonModalOpen] = useState(false);
@@ -191,6 +188,60 @@ const AdminContentSidebar = ({
 
   const [moduleToDelete, setModuleToDelete] = useState<string>("");
   const [itemToDelete, setItemToDelete] = useState<string>("");
+
+  const [activeContent, setActiveContent] = useState<ContentType>("all");
+
+  const {
+    data: courseStructure,
+    isLoading: courseStructureLoading,
+    isError: courseStructureError,
+  } = useGetCourseStructure({
+    courseId: courseId as string,
+    admin: true,
+  });
+
+  // sizing of dropdowns
+
+  const [dropdownHeights, setDropdownHeights] = useState<
+    Record<number, number>
+  >({});
+
+  const [shouldRecalculate, recalculate] = useState({});
+  const recalculateDropdownHeights = () => recalculate({});
+
+  useEffect(() => {
+    calculateDropdownHeights(activeContent);
+  }, [activeContent, courseStructure, shouldRecalculate]);
+
+  const calculateDropdownHeights = (activeContent: ContentType) => {
+    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
+    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
+    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
+    const dropdownHeights: Record<number, number> = {};
+    const dropdowns = document.getElementsByClassName("dropdown");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const allHeight = Array.from(
+        document.getElementsByClassName(`${i}-content-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const lessonHeight = Array.from(
+        document.getElementsByClassName(`${i}-lesson-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const problemHeight = Array.from(
+        document.getElementsByClassName(`${i}-problem-admin`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      if (activeContent === "all") {
+        dropdownHeights[i] = allHeight;
+      } else if (activeContent === "lessons") {
+        dropdownHeights[i] = lessonHeight;
+      } else if (activeContent === "problems") {
+        dropdownHeights[i] = problemHeight;
+      }
+    }
+    setDropdownHeights(dropdownHeights);
+  };
 
   const openDeleteModuleModal = (moduleId: string) => {
     setModuleToDelete(moduleId);
@@ -208,14 +259,6 @@ const AdminContentSidebar = ({
     (state: RootState) => state.interfaceControls
   );
 
-  const {
-    data: courseStructure,
-    isLoading: courseStructureLoading,
-    isError: courseStructureError,
-  } = useGetCourseStructure({
-    admin: true,
-  });
-
   const router = useRouter();
   const { lessonId, problemId } = router.query;
 
@@ -228,11 +271,12 @@ const AdminContentSidebar = ({
   const removeLesson = async () => {
     await deleteLesson(itemToDelete as string);
     setDeleteLessonModalOpen(false);
-    /* setSettingsOpen(false); */
-    // navigate to module page
 
     if (lessonId && lessonId === itemToDelete) {
-      router.push(`/admin/dashboard`);
+      router.push({
+        pathname: "/courses/[courseId]",
+        query: { courseId: courseId },
+      });
     }
   };
 
@@ -248,7 +292,10 @@ const AdminContentSidebar = ({
     /* setSettingsOpen(false); */
     // navigate to module page
     if (problemId && problemId === itemToDelete) {
-      router.push(`/admin/dashboard`);
+      router.push({
+        pathname: "/courses/[courseId]",
+        query: { courseId: courseId },
+      });
     }
   };
 
@@ -516,7 +563,7 @@ const AdminContentSidebar = ({
                                           <Tooltip.Provider delayDuration={100}>
                                             <Tooltip.Root>
                                               <Tooltip.Trigger asChild>
-                                                <button
+                                                <div
                                                   onClick={(e) => {
                                                     e.stopPropagation();
 
@@ -531,7 +578,7 @@ const AdminContentSidebar = ({
                                                     strokeWidth={1.5}
                                                   />
                                                   {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
-                                                </button>
+                                                </div>
                                               </Tooltip.Trigger>
                                               <Tooltip.Portal>
                                                 <Tooltip.Content
@@ -576,6 +623,7 @@ const AdminContentSidebar = ({
                                               </m.div>
                                             ) : (
                                               <ModuleContentList
+                                                courseId={courseId as string}
                                                 activeId={activeId as string}
                                                 module={module}
                                                 allContent={allContent}
@@ -600,147 +648,18 @@ const AdminContentSidebar = ({
                                                   reorderedModules
                                                 }
                                               />
-                                              /* allContent.map(
-                                                (
-                                                  item: ModuleContent,
-                                                  secondaryIndex: number
-                                                ) => {
-                                                  const id = item.id;
-                                                  //check type of item
-                                                  const type = item.contentType;
-
-                                                  const name = item.title;
-
-                                                  return (
-                                                    <Link
-                                                      href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                                                        module.moduleName
-                                                      )}&moduleId=${encodeURIComponent(
-                                                        module.id
-                                                      )}`}
-                                                      key={id}
-                                                    >
-                                                      <m.div
-                                                        initial={{ opacity: 0 }}
-                                                        animate={{
-                                                          opacity: 1,
-                                                          transition: {
-                                                            delay:
-                                                              secondaryIndex *
-                                                              0.1,
-                                                          },
-                                                        }}
-                                                        exit={{ opacity: 0 }}
-                                                        key={`${primaryIndex}-${secondaryIndex}`}
-                                                        className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
-                                                          id === activeId
-                                                            ? "!bg-nav-darkest"
-                                                            : ""
-                                                        }`}
-                                                      >
-                                                        <DropdownMenu.Root>
-                                                          <DropdownMenu.Trigger
-                                                            asChild
-                                                          >
-                                                            <button
-                                                              className={`absolute rounded-md p-1 group/dotgroup top-1/2 -translate-y-1/2 right-4 hover:bg-slate-800`}
-                                                            >
-                                                              <DotsHorizontalIcon
-                                                                className={`w-4 h-4 group-hover/dotgroup:text-white ${
-                                                                  id ===
-                                                                  activeId
-                                                                    ? "text-white"
-                                                                    : "text-slate-400"
-                                                                }`}
-                                                              />
-                                                            </button>
-                                                          </DropdownMenu.Trigger>
-
-                                                          <DropdownMenu.Portal>
-                                                            <DropdownMenu.Content
-                                                              side="bottom"
-                                                              align="start"
-                                                              className="DropdownMenuContent font-dm data-[side=bottom]:animate-slideUpAndFade min-w-[150px] z-50 bg-white rounded-md p-1"
-                                                              sideOffset={5}
-                                                            >
-                                                              <Link
-                                                                href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                                                                  module.moduleName
-                                                                )}&moduleId=${encodeURIComponent(
-                                                                  module.id
-                                                                )}`}
-                                                                key={id}
-                                                              >
-                                                                <DropdownMenu.Item className="space-x-2 font-bold group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-slate-200 cursor-pointer data-[highlighted]:text-slate-600">
-                                                                  <p>Edit</p>
-                                                                </DropdownMenu.Item>
-                                                              </Link>
-                                                              <DropdownMenu.Separator className="h-[1px] bg-slate-200 m-1" />
-                                                              <DropdownMenu.Item
-                                                                onClick={(
-                                                                  e
-                                                                ) => {
-                                                                  e.stopPropagation();
-                                                                  e.preventDefault();
-                                                                  setItemToDelete(
-                                                                    id
-                                                                  );
-                                                                  type ===
-                                                                  "problem"
-                                                                    ? setDeleteProblemModalOpen(
-                                                                        true
-                                                                      )
-                                                                    : setDeleteLessonModalOpen(
-                                                                        true
-                                                                      );
-                                                                }}
-                                                                className="group cursor-pointer text-xs font-bold space-x-2 leading-none rounded-sm flex items-center py-[10px] px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-red-100 data-[highlighted]:text-red-600 text-red-600"
-                                                              >
-                                                                <p>Delete</p>
-                                                              </DropdownMenu.Item>
-                                                              <DropdownMenu.Arrow className="fill-white" />
-                                                            </DropdownMenu.Content>
-                                                          </DropdownMenu.Portal>
-                                                        </DropdownMenu.Root>
-
-                                                        <div className="w-[2px] min-w-[2px] h-full mr-4 flex flex-col relative"></div>
-                                                        <p
-                                                          style={{
-                                                            //clamp lines to 3
-                                                            display:
-                                                              "-webkit-box",
-                                                            WebkitLineClamp: 3,
-                                                            WebkitBoxOrient:
-                                                              "vertical",
-                                                            overflow: "hidden",
-                                                          }}
-                                                          className="text-white text-sm py-4 w-full line"
-                                                        >
-                                                          <span className="text-slate-500 mr-1">
-                                                            {`${
-                                                              primaryIndex + 1
-                                                            }.${
-                                                              secondaryIndex + 1
-                                                            }`}
-                                                          </span>{" "}
-                                                          {`${name}`}
-                                                        </p>
-                                                      </m.div>
-                                                    </Link>
-                                                  );
-                                                }
-                                              ) */
                                             )}
                                           </AnimatePresence>
                                         </AnimateHeight>
                                         <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
                                           <div className="flex space-x-2 w-full">
                                             <Link
-                                              href={`/admin/lesson/create/${
-                                                module.id
-                                              }?moduleName=${encodeURIComponent(
-                                                module.moduleName
-                                              )}`}
+                                              href={{
+                                                pathname: `/courses/${courseId}/lesson/create/${module.id}`,
+                                                query: {
+                                                  moduleName: module.moduleName,
+                                                },
+                                              }}
                                             >
                                               <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
                                                 <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
@@ -750,11 +669,12 @@ const AdminContentSidebar = ({
                                               </div>
                                             </Link>
                                             <Link
-                                              href={`/admin/problem/create/${
-                                                module.id
-                                              }?moduleName=${encodeURIComponent(
-                                                module.moduleName
-                                              )}`}
+                                              href={{
+                                                pathname: `/courses/${courseId}/problem/create/${module.id}`,
+                                                query: {
+                                                  moduleName: module.moduleName,
+                                                },
+                                              }}
                                             >
                                               <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
                                                 <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
@@ -816,6 +736,7 @@ const ModuleContentList = ({
   setActiveContent,
   setReorderedModules,
   reorderedModules,
+  courseId,
 }: {
   module: CourseModule;
   activeId: string;
@@ -828,6 +749,7 @@ const ModuleContentList = ({
   setActiveContent: (activeContent: "problems" | "lessons" | "all") => void;
   setReorderedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>;
   reorderedModules: CourseModule[];
+  courseId: string;
 }) => {
   const [reorderedContent, setReorderedContent] = useState(
     module.content || []
@@ -929,9 +851,9 @@ const ModuleContentList = ({
                   {(provided, snapshot) => (
                     <div ref={provided.innerRef} {...provided.draggableProps}>
                       <Link
-                        href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                          module.moduleName
-                        )}&moduleId=${encodeURIComponent(module.id)}`}
+                        href={{
+                          pathname: `/courses/${courseId}/${type}/edit/${id}`,
+                        }}
                         key={id}
                       >
                         <m.div
@@ -968,9 +890,9 @@ const ModuleContentList = ({
                                 sideOffset={5}
                               >
                                 <Link
-                                  href={`/admin/${type}/edit/${id}?moduleName=${encodeURIComponent(
-                                    module.moduleName
-                                  )}&moduleId=${encodeURIComponent(module.id)}`}
+                                  href={{
+                                    pathname: `/courses/${courseId}/${type}/edit/${id}`,
+                                  }}
                                   key={id}
                                 >
                                   <DropdownMenu.Item className="space-x-2 font-bold group text-xs leading-none rounded-sm flex items-center py-[10px] text-slate-800 px-2 relative pl-2 select-none outline-none data-[disabled]:text-gray-300 data-[disabled]:pointer-events-none data-[highlighted]:bg-slate-200 cursor-pointer data-[highlighted]:text-slate-600">

@@ -1,3 +1,5 @@
+import React from "react";
+import { useRouter } from "next/router";
 import AdminLayout from "components/layouts/AdminLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "lib/store/store";
@@ -32,9 +34,18 @@ import CustomUserButton from "components/navigation/CustomUserButton";
 import { AddProblemModal } from "components/shared/Modals/AddProblemModal";
 import { AddLessonModal } from "components/shared/Modals/AddLessonModal";
 
-const ModulesPage = () => {
+// if course does not exist, or user does not have permission to access the courseId,
+// we will redirect them elsewhere or return a 404 (preferably the latter)
+
+const CourseHome = () => {
+  const router = useRouter();
+  const { courseId } = router.query;
+
+  console.log("COURSEID", courseId);
+
   const { data: courseStructureData, isFetching: courseStructureFetching } =
     useGetCourseStructure({
+      courseId: courseId as string,
       admin: true,
     });
 
@@ -250,8 +261,8 @@ const NewSection = ({
   );
 };
 
-ModulesPage.getLayout = (page: React.ReactNode) => (
-  <AdminLayout pageTitle="Modules">{page}</AdminLayout>
-);
+CourseHome.getLayout = (page: React.ReactNode) => {
+  return <AdminLayout pageTitle="Course Home">{page}</AdminLayout>;
+};
 
-export default ModulesPage;
+export default CourseHome;

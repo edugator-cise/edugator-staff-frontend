@@ -64,53 +64,10 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const locationState = router.asPath;
 
-  const [activeContent, setActiveContent] = useState<ContentType>("all");
+  const { courseId = undefined } = router.query;
 
-  const [dropdownHeights, setDropdownHeights] = useState<
-    Record<number, number>
-  >({});
-
-  const [shouldRecalculate, recalculate] = useState({});
-  const recalculateDropdownHeights = () => recalculate({});
-
-  // run the function to calculate dropdown heights when the activeContent or the course structure changes
-  const { data: courseStructureData } = useGetCourseStructure({ admin: true });
-
-  useEffect(() => {
-    calculateDropdownHeights(activeContent);
-  }, [activeContent, courseStructureData, shouldRecalculate]);
-
-  const calculateDropdownHeights = (activeContent: ContentType) => {
-    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
-    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
-    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
-    const dropdownHeights: Record<number, number> = {};
-    const dropdowns = document.getElementsByClassName("dropdown");
-    for (let i = 0; i < dropdowns.length; i++) {
-      const allHeight = Array.from(
-        document.getElementsByClassName(`${i}-content-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      const lessonHeight = Array.from(
-        document.getElementsByClassName(`${i}-lesson-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      const problemHeight = Array.from(
-        document.getElementsByClassName(`${i}-problem-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
-
-      if (activeContent === "all") {
-        dropdownHeights[i] = allHeight;
-      } else if (activeContent === "lessons") {
-        dropdownHeights[i] = lessonHeight;
-      } else if (activeContent === "problems") {
-        dropdownHeights[i] = problemHeight;
-      }
-    }
-    setDropdownHeights(dropdownHeights);
-  };
+  console.log("COURSEID", courseId);
 
   const { adminContentSidebarHidden, adminMainSidebarHidden } = useSelector(
     (state: RootState) => state.interfaceControls
@@ -151,35 +108,28 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
             : "w-5 min-w-[5rem]"
         }`}
       >
-        <AdminNavigation />
+        <AdminNavigation courseId={courseId as string} />
       </div>
 
       {/* Divider between sidebars */}
-      <div
-        style={{
-          left: mobileView ? -1 : dividerOffset(),
-        }}
-        className="w-px h-full absolute transition-all bg-slate-800 z-[100] min-w-[1px] ease-[cubic-bezier(0.87,_0,_0.13,_1)]"
-      />
 
       <div className="w-full h-full flex flex-col">
         <div className="flex w-full h-full">
           {/* Content sidebar */}
-          <div
-            style={{
-              left: mobileView
-                ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
-                : contentSidebarOffset(),
-            }}
-            className={`mobile:left-auto !absolute top-0 transition-all h-full ease-[cubic-bezier(0.87,_0,_0.13,_1)]`}
-          >
-            <AdminContentSidebar
-              dropdownHeights={dropdownHeights}
-              setActiveContent={setActiveContent}
-              activeContent={activeContent}
-              recalculateDropdownHeights={recalculateDropdownHeights}
-            />
-          </div>
+          {/* If no course is selected, don't render content sidebar */}
+          {courseId && (
+            <div
+              style={{
+                left: mobileView
+                  ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
+                  : contentSidebarOffset(),
+              }}
+              className={`mobile:left-auto !absolute top-0 transition-all h-full ease-[cubic-bezier(0.87,_0,_0.13,_1)]`}
+            >
+              {/* Conditionally render student or admin content sidebar. Based on user role in selected course */}
+              <AdminContentSidebar courseId={courseId as string} />
+            </div>
+          )}
 
           {/* Content Holder */}
           <div
@@ -187,7 +137,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               paddingTop: mobileView ? 56 : 0,
               paddingLeft: laptopView ? laptopContentMargin() : contentMargin(),
             }}
-            className={`relative w-full min-h-screen h-screen pb-12 transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+            className={`relative w-full min-h-screen h-screen transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
               tabletView ? "!pl-[80px]" : ""
             } ${mobileView ? "!pl-0" : ""}`}
           >

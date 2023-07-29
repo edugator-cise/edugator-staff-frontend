@@ -134,6 +134,61 @@ export const EdugatorFullLogo = () => (
 );
 
 export const icons: Record<string, (active: boolean) => JSX.Element> = {
+  home: (active: boolean) => (
+    <svg
+      className="w-full h-full"
+      viewBox="0 0 25 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_1943_2)">
+        <path
+          d="M0.5 11.6167C0.5 11.1411 0.697561 10.6869 1.04545 10.3627L11.9422 0.206352C12.2632 -0.0687841 12.7368 -0.0687838 13.0578 0.206352L23.9545 10.3627C24.3025 10.6869 24.5 11.1411 24.5 11.6167V21.4286C24.5 22.8487 23.3487 24 21.9286 24H3.07143C1.65127 24 0.5 22.8487 0.5 21.4286V11.6167Z"
+          className={iconClassName(active, "light")}
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1943_2">
+          <rect
+            width="24"
+            height="24"
+            fill="white"
+            transform="translate(0.5)"
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
+  home2: (active: boolean) => (
+    <svg
+      className="w-full h-full"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_1943_15)">
+        <path
+          d="M3.42856 22.2859V12.0001L12 3.42871L20.5714 12.0001V22.2859C20.5714 23.2327 19.8039 24.0001 18.8571 24.0001H5.14284C4.19608 24.0001 3.42856 23.2327 3.42856 22.2859Z"
+          className={iconClassName(active, "light")}
+        />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M10.7878 2.21645C11.4573 1.54699 12.5427 1.54699 13.2122 2.21645L23.4979 12.5022C24.1673 13.1716 24.1673 14.2571 23.4979 14.9265C22.8285 15.596 21.743 15.596 21.0735 14.9265L12 5.853L2.92647 14.9265C2.25699 15.596 1.17157 15.596 0.502102 14.9265C-0.167367 14.2571 -0.167367 13.1716 0.502102 12.5022L10.7878 2.21645Z"
+          className={iconClassName(active, "dark")}
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1943_15">
+          <rect
+            width="24"
+            height="24"
+            className={iconClassName(active, "dark")}
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
   dashboard: (active: boolean) => (
     <svg
       className="w-full h-full"

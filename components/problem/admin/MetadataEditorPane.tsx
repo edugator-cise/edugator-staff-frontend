@@ -149,7 +149,7 @@ const MetadataEditorPane = ({
   });
 
   return (
-    <div className={`w-full h-auto p-4 overflow-y-scroll bg-slate-100`}>
+    <div className={`w-full h-auto p-4 overflow-y-scroll scroll bg-slate-100`}>
       <div className="h-auto w-full flex flex-col space-y-4">
         {/* <div className={`flex w-full items-center justify-center`}>
               <h1 className="text-xl text-left w-full font-dm font-bold">

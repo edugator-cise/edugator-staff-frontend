@@ -131,6 +131,17 @@
 }
 
 
+.PopoverContent[data-state="open"][data-side="bottom"][data-align="end"] {
+  transform-origin: top right;
+  animation: fadeIn 150ms ease-out;
+}
+
+.PopoverContent[data-state="closed"][data-side="bottom"][data-align="end"] {
+  transform-origin: top right;
+  animation: fadeOut 150ms ease-out;
+}
+
+
 .SelectContent[data-state="open"][data-side="bottom"] {
   transform-origin: top;
   animation: fadeIn 150ms ease-out;

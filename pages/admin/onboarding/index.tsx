@@ -238,7 +238,7 @@ const OnboardingScreen = () => {
       </div>
 
       <div className="w-full flex justify-between items-center">
-        <Link href="/admin/dashboard">
+        <Link href="/courses">
           <p className="text-white/80 text-sm font-dm hover:text-white hover:underline cursor-pointer">
             Do this later
           </p>

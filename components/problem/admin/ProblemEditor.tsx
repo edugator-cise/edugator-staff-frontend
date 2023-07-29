@@ -70,7 +70,13 @@ export const DeleteProblemModal = ({
 
 const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
   const router = useRouter();
-  const { problemId, moduleId, moduleName } = router.query;
+  const {
+    problemId,
+    moduleName: queryModuleName,
+    moduleId: queryModuleId,
+  } = router.query;
+
+  const { courseId } = router.query;
 
   const {
     id,
@@ -91,17 +97,18 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
     createdAt,
     updatedAt,
     testCases,
+    moduleName: fetchedModuleName,
+    moduleId: fetchedModuleId,
   } = problem || {};
+
+  const moduleId = queryModuleId || fetchedModuleId;
+  const moduleName = queryModuleName || fetchedModuleName;
 
   const [unsavedChanges, setUnsavedChanges] = useState(false); // set to true when user makes changes to anything in problem state
   const [editable, setEditable] = useState(problem ? false : true); // set to true when user clicks "edit" button
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false); // set to true when user tries navigating away from page with unsaved changes
-
-  useEffect(() => {
-    console.log(problem);
-  }, [problem]);
 
   // REDUCER
 
@@ -267,6 +274,10 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
         feedback: "",
         testType: "unit",
       })),
+      // awaiting impl
+      difficulty: "",
+      author: "",
+      codeSolution: "",
     });
   };
 
@@ -276,7 +287,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
     setDeleteModalOpen(false);
     setSettingsOpen(false);
     // navigate to module page
-    router.push(`/admin/dashboard`);
+    router.push(`/courses/${courseId}/`);
   };
 
   // Save changes to existing lesson
@@ -286,31 +297,43 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
       return;
     }
     // update lesson
-    await updateProblem({
-      moduleId: moduleId as string,
-      title: problemState.title,
-      statement: stringifyContent(problemState.statement),
-      hidden: problemState.hidden,
-      fileName: problemState.fileName,
-      dueDate: problemState.dueDate,
-      codeHeader: problemState.codeHeader,
-      codeBody: problemState.codeBody,
-      codeFooter: problemState.codeFooter,
-      templatePackage: problemState.templatePackage,
-      timeLimit: problemState.timeLimit,
-      memoryLimit: problemState.memoryLimit,
-      buildCommand: problemState.buildCommand,
-      languages: problemState.languages,
-      testCases: problemState.testCases.map((testCase, i) => ({
-        input: testCase.input,
-        expectedOutput: testCase.expectedOutput,
-        hint: testCase.hint,
-        visibility: testCase.visibility,
-        orderNumber: i,
-        feedback: "",
-        testType: "unit",
-      })),
-    });
+    await updateProblem(
+      {
+        moduleId: moduleId as string,
+        title: problemState.title,
+        statement: stringifyContent(problemState.statement),
+        hidden: problemState.hidden,
+        fileName: problemState.fileName,
+        dueDate: problemState.dueDate,
+        codeHeader: problemState.codeHeader,
+        codeBody: problemState.codeBody,
+        codeFooter: problemState.codeFooter,
+        templatePackage: problemState.templatePackage,
+        timeLimit: problemState.timeLimit,
+        memoryLimit: problemState.memoryLimit,
+        buildCommand: problemState.buildCommand,
+        languages: problemState.languages,
+        testCases: problemState.testCases.map((testCase, i) => ({
+          input: testCase.input,
+          expectedOutput: testCase.expectedOutput,
+          hint: testCase.hint,
+          visibility: testCase.visibility,
+          orderNumber: i,
+          feedback: "",
+          testType: "unit",
+        })),
+      },
+      {
+        onSuccess: () => {
+          setUnsavedChanges(false);
+          setEditable(false);
+          toast.success("Problem saved successfully.");
+        },
+        onError: () => {
+          toast.error("Error saving problem.");
+        },
+      }
+    );
   };
 
   return (

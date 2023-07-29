@@ -1,7 +1,6 @@
 import AdminLayout from "components/layouts/AdminLayout";
-import ActionButton from "components/shared/Buttons/ActionButton";
 import { NextPage } from "next";
-import { ListBullets, FileCode, FileText } from "phosphor-react";
+import { ListBullets } from "phosphor-react";
 import React from "react";
 
 const BlankContentPage = () => {
@@ -25,24 +24,6 @@ const BlankContentPage = () => {
           Select a lesson or problem from the left sidebar to view or edit it
           here.
         </p>
-        {/*  <div className="flex space-x-2 items-center">
-          <ActionButton
-            color="purple"
-            className="text-sm font-dm px-4 flex flex-col !items-start !space-x-0 space-y-1 !pt-16"
-            containerClassName="w-fit"
-          >
-            <FileText size={18} weight="duotone" />
-            <span>Add Lesson</span>
-          </ActionButton>
-          <ActionButton
-            color="blue"
-            className="text-sm font-dm px-4 flex flex-col !items-start !space-x-0 space-y-1 !pt-16"
-            containerClassName="w-fit"
-          >
-            <FileCode size={18} weight="duotone" />
-            <span>Add Coding Question</span>
-          </ActionButton>
-        </div> */}
       </div>
     </div>
   );

@@ -15,6 +15,8 @@ export interface LessonCreate {
   content: string;
   hidden: boolean;
   moduleId: string;
+  author: string;
+  difficulty: string;
 }
 
 const createLesson = async (lesson: LessonCreate): Promise<Lesson> => {
@@ -28,7 +30,8 @@ const createLesson = async (lesson: LessonCreate): Promise<Lesson> => {
 export const useCreateLesson = (moduleId: string) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { courseId } = useSelector((state: RootState) => state.course);
+
+  const { courseId } = router.query;
 
   if (!courseId) {
     throw new Error("Course id not found");
@@ -41,16 +44,13 @@ export const useCreateLesson = (moduleId: string) => {
       toast.success("Lesson created successfully");
 
       const id = data.id;
-      const moduleId = data.moduleId;
-      const moduleName = data.moduleName || "Module Name";
 
       console.log(data);
 
       router.push({
-        pathname: `/admin/lesson/edit/${id}`,
+        pathname: `/courses/${courseId}/lesson/edit/${id}`,
         query: {
-          moduleName: moduleName,
-          moduleId: moduleId,
+          courseId,
         },
       });
     },

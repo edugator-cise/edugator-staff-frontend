@@ -61,7 +61,7 @@ const VerifyPage = () => {
         } else if (role === "student") {
           router.push(NextRoutes.Code);
         } else if (role === "instructor") {
-          router.push(NextRoutes.AdminDashboard);
+          router.push(NextRoutes.Dashboard);
         } else {
           toast.error("Invalid role. Please try again.");
         }

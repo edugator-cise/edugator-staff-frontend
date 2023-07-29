@@ -34,6 +34,10 @@ type ProblemCreate = {
   languages: string;
   moduleId: string;
   testCases: TestCaseCreate[];
+  //awaiting impl
+  difficulty: string;
+  author: string;
+  codeSolution: string;
 };
 
 // takes in ProblemCreate, returns a Problem object. define type as promise
@@ -48,23 +52,22 @@ const createProblem = async (problem: ProblemCreate): Promise<Problem> => {
 export const useCreateProblem = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { courseId } = useSelector((state: RootState) => state.course);
+
+  const { courseId } = router.query;
+
   return useMutation<Problem, Error, ProblemCreate>(createProblem, {
     onSuccess: (data) => {
       queryClient.invalidateQueries([COURSE_STRUCTURE_QUERY_KEY, courseId]);
       toast.success("Problem created successfully");
 
       const id = data.id;
-      const moduleId = data.moduleId;
-      const moduleName = data.moduleName || "Module Name";
 
       console.log(data);
 
       router.push({
-        pathname: `/admin/problem/edit/${id}`,
+        pathname: `/courses/${courseId}/problem/edit/${id}`,
         query: {
-          moduleName: moduleName,
-          moduleId: moduleId,
+          courseId,
         },
       });
     },
