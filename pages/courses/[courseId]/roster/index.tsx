@@ -23,12 +23,6 @@ const RosterPage = () => {
         setOpen={setAddStudentModalOpen}
       />
 
-      <div className="w-full h-[3.5rem] py-3 px-4 flex justify-between items-center bg-white border-b">
-        <div />
-        <div className="w-8 h-8 rounded-full">
-          <UserButton afterSignOutUrl={NextRoutes.SignIn} />
-        </div>
-      </div>
       <div className="p-6 lg:p-12 w-full h-full !overflow-y-auto">
         <div className="w-full max-w-7xl flex flex-col">
           <div className="flex space-x-6 items-center">

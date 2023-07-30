@@ -81,6 +81,7 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
           {/* <UserButton hidden={adminMainSidebarHidden} /> */}
 
           {/* Divider */}
+
           <Divider />
           {/* Collapse/Expand Button */}
           <NavLinkTooltip text={"Expand"} disabled={!adminMainSidebarHidden}>
@@ -211,17 +212,13 @@ export const CourseSection = () => {
           router.push({
             pathname: `/courses/${value}`,
           });
-          //dispatch(setCourseId(value));
           console.log(sampleCourses.find((c) => c.id === value));
-          /* dispatch(
-            setCourse(sampleCourses.find((c) => c.id === value) as Course)
-          ); */
         }}
         value={courseId as string | undefined}
       >
         {/* add in 'bg-gradient-t-b' for depth below */}
         <Select.Trigger
-          className={`flex bg-black/20 font-dm relative items-center justify-between transition-all space-x-2 rounded-[7px] text-sm leading-none w-full text-white data-[placeholder]:text-slate-400 ${
+          className={`flex outline-none focus:ring-2 focus:ring-white/20 focus:ring-inset bg-black/20 font-dm relative items-center justify-between transition-all space-x-2 text-sm leading-none w-full text-white data-[placeholder]:text-slate-400 ${
             adminMainSidebarHidden ? "p-[11px]" : "p-4"
           }`}
           aria-label="Select an organization"
@@ -271,16 +268,16 @@ export const CourseSection = () => {
           <Select.Content
             position="popper"
             side={adminMainSidebarHidden ? "right" : "bottom"}
-            sideOffset={adminMainSidebarHidden ? 10 : -48}
+            sideOffset={adminMainSidebarHidden ? 5 : -48}
             align={adminMainSidebarHidden ? "start" : "center"}
-            className={`SelectContent bg-[#3A3F49] dark:bg-[#484F5B]  from-[#3A3F49] dark:from-[#484F5B] via-[#242934] dark:via-[#242934] via-[12px] to-[#242934] dark:to-[#242934] p-px z-50 font-dm data-[state=closed]:animate-slideUp overflow-hidden rounded-lg ${
+            alignOffset={adminMainSidebarHidden ? 4 : 0}
+            className={`SelectContent bg-nav-dark border border-white/10 z-50 font-dm data-[state=closed]:animate-slideUp overflow-hidden rounded-lg ${
               adminMainSidebarHidden
                 ? "w-[250px]"
                 : "w-[calc(var(--radix-select-trigger-width)+16px)]"
             }`}
           >
-            {/* add in 'bg-gradient-t-b' for depth above */}
-            <Select.Viewport className="bg-[#242934] dark:bg-[#333B49] rounded-[7px]">
+            <Select.Viewport className="">
               <Select.Group>
                 <Select.Label className="text-xs leading-[25px] text-gray-400 py-[6px] px-3 !font-bold">
                   Select course
@@ -289,7 +286,7 @@ export const CourseSection = () => {
                   <Select.Item
                     key={course.id}
                     value={course.id}
-                    className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#2F343E] dark:data-[highlighted]:bg-[#3D4552] data-[highlighted]:border-y-[#3A3F49] dark:data-[highlighted]:border-y-[#484F5B] border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
+                    className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-white/5 data-[highlighted]:border-y-white/10 border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
                   >
                     <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
                       <Image
@@ -314,7 +311,7 @@ export const CourseSection = () => {
                     </Select.ItemIndicator>
                   </Select.Item>
                 ))}
-                <button className="text-xs leading-[25px] text-gray-400 w-full flex items-center justify-start space-x-2 hover:bg-[#2F343E] dark:hover:bg-[#3D4552] hover:border-t-[#3A3F49] dark:hover:border-t-[#484F5B] border-t border-t-transparent py-[6px] px-3 !font-bold">
+                <button className="text-xs leading-[25px] text-gray-400 w-full flex items-center justify-start space-x-2 hover:bg-white/5 hover:border-t-white/10 border-t border-t-transparent py-[6px] px-3 !font-bold">
                   <PlusIcon />
                   <p>Create new course</p>
                 </button>
@@ -373,28 +370,23 @@ export const CourseSection = () => {
 
           if (link.id === "content") {
             return (
-              <NavLinkTooltip text={"RIVE"} disabled={adminMainSidebarHidden}>
+              <NavLinkTooltip
+                text={"Course Content"}
+                disabled={!adminMainSidebarHidden}
+              >
                 <button
                   onClick={() => {
                     clickHandler();
                   }}
                   className={`w-full border border-transparent h-[42px] transition rounded-[6px] overflow-hidden box-border flex items-center justify-start pl-2 pr-[10px] group space-x-4 ${
-                    activeLink.id === "content" ||
-                    pathname.includes("content") ||
-                    pathname.includes("lesson") ||
-                    pathname.includes("problem")
+                    activeIndex() === 1
                       ? "bg-blue-300/20 text-white "
                       : "text-nav-inactive-light hover:bg-blue-300/5"
                   }`}
                 >
                   <div
                     className={`w-[23px] h-[23px] min-w-[23px] ${
-                      activeLink.id === "content" ||
-                      pathname.includes("content") ||
-                      pathname.includes("lesson") ||
-                      pathname.includes("problem")
-                        ? ""
-                        : "grayscale"
+                      activeIndex() === 1 ? "" : "grayscale"
                     }`}
                   >
                     <RiveComponent />

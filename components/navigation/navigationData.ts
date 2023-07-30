@@ -32,7 +32,9 @@ export type AdminNavLinkText =
   | "Course Content"
   | "Blank"
   | "Course Roster"
-  | "Course Home";
+  | "Course Home"
+  | "Home"
+  | "Roster";
 
 export const navLinks: NavLinkItem[] = [
   {
@@ -68,7 +70,7 @@ export const navLinks: NavLinkItem[] = [
 export const adminNavLinks: NavLinkItem[] = [
   {
     icon: icons.dashboard2,
-    text: "Course Home",
+    text: "Home",
     id: "home",
     toggleExercises: false,
     href: "/",
@@ -82,7 +84,7 @@ export const adminNavLinks: NavLinkItem[] = [
   },
   {
     icon: icons.usersMultiple,
-    text: "Course Roster",
+    text: "Roster",
     id: "roster",
     toggleExercises: false,
     href: "/roster",

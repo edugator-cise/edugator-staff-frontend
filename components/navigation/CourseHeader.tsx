@@ -36,11 +36,11 @@ const UserButton = () => {
         align="end"
         side="bottom"
         sideOffset={5}
-        className="PopoverContent z-50 border-[#3A3F49] dark:border-[#484F5B] bg-[#242934] dark:bg-[#333B49] min-w-[200px] max-w-[300px] border rounded-lg shadow-md flex flex-col"
+        className="PopoverContent z-50 border-white/10 bg-nav-dark min-w-[200px] max-w-[300px] border rounded-lg shadow-md flex flex-col"
       >
         <ul className="space-y-2">
           <li className="flex space-x-4 items-center p-4 pb-2 rounded-sm ">
-            <div className="w-10 h-10 min-w-[40px] rounded-full relative focus:ring-2 outline-none transition">
+            <div className="w-8 h-8 min-w-[32px] rounded-full relative focus:ring-2 outline-none transition">
               <Image
                 src={
                   imageUrl ||
@@ -53,19 +53,19 @@ const UserButton = () => {
               />
             </div>
             <div className="flex flex-col space-y-0 overflow-hidden">
-              <p className="text-sm font-dm font-semibold text-white whitespace-nowrap truncate max-w-full">
+              <p className="text-sm font-dm text-white whitespace-nowrap truncate max-w-full">
                 {firstName} {lastName}
               </p>
-              <p className="text-xs text-gray-400 truncate whitespace-nowrap">
+              <p className="text-xs text-white/40 truncate whitespace-nowrap">
                 {email}
               </p>
             </div>
           </li>
-          <div className="w-full h-px bg-[#3A3F49] dark:bg-[#484F5B]"></div>
+          <div className="w-full h-px bg-white/10"></div>
           <div className="flex flex-col space-y-1 pb-2">
-            <li className="px-4 hover:bg-[#2F343E] dark:hover:bg-[#3D4552] hover:border-y-[#3A3F49] dark:hover:border-y-[#484F5B] border-y border-y-transparent hover:text-white py-2 group flex space-x-3 cursor-pointer items-center transition">
+            <li className="px-4 hover:bg-white/5 hover:border-y-white/10 border-y border-y-transparent hover:text-white py-2 group flex space-x-3 cursor-pointer items-center transition">
               <ExitIcon className="text-gray-500 group-hover:text-white/80 transition" />
-              <p className="text-[13px] text-gray-400 font-sans transition group-hover:text-white truncate max-w-full">
+              <p className="text-xs text-white/60 font-sans transition group-hover:text-white truncate max-w-full">
                 Sign Out
               </p>
             </li>
@@ -78,7 +78,7 @@ const UserButton = () => {
 
 const CourseHeader = () => {
   return (
-    <div className="h-[50px] min-h-[50px] bg-[#090B11] border-b border-b-white/20 w-full flex py-1 justify-between items-center px-4">
+    <div className="h-[50px] min-h-[50px] bg-[#090B11] border-b border-b-white/10 w-full flex py-1 justify-between items-center px-4">
       <div className="flex items-center cursor-pointer">
         <Link href="/courses">
           <div className="w-10 h-10 min-w-[2.8rem] p-1 flex items-center mr-2">

@@ -16,7 +16,7 @@ const BlankContentPage = () => {
         </div>
       </div>
       <div className="w-full h-full items-center justify-center flex flex-col space-y-4">
-        <div className=" min-w-[3.5rem] rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
+        <div className="min-h-[3.5rem] min-w-[3.5rem] rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
           <ListBullets size={36} weight="duotone" className="text-slate-100" />
         </div>
         <h1 className="text-[26px] font-medium font-dm">Course Content</h1>

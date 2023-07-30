@@ -86,7 +86,7 @@ const CourseHome = () => {
 
   return (
     <div className="min-h-screen h-full w-full text-slate-800 bg-slate-100 ">
-      <div className="p-6 lg:p-12 w-full h-full overflow-auto">
+      <div className="p-8 w-full h-full overflow-auto">
         <AddModuleModal
           open={newModuleModalOpen}
           setOpen={setNewModuleModalOpen}
@@ -106,41 +106,30 @@ const CourseHome = () => {
         <div className="w-full h-full max-w-7xl">
           {courseStructureFetching ? (
             <div className="flex space-x-6 items-center">
-              <div className="w-14 h-14 min-w-[3.5rem] animate-pulse rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
+              {/* <div className="w-14 h-14 min-w-[3.5rem] animate-pulse rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
                 <SquaresFour
                   size={36}
                   weight="duotone"
                   className="text-slate-100"
                 />
-              </div>
+              </div> */}
               <div className="w-80 h-[39px] bg-slate-300 rounded-md animate-pulse"></div>
             </div>
           ) : (
             <div className="flex space-x-6 items-center">
-              <div className="w-14 h-14 min-w-[3.5rem] group relative rounded-md overflow-hidden ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner ring-1">
-                <Image
-                  src={course?.logo || "/images/placeholder.png"}
-                  width={56}
-                  height={56}
-                  objectFit="cover"
-                  className="rounded-md"
-                />
-                <div className="absolute inset-0 w-full h-full bg-slate-300 flex items-center justify-center opacity-0 group-hover:opacity-80 transition">
+              {/* <div className="w-14 h-14 min-w-[3.5rem] group relative rounded-md overflow-hidden ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner ring-1">
+                <div className="absolute inset-0 w-full h-full bg-slate-300 flex items-center justify-center transition">
                   <SquaresFour
                     size={36}
                     weight="duotone"
                     className="text-slate-100"
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col space-y-[2px] justify-center">
-                <h1 className="text-[26px] font-medium font-dm">
-                  Home - {courseStructureData?.courseName}
+                <h1 className="text-2xl font-medium text-slate-800 font-sans">
+                  {course?.courseName}
                 </h1>
-                <p className="font-sans text-slate-600 text-sm max-w-4xl text-left">
-                  Welcome to your course! Here you can manage your course
-                  content and view your students' progress.
-                </p>
               </div>
             </div>
           )}
