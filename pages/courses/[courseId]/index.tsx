@@ -86,17 +86,6 @@ const CourseHome = () => {
 
   return (
     <div className="min-h-screen h-full w-full text-slate-800 bg-slate-100 ">
-      <div className="w-full h-[3.5rem] py-3 px-4 flex justify-between items-center ">
-        <div />
-        <div className="flex space-x-2">
-          <div className="w-8 h-8 rounded-full">
-            <CustomUserButton />
-          </div>
-          <div className="w-8 h-8 rounded-full">
-            <UserButton afterSignOutUrl={NextRoutes.SignIn} />
-          </div>
-        </div>
-      </div>
       <div className="p-6 lg:p-12 w-full h-full overflow-auto">
         <AddModuleModal
           open={newModuleModalOpen}
@@ -148,7 +137,7 @@ const CourseHome = () => {
                 <h1 className="text-[26px] font-medium font-dm">
                   Home - {courseStructureData?.courseName}
                 </h1>
-                <p className="font-dm text-slate-600 text-sm max-w-4xl text-left">
+                <p className="font-sans text-slate-600 text-sm max-w-4xl text-left">
                   Welcome to your course! Here you can manage your course
                   content and view your students' progress.
                 </p>

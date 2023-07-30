@@ -373,11 +373,11 @@ const AdminContentSidebar = ({
   return (
     <>
       <ScrollArea.Root
-        className={`overflow-auto w-[350px] min-w-[350px] h-full bg-nav-dark flex-col z-40 border-r border-r-slate-700 `}
+        className={`w-[350px] min-w-[350px] h-full bg-nav-dark flex-col z-40 border-r border-r-slate-700 `}
       >
         {/* Header */}
-        <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
-          <h1 className="text-white font-dm text-base">Exercises</h1>
+        <div className="w-full h-[60px] min-h-[60px] flex items-center px-4 bg-nav-darker justify-between border-b border-b-white/10">
+          <h1 className="text-white font-dm text-sm">Course Content</h1>
           <Tooltip.Provider delayDuration={100}>
             <Tooltip.Root>
               <Tooltip.Trigger asChild>
@@ -405,7 +405,7 @@ const AdminContentSidebar = ({
         </div>
         <div className="w-full">
           <Tabs.Root
-            className="flex flex-col w-full rounded-md"
+            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker"
             value={activeContent}
             onValueChange={(value) => {
               setActiveContent(value as ContentType);
@@ -416,13 +416,15 @@ const AdminContentSidebar = ({
               aria-label="Select content type"
             >
               {toggleExercisesLinks.map((link) => (
-                <Tabs.Trigger
-                  key={link.id}
-                  className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
-                  value={link.id}
-                >
-                  {link.text}
-                </Tabs.Trigger>
+                <div className="p-2 flex-1">
+                  <Tabs.Trigger
+                    key={link.id}
+                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none"
+                    value={link.id}
+                  >
+                    {link.text}
+                  </Tabs.Trigger>
+                </div>
               ))}
             </Tabs.List>
           </Tabs.Root>
@@ -464,13 +466,13 @@ const AdminContentSidebar = ({
                 setOpenModules(value);
               }}
               value={openModules}
-              className="w-full font-dm"
+              className="w-full font-dm !overflow-y-auto max-h-[calc(100%-110px)] !pb-0"
               type="multiple"
             >
               <div className="w-full h-px bg-slate-500"></div>
               {courseStructure && courseStructure.modules.length === 0 && (
                 <div className="flex items-center justify-center px-4 py-4">
-                  <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                  <p className="text-slate-400 text-xs py-3 w-full line text-center">
                     Looks like you have no content yet. Add a module below to
                     get started!
                   </p>
@@ -536,10 +538,10 @@ const AdminContentSidebar = ({
                                     <Accordion.Item
                                       value={module.moduleName}
                                       key={module.id}
-                                      className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown "
+                                      className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown"
                                     >
                                       <Accordion.Trigger
-                                        className={`pl-4 relative pr-4 group py-2 w-full flex items-center justify-between overflow-hidden bg-nav-dark`}
+                                        className={`pl-4 relative pr-4 group py-[6px] w-full flex items-center justify-between overflow-hidden bg-nav-dark`}
                                       >
                                         <div
                                           className={`absolute w-full h-full pointer-events-none z-50 bg-sky-500 inset-0 transition ${
@@ -552,7 +554,7 @@ const AdminContentSidebar = ({
                                           <div {...provided.dragHandleProps}>
                                             <DragHandleDots2Icon className="text-slate-500 w-4 h-4 cursor-row-resize" />
                                           </div>
-                                          <p className="text-left text-sm text-white">
+                                          <p className="text-left text-[13px] text-white">
                                             <span className="text-slate-300 mr-1">{`${
                                               primaryIndex + 1
                                             }.`}</span>
@@ -604,10 +606,10 @@ const AdminContentSidebar = ({
                                           contentClassName="h-full bg-nav-darker"
                                           height={
                                             allContent.length == 0
-                                              ? 44
+                                              ? 40
                                               : dropdownHeights[primaryIndex]
                                           }
-                                          className="flex flex-col"
+                                          className="flex flex-col justify-center"
                                         >
                                           <AnimatePresence exitBeforeEnter>
                                             {isEmpty ? (
@@ -617,7 +619,7 @@ const AdminContentSidebar = ({
                                                 exit={{ opacity: 0 }}
                                                 className={`relative flex px-4 items-center cursor-pointer justify-center `}
                                               >
-                                                <p className="text-slate-400 text-sm py-3 w-full line text-center">
+                                                <p className="text-slate-400 text-xs py-3 w-full line text-center">
                                                   No Content here :&#40;
                                                 </p>
                                               </m.div>
@@ -706,7 +708,7 @@ const AdminContentSidebar = ({
                   className="flex space-x-2 items-center justify-center w-full px-2 py-3 group/modulebutton border border-blue-500/60 border-dashed rounded-md"
                 >
                   <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/modulebutton:text-white" />
-                  <p className="text-slate-100/60 group-hover/modulebutton:text-white text-sm">
+                  <p className="text-slate-100/60 group-hover/modulebutton:text-white text-xs">
                     Add Module
                   </p>
                 </button>
@@ -936,7 +938,7 @@ const ModuleContentList = ({
                                 WebkitBoxOrient: "vertical",
                                 overflow: "hidden",
                               }}
-                              className="text-white text-sm py-4 w-full line"
+                              className="text-white text-[13px] py-3 w-full line"
                             >
                               <span className="text-slate-500 mr-1">
                                 {`${primaryIndex + 1}.${secondaryIndex + 1}`}
@@ -1020,7 +1022,9 @@ export const HiddenSizingItems = ({
                         WebkitBoxOrient: "vertical",
                         overflow: "hidden",
                       }}
-                      className="text-white text-sm py-4 w-full line"
+                      className={`text-white text-[13px] py-3 w-full line ${
+                        activeContent === "all" ? "pl-6" : "pl-2"
+                      }`}
                     >
                       <span className="text-slate-500 mr-1">
                         {`${primaryIndex + 1}.${secondaryIndex + 1}`}

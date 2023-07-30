@@ -483,12 +483,9 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
       />
 
       {/* Top Banner */}
-      <div className="w-full h-16 min-h-[3.5rem] max-h-[3.5rem] bg-nav-dark flex items-center justify-between px-6 border-b border-b-slate-700">
-        <div className="flex items-end">
-          <p className="text-base text-slate-400 font-dm">
-            {moduleName}
-            <span className="text-slate-600">&nbsp;&nbsp;&gt;&nbsp;&nbsp;</span>
-          </p>
+      <div className="w-full h-16 min-h-[60px] max-h-[60px] bg-nav-dark flex items-center justify-between px-4 border-b border-b-white/10">
+        <div className="flex items-start flex-col">
+          <p className="text-white/40 font-sans text-xs">{moduleName}</p>
           <h1 className="text-white font-dm text-base">
             {title || "New Problem"}
           </h1>

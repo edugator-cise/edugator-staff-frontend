@@ -204,6 +204,112 @@ export const icons: Record<string, (active: boolean) => JSX.Element> = {
       />
     </svg>
   ),
+  dashboard2: (active: boolean) => (
+    <svg
+      className="w-full h-full"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <g id="dashboard-4--app-application-dashboard-home-layout-horizontal">
+        <path
+          id="Union"
+          className={iconClassName(active, "light")}
+          fillRule="evenodd"
+          d="M22.75 13.25V22.75L10.25 22.75V13.25H22.75Z"
+          clipRule="evenodd"
+        />
+        <path
+          id="Union_2"
+          className={iconClassName(active, "dark")}
+          fillRule="evenodd"
+          d="M22.75 1.25L22.75 10.75H16.25V1.25H22.75Z"
+          clipRule="evenodd"
+        />
+        <path
+          id="Union_3"
+          className={iconClassName(active, "dark")}
+          fillRule="evenodd"
+          d="M7.75 13.25L7.75 22.75H1.25V13.25H7.75Z"
+          clipRule="evenodd"
+        />
+        <path
+          id="Union_4"
+          className={iconClassName(active, "light")}
+          fillRule="evenodd"
+          d="M13.75 1.25V10.75L1.25 10.75V1.25H13.75Z"
+          clipRule="evenodd"
+        />
+      </g>
+    </svg>
+  ),
+  book: (active: boolean) => (
+    <svg
+      className="w-full h-full"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6 1C3.79086 1 2 2.79086 2 5V19C2 21.2091 3.79086 23 6 23H21.75V21H20V17H22V1H6Z"
+        className={iconClassName(active, "light")}
+      />
+      <path
+        d="M6 17H20V21H6C4.89543 21 4 20.1046 4 19C4 17.8954 4.89543 17 6 17Z"
+        className={iconClassName(active, "dark")}
+      />
+    </svg>
+  ),
+  openBook: (active: boolean) => (
+    <svg
+      className="w-full h-full"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <g id="open-book--content-books-book-open">
+        <path
+          id="Union"
+          className={iconClassName(active, "light")}
+          d="M8 3H1V20H9C9.55229 20 10 20.4477 10 21H14C14 20.4477 14.4477 20 15 20H23V3H16C14.3644 3 12.9122 3.78535 12 4.99952C11.0878 3.78534 9.6356 3 8 3Z"
+        />
+        <path
+          id="Intersect"
+          className={iconClassName(active, "dark")}
+          fillRule="evenodd"
+          d="M13 3.99963V21H11V3.99962C11.3786 4.28402 11.7156 4.62092 12 4.9995C12.2844 4.62092 12.6214 4.28402 13 3.99963Z"
+          clipRule="evenodd"
+        />
+      </g>
+    </svg>
+  ),
+  usersMultiple: (active: boolean) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      className="w-full h-full"
+    >
+      <g id="user-multiple-group--close-geometric-human-multiple-person-up-user">
+        <path
+          id="Union"
+          className={iconClassName(active, "light")}
+          fillRule="evenodd"
+          d="M8.5 12.5C10.7091 12.5 12.5 10.7091 12.5 8.5C12.5 6.29086 10.7091 4.5 8.5 4.5C6.29086 4.5 4.5 6.29086 4.5 8.5C4.5 10.7091 6.29086 12.5 8.5 12.5ZM1.53506 16.2118C3.61741 15.1183 5.98797 14.5 8.5 14.5C11.012 14.5 13.3826 15.1183 15.4649 16.2118L16 16.4928V20H1V16.4928L1.53506 16.2118Z"
+          clipRule="evenodd"
+        />
+        <path
+          id="Subtract"
+          className={iconClassName(active, "dark")}
+          fillRule="evenodd"
+          d="M13.0181 11.6371C13.637 10.7474 13.9999 9.66606 13.9999 8.5C13.9999 7.33394 13.637 6.25264 13.0181 5.36285C13.7 4.8226 14.5623 4.5 15.4999 4.5C17.7091 4.5 19.4999 6.29086 19.4999 8.5C19.4999 10.7091 17.7091 12.5 15.4999 12.5C14.5623 12.5 13.7 12.1774 13.0181 11.6371ZM17.4999 20V16V15.5863V14.6323C19.2705 14.8683 20.9445 15.4134 22.4649 16.2118L22.9999 16.4928V20H17.4999Z"
+          clipRule="evenodd"
+        />
+      </g>
+    </svg>
+  ),
   books: (active: boolean) => (
     <svg
       className="w-full h-full"

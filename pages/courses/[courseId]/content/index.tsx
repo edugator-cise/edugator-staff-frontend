@@ -8,7 +8,7 @@ const BlankContentPage = () => {
     <div className="w-full h-full flex flex-col relative bg-slate-100">
       <div
         className="w-full 
-      h-16 min-h-[3.5rem] max-h-[3.5rem] !bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-slate-950 z-10"
+      h-16 min-h-[60px] max-h-[60px] !bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-white/10 z-10"
       >
         <div className="flex items-end">
           <p className="text-base text-slate-400 font-dm"></p>

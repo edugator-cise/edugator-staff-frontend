@@ -28,7 +28,11 @@ export type NavLinkText =
   | "Problems"
   | "Bug Bounty";
 
-export type AdminNavLinkText = "Course Content" | "Blank" | "Roster" | "Home";
+export type AdminNavLinkText =
+  | "Course Content"
+  | "Blank"
+  | "Course Roster"
+  | "Course Home";
 
 export const navLinks: NavLinkItem[] = [
   {
@@ -63,22 +67,22 @@ export const navLinks: NavLinkItem[] = [
 
 export const adminNavLinks: NavLinkItem[] = [
   {
-    icon: icons.home2,
-    text: "Home",
+    icon: icons.dashboard2,
+    text: "Course Home",
     id: "home",
     toggleExercises: false,
     href: "/",
   },
   {
-    icon: icons.list,
+    icon: icons.book,
     text: "Course Content",
     id: "content",
     toggleExercises: true,
     href: "/content",
   },
   {
-    icon: icons.roster,
-    text: "Roster",
+    icon: icons.usersMultiple,
+    text: "Course Roster",
     id: "roster",
     toggleExercises: false,
     href: "/roster",
