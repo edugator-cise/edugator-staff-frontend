@@ -10,6 +10,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { SubmitOutput } from "./SubmitOutput";
 import { CompilerOutput } from "hooks/types";
 import { IResultSubmission } from "../types";
+import { TestInput } from "./TestInput";
 const TabBar = styled("div")(
   () => `
   display: flex;
@@ -39,6 +40,7 @@ export const InputOutputView = ({
   compilerOutput,
   isAcceptedOutput,
   submissionOutput,
+  checkOutput,
   activeTab,
   setActiveTab,
 }: {
@@ -47,6 +49,7 @@ export const InputOutputView = ({
   compilerOutput: CompilerOutput;
   isAcceptedOutput: boolean | undefined;
   submissionOutput: IResultSubmission[] | undefined;
+  checkOutput: boolean | undefined
   activeTab: number;
   setActiveTab: (activeTab: number) => void;
 }) => {
@@ -85,6 +88,7 @@ export const InputOutputView = ({
             <Tab disableRipple label="Stdin"></Tab>
             <Tab disableRipple label="Compiler Output"></Tab>
             <Tab disableRipple label="Submission"></Tab>
+            <Tab disableRipple label="Test Output"></Tab>
           </Tabs>
         </TabBar>
         <Box
@@ -123,8 +127,15 @@ export const InputOutputView = ({
                 compileMessage={compilerOutput?.compilerMessage}
               />
             </>
+          ) : activeTab === 2 ? (
+            <>
+              {/* <SubmitOutput results={submissionOutput} /> */}
+              <TestInput checkInput={false} />
+            </>
           ) : (
-            <SubmitOutput results={submissionOutput} />
+            <>
+              <TestInput checkInput={false} />
+            </>
           )}
         </Box>
       </CodeHolder>

@@ -1,6 +1,7 @@
 import { CompileOutput } from "../CompileOutput";
 import { SubmitOutput } from "../SubmitOutput";
 import { CompilerOutput } from "hooks/types";
+import { TestInput } from "../TestInput";
 import { IResultSubmission } from "../../types";
 import * as Tabs from "@radix-ui/react-tabs";
 import { toTitleCase } from "utils/textUtils";
@@ -14,6 +15,7 @@ export const InputOutputView = ({
   submissionOutput,
   activeTab,
   setActiveTab,
+  testingInput
 }: {
   stdin: string;
   setStdin: (stdin: string) => void;
@@ -22,6 +24,7 @@ export const InputOutputView = ({
   submissionOutput: IResultSubmission[] | undefined;
   activeTab: number;
   setActiveTab: (activeTab: number) => void;
+  testingInput: boolean | undefined;
 }) => {
   const handleStdinChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,7 +42,7 @@ export const InputOutputView = ({
     setStdin(stdin);
   }, [stdin]);
 
-  const tabs = ["stdin", "output", "submission"];
+  const tabs = ["stdin", "output", "submission", "test Input"];
 
   return (
     <Tabs.Root
@@ -103,6 +106,12 @@ export const InputOutputView = ({
         value="submission"
       >
         <SubmitOutput results={submissionOutput} />
+      </Tabs.Content>
+      <Tabs.Content
+        className="w-full h-full p-4 overflow-y-scroll"
+        value="test Input"
+      >
+        <TestInput testInput={testingInput} />
       </Tabs.Content>
     </Tabs.Root>
   );
