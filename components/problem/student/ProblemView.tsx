@@ -66,6 +66,8 @@ export default function ProblemView({
     }
   };
 
+  const testCases = problem?.testCases ?? null;
+
   return (
     <div className="w-full h-full bg-gray-200 dark:bg-slate-950 relative student-view-holder">
       {/* <AIChat /> */}
@@ -104,7 +106,11 @@ export default function ProblemView({
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             submissionOutput={submissionOutput}
-            stdin={problem?.testCases?.at(0)?.input || ""}
+            stdin={
+              problem?.testCases && problem?.testCases[0]
+                ? problem?.testCases[0].input
+                : ""
+            }
             setStdin={setStdin}
             compilerOutput={compilerOutput}
             isAcceptedOutput={isAcceptedOutput}
