@@ -15,6 +15,7 @@ const ProblemEditPage = () => {
     isFetching: problemFetching,
     isError: problemError, // TODO add error handling and visual state
   } = useGetProblem({
+    admin: true,
     problemId: problemId as string,
   });
 

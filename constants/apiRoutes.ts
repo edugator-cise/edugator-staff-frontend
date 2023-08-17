@@ -30,6 +30,9 @@ export const apiRoutes = {
       getStructure: (courseId: string) =>
         `v2/course/${courseId}/structure?hidden=false`,
 
+      getProblem: (problemId: string) => `v2/student/problem/${problemId}`,
+      getLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
+
       // code evaluation
       runCode: "v2/code/run",
       runCodeEvaluation: "v2/code/run/evaluate",
