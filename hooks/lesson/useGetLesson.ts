@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { Content } from "@tiptap/react";
 import { apiRoutes } from "constants/apiRoutes";
@@ -20,12 +21,21 @@ export interface Lesson {
   moduleName: string;
 }
 
-const fetchLesson = async ({ lessonId }: GetLessonParams) => {
-  const { data } = await apiClient.get(apiRoutes.v2.admin.getLesson(lessonId));
-  return data;
-};
-
 export const useGetLesson = ({ lessonId }: GetLessonParams) => {
+  const { getToken } = useAuth();
+
+  const fetchLesson = async ({ lessonId }: GetLessonParams) => {
+    const { data } = await apiClient.get(
+      apiRoutes.v2.admin.getLesson(lessonId),
+      {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      }
+    );
+    return data;
+  };
+
   return useQuery<Lesson, Error>({
     refetchOnWindowFocus: false,
     queryKey: ["lesson", lessonId],

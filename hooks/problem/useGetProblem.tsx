@@ -1,4 +1,5 @@
 // basically same as useGetLesson but with problem instead of lesson
+import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { Content } from "@tiptap/react";
 import { apiRoutes } from "constants/apiRoutes";
@@ -46,14 +47,21 @@ type GetProblemParams = {
   problemId: string;
 };
 
-const fetchProblem = async ({ problemId }: GetProblemParams) => {
-  const { data } = await apiClient.get(
-    apiRoutes.v2.admin.getProblem(problemId)
-  );
-  return data;
-};
-
 export const useGetProblem = ({ problemId }: GetProblemParams) => {
+  const { getToken } = useAuth();
+
+  const fetchProblem = async ({ problemId }: GetProblemParams) => {
+    const { data } = await apiClient.get(
+      apiRoutes.v2.admin.getProblem(problemId),
+      {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      }
+    );
+    return data;
+  };
+
   return useQuery<Problem, Error>({
     refetchOnWindowFocus: false,
     queryKey: ["problem", problemId],

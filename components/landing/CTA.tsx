@@ -45,6 +45,11 @@ const CTA = () => {
                   <Image src="/images/avatars/small/aman.png" layout="fill" />
                 </div>
               </div>
+              <div className="w-16 h-16 rounded-full bg-slate-50 p-[2px] ring-slate-400/30 shadow-black/10 shadow-xl -translate-x-full z-0">
+                <div className="w-full h-full rounded-full relative overflow-hidden border bg-gradient-to-br from-sky-100 to-sky-600">
+                  <Image src="/images/avatars/small/prayuj.png" layout="fill" />
+                </div>
+              </div>
               {/* <Image src="/images/chalkboardIcon.png" layout="fill" /> */}
             </div>
             <h1 className="text-3xl font-semibold text-nav-darkest font-ambit max-w-sm">

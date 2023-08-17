@@ -4,6 +4,7 @@ import React from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { GearIcon, PersonIcon } from "@radix-ui/react-icons";
 import { User } from "phosphor-react";
+import { placeholderAvatar } from "constants/coverImageData";
 
 const CustomUserButton = () => {
   const { user } = useClerk();
@@ -18,10 +19,7 @@ const CustomUserButton = () => {
       <Popover.Root>
         <Popover.Trigger className="w-8 h-8 rounded-full relative cursor-pointer focus:ring-2 outline-none transition">
           <Image
-            src={
-              imageUrl ||
-              "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
-            }
+            src={imageUrl || placeholderAvatar}
             alt="User profile picture"
             layout="fill"
             objectFit="cover"
@@ -38,10 +36,7 @@ const CustomUserButton = () => {
             <li className="flex space-x-4 items-center p-2 rounded-sm">
               <div className="w-10 h-10 min-w-[40px] rounded-full relative focus:ring-2 outline-none transition">
                 <Image
-                  src={
-                    imageUrl ||
-                    "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
-                  }
+                  src={imageUrl || placeholderAvatar}
                   alt="User profile picture"
                   layout="fill"
                   objectFit="cover"

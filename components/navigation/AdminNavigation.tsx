@@ -1,7 +1,6 @@
-import { EdugatorLogo, icons } from "components/navigation/navIcons";
+import { icons } from "components/navigation/navIcons";
 import { RootState } from "lib/store/store";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,25 +11,14 @@ import {
 import { adminNavLinks, NavLinkItem } from "./navigationData";
 import { NavLink } from "./NavLink";
 import { NavLinkTooltip } from "./NavLinkTooltip";
-import { sampleCourses } from "state/courseSlice";
 import Image from "next/image";
 import * as Select from "@radix-ui/react-select";
-import {
-  CaretSortIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  ExitIcon,
-  PlusIcon,
-} from "@radix-ui/react-icons";
+import { CaretSortIcon, CheckIcon, PlusIcon } from "@radix-ui/react-icons";
 import { COURSE_STRUCTURE_QUERY_KEY } from "hooks/course/useGetCourseStructure";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  useRive,
-  useStateMachineInput,
-  Layout,
-  Fit,
-  Alignment,
-} from "@rive-app/react-canvas";
+import { useRive, useStateMachineInput } from "@rive-app/react-canvas";
+import { useGetUserEnrollments } from "hooks/enrollments/useGetUserEnrollments";
+import { placeholderAvatar } from "constants/coverImageData";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -53,8 +41,6 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
     // used to fix hydration mismatch with theme toggle
     setMounted(true);
   }, []);
-
-  const router = useRouter();
 
   const { systemTheme, theme, setTheme } = useTheme();
 
@@ -197,26 +183,31 @@ export const CourseSection = () => {
   const { pathname } = router;
   const { courseId } = router.query;
 
+  const {
+    data: enrollmentsData,
+    isFetching: enrollmentsFetching,
+    isError: enrollmentsError,
+  } = useGetUserEnrollments();
+
+  if (enrollmentsFetching) {
+    return <div>Loading...</div>; /* TODO Improve this loading state */
+  }
+
+  const currentCourse = enrollmentsData?.find(
+    (enrollment) => enrollment.courseId === courseId
+  );
+
   return (
     <section className="w-full flex flex-col">
-      {/* <label
-        className={`text-xs text-white/50 leading-6 uppercase tracking-wide font-bold ${
-          adminMainSidebarHidden ? "text-center" : "text-left"
-        }`}
-      >
-        {adminMainSidebarHidden ? <p>•••</p> : <p>Course</p>}
-      </label> */}
       <Select.Root
         onValueChange={(value) => {
           queryClient.invalidateQueries([COURSE_STRUCTURE_QUERY_KEY, value]);
           router.push({
             pathname: `/courses/${value}`,
           });
-          console.log(sampleCourses.find((c) => c.id === value));
         }}
         value={courseId as string | undefined}
       >
-        {/* add in 'bg-gradient-t-b' for depth below */}
         <Select.Trigger
           className={`flex outline-none focus:ring-2 focus:ring-white/20 focus:ring-inset bg-black/20 font-dm relative items-center justify-between transition-all space-x-2 text-sm leading-none w-full text-white data-[placeholder]:text-slate-400 ${
             adminMainSidebarHidden ? "p-[11px]" : "p-4"
@@ -233,15 +224,8 @@ export const CourseSection = () => {
             >
               <Image
                 placeholder="empty"
-                src={
-                  sampleCourses.find((course) => course.id === courseId)
-                    ?.logo ||
-                  "https://images.unsplash.com/photo-1622837137196-4b3b8b0b0b0e?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xhc3N8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80"
-                }
-                alt={
-                  sampleCourses.find((course) => course.id === courseId)
-                    ?.courseName || "Course Logo"
-                }
+                src={currentCourse?.courseLogo || placeholderAvatar}
+                alt={currentCourse?.courseName || "Course Logo"}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-[4px] z-10"
@@ -254,7 +238,7 @@ export const CourseSection = () => {
             >
               <Select.Value placeholder="Select a course" />
               <p className="text-xs text-white/40 font-sans text-left truncate">
-                Student / Instructor
+                {currentCourse?.role}
               </p>
             </div>
           </div>
@@ -282,17 +266,17 @@ export const CourseSection = () => {
                 <Select.Label className="text-xs leading-[25px] text-gray-400 py-[6px] px-3 !font-bold">
                   Select course
                 </Select.Label>
-                {sampleCourses?.map((course) => (
+                {enrollmentsData?.map((enrollment) => (
                   <Select.Item
-                    key={course.id}
-                    value={course.id}
+                    key={enrollment.courseId}
+                    value={enrollment.courseId}
                     className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-white/5 data-[highlighted]:border-y-white/10 border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
                   >
                     <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
                       <Image
                         placeholder="empty"
-                        src={course.logo}
-                        alt={course.courseName}
+                        src={enrollment.courseLogo || placeholderAvatar}
+                        alt={enrollment.courseName}
                         layout="fill"
                         objectFit="cover"
                         className="rounded-lg"
@@ -300,7 +284,9 @@ export const CourseSection = () => {
                     </div>
                     <div className="flex flex-col justify-center space-y-1 max-w-[calc(100%-90px)]">
                       <div className="truncate pb-[1px]">
-                        <Select.ItemText>{course.courseName}</Select.ItemText>
+                        <Select.ItemText>
+                          {enrollment.courseName}
+                        </Select.ItemText>
                       </div>
                       <p className="text-xs text-white/40 font-sans">
                         0 students

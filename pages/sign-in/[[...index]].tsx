@@ -2,19 +2,27 @@ import AuthLayout from "components/layouts/AuthLayout";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { NextPage } from "next";
 import { HandWaving } from "phosphor-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
-import { Routes } from "constants/navigationRoutes";
+import { NextRoutes, Routes } from "constants/navigationRoutes";
 import { IRequestLoginAction } from "components/Login/types";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { useSignIn } from "@clerk/clerk-react";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 
 const LoginPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { isLoaded, signIn, setActive } = useSignIn();
+  const { sessionId } = useAuth();
+
+  useEffect(() => {
+    if (sessionId) {
+      router.push(NextRoutes.Dashboard);
+    }
+  }, [sessionId]);
 
   const handleSubmit = async (values: IRequestLoginAction) => {
     if (!isLoaded) {
@@ -33,7 +41,7 @@ const LoginPage = () => {
         }
         toast.success("Logged in successfully");
         setLoading(false);
-        router.push(Routes.Landing);
+        router.push(NextRoutes.Dashboard);
       } else {
         console.log(result);
         toast.error(JSON.stringify(result));

@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { apiRoutes } from "constants/apiRoutes";
 import apiClient from "lib/api/apiClient";
@@ -31,18 +32,6 @@ type GetCourseStructureParams = {
 
 export const COURSE_STRUCTURE_QUERY_KEY = "courseStructure";
 
-const fetchCourseStructure = async ({
-  courseId,
-  admin,
-}: GetCourseStructureParams): Promise<CourseStructure> => {
-  const { data } = await apiClient.get(
-    admin
-      ? apiRoutes.v2.admin.getStructure(courseId)
-      : apiRoutes.v2.student.getStructure(courseId)
-  );
-  return data;
-};
-
 export const useGetCourseStructure = ({
   admin,
   courseId,
@@ -50,6 +39,25 @@ export const useGetCourseStructure = ({
   admin?: boolean;
   courseId: string;
 }) => {
+  const { getToken } = useAuth();
+
+  const fetchCourseStructure = async ({
+    courseId,
+    admin,
+  }: GetCourseStructureParams): Promise<CourseStructure> => {
+    const { data } = await apiClient.get(
+      admin
+        ? apiRoutes.v2.admin.getStructure(courseId)
+        : apiRoutes.v2.student.getStructure(courseId),
+      {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      }
+    );
+    return data;
+  };
+
   return useQuery<CourseStructure, Error>({
     queryKey: [COURSE_STRUCTURE_QUERY_KEY, courseId],
     queryFn: () => fetchCourseStructure({ courseId, admin }),

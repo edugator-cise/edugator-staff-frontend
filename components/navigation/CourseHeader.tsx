@@ -1,10 +1,10 @@
 import { EdugatorLogo } from "components/navigation/navIcons";
 import { useClerk } from "@clerk/nextjs";
 import * as Popover from "@radix-ui/react-popover";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import Image from "next/image";
 import { ExitIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { placeholderAvatar } from "constants/coverImageData";
 
 const UserButton = () => {
   const { user } = useClerk();
@@ -14,6 +14,8 @@ const UserButton = () => {
   const lastName = user?.lastName || "Last";
   const email = user?.emailAddresses[0].emailAddress || "";
 
+  const { signOut } = useClerk();
+
   return (
     <Popover.Root>
       <Popover.Trigger
@@ -21,10 +23,7 @@ const UserButton = () => {
       >
         <div className="w-7 h-7 min-w-[28px] rounded-full relative focus:ring-2 outline-none transition">
           <Image
-            src={
-              imageUrl ||
-              "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
-            }
+            src={imageUrl || placeholderAvatar}
             alt="User profile picture"
             layout="fill"
             objectFit="cover"
@@ -42,10 +41,7 @@ const UserButton = () => {
           <li className="flex space-x-4 items-center p-4 pb-2 rounded-sm ">
             <div className="w-8 h-8 min-w-[32px] rounded-full relative focus:ring-2 outline-none transition">
               <Image
-                src={
-                  imageUrl ||
-                  "https://t4.ftcdn.net/jpg/04/08/24/43/360_F_408244382_Ex6k7k8XYzTbiXLNJgIL8gssebpLLBZQ.jpg"
-                }
+                src={imageUrl || placeholderAvatar}
                 alt="User profile picture"
                 layout="fill"
                 objectFit="cover"
@@ -62,14 +58,17 @@ const UserButton = () => {
             </div>
           </li>
           <div className="w-full h-px bg-white/10"></div>
-          <div className="flex flex-col space-y-1 pb-2">
+          <button
+            onClick={() => signOut()}
+            className="flex flex-col space-y-1 pb-2 w-full"
+          >
             <li className="px-4 hover:bg-white/5 hover:border-y-white/10 border-y border-y-transparent hover:text-white py-2 group flex space-x-3 cursor-pointer items-center transition">
               <ExitIcon className="text-gray-500 group-hover:text-white/80 transition" />
               <p className="text-xs text-white/60 font-sans transition group-hover:text-white truncate max-w-full">
                 Sign Out
               </p>
             </li>
-          </div>
+          </button>
         </ul>
       </Popover.Content>
     </Popover.Root>

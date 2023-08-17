@@ -54,17 +54,7 @@ const VerifyPage = () => {
         await setActive({ session: completeSignUp.createdSessionId });
         toast.success("Account verified!");
 
-        // TODO: Add toast notification
-        // make planetscale query to create user (nvm, do this as a webhook)
-        if (!role) {
-          toast.error("No role provided. Please try again.");
-        } else if (role === "student") {
-          router.push(NextRoutes.Code);
-        } else if (role === "instructor") {
-          router.push(NextRoutes.Dashboard);
-        } else {
-          toast.error("Invalid role. Please try again.");
-        }
+        router.push(NextRoutes.Dashboard);
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));

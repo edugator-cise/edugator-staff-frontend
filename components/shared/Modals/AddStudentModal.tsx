@@ -5,6 +5,7 @@ import ActionButton from "components/shared/Buttons/ActionButton";
 import Modal from "components/shared/Modals/Modal";
 import Papa from "papaparse";
 import { toast } from "react-hot-toast";
+import { useInviteCourseMember } from "hooks/invitations/useInviteCourseMember";
 
 export const AddStudentModal = ({
   open,
@@ -18,6 +19,8 @@ export const AddStudentModal = ({
   const [file, setFile] = useState<File | null>(null);
   const [parsedStudents, setParsedStudents] = useState<string[]>([]);
 
+  const { mutate, isLoading } = useInviteCourseMember();
+
   const onAddStudents = () => {
     if (inputType === "text") {
       if (students === "") {
@@ -26,6 +29,11 @@ export const AddStudentModal = ({
       }
       const emails = students.split(/[\s,]+/);
       console.log(emails);
+      alert(emails[0]);
+      mutate({
+        email: emails[0],
+        role: "student",
+      });
       setParsedStudents(emails);
     } else {
       if (file === null) {
@@ -177,8 +185,18 @@ export const AddStudentModal = ({
             onAddStudents();
           }}
         >
-          <PlusIcon />
-          <p>Add Students</p>
+          {isLoading ? (
+            <div className="bouncing-loader">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          ) : (
+            <>
+              <PlusIcon />
+              <p>Add Students</p>
+            </>
+          )}
         </ActionButton>
       </div>
     </Modal>

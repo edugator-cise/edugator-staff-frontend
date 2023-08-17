@@ -8,7 +8,7 @@ export const apiRoutes = {
     runCode: "v1/code/run",
     runCodeSubmission: "v1/code/run/submission",
     runCodeEvaluation: "v1/code/run/evaluate",
-    health: "v1/health"
+    health: "v1/health",
   },
   admin: {
     getLesson: (id: string) => `v1/admin/lesson/${id}`,
@@ -29,44 +29,73 @@ export const apiRoutes = {
   v2: {
     student: {
       getStructure: (courseId: string) =>
-        `v2/course/${courseId}/structure?hidden=false`,
+        `v3/course/${courseId}/structure?hidden=false`,
 
       // code evaluation
       runCode: "v2/code/run",
       runCodeEvaluation: "v2/code/run/evaluate",
       runCodeSubmission: "v2/code/run/submission",
+
+      // invitations
+      getInvitations: "v3/invitations",
+      acceptInvitation: (invitationId: string) =>
+        `v3/invitations/${invitationId}/accept`,
+      rejectInvitation: (invitationId: string) =>
+        `v3/invitations/${invitationId}/reject`,
+
+      // enrollments
+      getEnrollments: "v3/enrollments",
     },
     organization: {
-      getAll: "v2/organization"
+      getAll: "v3/organization",
     },
     admin: {
       // organization
-      getOrganizations: () => `v2/organization`,
+      getOrganizations: () => `v3/organization`,
 
       // course
-      getStructure: (courseId: string) => `v2/course/${courseId}/structure`,
+      getStructure: (courseId: string) => `v3/course/${courseId}/structure`,
+      getCourseById: (courseId: string) => `v3/course/${courseId}`,
 
       // module
-      createModule: "v2/module",
-      deleteModule: (moduleId: string) => `v2/module/${moduleId}`,
+      createModule: "v3/module",
+      deleteModule: (moduleId: string) => `v3/module/${moduleId}`,
 
       // lesson
-      createLesson: "v2/admin/lesson",
-      getLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
-      updateLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
-      deleteLesson: (lessonId: string) => `v2/admin/lesson/${lessonId}`,
+      createLesson: "v3/admin/lesson",
+      getLesson: (lessonId: string) => `v3/admin/lesson/${lessonId}`,
+      updateLesson: (lessonId: string) => `v3/admin/lesson/${lessonId}`,
+      deleteLesson: (lessonId: string) => `v3/admin/lesson/${lessonId}`,
 
       // problem
-      createProblem: "v2/admin/problem",
-      getProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
-      updateProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
-      deleteProblem: (problemId: string) => `v2/admin/problem/${problemId}`,
+      createProblem: "v3/admin/problem",
+      getProblem: (problemId: string) => `v3/admin/problem/${problemId}`,
+      updateProblem: (problemId: string) => `v3/admin/problem/${problemId}`,
+      deleteProblem: (problemId: string) => `v3/admin/problem/${problemId}`,
 
       // reorder
       reorderContent: (moduleId: string) =>
-        `v2/module/${moduleId}/changeContentOrder`,
+        `v3/module/${moduleId}/changeContentOrder`,
       reorderModule: (courseId: string) =>
-        `v2/course/${courseId}/changeModuleOrder`,
+        `v3/course/${courseId}/changeModuleOrder`,
+
+      // invitations and enrollments
+
+      // invitations
+      createInvitation: (courseId: string) =>
+        `v3/course/${courseId}/invitations`,
+      getCourseInvitations: (courseId: string) =>
+        `v3/course/${courseId}/invitations`,
+      deleteInvitation: (courseId: string, invitationId: string) =>
+        `v3/course/${courseId}/invitations/${invitationId}`,
+
+      // enrollments
+      getCourseEnrollments: (courseId: string) =>
+        `v3/course/${courseId}/enrollment`,
+      deleteEnrollment: (courseId: string) =>
+        `v3/course/${courseId}/enrollment`,
+      updateEnrollment: (courseId: string) =>
+        `v3/course/${courseId}/enrollment`,
     },
   },
 };

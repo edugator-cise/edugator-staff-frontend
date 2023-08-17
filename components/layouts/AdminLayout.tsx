@@ -105,7 +105,11 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         {/* Main sidebar */}
         <div
           style={{
-            left: mobileView || !courseId ? -MAIN_SIDEBAR_WIDTH : 0,
+            left: false
+              ? adminMainSidebarHidden
+                ? -MAIN_SIDEBAR_WIDTH
+                : -MAIN_SIDEBAR_EXPANDED_WIDTH
+              : 0,
           }}
           className={`absolute -left-[80px] transition-all sm:left-0 top-0 h-full z-50 ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
             !adminMainSidebarHidden
@@ -122,10 +126,9 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
             {/* If no course is selected, don't render content sidebar */}
             <div
               style={{
-                left:
-                  mobileView || !courseId
-                    ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
-                    : contentSidebarOffset(),
+                left: false
+                  ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
+                  : contentSidebarOffset(),
               }}
               className={`mobile:left-auto !absolute top-0 transition-all h-full ease-[cubic-bezier(0.87,_0,_0.13,_1)]`}
             >
@@ -143,7 +146,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
               }}
               className={`relative w-full min-h-screen h-screen transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
                 tabletView ? `!pl-[${MAIN_SIDEBAR_WIDTH}px]` : ""
-              } ${mobileView ? "!pl-0" : ""} ${!courseId ? "!pl-0" : ""}`}
+              } ${mobileView ? "!pl-0" : ""} ${false ? "!pl-0" : ""}`}
             >
               {/* Top bar (shown only on mobile) */}
               {/* <div

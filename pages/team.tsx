@@ -7,19 +7,25 @@ const teamData = [
     name: "Dustin Karp",
     image: "/images/avatars/medium/dustin.png",
     description: "UF Alumni",
-    role: "Designer & Frontend Lead.",
+    role: "Designer & Frontend Lead",
   },
   {
     name: "Marc Diaz",
     image: "/images/avatars/medium/marc.png",
     description: "UF Alumni",
-    role: "Infrastructure Lead.",
+    role: "Infrastructure Lead",
   },
   {
     name: "Amanpreet Kapoor",
     image: "/images/avatars/medium/aman.png",
     description: "Instructional Assistant Professor, UF",
-    role: "Learning Lead.",
+    role: "Learning Lead",
+  },
+  {
+    name: "Prayuj Tuli",
+    image: "/images/avatars/medium/prayuj.png",
+    description: "Computer Science Student, UF",
+    role: "Backend Lead",
   },
 ];
 
@@ -106,9 +112,6 @@ const platform_contributors = [
     name: "Paul Wei",
   },
   {
-    name: "Prayuj Tuli",
-  },
-  {
     name: "Robert McAdam",
   },
   {
@@ -146,24 +149,21 @@ const platform_supporters = [
 const Team = () => {
   return (
     <div className="text-center w-full flex flex-col space-y-4 pt-12">
-      <div className="w-16 h-16 relative mx-auto">
-        <Image src={"/images/chalkboardIcon.png"} layout="fill" />
-      </div>
       <h1 className="text-3xl font-semibold text-nav-darkest font-ambit">
         Built by students, for students.
       </h1>
       <p className="text-nav-darkest">
         Edugator is designed by researchers and engineers with excessive
-        obsession for student centered learning. Our goal is to accelerate 
-        the adoption of learning by doing practices in computing education. 
+        obsession for student centered learning. Our goal is to accelerate the
+        adoption of learning by doing practices in computing education.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 !mt-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 !mt-16">
         {teamData.map((member) => (
           <div
             className="flex flex-col items-start space-y-4 p-4 rounded-md"
             key={member.name}
           >
-            <div className="w-20 h-20 relative bg-gradient-to-br from-emerald-400 to-green-800 rounded-sm overflow-hidden ring ring-slate-50 drop-shadow-xl">
+            <div className="w-20 h-20 relative bg-gradient-to-br from-sky-300 to-blue-500 rounded-sm overflow-hidden ring ring-slate-50 drop-shadow-xl">
               <Image src={member.image} layout="fill" />
             </div>
             <h1 className="text-2xl flex flex-col items-start font-semibold text-nav-darkest font-ambit">

@@ -8,24 +8,15 @@ import {
 } from "@radix-ui/react-icons";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import { useRouter } from "next/router";
-import { GraduationCap, HandWaving, SignIn } from "phosphor-react";
+import { GraduationCap } from "phosphor-react";
 import React, { useState, useEffect } from "react";
-import AnimateHeight from "react-animate-height";
 import { toast } from "react-hot-toast";
 import AuthLayout from "components/layouts/AuthLayout";
-import {
-  Organization,
-  useGetOrganizations,
-} from "hooks/org/useGetOrganizations";
-import * as Select from "@radix-ui/react-select";
-import Image from "next/image";
+import { useGetOrganizations } from "hooks/org/useGetOrganizations";
 import { Field, Form, Formik } from "formik";
-import {
-  IRequestLoginAction,
-  IRequestSignupAction,
-} from "components/Login/types";
-import { useSignUp } from "@clerk/nextjs";
-import { Routes } from "constants/navigationRoutes";
+import { IRequestSignupAction } from "components/Login/types";
+import { useAuth, useSignUp } from "@clerk/nextjs";
+import { NextRoutes, Routes } from "constants/navigationRoutes";
 
 const SignUpPage = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -36,12 +27,13 @@ const SignUpPage = () => {
 
   const [pendingVerification, setPendingVerification] = useState(false);
 
-  const {
-    data: organizations,
-    isLoading,
-    isError,
-    error,
-  } = useGetOrganizations();
+  const { sessionId } = useAuth();
+
+  useEffect(() => {
+    if (sessionId) {
+      router.push(NextRoutes.Dashboard);
+    }
+  }, [sessionId]);
 
   const handleSubmit = async (values: IRequestSignupAction) => {
     // FIRST CHECK IF USER IS STUDENT AND EXISTS IN COURSE (PLANETSCALE QUERY)
@@ -55,15 +47,11 @@ const SignUpPage = () => {
     }
     setLoading(true);
     try {
-      await signUp!.create({
+      await signUp.create({
         emailAddress: values.email,
         password: values.password,
-        /* firstName: values.firstName,
-        lastName: values.lastName, */
-        unsafeMetadata: {
-          role: values.role,
-          organization: values.organization,
-        },
+        firstName: values.firstName,
+        lastName: values.lastName,
       });
 
       await signUp!.prepareEmailAddressVerification({ strategy: "email_code" });
@@ -136,187 +124,6 @@ const SignUpPage = () => {
               </h1>
             </div>
 
-            <div className="mt-12 w-full space-y-2">
-              <p className="text-white/80 text-sm font-dm w-full text-center">
-                I'm signing up as a...
-              </p>
-              <ul className="relative flex w-full rounded-[10px] border border-slate-700 bg-nav-dark shadow-inner ring-1 ring-slate-800">
-                <div
-                  className={`pointer-events-none absolute top-0 z-0 h-full w-1/2 transition-all ${
-                    values.role === "instructor"
-                      ? "translate-x-full p-1"
-                      : "translate-x-0 p-1"
-                  }`}
-                >
-                  <div className="h-full w-full p-px bg-gradient-to-b from-[#648AE8] via-[#648AE8] to-[#2458F2] shadow-[#2458F2]/10 flex items-center group justify-center disabled:from-white disabled:opacity-50 disabled:to-gray-400 enabled:hover:brightness-110 cursor-pointer rounded-md group shadow-lg disabled:cursor-not-allowed enabled:hover:shadow-xl transition duration-200 ease-in-out">
-                    <div className="h-full w-full rounded-[5px] bg-[#2458F2]"></div>
-                  </div>
-                </div>
-                <li className="z-10 w-full">
-                  <Field
-                    type="radio"
-                    id="student"
-                    name="role"
-                    checked={values.role === "student"}
-                    onChange={() => setFieldValue("role", "student")}
-                    className="peer hidden"
-                    required
-                  />
-                  <label
-                    htmlFor="student"
-                    className="inline-flex w-full cursor-pointer items-center justify-center p-4 text-gray-500 transition rounded-l-[9px] hover:bg-slate-500/20 hover:text-gray-400 peer-checked:text-white peer-checked:hover:bg-transparent"
-                  >
-                    <div className="block">
-                      <div className="w-full text-sm">Student</div>
-                    </div>
-                  </label>
-                </li>
-                <li className="z-10 w-full">
-                  <Field
-                    type="radio"
-                    id="instructor"
-                    name="role"
-                    checked={values.role === "instructor"}
-                    onChange={() => setFieldValue("role", "instructor")}
-                    className="peer hidden"
-                  />
-                  <label
-                    htmlFor="instructor"
-                    className="inline-flex w-full cursor-pointer items-center justify-center p-4 text-gray-500 transition rounded-r-[9px] hover:bg-slate-500/20 hover:text-gray-400 peer-checked:text-white peer-checked:hover:bg-transparent"
-                  >
-                    <div className="block">
-                      <div className="w-full text-sm">Instructor</div>
-                    </div>
-                  </label>
-                </li>
-              </ul>
-            </div>
-
-            <AnimateHeight
-              duration={300}
-              height={values.role === "instructor" ? "auto" : 0}
-              animateOpacity={true}
-              className="!mt-0"
-            >
-              <div className="space-y-4 mt-6">
-                <div className="flex flex-col space-y-1">
-                  <label className="text-white text-sm font-dm">
-                    Organization
-                  </label>
-                  {isLoading ? (
-                    <div className="flex items-center space-x-2 w-full bg-nav-dark rounded-md justify-between px-4 py-6">
-                      <div className="bouncing-loader">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                      </div>
-                      <ChevronDownIcon className="text-slate-500" />
-                    </div>
-                  ) : (
-                    <Select.Root
-                      onValueChange={(value) => {
-                        setFieldValue("organization", value);
-                      }}
-                      value={values.organization}
-                    >
-                      <div className="overflow-hidden bg-slate-700 from-[#3A3F49] via-[#242934] via-[12px] to-[#242934] cursor-pointer rounded-lg group p-px flex items-center group justify-center transition duration-200 ease-in-out">
-                        <Select.Trigger
-                          className={`flex relative items-center justify-between transition-all space-x-2 rounded-[7px] text-sm leading-none bg-nav-dark w-full text-white data-[placeholder]:text-slate-400 p-2`}
-                          aria-label="Select an organization"
-                        >
-                          <div className="flex items-center space-x-4 whitespace-nowrap truncate">
-                            <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
-                              <Image
-                                placeholder="empty"
-                                src={
-                                  organizations?.find(
-                                    (org) => org.id === values.organization
-                                  )?.logo || "/images/universityicon.png"
-                                }
-                                alt={
-                                  organizations?.find(
-                                    (org) => org.id === values.organization
-                                  )?.name || "Edugator"
-                                }
-                                layout="fill"
-                                objectFit="cover"
-                                className="rounded-sm z-10"
-                              />
-                            </div>
-                            <div
-                              className={`truncate transition opacity-100 text-white`}
-                            >
-                              <Select.Value placeholder="Select an organization" />
-                            </div>
-                          </div>
-                          <ChevronDownIcon
-                            className={`absolute right-3 top-1/2 -translate-y-1/2 duration-300 opacity-100`}
-                          />
-                        </Select.Trigger>
-                      </div>
-                      <Select.Portal>
-                        <Select.Content
-                          position="popper"
-                          side="bottom"
-                          sideOffset={-48}
-                          align="start"
-                          alignOffset={-8}
-                          className={`SelectContent bg-slate-700  from-[#3A3F49] via-[#242934] via-[12px] to-[#242934] p-px z-50 data-[state=closed]:animate-slideUp overflow-hidden rounded-lg w-[calc(var(--radix-select-trigger-width)+16px)]`}
-                        >
-                          {/* add in 'bg-gradient-t-b' for depth above */}
-                          <Select.Viewport className="bg-nav-dark rounded-[7px]">
-                            <Select.Group>
-                              <Select.Label className="text-xs leading-[25px] text-gray-400 py-[6px] px-3 !font-bold">
-                                Select organization
-                              </Select.Label>
-                              {organizations?.map((org) => (
-                                <Select.Item
-                                  key={org.id}
-                                  value={org.id}
-                                  className="text-sm space-x-4 leading-none text-white flex items-center py-2 transition px-3 relative select-none data-[disabled]:text-slate-500 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#2F343E] data-[highlighted]:border-y-[#3A3F49]  border-y border-y-transparent cursor-pointer data-[highlighted]:text-white"
-                                >
-                                  <div className="h-10 w-10 min-w-[2.5rem] rounded-md relative">
-                                    <Image
-                                      placeholder="empty"
-                                      src={org.logo}
-                                      alt={org.name}
-                                      layout="fill"
-                                      objectFit="cover"
-                                      className="rounded-lg"
-                                    />
-                                  </div>
-                                  <div className="flex flex-col justify-center space-y-1 max-w-[calc(100%-90px)]">
-                                    <div className="truncate">
-                                      <Select.ItemText>
-                                        {org.name}
-                                      </Select.ItemText>
-                                    </div>
-                                  </div>
-                                  <Select.ItemIndicator className="absolute right-2 p-1 bg-[#46474A] rounded-full inline-flex items-center justify-center">
-                                    <CheckIcon />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                              ))}
-                              <button className="text-xs leading-[25px] text-gray-400 w-full flex items-center justify-start space-x-2 cursor-auto py-[6px] px-3 !font-bold">
-                                <p>
-                                  Organization not listed? Contact us{" "}
-                                  <a
-                                    className="text-blue-400"
-                                    href="mailto:csinfraweb@gmail.com"
-                                  >
-                                    here.
-                                  </a>
-                                </p>
-                              </button>
-                            </Select.Group>
-                          </Select.Viewport>
-                        </Select.Content>
-                      </Select.Portal>
-                    </Select.Root>
-                  )}
-                </div>
-              </div>
-            </AnimateHeight>
             <div className="flex space-x-2 w-full">
               <div className="flex flex-col space-y-1 w-full">
                 <label className="text-white text-sm font-dm">First Name</label>
@@ -410,7 +217,7 @@ const SignUpPage = () => {
           Already have an account?&nbsp;
         </span>
         <span
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/sign-in")}
           className="text-blue-500 font-medium text-sm font-dm cursor-pointer hover:text-blue-400 transition"
         >
           Log In

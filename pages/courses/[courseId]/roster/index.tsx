@@ -5,16 +5,40 @@ import { Trash, UsersThree } from "phosphor-react";
 import ActionButton from "components/shared/Buttons/ActionButton";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Download } from "tabler-icons-react";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { NextRoutes } from "constants/navigationRoutes";
 import { AddStudentModal } from "components/shared/Modals/AddStudentModal";
 import { useRouter } from "next/router";
+import { useGetCourseEnrollments } from "hooks/enrollments/useGetCourseEnrollments";
+import { useGetCourseInvitations } from "hooks/invitations/useGetCourseInvitations";
+import { useCancelInvitation } from "hooks/invitations/useCancelInvitation";
+import { useDeleteEnrollment } from "hooks/enrollments/useDeleteEnrollment";
 
 const RosterPage = () => {
   const [addStudentModalOpen, setAddStudentModalOpen] = useState(false);
 
   const router = useRouter();
   const { courseId } = router.query;
+
+  const {
+    data: enrollmentsData,
+    isFetching: enrollmentsFetching,
+    isError: enrollmentsError,
+  } = useGetCourseEnrollments();
+
+  const {
+    data: invitationsData,
+    isFetching: invitationsFetching,
+    isError: invitationsError,
+  } = useGetCourseInvitations();
+
+  const { mutate: cancelInvitation, isLoading: cancelInvitationLoading } =
+    useCancelInvitation();
+
+  const { mutate: deleteEnrollment, isLoading: deleteEnrollmentLoading } =
+    useDeleteEnrollment();
+
+  const { user } = useUser();
 
   return (
     <div className="h-screen pb-12 min-h-screen w-full text-slate-800 bg-slate-100 relative">
@@ -42,7 +66,7 @@ const RosterPage = () => {
           </div>
           <div className="w-full h-px bg-slate-200 mt-8" />
           <div className="w-full flex flex-col justify-between items-start space-y-2 sm:flex-row sm:items-center !mt-8 mb-4">
-            <h1 className="text-xl font-medium font-dm">Students</h1>
+            <h1 className="text-xl font-medium font-dm">Invitations</h1>
             <div className="flex space-x-2">
               <Tooltip.Provider delayDuration={100}>
                 <Tooltip.Root>
@@ -90,9 +114,6 @@ const RosterPage = () => {
               <thead className="font-dm text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">
-                    Name
-                  </th>
-                  <th scope="col" className="px-6 py-3">
                     Email
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -104,7 +125,7 @@ const RosterPage = () => {
                 </tr>
               </thead>
               <tbody className="[&>*:last-child]:border-none font-dm">
-                {Array.from(Array(8).keys()).map((i) => (
+                {invitationsData?.map((invitation, i) => (
                   <tr
                     key={i}
                     className="bg-white border-b dark:bg-slate-800 dark:border-slate-700 last:border-none"
@@ -113,10 +134,9 @@ const RosterPage = () => {
                       scope="row"
                       className="px-6 py-4  font-medium text-slate-900 whitespace-nowrap dark:text-white"
                     >
-                      Phillip Phan
+                      {invitation.email}
                     </th>
-                    <td className="px-6 py-2">studentemail@ufl.edu</td>
-                    <td className="px-6 py-2">Student</td>
+                    <td className="px-6 py-2">{invitation.role}</td>
                     <td className="px-6 py-2">
                       <div className="flex space-x-2 justify-end w-full">
                         <Tooltip.Provider delayDuration={100}>
@@ -144,7 +164,105 @@ const RosterPage = () => {
                         <Tooltip.Provider delayDuration={100}>
                           <Tooltip.Root>
                             <Tooltip.Trigger asChild>
-                              <div className="rounded-md p-2 relative cursor-pointer after:inset-0 after:w-full after:hover:bg-red-500/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full">
+                              <div
+                                onClick={() => {
+                                  cancelInvitation(invitation.id);
+                                }}
+                                className="rounded-md p-2 relative cursor-pointer after:inset-0 after:w-full after:hover:bg-red-500/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full"
+                              >
+                                <Trash
+                                  className="text-red-500 w-4 h-4"
+                                  strokeWidth={1.5}
+                                />
+                              </div>
+                            </Tooltip.Trigger>
+                            <Tooltip.Portal>
+                              <Tooltip.Content
+                                side="top"
+                                sideOffset={5}
+                                align="center"
+                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                              >
+                                Remove Student
+                              </Tooltip.Content>
+                            </Tooltip.Portal>
+                          </Tooltip.Root>
+                        </Tooltip.Provider>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="w-full flex flex-col justify-between items-start space-y-2 sm:flex-row sm:items-center !mt-8 mb-4">
+            <h1 className="text-xl font-medium font-dm">Enrollments</h1>
+          </div>
+          <div className="relative overflow-x-auto shadow-sm">
+            <table className="w-full text-sm text-left text-slate-500 dark:text-slate-400 border ">
+              <thead className="font-dm text-xs text-slate-700 uppercase bg-slate-50 dark:bg-slate-700 dark:text-slate-400">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Email
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Role
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Status
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    {/* Actions */}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="[&>*:last-child]:border-none font-dm">
+                {enrollmentsData?.map((enrollment, i) => (
+                  <tr
+                    key={i}
+                    className="bg-white border-b dark:bg-slate-800 dark:border-slate-700 last:border-none"
+                  >
+                    <th
+                      scope="row"
+                      className="px-6 py-4  font-medium text-slate-900 whitespace-nowrap dark:text-white"
+                    >
+                      {enrollment.email}
+                    </th>
+                    <td className="px-6 py-2">{enrollment.role}</td>
+                    <td className="px-6 py-2">{enrollment.status}</td>
+                    <td className="px-6 py-2">
+                      <div className="flex space-x-2 justify-end w-full">
+                        <Tooltip.Provider delayDuration={100}>
+                          <Tooltip.Root>
+                            <Tooltip.Trigger asChild>
+                              <div className="rounded-md p-2 relative cursor-pointer after:inset-0 after:w-full after:hover:bg-blue-500/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full">
+                                <Pencil2Icon
+                                  className="text-slate-500 w-4 h-4"
+                                  strokeWidth={1.5}
+                                />
+                              </div>
+                            </Tooltip.Trigger>
+                            <Tooltip.Portal>
+                              <Tooltip.Content
+                                side="top"
+                                sideOffset={5}
+                                align="center"
+                                className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                              >
+                                Edit Student
+                              </Tooltip.Content>
+                            </Tooltip.Portal>
+                          </Tooltip.Root>
+                        </Tooltip.Provider>
+                        <Tooltip.Provider delayDuration={100}>
+                          <Tooltip.Root>
+                            <Tooltip.Trigger asChild>
+                              <div
+                                onClick={() =>
+                                  deleteEnrollment(enrollment.userId)
+                                }
+                                className="rounded-md p-2 relative cursor-pointer after:inset-0 after:w-full after:hover:bg-red-500/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full"
+                              >
                                 <Trash
                                   className="text-red-500 w-4 h-4"
                                   strokeWidth={1.5}
