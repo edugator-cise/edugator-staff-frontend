@@ -104,7 +104,7 @@ export default function ProblemView({
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             submissionOutput={submissionOutput}
-            stdin={problem?.testCases[0].input as string}
+            stdin={problem?.testCases?.at(0)?.input || ""}
             setStdin={setStdin}
             compilerOutput={compilerOutput}
             isAcceptedOutput={isAcceptedOutput}

@@ -37,6 +37,7 @@ export default function CodeEditor() {
     isFetching: problemFetching,
     isError: problemError, // TODO add error handling and visual state
   } = useGetProblem({
+    admin: false,
     problemId: problemId as string,
   }); // pass in problemdata to one component in return (goal)
 

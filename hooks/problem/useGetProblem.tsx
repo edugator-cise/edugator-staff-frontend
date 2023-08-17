@@ -44,16 +44,19 @@ export interface Problem {
 
 type GetProblemParams = {
   problemId: string;
+  admin?: boolean;
 };
 
-const fetchProblem = async ({ problemId }: GetProblemParams) => {
-  const { data } = await apiClient.get(
-    apiRoutes.v2.admin.getProblem(problemId)
-  );
-  return data;
-};
+export const useGetProblem = ({ problemId, admin }: GetProblemParams) => {
+  const fetchProblem = async ({ problemId }: GetProblemParams) => {
+    const { data } = await apiClient.get(
+      admin
+        ? apiRoutes.v2.admin.getProblem(problemId)
+        : apiRoutes.v2.student.getProblem(problemId)
+    );
+    return data;
+  };
 
-export const useGetProblem = ({ problemId }: GetProblemParams) => {
   return useQuery<Problem, Error>({
     refetchOnWindowFocus: false,
     queryKey: ["problem", problemId],
