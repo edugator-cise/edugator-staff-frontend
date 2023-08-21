@@ -7,7 +7,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import * as Tooltip from "@radix-ui/react-tooltip";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Pencil1Icon,
   CheckCircledIcon,
@@ -50,10 +55,11 @@ import { useUpdateLesson } from "hooks/lesson/useUpdateLesson";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { useQueryClient } from "@tanstack/react-query";
 import ActionButton from "components/shared/Buttons/ActionButton";
-import { isUrl } from "utils/textUtils";
+import { isUrl } from "@/lib/textUtils";
 import { useNavigationConfirmation } from "hooks/shared/useConfirmNavigation";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
 import { Trash } from "tabler-icons-react";
+import { Button } from "@radix-ui/themes";
 
 export const DeleteLessonModal = ({
   open,
@@ -540,32 +546,28 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                     <CheckCircledIcon />
                     <p>Save Changes</p>
                   </ActionButton>
-                  <Tooltip.Provider delayDuration={100}>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <div className="w-fit">
-                          <ActionButton
-                            disabled={deleteLessonLoading}
-                            color="red"
-                            onClick={() => setDeleteModalOpen(true)}
-                            className="!px-2"
-                          >
-                            <Trash className="w-4 h-4" strokeWidth={1.5} />
-                          </ActionButton>
-                        </div>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="w-fit">
+                        <ActionButton
+                          disabled={deleteLessonLoading}
+                          color="red"
+                          onClick={() => setDeleteModalOpen(true)}
+                          className="!px-2"
                         >
-                          Delete Lesson
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  </Tooltip.Provider>
+                          <Trash className="w-4 h-4" strokeWidth={1.5} />
+                        </ActionButton>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      sideOffset={5}
+                      align="center"
+                      className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                    >
+                      Delete Lesson
+                    </TooltipContent>
+                  </Tooltip>
                 </>
               ) : (
                 <>
@@ -611,53 +613,47 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         <div
           className={`flex  gap-2 items-center ${!editable ? "" : "flex-wrap"}`}
         >
-          <Tooltip.Provider delayDuration={400}>
-            {menuOptions(
-              openLinkModal, // on link click
-              addImage // on image click
-            ).map((option: MenuOption | Divider, index: number) => {
-              // check if option is a divider (if object is empty)
-              if (Object.keys(option).length === 0) {
-                return (
-                  <div key={index} className="w-px h-6 bg-slate-500"></div>
-                );
-              }
-              const menuOption = option as MenuOption;
-              return (
-                <Tooltip.Root key={index} delayDuration={300}>
-                  <Tooltip.Trigger asChild>
-                    <button
-                      key={index}
-                      className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
-                        menuOption.active &&
-                        menuOption.active(editor) &&
-                        "bg-white/20"
-                      } ${
-                        disableToolbar &&
-                        "opacity-50 cursor-not-allowed pointer-events-none"
-                      }`}
-                      onClick={() => {
-                        if (disableToolbar) return;
-                        menuOption.command(editor);
-                      }}
-                    >
-                      {menuOption.icon}
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="bottom"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                    >
-                      {menuOption.title}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              );
-            })}
-          </Tooltip.Provider>
+          {menuOptions(
+            openLinkModal, // on link click
+            addImage // on image click
+          ).map((option: MenuOption | Divider, index: number) => {
+            // check if option is a divider (if object is empty)
+            if (Object.keys(option).length === 0) {
+              return <div key={index} className="w-px h-6 bg-slate-500"></div>;
+            }
+            const menuOption = option as MenuOption;
+            return (
+              <Tooltip key={index} delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <button
+                    key={index}
+                    className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
+                      menuOption.active &&
+                      menuOption.active(editor) &&
+                      "bg-white/20"
+                    } ${
+                      disableToolbar &&
+                      "opacity-50 cursor-not-allowed pointer-events-none"
+                    }`}
+                    onClick={() => {
+                      if (disableToolbar) return;
+                      menuOption.command(editor);
+                    }}
+                  >
+                    {menuOption.icon}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                >
+                  {menuOption.title}
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
         </div>
         {/* <button className="px-3 py-2 rounded-sm bg-blue-500 hover:bg-blue-600 text-white font-dm text-xs flex items-center space-x-2">
                 <EyeOpenIcon />
@@ -730,106 +726,98 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                 }}
               />
               <div className="w-px h-6 bg-slate-600" />
-              <Tooltip.Provider delayDuration={300}>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
-                      onClick={
-                        editingLink
-                          ? () => {
-                              if (!isUrl(url)) {
-                                toast.error("Please enter a valid URL.");
-                                return;
-                              }
-                              setUrl(editor.getAttributes("link").href);
-                              //set editor link value to current link value
-                              editor
-                                ?.chain()
-                                .focus()
-                                .extendMarkRange("link")
-                                .setLink({ href: url, target: "_blank" })
-                                .run();
-                              setTimeout(() => {
-                                setEditingLink(false);
-                              }, 300);
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild className="relative">
+                  <button
+                    className="rounded-sm min-w-[31px] overflow-hidden transition hover:bg-white/10 text-slate-300 p-2 flex items-center justify-center"
+                    onClick={
+                      editingLink
+                        ? () => {
+                            if (!isUrl(url)) {
+                              toast.error("Please enter a valid URL.");
+                              return;
                             }
-                          : openLinkModal
-                      }
-                    >
-                      <>
-                        <CheckIcon
-                          className={`transition absolute -translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
-
-                        <Pencil1Icon
-                          className={`transition ${
-                            editingLink ? "translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                    >
-                      {editingLink ? "Save" : "Edit Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-                <Tooltip.Root delayDuration={300}>
-                  <Tooltip.Trigger asChild className="relative">
-                    <button
-                      className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
-                        editingLink
-                          ? "hover:bg-white/10"
-                          : "hover:bg-red-500/30"
-                      }`}
-                      onClick={
-                        editingLink
-                          ? () => {
-                              // cancel current link changes
-                              setUrl(editor.getAttributes("link").href);
+                            setUrl(editor.getAttributes("link").href);
+                            //set editor link value to current link value
+                            editor
+                              ?.chain()
+                              .focus()
+                              .extendMarkRange("link")
+                              .setLink({ href: url, target: "_blank" })
+                              .run();
+                            setTimeout(() => {
                               setEditingLink(false);
-                            }
-                          : removeLink
-                      }
-                    >
-                      <>
-                        <Cross2Icon
-                          className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
-                            editingLink ? "!translate-y-0" : ""
-                          }`}
-                        />
+                            }, 300);
+                          }
+                        : openLinkModal
+                    }
+                  >
+                    <>
+                      <CheckIcon
+                        className={`transition absolute -translate-y-[calc(100%+16px)] ${
+                          editingLink ? "!translate-y-0" : ""
+                        }`}
+                      />
 
-                        <TrashIcon
-                          className={`transition text-red-500 ${
-                            editingLink ? "-translate-y-[calc(100%+16px)]" : ""
-                          }`}
-                        />
-                      </>
-                    </button>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="top"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
-                        editingLink ? "text-slate-300" : "text-red-500"
-                      }`}
-                    >
-                      {editingLink ? "Cancel" : "Remove Link"}
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
+                      <Pencil1Icon
+                        className={`transition ${
+                          editingLink ? "translate-y-[calc(100%+16px)]" : ""
+                        }`}
+                      />
+                    </>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                >
+                  {editingLink ? "Save" : "Edit Link"}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild className="relative">
+                  <button
+                    className={`rounded-sm overflow-hidden min-w-[31px] transition p-2 flex items-center justify-center ${
+                      editingLink ? "hover:bg-white/10" : "hover:bg-red-500/30"
+                    }`}
+                    onClick={
+                      editingLink
+                        ? () => {
+                            // cancel current link changes
+                            setUrl(editor.getAttributes("link").href);
+                            setEditingLink(false);
+                          }
+                        : removeLink
+                    }
+                  >
+                    <>
+                      <Cross2Icon
+                        className={`transition absolute text-slate-300 translate-y-[calc(100%+16px)] ${
+                          editingLink ? "!translate-y-0" : ""
+                        }`}
+                      />
+
+                      <TrashIcon
+                        className={`transition text-red-500 ${
+                          editingLink ? "-translate-y-[calc(100%+16px)]" : ""
+                        }`}
+                      />
+                    </>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  sideOffset={5}
+                  align="center"
+                  className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 border border-slate-500 font-dm text-xs rounded-md p-2 ${
+                    editingLink ? "text-slate-300" : "text-red-500"
+                  }`}
+                >
+                  {editingLink ? "Cancel" : "Remove Link"}
+                </TooltipContent>
+              </Tooltip>
             </BubbleMenu>
             <EditorContent
               onFocus={() => setDisableToolbar(false)}

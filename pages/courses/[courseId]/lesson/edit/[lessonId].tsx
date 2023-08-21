@@ -4,10 +4,12 @@ import AdminLayout from "components/layouts/AdminLayout";
 import { useGetLesson } from "hooks/lesson/useGetLesson";
 import AdminLessonEditor from "components/lesson/admin/LessonEditor";
 import { StudentLoadingState } from "pages/learn/[lessonId]";
+import { useUserRole } from "hooks/user/useUserRole";
 
 const ContentEditorPage = () => {
   const router = useRouter();
   const { lessonId } = router.query;
+  const { role } = useUserRole();
 
   const {
     data: lessonData,
@@ -17,6 +19,10 @@ const ContentEditorPage = () => {
   } = useGetLesson({
     lessonId: lessonId as string,
   });
+
+  if (role === "student") {
+    return null;
+  }
 
   return lessonFetching ? (
     <div className="w-full h-full">

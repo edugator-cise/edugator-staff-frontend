@@ -22,8 +22,7 @@ const BlankContentPage = () => {
         </div>
         <h1 className="text-[26px] font-medium font-dm">Course Content</h1>
         <p className="text-slate-500 font-dm text-sm !mt-2">
-          Select a lesson or problem from the left sidebar to view or edit it
-          here.
+          Select a lesson or problem from the left sidebar to get started.
         </p>
         {/*  <div className="flex space-x-2 items-center">
           <ActionButton

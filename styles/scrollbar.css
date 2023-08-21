@@ -12,6 +12,12 @@
     padding-right: 2px !important;
 }
 
+/* For horizontal scrollbar */
+*::-webkit-scrollbar:horizontal{
+    height: 6px;
+    padding-bottom: 2px !important;
+}
+
 *::-webkit-scrollbar-track{
     margin: 7px 0;
     border-radius: 0px;

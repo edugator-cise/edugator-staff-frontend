@@ -26,6 +26,7 @@ export const useGetCourseInvitations = () => {
 
   return useQuery<CourseInvitation[], Error>({
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     queryKey: ["courseInvitations", courseId],
     queryFn: () => fetchAllCourseInvitations(),
     onError: () => {

@@ -19,6 +19,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRive, useStateMachineInput } from "@rive-app/react-canvas";
 import { useGetUserEnrollments } from "hooks/enrollments/useGetUserEnrollments";
 import { placeholderAvatar } from "constants/coverImageData";
+import { Skeleton } from "@/components/ui/skeleton";
+import { camelCaseToSpacedTitleCase, toTitleCase } from "@/lib/textUtils";
+import { AnimatePresence, motion as m } from "framer-motion";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -60,7 +63,9 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
       {/* Main Sidebar Content */}
       <div className="h-full flex flex-col items-center justify-between pb-[10px] w-full">
         {/* Class Group */}
-        {courseId ? <CourseSection /> : <div></div>}
+        <AnimatePresence exitBeforeEnter>
+          {courseId ? <CourseSection /> : <></>}
+        </AnimatePresence>
         {/* Bottom Group */}
         <div className="w-full space-y-0">
           {/* Profile */}
@@ -68,29 +73,36 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
 
           {/* Divider */}
 
-          <Divider />
-          {/* Collapse/Expand Button */}
-          <NavLinkTooltip text={"Expand"} disabled={!adminMainSidebarHidden}>
-            <div
-              onClick={() => toggleMainSidebar(!adminMainSidebarHidden)}
-              className={`w-full border rounded-none px-[18px] border-transparent py-4 cursor-pointer transition-all overflow-hidden box-border flex items-center justify-start group space-x-4 text-nav-inactive-light hover:bg-blue-300/5 `}
-            >
-              <div
-                className={`w-[20px] h-[20px] min-w-[20px] transition-transform ${
-                  !adminMainSidebarHidden ? "rotate-180" : ""
-                }`}
+          {courseId ? (
+            <>
+              <Divider />
+              {/* Collapse/Expand Button */}
+              <NavLinkTooltip
+                text={"Expand"}
+                disabled={!adminMainSidebarHidden}
               >
-                {icons.expandArrow(false)}
-              </div>
-              <label
-                className={`group-hover:text-white font-dm text-[13px] select-none pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                  !adminMainSidebarHidden ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                Collapse
-              </label>
-            </div>
-          </NavLinkTooltip>
+                <div
+                  onClick={() => toggleMainSidebar(!adminMainSidebarHidden)}
+                  className={`w-full border rounded-none px-[18px] border-transparent py-4 cursor-pointer transition-all overflow-hidden box-border flex items-center justify-start group space-x-4 text-nav-inactive-light hover:bg-blue-300/5 `}
+                >
+                  <div
+                    className={`w-[20px] h-[20px] min-w-[20px] transition-transform ${
+                      !adminMainSidebarHidden ? "rotate-180" : ""
+                    }`}
+                  >
+                    {icons.expandArrow(false)}
+                  </div>
+                  <label
+                    className={`group-hover:text-white font-dm text-[13px] select-none pointer-events-none transition text-ellipsis whitespace-nowrap ${
+                      !adminMainSidebarHidden ? "opacity-100" : "opacity-0"
+                    }`}
+                  >
+                    Collapse
+                  </label>
+                </div>
+              </NavLinkTooltip>
+            </>
+          ) : null}
         </div>
       </div>
     </nav>
@@ -190,7 +202,9 @@ export const CourseSection = () => {
   } = useGetUserEnrollments();
 
   if (enrollmentsFetching) {
-    return <div>Loading...</div>; /* TODO Improve this loading state */
+    return (
+      <Skeleton className="w-full h-16 bg-slate-800 rounded-none"></Skeleton>
+    );
   }
 
   const currentCourse = enrollmentsData?.find(
@@ -198,7 +212,14 @@ export const CourseSection = () => {
   );
 
   return (
-    <section className="w-full flex flex-col">
+    <m.section
+      id="course-section"
+      key="course-section"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="w-full flex flex-col"
+    >
       <Select.Root
         onValueChange={(value) => {
           queryClient.invalidateQueries([COURSE_STRUCTURE_QUERY_KEY, value]);
@@ -232,13 +253,13 @@ export const CourseSection = () => {
               />
             </div>
             <div
-              className={`truncate w-full transition !max-w-[160px] pb-[1px] text-sm ${
+              className={`truncate w-full transition !max-w-[160px] space-y-1 text-sm ${
                 adminMainSidebarHidden ? "opacity-0" : "opacity-100"
               }`}
             >
               <Select.Value placeholder="Select a course" />
               <p className="text-xs text-white/40 font-sans text-left truncate">
-                {currentCourse?.role}
+                {camelCaseToSpacedTitleCase(currentCourse?.role as string)}
               </p>
             </div>
           </div>
@@ -289,7 +310,9 @@ export const CourseSection = () => {
                         </Select.ItemText>
                       </div>
                       <p className="text-xs text-white/40 font-sans">
-                        0 students
+                        {camelCaseToSpacedTitleCase(
+                          currentCourse?.role as string
+                        )}
                       </p>
                     </div>
                     <Select.ItemIndicator className="absolute right-2 p-1 bg-[#46474A] rounded-full inline-flex items-center justify-center">
@@ -314,95 +337,110 @@ export const CourseSection = () => {
           adminMainSidebarHidden ? "px-2 pt-2" : "px-4 pt-4"
         }`}
       >
-        {adminNavLinks.map((link, i) => {
-          const toggleExercises = link.id === "content";
-          const isActiveLink = activeLink.id === link.id;
+        <AnimatePresence>
+          {adminNavLinks.map((link, i) => {
+            const toggleExercises = link.id === "content";
+            const isActiveLink = activeLink.id === link.id;
 
-          const clickHandler = () => {
-            // IF ID is content and active link is content, toggle content sidebar but don't push to href
-            // if id is content and active link is not content, toggle content sidebar and push to href
-            // if id is not content, toggle content sidebar to false and push to href
-            if (link.id === "content" && activeLink.id === "content") {
-              toggleContentSidebar(!adminContentSidebarHidden);
-              return;
-            } else if (link.id === "content" && activeLink.id !== "content") {
-              toggleContentSidebar(false);
-            } else {
-              toggleContentSidebar(true);
-            }
+            const clickHandler = () => {
+              // IF ID is content and active link is content, toggle content sidebar but don't push to href
+              // if id is content and active link is not content, toggle content sidebar and push to href
+              // if id is not content, toggle content sidebar to false and push to href
+              if (link.id === "content" && activeLink.id === "content") {
+                toggleContentSidebar(!adminContentSidebarHidden);
+                return;
+              } else if (link.id === "content" && activeLink.id !== "content") {
+                toggleContentSidebar(false);
+              } else {
+                toggleContentSidebar(true);
+              }
 
-            router.push({
-              pathname: `/courses/${courseId}${link.href}`,
-            });
+              router.push({
+                pathname: `/courses/${courseId}${link.href}`,
+              });
 
-            setActiveLink(link);
-          };
+              setActiveLink(link);
+            };
 
-          // if route contains either "problem" or "lesson", then 1 is active.
-          // if admincontentsidebar is hidden, then 0 should be active. otherwise, 1 should be active
-          const activeIndex = () => {
-            if (
-              pathname.includes("problem") ||
-              pathname.includes("lesson") ||
-              pathname.includes("content")
-            ) {
-              return 1;
-            } else if (pathname.includes("roster")) {
-              return 2;
-            } else {
-              return 0;
-            }
-          };
+            // if route contains either "problem" or "lesson", then 1 is active.
+            // if admincontentsidebar is hidden, then 0 should be active. otherwise, 1 should be active
+            const activeIndex = () => {
+              if (
+                pathname.includes("problem") ||
+                pathname.includes("lesson") ||
+                pathname.includes("content")
+              ) {
+                return 1;
+              } else if (pathname.includes("roster")) {
+                return 2;
+              } else {
+                return 0;
+              }
+            };
 
-          if (link.id === "content") {
-            return (
-              <NavLinkTooltip
-                text={"Course Content"}
-                disabled={!adminMainSidebarHidden}
-              >
-                <button
-                  onClick={() => {
-                    clickHandler();
-                  }}
-                  className={`w-full border border-transparent h-[42px] transition rounded-[6px] overflow-hidden box-border flex items-center justify-start pl-2 pr-[10px] group space-x-4 ${
-                    activeIndex() === 1
-                      ? "bg-blue-300/20 text-white "
-                      : "text-nav-inactive-light hover:bg-blue-300/5"
-                  }`}
+            if (link.id === "content") {
+              return (
+                <m.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i }}
                 >
-                  <div
-                    className={`w-[23px] h-[23px] min-w-[23px] ${
-                      activeIndex() === 1 ? "" : "grayscale"
-                    }`}
+                  <NavLinkTooltip
+                    text={"Course Content"}
+                    disabled={!adminMainSidebarHidden}
                   >
-                    <RiveComponent />
-                  </div>
+                    <button
+                      onClick={() => {
+                        clickHandler();
+                      }}
+                      className={`w-full border border-transparent h-[42px] transition rounded-[6px] overflow-hidden box-border flex items-center justify-start pl-2 pr-[10px] group space-x-4 ${
+                        activeIndex() === 1
+                          ? "bg-blue-300/20 text-white "
+                          : "text-nav-inactive-light hover:bg-blue-300/5"
+                      }`}
+                    >
+                      <div
+                        className={`w-[23px] h-[23px] min-w-[23px] ${
+                          activeIndex() === 1 ? "" : "grayscale"
+                        }`}
+                      >
+                        <RiveComponent />
+                      </div>
 
-                  {/* <div className="w-[20px] h-[20px] min-w-[20px]">{icon(active)}</div> */}
-                  <label
-                    className={`group-hover:text-white font-dm text-[13px] pointer-events-none transition text-ellipsis whitespace-nowrap ${
-                      !adminMainSidebarHidden ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    Course Content
-                  </label>
-                </button>
-              </NavLinkTooltip>
+                      {/* <div className="w-[20px] h-[20px] min-w-[20px]">{icon(active)}</div> */}
+                      <label
+                        className={`group-hover:text-white font-dm text-[13px] pointer-events-none transition text-ellipsis whitespace-nowrap ${
+                          !adminMainSidebarHidden ? "opacity-100" : "opacity-0"
+                        }`}
+                      >
+                        Course Content
+                      </label>
+                    </button>
+                  </NavLinkTooltip>
+                </m.div>
+              );
+            }
+            return (
+              <m.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * i }}
+              >
+                <NavLink
+                  open={!adminMainSidebarHidden}
+                  icon={link.icon}
+                  text={link.text}
+                  active={i === activeIndex()}
+                  onClick={clickHandler}
+                />
+              </m.div>
             );
-          }
-          return (
-            <NavLink
-              key={i}
-              open={!adminMainSidebarHidden}
-              icon={link.icon}
-              text={link.text}
-              active={i === activeIndex()}
-              onClick={clickHandler}
-            />
-          );
-        })}
+          })}
+        </AnimatePresence>
       </div>
-    </section>
+    </m.section>
   );
 };
 

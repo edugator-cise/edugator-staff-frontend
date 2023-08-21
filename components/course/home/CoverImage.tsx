@@ -9,7 +9,7 @@ import {
   coverImageData,
   placeholderAvatar,
 } from "constants/coverImageData";
-import { Course, useGetCourse } from "hooks/course/useGetCourse";
+import { Course } from "hooks/course/useGetCourse";
 
 const CoverImage = ({
   courseData,

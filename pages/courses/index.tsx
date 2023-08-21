@@ -1,6 +1,6 @@
 import AdminLayout from "components/layouts/AdminLayout";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { FidgetSpinner } from "tabler-icons-react";
 import Link from "next/link";
 import SuperEllipse from "react-superellipse";
@@ -15,6 +15,12 @@ import { CheckmarkIcon } from "react-hot-toast";
 import { XCircle } from "phosphor-react";
 import { useAcceptInvitation } from "hooks/invitations/useAcceptInvitation";
 import { placeholderAvatar } from "constants/coverImageData";
+import { useDispatch } from "react-redux";
+import {
+  setAdminContentSidebarHidden,
+  setAdminMainSidebarHidden,
+  setContentSidebarHidden,
+} from "state/interfaceControls.slice";
 
 // dashboard for students and instructor.
 // accessible only if authenticated and has active session.
@@ -113,6 +119,14 @@ const CourseCard = ({
 };
 
 const DashboardPage = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setAdminMainSidebarHidden(true));
+    dispatch(setAdminContentSidebarHidden(true));
+    dispatch(setContentSidebarHidden(true));
+  }, []);
+
   const {
     data: enrollmentsData,
     isFetching: enrollmentsFetching,
@@ -128,10 +142,10 @@ const DashboardPage = () => {
   const { mutate, isLoading } = useAcceptInvitation();
 
   return (
-    <div className="w-full h-full bg-slate-100">
+    <div className="w-full h-full bg-white">
       <div className="max-w-7xl p-8 flex flex-col">
         <h1 className="text-2xl font-medium font-sans mb-8">Courses</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-cols-auto gap-8 w-full mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-8 w-full mb-8">
           {enrollmentsData?.map((enrollment) => {
             return <CourseCard enrollment={enrollment} />;
           })}

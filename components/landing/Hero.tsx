@@ -49,7 +49,7 @@ const Hero = () => {
           tools for computing instructors that improve learning of computing. */}
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center space-x-0 sm:space-y-0 space-y-6 sm:space-x-8 z-[1]">
-          <GradientButton text="Start Coding" href="/code" />
+          <GradientButton text="Start Coding" href="/courses" />
           <Link href="/#about">
             <button className="group flex items-center space-x-1">
               <span className="font-dm text-white text-sm font-medium">

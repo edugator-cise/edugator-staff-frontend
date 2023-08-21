@@ -2,14 +2,13 @@ const plugin = require("tailwindcss/plugin");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/tailwind-datepicker-react/dist/**/*.js",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+    "@/components/**/*.{ts,tsx}",
   ],
   safelist: [
     "fill-nav-active-light",
@@ -27,12 +26,24 @@ module.exports = {
   ],
   darkMode: "class",
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    fontSize: {
+      ...require("tailwindcss/defaultTheme").fontSize,
+      sm: "13px",
+    },
     extend: {
       screens: {
         mobile: "800px",
         tablet: "1024px",
         laptop: "1420px",
       },
+
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
@@ -79,20 +90,62 @@ module.exports = {
           900: "#1d365d",
           950: "#13223e",
         },
-        main: {
-          50: "#EBF2FA",
-          100: "#D7E5F4",
-          200: "#AAC7E9",
-          300: "#82ADDE",
-          400: "#5590D3",
-          500: "#3376C2",
-          600: "#275B96",
-          700: "#1D426D",
-          800: "#112741",
-          900: "#060E17",
-          950: "#03070C",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
+        "skew-scroll": {
+          "0%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
+          },
+          "50%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%)",
+          },
+          "100%": {
+            transform:
+              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
+          },
         },
       },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "skew-scroll": "skew-scroll 30s ease-in-out infinite",
+      },
+    },
+  },
+  corePlugins: {
+    aspectRatio: false,
+  },
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/aspect-ratio"),
+    require("tailwindcss-radix")(),
+    require("@tailwindcss/typography"),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          "translate-z": (value) => ({
+            "--tw-translate-z": value,
+            transform: ` translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))`,
+          }), // this is actual CSS
+        },
+        { values: theme("translate"), supportsNegativeValues: true }
+      );
+    }),
+    // ...
+  ],
+};
+
+/* 
       keyframes: {
         slideDownAndFade: {
           from: { opacity: 0, transform: "translateY(-10px)" },
@@ -118,23 +171,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
-        "skew-scroll": {
-          "0%": {
-            transform:
-              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
-          },
-          "50%": {
-            transform:
-              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(-100%)",
-          },
-          "100%": {
-            transform:
-              "rotatex(20deg) rotateZ(-20deg) skewX(20deg) translateZ(0) translateY(0)",
-          },
-        },
+        
       },
       animation: {
-        "skew-scroll": "skew-scroll 30s ease-in-out infinite",
+       
         slideDownAndFade:
           "slideDownAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)",
         slideLeftAndFade:
@@ -147,24 +187,5 @@ module.exports = {
       },
     },
   },
-  corePlugins: {
-    aspectRatio: false,
-  },
-  plugins: [
-    require("@tailwindcss/aspect-ratio"),
-    require("tailwindcss-radix")(),
-    require("@tailwindcss/typography"),
-    plugin(function ({ matchUtilities, theme }) {
-      matchUtilities(
-        {
-          "translate-z": (value) => ({
-            "--tw-translate-z": value,
-            transform: ` translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))`,
-          }), // this is actual CSS
-        },
-        { values: theme("translate"), supportsNegativeValues: true }
-      );
-    }),
-    // ...
-  ],
-};
+  
+}; */

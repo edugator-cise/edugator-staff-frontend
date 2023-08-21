@@ -7,13 +7,17 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
-import { Gear } from "phosphor-react";
-import React, { useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import React, { useState } from "react";
 import { Settings, Trash } from "tabler-icons-react";
 import { ProblemAction, TestCaseVisibility } from "./types";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import * as Accordion from "@radix-ui/react-accordion";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { AccordionContent } from "utils/radixTypes";
 import Modal from "components/shared/Modals/Modal";
 import { toast } from "react-hot-toast";
@@ -250,71 +254,58 @@ const InputOutputEditorPane = ({
                           </p>
                         </div>
                         <div className="flex space-x-2 items-center">
-                          <Tooltip.Provider delayDuration={100}>
-                            <Tooltip.Root>
-                              <Tooltip.Trigger asChild>
-                                <div className="text-sm text-slate-500 font-dm hover:bg-slate-700/5 rounded-sm p-2">
-                                  {testCase.visibility ===
-                                  TestCaseVisibility.IO_VISIBLE ? (
-                                    <EyeOpenIcon />
-                                  ) : testCase.visibility ===
-                                    TestCaseVisibility.I_VISIBLE_O_HIDDEN ? (
-                                    <EyeNoneIcon />
-                                  ) : (
-                                    <EyeClosedIcon />
-                                  )}
-                                </div>
-                              </Tooltip.Trigger>
-                              <Tooltip.Portal>
-                                <Tooltip.Content
-                                  side="top"
-                                  sideOffset={5}
-                                  align="center"
-                                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                                >
-                                  {testCase.visibility ===
-                                  TestCaseVisibility.IO_VISIBLE
-                                    ? "Input and output visible"
-                                    : testCase.visibility ===
-                                      TestCaseVisibility.I_VISIBLE_O_HIDDEN
-                                    ? "Input visible, output hidden"
-                                    : "Input and output hidden"}
-                                </Tooltip.Content>
-                              </Tooltip.Portal>
-                            </Tooltip.Root>
-                          </Tooltip.Provider>
-                          <Tooltip.Provider delayDuration={100}>
-                            <Tooltip.Root>
-                              <Tooltip.Trigger asChild>
-                                <div
-                                  className="text-sm text-red-500 font-dm hover:bg-red-500/10 rounded-sm p-2"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    toast.success("Deleted test case");
-                                    dispatch({
-                                      type: "REMOVE_TEST_CASE",
-                                      payload: index,
-                                    });
-                                  }}
-                                >
-                                  <Trash
-                                    className="w-4 h-4"
-                                    strokeWidth={1.5}
-                                  />
-                                </div>
-                              </Tooltip.Trigger>
-                              <Tooltip.Portal>
-                                <Tooltip.Content
-                                  side="top"
-                                  sideOffset={5}
-                                  align="center"
-                                  className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                                >
-                                  Delete Test Case
-                                </Tooltip.Content>
-                              </Tooltip.Portal>
-                            </Tooltip.Root>
-                          </Tooltip.Provider>
+                          <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild>
+                              <div className="text-sm text-slate-500 font-dm hover:bg-slate-700/5 rounded-sm p-2">
+                                {testCase.visibility ===
+                                TestCaseVisibility.IO_VISIBLE ? (
+                                  <EyeOpenIcon />
+                                ) : testCase.visibility ===
+                                  TestCaseVisibility.I_VISIBLE_O_HIDDEN ? (
+                                  <EyeNoneIcon />
+                                ) : (
+                                  <EyeClosedIcon />
+                                )}
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="top"
+                              sideOffset={5}
+                              align="center"
+                            >
+                              {testCase.visibility ===
+                              TestCaseVisibility.IO_VISIBLE
+                                ? "Input and output visible"
+                                : testCase.visibility ===
+                                  TestCaseVisibility.I_VISIBLE_O_HIDDEN
+                                ? "Input visible, output hidden"
+                                : "Input and output hidden"}
+                            </TooltipContent>
+                          </Tooltip>
+                          <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild>
+                              <div
+                                className="text-sm text-red-500 font-dm hover:bg-red-500/10 rounded-sm p-2"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  toast.success("Deleted test case");
+                                  dispatch({
+                                    type: "REMOVE_TEST_CASE",
+                                    payload: index,
+                                  });
+                                }}
+                              >
+                                <Trash className="w-4 h-4" strokeWidth={1.5} />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="top"
+                              sideOffset={5}
+                              align="center"
+                            >
+                              Delete Test Case
+                            </TooltipContent>
+                          </Tooltip>
 
                           <button className="text-sm text-slate-500 font-dm rounded-sm p-2">
                             <ChevronDownIcon className="group-data-[state=open]:rotate-180 transition" />

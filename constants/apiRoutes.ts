@@ -88,6 +88,8 @@ export const apiRoutes = {
         `v3/course/${courseId}/invitations`,
       deleteInvitation: (courseId: string, invitationId: string) =>
         `v3/course/${courseId}/invitations/${invitationId}`,
+      updateInvitation: (courseId: string, invitationId: string) =>
+        `v3/course/${courseId}/invitations/${invitationId}`,
 
       // enrollments
       getCourseEnrollments: (courseId: string) =>

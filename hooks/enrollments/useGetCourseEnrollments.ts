@@ -28,6 +28,7 @@ export const useGetCourseEnrollments = () => {
 
   return useQuery<CourseEnrollment[], Error>({
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     queryKey: ["courseEnrollments", courseId],
     queryFn: () => fetchAllCourseEnrollments(),
     onError: () => {

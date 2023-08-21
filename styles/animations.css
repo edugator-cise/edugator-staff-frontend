@@ -195,50 +195,6 @@
   }
 }
 
-.TooltipContent[data-state="open"][data-side="right"] {
-  transform-origin: left;
-  animation: fadeIn 150ms ease-out;
-}
-
-.TooltipContent[data-state="closed"][data-side="right"] {
-  transform-origin: left;
-  animation: fadeOut 150ms ease-in;
-}
-
-.TooltipContent[data-state="open"][data-side="left"] {
-  transform-origin: right;
-  animation: fadeIn 150ms ease-out;
-}
-
-.TooltipContent[data-state="closed"][data-side="left"] {
-  transform-origin: right;
-  animation: fadeOut 150ms ease-in;
-}
-
-.TooltipContent[data-state="open"][data-side="bottom"] {
-  transform-origin: top;
-  animation: fadeIn 150ms ease-out;
-}
-
-.TooltipContent[data-state="closed"][data-side="bottom"] {
-  transform-origin: top;
-  animation: fadeOut 150ms ease-in;
-}
-
-.TooltipContent[data-state="open"][data-side="top"] {
-  transform-origin: bottom;
-  animation: fadeIn 150ms ease-out;
-}
-
-.TooltipContent[data-state="closed"][data-side="top"] {
-  transform-origin: bottom;
-  animation: fadeOut 150ms ease-in;
-}
-
-.TooltipContent[data-state="closed"][data-side="bottom"] {
-  transform-origin: bottom;
-  animation: fadeOut 150ms ease-in;
-}
 
 @keyframes contentShow {
   from {

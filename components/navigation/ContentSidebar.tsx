@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
@@ -23,23 +23,23 @@ import {
   ModuleContent,
   useGetCourseStructure,
 } from "hooks/course/useGetCourseStructure";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-const ContentSidebar = ({
-  activeContent,
-  setActiveContent,
-  dropdownHeights,
-}: {
-  activeContent: ContentType;
-  setActiveContent: (activeContent: ContentType) => void;
-  dropdownHeights: Record<number, number>;
-}) => {
-  const [openModules, setOpenModules] = React.useState<string[]>([]);
+const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
+  const [openModules, setOpenModules] = useState<string[]>([]);
+
+  const [activeContent, setActiveContent] = useState<ContentType>("all");
 
   const {
     data: courseStructure,
     isLoading: courseStructureLoading,
     isError: courseStructureError,
   } = useGetCourseStructure({
+    courseId: courseId as string,
     admin: false,
   });
 
@@ -51,6 +51,49 @@ const ContentSidebar = ({
 
   const toggleContentSidebar = (hidden: boolean) => {
     dispatch(setContentSidebarHidden(hidden));
+  };
+
+  // sizing of dropdowns
+
+  const [dropdownHeights, setDropdownHeights] = useState<
+    Record<number, number>
+  >({});
+
+  const [shouldRecalculate, recalculate] = useState({});
+  const recalculateDropdownHeights = () => recalculate({});
+
+  useEffect(() => {
+    calculateDropdownHeights(activeContent);
+  }, [activeContent, courseStructure, shouldRecalculate]);
+
+  const calculateDropdownHeights = (activeContent: ContentType) => {
+    // if activeContent is all, get summed height of all elements with class {index}-content from index 0 to 3
+    // if activeContent is lessons, get summed height of all elements with class {index}-lesson from index 0 to 1
+    // if activeContent is problems, get summed height of all elements with class {index}-problem from index 2 to 3
+    const dropdownHeights: Record<number, number> = {};
+    const dropdowns = document.getElementsByClassName("dropdown");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const allHeight = Array.from(
+        document.getElementsByClassName(`${i}-content`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const lessonHeight = Array.from(
+        document.getElementsByClassName(`${i}-lesson`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      const problemHeight = Array.from(
+        document.getElementsByClassName(`${i}-problem`)
+      ).reduce((acc, el) => acc + el.clientHeight, 0);
+
+      if (activeContent === "all") {
+        dropdownHeights[i] = allHeight;
+      } else if (activeContent === "lessons") {
+        dropdownHeights[i] = lessonHeight;
+      } else if (activeContent === "problems") {
+        dropdownHeights[i] = problemHeight;
+      }
+    }
+    setDropdownHeights(dropdownHeights);
   };
 
   const router = useRouter();
@@ -66,20 +109,27 @@ const ContentSidebar = ({
         className={`overflow-auto w-72 min-w-[18rem] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
       >
         {/* Header */}
-        <div className="w-full h-20 min-h-[5rem] flex items-center px-6 justify-between">
-          <h1 className="text-white font-dm text-base">Exercises</h1>
-          <div
-            onClick={() => {
-              toggleContentSidebar(!contentSidebarHidden);
-            }}
-            className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
-          >
-            <DoubleArrowLeftIcon className="text-slate-300" />
-          </div>
+        <div className="w-full h-[60px] min-h-[60px] flex items-center px-4 bg-nav-darker justify-between border-b border-b-white/10">
+          <h1 className="text-white font-dm text-sm">Course Content</h1>
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger asChild>
+              <div
+                onClick={() => {
+                  toggleContentSidebar(!contentSidebarHidden);
+                }}
+                className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
+              >
+                <DoubleArrowLeftIcon className="text-slate-300" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="left" sideOffset={5} align="center">
+              Collapse
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="w-full">
           <Tabs.Root
-            className="flex flex-col w-full rounded-md"
+            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker"
             value={activeContent}
             onValueChange={(value) => {
               setActiveContent(value as ContentType);
@@ -90,13 +140,15 @@ const ContentSidebar = ({
               aria-label="Select content type"
             >
               {toggleExercisesLinks.map((link) => (
-                <Tabs.Trigger
-                  key={link.id}
-                  className="px-3 py-3 transition data-[state=active]:border-b data-[state=inactive]:border-b-slate-400 data-[state=active]:border-b-emerald-500 flex-1 flex items-center justify-center text-sm font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none cursor-default"
-                  value={link.id}
-                >
-                  {link.text}
-                </Tabs.Trigger>
+                <div className="p-2 flex-1">
+                  <Tabs.Trigger
+                    key={link.id}
+                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none"
+                    value={link.id}
+                  >
+                    {link.text}
+                  </Tabs.Trigger>
+                </div>
               ))}
             </Tabs.List>
           </Tabs.Root>
@@ -156,7 +208,7 @@ const ContentSidebar = ({
                       <Accordion.Item
                         value={value.moduleName}
                         key={primaryIndex}
-                        className="border-t border-slate-700 last:border-b group dropdown"
+                        className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown"
                       >
                         <Accordion.Trigger
                           className={`pl-[0.875rem] relative pr-4 group py-3 w-full flex items-center justify-between overflow-hidden`}
@@ -233,7 +285,12 @@ const ContentSidebar = ({
                                       type === "problem" ? "code" : "learn";
 
                                     return (
-                                      <Link href={`/${urlPath}/${id}`} key={id}>
+                                      <Link
+                                        href={{
+                                          pathname: `/courses/${courseId}/${type}/${id}`,
+                                        }}
+                                        key={id}
+                                      >
                                         <m.div
                                           initial={{ opacity: 0, x: 10 }}
                                           animate={{

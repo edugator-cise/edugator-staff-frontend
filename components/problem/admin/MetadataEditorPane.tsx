@@ -11,20 +11,11 @@ import {
   NodeViewContent,
 } from "@tiptap/react";
 import { Markdown } from "tiptap-markdown";
-import { mergeAttributes, Node, Content } from "@tiptap/core";
-import { ReactNodeViewRenderer } from "@tiptap/react";
 import {
-  H1,
-  H2,
-  Bold,
-  Italic,
-  Strikethrough,
-  Code,
-  SourceCode,
-  List,
-  ListNumbers,
-  Underline as UnderlineIcon,
-} from "tabler-icons-react";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ProblemAction } from "./types";
 import { JSONContent } from "@tiptap/react";
 import {
@@ -32,11 +23,9 @@ import {
   processProblemStatement,
   sampleEditorContent,
 } from "./utils";
-import { Extensions } from "@tiptap/react";
 import { Problem } from "hooks/problem/useGetProblem";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { Divider, MenuOption } from "components/lesson/admin/utils";
 
 const MenuBar = ({ editor }: { editor: Editor }) => {
@@ -46,44 +35,35 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
 
   return (
     <div className="w-full gap-2 rounded-t-md bg-slate-700 text-white flex flex-wrap p-2 items-center">
-      <Tooltip.Provider delayDuration={400}>
-        {menuOptions().map((option: MenuOption | Divider, index: number) => {
-          // check if option is a divider (if object is empty)
-          if (Object.keys(option).length === 0) {
-            return <div key={index} className="w-px h-6 bg-slate-500"></div>;
-          }
-          const menuOption = option as MenuOption;
-          return (
-            <Tooltip.Root key={index} delayDuration={300}>
-              <Tooltip.Trigger asChild>
-                <button
-                  key={index}
-                  className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
-                    menuOption.active &&
-                    menuOption.active(editor) &&
-                    "bg-white/20"
-                  } `}
-                  onClick={() => {
-                    menuOption.command(editor);
-                  }}
-                >
-                  {menuOption.icon}
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="bottom"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-20 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
-                >
-                  {menuOption.title}
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          );
-        })}
-      </Tooltip.Provider>
+      {menuOptions().map((option: MenuOption | Divider, index: number) => {
+        // check if option is a divider (if object is empty)
+        if (Object.keys(option).length === 0) {
+          return <div key={index} className="w-px h-6 bg-slate-500"></div>;
+        }
+        const menuOption = option as MenuOption;
+        return (
+          <Tooltip key={index} delayDuration={300}>
+            <TooltipTrigger asChild>
+              <button
+                key={index}
+                className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
+                  menuOption.active &&
+                  menuOption.active(editor) &&
+                  "bg-white/20"
+                } `}
+                onClick={() => {
+                  menuOption.command(editor);
+                }}
+              >
+                {menuOption.icon}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={5} align="center">
+              {menuOption.title}
+            </TooltipContent>
+          </Tooltip>
+        );
+      })}
     </div>
   );
 };

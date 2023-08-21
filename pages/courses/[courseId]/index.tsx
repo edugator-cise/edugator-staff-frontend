@@ -25,9 +25,7 @@ const CourseHome = () => {
   const router = useRouter();
   const { courseId } = router.query;
 
-  const { data: courseData, isFetching: courseDataFetching } = useGetCourse({
-    courseId: courseId as string,
-  });
+  const { data: courseData, isFetching: courseDataFetching } = useGetCourse();
 
   const {
     data: colors,
@@ -73,7 +71,27 @@ const CourseHome = () => {
   ];
 
   return (
-    <div className="min-h-screen h-full w-full text-slate-800 bg-gray-100">
+    <div className="min-h-screen h-1 w-full text-slate-800 bg-white overflow-auto">
+      Welcome to the course home page!
+    </div>
+  );
+  return (
+    <div className="min-h-screen h-1 w-full text-slate-800 bg-white overflow-auto">
+      <AddModuleModal
+        open={newModuleModalOpen}
+        setOpen={setNewModuleModalOpen}
+        moduleCount={courseStructureData?.modules.length || 0}
+      />
+      <AddLessonModal
+        open={newLessonModalOpen}
+        setOpen={setNewLessonModalOpen}
+        modules={courseStructureData?.modules || []}
+      />
+      <AddProblemModal
+        open={newProblemModalOpen}
+        setOpen={setNewProblemModalOpen}
+        modules={courseStructureData?.modules || []}
+      />
       <CoverImage
         courseData={courseData}
         colorLoading={colorLoading}
@@ -81,47 +99,16 @@ const CourseHome = () => {
         primaryColor={primaryColor}
       />
 
-      <div className="p-8 pt-10 w-full h-full overflow-auto">
-        <AddModuleModal
-          open={newModuleModalOpen}
-          setOpen={setNewModuleModalOpen}
-          moduleCount={courseStructureData?.modules.length || 0}
-        />
-        <AddLessonModal
-          open={newLessonModalOpen}
-          setOpen={setNewLessonModalOpen}
-          modules={courseStructureData?.modules || []}
-        />
-        <AddProblemModal
-          open={newProblemModalOpen}
-          setOpen={setNewProblemModalOpen}
-          modules={courseStructureData?.modules || []}
-        />
+      <div className="pb-8 p-8 pt-10 w-full">
         <div className="w-full h-full max-w-7xl relative">
           {/* Course Logo */}
 
           {courseStructureFetching ? (
             <div className="flex space-x-6 items-center">
-              {/* <div className="w-14 h-14 min-w-[3.5rem] animate-pulse rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-white ring-slate-400/70 shadow-inner">
-                <SquaresFour
-                  size={36}
-                  weight="duotone"
-                  className="text-slate-100"
-                />
-              </div> */}
               <div className="w-80 h-[39px] bg-slate-300 rounded-md animate-pulse"></div>
             </div>
           ) : (
             <div className="flex space-x-6 items-center">
-              {/* <div className="w-14 h-14 min-w-[3.5rem] group relative rounded-md overflow-hidden ring-offset-1 ring-offset-white ring-slate-400/70 shadow-inner ring-1">
-                <div className="absolute inset-0 w-full h-full bg-slate-300 flex items-center justify-center transition">
-                  <SquaresFour
-                    size={36}
-                    weight="duotone"
-                    className="text-slate-100"
-                  />
-                </div>
-              </div> */}
               <div className="flex flex-row justify-between w-full">
                 <div className="flex flex-col space-y-4 justify-center">
                   <h1 className="text-3xl font-medium text-slate-800 font-sans">
@@ -171,7 +158,7 @@ const CourseHome = () => {
           )}
           <div className="w-full h-px bg-slate-200 mt-8" />
           <h1 className="text-xl font-medium font-dm !mt-8 mb-4">Actions</h1>
-          <div className="w-full p-4 rounded-md bg-gray-200 border border-gray-300">
+          <div className="w-full p-4 rounded-md bg-gray-100 border">
             {courseStructureFetching ? (
               <div className="w-full h-48 flex items-center justify-center bg-slate-100">
                 <FidgetSpinner className="w-10 h-10 animate-spin text-slate-800" />
@@ -202,7 +189,6 @@ const CourseHome = () => {
             )}
           </div>
         </div>
-        C
       </div>
     </div>
   );

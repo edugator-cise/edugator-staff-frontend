@@ -3,9 +3,11 @@ import { useRouter } from "next/router";
 import AdminProblemEditor from "components/problem/admin/ProblemEditor";
 import { useGetProblem } from "hooks/problem/useGetProblem";
 import { useEffect } from "react";
-import { StudentLoadingState } from "pages/code/[problemId]";
+import { useUserRole } from "hooks/user/useUserRole";
+import { StudentProblemLoadingState } from "../[problemId]";
 
 const ProblemEditPage = () => {
+  const { role } = useUserRole();
   const router = useRouter();
   const { problemId } = router.query;
 
@@ -18,13 +20,9 @@ const ProblemEditPage = () => {
     problemId: problemId as string,
   });
 
-  useEffect(() => {
-    console.log("problemData CHANGEDDDD");
-    if (problemData) {
-      console.log(problemData);
-    }
-  }, [problemData]);
-
+  if (role === "student") {
+    return <></>;
+  }
   return problemFetching ? (
     <div className="flex flex-col w-full h-full">
       <div className="h-14 py-3 bg-nav-darkest w-full flex justify-between px-4 items-center">
@@ -35,7 +33,7 @@ const ProblemEditPage = () => {
           <div className="w-24 h-8 rounded-md bg-nav-inactive-dark/50 animate-pulse"></div>
         </div>
       </div>
-      <StudentLoadingState />
+      <StudentProblemLoadingState />
     </div>
   ) : (
     <AdminProblemEditor problem={problemData} />

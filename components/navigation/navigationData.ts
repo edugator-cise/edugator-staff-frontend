@@ -1,18 +1,5 @@
 import { icons } from "./navIcons";
 
-export const classes = [
-  {
-    name: "COP3530",
-    course: "Data Structures and Algorithms",
-    icon: "/DSALogo.png",
-  },
-  {
-    name: "COP3501",
-    course: "Programming 1",
-    icon: "/prog1logo.jpg",
-  },
-];
-
 export type NavLinkItem = {
   icon: (active: boolean) => React.ReactNode;
   text: NavLinkText | AdminNavLinkText;

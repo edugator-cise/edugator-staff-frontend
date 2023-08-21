@@ -3,7 +3,7 @@ import * as monaco from "monaco-editor";
 import { getFileExtension } from "./utils";
 import { Language, LanguageData, ProblemAction } from "./types";
 import Editor from "@monaco-editor/react";
-import { toTitleCase } from "utils/textUtils";
+import { toTitleCase } from "@/lib/textUtils";
 import { Problem } from "hooks/problem/useGetProblem";
 
 const languageLabels: { [key in Language]: string } = {

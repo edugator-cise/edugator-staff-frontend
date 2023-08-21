@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/nextjs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRoutes } from "constants/apiRoutes";
 import { COURSE_STRUCTURE_QUERY_KEY } from "hooks/course/useGetCourseStructure";
@@ -12,13 +13,18 @@ export interface ReorderModule {
 }
 
 export const useReorderModule = () => {
-  const queryClient = useQueryClient();
+  const { getToken } = useAuth();
   const { courseId } = useSelector((state: RootState) => state.course);
 
   const reorderModule = async (reorderModule: ReorderModule) => {
     const { data } = await apiClient.post(
       apiRoutes.v2.admin.reorderModule(courseId as string),
-      reorderModule
+      reorderModule,
+      {
+        headers: {
+          Authorization: `Bearer ${await getToken()}`,
+        },
+      }
     );
     return data;
   };

@@ -9,6 +9,11 @@ import {
   ReloadIcon,
 } from "@radix-ui/react-icons";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Editor,
   Node,
   NodeConfig,
@@ -17,7 +22,6 @@ import {
   mergeAttributes,
 } from "@tiptap/react";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import { ListCheck } from "tabler-icons-react";
 import { AwesomeButton } from "react-awesome-button";
 import AnimateHeight from "react-animate-height";
@@ -356,116 +360,106 @@ const MultipleSelectAdminComponent: React.FC<MultipleSelectProps> = ({
           Answers
         </label>
         <div className="flex flex-col space-y-2">
-          <Tooltip.Provider delayDuration={100}>
-            {answers.map((answer: string, index: number) => (
-              <div key={index} className="flex space-x-2 w-full items-center">
-                <div
-                  className={`rounded-md w-full bg-white flex items-center space-x-2 text-slate-800 transition font-dm text-base outline-none border px-2 ${
+          {answers.map((answer: string, index: number) => (
+            <div key={index} className="flex space-x-2 w-full items-center">
+              <div
+                className={`rounded-md w-full bg-white flex items-center space-x-2 text-slate-800 transition font-dm text-base outline-none border px-2 ${
+                  correctAnswers.includes(index)
+                    ? "border-emerald-500"
+                    : "border-slate-300"
+                }`}
+              >
+                <Checkbox.Root
+                  className={`bg-white  w-6 min-w-[1.5rem] h-6 rounded-sm shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
                     correctAnswers.includes(index)
-                      ? "border-emerald-500"
-                      : "border-slate-300"
+                      ? "focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
+                      : "border border-slate-300"
                   }`}
+                  id={index.toString()}
+                  onCheckedChange={() => {
+                    handleCorrectAnswerChange(index);
+                  }}
+                  checked={correctAnswers.includes(index)}
                 >
-                  <Checkbox.Root
-                    className={`bg-white  w-6 min-w-[1.5rem] h-6 rounded-sm shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
-                      correctAnswers.includes(index)
-                        ? "focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
-                        : "border border-slate-300"
-                    }`}
-                    id={index.toString()}
-                    onCheckedChange={() => {
-                      handleCorrectAnswerChange(index);
-                    }}
-                    checked={correctAnswers.includes(index)}
+                  <Checkbox.Indicator
+                    asChild
+                    className="flex items-center justify-center w-full h-full relative"
                   >
-                    <Checkbox.Indicator
-                      asChild
-                      className="flex items-center justify-center w-full h-full relative"
-                    >
-                      <div className="w-full h-full rounded-sm bg-emerald-500/80 flex items-center justify-center">
-                        <CheckIcon className="w-5 h-5 text-white" />
-                      </div>
-                    </Checkbox.Indicator>
-                  </Checkbox.Root>
-                  <input
-                    onClick={(e) => {
-                      // set multipleSelectNode as active
-                      editor.chain().setNodeSelection(node.pos).run();
+                    <div className="w-full h-full rounded-sm bg-emerald-500/80 flex items-center justify-center">
+                      <CheckIcon className="w-5 h-5 text-white" />
+                    </div>
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
+                <input
+                  onClick={(e) => {
+                    // set multipleSelectNode as active
+                    editor.chain().setNodeSelection(node.pos).run();
 
-                      e.stopPropagation();
-                      e.preventDefault();
-                    }}
-                    type="text"
-                    className={`w-full bg-white text-slate-800 p-2 font-dm text-base outline-none rounded-md`}
-                    value={answer}
-                    onChange={(e) => handleAnswerChange(index, e)}
-                    placeholder={`Answer ${index + 1}`}
-                  />
-                  <div className="flex space-x-2 items-center">
-                    {correctAnswers.includes(index) ? (
-                      <div
-                        className={`rounded-sm flex w-fit space-x-2 items-center bg-emerald-500 h-full py-1 px-2`}
-                      >
-                        <div className="text-white font-dm text-xs min-w-fit whitespace-nowrap">
-                          Correct Answer
-                        </div>
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                  type="text"
+                  className={`w-full bg-white text-slate-800 p-2 font-dm text-base outline-none rounded-md`}
+                  value={answer}
+                  onChange={(e) => handleAnswerChange(index, e)}
+                  placeholder={`Answer ${index + 1}`}
+                />
+                <div className="flex space-x-2 items-center">
+                  {correctAnswers.includes(index) ? (
+                    <div
+                      className={`rounded-sm flex w-fit space-x-2 items-center bg-emerald-500 h-full py-1 px-2`}
+                    >
+                      <div className="text-white font-dm text-xs min-w-fit whitespace-nowrap">
+                        Correct Answer
                       </div>
-                    ) : (
-                      <></>
-                    )}
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <button
-                          disabled={answers.length === 3}
-                          className="p-1 enabled:hover:bg-red-50 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                          onClick={() => removeAnswer(index)}
-                        >
-                          <MinusCircledIcon className="w-5 h-5 text-red-500" />
-                        </button>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="right"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2 ${
-                            answers.length === 3 ? "hidden" : ""
-                          }`}
-                        >
-                          Remove Answer
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <button
+                        disabled={answers.length === 3}
+                        className="p-1 enabled:hover:bg-red-50 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => removeAnswer(index)}
+                      >
+                        <MinusCircledIcon className="w-5 h-5 text-red-500" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      sideOffset={5}
+                      align="center"
+                      className={`${answers.length === 3 ? "hidden" : ""}`}
+                    >
+                      Remove Answer
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
-            ))}
-            <div className="flex justify-center !mt-4 items-center space-x-2">
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild>
-                  <button
-                    disabled={answers.length === 8}
-                    className="p-1 enabled:hover:bg-emerald-500/10 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    onClick={addAnswer}
-                  >
-                    <PlusCircledIcon className="w-6 h-6 text-green-500" />
-                  </button>
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content
-                    side="bottom"
-                    sideOffset={5}
-                    align="center"
-                    className={`z-20 TooltipContent data-[side=bottom]:animate-slideDownAndFade data-[side=top]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2 ${
-                      answers.length === 8 ? "hidden" : ""
-                    }`}
-                  >
-                    Add Answer
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
             </div>
-          </Tooltip.Provider>
+          ))}
+          <div className="flex justify-center !mt-4 items-center gap-2">
+            <Tooltip delayDuration={100}>
+              <TooltipTrigger asChild>
+                <button
+                  disabled={answers.length === 8}
+                  className="p-1 enabled:hover:bg-emerald-500/10 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={addAnswer}
+                >
+                  <PlusCircledIcon className="w-6 h-6 text-green-500" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                sideOffset={5}
+                align="center"
+                className={`${answers.length === 8 ? "hidden" : ""}`}
+              >
+                Add Answer
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </div>
     </NodeViewWrapper>

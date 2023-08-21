@@ -19,7 +19,6 @@ import {
   RocketIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import Modal from "components/shared/Modals/Modal";
 import SwitchToggle from "components/shared/SwitchToggle";
 import AlertModal from "components/shared/Modals/AlertModal";
@@ -34,6 +33,11 @@ import { useUpdateProblem } from "hooks/problem/useUpdateProblem";
 import { useCreateProblem } from "hooks/problem/useCreateProblem";
 import { Content } from "@tiptap/react";
 import { useDeleteProblem } from "hooks/problem/useDeleteProblem";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Trash } from "tabler-icons-react";
 
 const Allotment = dynamic<AllotmentProps>(
@@ -492,90 +496,74 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
         </div>
         <div className="flex space-x-2 items-center">
           {problem ? (
-            <div className="flex space-x-2 items-center">
+            <div className="flex gap-2 items-center">
               {editable ? (
                 <>
-                  <Tooltip.Provider delayDuration={100}>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <div
-                          className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
-                          onClick={() => {
-                            setSettingsOpen(!settingsOpen);
-                          }}
-                        >
-                          <GearIcon color="white" />
-                        </div>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                        >
-                          Settings
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger>
+                      <div
+                        className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
+                        onClick={() => {
+                          setSettingsOpen(!settingsOpen);
+                        }}
+                      >
+                        <GearIcon color="white" />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" sideOffset={5} align="center">
+                      <p>Settings</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                    <ActionButton
-                      color="gray"
-                      onClick={() => {
-                        if (!unsavedChanges) {
-                          onCancelWithoutChanges();
-                          return;
-                        }
-                        setConfirmModalOpen(true);
-                      }}
-                    >
-                      <Cross2Icon />
-                      <p>Discard Changes</p>
-                    </ActionButton>
-                    <ActionButton
-                      color="green"
-                      disabled={
-                        !unsavedChanges || updateProblemLoading
-                        /* lessonState.title === "" ||
+                  <ActionButton
+                    color="gray"
+                    onClick={() => {
+                      if (!unsavedChanges) {
+                        onCancelWithoutChanges();
+                        return;
+                      }
+                      setConfirmModalOpen(true);
+                    }}
+                  >
+                    <Cross2Icon />
+                    <p>Discard Changes</p>
+                  </ActionButton>
+                  <ActionButton
+                    color="green"
+                    disabled={
+                      !unsavedChanges || updateProblemLoading
+                      /* lessonState.title === "" ||
                       lessonState.content === "" ||
                       !lessonState.title ||
                       !lessonState.content ||
                       !editable ||
                       !unsavedChanges */
-                      }
-                      onClick={async () => {
-                        console.log(problemState);
-                        await saveProblem();
-                      }}
-                    >
-                      <CheckCircledIcon />
-                      <p>Save Changes</p>
-                    </ActionButton>
-                    <Tooltip.Root>
-                      <Tooltip.Trigger asChild>
-                        <div className="w-fit">
-                          <ActionButton
-                            disabled={deleteProblemLoading}
-                            color="red"
-                            onClick={() => setDeleteModalOpen(true)}
-                            className="!px-2"
-                          >
-                            <Trash className="w-4 h-4" strokeWidth={1.5} />
-                          </ActionButton>
-                        </div>
-                      </Tooltip.Trigger>
-                      <Tooltip.Portal>
-                        <Tooltip.Content
-                          side="bottom"
-                          sideOffset={5}
-                          align="center"
-                          className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
+                    }
+                    onClick={async () => {
+                      console.log(problemState);
+                      await saveProblem();
+                    }}
+                  >
+                    <CheckCircledIcon />
+                    <p>Save Changes</p>
+                  </ActionButton>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <div className="w-fit">
+                        <ActionButton
+                          disabled={deleteProblemLoading}
+                          color="red"
+                          onClick={() => setDeleteModalOpen(true)}
+                          className="!px-2"
                         >
-                          Delete Problem
-                        </Tooltip.Content>
-                      </Tooltip.Portal>
-                    </Tooltip.Root>
-                  </Tooltip.Provider>
+                          <Trash className="w-4 h-4" strokeWidth={1.5} />
+                        </ActionButton>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" sideOffset={5} align="center">
+                      Delete Problem
+                    </TooltipContent>
+                  </Tooltip>
                 </>
               ) : (
                 <>
@@ -593,30 +581,21 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
             </div>
           ) : (
             <>
-              <Tooltip.Provider delayDuration={100}>
-                <Tooltip.Root>
-                  <Tooltip.Trigger asChild>
-                    <div
-                      className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
-                      onClick={() => {
-                        setSettingsOpen(!settingsOpen);
-                      }}
-                    >
-                      <GearIcon color="white" />
-                    </div>
-                  </Tooltip.Trigger>
-                  <Tooltip.Portal>
-                    <Tooltip.Content
-                      side="bottom"
-                      sideOffset={5}
-                      align="center"
-                      className={`z-20 TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-gray-800 text-white font-dm text-xs rounded-md p-2`}
-                    >
-                      Settings
-                    </Tooltip.Content>
-                  </Tooltip.Portal>
-                </Tooltip.Root>
-              </Tooltip.Provider>
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger asChild>
+                  <div
+                    className="p-2 rounded-md cursor-pointer ring-1 ring-offset-1 ring-offset-slate-800 ring-slate-700 bg-white/5 flex items-center justify-center space-x-2"
+                    onClick={() => {
+                      setSettingsOpen(!settingsOpen);
+                    }}
+                  >
+                    <GearIcon color="white" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={5} align="center">
+                  Settings
+                </TooltipContent>
+              </Tooltip>
               <ActionButton
                 color="green"
                 disabled={!unsavedChanges || createProblemLoading}

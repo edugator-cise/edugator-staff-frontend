@@ -49,7 +49,6 @@ export const AddStudentModal = ({
         },
       });
     }
-    toast.success("Students added successfully.");
     setTimeout(() => {
       setStudents("");
       setFile(null);

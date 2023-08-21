@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import * as Tooltip from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const NavLinkTooltip = ({
   text,
@@ -18,19 +22,16 @@ export const NavLinkTooltip = ({
   }, [disabled]);
 
   return (
-    <Tooltip.Provider disableHoverableContent={disabled} delayDuration={150}>
-      <Tooltip.Root open={disabled ? false : open} onOpenChange={setOpen}>
-        <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            side="right"
-            className="TooltipContent z-[100] data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade text-sm font-dm select-none rounded-[4px] bg-nav-darker border border-slate-700 text-slate-300 px-3 py-2 leading-none will-change-[transform,opacity]"
-            sideOffset={10}
-          >
-            {text}
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+    <Tooltip
+      open={disabled ? false : open}
+      onOpenChange={setOpen}
+      disableHoverableContent={disabled}
+      delayDuration={150}
+    >
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent side="right" sideOffset={10}>
+        {text}
+      </TooltipContent>
+    </Tooltip>
   );
 };

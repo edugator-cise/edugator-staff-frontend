@@ -21,6 +21,8 @@ import { useUser } from "@clerk/nextjs";
 import { EdugatorLogo } from "components/navigation/navIcons";
 
 import CourseHeader from "components/navigation/CourseHeader";
+import { useUserRole } from "hooks/user/useUserRole";
+import ContentSidebar from "components/navigation/ContentSidebar";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -39,13 +41,15 @@ type Props = {
 
 const MAIN_SIDEBAR_WIDTH = 58;
 const MAIN_SIDEBAR_EXPANDED_WIDTH = 288;
-const CONTENT_SIDEBAR_WIDTH = 350;
+const ADMIN_CONTENT_SIDEBAR_WIDTH = 350;
+const STUDENT_CONTENT_SIDEBAR_WIDTH = 288;
 
 const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
   const [isMounted, setIsMounted] = useState(false);
 
   // useuser
   const { user } = useUser();
+  const { role } = useUserRole();
 
   useEffect(() => {
     console.log(user);
@@ -76,6 +80,11 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     (state: RootState) => state.interfaceControls
   );
 
+  const CONTENT_SIDEBAR_WIDTH =
+    role === "student"
+      ? STUDENT_CONTENT_SIDEBAR_WIDTH
+      : ADMIN_CONTENT_SIDEBAR_WIDTH;
+
   const {
     contentMargin,
     contentSidebarOffset,
@@ -105,7 +114,7 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         {/* Main sidebar */}
         <div
           style={{
-            left: false
+            left: mobileView
               ? adminMainSidebarHidden
                 ? -MAIN_SIDEBAR_WIDTH
                 : -MAIN_SIDEBAR_EXPANDED_WIDTH
@@ -119,22 +128,25 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
         >
           <AdminNavigation courseId={courseId as string} />
         </div>
-        {/* Divider between sidebars */}
         <div className="w-full h-full flex flex-col">
           <div className="flex w-full h-full">
             {/* Content sidebar */}
             {/* If no course is selected, don't render content sidebar */}
             <div
               style={{
-                left: false
+                left: mobileView
                   ? -(MAIN_SIDEBAR_WIDTH + CONTENT_SIDEBAR_WIDTH)
                   : contentSidebarOffset(),
               }}
               className={`mobile:left-auto !absolute top-0 transition-all h-full ease-[cubic-bezier(0.87,_0,_0.13,_1)]`}
             >
-              {courseId && (
-                <AdminContentSidebar courseId={courseId as string} />
-              )}
+              {courseId ? (
+                role === "student" ? (
+                  <ContentSidebar courseId={courseId as string} />
+                ) : (
+                  <AdminContentSidebar courseId={courseId as string} />
+                )
+              ) : null}
             </div>
 
             {/* Content Holder */}
@@ -144,26 +156,10 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
                   ? laptopContentMargin()
                   : contentMargin(),
               }}
-              className={`relative w-full min-h-screen h-screen transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+              className={`relative w-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
                 tabletView ? `!pl-[${MAIN_SIDEBAR_WIDTH}px]` : ""
               } ${mobileView ? "!pl-0" : ""} ${false ? "!pl-0" : ""}`}
             >
-              {/* Top bar (shown only on mobile) */}
-              {/* <div
-                style={{
-                  top: mobileView ? 0 : -96,
-                  left: mobileView ? 0 : 80,
-                }}
-                className="absolute left-0 transition-all w-full"
-              >
-                <MobileHeader
-                  mobileNavOpen={mobileNavOpen}
-                  setMobileNavOpen={setMobileNavOpen}
-                  dropdownHeights={[]}
-                  setActiveContent={() => {}}
-                  activeContent={"all"}
-                />
-              </div> */}
               <SidebarHideOverlay
                 hidden={adminContentSidebarHidden && adminMainSidebarHidden}
                 setHidden={() => {

@@ -3,7 +3,7 @@ import { SubmitOutput } from "./SubmitOutput";
 import { CompilerOutput } from "hooks/types";
 import { IResultSubmission } from "./types";
 import * as Tabs from "@radix-ui/react-tabs";
-import { toTitleCase } from "utils/textUtils";
+import { toTitleCase } from "@/lib/textUtils";
 import { useEffect, useState } from "react";
 
 export const InputOutputView = ({

@@ -1,7 +1,13 @@
 import AdminLayout from "components/layouts/AdminLayout";
 import AdminLessonEditor from "components/lesson/admin/LessonEditor";
+import { useUserRole } from "hooks/user/useUserRole";
 
 const ContentCreatePage = () => {
+  const { role } = useUserRole();
+
+  if (role === "student") {
+    return null;
+  }
   return <AdminLessonEditor />;
 };
 

@@ -27,14 +27,15 @@ type GetCourseParams = {
 
 export const COURSE_QUERY_KEY = "courseData";
 
-export const useGetCourse = ({
-  admin,
-  courseId,
-}: {
-  admin?: boolean;
-  courseId: string;
-}) => {
+export const useGetCourse = () => {
   const { getToken } = useAuth();
+
+  const { courseId } = useSelector((state: RootState) => state.course);
+
+  if (!courseId) {
+    toast.error("Course id not found");
+    throw new Error("Course id not found");
+  }
 
   const fetchCourse = async ({
     courseId,

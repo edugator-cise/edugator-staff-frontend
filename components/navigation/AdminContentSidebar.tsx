@@ -10,6 +10,11 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as Tabs from "@radix-ui/react-tabs";
@@ -26,7 +31,6 @@ import { AnimatePresence, motion as m, Reorder } from "framer-motion";
 import AnimateHeight from "react-animate-height";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Modal from "components/shared/Modals/Modal";
-import * as Tooltip from "@radix-ui/react-tooltip";
 import {
   CourseModule,
   CourseStructure,
@@ -37,7 +41,7 @@ import { useCreateModule } from "hooks/module/useCreateModule";
 import AlertModal from "components/shared/Modals/AlertModal";
 import { useDeleteModule } from "hooks/module/useDeleteModule";
 import { useDeleteLesson } from "hooks/lesson/useDeleteLesson";
-import { toTitleCase } from "utils/textUtils";
+import { toTitleCase } from "@/lib/textUtils";
 import { DeleteLessonModal } from "components/lesson/admin/LessonEditor";
 import { useDeleteProblem } from "hooks/problem/useDeleteProblem";
 import { DeleteProblemModal } from "components/problem/admin/ProblemEditor";
@@ -378,30 +382,21 @@ const AdminContentSidebar = ({
         {/* Header */}
         <div className="w-full h-[60px] min-h-[60px] flex items-center px-4 bg-nav-darker justify-between border-b border-b-white/10">
           <h1 className="text-white font-dm text-sm">Course Content</h1>
-          <Tooltip.Provider delayDuration={100}>
-            <Tooltip.Root>
-              <Tooltip.Trigger asChild>
-                <div
-                  onClick={() => {
-                    toggleContentSidebar(!adminContentSidebarHidden);
-                  }}
-                  className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
-                >
-                  <DoubleArrowLeftIcon className="text-slate-300" />
-                </div>
-              </Tooltip.Trigger>
-              <Tooltip.Portal>
-                <Tooltip.Content
-                  side="left"
-                  sideOffset={5}
-                  align="center"
-                  className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-slate-800 border border-slate-700 text-white font-dm text-xs rounded-md p-2`}
-                >
-                  Collapse
-                </Tooltip.Content>
-              </Tooltip.Portal>
-            </Tooltip.Root>
-          </Tooltip.Provider>
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger asChild>
+              <div
+                onClick={() => {
+                  toggleContentSidebar(!adminContentSidebarHidden);
+                }}
+                className="w-8 h-8 flex items-center justify-center rounded-md bg-white/5 hover:bg-white/20 transition cursor-pointer"
+              >
+                <DoubleArrowLeftIcon className="text-slate-300" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="left" sideOffset={5} align="center">
+              Collapse
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="w-full">
           <Tabs.Root
@@ -562,38 +557,34 @@ const AdminContentSidebar = ({
                                           </p>
                                         </div>
                                         <div className="flex space-x-2 items-center">
-                                          <Tooltip.Provider delayDuration={100}>
-                                            <Tooltip.Root>
-                                              <Tooltip.Trigger asChild>
-                                                <div
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
+                                          <Tooltip delayDuration={100}>
+                                            <TooltipTrigger asChild>
+                                              <div
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
 
-                                                    openDeleteModuleModal(
-                                                      module.id
-                                                    );
-                                                  }}
-                                                  className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center"
-                                                >
-                                                  <Trash
-                                                    className="text-red-400 w-4 h-4"
-                                                    strokeWidth={1.5}
-                                                  />
-                                                  {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
-                                                </div>
-                                              </Tooltip.Trigger>
-                                              <Tooltip.Portal>
-                                                <Tooltip.Content
-                                                  side="left"
-                                                  sideOffset={5}
-                                                  align="center"
-                                                  className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-red-700 text-white font-dm text-xs rounded-md p-2`}
-                                                >
-                                                  Delete Module
-                                                </Tooltip.Content>
-                                              </Tooltip.Portal>
-                                            </Tooltip.Root>
-                                          </Tooltip.Provider>
+                                                  openDeleteModuleModal(
+                                                    module.id
+                                                  );
+                                                }}
+                                                className="p-2 rounded-md hover:bg-nav-darker flex items-center justify-center"
+                                              >
+                                                <Trash
+                                                  className="text-red-400 w-4 h-4"
+                                                  strokeWidth={1.5}
+                                                />
+                                                {/* <Pencil1Icon className="text-white w-4 h-4" /> */}
+                                              </div>
+                                            </TooltipTrigger>
+                                            <TooltipContent
+                                              side="left"
+                                              sideOffset={5}
+                                              align="center"
+                                              className={`z-50 TooltipContent data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade bg-red-700 text-white font-dm text-xs rounded-md p-2`}
+                                            >
+                                              Delete Module
+                                            </TooltipContent>
+                                          </Tooltip>
 
                                           <ChevronDownIcon
                                             className="text-white ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-180"

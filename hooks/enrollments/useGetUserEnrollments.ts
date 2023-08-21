@@ -9,9 +9,11 @@ export type EnrollmentStatus = "pending" | "active" | "removed";
 
 // for gets
 export interface CourseEnrollment {
+  avatar: string;
   courseId: string;
   userId: string;
   email: string;
+  name: string;
   role: CourseRole; // should this be enum? depends what we expect passed in by backend
   courseName: string;
   instructors: InstructorData[];
@@ -40,6 +42,7 @@ export const useGetUserEnrollments = () => {
 
   return useQuery<CourseEnrollment[], Error>({
     refetchOnWindowFocus: false, // set this to true?
+    refetchOnMount: false,
     queryKey: ["userEnrollments"],
     queryFn: () => fetchAllUserEnrollments(),
     onError: () => {
