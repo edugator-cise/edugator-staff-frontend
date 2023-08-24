@@ -47,15 +47,6 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
     setMounted(true);
   }, []);
 
-  const { systemTheme, theme, setTheme } = useTheme();
-
-  // force light theme
-  useEffect(() => {
-    setTheme("light");
-  }, [mounted]);
-
-  const currentTheme = theme === "system" ? systemTheme : theme;
-
   return (
     <nav
       style={

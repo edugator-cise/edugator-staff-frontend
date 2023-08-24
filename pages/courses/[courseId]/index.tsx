@@ -22,6 +22,7 @@ import { Users2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import SuperEllipse from "react-superellipse";
+import { Switchboard } from "..";
 
 // if course does not exist, or user does not have permission to access the courseId,
 // we will redirect them elsewhere or return a 404 (preferably the latter)
@@ -77,13 +78,16 @@ const CourseHome = () => {
 
   return (
     <div className="min-h-screen h-1 w-full bg-white dark:bg-nav-evendarker overflow-auto">
-      <div className="w-full">
-        <div className="max-w-7xl mx-auto flex items-center justify-between p-6 lg:p-12">
+      <div className="w-full bg-nav-darkest dark:bg-nav-evendarker">
+        <div className="max-w-7xl mx-auto flex items-center justify-between p-6 lg:p-12 lg:py-9 relative">
+          <div className="absolute -translate-y-1/2 top-1/2 left-1/2 -translate-x-1/2">
+            <Switchboard color={primaryColor} />
+          </div>
           <div className="flex items-center gap-6">
             <SuperEllipse
               p1={7}
               p2={30}
-              className="min-w-[72px] min-h-[72px] bg-white dark:bg-nav-darkest flex items-center justify-center drop-shadow-2xl"
+              className="min-w-[72px] min-h-[72px] bg-nav-darkest flex items-center justify-center drop-shadow-2xl"
             >
               <SuperEllipse
                 p1={5}
@@ -101,7 +105,7 @@ const CourseHome = () => {
               </SuperEllipse>
             </SuperEllipse>
             <div className="flex flex-col justify-center">
-              <h1 className="text-3xl font-medium font-sans">
+              <h1 className="text-3xl font-medium font-sans text-white">
                 {courseData?.courseName}
               </h1>
             </div>
@@ -119,7 +123,7 @@ const CourseHome = () => {
                       className="rounded-full"
                     />
                   </div>
-                  <p className="text-sm font-medium font-sans">
+                  <p className="text-sm font-medium font-sans text-white">
                     {instructor?.name}
                   </p>
                 </div>
@@ -159,7 +163,7 @@ const CourseHome = () => {
           {/* Course Logo */}
 
           <h1 className="text-xl font-medium font-dm mb-4">Actions</h1>
-          <div className="dot-grid w-full p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
+          <div className="w-full p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
             {courseStructureFetching ? (
               <div className="w-full h-[169px] flex items-center gap-3">
                 <Skeleton className="w-full h-full" />

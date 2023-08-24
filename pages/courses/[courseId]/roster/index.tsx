@@ -124,13 +124,13 @@ const RosterPage = () => {
                 <TabsList className="h-full p-0 rounded-none space-x-0 shrink-0 !bg-transparent">
                   <TabsTrigger
                     value="enrollments"
-                    className="px-4 py-2 h-full ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-transparent data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
+                    className="px-4 py-2 h-full ring-0 w-fit !bg-transparent !shadow-none rounded-none z-10 border-b-2 data-[state=inactive]:!border-b-transparent data-[state=active]:!border-b-blue-500 data-[state=active]:text-blue-data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
                   >
                     Enrollments
                   </TabsTrigger>
                   <TabsTrigger
                     value="invitations"
-                    className="px-3 py-2 h-full box-border ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-transparent data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
+                    className="px-3 py-2 h-full box-border ring-0 w-fit !bg-transparent !shadow-none rounded-none z-10 border-b-2 data-[state=inactive]:!border-b-transparent data-[state=active]:!border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
                   >
                     Active Invitations
                   </TabsTrigger>

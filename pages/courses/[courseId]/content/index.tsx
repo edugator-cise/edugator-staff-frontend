@@ -3,21 +3,20 @@ import { useUserRole } from "hooks/user/useUserRole";
 import { NextPage } from "next";
 import { ListBullets } from "phosphor-react";
 import React from "react";
+import { motion as m } from "framer-motion";
 
 const BlankContentPage = () => {
   const { role } = useUserRole();
 
   return (
-    <div className="w-full h-full flex flex-col relative dark:bg-transparent">
-      {role === "teachingAssistant" || role === "instructor" ? (
-        <div className="w-full h-16 min-h-[59px] max-h-[59px] bg-nav-dark dark:bg-nav-evendarker overflow-hidden flex items-center justify-between px-6 border-b border-b-white/10 z-10">
-          <div className="flex items-end">
-            <p className="text-base text-slate-400 font-dm"></p>
-            <h1 className="text-white font-dm text-base"></h1>
-          </div>
-        </div>
-      ) : null}
-      <div className="w-full h-full items-center justify-center flex flex-col space-y-4">
+    <div className="w-full h-full flex flex-col items-center justify-center relative">
+      <m.div
+        key={"content-page"}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        className="w-fit h-fit items-start justify-center flex flex-col space-y-4 bg-white/50 backdrop-blur-[2px] dark:bg-nav-darkest border dark:border-white/10 shadow-sm p-8 rounded-lg"
+      >
         <div className="min-h-[3.5rem] min-w-[3.5rem] rounded-md ring-1 flex items-center justify-center ring-offset-1 bg-slate-300 ring-offset-slate-200 ring-slate-400/70 dark:bg-slate-700 dark:ring-offset-nav-evendarker dark:ring-slate-400/70 shadow-inner">
           <ListBullets
             size={36}
@@ -29,7 +28,7 @@ const BlankContentPage = () => {
         <p className="opacity-60 font-dm text-sm !mt-2">
           Select a lesson or problem from the left sidebar to get started.
         </p>
-      </div>
+      </m.div>
     </div>
   );
 };

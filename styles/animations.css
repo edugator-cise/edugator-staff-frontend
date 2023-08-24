@@ -292,6 +292,51 @@
   );
 }
 
+
+/* Switchboard */
+.switchboard .light {
+  width: 1px;
+  height: 1px;
+  border-radius: 9999px;
+  position: relative;
+  transition: transform var(--transition-duration) ease;
+}
+
+.switchboard .light::after, .switchboard .light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  transition: opacity var(--transition-duration) ease;
+}
+
+.switchboard .light::before {
+  background: var(--dot-color);
+  box-shadow: 0px 0px 2px 1px rgba(50, 145, 255, 0.25);
+}
+
+.switchboard .light::after {
+  background: #FFFFFF;
+  box-shadow: 
+    0px 0px 1px 1px var(--dot-shadow-color),
+    0px 0px 2px 1px rgba(50, 145, 255, 0.25);
+}
+
+.switchboard .light[data-state='off'] {
+  background: #707070;
+}
+
+.switchboard .light[data-state='medium']::before {
+  opacity: 1;
+}
+
+.switchboard .light[data-state='high']::after {
+  opacity: 1;
+}
+
 /* Bouncing Loader Animation */
 
 .bouncing-loader {
@@ -335,3 +380,4 @@
 .cl-rootBox .cl-card {
   @apply p-6
 }
+

@@ -5,3 +5,15 @@
 .dot-grid {
     @apply bg-[radial-gradient(#32363d40_1px,_transparent_0)] dark:bg-[radial-gradient(#79a1f940_1px,_transparent_0)] bg-[position:-7px_-7px] bg-[size:30px_30px];
 }
+
+.dot-grid-no-light {
+    @apply dark:bg-[radial-gradient(#79a1f940_1px,_transparent_0)] bg-[position:-7px_-7px] bg-[size:30px_30px];
+}
+
+.dot-grid-colored {
+    @apply bg-[radial-gradient(#ffffff4d_1px,_transparent_0)] bg-[position:-7px_-7px] bg-[size:30px_30px];
+}
+
+.dot-grid-dark-only {
+    @apply bg-[radial-gradient(#79a1f940_1px,_transparent_0)] bg-[position:-7px_-7px] bg-[size:30px_30px];
+}

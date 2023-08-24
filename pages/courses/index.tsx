@@ -1,7 +1,7 @@
 import AdminLayout from "components/layouts/AdminLayout";
 import Image from "next/image";
 import React, { useEffect } from "react";
-import { FidgetSpinner } from "tabler-icons-react";
+import { FidgetSpinner, Switch } from "tabler-icons-react";
 import Link from "next/link";
 import SuperEllipse from "react-superellipse";
 import { usePalette } from "react-palette";
@@ -30,6 +30,8 @@ import {
   PlusIcon,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 // dashboard for students and instructor.
 // accessible only if authenticated and has active session.
@@ -53,7 +55,14 @@ const CourseCard = ({
       href={`/courses/${enrollment?.courseId}`}
       key={`${enrollment?.courseId}-${enrollment?.userId}`}
     >
-      <div className="relative group flex flex-col gap-y-4 group hover:shadow-md z-10 hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-white/20 transition border dark:border-white/10 bg-white dark:bg-nav-evendarker/40 backdrop-blur-[2px] p-5">
+      <div className="relative group flex flex-col gap-y-4 group hover:shadow-md z-10 hover:shadow-black/5 cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-white/20 transition border dark:border-white/10 bg-slate-50 dark:bg-nav-darkest backdrop-blur-[2px] p-5">
+        {enrollment?.role === "instructor" ? (
+          <Badge variant="outline" className="absolute top-5 right-5">
+            Instructor
+          </Badge>
+        ) : (
+          <></>
+        )}
         <div className="gap-4 flex">
           <div className="flex flex-col relative transition ease-in">
             <div className="min-w-[50px] max-w-[50px] min-h-[50px] mb-2 rounded-lg focus:ring-2 outline-none transition">
@@ -75,7 +84,9 @@ const CourseCard = ({
             <h1 className="text-xl font-medium font-sans mb-1">
               {enrollment?.courseName}
             </h1>
-            <p className="text-[13px]">{enrollment?.courseDescription}</p>
+            <p className="text-[13px] opacity-70">
+              {enrollment?.courseDescription}
+            </p>
           </div>
         </div>
         {/* <Separator /> */}
@@ -92,6 +103,112 @@ const CourseCard = ({
         </div>
       </div>
     </Link>
+  );
+};
+
+export const Switchboard = ({ color = "#33ff77" }: { color?: string }) => {
+  const rows = 5;
+  const columns = 64;
+  const transitionDuration = 250;
+  // Cherry-pick a few lights to animate (up to 320)
+  const indices = [
+    7, 15, 26, 29, 55, 70, 92, 99, 101, 105, 110, 120, 125, 130, 140, 145, 160,
+    165, 185, 200, 215, 220, 230, 235, 240, 255, 270, 300, 305,
+  ];
+  // Randomly animate between three states
+  const states = ["off", "medium", "high"];
+
+  const ref = React.useRef();
+
+  const defaultColor = "#33ff77";
+
+  React.useEffect(() => {
+    const timeoutIds = [];
+
+    const interval = setInterval(() => {
+      indices.forEach((index) => {
+        const light = ref.current.querySelector(`[data-index="${index}"]`);
+
+        if (!light) {
+          return;
+        }
+
+        // Pick a random next state
+        const nextState = states[Math.floor(Math.random() * states.length)];
+        const currentState = light.dataset.state;
+
+        const pulse =
+          Math.random() > 0.2 &&
+          // Make sure we only pulsate going from "off" → "medium" → "high"
+          ((currentState === "off" && nextState === "high") ||
+            (currentState === "off" && nextState === "medium") ||
+            (currentState === "medium" && nextState === "high"));
+
+        if (pulse) {
+          // Add an arbitrary delay between 100-500ms
+          const delay = getRandomNumber(100, 500);
+
+          timeoutIds.push(
+            setTimeout(() => {
+              light.style.transform = "scale(2)";
+            }, delay)
+          );
+
+          timeoutIds.push(
+            setTimeout(() => {
+              light.style.transform = "scale(1)";
+            }, transitionDuration + delay)
+          );
+        }
+
+        // After a pulse, don't transition from "high" → "medium"
+        if (currentState === "high" && nextState === "medium" && pulse) {
+          light.dataset.state = "off";
+        } else {
+          light.dataset.state = nextState;
+        }
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      timeoutIds.forEach(clearTimeout);
+    };
+  }, []);
+
+  const getRandomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="switchboard z-10"
+      style={{
+        display: "grid",
+        gap: `30px`,
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+      }}
+    >
+      {Array.from({ length: columns * rows }).map((_, i) => {
+        return (
+          <div
+            key={i}
+            className="light"
+            data-state="off"
+            data-index={i}
+            style={
+              {
+                zIndex: 20,
+                "--dot-color": color,
+                "--dot-shadow-color": `${color}cc`,
+                "--transition-duration": `${transitionDuration}ms`,
+              } as React.CSSProperties
+            }
+          />
+        );
+      })}
+    </div>
   );
 };
 
@@ -120,6 +237,9 @@ const DashboardPage = () => {
 
   return (
     <div className="w-full h-full bg-white dark:bg-nav-evendarker">
+      <div className="w-full h-36 border-b dark:border-b-white/10 overflow-hidden flex items-center justify-center dark:bg-nav-evendarker bg-nav-darkest">
+        <Switchboard />
+      </div>
       <div className="max-w-7xl p-6 lg:p-12 flex flex-col mx-auto">
         <div className="w-full flex items-center justify-between py-2">
           <h1 className="text-2xl font-medium font-sans">Courses</h1>
@@ -129,12 +249,33 @@ const DashboardPage = () => {
           </ActionButton>
         </div>
         <Separator className="mt-2 mb-6" />
-        <div className="dot-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-8 w-full mb-8 p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-6 w-full mb-8 rounded-md ">
+          {enrollmentsFetching && (
+            <Skeleton className="w-full h-[191px] dark:bg-white/5"></Skeleton>
+          )}
+          {/* Empty State */}
+          {enrollmentsData?.length === 0 && (
+            <div className="w-full col-span-full flex flex-col items-center justify-center space-y-4 py-16">
+              <Image
+                src="/images/empty.svg"
+                alt="empty"
+                width={64}
+                height={64}
+              />
+              <p className="text-sm font-medium font-sans opacity-70">
+                No courses found
+              </p>
+            </div>
+          )}
           {enrollmentsData?.map((enrollment) => {
             return <CourseCard enrollment={enrollment} />;
           })}
         </div>
         <h1 className="text-xl font-medium font-sans mb-8">Invites</h1>
+        {invitationsFetching && (
+          <Skeleton className="w-full h-24 dark:bg-white/5"></Skeleton>
+        )}
+
         {invitationsData?.map((invitation) => {
           return (
             <div className="w-96 flex items-center border space-x-2 shadow-lg p-4">
