@@ -40,6 +40,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RosterControls } from "pages/courses/[courseId]/roster";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { useUser } from "@clerk/nextjs";
 
 type EnrollmentTableDisplay = {
   name: JSX.Element;
@@ -62,6 +63,8 @@ const EnrollmentsTable = () => {
 
   const { mutate: deleteEnrollment, isLoading: deleteEnrollmentLoading } =
     useDeleteEnrollment();
+
+  const { user } = useUser();
 
   // column definitions for the enrollments table
   const columns: ColumnDef<EnrollmentTableDisplay>[] = [
@@ -160,27 +163,32 @@ const EnrollmentsTable = () => {
     </div>
   );
 
-  const roleSelect = (enrollment: CourseEnrollment) => (
-    <Select
-      value={enrollment.role}
-      onValueChange={(value) => {
-        updateRole({ userId: enrollment.userId, role: value as CourseRole });
-      }}
-    >
-      <SelectTrigger className="w-[180px] bg-white">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {Object.keys(COURSE_ROLES).map((role) => (
-            <SelectItem value={role}>
-              {camelCaseToSpacedTitleCase(role)}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
+  const roleSelect = (enrollment: CourseEnrollment) =>
+    user && user?.id === enrollment.userId ? (
+      <p className="text-sm">
+        {camelCaseToSpacedTitleCase(enrollment.role)} (You)
+      </p>
+    ) : (
+      <Select
+        value={enrollment.role}
+        onValueChange={(value) => {
+          updateRole({ userId: enrollment.userId, role: value as CourseRole });
+        }}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a fruit" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {Object.keys(COURSE_ROLES).map((role) => (
+              <SelectItem value={role}>
+                {camelCaseToSpacedTitleCase(role)}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
 
   const actions = (enrollment: CourseEnrollment) => (
     <div className="flex gap-2 justify-end w-full">
@@ -228,7 +236,7 @@ const EnrollmentsTable = () => {
   }
   return (
     <div className="space-y-2">
-      <p className="text-base font-dm font-semibold text-slate-700 whitespace-nowrap">
+      <p className="text-base font-dm font-semibold whitespace-nowrap">
         {enrollmentsData ? (
           `${enrollmentsData.length} student${
             enrollmentsData.length === 1 ? "" : "s"

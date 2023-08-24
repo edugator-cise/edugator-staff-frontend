@@ -28,7 +28,9 @@ export const ModulePath = ({ moduleOpen }: { moduleOpen: boolean }) => (
           : {}
       }
       className={`transition-colors duration-300 ${
-        moduleOpen ? "stroke-slate-700" : "stroke-nav-dark"
+        moduleOpen
+          ? "stroke-slate-700 dark:stroke-gray-700"
+          : "stroke-nav-dark dark:stroke-nav-evendarker"
       }`}
     />
   </svg>
@@ -66,7 +68,9 @@ export const ItemPath = ({
         animationIterationCount: "1",
       }}
       className={`transition-all duration-300  path ${
-        moduleOpen ? "stroke-slate-700" : "stroke-nav-dark"
+        moduleOpen
+          ? "stroke-slate-700 dark:stroke-gray-700"
+          : "stroke-nav-dark dark:stroke-nav-evendarker"
       }`}
     />
   </svg>

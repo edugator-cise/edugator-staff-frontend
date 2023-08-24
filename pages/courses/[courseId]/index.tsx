@@ -17,6 +17,11 @@ import { useGetCourse } from "hooks/course/useGetCourse";
 import { usePalette } from "react-palette";
 import CoverImage from "components/course/home/CoverImage";
 import { placeholderAvatar } from "constants/coverImageData";
+import { Button } from "@/components/ui/button";
+import { Users2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import SuperEllipse from "react-superellipse";
 
 // if course does not exist, or user does not have permission to access the courseId,
 // we will redirect them elsewhere or return a 404 (preferably the latter)
@@ -71,12 +76,62 @@ const CourseHome = () => {
   ];
 
   return (
-    <div className="min-h-screen h-1 w-full text-slate-800 bg-white overflow-auto">
-      Welcome to the course home page!
-    </div>
-  );
-  return (
-    <div className="min-h-screen h-1 w-full text-slate-800 bg-white overflow-auto">
+    <div className="min-h-screen h-1 w-full bg-white dark:bg-nav-evendarker overflow-auto">
+      <div className="w-full p-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <SuperEllipse
+              p1={7}
+              p2={30}
+              className="min-w-[72px] min-h-[72px] bg-white dark:bg-nav-darkest flex items-center justify-center drop-shadow-2xl"
+            >
+              <SuperEllipse
+                p1={5}
+                p2={32}
+                className="min-w-[68px] min-h-[68px]"
+              >
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  src={courseData?.logo || placeholderAvatar}
+                  alt="User profile picture"
+                  className="rounded-xl"
+                />
+                {/* children */}
+              </SuperEllipse>
+            </SuperEllipse>
+            <div className="flex flex-col justify-center">
+              <h1 className="text-3xl font-medium font-sans">
+                {courseData?.courseName}
+              </h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            {courseData?.instructors ? (
+              courseData.instructors.map((instructor) => (
+                <div className="flex flex-row items-center space-x-2">
+                  <div className="w-8 h-8 rounded-full">
+                    <Image
+                      src={instructor?.image || placeholderAvatar}
+                      width={32}
+                      height={32}
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                  </div>
+                  <p className="text-sm font-medium font-sans">
+                    {instructor?.name}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      </div>
+      <Separator className=" mx-auto" />
+
       <AddModuleModal
         open={newModuleModalOpen}
         setOpen={setNewModuleModalOpen}
@@ -92,76 +147,35 @@ const CourseHome = () => {
         setOpen={setNewProblemModalOpen}
         modules={courseStructureData?.modules || []}
       />
-      <CoverImage
+      {/* <CoverImage
         courseData={courseData}
         colorLoading={colorLoading}
         colorError={colorError}
         primaryColor={primaryColor}
-      />
+      /> */}
 
       <div className="pb-8 p-8 pt-10 w-full">
-        <div className="w-full h-full max-w-7xl relative">
+        <div className="w-full h-full max-w-7xl mx-auto relative">
           {/* Course Logo */}
 
-          {courseStructureFetching ? (
-            <div className="flex space-x-6 items-center">
-              <div className="w-80 h-[39px] bg-slate-300 rounded-md animate-pulse"></div>
-            </div>
-          ) : (
-            <div className="flex space-x-6 items-center">
-              <div className="flex flex-row justify-between w-full">
-                <div className="flex flex-col space-y-4 justify-center">
-                  <h1 className="text-3xl font-medium text-slate-800 font-sans">
-                    {courseData?.courseName}
-                  </h1>
-                  <p className="text-sm text-gray-600 font-sans">
-                    {courseData?.description}
-                  </p>
-                  <div className="w-full h-px bg-gray-200"></div>
-                  {/* Attributes Section */}
-                  <div className="flex space-x-4">
-                    {courseData?.instructors?.map((instructor) => (
-                      <div className="flex space-x-2 items-center">
-                        <div
-                          className="min-w-[2rem] min-h-[2rem] rounded-full relative transition ring-1 ring-white shadow-md"
-                          style={{
-                            backgroundColor:
-                              colorLoading || colorError
-                                ? "#000"
-                                : primaryColor,
-                          }}
-                        >
-                          <Image
-                            src={instructor.image || placeholderAvatar}
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-full"
-                          />
-                        </div>
-                        <div className="flex flex-col space-y-0">
-                          <p className="text-sm text-gray-800 font-sans">
-                            {instructor.name}
-                          </p>
-                          <p className="text-xs text-gray-500 font-sans">
-                            Instructor
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                    <div className="w-px h-8 bg-gray-200"></div>
-                  </div>
-                </div>
-                {/* Right Side */}
-                <div className="flex space-x-2 items-center"></div>
-              </div>
-            </div>
-          )}
-          <div className="w-full h-px bg-slate-200 mt-8" />
-          <h1 className="text-xl font-medium font-dm !mt-8 mb-4">Actions</h1>
-          <div className="w-full p-4 rounded-md bg-gray-100 border">
+          <h1 className="text-xl font-medium font-dm mb-4">Actions</h1>
+          <div className="w-full p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
+            <div
+              style={{
+                WebkitMaskImage:
+                  "linear-gradient(175deg, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%)",
+                backgroundImage:
+                  "radial-gradient(#79a1f940 1px, transparent 0)",
+                backgroundSize: "30px 30px",
+                backgroundPosition: "-7px -7px",
+              }}
+              className="w-full h-full absolute inset-0 z-0"
+            ></div>
             {courseStructureFetching ? (
-              <div className="w-full h-48 flex items-center justify-center bg-slate-100">
-                <FidgetSpinner className="w-10 h-10 animate-spin text-slate-800" />
+              <div className="w-full h-[169px] flex items-center gap-3">
+                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-full" />
+                <Skeleton className="w-full h-full" />
               </div>
             ) : courseStructureData?.modules?.length === 0 ? (
               <NewSection
@@ -224,19 +238,27 @@ const NewSection = ({
       onClick={onClick}
       onMouseEnter={animationIn}
       onMouseLeave={animationOut}
-      className="group hover:shadow-md hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-xl hover:border-slate-300 transition border bg-white p-5 flex flex-col space-y-2"
+      style={{
+        backdropFilter: "blur(2px)",
+      }}
+      className="group hover:shadow-md z-10 hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-slate-700 transition border dark:border-slate-800/80 bg-white dark:bg-nav-evendarker/40 p-5 flex flex-col space-y-2"
     >
       <button className="flex flex-col items-start cursor-pointer space-y-4">
         <div
-          className="p-2 rounded-md flex items-center justify-center bg-opacity-20"
-          style={{
-            backgroundColor: `${primaryColor}33` || "#3b82f6",
-          }}
+          className={`p-2 rounded-md flex items-center justify-center ring-1 shadow-inner dark:!ring-offset-nav-darkest`}
+          style={
+            {
+              backgroundColor: `${primaryColor}4D` || "#3b82f6",
+              "--tw-ring-color": `${primaryColor}80`,
+              "--tw-ring-offset-color": `#ffffffB3`,
+              "--tw-ring-offset-width": "1px",
+            } as React.CSSProperties
+          }
         >
           {title === "New Module" && (
             <ListBullets
               style={{
-                color: primaryColor || "#3b82f6",
+                color: "white",
               }}
               className="h-6 w-6"
             />
@@ -244,7 +266,7 @@ const NewSection = ({
           {title === "New Lesson" && (
             <ChalkboardTeacher
               style={{
-                color: primaryColor || "#3b82f6",
+                color: "white",
               }}
               className="h-6 w-6"
             />
@@ -252,7 +274,7 @@ const NewSection = ({
           {title === "New Problem" && (
             <Code
               style={{
-                color: primaryColor || "#3b82f6",
+                color: "white",
               }}
               className="h-6 w-6"
             />
@@ -262,7 +284,7 @@ const NewSection = ({
           <h1 className="text-lg font-semibold font-dm line-clamp-1">
             {title}
           </h1>
-          <p className="text-[13px] text-left text-slate-500 font-sans">
+          <p className="text-[13px] text-left font-sans opacity-70">
             {description}
           </p>
         </div>

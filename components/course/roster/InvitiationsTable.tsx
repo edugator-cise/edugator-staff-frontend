@@ -118,7 +118,7 @@ const InvitiationsTable = () => {
         updateRole({ invitationId: invitation.id, role: value as CourseRole });
       }}
     >
-      <SelectTrigger className="w-[180px] bg-white">
+      <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
@@ -174,7 +174,7 @@ const InvitiationsTable = () => {
   }
   return (
     <div className="space-y-2">
-      <p className="text-base font-dm font-semibold text-slate-700 whitespace-nowrap">
+      <p className="text-base font-dm font-semibold whitespace-nowrap">
         {invitationsData ? (
           `${invitationsData.length} pending invitation${
             invitationsData.length === 1 ? "" : "s"

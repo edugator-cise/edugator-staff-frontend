@@ -96,8 +96,9 @@ const LessonView = ({ lesson }: { lesson: Lesson }) => {
   }) as Editor;
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
-      <div className="w-full h-full flex flex-col justify-start items-center overflow-auto bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
+    <div className="w-full h-full flex flex-col justify-center items-center p-3">
+      <div className="absolute inset-0 w-full h-full"></div>
+      <div className="z-10 h-full flex flex-col justify-start items-center overflow-auto bg-white dark:bg-nav-darker/80 border border-slate-300 dark:border-white/10 rounded-md">
         <div
           className={`max-w-4xl w-[90%] mt-14 h-auto flex flex-col py-4 space-y-4`}
         >

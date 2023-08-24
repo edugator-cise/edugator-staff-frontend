@@ -89,7 +89,7 @@ const MultipleChoiceStudentComponent: React.FC<MultipleChoiceProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-50 dark:bg-slate-800 ring-1 ring-slate-300 dark:ring-slate-500 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
+      className="bg-slate-100 dark:bg-slate-800 ring-1 ring-slate-300 dark:ring-white/10 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
     >
       <div className="w-10 h-10 p-px bg-gradient-to-b from-blue-400 to-blue-500 border border-blue-400 ring ring-blue-500/30 rounded-full absolute left-1/2 -translate-x-1/2 -top-5 flex items-center justify-center">
         <ListDetails className="w-4 h-4 text-white" />
@@ -286,7 +286,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
   return (
     <NodeViewWrapper
       contentEditable={false}
-      className="bg-slate-100 ring-1 ring-slate-300 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
+      className="bg-slate-100 dark:bg-slate-800 ring-1 ring-slate-300 dark:ring-white/10 flex flex-col p-4 pt-6 rounded-md mb-10 mt-16 relative"
     >
       <div className="flex mx-auto items-center space-x-2 text-white absolute left-1/2 -translate-x-1/2 -top-4 bg-gradient-to-b from-blue-400 to-blue-500 w-fit px-4 py-2 rounded-md border border-blue-400 ring ring-blue-500/30">
         <ListDetails className="w-4 h-4" />
@@ -301,7 +301,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
 
         <input
           type="text"
-          className="content bg-white w-full rounded-md p-2 text-slate-800 font-dm text-base outline-none border border-slate-300"
+          className="content dark:bg-slate-700 dark:text-white bg-white w-full rounded-md p-2 text-slate-800 font-dm text-base outline-none border border-slate-300 dark:border-slate-600"
           value={question}
           onClick={(e) => {
             // set multipleChoiceNode as active
@@ -330,16 +330,16 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
             {answers.map((answer: string, index: number) => (
               <div key={index} className="flex space-x-2 w-full items-center">
                 <div
-                  className={`rounded-md w-full bg-white flex items-center space-x-2 text-slate-800 transition font-dm text-base outline-none border px-2 ${
+                  className={`rounded-md w-full bg-white dark:text-white dark:bg-slate-700 flex  items-center space-x-2 text-slate-800 transition font-dm text-base outline-none border px-2 ${
                     index === correctAnswer
                       ? "border-emerald-500"
-                      : "border-slate-300"
+                      : "border-slate-300 dark:border-slate-600"
                   }`}
                 >
                   <RadioGroup.Item
                     className={`bg-white w-6 min-w-[1.5rem] h-6 rounded-full shadow-sm hover:shadow-md transition outline-none cursor-pointer ${
                       index === correctAnswer
-                        ? "focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
+                        ? "focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 focus:dark:ring-offset-slate-700"
                         : "border border-slate-300"
                     }`}
                     value={index.toString()}
@@ -363,7 +363,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
                       e.preventDefault();
                     }}
                     type="text"
-                    className={`w-full text-slate-800 p-2 bg-white font-dm text-base outline-none rounded-md`}
+                    className={`w-full text-slate-800 dark:text-white dark:bg-slate-700 p-2 bg-white font-dm text-base outline-none rounded-md`}
                     value={answer}
                     onChange={(e) => handleAnswerChange(index, e)}
                     placeholder={`Answer ${index + 1}`}
@@ -384,7 +384,7 @@ const MultipleChoiceAdminComponent: React.FC<MultipleChoiceProps> = ({
                       <TooltipTrigger asChild>
                         <button
                           disabled={answers.length === 2}
-                          className="p-1 enabled:hover:bg-red-50 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-1 enabled:hover:bg-red-500/10 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                           onClick={() => removeAnswer(index)}
                         >
                           <MinusCircledIcon className="w-5 h-5 text-red-500 " />

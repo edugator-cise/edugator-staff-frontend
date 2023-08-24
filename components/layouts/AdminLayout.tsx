@@ -10,19 +10,14 @@ import {
   setAdminMainSidebarHidden,
 } from "state/interfaceControls.slice";
 import { useSidebarLayout } from "hooks/useSidebarLayout";
-import MobileHeader from "components/layouts/MobileHeader";
-import {
-  ContentType,
-  SidebarHideOverlay,
-} from "components/layouts/PlaygroundLayout";
+import { SidebarHideOverlay } from "components/layouts/PlaygroundLayout";
 import AdminContentSidebar from "components/navigation/AdminContentSidebar";
-import { useGetCourseStructure } from "hooks/course/useGetCourseStructure";
 import { useUser } from "@clerk/nextjs";
-import { EdugatorLogo } from "components/navigation/navIcons";
 
 import CourseHeader from "components/navigation/CourseHeader";
 import { useUserRole } from "hooks/user/useUserRole";
 import ContentSidebar from "components/navigation/ContentSidebar";
+import { dotGridStyle } from "constants/config";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -105,12 +100,12 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
     contentSidebarWidth: CONTENT_SIDEBAR_WIDTH,
   });
 
-  if (!isMounted) return <div className="w-screen h-screen bg-red-500"></div>;
+  if (!isMounted) return <div className="w-screen h-screen"></div>;
 
   return (
-    <div className="flex flex-col min-h-screen max-h-screen h-full bg-red-100 w-screen max-w-full overflow-hidden">
+    <div className="flex flex-col min-h-screen max-h-screen h-full w-screen max-w-full overflow-hidden">
       <CourseHeader />
-      <div className="flex w-full h-[calc(100vh-40px)] bg-stone-100 relative">
+      <div className="flex w-full h-[calc(100vh-40px)] relative">
         {/* Main sidebar */}
         <div
           style={{
@@ -155,8 +150,9 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
                 paddingLeft: laptopView
                   ? laptopContentMargin()
                   : contentMargin(),
+                ...dotGridStyle,
               }}
-              className={`relative w-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+              className={`bg-[#d3d9df] dark:bg-nav-evendarker relative w-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
                 tabletView ? `!pl-[${MAIN_SIDEBAR_WIDTH}px]` : ""
               } ${mobileView ? "!pl-0" : ""} ${false ? "!pl-0" : ""}`}
             >

@@ -462,7 +462,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
   } = useNavigationConfirmation(unsavedChanges, router);
 
   return (
-    <div className="w-full h-full flex flex-col relative bg-white">
+    <div className="w-full h-full flex flex-col relative">
       {/* Modal for cancelling changes */}
       <AlertModal
         title="Are you sure?"
@@ -501,7 +501,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         removeLesson={removeLesson}
       />
 
-      <div className="w-full h-16 min-h-[60px] max-h-[60px] bg-nav-dark flex items-center justify-between px-4 border-b border-b-white/10 z-10">
+      <div className="w-full h-16 min-h-[59px] max-h-[59px] bg-nav-dark dark:bg-nav-evendarker flex items-center justify-between px-4 border-b border-b-white/10 z-10">
         <div className="flex items-start flex-col">
           <p className="text-white/40 font-sans text-xs">{moduleName}</p>
           <h1 className="text-white font-dm text-base">
@@ -606,7 +606,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
         </div>
       </div>
       <div
-        className={`w-full p-[10px] bg-slate-700 flex items-center justify-between border-b border-b-slate-400 border-t border-t-slate-600 transition-all ${
+        className={`w-full p-[10px] z-[2] bg-slate-700 dark:bg-nav-evendarker flex items-center justify-between border-b border-b-slate-400 dark:border-white/10 transition-all ${
           !editable ? "-mt-[54px] !cursor-not-allowed pointer-events-none" : ""
         }`}
       >
@@ -619,18 +619,23 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
           ).map((option: MenuOption | Divider, index: number) => {
             // check if option is a divider (if object is empty)
             if (Object.keys(option).length === 0) {
-              return <div key={index} className="w-px h-6 bg-slate-500"></div>;
+              return (
+                <div
+                  key={index}
+                  className="w-px h-6 bg-slate-500 dark:bg-white/20"
+                ></div>
+              );
             }
             const menuOption = option as MenuOption;
             return (
               <Tooltip key={index} delayDuration={300}>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <button
                     key={index}
                     className={`w-8 h-8 rounded-md cursor-pointer relative after:w-full after:hover:bg-white/10 after:transition after:scale-75 after:hover:scale-100 after:rounded-md after:absolute after:h-full transition flex items-center justify-center text-slate-100 ${
                       menuOption.active &&
                       menuOption.active(editor) &&
-                      "bg-white/20"
+                      "bg-white/[15%]"
                     } ${
                       disableToolbar &&
                       "opacity-50 cursor-not-allowed pointer-events-none"
@@ -647,7 +652,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
                   side="bottom"
                   sideOffset={5}
                   align="center"
-                  className={`z-20 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
+                  className={`z-50 data-[side=bottom]:animate-fadeIn bg-gray-800 border border-slate-500 text-white font-dm text-xs rounded-md p-2`}
                 >
                   {menuOption.title}
                 </TooltipContent>
@@ -655,15 +660,11 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
             );
           })}
         </div>
-        {/* <button className="px-3 py-2 rounded-sm bg-blue-500 hover:bg-blue-600 text-white font-dm text-xs flex items-center space-x-2">
-                <EyeOpenIcon />
-                <p>Preview</p>
-              </button> */}
       </div>
       {/* Surrounding Border */}
-      <div className="w-full h-full flex flex-col justify-center items-center bg-[#d3d9df] dark:bg-slate-950 p-3">
+      <div className="w-full h-full flex flex-col justify-center items-center p-3">
         {/* Editor and Title Holder ("Page") */}
-        <div className="w-full h-full min-h-full max-h-[200px] !overflow-y-scroll flex flex-col justify-start items-center bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-800 rounded-md">
+        <div className="z-[1] w-full h-full min-h-full max-h-[200px] !overflow-y-scroll flex flex-col justify-start items-center bg-white dark:bg-nav-darker/80 backdrop-blur-[2px] border border-slate-300 dark:border-slate-800 rounded-md">
           <div
             className={`max-w-4xl w-[90%] h-full mt-14 flex flex-col py-4 space-y-4 transition-all`}
           >
@@ -671,7 +672,7 @@ const AdminLessonEditor = ({ lesson }: { lesson?: Lesson }) => {
               <input
                 type="text"
                 id="problem-title"
-                className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-white dark:bg-nav-darker dark:text-white text-slate-800 font-dm outline-none"
+                className="w-full px-6 py-2 text-3xl rounded-md font-bold bg-inherit dark:text-white text-slate-800 font-dm outline-none"
                 autoComplete="off"
                 disabled={!editable}
                 onFocus={() => setDisableToolbar(true)}

@@ -1,13 +1,8 @@
-import { EdugatorLogo } from "components/navigation/navIcons";
+import { EdugatorLogo, icons } from "components/navigation/navIcons";
 import { useClerk } from "@clerk/nextjs";
 //import * as Popover from "@radix-ui/react-popover";
 import Image from "next/image";
-import {
-  BellIcon,
-  CheckIcon,
-  Cross2Icon,
-  ExitIcon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, Cross2Icon, ExitIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { placeholderAvatar } from "constants/coverImageData";
 import {
@@ -26,7 +21,34 @@ import { useGetCourse } from "hooks/course/useGetCourse";
 import { AnimatePresence, motion as m } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/router";
-import { ArrowLeftIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  MoonIcon,
+  SunIcon,
+  BellIcon,
+  MoonStarIcon,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+
+const ThemeToggleButton = () => {
+  const { systemTheme, theme, setTheme } = useTheme();
+
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  return (
+    <div
+      onClick={() => {
+        setTheme(currentTheme === "dark" ? "light" : "dark");
+      }}
+      className="p-2 overflow-hidden relative opacity-75 hover:opacity-100 rounded-md cursor-pointer transition flex items-center justify-center space-x-2"
+    >
+      {currentTheme === "dark" ? (
+        <SunIcon className="text-yellow-400 w-4 h-4" />
+      ) : (
+        <MoonStarIcon className="text-slate-200 w-4 h-4" />
+      )}
+    </div>
+  );
+};
 
 const NotificationButton = () => {
   const {
@@ -41,8 +63,9 @@ const NotificationButton = () => {
         {invitationsData && invitationsData?.length > 0 && (
           <div className="w-2 h-2 rounded-full bg-red-500 absolute top-1 right-1"></div>
         )}
-        <div className="p-2 rounded-md cursor-pointer transition hover:ring-1 ring-offset-1 ring-offset-nav-darkest ring-slate-700 bg-white/5 flex items-center justify-center space-x-2">
-          <BellIcon color="white" />
+
+        <div className="p-2 overflow-hidden relative opacity-75 hover:opacity-100 rounded-md cursor-pointer transition flex items-center justify-center space-x-2">
+          <BellIcon className="w-4 h-4" color="white" />
         </div>
       </PopoverTrigger>
       <PopoverContent
@@ -189,7 +212,7 @@ const CourseHeader = () => {
   const { data: courseData, isFetching: courseFetching } = useGetCourse();
 
   return (
-    <div className="h-[50px] min-h-[50px] bg-[#090B11] border-b border-b-white/10 w-full flex py-1 justify-between items-center px-4">
+    <div className="h-[50px] min-h-[50px] bg-nav-evendarker border-b border-b-white/10 w-full flex py-1 justify-between items-center px-4">
       <div className="flex items-center gap-1">
         <div className="flex items-center cursor-pointer">
           <Link href="/courses">
@@ -229,9 +252,27 @@ const CourseHeader = () => {
         </AnimatePresence>
       </div>
       <div className="gap-4 flex items-center">
-        <NotificationButton />
+        <div className="gap-3 flex items-center">
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger>
+              <NotificationButton />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Notifications</TooltipContent>
+          </Tooltip>
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger>
+              <ThemeToggleButton />
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Toggle Theme</TooltipContent>
+          </Tooltip>
+        </div>
         <Separator orientation="vertical" className="h-6 bg-slate-700" />
-        <UserButton />
+        <Tooltip delayDuration={100}>
+          <TooltipTrigger>
+            <UserButton />
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Profile</TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

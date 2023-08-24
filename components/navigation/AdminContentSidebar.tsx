@@ -64,6 +64,7 @@ import {
   ReorderModule,
   useReorderModule,
 } from "hooks/reorder/useReorderModule";
+import { Separator } from "@/components/ui/separator";
 
 export const AddModuleModal = ({
   open,
@@ -226,15 +227,15 @@ const AdminContentSidebar = ({
     for (let i = 0; i < dropdowns.length; i++) {
       const allHeight = Array.from(
         document.getElementsByClassName(`${i}-content-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
+      ).reduce((acc, el) => acc + el.clientHeight + 0.6, 0);
 
       const lessonHeight = Array.from(
         document.getElementsByClassName(`${i}-lesson-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
+      ).reduce((acc, el) => acc + el.clientHeight + 0.6, 0);
 
       const problemHeight = Array.from(
         document.getElementsByClassName(`${i}-problem-admin`)
-      ).reduce((acc, el) => acc + el.clientHeight, 0);
+      ).reduce((acc, el) => acc + el.clientHeight + 0.6, 0);
 
       if (activeContent === "all") {
         dropdownHeights[i] = allHeight;
@@ -377,11 +378,11 @@ const AdminContentSidebar = ({
   return (
     <>
       <ScrollArea.Root
-        className={`w-[350px] min-w-[350px] h-full bg-nav-dark flex-col z-40 border-r border-r-slate-700 `}
+        className={`w-[350px] min-w-[350px] h-full bg-nav-dark dark:bg-nav-evendarker flex-col z-40 border-r border-r-white/10 `}
       >
         {/* Header */}
-        <div className="w-full h-[60px] min-h-[60px] flex items-center px-4 bg-nav-darker justify-between border-b border-b-white/10">
-          <h1 className="text-white font-dm text-sm">Course Content</h1>
+        <div className="w-full h-[59px] min-h-[59px] flex items-center px-4 bg-nav-darker dark:bg-nav-evendarker justify-between border-b border-b-white/10">
+          <h1 className="font-dm text-sm text-white">Course Content</h1>
           <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
               <div
@@ -400,7 +401,7 @@ const AdminContentSidebar = ({
         </div>
         <div className="w-full">
           <Tabs.Root
-            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker"
+            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker dark:bg-nav-evendarker"
             value={activeContent}
             onValueChange={(value) => {
               setActiveContent(value as ContentType);
@@ -414,7 +415,7 @@ const AdminContentSidebar = ({
                 <div className="p-2 flex-1">
                   <Tabs.Trigger
                     key={link.id}
-                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none"
+                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 dark:data-[state=active]:bg-blue-300/10 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-white/40 select-none hover:text-white data-[state=active]:text-white outline-none"
                     value={link.id}
                   >
                     {link.text}
@@ -464,7 +465,6 @@ const AdminContentSidebar = ({
               className="w-full font-dm !overflow-y-auto max-h-[calc(100%-110px)] !pb-0"
               type="multiple"
             >
-              <div className="w-full h-px bg-slate-500"></div>
               {courseStructure && courseStructure.modules.length === 0 && (
                 <div className="flex items-center justify-center px-4 py-4">
                   <p className="text-slate-400 text-xs py-3 w-full line text-center">
@@ -533,10 +533,10 @@ const AdminContentSidebar = ({
                                     <Accordion.Item
                                       value={module.moduleName}
                                       key={module.id}
-                                      className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown"
+                                      className="border-b border-t border-t-white/10 border-b-black/30 group dropdown"
                                     >
                                       <Accordion.Trigger
-                                        className={`pl-4 relative pr-4 group py-[6px] w-full flex items-center justify-between overflow-hidden bg-nav-dark`}
+                                        className={`pl-4 relative pr-4 group py-[6px] w-full flex items-center justify-between overflow-hidden bg-nav-dark dark:bg-nav-evendarker`}
                                       >
                                         <div
                                           className={`absolute w-full h-full pointer-events-none z-50 bg-sky-500 inset-0 transition ${
@@ -547,7 +547,7 @@ const AdminContentSidebar = ({
                                         />
                                         <div className="flex items-center space-x-2">
                                           <div {...provided.dragHandleProps}>
-                                            <DragHandleDots2Icon className="text-slate-500 w-4 h-4 cursor-row-resize" />
+                                            <DragHandleDots2Icon className="text-white/30 w-4 h-4 cursor-row-resize" />
                                           </div>
                                           <p className="text-left text-[13px] text-white">
                                             <span className="text-slate-300 mr-1">{`${
@@ -594,7 +594,7 @@ const AdminContentSidebar = ({
                                       </Accordion.Trigger>
                                       <AccordionContent className="AccordionContent">
                                         <AnimateHeight
-                                          contentClassName="h-full bg-nav-darker"
+                                          contentClassName="h-full bg-nav-darker dark:bg-nav-evendarker"
                                           height={
                                             allContent.length == 0
                                               ? 40
@@ -610,7 +610,7 @@ const AdminContentSidebar = ({
                                                 exit={{ opacity: 0 }}
                                                 className={`relative flex px-4 items-center cursor-pointer justify-center `}
                                               >
-                                                <p className="text-slate-400 text-xs py-3 w-full line text-center">
+                                                <p className="text-white/60 text-xs py-3 w-full line text-center">
                                                   No Content here :&#40;
                                                 </p>
                                               </m.div>
@@ -644,7 +644,7 @@ const AdminContentSidebar = ({
                                             )}
                                           </AnimatePresence>
                                         </AnimateHeight>
-                                        <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90">
+                                        <div className="flex items-center justify-center px-4 py-4 bg-nav-darkest/90 dark:bg-nav-evendarker">
                                           <div className="flex space-x-2 w-full">
                                             <Link
                                               href={{
@@ -654,7 +654,7 @@ const AdminContentSidebar = ({
                                                 },
                                               }}
                                             >
-                                              <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
+                                              <div className="flex items-center bg-nav-darker dark:bg-nav-evendarker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/lessonbutton border dash border-blue-500/30 rounded-md">
                                                 <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/lessonbutton:text-white" />
                                                 <p className="text-slate-100/60 group-hover/lessonbutton:text-white text-xs pointer-events-none">
                                                   Add Lesson
@@ -669,7 +669,7 @@ const AdminContentSidebar = ({
                                                 },
                                               }}
                                             >
-                                              <div className="flex items-center bg-nav-darker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
+                                              <div className="flex items-center bg-nav-darker dark:bg-nav-evendarker justify-center w-full px-2 space-x-2 py-3 cursor-pointer group/problembutton border border-blue-500/30 rounded-md">
                                                 <PlusIcon className="w-4 h-4 text-slate-100/60 group-hover/problembutton:text-white" />
                                                 <p className="text-slate-100/60 group-hover/problembutton:text-white text-xs pointer-events-none">
                                                   Add Problem
@@ -691,7 +691,7 @@ const AdminContentSidebar = ({
                   )}
                 </Droppable>
               </DragDropContext>
-              <div className="flex items-center justify-center px-4 py-4 border-t border-t-slate-700">
+              <div className="flex items-center justify-center px-4 py-4 border-t border-t-white/10">
                 <button
                   onClick={() => {
                     setNewModuleModalOpen(true);
@@ -822,6 +822,7 @@ const ModuleContentList = ({
       onDragEnd={handleDragEnd}
       onDragStart={(start, provided) => console.log(start, provided)}
     >
+      <Separator className="bg-white/5" />
       <Droppable
         droppableId={`module-${module.id}`}
         isDropDisabled={activeContent !== "all"}
@@ -851,8 +852,10 @@ const ModuleContentList = ({
                       >
                         <m.div
                           key={`${primaryIndex}-${secondaryIndex}`}
-                          className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker hover:bg-nav-darkest border-b border-nav-dark ${
-                            id === activeId ? "!bg-nav-darkest" : ""
+                          className={`relative flex pr-14 pl-0 items-center cursor-pointer justify-start bg-nav-darker dark:bg-white/[2%] dark:hover:bg-white/[4%] hover:bg-nav-darkest border-b border-white/5 ${
+                            id === activeId
+                              ? "!bg-nav-darkest dark:!bg-white/5"
+                              : ""
                           }`}
                         >
                           <div

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import AdminLayout from "components/layouts/AdminLayout";
 import { useGetLesson } from "hooks/lesson/useGetLesson";
 import AdminLessonEditor from "components/lesson/admin/LessonEditor";
-import { StudentLoadingState } from "pages/learn/[lessonId]";
+import { StudentLessonLoadingState } from "../[lessonId]";
 import { useUserRole } from "hooks/user/useUserRole";
 
 const ContentEditorPage = () => {
@@ -26,13 +26,13 @@ const ContentEditorPage = () => {
 
   return lessonFetching ? (
     <div className="w-full h-full">
-      <div className="h-14 py-3 bg-nav-darkest w-full flex justify-between px-4 items-center">
+      <div className="h-[59px] border-b dark:border-b-white/10 py-3 bg-nav-darkest dark:bg-nav-evendarker w-full flex justify-between px-4 items-center">
         <div className="h-full w-48 rounded-md animate-pulse bg-nav-inactive-dark/50"></div>
         <div className="flex space-x-2 items-center h-full">
           <div className="w-24 h-8 rounded-md bg-nav-inactive-dark/50 animate-pulse"></div>
         </div>
       </div>
-      <StudentLoadingState />
+      <StudentLessonLoadingState />
     </div>
   ) : (
     <AdminLessonEditor lesson={lessonData} />

@@ -113,7 +113,7 @@ const CoverImage = ({
         <SuperEllipse
           p1={7}
           p2={30}
-          className="min-w-[80px] min-h-[80px] bg-gray-100 flex items-center justify-center drop-shadow-2xl"
+          className="min-w-[80px] min-h-[80px] bg-white dark:bg-nav-darkest flex items-center justify-center drop-shadow-2xl"
         >
           <SuperEllipse p1={5} p2={32} className="min-w-[76px] min-h-[76px]">
             <Image
@@ -123,7 +123,6 @@ const CoverImage = ({
               alt="User profile picture"
               className="rounded-xl"
             />
-            <div className="w-full h-full bg-blue-500"></div>
             {/* children */}
           </SuperEllipse>
         </SuperEllipse>
@@ -312,7 +311,7 @@ const CoverImage = ({
       <Image
         src={coverImage ? `/images/covers/${coverImage}` : ""}
         style={{
-          backgroundColor: coverImageColor || "",
+          backgroundColor: coverImageColor || "#ECECEE",
         }}
         className="transition"
         layout="fill"

@@ -59,6 +59,7 @@ module.exports = {
           "inactive-dark": "#434A55",
           "active-light-color": "#8FBFFA",
           "active-dark-color": "#2859C5",
+          evendarker: "#090B11",
           darkest: "#0c121c",
           darker: "#111825",
           dark: "#192231",
@@ -89,6 +90,9 @@ module.exports = {
           800: "#1d3d6f",
           900: "#1d365d",
           950: "#13223e",
+        },
+        slate: {
+          950: "#0c121c",
         },
       },
       keyframes: {

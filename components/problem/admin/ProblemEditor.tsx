@@ -341,7 +341,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
   };
 
   return (
-    <div className={`w-full h-full flex flex-col relative bg-slate-100`}>
+    <div className={`w-full h-full flex flex-col relative`}>
       {/* Modal for cancelling changes */}
       <AlertModal
         title="Are you sure?"
@@ -463,21 +463,6 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
               }}
             />
           </div>
-          {/* <div className="flex flex-col space-y-2 w-full">
-            <label className="text-xs text-slate-800 font-dm">
-              Delete Problem
-            </label>
-            <div className="w-fit">
-              <ActionButton
-                color="red"
-                onClick={() => setDeleteModalOpen(true)}
-                className="w-fit px-4 py-3 bg-red-500 hover:bg-red-200 cursor-pointer text-red-600 rounded-md flex space-x-2 items-center justify-center"
-              >
-                <TrashIcon />
-                <p className="text-xs font-dm">Delete Problem</p>
-              </ActionButton>
-            </div>
-          </div> */}
         </div>
       </Modal>
       <DeleteProblemModal
@@ -487,7 +472,7 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
       />
 
       {/* Top Banner */}
-      <div className="w-full h-16 min-h-[60px] max-h-[60px] bg-nav-dark flex items-center justify-between px-4 border-b border-b-white/10">
+      <div className="w-full h-16 min-h-[59px] max-h-[59px] bg-nav-dark dark:bg-nav-evendarker flex items-center justify-between px-4 border-b border-b-white/10">
         <div className="flex items-start flex-col">
           <p className="text-white/40 font-sans text-xs">{moduleName}</p>
           <h1 className="text-white font-dm text-base">
@@ -647,7 +632,6 @@ const AdminProblemEditor = ({ problem }: { problem?: Problem }) => {
         ) : (
           <ProblemView problem={problem} />
         )}
-        {/* <AIChat /> */}
       </div>
     </div>
   );

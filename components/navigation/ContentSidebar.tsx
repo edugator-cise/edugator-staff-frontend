@@ -106,10 +106,10 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
   return (
     <>
       <ScrollArea.Root
-        className={`overflow-auto w-72 min-w-[18rem] h-full bg-nav-dark flex-col  z-40 border-r border-r-slate-700 `}
+        className={`overflow-auto w-72 min-w-[18rem] h-full bg-nav-dark flex-col dark:bg-nav-evendarker z-40 border-r border-slate-700 dark:border-white/10`}
       >
         {/* Header */}
-        <div className="w-full h-[60px] min-h-[60px] flex items-center px-4 bg-nav-darker justify-between border-b border-b-white/10">
+        <div className="w-full h-[59px] min-h-[59px] flex items-center px-4 bg-nav-darker dark:bg-nav-evendarker justify-between border-b border-b-white/10">
           <h1 className="text-white font-dm text-sm">Course Content</h1>
           <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
@@ -129,7 +129,7 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
         </div>
         <div className="w-full">
           <Tabs.Root
-            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker"
+            className="flex flex-col w-full border-b border-b-white/10 shadow-inner bg-nav-darker dark:bg-nav-evendarker"
             value={activeContent}
             onValueChange={(value) => {
               setActiveContent(value as ContentType);
@@ -143,7 +143,7 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
                 <div className="p-2 flex-1">
                   <Tabs.Trigger
                     key={link.id}
-                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none"
+                    className="px-3 py-2 rounded-md transition cursor-pointer data-[state=active]:bg-blue-300/20 dark:data-[state=active]:bg-white/10 border-t data-[state=inactive]:border-transparent data-[state=active]:border-t-white/[0%] w-full flex items-center justify-center text-xs font-dm leading-none text-slate-500 select-none hover:text-white data-[state=active]:text-white outline-none"
                     value={link.id}
                   >
                     {link.text}
@@ -168,7 +168,6 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
               className="w-full font-dm"
               type="multiple"
             >
-              <div className="w-full h-px bg-slate-500"></div>
               {courseStructure &&
                 courseStructure.modules.map(
                   (value: CourseModule, primaryIndex: number) => {
@@ -208,7 +207,7 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
                       <Accordion.Item
                         value={value.moduleName}
                         key={primaryIndex}
-                        className="border-b border-t border-t-slate-700 border-b-slate-950 group dropdown"
+                        className="border-b border-t border-t-white/10 border-b-black/30 group dropdown"
                       >
                         <Accordion.Trigger
                           className={`pl-[0.875rem] relative pr-4 group py-3 w-full flex items-center justify-between overflow-hidden`}
@@ -234,7 +233,7 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
                               )}
                             </AnimatePresence>
                             <div
-                              className={`w-4 h-4 mx-2 border-2 z-10 border-slate-600 group-data-[state=open]:border-white transition-colors duration-500 bg-nav-dark rounded-full ${
+                              className={`w-4 h-4 mx-2 border-2 z-10 border-slate-600 group-data-[state=open]:border-white transition-colors duration-500 bg-nav-dark dark:bg-nav-evendarker rounded-full ${
                                 isActiveModule ? "!border-emerald-500" : ""
                               }`}
                             ></div>
@@ -302,7 +301,7 @@ const ContentSidebar = ({ courseId }: { courseId: string | undefined }) => {
                                           }}
                                           exit={{ opacity: 0 }}
                                           key={`${primaryIndex}-${secondaryIndex}`}
-                                          className={`relative flex pr-10 pl-8 items-center cursor-pointer justify-start`}
+                                          className={`relative hover:bg-white/[3%] flex pr-10 pl-8 items-center cursor-pointer justify-start`}
                                         >
                                           <div className="absolute left-7 bottom-[40%]">
                                             <ItemPath

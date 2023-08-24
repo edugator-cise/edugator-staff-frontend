@@ -67,7 +67,7 @@ export default function ProblemView({
   };
 
   return (
-    <div className="w-full h-full bg-gray-200 dark:bg-slate-950 relative student-view-holder">
+    <div className="w-full h-full relative student-view-holder">
       {/* <AIChat /> */}
       <Allotment
         separator={false}

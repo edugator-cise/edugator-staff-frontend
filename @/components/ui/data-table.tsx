@@ -106,9 +106,9 @@ export function DataTable<TData, TValue>({
         </DropdownMenu> */}
         {controls}
       </div>
-      <div className="border-y mb-4">
+      <div className="mb-4">
         <Table>
-          <TableHeader className="bg-slate-50 text-xs">
+          <TableHeader className="text-xs">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

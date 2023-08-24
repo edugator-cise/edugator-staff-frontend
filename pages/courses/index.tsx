@@ -21,6 +21,10 @@ import {
   setAdminMainSidebarHidden,
   setContentSidebarHidden,
 } from "state/interfaceControls.slice";
+import { Button } from "@/components/ui/button";
+import ActionButton from "components/shared/Buttons/ActionButton";
+import { PlusIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 // dashboard for students and instructor.
 // accessible only if authenticated and has active session.
@@ -44,75 +48,46 @@ const CourseCard = ({
       href={`/courses/${enrollment?.courseId}`}
       key={`${enrollment?.courseId}-${enrollment?.userId}`}
     >
-      <div className="relative w-full flex flex-col rounded-md border border-slate-200 bg-white hover:border-slate-300 duration-300 transition hover:shadow-md hover:shadow-black/5 cursor-pointer group">
-        <div className="absolute z-10 top-2 right-2 border rounded-sm bg-gray-100 text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 cursor-pointer transition">
+      <div
+        style={{
+          borderLeftColor: primaryColor,
+        }}
+        className="relative w-full p-5 flex flex-col space-y-4 border-l hover:border-l-4 rounded-lg ring-1 ring-transparent hover:ring-offset-2 dark:ring-offset-nav-evendarker dark:hover:ring-slate-700 hover:ring-blue-400 bg-slate-100 dark:bg-nav-darker  duration-300 transition-all hover:shadow-md hover:shadow-black/5 cursor-pointer group"
+      >
+        <div className="gap-4 flex">
+          {/* <div className="absolute z-10 top-2 right-2 border rounded-sm bg-gray-100 text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 cursor-pointer transition">
           <DotsHorizontalIcon className="w- h-" />
-        </div>
-        <div
+        </div> */}
+          {/* <div
           className="w-full h-28 rounded-t-[5px] overflow-hidden relative bg-nav-dark"
           style={{
             backgroundColor: primaryColor,
           }}
-        ></div>
-        <div className="p-4 pt-8 relative transition ease-in group-hover:-translate-y-[1px]">
-          <div className="absolute -top-8 left-4 min-w-[56px] min-h-[56px] rounded-lg focus:ring-2 outline-none transition">
+        ></div> */}
+          <div className="min-w-[50px] min-h-[50px] rounded-lg focus:ring-2 outline-none transition">
             <SuperEllipse
-              p1={3}
-              p2={30}
-              className="min-w-[56px] min-h-[56px] bg-gray-100 flex items-center justify-center drop-shadow-2xl"
+              p1={1}
+              p2={32}
+              className="min-w-[50px] min-h-[50px] shrink-0 relative"
             >
-              <SuperEllipse
-                p1={1}
-                p2={32}
-                className="min-w-[52px] min-h-[52px]"
-              >
-                <Image
-                  layout="fill"
-                  objectFit="cover"
-                  src={enrollment?.courseLogo || placeholderAvatar}
-                  alt="User profile picture"
-                  className="rounded-xl"
-                />
-                <div className="w-full h-full bg-blue-500"></div>
-                {/* children */}
-              </SuperEllipse>
+              <Image
+                layout="fill"
+                objectFit="cover"
+                src={enrollment?.courseLogo || placeholderAvatar}
+                alt="User profile picture"
+                className="rounded-xl"
+              />
+              {/* children */}
             </SuperEllipse>
           </div>
-          <h1 className="text-xl font-medium font-sans mb-1">
-            {enrollment?.courseName}
-          </h1>
-          <p className="text-[13px] text-gray-500">
-            {enrollment?.courseDescription}
-          </p>
-
-          <div className="w-full h-px bg-gray-200 mt-4"></div>
-          {enrollment?.instructors.map((instructor) => (
-            <div className="flex space-x-2 mt-4">
-              <div
-                style={{
-                  backgroundColor: primaryColor,
-                }}
-                className="w-8 h-8 min-w-[32px] min-h-[32px] rounded-full relative focus:ring-2 outline-none transition"
-              >
-                <Image
-                  layout="fill"
-                  objectFit="cover"
-                  src={instructor.image || placeholderAvatar}
-                  alt="User profile picture"
-                  className="rounded-full"
-                />
-              </div>
-              <div className="flex flex-col space-y-0 overflow-hidden">
-                <p className="text-sm font-dm text-slate-800 whitespace-nowrap truncate max-w-full">
-                  {instructor.name}
-                </p>
-                <p className="text-xs text-slate-500 truncate whitespace-nowrap">
-                  Instructor
-                </p>
-              </div>
-            </div>
-          ))}
+          <div className="flex flex-col relative transition ease-in">
+            <h1 className="text-xl font-medium font-sans mb-1">
+              {enrollment?.courseName}
+            </h1>
+            <p className="text-[13px]">{enrollment?.courseDescription}</p>
+          </div>
         </div>
+        {/* <Separator /> */}
       </div>
     </Link>
   );
@@ -142,9 +117,16 @@ const DashboardPage = () => {
   const { mutate, isLoading } = useAcceptInvitation();
 
   return (
-    <div className="w-full h-full bg-white">
+    <div className="w-full h-full bg-white dark:bg-nav-evendarker">
       <div className="max-w-7xl p-8 flex flex-col">
-        <h1 className="text-2xl font-medium font-sans mb-8">Courses</h1>
+        <div className="w-full flex items-center justify-between py-2">
+          <h1 className="text-2xl font-medium font-sans">Courses</h1>
+          <ActionButton color="blue" onClick={() => alert("todo")}>
+            <PlusIcon className="h-4 w-4" />
+            <p>Create Course</p>
+          </ActionButton>
+        </div>
+        <Separator className="mt-2 mb-6" />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-8 w-full mb-8">
           {enrollmentsData?.map((enrollment) => {
             return <CourseCard enrollment={enrollment} />;

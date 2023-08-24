@@ -56,10 +56,14 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
     day: "numeric",
   });
 
+  const blur = {
+    filter: "blur(8px)",
+  };
+
   return (
-    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px] ">
-      <div className="h-full w-full flex flex-col justify-start rounded-md shadow-sm overflow-hidden bg-white dark:bg-nav-darker border border-slate-300 dark:border-slate-700">
-        <div className="w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 py-3 dark:bg-nav-darkest bg-slate-100">
+    <div className="w-full h-full flex flex-col justify-start p-3 pr-[6px]">
+      <div className="h-full w-full flex flex-col justify-start rounded-md shadow-sm overflow-hidden border border-slate-300 dark:border-white/10">
+        <div className="w-full dark:border-b-white/10 border-b-slate-300 border-b px-4 py-3 dark:bg-nav-darkest/30 backdrop-blur-[1px] bg-slate-100">
           <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
             Modules
             <span className="text-slate-500 dark:text-slate-400 font-normal truncate">
@@ -70,7 +74,7 @@ const MetadataView = ({ problem }: { problem: Problem }) => {
             </span>
           </p>
         </div>
-        <div className="overflow-auto h-full w-full flex flex-col space-y-4 p-6">
+        <div className="overflow-auto h-full w-full flex flex-col space-y-4 p-6 bg-white dark:bg-nav-darker">
           <h1 className="text-2xl font-dm font-semibold text-slate-800 dark:text-white underline underline-offset-4 dark:decoration-sky-500 decoration-emerald-500">
             {problem?.title || "New Problem"}
           </h1>

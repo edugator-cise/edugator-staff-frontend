@@ -8,12 +8,9 @@ const BlankContentPage = () => {
   const { role } = useUserRole();
 
   return (
-    <div className="w-full h-full flex flex-col relative bg-slate-100">
+    <div className="w-full h-full flex flex-col relative">
       {role === "teachingAssistant" || role === "instructor" ? (
-        <div
-          className="w-full 
-        h-16 min-h-[60px] max-h-[60px] !bg-nav-dark overflow-hidden flex items-center justify-between px-6 border-b border-b-white/10 z-10"
-        >
+        <div className="w-full h-16 min-h-[59px] max-h-[59px] bg-nav-dark dark:bg-nav-evendarker overflow-hidden flex items-center justify-between px-6 border-b border-b-white/10 z-10">
           <div className="flex items-end">
             <p className="text-base text-slate-400 font-dm"></p>
             <h1 className="text-white font-dm text-base"></h1>
@@ -21,11 +18,15 @@ const BlankContentPage = () => {
         </div>
       ) : null}
       <div className="w-full h-full items-center justify-center flex flex-col space-y-4">
-        <div className="min-h-[3.5rem] min-w-[3.5rem] rounded-md bg-slate-300 ring-1 flex items-center justify-center ring-offset-1 ring-offset-slate-200 ring-slate-400/70 shadow-inner">
-          <ListBullets size={36} weight="duotone" className="text-slate-100" />
+        <div className="min-h-[3.5rem] min-w-[3.5rem] rounded-md ring-1 flex items-center justify-center ring-offset-1 bg-slate-300 ring-offset-slate-200 ring-slate-400/70 dark:bg-slate-700 dark:ring-offset-nav-evendarker dark:ring-slate-400/70 shadow-inner">
+          <ListBullets
+            size={36}
+            weight="duotone"
+            className="text-white dark:text-[#989ea8]"
+          />
         </div>
         <h1 className="text-[26px] font-medium font-dm">Course Content</h1>
-        <p className="text-slate-500 font-dm text-sm !mt-2">
+        <p className="opacity-60 font-dm text-sm !mt-2">
           Select a lesson or problem from the left sidebar to get started.
         </p>
       </div>

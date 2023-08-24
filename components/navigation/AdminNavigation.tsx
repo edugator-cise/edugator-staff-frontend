@@ -8,7 +8,7 @@ import {
   setAdminContentSidebarHidden,
   setAdminMainSidebarHidden,
 } from "state/interfaceControls.slice";
-import { adminNavLinks, NavLinkItem } from "./navigationData";
+import { getNavLinks, NavLinkItem } from "./navigationData";
 import { NavLink } from "./NavLink";
 import { NavLinkTooltip } from "./NavLinkTooltip";
 import Image from "next/image";
@@ -22,6 +22,8 @@ import { placeholderAvatar } from "constants/coverImageData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { camelCaseToSpacedTitleCase, toTitleCase } from "@/lib/textUtils";
 import { AnimatePresence, motion as m } from "framer-motion";
+import { useUserRole } from "hooks/user/useUserRole";
+import { CourseRole } from "hooks/invitations/useGetUserInvitations";
 
 const Divider = () => {
   return <div className="w-full h-px bg-slate-600"></div>;
@@ -56,7 +58,7 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
 
   return (
     <nav
-      className={`flex font-dm border-r border-r-white/10 overflow-hidden h-full bg-nav-darker dark:bg-[#212b3b] flex-col items-center justify-start`}
+      className={`flex font-dm border-r border-r-white/10 overflow-hidden h-full bg-nav-darker dark:bg-nav-evendarker flex-col items-center justify-start`}
     >
       {/* Logo */}
 
@@ -64,7 +66,21 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
       <div className="h-full flex flex-col items-center justify-between pb-[10px] w-full">
         {/* Class Group */}
         <AnimatePresence exitBeforeEnter>
-          {courseId ? <CourseSection /> : <></>}
+          {courseId ? (
+            <m.div
+              key={courseId}
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{
+                opacity: 0,
+              }}
+              className="w-full flex flex-col"
+            >
+              <CourseSection />
+            </m.div>
+          ) : (
+            <></>
+          )}
         </AnimatePresence>
         {/* Bottom Group */}
         <div className="w-full space-y-0">
@@ -157,7 +173,11 @@ export const CourseSection = () => {
     INPUT_NAME
   );
 
-  const [activeLink, setActiveLink] = useState<NavLinkItem>(adminNavLinks[0]);
+  const { role } = useUserRole();
+
+  const links = getNavLinks(role as CourseRole);
+
+  const [activeLink, setActiveLink] = useState<NavLinkItem>(links[0]);
 
   const { adminMainSidebarHidden } = useSelector(
     (state: RootState) => state.interfaceControls
@@ -212,14 +232,7 @@ export const CourseSection = () => {
   );
 
   return (
-    <m.section
-      id="course-section"
-      key="course-section"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="w-full flex flex-col"
-    >
+    <section className="w-full flex flex-col">
       <Select.Root
         onValueChange={(value) => {
           queryClient.invalidateQueries([COURSE_STRUCTURE_QUERY_KEY, value]);
@@ -243,14 +256,25 @@ export const CourseSection = () => {
                   : "h-10 w-10 min-w-[2.5rem]"
               }`}
             >
-              <Image
-                placeholder="empty"
-                src={currentCourse?.courseLogo || placeholderAvatar}
-                alt={currentCourse?.courseName || "Course Logo"}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-[4px] z-10"
-              />
+              <AnimatePresence>
+                {courseId ? (
+                  <m.div
+                    key={currentCourse?.courseId}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <Image
+                      placeholder="empty"
+                      src={currentCourse?.courseLogo || placeholderAvatar}
+                      alt={currentCourse?.courseName || "Course Logo"}
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded-[4px] z-10"
+                    />
+                  </m.div>
+                ) : null}
+              </AnimatePresence>
             </div>
             <div
               className={`truncate w-full transition !max-w-[160px] space-y-1 text-sm ${
@@ -259,7 +283,8 @@ export const CourseSection = () => {
             >
               <Select.Value placeholder="Select a course" />
               <p className="text-xs text-white/40 font-sans text-left truncate">
-                {camelCaseToSpacedTitleCase(currentCourse?.role as string)}
+                {currentCourse &&
+                  camelCaseToSpacedTitleCase(currentCourse?.role as string)}
               </p>
             </div>
           </div>
@@ -310,9 +335,10 @@ export const CourseSection = () => {
                         </Select.ItemText>
                       </div>
                       <p className="text-xs text-white/40 font-sans">
-                        {camelCaseToSpacedTitleCase(
-                          currentCourse?.role as string
-                        )}
+                        {currentCourse &&
+                          camelCaseToSpacedTitleCase(
+                            currentCourse?.role as string
+                          )}
                       </p>
                     </div>
                     <Select.ItemIndicator className="absolute right-2 p-1 bg-[#46474A] rounded-full inline-flex items-center justify-center">
@@ -338,23 +364,26 @@ export const CourseSection = () => {
         }`}
       >
         <AnimatePresence>
-          {adminNavLinks.map((link, i) => {
-            const toggleExercises = link.id === "content";
-            const isActiveLink = activeLink.id === link.id;
-
+          {links.map((link, i) => {
             const clickHandler = () => {
               // IF ID is content and active link is content, toggle content sidebar but don't push to href
               // if id is content and active link is not content, toggle content sidebar and push to href
               // if id is not content, toggle content sidebar to false and push to href
-              if (link.id === "content" && activeLink.id === "content") {
+              if (link.id === "content" && activeLink?.id === "content") {
                 toggleContentSidebar(!adminContentSidebarHidden);
                 return;
-              } else if (link.id === "content" && activeLink.id !== "content") {
+              } else if (
+                link.id === "content" &&
+                activeLink?.id !== "content"
+              ) {
                 toggleContentSidebar(false);
               } else {
                 toggleContentSidebar(true);
               }
 
+              if (activeLink?.id === "content") {
+                console.log("active link is content");
+              }
               router.push({
                 pathname: `/courses/${courseId}${link.href}`,
               });
@@ -382,8 +411,9 @@ export const CourseSection = () => {
               return (
                 <m.div
                   key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ delay: 0.1 * i }}
                 >
                   <NavLinkTooltip
@@ -396,7 +426,7 @@ export const CourseSection = () => {
                       }}
                       className={`w-full border border-transparent h-[42px] transition rounded-[6px] overflow-hidden box-border flex items-center justify-start pl-2 pr-[10px] group space-x-4 ${
                         activeIndex() === 1
-                          ? "bg-blue-300/20 text-white "
+                          ? "bg-blue-300/20 dark:bg-blue-300/10 text-white"
                           : "text-nav-inactive-light hover:bg-blue-300/5"
                       }`}
                     >
@@ -424,8 +454,9 @@ export const CourseSection = () => {
             return (
               <m.div
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ delay: 0.1 * i }}
               >
                 <NavLink
@@ -440,7 +471,7 @@ export const CourseSection = () => {
           })}
         </AnimatePresence>
       </div>
-    </m.section>
+    </section>
   );
 };
 

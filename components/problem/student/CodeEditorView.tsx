@@ -3,7 +3,11 @@ import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import { generateFileName, handleDownload } from "utils/CodeEditorUtils";
 import { useRouter } from "next/router";
-import * as Tooltip from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { toast } from "react-hot-toast";
 import { useTheme } from "next-themes";
 import { Problem } from "hooks/problem/useGetProblem";
@@ -64,23 +68,20 @@ const ButtonToolTip = ({
   children: React.ReactNode;
   className?: string;
 }) => (
-  <Tooltip.Provider delayDuration={100}>
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
-      <Tooltip.Portal>
-        <Tooltip.Content
-          side="bottom"
-          sideOffset={5}
-          align="center"
-          className={`TooltipContent data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade bg-slate-800 text-white font-dm text-xs font-medium rounded-md p-2 ${
-            className ? className : ""
-          }`}
-        >
-          {label}
-        </Tooltip.Content>
-      </Tooltip.Portal>
-    </Tooltip.Root>
-  </Tooltip.Provider>
+  <Tooltip delayDuration={100}>
+    {/* Idk why these z indexes aren't working so i just set side to left */}
+    <TooltipTrigger className="z-[9999999]">{children}</TooltipTrigger>
+    <TooltipContent
+      side="left"
+      sideOffset={5}
+      align="center"
+      className={`!z-[99999999] bg-slate-800 text-white font-dm text-xs font-medium rounded-md p-2 ${
+        className ? className : ""
+      }`}
+    >
+      {label}
+    </TooltipContent>
+  </Tooltip>
 );
 
 export const CodeEditorView = ({
@@ -165,8 +166,8 @@ export const CodeEditorView = ({
 
   return (
     <div className="w-full h-full flex flex-col justify-start p-3 pl-[6px] pb-[6px] relative">
-      <div className="h-full w-full flex flex-col justify-start rounded-md overflow-hidden shadow-sm bg-white dark:bg-nav-dark border border-slate-300 dark:border-slate-700">
-        <div className="rounded-t-md flex items-center justify-between w-full dark:border-b-slate-700 border-b-slate-300 border-b px-4 pr-1 py-1 dark:bg-nav-darkest bg-slate-100">
+      <div className="h-full w-full flex flex-col justify-start rounded-md shadow-sm border border-slate-300 dark:border-white/10">
+        <div className="rounded-t-md flex items-center justify-between w-full dark:border-b-white/10 border-b-slate-300 border-b px-4 pr-1 py-1 dark:bg-nav-darkest/30 backdrop-blur-[1px] bg-slate-100">
           <div className="flex space-x-4 items-center">
             <p className="text-xs text-slate-800 font-dm font-bold dark:text-white">
               Solution
@@ -246,7 +247,7 @@ export const CodeEditorView = ({
           />
         </div>
         {/* Buttons */}
-        <div className="w-full px-3 py-3 flex items-center justify-end bg-slate-100 rounded-b-md border-t border-t-slate-300 dark:border-t-slate-700 overflow-hidden dark:bg-nav-darkest">
+        <div className="w-full px-3 py-3 flex items-center justify-end bg-slate-100 rounded-b-md border-t border-t-slate-300 dark:border-t-white/10 overflow-hidden dark:bg-nav-darkest/30 backdrop-blur-[1px]">
           <div className="flex items-center space-x-2">
             <ActionButton
               color="gray"

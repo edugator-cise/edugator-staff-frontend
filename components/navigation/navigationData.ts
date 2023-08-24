@@ -1,3 +1,4 @@
+import { CourseRole } from "hooks/invitations/useGetUserInvitations";
 import { icons } from "./navIcons";
 
 export type NavLinkItem = {
@@ -54,7 +55,7 @@ export const navLinks: NavLinkItem[] = [
   }, */
 ];
 
-export const adminNavLinks: NavLinkItem[] = [
+export const instructorNavLinks: NavLinkItem[] = [
   {
     icon: icons.dashboard2,
     text: "Home",
@@ -77,3 +78,57 @@ export const adminNavLinks: NavLinkItem[] = [
     href: "/roster",
   },
 ];
+
+export const teachingAssistantNavLinks: NavLinkItem[] = [
+  {
+    icon: icons.dashboard2,
+    text: "Home",
+    id: "home",
+    toggleExercises: false,
+    href: "/",
+  },
+  {
+    icon: icons.book,
+    text: "Course Content",
+    id: "content",
+    toggleExercises: true,
+    href: "/content",
+  },
+  {
+    icon: icons.usersMultiple,
+    text: "Roster",
+    id: "roster",
+    toggleExercises: false,
+    href: "/roster",
+  },
+];
+
+export const studentNavLinks: NavLinkItem[] = [
+  {
+    icon: icons.dashboard2,
+    text: "Course Home",
+    id: "home",
+    toggleExercises: false,
+    href: "/",
+  },
+  {
+    icon: icons.book,
+    text: "Course Content",
+    id: "content",
+    toggleExercises: true,
+    href: "/content",
+  },
+];
+
+export const getNavLinks = (role: CourseRole): NavLinkItem[] => {
+  switch (role) {
+    case "instructor":
+      return instructorNavLinks;
+    case "teachingAssistant":
+      return teachingAssistantNavLinks;
+    case "student":
+      return studentNavLinks;
+    default:
+      return [];
+  }
+};

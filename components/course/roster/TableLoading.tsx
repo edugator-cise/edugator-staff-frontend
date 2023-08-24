@@ -11,9 +11,9 @@ import React from "react";
 
 const TableLoading = () => {
   return (
-    <div className="overflow-hidden rounded-md border">
+    <div className="overflow-hidden rounded-md border dark:border-white/10">
       <Table>
-        <TableHeader className="bg-slate-50 rounded-t-md">
+        <TableHeader className="bg-slate-50 dark:bg-nav-darkest dark:border-white/10 rounded-t-md">
           <TableRow>
             {Array.from({ length: 5 }).map((_, i) => (
               <TableHead
@@ -27,7 +27,10 @@ const TableLoading = () => {
         </TableHeader>
         <TableBody>
           {Array.from({ length: 10 }).map((_, i) => (
-            <TableRow className="bg-white hover:bg-slate-50" key={i}>
+            <TableRow
+              className="bg-white hover:bg-white dark:bg-nav-evendarker dark:hover:bg-nav-evendarker"
+              key={i}
+            >
               {Array.from({ length: 5 }).map((_, i) => (
                 <TableCell key={i} className="px-4 py-3">
                   <Skeleton
