@@ -17,7 +17,6 @@ import { useUser } from "@clerk/nextjs";
 import CourseHeader from "components/navigation/CourseHeader";
 import { useUserRole } from "hooks/user/useUserRole";
 import ContentSidebar from "components/navigation/ContentSidebar";
-import { dotGridStyle } from "constants/config";
 export type ButtonColor = "primary" | "success" | "error" | "info" | "warning";
 export type ButtonVariant = "text" | "contained" | "outlined";
 
@@ -150,9 +149,8 @@ const AdminLayout = ({ pageTitle, children, actionButtons = [] }: Props) => {
                 paddingLeft: laptopView
                   ? laptopContentMargin()
                   : contentMargin(),
-                ...dotGridStyle,
               }}
-              className={`bg-[#d3d9df] dark:bg-nav-evendarker relative w-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
+              className={`dot-grid bg-[#d3d9df] dark:bg-nav-evendarker relative w-full transition-all flex flex-col ease-[cubic-bezier(0.87,_0,_0.13,_1)] ${
                 tabletView ? `!pl-[${MAIN_SIDEBAR_WIDTH}px]` : ""
               } ${mobileView ? "!pl-0" : ""} ${false ? "!pl-0" : ""}`}
             >

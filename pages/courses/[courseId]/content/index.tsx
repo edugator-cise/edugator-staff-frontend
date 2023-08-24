@@ -8,7 +8,7 @@ const BlankContentPage = () => {
   const { role } = useUserRole();
 
   return (
-    <div className="w-full h-full flex flex-col relative bg-white dark:bg-transparent">
+    <div className="w-full h-full flex flex-col relative dark:bg-transparent">
       {role === "teachingAssistant" || role === "instructor" ? (
         <div className="w-full h-16 min-h-[59px] max-h-[59px] bg-nav-dark dark:bg-nav-evendarker overflow-hidden flex items-center justify-between px-6 border-b border-b-white/10 z-10">
           <div className="flex items-end">

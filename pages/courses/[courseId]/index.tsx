@@ -77,8 +77,8 @@ const CourseHome = () => {
 
   return (
     <div className="min-h-screen h-1 w-full bg-white dark:bg-nav-evendarker overflow-auto">
-      <div className="w-full p-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="w-full">
+        <div className="max-w-7xl mx-auto flex items-center justify-between p-6 lg:p-12">
           <div className="flex items-center gap-6">
             <SuperEllipse
               p1={7}
@@ -154,23 +154,12 @@ const CourseHome = () => {
         primaryColor={primaryColor}
       /> */}
 
-      <div className="pb-8 p-8 pt-10 w-full">
-        <div className="w-full h-full max-w-7xl mx-auto relative">
+      <div className="w-full">
+        <div className="w-full h-full max-w-7xl mx-auto relative p-6 lg:p-12">
           {/* Course Logo */}
 
           <h1 className="text-xl font-medium font-dm mb-4">Actions</h1>
-          <div className="w-full p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
-            <div
-              style={{
-                WebkitMaskImage:
-                  "linear-gradient(175deg, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 100%)",
-                backgroundImage:
-                  "radial-gradient(#79a1f940 1px, transparent 0)",
-                backgroundSize: "30px 30px",
-                backgroundPosition: "-7px -7px",
-              }}
-              className="w-full h-full absolute inset-0 z-0"
-            ></div>
+          <div className="dot-grid w-full p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
             {courseStructureFetching ? (
               <div className="w-full h-[169px] flex items-center gap-3">
                 <Skeleton className="w-full h-full" />
@@ -238,10 +227,7 @@ const NewSection = ({
       onClick={onClick}
       onMouseEnter={animationIn}
       onMouseLeave={animationOut}
-      style={{
-        backdropFilter: "blur(2px)",
-      }}
-      className="group hover:shadow-md z-10 hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-slate-700 transition border dark:border-slate-800/80 bg-white dark:bg-nav-evendarker/40 p-5 flex flex-col space-y-2"
+      className="group hover:shadow-md z-10 hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-slate-700 transition border dark:border-slate-800/80 bg-white dark:bg-nav-evendarker/40 backdrop-blur-[2px] p-5 flex flex-col space-y-2"
     >
       <button className="flex flex-col items-start cursor-pointer space-y-4">
         <div

@@ -53,42 +53,25 @@ const CourseCard = ({
       href={`/courses/${enrollment?.courseId}`}
       key={`${enrollment?.courseId}-${enrollment?.userId}`}
     >
-      <div className="relative w-full p-5 flex flex-col gap-y-4 rounded-lg ring-1 ring-transparent hover:ring-offset-2 dark:ring-offset-nav-evendarker dark:hover:ring-slate-700 hover:ring-blue-400 bg-slate-50 dark:!shadow-none border dark:border-none dark:bg-nav-darker  duration-300 transition-all hover:shadow-md hover:shadow-black/5 cursor-pointer group">
-        <div
-          style={{
-            backgroundColor: primaryColor,
-          }}
-          className="absolute right-3 bottom-3 h-6 w-6 flex items-center justify-center rounded-md shadow-xl"
-        >
-          <ArrowRightIcon className="h-4 w-4 text-white" />
-        </div>
+      <div className="relative group flex flex-col gap-y-4 group hover:shadow-md z-10 hover:shadow-black/5 hover:-translate-y-1 max-w-md cursor-pointer w-full rounded-sm hover:border-slate-300 dark:hover:border-white/20 transition border dark:border-white/10 bg-white dark:bg-nav-evendarker/40 backdrop-blur-[2px] p-5">
         <div className="gap-4 flex">
-          {/* <div className="absolute z-10 top-2 right-2 border rounded-sm bg-gray-100 text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 cursor-pointer transition">
-          <DotsHorizontalIcon className="w- h-" />
-        </div> */}
-          {/* <div
-          className="w-full h-28 rounded-t-[5px] overflow-hidden relative bg-nav-dark"
-          style={{
-            backgroundColor: primaryColor,
-          }}
-        ></div> */}
-          <div className="min-w-[50px] min-h-[50px] rounded-lg focus:ring-2 outline-none transition">
-            <SuperEllipse
-              p1={1}
-              p2={32}
-              className="min-w-[50px] min-h-[50px] shrink-0 relative"
-            >
-              <Image
-                layout="fill"
-                objectFit="cover"
-                src={enrollment?.courseLogo || placeholderAvatar}
-                alt="User profile picture"
-                className="rounded-xl"
-              />
-              {/* children */}
-            </SuperEllipse>
-          </div>
           <div className="flex flex-col relative transition ease-in">
+            <div className="min-w-[50px] max-w-[50px] min-h-[50px] mb-2 rounded-lg focus:ring-2 outline-none transition">
+              <SuperEllipse
+                p1={1}
+                p2={32}
+                className="min-w-[50px] max-w-[50px] min-h-[50px] shrink-0 relative"
+              >
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  src={enrollment?.courseLogo || placeholderAvatar}
+                  alt="User profile picture"
+                  className="rounded-xl"
+                />
+                {/* children */}
+              </SuperEllipse>
+            </div>
             <h1 className="text-xl font-medium font-sans mb-1">
               {enrollment?.courseName}
             </h1>
@@ -96,6 +79,17 @@ const CourseCard = ({
           </div>
         </div>
         {/* <Separator /> */}
+        <div className="w-full flex items-center justify-end">
+          <div
+            style={{
+              backgroundColor: primaryColor,
+            }}
+            className="shrink-0 h-6 w-6 overflow-hidden flex items-center justify-center rounded-md shadow-xl relative"
+          >
+            <ArrowRightIcon className="h-4 w-4 absolute transition left-1/2 top-1/2 duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] -translate-x-[calc(200%+8px)] group-hover:-translate-x-1/2 -translate-y-1/2 text-white" />
+            <ArrowRightIcon className="h-4 w-4 absolute transition left-1/2 top-1/2 duration-300 ease-[cubic-bezier(0.87,_0,_0.13,_1)] -translate-x-1/2 group-hover:translate-x-[calc(200%+8px)] -translate-y-1/2 text-white" />
+          </div>
+        </div>
       </div>
     </Link>
   );
@@ -126,7 +120,7 @@ const DashboardPage = () => {
 
   return (
     <div className="w-full h-full bg-white dark:bg-nav-evendarker">
-      <div className="max-w-7xl p-8 flex flex-col mx-auto">
+      <div className="max-w-7xl p-6 lg:p-12 flex flex-col mx-auto">
         <div className="w-full flex items-center justify-between py-2">
           <h1 className="text-2xl font-medium font-sans">Courses</h1>
           <ActionButton color="blue" onClick={() => alert("todo")}>
@@ -135,7 +129,7 @@ const DashboardPage = () => {
           </ActionButton>
         </div>
         <Separator className="mt-2 mb-6" />
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-8 w-full mb-8">
+        <div className="dot-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-cols-auto gap-8 w-full mb-8 p-4 rounded-md bg-gray-100 relative dark:bg-nav-darkest border dark:border-slate-900">
           {enrollmentsData?.map((enrollment) => {
             return <CourseCard enrollment={enrollment} />;
           })}

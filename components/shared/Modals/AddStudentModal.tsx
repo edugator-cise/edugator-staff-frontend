@@ -70,7 +70,7 @@ export const AddStudentModal = ({
         }, 200);
       }}
     >
-      <ul className="relative font-dm flex w-full mb-4 rounded-md ring-offset-1 ring-offset-slate-200 ring-slate-400/70 bg-slate-200 shadow-inner ring-1 ring-slate-800">
+      <ul className="relative font-dm flex w-full mb-4 rounded-md ring-offset-1 ring-offset-slate-200 ring-slate-400/70 bg-slate-200 shadow-inner ring-1 ring-slate-200">
         <div
           className={`pointer-events-none absolute top-0 z-0 h-full w-1/2 transition-all ${
             inputType === "file" ? "translate-x-full p-1" : "translate-x-0 p-1"

@@ -145,8 +145,8 @@ const EnrollmentsTable = () => {
           status === "removed"
             ? "destructive"
             : status === "pending"
-            ? "secondary"
-            : "default"
+            ? "warning"
+            : "success"
         }
       >
         {toTitleCase(status)}
@@ -156,7 +156,7 @@ const EnrollmentsTable = () => {
 
   const avatar = (enrollment: CourseEnrollment) => (
     <div className="flex items-center gap-4">
-      <div className="flex-shrink-0 w-7 h-7 border rounded-full overflow-hidden">
+      <div className="flex-shrink-0 w-7 h-7 border dark:border-white/10 rounded-full overflow-hidden">
         <img src={enrollment.avatar} alt={enrollment.name} />
       </div>
       <p>{enrollment.name}</p>

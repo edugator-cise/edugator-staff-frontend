@@ -13,11 +13,3 @@ export const colors = {
 };
 
 export const adminPathRegex = /\/admin\/code*/;
-
-export const dotGridStyle = {
-  WebkitMaskImage:
-    "linear-gradient(175deg, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%)",
-  backgroundImage: "radial-gradient(#79a1f940 1px, transparent 0)",
-  backgroundSize: "30px 30px",
-  backgroundPosition: "-7px -7px",
-};

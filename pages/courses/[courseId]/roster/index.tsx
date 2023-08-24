@@ -29,6 +29,7 @@ import { TabsContent } from "@radix-ui/react-tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 export const RosterControls = () => {
   const [addStudentModalOpen, setAddStudentModalOpen] = useState(false);
@@ -47,16 +48,16 @@ export const RosterControls = () => {
         </TooltipTrigger>
         <TooltipContent side="top">Download Roster</TooltipContent>
       </Tooltip>
-      <Button
-        variant="default"
-        className="gap-2"
+
+      <ActionButton
+        color="green"
         onClick={() => {
           setAddStudentModalOpen(true);
         }}
       >
         <PlusIcon className="w-4 h-4" strokeWidth={1.5} />
         <p>Add Students</p>
-      </Button>
+      </ActionButton>
     </div>
   );
 };
@@ -90,8 +91,8 @@ const RosterPage = () => {
 
   return (
     <div className="h-screen pb-12 min-h-screen w-full bg-white dark:bg-nav-evendarker relative">
-      <div className="p-6 lg:p-12 w-full h-full !overflow-y-auto">
-        <div className="w-full max-w-7xl flex flex-col">
+      <div className="w-full h-full !overflow-y-auto">
+        <div className="w-full max-w-7xl flex flex-col mx-auto p-6 lg:p-12 !pb-0">
           <div className="flex space-x-6 items-center">
             <div className="min-h-[3.5rem] min-w-[3.5rem] rounded-md ring-1 flex items-center justify-center ring-offset-1 bg-slate-300 ring-offset-slate-200 ring-slate-400/70 dark:bg-slate-700 dark:ring-offset-nav-evendarker dark:ring-slate-400/70 shadow-inner">
               <UsersThree
@@ -107,39 +108,45 @@ const RosterPage = () => {
               </p>
             </div>
           </div>
-          <Tabs
-            className=""
-            value={tableView}
-            onValueChange={(value) =>
-              setTableView(value as "enrollments" | "invitations")
-            }
-          >
-            <div className="w-full flex justify-between !mt-8 items-end">
-              <TabsList className="h-full p-0 rounded-none space-x-0 shrink-0 !bg-transparent">
-                <TabsTrigger
-                  value="enrollments"
-                  className="px-4 py-2 h-full ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-white/10 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
-                >
-                  Enrollments
-                </TabsTrigger>
-                <TabsTrigger
-                  value="invitations"
-                  className="px-3 py-2 h-full box-border ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-white/10 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
-                >
-                  Active Invitations
-                </TabsTrigger>
-              </TabsList>
-              <div className="w-full h-full border-b dark:border-b-white/10"></div>
-            </div>
+        </div>
 
+        <Tabs
+          className=""
+          value={tableView}
+          onValueChange={(value) =>
+            setTableView(value as "enrollments" | "invitations")
+          }
+        >
+          <div className="w-full flex justify-between !mt-8 items-end">
+            <div className="w-full flex justify-center relative">
+              <Separator className="absolute bottom-0 left-0"></Separator>
+              <div className="w-full max-w-7xl flex px-6 lg:px-12 justify-start">
+                <TabsList className="h-full p-0 rounded-none space-x-0 shrink-0 !bg-transparent">
+                  <TabsTrigger
+                    value="enrollments"
+                    className="px-4 py-2 h-full ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-transparent data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
+                  >
+                    Enrollments
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="invitations"
+                    className="px-3 py-2 h-full box-border ring-0 w-fit !bg-transparent !shadow-none rounded-none border-b dark:data-[state=inactive]:border-b-transparent data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 dark:data-[state=inactive]:!text-white/40 dark:data-[state=inactive]:hover:!text-white/60"
+                  >
+                    Active Invitations
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </div>
+          </div>
+          <div className="w-full max-w-7xl flex flex-col mx-auto p-6 lg:p-12 !pt-0">
             <TabsContent value="enrollments" className="mt-8">
               <EnrollmentsTable />
             </TabsContent>
             <TabsContent value="invitations" className="mt-8">
               <InvitiationsTable />
             </TabsContent>
-          </Tabs>
-        </div>
+          </div>
+        </Tabs>
       </div>
     </div>
   );

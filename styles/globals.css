@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dot-grid {
+    @apply bg-[radial-gradient(#32363d40_1px,_transparent_0)] dark:bg-[radial-gradient(#79a1f940_1px,_transparent_0)] bg-[position:-7px_-7px] bg-[size:30px_30px];
+}
