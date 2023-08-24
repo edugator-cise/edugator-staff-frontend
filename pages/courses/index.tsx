@@ -23,7 +23,12 @@ import {
 } from "state/interfaceControls.slice";
 import { Button } from "@/components/ui/button";
 import ActionButton from "components/shared/Buttons/ActionButton";
-import { PlusIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PlusIcon,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 // dashboard for students and instructor.
@@ -48,12 +53,15 @@ const CourseCard = ({
       href={`/courses/${enrollment?.courseId}`}
       key={`${enrollment?.courseId}-${enrollment?.userId}`}
     >
-      <div
-        style={{
-          borderLeftColor: primaryColor,
-        }}
-        className="relative w-full p-5 flex flex-col space-y-4 border-l hover:border-l-4 rounded-lg ring-1 ring-transparent hover:ring-offset-2 dark:ring-offset-nav-evendarker dark:hover:ring-slate-700 hover:ring-blue-400 bg-slate-100 dark:bg-nav-darker  duration-300 transition-all hover:shadow-md hover:shadow-black/5 cursor-pointer group"
-      >
+      <div className="relative w-full p-5 flex flex-col gap-y-4 rounded-lg ring-1 ring-transparent hover:ring-offset-2 dark:ring-offset-nav-evendarker dark:hover:ring-slate-700 hover:ring-blue-400 bg-slate-50 dark:!shadow-none border dark:border-none dark:bg-nav-darker  duration-300 transition-all hover:shadow-md hover:shadow-black/5 cursor-pointer group">
+        <div
+          style={{
+            backgroundColor: primaryColor,
+          }}
+          className="absolute right-3 bottom-3 h-6 w-6 flex items-center justify-center rounded-md shadow-xl"
+        >
+          <ArrowRightIcon className="h-4 w-4 text-white" />
+        </div>
         <div className="gap-4 flex">
           {/* <div className="absolute z-10 top-2 right-2 border rounded-sm bg-gray-100 text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:bg-gray-200 cursor-pointer transition">
           <DotsHorizontalIcon className="w- h-" />
@@ -118,7 +126,7 @@ const DashboardPage = () => {
 
   return (
     <div className="w-full h-full bg-white dark:bg-nav-evendarker">
-      <div className="max-w-7xl p-8 flex flex-col">
+      <div className="max-w-7xl p-8 flex flex-col mx-auto">
         <div className="w-full flex items-center justify-between py-2">
           <h1 className="text-2xl font-medium font-sans">Courses</h1>
           <ActionButton color="blue" onClick={() => alert("todo")}>

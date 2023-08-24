@@ -58,7 +58,15 @@ const AdminNavigation = ({ courseId }: { courseId: string | undefined }) => {
 
   return (
     <nav
-      className={`flex font-dm border-r border-r-white/10 overflow-hidden h-full bg-nav-darker dark:bg-nav-evendarker flex-col items-center justify-start`}
+      style={
+        courseId
+          ? {}
+          : {
+              background:
+                "repeating-linear-gradient(300deg, #ffffff1a, transparent 1px, transparent 10px)",
+            }
+      }
+      className={`flex font-dm border-r border-r-white/10 overflow-hidden h-full !bg-nav-darker dark:!bg-nav-evendarker transition !delay-1000 flex-col items-center justify-start`}
     >
       {/* Logo */}
 
